@@ -30,134 +30,134 @@
        *ngIf="StudentDetailsList[0]?.AllotmentStatus == 0 ||
             StudentDetailsList[0]?.AllotmentStatus == 12 ||
             StudentDetailsList[0]?.AllotmentStatus == 13">
+    <ng-container *ngIf="IsEligibility === 1; else notEligible">
+      <div class="mb-8">
+        <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+          <div><b>Name of Student</b></div>
+          <div>{{StudentDetailsList[0]?.StudentName}}</div>
+          <div><b>Father's Name</b></div>
+          <div>{{StudentDetailsList[0]?.FatherName}}</div>
+          <div><b>Contact/Mobile No.</b></div>
+          <div>{{StudentDetailsList[0]?.MobileNo}}</div>
+          <div><b>Permanet Address</b></div>
+          <div>{{StudentDetailsList[0]?.Address1}}</div>
+          <div><b>Cast/Category</b></div>
+          <div>{{StudentDetailsList[0]?.CasteCategoryNameEnglish}}</div>
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> Academic Status</b>
+        </div>
+        <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+          <div><b>(A).Aggregate Marks in 10th & Percentage</b></div>
+          <div>{{StudentDetailsList[0]?.Marks10}} - {{StudentDetailsList[0]?.AvgMarks10}}%</div>
+          <div><b>(B).Aggregate Marks in 1st year & Percentage</b></div>
+          <div>{{StudentDetailsList[0]?.MarksFirstYear}} - {{StudentDetailsList[0]?.AvgMarksFirstYear}}%</div>
+          <div><b>(C).Aggregate Marks in 2nd year & Percentage</b></div>
+          <div>{{StudentDetailsList[0]?.MarksSecondYear}} - {{StudentDetailsList[0]?.AvgMarksSecondYear}}%</div>
+          <div><b>(D). Total (A)+(B)+(C) Aggregate & Percentage</b></div>
+          <div>{{StudentDetailsList[0]?.TotalAvg  | number:'1.2-2'}}%</div>
 
-    <div class="mb-8">
-      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
-        <div><b>Name of Student</b></div>
-        <div>{{StudentDetailsList[0]?.StudentName}}</div>
-        <div><b>Father's Name</b></div>
-        <div>{{StudentDetailsList[0]?.FatherName}}</div>
-        <div><b>Contact/Mobile No.</b></div>
-        <div>{{StudentDetailsList[0]?.MobileNo}}</div>
-        <div><b>Permanet Address</b></div>
-        <div>{{StudentDetailsList[0]?.Address1}}</div>
-        <div><b>Cast/Category</b></div>
-        <div>{{StudentDetailsList[0]?.CasteCategoryNameEnglish}}</div>
-      </div>
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
-        <b class="text-1xl-5"><i class="ti ti-list"></i> Academic Status</b>
-      </div>
-      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
-        <div><b>(A).Aggregate Marks in 10th & Percentage</b></div>
-        <div>{{StudentDetailsList[0]?.Marks10}} - {{StudentDetailsList[0]?.AvgMarks10}}%</div>
-        <div><b>(B).Aggregate Marks in 1st year & Percentage</b></div>
-        <div>{{StudentDetailsList[0]?.MarksFirstYear}} - {{StudentDetailsList[0]?.AvgMarksFirstYear}}%</div>
-        <div><b>(C).Aggregate Marks in 2nd year & Percentage</b></div>
-        <div>{{StudentDetailsList[0]?.MarksSecondYear}} - {{StudentDetailsList[0]?.AvgMarksSecondYear}}%</div>
-        <div><b>(D). Total (A)+(B)+(C) Aggregate & Percentage</b></div>
-        <div>{{StudentDetailsList[0]?.TotalAvg  | number:'1.2-2'}}%</div>
+        </div>
+        <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.HostelWarden">
+          <div><b>(A).Aggregate Marks in 10th & Percentage</b></div>
+          <div>{{StudentDetailsList[0]?.Marks10}} - {{StudentDetailsList[0]?.AvgMarks10}}%</div>
+          <div><b>(B).Aggregate Marks in 1st year & Percentage</b></div>
+          <div>{{StudentDetailsList[0]?.MarksFirstYear}} - {{StudentDetailsList[0]?.AvgMarksFirstYear}}%</div>
+          <div><b>(C).Aggregate Marks in 2nd year & Percentage</b></div>
+          <div>{{StudentDetailsList[0]?.MarksSecondYear}} - {{StudentDetailsList[0]?.AvgMarksSecondYear}}%</div>
+          <div><b>(D). Total (A)+(B)+(C) Aggregate & Percentage</b></div>
+          <div>{{StudentDetailsList[0]?.TotalAvg  | number:'1.2-2' }}%</div>
 
-      </div>
-      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.HostelWarden">
-        <div><b>(A).Aggregate Marks in 10th & Percentage</b></div>
-        <div>{{StudentDetailsList[0]?.Marks10}} - {{StudentDetailsList[0]?.AvgMarks10}}%</div>
-        <div><b>(B).Aggregate Marks in 1st year & Percentage</b></div>
-        <div>{{StudentDetailsList[0]?.MarksFirstYear}} - {{StudentDetailsList[0]?.AvgMarksFirstYear}}%</div>
-        <div><b>(C).Aggregate Marks in 2nd year & Percentage</b></div>
-        <div>{{StudentDetailsList[0]?.MarksSecondYear}} - {{StudentDetailsList[0]?.AvgMarksSecondYear}}%</div>
-        <div><b>(D). Total (A)+(B)+(C) Aggregate & Percentage</b></div>
-        <div>{{StudentDetailsList[0]?.TotalAvg  | number:'1.2-2' }}%</div>
+        </div>
 
-      </div>
-
-      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList" *ngIf="MarksDetailsList && sSOLoginDataModel.RoleID == _EnumRole.Student ">
-        <div><b>(A).Aggregate Marks in 10th & Percentage</b></div>
-        <div>Obtained Marks ( {{MarksDetailsList[0]?.Marks10}} / 600 ) - {{MarksDetailsList[0]?.AvgMarks10}}%</div>
-        <!--<div>
+        <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList" *ngIf="MarksDetailsList && sSOLoginDataModel.RoleID == _EnumRole.Student ">
+          <div><b>(A).Aggregate Marks in 10th & Percentage</b></div>
+          <div>Obtained Marks ( {{MarksDetailsList[0]?.Marks10}} / 600 ) - {{MarksDetailsList[0]?.AvgMarks10}}%</div>
+          <!--<div>
           {{StudentDetailsList[0]?.MarksFirstYear}}
           ({{ (StudentDetailsList[0]?.MarksFirstYear / 600 * 100) | number:'1.0-2'}}%)
         </div>-->
 
-        <div><b>(B).Aggregate Marks in 1st year & Percentage</b></div>
-        <div>{{MarksDetailsList[0]?.MarksFirstYear}} - {{MarksDetailsList[0]?.AvgMarksFirstYear}}%</div>
-        <div><b>(C).Aggregate Marks in 2nd year & Percentage</b></div>
-        <div>{{MarksDetailsList[0]?.MarksSecondYear}} - {{MarksDetailsList[0]?.AvgMarksSecondYear}}%</div>
-        <div><b>(D). Total (A)+(B)+(C) Aggregate & Percentage</b></div>
-        <div>{{MarksDetailsList[0]?.TotalAvg  | number:'1.2-2'}}%</div>
+          <div><b>(B).Aggregate Marks in 1st year & Percentage</b></div>
+          <div>{{MarksDetailsList[0]?.MarksFirstYear}} - {{MarksDetailsList[0]?.AvgMarksFirstYear}}%</div>
+          <div><b>(C).Aggregate Marks in 2nd year & Percentage</b></div>
+          <div>{{MarksDetailsList[0]?.MarksSecondYear}} - {{MarksDetailsList[0]?.AvgMarksSecondYear}}%</div>
+          <div><b>(D). Total (A)+(B)+(C) Aggregate & Percentage</b></div>
+          <div>{{MarksDetailsList[0]?.TotalAvg  | number:'1.2-2'}}%</div>
 
-      </div>
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
-        <b class="text-1xl-5"><i class="ti ti-user"></i> Some Basic Info For Emergency Contact</b>
-      </div>
-      <form [formGroup]="groupForm"
-            (ngSubmit)="saveData()"
-            *ngIf="StudentDetailsList[0]?.AllotmentStatus === 0 ||
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5"><i class="ti ti-user"></i> Some Basic Info For Emergency Contact</b>
+        </div>
+        <form [formGroup]="groupForm"
+              (ngSubmit)="saveData()"
+              *ngIf="StudentDetailsList[0]?.AllotmentStatus === 0 ||
                 StudentDetailsList[0]?.AllotmentStatus === 12 ||
                 StudentDetailsList[0]?.AllotmentStatus === 13 ">
 
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Father's Contact/Mobile No.</label>
-            <input placeholder="Enter Father's Contact/Mobile No." class="form-input" id="mobileNo" (keypress)="validateNumber($event)" name="MobileNo" formControlName="txtFatherContactNo" maxlength="10">
-            <div *ngIf="isSubmitted && groupForm.controls.txtFatherContactNo.errors" class="text-danger">
-              <p *ngIf="groupForm.controls.txtFatherContactNo.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Father's Contact/Mobile No.</label>
+              <input placeholder="Enter Father's Contact/Mobile No." class="form-input" id="mobileNo" (keypress)="validateNumber($event)" name="MobileNo" formControlName="txtFatherContactNo" maxlength="10">
+              <div *ngIf="isSubmitted && groupForm.controls.txtFatherContactNo.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtFatherContactNo.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Local Guardian Name</label>
+              <input class="form-input" placeholder="Enter Local Guardian Name" formControlName="txtLocalGuardianName" />
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Local Guardian Contact No.</label>
+              <input class="form-input" placeholder="Enter Local Guardian Contact No." (keypress)="validateNumber($event)" formControlName="txtLocalGuardianContactNo" maxlength="10" />
+            </div>
+          </div>
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3"
+               *ngIf="StudentDetailsList[0]?.YearNo !== '1st'">
+            <b class="text-1xl-5"><i class="ti ti-list"></i> In Year({{LastFY.FinancialYearName}})</b>
+          </div>
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" *ngIf="StudentDetailsList[0]?.YearNo !== '1st'">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel allotted in Previous Year </label>
+              <select class="form-select" formControlName="txtAllotedHostelLastEndTerm" (change)="isallotedhostellastendterm()">
+                <option value="2">--Select Option--</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </div>
+            <div *ngIf="allotedhostellastendterm === true">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Allotted Hostel Details </label>
+              <div class="flex items-center">
+                <input class="form-input" placeholder="Room No." formControlName="txtAllotedHostelInLastSessionRoomNo" />
+                -
+                <input class="form-input" placeholder="Fee Details" formControlName="txtAllotedHostelInLastSessionFeeDetails" />
+              </div>
+            </div>
+            <div *ngIf="allotedhostellastendterm === true">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Any Warning for Short of Attendance</label>
+              <select class="form-select" formControlName="txtAnyWorningForShortOfAttendance">
+                <option value="2">--Select Option--</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </div>
+            <div *ngIf="allotedhostellastendterm === true">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Any Warning for Invovement Against Discipline</label>
+              <select class="form-select" formControlName="txtAnyWarningForInvovementAgainstDiscipline">
+                <option value="2">--Select Option--</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
             </div>
           </div>
 
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Local Guardian Name</label>
-            <input class="form-input" placeholder="Enter Local Guardian Name" formControlName="txtLocalGuardianName" />
-          </div>
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Local Guardian Contact No.</label>
-            <input class="form-input" placeholder="Enter Local Guardian Contact No." (keypress)="validateNumber($event)" formControlName="txtLocalGuardianContactNo" maxlength="10" />
-          </div>
-        </div>
-        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3"
-             *ngIf="StudentDetailsList[0]?.YearNo !== '1st'">
-          <b class="text-1xl-5"><i class="ti ti-list"></i> In Year({{LastFY.FinancialYearName}})</b>
-        </div>
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" *ngIf="StudentDetailsList[0]?.YearNo !== '1st'">
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel allotted in Previous Year </label>
-            <select class="form-select" formControlName="txtAllotedHostelLastEndTerm" (change)="isallotedhostellastendterm()">
-              <option value="2">--Select Option--</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
-          </div>
-          <div *ngIf="allotedhostellastendterm === true">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Allotted Hostel Details </label>
-            <div class="flex items-center">
-              <input class="form-input" placeholder="Room No." formControlName="txtAllotedHostelInLastSessionRoomNo" />
-              -
-              <input class="form-input" placeholder="Fee Details" formControlName="txtAllotedHostelInLastSessionFeeDetails" />
-            </div>
-          </div>
-          <div *ngIf="allotedhostellastendterm === true">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Any Warning for Short of Attendance</label>
-            <select class="form-select" formControlName="txtAnyWorningForShortOfAttendance">
-              <option value="2">--Select Option--</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
-          </div>
-          <div *ngIf="allotedhostellastendterm === true">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Any Warning for Invovement Against Discipline</label>
-            <select class="form-select" formControlName="txtAnyWarningForInvovementAgainstDiscipline">
-              <option value="2">--Select Option--</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3 ">
-          <div class="flex justify-between flex-wrap items-center ">
-            <b class="text-1xl-5 "><i class="ti ti-search"></i> Request For Room Choice</b>
-            <!-- <div class="ms-3">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3 ">
+            <div class="flex justify-between flex-wrap items-center ">
+              <b class="text-1xl-5 "><i class="ti ti-search"></i> Request For Room Choice</b>
+              <!-- <div class="ms-3">
               <label for="txtRequestForRoomPartner">
                 <input type="radio" formControlName="txtRequestForRoomPartner" (change)="isRequestForRoomPartner(true)" [value]="true" /> Yes
               </label>
@@ -165,76 +165,76 @@
                 <input type="radio" formControlName="txtRequestForRoomPartner" (change)="isRequestForRoomPartner(false)" [value]="false" /> No
               </label>
             </div> -->
+            </div>
           </div>
-        </div>
 
-        <!-- room choice -->
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Type</label>
+          <!-- room choice -->
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Type</label>
 
-            <!-- <label for="inputState" class="form-label">Branch</label> -->
-            <ng-multiselect-dropdown #multiSelect1 class="w-40 text-sm" [placeholder]="'Choose Option'"
-                                     [settings]="settingsMultiselect"
-                                     [data]="RoomTypeDDLList"
-                                     formControlName="SelectedRoomTypeID"
-                                     name="SelectedRoomTypeID"
-                                     [disabled]="false"
-                                     (onFilterChange)="onFilterChange($event)"
-                                     (onDropDownClose)="onDropDownClose($event)"
-                                     (onSelect)="onItemSelect($event)"
-                                     (onDeSelect)="onDeSelect($event)"
-                                     (onSelectAll)="onSelectAll($event)"
-                                     (onDeSelectAll)="onDeSelectAll($event)">
-            </ng-multiselect-dropdown>
-            <!-- [(ngModel)]="SelectedRoomTypeID" -->
-            <small>(1 Seater, 2 Seater, 3 Seater, 4 Seater)</small>
-            <!-- <div *ngIf="isSubmitted && groupForm.controls.txtRoomType.errors" class="text-danger">
+              <!-- <label for="inputState" class="form-label">Branch</label> -->
+              <ng-multiselect-dropdown #multiSelect1 class="w-40 text-sm" [placeholder]="'Choose Option'"
+                                       [settings]="settingsMultiselect"
+                                       [data]="RoomTypeDDLList"
+                                       formControlName="SelectedRoomTypeID"
+                                       name="SelectedRoomTypeID"
+                                       [disabled]="false"
+                                       (onFilterChange)="onFilterChange($event)"
+                                       (onDropDownClose)="onDropDownClose($event)"
+                                       (onSelect)="onItemSelect($event)"
+                                       (onDeSelect)="onDeSelect($event)"
+                                       (onSelectAll)="onSelectAll($event)"
+                                       (onDeSelectAll)="onDeSelectAll($event)">
+              </ng-multiselect-dropdown>
+              <!-- [(ngModel)]="SelectedRoomTypeID" -->
+              <small>(1 Seater, 2 Seater, 3 Seater, 4 Seater)</small>
+              <!-- <div *ngIf="isSubmitted && groupForm.controls.txtRoomType.errors" class="text-danger">
               <p *ngIf="!_groupForm.txtRoomType.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
             </div> -->
-          </div>
-        </div>
-
-        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3 ">
-          <div class="flex justify-between flex-wrap items-center ">
-            <b class="text-1xl-5 "><i class="ti ti-search"></i> Request For Room Partner</b>
-            <div class="ms-3">
-              <label for="txtRequestForRoomPartner">
-                <input type="radio" formControlName="txtRequestForRoomPartner" (change)="isRequestForRoomPartner(true)" [value]="true" /> Yes
-              </label>
-              <label for="txtRequestForRoomPartner">
-                <input type="radio" formControlName="txtRequestForRoomPartner" (change)="isRequestForRoomPartner(false)" [value]="false" /> No
-              </label>
             </div>
           </div>
-        </div>
 
-
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3" *ngIf="RequestForRoomPartner === true">
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application No</label>
-            <input class="form-input" placeholder="Enter Application ID" formControlName="txtPartnerApplicationID" />
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3 ">
+            <div class="flex justify-between flex-wrap items-center ">
+              <b class="text-1xl-5 "><i class="ti ti-search"></i> Request For Room Partner</b>
+              <div class="ms-3">
+                <label for="txtRequestForRoomPartner">
+                  <input type="radio" formControlName="txtRequestForRoomPartner" (change)="isRequestForRoomPartner(true)" [value]="true" /> Yes
+                </label>
+                <label for="txtRequestForRoomPartner">
+                  <input type="radio" formControlName="txtRequestForRoomPartner" (change)="isRequestForRoomPartner(false)" [value]="false" /> No
+                </label>
+              </div>
+            </div>
           </div>
-          <div>
-            <button type="button" class="btn bg-info text-white mt-6" (click)="SearchPartner()">Search</button>
-            <button type="button" class="btn bg-danger text-white mt-6" (click)="CancelRoomPartner()">Cancel</button>
+
+
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3" *ngIf="RequestForRoomPartner === true">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application No</label>
+              <input class="form-input" placeholder="Enter Application ID" formControlName="txtPartnerApplicationID" />
+            </div>
+            <div>
+              <button type="button" class="btn bg-info text-white mt-6" (click)="SearchPartner()">Search</button>
+              <button type="button" class="btn bg-danger text-white mt-6" (click)="CancelRoomPartner()">Cancel</button>
+            </div>
           </div>
-        </div>
 
-        <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList  mt-3" *ngIf="SearchRoomPartner === true && RoomPartnerDetailsList[0].StudentName">
-          <div><b>Name</b></div>
-          <div>{{RoomPartnerDetailsList[0]?.StudentName}}</div>
-          <div><b>Year</b></div>
-          <div>{{RoomPartnerDetailsList[0]?.YearNo}}</div>
-          <div><b>Branch</b></div>
-          <div>{{RoomPartnerDetailsList[0]?.BranchName}}</div>
-          <div><b>SFS</b></div>
-          <div>{{RoomPartnerDetailsList[0]?.SFS}}</div>
-          <div><b>Regular</b></div>
-          <div>{{RoomPartnerDetailsList[0]?.Regular}}</div>
-        </div>
+          <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList  mt-3" *ngIf="SearchRoomPartner === true && RoomPartnerDetailsList[0].StudentName">
+            <div><b>Name</b></div>
+            <div>{{RoomPartnerDetailsList[0]?.StudentName}}</div>
+            <div><b>Year</b></div>
+            <div>{{RoomPartnerDetailsList[0]?.YearNo}}</div>
+            <div><b>Branch</b></div>
+            <div>{{RoomPartnerDetailsList[0]?.BranchName}}</div>
+            <div><b>SFS</b></div>
+            <div>{{RoomPartnerDetailsList[0]?.SFS}}</div>
+            <div><b>Regular</b></div>
+            <div>{{RoomPartnerDetailsList[0]?.Regular}}</div>
+          </div>
 
-        <!--<div>
+          <!--<div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                  for="fileStudentPhoto"> Upload Document <span class="StarMarking">*</span> </label>
           <div class="flex fileUploader">
@@ -254,8 +254,8 @@
             </div>
           </div>
         </div>-->
-        <!-- </div> -->
-        <!-- <div>
+          <!-- </div> -->
+          <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Type</label>
           <select formControlName="txtRoomType" class="form-input" type="text" id="RoomType" placeholder="Enter Room Type"
                   [(ngModel)]="request.RoomType" (change)="changeSeats()">
@@ -271,32 +271,39 @@
 
 
 
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-          <div>
-            <!--<button type="submit" id="btnSave" class="btn bg-info text-white mt-6">Submit</button>
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <!--<button type="submit" id="btnSave" class="btn bg-info text-white mt-6">Submit</button>
             <button type="Update" id="btnUpdate" class="btn bg-info text-white mt-6">Update</button>-->
 
-            <button type="submit"
-                    id="btnSave"
-                    class="btn bg-info text-white mt-6">
-              Submit
-            </button>
+              <button type="submit"
+                      id="btnSave"
+                      class="btn bg-info text-white mt-6">
+                Submit
+              </button>
 
-            <button type="button"
-                    id="btnUpdate"
-                    class="btn bg-success text-white mt-6"
-                    (click)="updateData()"
-                    *ngIf="isEditMode && sSOLoginDataModel.RoleID == _EnumRole.Principal || isEditMode && sSOLoginDataModel.RoleID == _EnumRole.HostelWarden">
-              Update
-            </button>
+              <button type="button"
+                      id="btnUpdate"
+                      class="btn bg-success text-white mt-6"
+                      (click)="updateData()"
+                      *ngIf="isEditMode && sSOLoginDataModel.RoleID == _EnumRole.Principal || isEditMode && sSOLoginDataModel.RoleID == _EnumRole.HostelWarden">
+                Update
+              </button>
 
-            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+              <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
 
-    </div>
+      </div>
+    </ng-container>
 
+    <ng-template #notEligible>
+      <div class="mb-8">
+        <!-- Not eligible content -->
+        Student is not eligible for hostel application.
+      </div>
+    </ng-template>
   </div>
   <!--<div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 1">
     <div class="mb-8">

@@ -5,7 +5,7 @@ import { HostelManagmentService } from '../../../Services/HostelManagment/Hostel
 import { ToastrService } from 'ngx-toastr';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { HostelStudentSearchModel, SelectedRoomTyps, StudentDataModel } from '../../../Models/Hostel-Management/HostelManagmentDataModel';
+import { HostelStudentSearchModel, SelectedRoomTyps, StudentDataModel, VerifyStudentHostelEligibilityModel } from '../../../Models/Hostel-Management/HostelManagmentDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderService } from '../../../Services/Loader/loader.service';
@@ -72,6 +72,8 @@ export class ApplyForHostelComponent {
 
   _EnumRole = EnumRole;
   public isEditMode: boolean = true;
+  public _VerifyStudent = new VerifyStudentHostelEligibilityModel();
+  public IsEligibility: number = 0;
   //AnyKnownNearByCollegeHostel: boolean = false;
 
   groupFormHostelWardenRecheck!: FormGroup;
@@ -159,6 +161,8 @@ export class ApplyForHostelComponent {
         await this.EditDataAtWarden();
       }
     }
+
+    this.GetVerifyStudentHostelEligibility();
   }
 
   isRequestForRoomPartner(content: any) {
@@ -1283,6 +1287,36 @@ export class ApplyForHostelComponent {
     this.isSubmitted = false;
   }
 
+
+  async GetVerifyStudentHostelEligibility() {
+    try {
+      debugger
+      this._VerifyStudent.StudentID = this.sSOLoginDataModel.StudentID;
+      this._VerifyStudent.EndTermId = this.sSOLoginDataModel.EndTermID;
+      this._VerifyStudent.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      await this._HostelManagmentService.VerifyStudentHostelEligibility(this._VerifyStudent)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.IsEligibility = data['Data'];
+            //this.IsEligibility = ;
+              
+
+            
+          }
+          else {
+            this.toastr.error(data.ErrorMessage)
+          }
+
+
+          console.log("StudentDetailsList =>", this.StudentDetailsList);
+          console.log("isEditMode =>", this.isEditMode);
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
 
  }
 

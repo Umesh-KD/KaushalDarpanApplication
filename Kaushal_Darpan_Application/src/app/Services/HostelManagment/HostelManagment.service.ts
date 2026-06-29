@@ -5,7 +5,8 @@ import { catchError, throwError } from 'rxjs';
 import {
   CreateHostelDataModel, HostelSearchModel, StudentDataModel, HostelStudentSearchModel, EditHostelStudentSearchModel, CreateHostelRoomSeatDataModel,
   HostelRoomSeatSearchModel, FacilitiesDataModel, FacilitiesSearchModel, CollegeHostelDetailsDataModel, CollegeHostelDetailsSearchModel,
-  StatusChangeModel, HostelInstituteMappingModel, HostelFeeListModel, HostelFeeModel
+  StatusChangeModel, HostelInstituteMappingModel, HostelFeeListModel, HostelFeeModel,
+  VerifyStudentHostelEligibilityModel
 } from '../../Models/Hostel-Management/HostelManagmentDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 
@@ -337,5 +338,14 @@ export class HostelManagmentService {
       .toPromise();
 
   }
+
+  public async VerifyStudentHostelEligibility(searchRequest: VerifyStudentHostelEligibilityModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/VerifyStudentHostelEligibility`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 }
