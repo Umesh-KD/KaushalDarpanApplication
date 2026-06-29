@@ -22,7 +22,8 @@ reportList: any[] = [];
 searchRequest: any = {
   id: 0,
   action: '_getAllData',
-  financialYearID: 0
+  financialYearID: 0,
+  status :0
 };
 
 FinancialYearList: any[] = [];
