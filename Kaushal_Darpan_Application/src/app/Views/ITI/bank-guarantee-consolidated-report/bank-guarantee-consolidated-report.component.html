@@ -29,12 +29,15 @@
         <!-- Search Criteria -->
         <div class="mb-8">
 
-            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-                <b class="text-1xl-5">
-                    <i class="ti ti-search"></i>
-                    Enter Search Criteria
-                </b>
-            </div>
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">
+              <i class="ti ti-search"></i>
+              Enter Search Criteria
+            </b>
+            <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="reportList && reportList.length > 0">
+              <i class="ti ti-excel"></i> Export Excel
+            </a>
+          </div>
 
             <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
@@ -125,7 +128,7 @@
                     <!-- <th>Court Date</th> -->
                     <th>Status</th>
                     <th>Writ No</th>
-                    <th>WritNoDate</th>
+                    <!--<th>WritNoDate</th>-->
                     <!--<th>Remarks</th>-->
                     <!--<th>High Court</th>-->
                     <!--<th>Document</th>-->
@@ -180,10 +183,12 @@
                          [href]="appsettingConfig.StaticFileRootPathURL + '/' + row.CourtDocumernt"
                          target="_blank"
                          class="text-primary text-decoration-underline">
-                        {{ row.WritNo }}
+                        {{ row.WritNo }}  <span *ngIf="row.WritNo && row.WritNo.length > 0">
+                          - ({{ row.WritNoDate }})
+                        </span>
                       </a>
                     </td>
-                    <td>{{row.WritNoDate}}</td>
+                    <!--<td>{{row.WritNoDate}}</td>-->
 
                     <!--<td>{{row.BankRemark}}</td>
   <td>{{row.HighCourtName}}</td>-->
