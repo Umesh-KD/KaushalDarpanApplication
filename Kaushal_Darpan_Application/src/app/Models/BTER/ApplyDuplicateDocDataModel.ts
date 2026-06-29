@@ -30,11 +30,11 @@ export class ApplyDuplicateDocument extends RequestBaseModel {
 }
 
 
-export class DuplicateDocumentSearch {
+export class DuplicateDocumentSearch extends RequestBaseModel {
   public ID: number = 0;
   public DocumentID: number = 0;
   public SemesterID: number = 0;
-  public DepartmentID: number = 0;
+  //public DepartmentID: number = 0;
   public FeeAmount: number = 0;
   public ServiceID: number = 5442;
   public StudentID: number = 0;
@@ -61,7 +61,7 @@ export class DuplicateDocumentSearch {
   public SortColumn: string = '';
 
   public action:string='';
-  public Eng_NonEng:number=0;
+  //public Eng_NonEng:number=0;
 }
 
 export class DuplicateDoc_Action {

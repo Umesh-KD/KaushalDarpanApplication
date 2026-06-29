@@ -24,4 +24,5 @@ export class BterDuplicateCertificateReportDataModel {
   public EnrollmentNo: string = '';
   public StudentID: number = 0;
   public Document_ID?: number = 0;
+  public ReqId?: number = 0;
 }
