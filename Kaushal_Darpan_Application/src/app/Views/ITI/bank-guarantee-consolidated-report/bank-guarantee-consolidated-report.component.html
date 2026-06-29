@@ -72,8 +72,8 @@
                 <select class="form-select" [(ngModel)]="searchRequest.status">
                   <option value="">-- Select Status --</option>
                   <option value="0">All</option>
-                  <option value="2">Due</option>
-                  <option value="3">Not Due</option>
+                  <option value="2">Bank Guarantee Due</option>
+                  <option value="3">Bank Guarantee Not Due</option>
                   <option value="4">Court Case</option>
 
                 </select> 
@@ -146,13 +146,16 @@
                     <td>{{row.CollegeName}}</td>
                     <td>{{row.NumberOfUnit}}</td>
 
-                    <td class="text-right">
-                      {{row.AmountAvailable | number:'1.0-0'}}
-                    </td>
 
                     <td class="text-right">
                       {{row.AmountRequired | number:'1.0-0'}}
                     </td>
+
+                    <td class="text-right">
+                      {{row.AmountAvailable | number:'1.0-0'}}
+                    </td>
+
+
 
                     <td class="text-right">
 
@@ -189,23 +192,21 @@
                       </a>
                     </td>
                     <!--<td>{{row.WritNoDate}}</td>-->
-
                     <!--<td>{{row.BankRemark}}</td>
   <td>{{row.HighCourtName}}</td>-->
-
                     <!--<td>
 
-                      <a *ngIf="row.CourtDocumernt"
-                         [href]="appsettingConfig.StaticFileRootPathURL + '/' + row.CourtDocumernt"
-                         target="_blank"
-                         class="btn bg-primary btn-sm text-white"
-                         title="View Document">
+    <a *ngIf="row.CourtDocumernt"
+       [href]="appsettingConfig.StaticFileRootPathURL + '/' + row.CourtDocumernt"
+       target="_blank"
+       class="btn bg-primary btn-sm text-white"
+       title="View Document">
 
-                        <i class="ti ti-eye"></i>
+      <i class="ti ti-eye"></i>
 
-                      </a>
+    </a>
 
-                    </td>-->
+  </td>-->
                     <td>
 
                       <a [routerLink]="['/iti-bank-guarantee-list']"
