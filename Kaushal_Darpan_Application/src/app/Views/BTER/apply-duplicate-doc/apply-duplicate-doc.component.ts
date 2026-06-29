@@ -863,6 +863,12 @@ export class ApplyDuplicateDocComponent implements OnInit {
     this.request.FeesTypeID = 0;
     this.request.InstituteID = 0;
     this.request.FeeAmount = 0;
+    this.request.DepartmentTypeID = 0;
+
+   // this.GrievanceFormGroup.get('ddlFeesTypeID')?.enable();
+   // this.GrievanceFormGroup.get('ddlInstituteID')?.updateValueAndValidity();
+    await this.FeeAmount('DuplicateDocStudentWise');
+    await this.ondepartmentChange();
 
     if (this.request.DocumentID == this._DuplicateDocumentType.Duplicate_Marksheet) {
       this.isMarksheet = true;
