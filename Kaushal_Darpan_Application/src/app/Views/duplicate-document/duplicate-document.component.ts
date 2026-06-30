@@ -200,6 +200,7 @@ export class DuplicateDocumentComponent implements OnInit {
       this.loaderService.requestStarted();
       await this.applyDuplicateDocService.GetDuplicateDocInstituteWise(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
+        debugger;
         this.StudentList = data.Data;
 
         this.totalRecord=this.StudentList[0]?.TotalRecords;
@@ -390,7 +391,8 @@ export class DuplicateDocumentComponent implements OnInit {
           this.searchRequestMarksheet.FianancialYearID = this.sSOLoginDataModel.FinancialYearID
           this.searchRequestMarksheet.DocumentID = element.Document_ID;
           this.searchRequestMarksheet.ReqId = element.RequestID;
-
+          this.searchRequestMarksheet.MarksheetFile = element.MarksheetFile;
+          this.searchRequestMarksheet.MarksheetPath = element.MarksheetPath;
           this.loaderService.requestStarted();
 
           if (this.searchRequestMarksheet.DocumentID == this._EnumDuplicateDocumentType.Duplicate_Marksheet) {
@@ -422,6 +424,8 @@ export class DuplicateDocumentComponent implements OnInit {
             this.searchRequest1.Document_ID = element.Document_ID;
             this.searchRequest1.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
             this.searchRequest1.ReqId = element.RequestID;
+            this.searchRequest1.DocumentFilename = element.MarksheetFile;
+            this.searchRequest1.DocumentPath = element.MarksheetPath;
 
             await this.reportService.GetDuplicateDiplomaCertificate(this.searchRequest1)
               .then((data: any) => {
@@ -470,6 +474,8 @@ export class DuplicateDocumentComponent implements OnInit {
        this.searchRequest1.Document_ID = element.Document_ID;
        this.searchRequest1.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
        this.searchRequest1.ReqId = element.RequestID;
+       this.searchRequest1.DocumentFilename = element.MarksheetFile;
+       this.searchRequest1.DocumentPath = element.MarksheetPath;
           const data = await this.reportService.BterDuplicateCertificateDownload(this.searchRequest1);
           if (data && data.Data) {
             this.downloadBase64PDF(data.Data, `${this.searchRequest1.Action}.pdf`);
@@ -484,20 +490,20 @@ export class DuplicateDocumentComponent implements OnInit {
       }
     
       DownloadFile(fileName: string): void {
-        const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${fileName}`;
+        const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/BTER/DuplicateDocument/${fileName}`;
         this.http.get(fileUrl, { responseType: 'blob' }).subscribe(blob => {
           const link = document.createElement('a');
           const url = window.URL.createObjectURL(blob);
           link.href = url;
-          link.download = this.generateFileName('pdf');
+          link.download = this.generateFileName('pdf', fileName);
           link.click();
           window.URL.revokeObjectURL(url);
         });
       }
     
-      generateFileName(extension: string): string {
+  generateFileName(extension: string, fileName: string): string {
         const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
-        return `file_${timestamp}.${extension}`;
+         return `${fileName}_${timestamp}.${extension}`;
       }
 
 

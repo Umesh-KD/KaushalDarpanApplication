@@ -141,13 +141,15 @@ export class MiscellaneousReportComponent implements OnInit {
       { ID: 8, Name: '90 And Above Sessional Marks Institute Wise, Semester Wise report' },
       { ID: 9, Name: 'Download Student Digilocker Report' },
       { ID: 10, Name: 'Zero Marks IA Record' },
-      { ID: 11, Name: 'Zero Marks Practical Record' }
+      { ID: 11, Name: 'Zero Marks Practical Record' },
+      { ID: 12, Name: 'Minimum & Maximum Marks Report IA' },
+      { ID: 13, Name: 'Minimum & Maximum Marks Practical Report' }
     ];
   }
   get form() { return this.groupForm.controls; }
 
   async SubmitData() {
-    debugger;
+    //debugger;
     this.CustomizeReportCoulmnDataPush = [];
     try {
 
@@ -163,7 +165,7 @@ export class MiscellaneousReportComponent implements OnInit {
       this.requestData.SchemeID = !isNaN(Number(this.groupForm.value.SchemeID)) ? Number(this.groupForm.value.SchemeID) : 0;
 
 
-      if ([5, 6,9].includes(this.requestData.Type)) {
+      if ([5, 6, 9].includes(this.requestData.Type)) {
         this.requestData.CourseType = this.sSOLoginDataModel.Eng_NonEng;
       } else {
         this.requestData.CourseType = 0;
@@ -181,59 +183,19 @@ export class MiscellaneousReportComponent implements OnInit {
                 this.toastr.warning(data.Message);
               }
               else if (data.State == EnumStatus.Success) {
-
-                this.GetfilteredList = data["Data"];
-                debugger
-                this.exportToExcelstaticType90();
-              }
-              else {
-                this.toastr.error(data.Message);
-                console.log(data.ErrorMessage);
-              }
-
-            }, (error: any) => console.error(error));
-        }
-        else  if (this.requestData.Type == 9) {
-          this.requestData.Action = 'Heading';
-          debugger
-          await this.reportService.GetMiscellaneousReport(this.requestData)
-            .then((data: any) => {
-              // message
-              if (data.State == EnumStatus.Warning) {
-                this.toastr.warning(data.Message);
-              }
-              else if (data.State == EnumStatus.Success) {
-                this.GetfilteredColumnlist = data["Data"];// list
-                this.exportToExcelstaticType90();
-              }
-              else {
-                this.toastr.error(data.Message);
-                console.log(data.ErrorMessage);
-              }
-            }, (error: any) => console.error(error));
-
-          this.requestData.Action = 'ViewData';
-          await this.reportService.GetMiscellaneousReport(this.requestData)
-            .then((data: any) => {
-              // message
-              if (data.State == EnumStatus.Warning) {
-                 this.exportToExcelstaticType91();
-                this.toastr.warning(data.Message);
-              }
-              else if (data.State == EnumStatus.Success) {
-                debugger
+                //debugger
                 this.GetfilteredList = data["Data"];// list
-               
+                this.exportToExcelstaticType90();
               }
               else {
                 this.toastr.error(data.Message);
                 console.log(data.ErrorMessage);
               }
+
             }, (error: any) => console.error(error));
-
-
         }
         else {
+          debugger
           await this.reportService.GetMiscellaneousReport(this.requestData)
             .then((data: any) => {
               // message
@@ -251,13 +213,18 @@ export class MiscellaneousReportComponent implements OnInit {
                 else if (this.requestData.Type == 6) {
                   this.exportToExcelTpye6();
                 }
+                else if (this.requestData.Type == 9) {
+                  this.exportToExcelType9();
+                }
                 else if (this.requestData.Type == 10) {
                   this.exportToExcelGetZero_Marks_IA_Or_Practical_Record();
                 }
                 else if (this.requestData.Type == 11) {
                   this.exportToExcelGetZero_Marks_IA_Or_Practical_Record();
                 }
-
+                else if (this.requestData.Type == 12 || this.requestData.Type == 13) {
+                  this.exportToExcelMinimumMaximumMarksIA_Or_PracticalReport();
+                }
                 else {
                   this.exportToExcelTpye2();
                 }
@@ -269,7 +236,7 @@ export class MiscellaneousReportComponent implements OnInit {
             }, (error: any) => console.error(error));
         }
 
-       
+
       } catch (ex) {
         console.log(ex);
       }
@@ -412,74 +379,73 @@ export class MiscellaneousReportComponent implements OnInit {
     XLSX.writeFile(wb, fileName);
   }
 
+  exportToExcelTpye5(): void {
 
-    exportToExcelTpye5(): void {
-     
-      const wantedColumns =
-        ['SrNo', 'StudentName', 'FatherName', 'MotherName', 'EnrollmentNo', 'RollNo', 'SemesterID', 'StudentType',
-          'SubjectCode', 'MaxTheory', 'MaxPractical', 'MaxInternalAssisment', 'ObtainedTheory', 'ObtainedPractical',
-          'ObtainedInternalAssisment', 'ATM', 'GraceMarks', 'Result'];
+    const wantedColumns =
+      ['SrNo', 'StudentName', 'FatherName', 'MotherName', 'EnrollmentNo', 'RollNo', 'SemesterID', 'StudentType',
+        'SubjectCode', 'MaxTheory', 'MaxPractical', 'MaxInternalAssisment', 'ObtainedTheory', 'ObtainedPractical',
+        'ObtainedInternalAssisment', 'ATM', 'GraceMarks', 'Result'];
 
-      const exportData = this.GetfilteredList.map((row: any, index: number) => {
-        const filteredRow: any = {};
-        wantedColumns.forEach(col => {
-          filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
-        });
-        return filteredRow;
+    const exportData = this.GetfilteredList.map((row: any, index: number) => {
+      const filteredRow: any = {};
+      wantedColumns.forEach(col => {
+        filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
       });
+      return filteredRow;
+    });
 
-      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-      const colWidths = wantedColumns.map(col => {
-        const maxLength = Math.max(
-          col.length,
-          ...exportData.map((row: { [x: string]: { toString: () => { (): any; new(): any; length: any; }; }; }) =>
-            row[col] ? row[col].toString().length : 0
-          )
-        );
-        return { wch: maxLength + 2 };
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    const colWidths = wantedColumns.map(col => {
+      const maxLength = Math.max(
+        col.length,
+        ...exportData.map((row: { [x: string]: { toString: () => { (): any; new(): any; length: any; }; }; }) =>
+          row[col] ? row[col].toString().length : 0
+        )
+      );
+      return { wch: maxLength + 2 };
+    });
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    const fileName = `Download_Grace_Marks_Student_report_${todayDate}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+  }
+
+  exportToExcelTpye6(): void {
+
+    const wantedColumns =
+      ['SrNo', 'StudentName', 'FatherName', 'MotherName', 'EnrollmentNo', 'RollNo', 'SemesterID', 'StudentType',
+        'SubjectCode'];
+
+    const exportData = this.GetfilteredList.map((row: any, index: number) => {
+      const filteredRow: any = {};
+      wantedColumns.forEach(col => {
+        filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
       });
-      ws['!cols'] = colWidths;
+      return filteredRow;
+    });
 
-      const wb: XLSX.WorkBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-      const todayDate = new Date().toISOString().split('T')[0];
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    const colWidths = wantedColumns.map(col => {
+      const maxLength = Math.max(
+        col.length,
+        ...exportData.map((row: { [x: string]: { toString: () => { (): any; new(): any; length: any; }; }; }) =>
+          row[col] ? row[col].toString().length : 0
+        )
+      );
+      return { wch: maxLength + 2 };
+    });
+    ws['!cols'] = colWidths;
 
-      const fileName = `Download_Grace_Marks_Student_report_${todayDate}.xlsx`;
-      XLSX.writeFile(wb, fileName);
-    }
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    const todayDate = new Date().toISOString().split('T')[0];
 
-    exportToExcelTpye6(): void {
-     
-      const wantedColumns =
-        ['SrNo', 'StudentName', 'FatherName', 'MotherName', 'EnrollmentNo', 'RollNo', 'SemesterID', 'StudentType',
-          'SubjectCode'];
-
-      const exportData = this.GetfilteredList.map((row: any, index: number) => {
-        const filteredRow: any = {};
-        wantedColumns.forEach(col => {
-          filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
-        });
-        return filteredRow;
-      });
-
-      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-      const colWidths = wantedColumns.map(col => {
-        const maxLength = Math.max(
-          col.length,
-          ...exportData.map((row: { [x: string]: { toString: () => { (): any; new(): any; length: any; }; }; }) =>
-            row[col] ? row[col].toString().length : 0
-          )
-        );
-        return { wch: maxLength + 2 };
-      });
-      ws['!cols'] = colWidths;
-
-      const wb: XLSX.WorkBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-      const todayDate = new Date().toISOString().split('T')[0];
-
-      const fileName = `Download_Detain_Marks_Student_reportreport_${todayDate}.xlsx`;
-      XLSX.writeFile(wb, fileName);
+    const fileName = `Download_Detain_Marks_Student_reportreport_${todayDate}.xlsx`;
+    XLSX.writeFile(wb, fileName);
   }
 
   exportToExcelstaticType90(): void {
@@ -530,49 +496,28 @@ export class MiscellaneousReportComponent implements OnInit {
     );
   }
 
+  exportToExcelType9(): void {
 
-
-  exportToExcelstaticType91(): void {
-
-    let wantedColumns: string[] = [];
-
-    if (
-      this.GetfilteredColumnlist &&
-      this.GetfilteredColumnlist.length > 0 &&
-      this.GetfilteredColumnlist[0].ColumnNames
-    ) {
-      wantedColumns =
-        this.GetfilteredColumnlist[0].ColumnNames.split(',');
-    } else {
+    if (!this.GetfilteredList || this.GetfilteredList.length === 0) {
       return;
     }
 
+    // Get column names dynamically
+    const wantedColumns = Object.keys(this.GetfilteredList[0]);
+
     const excelData: any[][] = [];
 
-    // Header row
-    excelData.push([...wantedColumns]);
+    // Header
+    excelData.push(wantedColumns);
 
-    // Data rows
+    // Data
     this.GetfilteredList.forEach((row: any) => {
       excelData.push(
-        wantedColumns.map((col: string) =>
-          row[col] == null ? '' : row[col]
-        )
+        wantedColumns.map(col => row[col] ?? '')
       );
     });
 
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(excelData);
-
-    // Force header order again
-    wantedColumns.forEach((col, index) => {
-      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: index });
-      ws[cellAddress] = { t: 's', v: col };
-    });
-
-    ws['!ref'] = XLSX.utils.encode_range({
-      s: { r: 0, c: 0 },
-      e: { r: excelData.length - 1, c: wantedColumns.length - 1 }
-    });
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
@@ -628,10 +573,54 @@ export class MiscellaneousReportComponent implements OnInit {
     } else {
       this.SetfileName = 'Download_Report';
     }
+  }
 
-    const fileName = `${this.SetfileName}_${todayDate}.xlsx`;
+  exportToExcelMinimumMaximumMarksIA_Or_PracticalReport(): void {
+    debugger
+    if (!this.GetfilteredList || this.GetfilteredList.length === 0) {
+      return;
+    }
 
-    XLSX.writeFile(wb, fileName);
+    const wantedColumns = [
+      'S.No',
+      'InstituteName',
+      'Branch',
+      'SubjectCode',
+      'Below45',
+      'Above85',
+      'Remark'
+    ];
+
+    const exportData = this.GetfilteredList.map((row: any, index: number) => ({
+      'S.No': index + 1,
+      'InstituteName': row['InstituteName'] ?? '',
+      'Branch': row['Branch'] ?? '',
+      'SubjectCode': row['SubjectCode'] ?? '',
+      'Below45': row['Below45'] ?? '',
+      'Above85': row['Above85'] ?? '',
+      'Remark': row['Remark'] ?? ''
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    ws['!cols'] = wantedColumns.map(col => ({
+      wch: Math.max(
+        col.length,
+        ...exportData.map((r: any) => String(r[col] ?? '').length)
+      ) + 2
+    }));
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Report');
+
+    if (this.requestData.Type === 12) {
+      this.SetfileName = 'Minimum_Maximum_Marks_IA_Report';
+    }
+    else if (this.requestData.Type === 13) {
+      this.SetfileName = 'Minimum_Maximum_Marks_Practical_Report';
+    }
+
+    XLSX.writeFile(wb, `${this.SetfileName}.xlsx`);
   }
 
 }
