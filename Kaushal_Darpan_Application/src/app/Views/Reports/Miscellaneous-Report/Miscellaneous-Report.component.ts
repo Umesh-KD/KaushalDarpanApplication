@@ -141,7 +141,9 @@ export class MiscellaneousReportComponent implements OnInit {
       { ID: 8, Name: '90 And Above Sessional Marks Institute Wise, Semester Wise report' },
       { ID: 9, Name: 'Download Student Digilocker Report' },
       { ID: 10, Name: 'Zero Marks IA Record' },
-      { ID: 11, Name: 'Zero Marks Practical Record' }
+      { ID: 11, Name: 'Zero Marks Practical Record' },
+      { ID: 12, Name: 'Minimum & Maximum Marks Report IA' },
+      { ID: 13, Name: 'Minimum & Maximum Marks Practical Report' }
     ];
   }
   get form() { return this.groupForm.controls; }
@@ -220,7 +222,9 @@ export class MiscellaneousReportComponent implements OnInit {
                 else if (this.requestData.Type == 11) {
                   this.exportToExcelGetZero_Marks_IA_Or_Practical_Record();
                 }
-
+                else if (this.requestData.Type == 12 || this.requestData.Type == 13) {
+                  this.exportToExcelMinimumMaximumMarksIA_Or_PracticalReport();
+                }
                 else {
                   this.exportToExcelTpye2();
                 }
@@ -570,4 +574,53 @@ export class MiscellaneousReportComponent implements OnInit {
       this.SetfileName = 'Download_Report';
     }
   }
+
+  exportToExcelMinimumMaximumMarksIA_Or_PracticalReport(): void {
+    debugger
+    if (!this.GetfilteredList || this.GetfilteredList.length === 0) {
+      return;
+    }
+
+    const wantedColumns = [
+      'S.No',
+      'InstituteName',
+      'Branch',
+      'SubjectCode',
+      'Below45',
+      'Above85',
+      'Remark'
+    ];
+
+    const exportData = this.GetfilteredList.map((row: any, index: number) => ({
+      'S.No': index + 1,
+      'InstituteName': row['InstituteName'] ?? '',
+      'Branch': row['Branch'] ?? '',
+      'SubjectCode': row['SubjectCode'] ?? '',
+      'Below45': row['Below45'] ?? '',
+      'Above85': row['Above85'] ?? '',
+      'Remark': row['Remark'] ?? ''
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    ws['!cols'] = wantedColumns.map(col => ({
+      wch: Math.max(
+        col.length,
+        ...exportData.map((r: any) => String(r[col] ?? '').length)
+      ) + 2
+    }));
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Report');
+
+    if (this.requestData.Type === 12) {
+      this.SetfileName = 'Minimum_Maximum_Marks_IA_Report';
+    }
+    else if (this.requestData.Type === 13) {
+      this.SetfileName = 'Minimum_Maximum_Marks_Practical_Report';
+    }
+
+    XLSX.writeFile(wb, `${this.SetfileName}.xlsx`);
+  }
+
 }
