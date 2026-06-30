@@ -137,7 +137,8 @@ export class MiscellaneousReportComponent implements OnInit {
       { ID: 5, Name: 'Download Grace Marks Student report' },
       { ID: 6, Name: 'Download Detain Marks Student report' },
       { ID: 7, Name: '(Reval) Download Examiners With Group Code And Marking report' },
-      { ID: 8, Name: '90 And Above Sessional Marks Institute Wise, Semester Wise report' }
+      { ID: 8, Name: '90 And Above Sessional Marks Institute Wise, Semester Wise report' },
+      { ID: 9, Name: 'Download Student Digilocker Report' }
     ];
   }
   get form() { return this.groupForm.controls; }
@@ -159,12 +160,11 @@ export class MiscellaneousReportComponent implements OnInit {
       this.requestData.SchemeID = !isNaN(Number(this.groupForm.value.SchemeID)) ? Number(this.groupForm.value.SchemeID) : 0;
 
 
-      if ([5, 6].includes(this.requestData.Type)) {
+      if ([5, 6,9].includes(this.requestData.Type)) {
         this.requestData.CourseType = this.sSOLoginDataModel.Eng_NonEng;
       } else {
         this.requestData.CourseType = 0;
       }
-
       try {
         if (this.requestData.Type == 8) {
           this.requestData.Action = 'Heading';
@@ -202,7 +202,48 @@ export class MiscellaneousReportComponent implements OnInit {
             }, (error: any) => console.error(error));
 
 
-        } else {
+        }
+        else  if (this.requestData.Type == 9) {
+          this.requestData.Action = 'Heading';
+          debugger
+          await this.reportService.GetMiscellaneousReport(this.requestData)
+            .then((data: any) => {
+              // message
+              if (data.State == EnumStatus.Warning) {
+                this.toastr.warning(data.Message);
+              }
+              else if (data.State == EnumStatus.Success) {
+                this.GetfilteredColumnlist = data["Data"];// list
+                this.exportToExcelstaticType90();
+              }
+              else {
+                this.toastr.error(data.Message);
+                console.log(data.ErrorMessage);
+              }
+            }, (error: any) => console.error(error));
+
+          this.requestData.Action = 'ViewData';
+          await this.reportService.GetMiscellaneousReport(this.requestData)
+            .then((data: any) => {
+              // message
+              if (data.State == EnumStatus.Warning) {
+                 this.exportToExcelstaticType91();
+                this.toastr.warning(data.Message);
+              }
+              else if (data.State == EnumStatus.Success) {
+                debugger
+                this.GetfilteredList = data["Data"];// list
+               
+              }
+              else {
+                this.toastr.error(data.Message);
+                console.log(data.ErrorMessage);
+              }
+            }, (error: any) => console.error(error));
+
+
+        }
+        else {
           await this.reportService.GetMiscellaneousReport(this.requestData)
             .then((data: any) => {
               // message
@@ -497,6 +538,59 @@ export class MiscellaneousReportComponent implements OnInit {
     XLSX.writeFile(
       wb,
       `90AndAboveSessionalMarksInstituteWiseSemesterWisereport_${todayDate}.xlsx`
+    );
+  }
+
+  exportToExcelstaticType91(): void {
+
+    let wantedColumns: string[] = [];
+
+    if (
+      this.GetfilteredColumnlist &&
+      this.GetfilteredColumnlist.length > 0 &&
+      this.GetfilteredColumnlist[0].ColumnNames
+    ) {
+      wantedColumns =
+        this.GetfilteredColumnlist[0].ColumnNames.split(',');
+    } else {
+      return;
+    }
+
+    const excelData: any[][] = [];
+
+    // Header row
+    excelData.push([...wantedColumns]);
+
+    // Data rows
+    this.GetfilteredList.forEach((row: any) => {
+      excelData.push(
+        wantedColumns.map((col: string) =>
+          row[col] == null ? '' : row[col]
+        )
+      );
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(excelData);
+
+    // Force header order again
+    wantedColumns.forEach((col, index) => {
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: index });
+      ws[cellAddress] = { t: 's', v: col };
+    });
+
+    ws['!ref'] = XLSX.utils.encode_range({
+      s: { r: 0, c: 0 },
+      e: { r: excelData.length - 1, c: wantedColumns.length - 1 }
+    });
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    XLSX.writeFile(
+      wb,
+      `StudentDigilockerReport_${todayDate}.xlsx`
     );
   }
 
