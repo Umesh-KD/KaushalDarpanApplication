@@ -13,6 +13,7 @@ import * as XLSX from 'xlsx';
 import { DocumentDetailsModel } from '../../Models/DocumentDetailsModel';
 import { AdminUserSearchModel } from '../../Models/AdminUserDataModel';
 import { AdminUserService } from '../../Services/BTERAdminUser/admin-user.service';
+import { ReportService } from '../../Services/Report/report.service';
 
 @Component({
   selector: 'app-student-centered-activites-master',
@@ -65,7 +66,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
 
   public HodBranchlist: any[] = [];
   public hodRequestModel = new AdminUserSearchModel();
-
+  public IsAnnexure32Uploaded: boolean = false;
   constructor(private commonMasterService: CommonFunctionService,
     private SCAService: StudentCenteredActivitesService,
     private toastr: ToastrService,
@@ -76,7 +77,8 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
     private Swal2: SweetAlert2,
     private cdr: ChangeDetectorRef,
     private activatedRoute: ActivatedRoute,
-    private adminUserService: AdminUserService
+    private adminUserService: AdminUserService,
+    private ScholarshipService: ReportService,
   ) {
   }
 
@@ -204,6 +206,14 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   }
 
   async LockAndSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
+
+    this.getExaminerData();
+
+    if (this.IsAnnexure32Uploaded == false) {
+      this.Swal2.Warning("Please upload Annexure 32 first!")
+      return;
+    } 
+
     this.Swal2.Confirmation("Are you sure? <br> Once Submitted, It can't be edited anymore.",
       async (result: any) => {
         if (result.isConfirmed) {
@@ -575,6 +585,28 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
     }
     catch (ex) {
       console.log(ex);
+    }
+  }
+
+  async getExaminerData() {
+    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+
+    try {
+      const data: any = await this.ScholarshipService.GetUploadAnnexture32(this.searchRequest);
+      if (
+        data?.Data &&
+        data.Data.length > 0 &&
+        data.Data[0].FileName
+      ) {
+        this.IsAnnexure32Uploaded = true;
+      } else {
+        this.IsAnnexure32Uploaded = false;
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 }

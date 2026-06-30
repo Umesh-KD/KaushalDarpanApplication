@@ -53,6 +53,7 @@ export class DuplicateDocumentComponent implements OnInit {
   public State: number = -1;
   public Message: any = [];
   public ErrorMessage: any = [];
+  public DocumentTypeList1: any[] = [];
   // pagination
    pageNo: any = 1;
    pageSize: any = 50;
@@ -90,8 +91,11 @@ export class DuplicateDocumentComponent implements OnInit {
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
    
-   // this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
+    // this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
+    await this.GetDocumentTypeDDL();
+    this.searchRequest.DocumentID = 3;
     await this.GetDuplicateDocInstituteWise(1);
+
   }
   get FormAction() { return this.formAction.controls; }
 
@@ -157,7 +161,7 @@ export class DuplicateDocumentComponent implements OnInit {
   }
 
   async GetDuplicateDocInstituteWise(i:any) {
-   // debugger
+    debugger
     console.log(i);
     if(i==1){
       this.pageNo=1;
@@ -219,6 +223,28 @@ export class DuplicateDocumentComponent implements OnInit {
     }
   }
 
+  async GetDocumentTypeDDL() {
+    //debugger;
+    try {
+      this.loaderService.requestStarted();
+      await this.applyDuplicateDocService.GetApplyDuplicateDocumentTypeList()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DocumentTypeList1 = data['Data'];
+          console.log("document", this.DocumentTypeList1);
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   async SaveData_Issuance() {
    // debugger;
     this.isSubmitted = true;
@@ -269,6 +295,7 @@ export class DuplicateDocumentComponent implements OnInit {
     // this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
     this.searchRequest.PageNumber = this.pageNo;
     this.searchRequest.PageSize = this.pageSize;
+    this.searchRequest.DocumentID = 0;
     await this.GetDuplicateDocInstituteWise(1);
   }
 
@@ -504,8 +531,7 @@ export class DuplicateDocumentComponent implements OnInit {
   generateFileName(extension: string, fileName: string): string {
         const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
          return `${fileName}_${timestamp}.${extension}`;
-      }
-
+  }
 
   downloadBase64PDF(base64: string, filename: string): void {
     const byteCharacters = atob(base64);
