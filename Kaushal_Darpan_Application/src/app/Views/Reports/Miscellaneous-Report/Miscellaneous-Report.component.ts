@@ -573,6 +573,7 @@ export class MiscellaneousReportComponent implements OnInit {
     } else {
       this.SetfileName = 'Download_Report';
     }
+    XLSX.writeFile(wb, `${this.SetfileName}.xlsx`);
   }
 
   exportToExcelMinimumMaximumMarksIA_Or_PracticalReport(): void {
