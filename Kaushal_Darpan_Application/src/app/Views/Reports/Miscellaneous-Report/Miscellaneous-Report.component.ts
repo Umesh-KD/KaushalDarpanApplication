@@ -166,42 +166,29 @@ export class MiscellaneousReportComponent implements OnInit {
         this.requestData.CourseType = 0;
       }
       try {
+        debugger
         if (this.requestData.Type == 8) {
-          this.requestData.Action = 'Heading';
-          await this.reportService.GetMiscellaneousReport(this.requestData)
-            .then((data: any) => {
-              // message
-              if (data.State == EnumStatus.Warning) {
-                this.toastr.warning(data.Message);
-              }
-              else if (data.State == EnumStatus.Success) {
-                this.GetfilteredColumnlist = data["Data"];// list
-              }
-              else {
-                this.toastr.error(data.Message);
-                console.log(data.ErrorMessage);
-              }
-            }, (error: any) => console.error(error));
 
           this.requestData.Action = 'ViewData';
+
           await this.reportService.GetMiscellaneousReport(this.requestData)
             .then((data: any) => {
-              // message
+
               if (data.State == EnumStatus.Warning) {
                 this.toastr.warning(data.Message);
               }
               else if (data.State == EnumStatus.Success) {
+
+                this.GetfilteredList = data["Data"];
                 debugger
-                this.GetfilteredList = data["Data"];// list
                 this.exportToExcelstaticType90();
               }
               else {
                 this.toastr.error(data.Message);
                 console.log(data.ErrorMessage);
               }
+
             }, (error: any) => console.error(error));
-
-
         }
         else  if (this.requestData.Type == 9) {
           this.requestData.Action = 'Heading';
@@ -488,58 +475,106 @@ export class MiscellaneousReportComponent implements OnInit {
 
   
 
+  //exportToExcelstaticType90(): void {
+
+  //  let wantedColumns: string[] = [];
+
+  //  if (
+  //    this.GetfilteredColumnlist &&
+  //    this.GetfilteredColumnlist.length > 0 &&
+  //    this.GetfilteredColumnlist[0].ColumnNames
+  //  ) {
+  //    wantedColumns =
+  //      this.GetfilteredColumnlist[0].ColumnNames.split(',');
+  //  } else {
+  //    return;
+  //  }
+
+  //  const excelData: any[][] = [];
+
+  //  // Header row
+  //  excelData.push([...wantedColumns]);
+
+  //  // Data rows
+  //  this.GetfilteredList.forEach((row: any) => {
+  //    excelData.push(
+  //      wantedColumns.map((col: string) =>
+  //        row[col] == null ? '' : row[col]
+  //      )
+  //    );
+  //  });
+
+  //  const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(excelData);
+
+  //  // Force header order again
+  //  wantedColumns.forEach((col, index) => {
+  //    const cellAddress = XLSX.utils.encode_cell({ r: 0, c: index });
+  //    ws[cellAddress] = { t: 's', v: col };
+  //  });
+
+  //  ws['!ref'] = XLSX.utils.encode_range({
+  //    s: { r: 0, c: 0 },
+  //    e: { r: excelData.length - 1, c: wantedColumns.length - 1 }
+  //  });
+
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  //  const todayDate = new Date().toISOString().split('T')[0];
+
+  //  XLSX.writeFile(
+  //    wb,
+  //    `90AndAboveSessionalMarksInstituteWiseSemesterWisereport_${todayDate}.xlsx`
+  //  );
+  //}
   exportToExcelstaticType90(): void {
 
-    let wantedColumns: string[] = [];
-
-    if (
-      this.GetfilteredColumnlist &&
-      this.GetfilteredColumnlist.length > 0 &&
-      this.GetfilteredColumnlist[0].ColumnNames
-    ) {
-      wantedColumns =
-        this.GetfilteredColumnlist[0].ColumnNames.split(',');
-    } else {
+    if (!this.GetfilteredList || this.GetfilteredList.length === 0) {
       return;
     }
 
+    const keys = Object.keys(this.GetfilteredList[0]);
+
+   
+    const nonNumeric = keys.filter(k => isNaN(Number(k)));
+
+    
+    const numeric = keys.filter(k => !isNaN(Number(k)));
+
+    const wantedColumns = [...nonNumeric, ...numeric];
+
     const excelData: any[][] = [];
 
-    // Header row
+
     excelData.push([...wantedColumns]);
 
-    // Data rows
     this.GetfilteredList.forEach((row: any) => {
       excelData.push(
-        wantedColumns.map((col: string) =>
-          row[col] == null ? '' : row[col]
-        )
+        wantedColumns.map(col => row[col] ?? '')
       );
     });
 
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(excelData);
 
-    // Force header order again
-    wantedColumns.forEach((col, index) => {
-      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: index });
-      ws[cellAddress] = { t: 's', v: col };
-    });
+    ws['!cols'] = wantedColumns.map(col => ({
+      wch: Math.max(
+        col.length,
+        ...this.GetfilteredList.map((r: any) =>
+          (r[col] ?? '').toString().length
+        )
+      ) + 2
+    }));
 
-    ws['!ref'] = XLSX.utils.encode_range({
-      s: { r: 0, c: 0 },
-      e: { r: excelData.length - 1, c: wantedColumns.length - 1 }
-    });
-
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    const todayDate = new Date().toISOString().split('T')[0];
 
     XLSX.writeFile(
       wb,
-      `90AndAboveSessionalMarksInstituteWiseSemesterWisereport_${todayDate}.xlsx`
+      `90AndAboveSessionalMarksInstituteWiseSemesterWiseReport_${new Date().toISOString().split('T')[0]}.xlsx`
     );
   }
+
+
 
   exportToExcelstaticType91(): void {
 
