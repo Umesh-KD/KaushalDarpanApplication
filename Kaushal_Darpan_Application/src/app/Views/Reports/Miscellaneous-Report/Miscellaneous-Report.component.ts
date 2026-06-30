@@ -50,6 +50,7 @@ export class MiscellaneousReportComponent implements OnInit {
   public GetfilteredList: any[] = [];
   public GetfilteredColumnlist: any[] = [];
   public selectedNames: string[] = [];
+  public SetfileName: string = '';
   ssoLoginUser = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
@@ -138,7 +139,9 @@ export class MiscellaneousReportComponent implements OnInit {
       { ID: 6, Name: 'Download Detain Marks Student report' },
       { ID: 7, Name: '(Reval) Download Examiners With Group Code And Marking report' },
       { ID: 8, Name: '90 And Above Sessional Marks Institute Wise, Semester Wise report' },
-      { ID: 9, Name: 'Download Student Digilocker Report' }
+      { ID: 9, Name: 'Download Student Digilocker Report' },
+      { ID: 10, Name: 'Zero Marks IA Record' },
+      { ID: 11, Name: 'Zero Marks Practical Record' }
     ];
   }
   get form() { return this.groupForm.controls; }
@@ -248,6 +251,13 @@ export class MiscellaneousReportComponent implements OnInit {
                 else if (this.requestData.Type == 6) {
                   this.exportToExcelTpye6();
                 }
+                else if (this.requestData.Type == 10) {
+                  this.exportToExcelGetZero_Marks_IA_Or_Practical_Record();
+                }
+                else if (this.requestData.Type == 11) {
+                  this.exportToExcelGetZero_Marks_IA_Or_Practical_Record();
+                }
+
                 else {
                   this.exportToExcelTpye2();
                 }
@@ -472,87 +482,33 @@ export class MiscellaneousReportComponent implements OnInit {
       XLSX.writeFile(wb, fileName);
   }
 
-
-  
-
-  //exportToExcelstaticType90(): void {
-
-  //  let wantedColumns: string[] = [];
-
-  //  if (
-  //    this.GetfilteredColumnlist &&
-  //    this.GetfilteredColumnlist.length > 0 &&
-  //    this.GetfilteredColumnlist[0].ColumnNames
-  //  ) {
-  //    wantedColumns =
-  //      this.GetfilteredColumnlist[0].ColumnNames.split(',');
-  //  } else {
-  //    return;
-  //  }
-
-  //  const excelData: any[][] = [];
-
-  //  // Header row
-  //  excelData.push([...wantedColumns]);
-
-  //  // Data rows
-  //  this.GetfilteredList.forEach((row: any) => {
-  //    excelData.push(
-  //      wantedColumns.map((col: string) =>
-  //        row[col] == null ? '' : row[col]
-  //      )
-  //    );
-  //  });
-
-  //  const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(excelData);
-
-  //  // Force header order again
-  //  wantedColumns.forEach((col, index) => {
-  //    const cellAddress = XLSX.utils.encode_cell({ r: 0, c: index });
-  //    ws[cellAddress] = { t: 's', v: col };
-  //  });
-
-  //  ws['!ref'] = XLSX.utils.encode_range({
-  //    s: { r: 0, c: 0 },
-  //    e: { r: excelData.length - 1, c: wantedColumns.length - 1 }
-  //  });
-
-  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-  //  const todayDate = new Date().toISOString().split('T')[0];
-
-  //  XLSX.writeFile(
-  //    wb,
-  //    `90AndAboveSessionalMarksInstituteWiseSemesterWisereport_${todayDate}.xlsx`
-  //  );
-  //}
   exportToExcelstaticType90(): void {
-
+    debugger
     if (!this.GetfilteredList || this.GetfilteredList.length === 0) {
       return;
     }
 
+    // Get column names
     const keys = Object.keys(this.GetfilteredList[0]);
 
-   
+    // Non-numeric columns first
     const nonNumeric = keys.filter(k => isNaN(Number(k)));
 
-    
+    // Numeric columns next
     const numeric = keys.filter(k => !isNaN(Number(k)));
 
     const wantedColumns = [...nonNumeric, ...numeric];
 
-    const excelData: any[][] = [];
-
-
-    excelData.push([...wantedColumns]);
-
-    this.GetfilteredList.forEach((row: any) => {
-      excelData.push(
-        wantedColumns.map(col => row[col] ?? '')
-      );
-    });
+    // Create header + data without using forEach
+    const excelData = [
+      wantedColumns,
+      ...this.GetfilteredList.map((row: any) =>
+        Object.entries(row)
+          .filter(([key]) => wantedColumns.includes(key))
+          .sort((a, b) => wantedColumns.indexOf(a[0]) - wantedColumns.indexOf(b[0]))
+          .map(([, value]) => value ?? '')
+      )
+    ];
 
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(excelData);
 
@@ -560,7 +516,7 @@ export class MiscellaneousReportComponent implements OnInit {
       wch: Math.max(
         col.length,
         ...this.GetfilteredList.map((r: any) =>
-          (r[col] ?? '').toString().length
+          String(r[col] ?? '').length
         )
       ) + 2
     }));
@@ -628,6 +584,54 @@ export class MiscellaneousReportComponent implements OnInit {
       `StudentDigilockerReport_${todayDate}.xlsx`
     );
   }
+  exportToExcelGetZero_Marks_IA_Or_Practical_Record(): void {
+    debugger
+    if (!this.GetfilteredList || this.GetfilteredList.length === 0) {
+      return;
+    }
 
+    const wantedColumns = [
+      'SrNo',
+      'StudentName',
+      'RollNo',
+      'SPN',
+      'InstituteName',
+      'SubjectName',
+      'ObtainedMarks'
+    ];
+
+    const exportData = this.GetfilteredList.map((row: any, index: number) =>
+      wantedColumns.reduce((obj: any, col: string) => {
+        obj[col] = col === 'SrNo' ? index + 1 : (row[col] ?? '');
+        return obj;
+      }, {})
+    );
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    ws['!cols'] = wantedColumns.map(col => ({
+      wch: Math.max(
+        col.length,
+        ...exportData.map((row: any) => String(row[col] ?? '').length)
+      ) + 2
+    }));
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    if (this.requestData.Type === 10) {
+      this.SetfileName = 'Download_GetZero_Marks_IA_Record_Report';
+    } else if (this.requestData.Type === 11) {
+      this.SetfileName = 'Download_GetZero_Marks_Practical_Record_Report';
+    } else {
+      this.SetfileName = 'Download_Report';
+    }
+
+    const fileName = `${this.SetfileName}_${todayDate}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
+  }
 
 }
