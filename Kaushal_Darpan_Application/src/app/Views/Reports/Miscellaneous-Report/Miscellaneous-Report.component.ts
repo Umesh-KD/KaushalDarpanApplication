@@ -569,5 +569,5 @@ export class MiscellaneousReportComponent implements OnInit {
     } else {
       this.SetfileName = 'Download_Report';
     }
-
+  }
 }
