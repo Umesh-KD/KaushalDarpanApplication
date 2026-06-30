@@ -11,6 +11,7 @@ export class DownloadMarksheetSearchModel {
   public RequestEndTerm:number=0
   public Eng_NonEngID: number = 0
   public MarksheetPath: string = ''
+  public MarksheetFile?: string = ''
   public Marksheet: string = ''
   public IPAddress: string = ''
   public ExamType: number = 0
