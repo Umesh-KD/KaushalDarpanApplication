@@ -215,6 +215,21 @@ export class MarksheetDownloadComponent {
       window.URL.revokeObjectURL(url);
     });
   }
+
+  DownloadFile_chunk(FileName: string, row: any): void {
+
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      // downloadLink.download = this.generateFileName('pdf', DownloadfileName);
+      downloadLink.download = FileName || 'Marksheet.pdf'
+      downloadLink.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
   generateFileName(extension: string, name: string): string {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
     return `Marksheet_${name}_${timestamp}.${extension}`;
@@ -426,11 +441,12 @@ export class MarksheetDownloadComponent {
       this.loaderService.requestStarted();
 
       await this.reportService.StudentMarksheetDownloadChunk(StudentList)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data, "Data");
           if (data.State == EnumStatus.Success) {
-            this.DownloadFile(data.Data, 'file download');
+            this.DownloadFile_chunk(data.Data, 'file download');
+            await this.getAllData();
           }
           else {
             this.toastr.error(data.ErrorMessage)
