@@ -430,10 +430,11 @@ export class StudentDashboardComponent implements OnInit {
 async GetStudentMarksheetList() {
   try {
 
+    const request: any = {};
+    request.StudentID = this.sSOLoginDataModel.StudentID;
+    request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     const response: any =
-      await this.studentService.GetStudentMarksheetList(
-        this.sSOLoginDataModel.StudentID
-      );
+      await this.studentService.GetStudentMarksheetList(request);
     if (response?.State === 1 || response?.State === 'Success') {
       this.StudentMarksheetList = response.Data || [];
     } else {
@@ -446,8 +447,8 @@ async GetStudentMarksheetList() {
   }
 }
 
-async DownloadMarksheet(row: any) {
-
+  async DownloadMarksheet(row: any) {
+    debugger
     const fullSession = this.FinYearList.find((x: any) => x.EndTermID == row.EndTermID)?.FinancialYearName;
     const Session = fullSession ? fullSession.split('-')[0] : '';
 
