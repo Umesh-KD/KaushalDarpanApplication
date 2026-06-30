@@ -84,7 +84,7 @@ export class PaymentStatusComponent implements OnInit {
   }
 
   async FeeReceipt() {
-    
+    debugger
     if (this.DepartmentID == EnumDepartment.ITI) {
       this.GetITIStudentFeeReceipt()
     }
