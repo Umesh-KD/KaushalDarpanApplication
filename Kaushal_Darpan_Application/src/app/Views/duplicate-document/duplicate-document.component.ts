@@ -104,7 +104,10 @@ export class DuplicateDocumentComponent implements OnInit {
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
       'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID',
       'Category','MotherName','HighestQualification','PersonwithDisability','PWDcategory','EconomicWeakerSection',
-      'TraineeType','RecordStatus','CollegeName','StudentID', 'IsCollegeSubmitted'
+      'TraineeType', 'RecordStatus', 'CollegeName', 'StudentID', 'IsCollegeSubmitted', 'RequestID', 'RequestEndTerm',
+      'ID', 'Student_Id', 'Document_ID', 'Semester_ID', 'Department_ID', 'Institute_ID', 'IsActive', 'IsDelete', 'RTS', 'ConfigurationTypeID',
+      'ModifiedDate', 'EndTerm', 'RequestEndTerm1', 'DepartmentTypeID', 'FeeID', 'DuplicateMarksheetPath', 'DuplicateMarksheetFileName',
+      'IsPayment', 'MarksheetFile', 'MarksheetFile','MarksheetPath'
     ];
 
     const columnOrder = [
