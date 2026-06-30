@@ -22,12 +22,30 @@
         <!-- <a [routerLink]="'/AddCompany'"  [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a> -->
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name</label>   
-          <input type="text" class="form-input" placeholder="Name" id="Name" 
-            [(ngModel)]="searchRequest.Name"
-            (keyup.enter)="GetDuplicateDocInstituteWise(1)">
+          <!--(change)="FeeAmount('DuplicateDocStudentWise')"-->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Document <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="searchRequest.DocumentID" (change)="GetDuplicateDocInstituteWise(1)">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of DocumentTypeList1" [value]="item.DocumentID">{{item.DocumentName}}</option>
+          </select>
+          <!--<div *ngIf="isSubmitted&&form.ddlDocumentID.errors" class="text-danger">
+            <p *ngIf="!form.ddlDocumentID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>-->
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name</label>
+          <input type="text" class="form-input" placeholder="Name" id="Name"
+                 [(ngModel)]="searchRequest.Name"
+                 (keyup.enter)="GetDuplicateDocInstituteWise(1)">
+        </div>
+
+
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetDuplicateDocInstituteWise(1)">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
@@ -39,7 +57,7 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel</a>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
@@ -67,9 +85,9 @@
             <th class="text-left">Student Name</th>
             <th class="text-left">Student ID</th>
 
-            <th class="text-left">Semester</th>
+            <th *ngIf="this.searchRequest.DocumentID == _EnumDuplicateDocumentType.Duplicate_Marksheet"  class="text-left">Semester</th>
             <th class="text-left">EnrollmentNo / Application No</th>
-            <th class="text-left">Request Session</th>
+            <th *ngIf="this.searchRequest.DocumentID == _EnumDuplicateDocumentType.Duplicate_Marksheet"  class="text-left">Request Session</th>
             <!-- <th class="text-left">Service ID</th> -->
             <th class="text-left">Fees Amount</th>
             <th class="text-left">Apply For</th>
@@ -84,9 +102,9 @@
             <td align="left">{{item.UserName}}</td>
             <td align="left">{{item.Student_Id}}</td>
 
-            <td align="left">{{item.SemesterName}}</td>
+            <td *ngIf="this.searchRequest.DocumentID == _EnumDuplicateDocumentType.Duplicate_Marksheet"  align="left">{{item.SemesterName}}</td>
             <td align="left">{{item.EnrollmentNo}}</td>
-            <td align="left">{{item.EndTermName}}</td>
+            <td *ngIf="this.searchRequest.DocumentID == _EnumDuplicateDocumentType.Duplicate_Marksheet"   align="left">{{item.EndTermName}}</td>
             <!-- <td align="left">{{item.ServiceID}}</td> -->
             <td align="left">{{item.FeeAmount}}</td>
             <td align="left">{{item.Name}}</td>
