@@ -164,6 +164,7 @@ export class CampusRemovalReport {
   public CampusRemovedRemark: string = '';
   public CampusRemovedFilePath: string = '';
   public RoleID: number = 0
-  public UserID: number =0
+  public UserID: number = 0
+  public CampusDetails: string = '';
 }
 
