@@ -136,7 +136,7 @@ export class ITIDateConfigurationComponent implements OnInit, OnDestroy {
         this.TypeMasterDDL = data.Data;
         if (this.sSOLoginDataModel.RoleID == EnumRole.ITIAdmin_NCVT || this.sSOLoginDataModel.RoleID == EnumRole.ITIAdmin_SCVT
         ) {
-          this.TypeMasterDDL = this.TypeMasterDDL.filter((e: any) => e.ID == 5)
+          this.TypeMasterDDL = this.TypeMasterDDL.filter((e: any) => e.ID == 5 || e.ID == 175)
         } 
 
       }, (error: any) => console.error(error))
