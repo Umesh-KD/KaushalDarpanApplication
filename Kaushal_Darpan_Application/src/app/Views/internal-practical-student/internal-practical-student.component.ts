@@ -14,6 +14,7 @@ import * as XLSX from 'xlsx';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { AdminUserService } from '../../Services/BTERAdminUser/admin-user.service';
 import { AdminUserSearchModel } from '../../Models/AdminUserDataModel';
+import { ReportService } from '../../Services/Report/report.service';
 
 @Component({
   selector: 'app-internal-practical-student',
@@ -54,6 +55,8 @@ export class InternalPracticalStudentComponent implements OnInit {
   public InstituteMasterDDLList: any = []
   public StreamMasterDDL: any = [];
   public _EnumRole = EnumRole;
+  public IsAnnexure32Uploaded: boolean = false;
+
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -83,7 +86,8 @@ export class InternalPracticalStudentComponent implements OnInit {
     private router: ActivatedRoute,
     private modalService: NgbModal,
     private Swal2: SweetAlert2,
-    private adminUserService: AdminUserService
+    private adminUserService: AdminUserService,
+    private ScholarshipService: ReportService,
   ) { }
 
 
@@ -258,7 +262,35 @@ export class InternalPracticalStudentComponent implements OnInit {
     }
   }
 
+  async getExaminerData() {
+    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+
+    try {
+      const data: any = await this.ScholarshipService.GetUploadAnnexture32(this.searchRequest);
+      if (
+        data?.Data &&
+        data.Data.length > 0 &&
+        data.Data[0].FileName
+      ) {
+        this.IsAnnexure32Uploaded = true;
+      } else {
+        this.IsAnnexure32Uploaded = false;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  } 
   async LockAndSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
+    this.getExaminerData();
+
+    if (this.IsAnnexure32Uploaded == false) {
+      this.Swal2.Warning("Please upload Annexure 32 first!")
+      return;
+    }  
+
     this.Swal2.Confirmation("Are you sure? <br> Once Submitted, It can't be edited anymore.",
       async (result: any) => {
         if (result.isConfirmed) {

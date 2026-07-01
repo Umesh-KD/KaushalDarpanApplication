@@ -14,6 +14,8 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import { CommonDDLCommonSubjectModel } from '../../../Models/CommonDDLCommonSubjectModel';
 import { CommonDDLSubjectMasterModel } from '../../../Models/CommonDDLSubjectMasterModel';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-examiners',
@@ -401,6 +403,41 @@ export class ExaminersComponent implements OnInit {
   
   get sortInTableDirectionAero(): string {
     return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
+
+
+  exportToExcel(): void {
+
+    const exportData = this.paginatedInTableData.map((row: any, index: number) => ({
+      'Sr No': this.startInTableIndex + index + 1,
+      'SSOID': row.SSOID,
+      'Group Code': row.Code,
+      'Teacher Name': row.Name,
+      'Email': row.Email,
+      'Subject': `${row.SubjectCode} (${row.SubjectName})`
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Examiner List');
+
+    // Current Date & Time (DDMMYYYY_HHMMSS)
+    const now = new Date();
+
+    const date =
+      String(now.getDate()).padStart(2, '0') +
+      String(now.getMonth() + 1).padStart(2, '0') +
+      now.getFullYear();
+
+    const time =
+      String(now.getHours()).padStart(2, '0') +
+      String(now.getMinutes()).padStart(2, '0') +
+      String(now.getSeconds()).padStart(2, '0');
+
+    const fileName = `ExaminerList_${date}_${time}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
   }
   // end table feature
 }

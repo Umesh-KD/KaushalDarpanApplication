@@ -1,22 +1,20 @@
-
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
     <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" *ngIf="sSOLoginDataModel.DepartmentID == 1">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700"
+        *ngIf="sSOLoginDataModel.DepartmentID == 1">
         BTER
       </a>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" *ngIf="sSOLoginDataModel.DepartmentID == 2">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700"
+        *ngIf="sSOLoginDataModel.DepartmentID == 2">
         ITI
       </a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700" aria-current="page"> Student Dashboard</a>
     </div>
   </div>
-  <button type="button"
-          id="btnReset"
-          class="btn bg-danger text-white"
-          (click)="resetSSO()">
+  <button type="button" id="btnReset" class="btn bg-danger text-white" (click)="resetSSO()">
     <i class="ti ti-refresh"></i> Reset SSO
   </button>
   <!--<button type="submit" class="btn bg-success text-white btn-lg" (click)="openModal(modal_ApplyNow)"><i class="ti ti-plus"></i> Apply Now</button>-->
@@ -27,25 +25,25 @@
       <div class="card-body">
         <div class="Profilebox flex justify-between">
 
-          <p style="display:none">{{appsettingConfig.StaticFileRootPathURL}}/{{ProfileLists.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{ProfileLists.FileName}}</p>
+          <p style="display:none">
+            {{appsettingConfig.StaticFileRootPathURL}}/{{ProfileLists.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{ProfileLists.FileName}}
+          </p>
           <div class="profilePic">
             <!--<img [alt]="ProfileLists.StudentName" appImageError="assets/images/dummyImg.jpg"
        [src]="appsettingConfig.StaticFileRootPathURL + '/' + ProfileLists.FolderName + '/' + appsettingConfig.DepartmentBterFolder + '/' + ProfileLists.FileName" />
 
   <img *ngIf="ProfileLists.DepartmentID==2" [alt]="ProfileLists.StudentName" appImageError="assets/images/dummyImg.jpg"
        [src]="appsettingConfig.StaticFileRootPathURL +  ProfileLists.FileName" />-->
-        
+
 
             <ng-container *ngIf="ProfileLists.DepartmentID == 2; else otherImage">
-              <img [alt]="ProfileLists.StudentName"
-                   appImageError="assets/images/dummyImg.jpg"
-                   [src]="appsettingConfig.StaticFileRootPathURL + ProfileLists.FileName" />
+              <img [alt]="ProfileLists.StudentName" appImageError="assets/images/dummyImg.jpg"
+                [src]="appsettingConfig.StaticFileRootPathURL + ProfileLists.FileName" />
             </ng-container>
 
             <ng-template #otherImage>
-              <img [alt]="ProfileLists.StudentName"
-                   appImageError="assets/images/dummyImg.jpg"
-                   [src]="appsettingConfig.StaticFileRootPathURL + '/' + ProfileLists.FolderName + '/' + appsettingConfig.DepartmentBterFolder + '/' + ProfileLists.FileName" />
+              <img [alt]="ProfileLists.StudentName" appImageError="assets/images/dummyImg.jpg"
+                [src]="appsettingConfig.StaticFileRootPathURL + '/' + ProfileLists.FolderName + '/' + appsettingConfig.DepartmentBterFolder + '/' + ProfileLists.FileName" />
             </ng-template>
 
           </div>
@@ -84,7 +82,7 @@
                 <span>({{ProfileLists.InstituteCode}}) {{ProfileLists.InstituteName}}</span>
               </div>
               <div>
-                <label>{{sSOLoginDataModel.DepartmentID == 2?"Trade Name":"Stream Name"}}   : </label>
+                <label>{{sSOLoginDataModel.DepartmentID == 2?"Trade Name":"Stream Name"}} : </label>
                 <span>({{ProfileLists.StreamCode}}) {{ProfileLists.StreamName}}</span>
               </div>
               <!--<div>
@@ -102,81 +100,89 @@
     </div>
   </div>
   <!--<div class="grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 gap-6 mb-6 allStatics">-->
-<!-- Quick Actions -->
-<div class="mb-6">
-  <h5 class="qa-title">Quick Actions</h5>
+  <!-- Quick Actions -->
+  <div class="mb-6">
+    <h5 class="qa-title">Quick Actions</h5>
 
-  <div class="qa-scroll">
+    <div class="qa-scroll">
 
-    <a class="qa-card" [routerLink]="['/StudentPaidFees']" [queryParams]="{ status: 'PaidFees',filter: 1 }" ]>
-      <span class="qa-ico c-red">
-        <i class="ti ti-receipt"></i>
-      </span>
-      <span class="qa-label t-red">Pay Fees</span>
-    </a>
+      <a class="qa-card" [routerLink]="['/StudentPaidFees']" [queryParams]="{ status: 'PaidFees',filter: 1 }" ]>
+        <span class="qa-ico c-red">
+          <i class="ti ti-receipt"></i>
+        </span>
+        <span class="qa-label t-red">Pay Fees</span>
+      </a>
 
-    <a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card" [routerLink]="['/ApplyForHostel']" [queryParams]="{ id: 1 }">
-      <span class="qa-ico c-green">
-        <i class="ti ti-bed"></i>
-      </span>
-      <span class="qa-label t-green">Apply Hostel</span>
-    </a>
+      <a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card"
+        [routerLink]="['/CollegeHostelDetails']">
+        <span class="qa-ico c-green">
+          <i class="ti ti-bed"></i>
+        </span>
+        <span class="qa-label t-green">Apply Hostel</span>
+      </a>
 
-    <a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card" [routerLink]="['/studentplacementconsent']">
-      <span class="qa-ico c-blue">
-        <i class="ti ti-briefcase"></i>
-      </span>
-      <span class="qa-label t-blue">Placement Registration</span>
-    </a>
+      <a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card"
+        [routerLink]="['/studentplacementconsent']">
+        <span class="qa-ico c-blue">
+          <i class="ti ti-briefcase"></i>
+        </span>
+        <span class="qa-label t-blue">Placement Registration</span>
+      </a>
 
-    <a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" class="qa-card" [routerLink]="['/itistudentplacementconsent']">
-      <span class="qa-ico c-blue">
-        <i class="ti ti-briefcase"></i>
-      </span>
-      <span class="qa-label t-blue">Placement Registration</span>
-    </a>
+      <a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" class="qa-card"
+        [routerLink]="['/itistudentplacementconsent']">
+        <span class="qa-ico c-blue">
+          <i class="ti ti-briefcase"></i>
+        </span>
+        <span class="qa-label t-blue">Placement Registration</span>
+      </a>
 
-    <a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card" [routerLink]="['/StaffTrainingConsent']">
-      <span class="qa-ico c-purple">
-        <i class="ti ti-school"></i>
-      </span>
-      <span class="qa-label t-purple">IIP Registration</span>
-    </a>
+      <a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card"
+        [routerLink]="['/StaffTrainingConsent']">
+        <span class="qa-ico c-purple">
+          <i class="ti ti-school"></i>
+        </span>
+        <span class="qa-label t-purple">IIP Registration</span>
+      </a>
 
-    <a class="qa-card">
-      <span class="qa-ico c-orange">
-        <i class="ti ti-edit-circle"></i>
-      </span>
-      <span class="qa-label t-orange">Revaluation Apply</span>
-    </a>
+      <a class="qa-card">
+        <span class="qa-ico c-orange">
+          <i class="ti ti-edit-circle"></i>
+        </span>
+        <span class="qa-label t-orange">Revaluation Apply</span>
+      </a>
 
-    <a  *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card" [routerLink]="['/StudentEnrollmentCancelation']">
-      <span class="qa-ico c-teal">
-        <i class="ti ti-file-x"></i>
-      </span>
-      <span class="qa-label t-teal">Enrollment Cancellation</span>
-    </a>
+      <a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card"
+        [routerLink]="['/StudentEnrollmentCancelation']">
+        <span class="qa-ico c-teal">
+          <i class="ti ti-file-x"></i>
+        </span>
+        <span class="qa-label t-teal">Enrollment Cancellation</span>
+      </a>
 
 
 
-    <a class="qa-card">
-      <span class="qa-ico c-indigo">
-        <i class="ti ti-file-text"></i>
-      </span>
-      <span class="qa-label t-indigo">View Result</span>
-    </a>
+      <a class="qa-card">
+        <span class="qa-ico c-indigo">
+          <i class="ti ti-file-text"></i>
+        </span>
+        <span class="qa-label t-indigo">View Result</span>
+      </a>
 
+    </div>
   </div>
-</div>
 
 
-  <div class="{{this.sSOLoginDataModel.DepartmentID ==_EnumDepartment.BTER?'grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 gap-6 mb-6 allStatics':'grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 mb-6 allStatics'}}">
+  <div
+    class="{{this.sSOLoginDataModel.DepartmentID ==_EnumDepartment.BTER?'grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 gap-6 mb-6 allStatics':'grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 mb-6 allStatics'}}">
     <div class="card" *ngFor="let row of StudantDashboardList">
       <div class="p-5">
         <span class="material-symbols-rounded float-end text-3xl text-default-400">{{row.DasbhoardIcon}}</span>
         <h6 class="text-muted text-sm uppercase">{{row.StatusText}}</h6>
         <h3 class="text-2xl mb-3" data-plugin="counterup">{{row.TotalCount}}</h3>
-        <a href="{{row.RedirectURL}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        <a href="{{row.RedirectURL}}"
+          class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View
+          All <i class="ti ti-chevron-right"></i></a>
       </div>
     </div>
   </div>
@@ -190,12 +196,13 @@
   }
   @else if(this.sSOLoginDataModel.DepartmentID ==_EnumDepartment.ITI)
   {
-  <app-itipending-fees>  </app-itipending-fees>
+  <app-itipending-fees> </app-itipending-fees>
 
   }
 </div>
 
-<ng-template #modal_ApplyNow let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+<ng-template #modal_ApplyNow let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between  items-center">
@@ -210,9 +217,14 @@
             </div>
           </div>
           <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6 loginBox mt-8">
-            <a (click)="Redirect(_EnumDepartment.BTER)" class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">Polytechnic Admission<i class="ti ti-chevron-right"></i></a>
-            <a (click)="Redirect(_EnumDepartment.ITI)" class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">ITI <i class="ti ti-chevron-right"></i></a>
-            <a class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer" (click)="closeModal()">DCE <i class="ti ti-chevron-right"></i></a>
+            <a (click)="Redirect(_EnumDepartment.BTER)"
+              class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">Polytechnic Admission<i
+                class="ti ti-chevron-right"></i></a>
+            <a (click)="Redirect(_EnumDepartment.ITI)"
+              class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">ITI <i
+                class="ti ti-chevron-right"></i></a>
+            <a class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer" (click)="closeModal()">DCE <i
+                class="ti ti-chevron-right"></i></a>
             <!-- <a [routerLink]="'/StudentJanAadharDetail'"
              [queryParams]="{deptid:_EnumDepartment.ITI,isDirectAdmission:true}"
              (click)="closeModal()" class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">
@@ -227,7 +239,8 @@
 
 
 
-<ng-template #modal_StudetnCourseType let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+<ng-template #modal_StudetnCourseType let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between  items-center">
@@ -259,7 +272,8 @@
                   {{item.DepartmentName}}
                 </td>
                 <td>
-                  <a href="javascript:void(0);" class="btn bg-info btn-sm text-white text-center c-pointer" (click)="SetStudentDepartment(item)">Proceed <i class="ti ti-chevron-right"></i></a>
+                  <a href="javascript:void(0);" class="btn bg-info btn-sm text-white text-center c-pointer"
+                    (click)="SetStudentDepartment(item)">Proceed <i class="ti ti-chevron-right"></i></a>
                 </td>
               </tr>
             </table>
@@ -313,64 +327,49 @@
 
             <thead>
               <tr>
-                <th >Semester</th>
-                <th >Result Status</th>
-                <th >SGPA / Percentage</th>
-                <th >Result Date</th>
-                <th >Action</th>
+                <th>Semester</th>
+                <th>Result Status</th>
+                <th>SGPA / Percentage</th>
+                <th>Result Date</th>
+                <th>Action</th>
               </tr>
             </thead>
 
             <tbody>
 
               <tr *ngFor="let row of StudentMarksheetList">
+                <td style="text-align:center;">{{row.Semester}}</td>
+                <td style="text-align:center;">
+                  <span [ngClass]="row.Result_str == 'Pass' ? 'status-pass' : 'status-fail'">
+                    {{row.Result_str}}
+                  </span>
+                </td>
+                <td style="text-align:center;">
+                  {{row.CGPA}}
+                </td>
+                <td style="text-align:center;">
+                  {{row.ResultDate | date:'dd MMM yyyy'}}
+                </td>
+                <td style="text-align:center;">
+                  <a class="btn-marksheet" target="_blank" 
+                    *ngIf="row.MarksheetFile == ''"
+                    (click)="DownloadMarksheet(row)">
+                    View Marksheet
+                  </a>
 
-    <td style="text-align:center;">{{row.Semester}}</td>
+                  <a class="btn-marksheet" target="_blank" 
+                    *ngIf="row.MarksheetFile != ''"
+                    (click)="downloadFile_existing(row)">
+                    View Marksheet
+                  </a>
+                </td>
+              </tr>
 
-    <td style="text-align:center;">
-        <span
-            [ngClass]="row.Result_str == 'Pass'
-                ? 'status-pass'
-                : 'status-fail'">
-
-            {{row.Result_str}}
-        </span>
-    </td>
-
-    <td style="text-align:center;">
-        {{row.CGPA}}
-    </td>
-
-    <td style="text-align:center;">
-        {{row.ResultDate | date:'dd MMM yyyy'}}
-    </td>
-
-    <td style="text-align:center;">
-
-        <!-- <a class="btn-marksheet"
-           target="_blank"
-           href="{{appsettingConfig.StaticFileRootPathURL+ row.MarksheetFilePath}}">
-
-            View Marksheet
-
-        </a> -->
-          <a class="btn-marksheet"
-           target="_blank"
-           (click)="DownloadMarksheet(row)">
-
-            View Marksheet
-
-        </a>
-
-    </td>
-
-</tr>
-
-<tr *ngIf="StudentMarksheetList.length == 0">
-    <td colspan="5" class="text-center">
-        No Result Found
-    </td>
-</tr>
+              <tr *ngIf="StudentMarksheetList.length == 0">
+                <td colspan="5" class="text-center">
+                  No Result Found
+                </td>
+              </tr>
 
             </tbody>
 
@@ -390,13 +389,11 @@
 
         <ul class="activity-list">
 
-          <li class="activity-item"
-              *ngFor="let item of StudentRecentActivityList">
+          <li class="activity-item" *ngFor="let item of StudentRecentActivityList">
 
             <div class="activity-left">
 
-              <div class="activity-icon"
-                   [ngClass]="item.ColorClass || 'bg-soft-blue'">
+              <div class="activity-icon" [ngClass]="item.ColorClass || 'bg-soft-blue'">
 
                 <i class="ti ti-bulb"></i>
 
@@ -414,8 +411,7 @@
 
           </li>
 
-          <li *ngIf="StudentRecentActivityList?.length == 0"
-              class="text-center p-4">
+          <li *ngIf="StudentRecentActivityList?.length == 0" class="text-center p-4">
             No recent activities found
           </li>
 

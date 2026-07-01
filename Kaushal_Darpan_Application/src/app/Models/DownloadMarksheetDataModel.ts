@@ -11,6 +11,7 @@ export class DownloadMarksheetSearchModel {
   public RequestEndTerm:number=0
   public Eng_NonEngID: number = 0
   public MarksheetPath: string = ''
+  public MarksheetFile?: string = ''
   public Marksheet: string = ''
   public IPAddress: string = ''
   public ExamType: number = 0
@@ -20,7 +21,8 @@ export class DownloadMarksheetSearchModel {
   public IsLateral?: boolean = false
   public FianancialYearID?:number=0
   public DocumentID?:number=0
- 
+  public MarksheetID?:number=0
+  public SessionName?: string = ''
 }
 
 

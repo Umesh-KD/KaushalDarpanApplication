@@ -53,6 +53,7 @@ export class DuplicateDocumentComponent implements OnInit {
   public State: number = -1;
   public Message: any = [];
   public ErrorMessage: any = [];
+  public DocumentTypeList1: any[] = [];
   // pagination
    pageNo: any = 1;
    pageSize: any = 50;
@@ -90,8 +91,11 @@ export class DuplicateDocumentComponent implements OnInit {
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
    
-   // this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
+    // this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
+    await this.GetDocumentTypeDDL();
+    this.searchRequest.DocumentID = 3;
     await this.GetDuplicateDocInstituteWise(1);
+
   }
   get FormAction() { return this.formAction.controls; }
 
@@ -100,7 +104,10 @@ export class DuplicateDocumentComponent implements OnInit {
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
       'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID',
       'Category','MotherName','HighestQualification','PersonwithDisability','PWDcategory','EconomicWeakerSection',
-      'TraineeType','RecordStatus','CollegeName','StudentID', 'IsCollegeSubmitted'
+      'TraineeType', 'RecordStatus', 'CollegeName', 'StudentID', 'IsCollegeSubmitted', 'RequestID', 'RequestEndTerm',
+      'ID', 'Student_Id', 'Document_ID', 'Semester_ID', 'Department_ID', 'Institute_ID', 'IsActive', 'IsDelete', 'RTS', 'ConfigurationTypeID',
+      'ModifiedDate', 'EndTerm', 'RequestEndTerm1', 'DepartmentTypeID', 'FeeID', 'DuplicateMarksheetPath', 'DuplicateMarksheetFileName',
+      'IsPayment', 'MarksheetFile', 'MarksheetFile','MarksheetPath'
     ];
 
     const columnOrder = [
@@ -157,7 +164,7 @@ export class DuplicateDocumentComponent implements OnInit {
   }
 
   async GetDuplicateDocInstituteWise(i:any) {
-   // debugger
+    debugger
     console.log(i);
     if(i==1){
       this.pageNo=1;
@@ -200,6 +207,7 @@ export class DuplicateDocumentComponent implements OnInit {
       this.loaderService.requestStarted();
       await this.applyDuplicateDocService.GetDuplicateDocInstituteWise(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
+        debugger;
         this.StudentList = data.Data;
 
         this.totalRecord=this.StudentList[0]?.TotalRecords;
@@ -207,6 +215,28 @@ export class DuplicateDocumentComponent implements OnInit {
 
         console.log(this.StudentList)
       }, (error: any) => console.error(error))
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async GetDocumentTypeDDL() {
+    //debugger;
+    try {
+      this.loaderService.requestStarted();
+      await this.applyDuplicateDocService.GetApplyDuplicateDocumentTypeList()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DocumentTypeList1 = data['Data'];
+          console.log("document", this.DocumentTypeList1);
+        }, (error: any) => console.error(error)
+        );
     }
     catch (ex) {
       console.log(ex);
@@ -268,6 +298,7 @@ export class DuplicateDocumentComponent implements OnInit {
     // this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
     this.searchRequest.PageNumber = this.pageNo;
     this.searchRequest.PageSize = this.pageSize;
+    this.searchRequest.DocumentID = 0;
     await this.GetDuplicateDocInstituteWise(1);
   }
 
@@ -390,7 +421,8 @@ export class DuplicateDocumentComponent implements OnInit {
           this.searchRequestMarksheet.FianancialYearID = this.sSOLoginDataModel.FinancialYearID
           this.searchRequestMarksheet.DocumentID = element.Document_ID;
           this.searchRequestMarksheet.ReqId = element.RequestID;
-
+          this.searchRequestMarksheet.MarksheetFile = element.MarksheetFile;
+          this.searchRequestMarksheet.MarksheetPath = element.MarksheetPath;
           this.loaderService.requestStarted();
 
           if (this.searchRequestMarksheet.DocumentID == this._EnumDuplicateDocumentType.Duplicate_Marksheet) {
@@ -422,6 +454,8 @@ export class DuplicateDocumentComponent implements OnInit {
             this.searchRequest1.Document_ID = element.Document_ID;
             this.searchRequest1.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
             this.searchRequest1.ReqId = element.RequestID;
+            this.searchRequest1.DocumentFilename = element.MarksheetFile;
+            this.searchRequest1.DocumentPath = element.MarksheetPath;
 
             await this.reportService.GetDuplicateDiplomaCertificate(this.searchRequest1)
               .then((data: any) => {
@@ -470,6 +504,8 @@ export class DuplicateDocumentComponent implements OnInit {
        this.searchRequest1.Document_ID = element.Document_ID;
        this.searchRequest1.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
        this.searchRequest1.ReqId = element.RequestID;
+       this.searchRequest1.DocumentFilename = element.MarksheetFile;
+       this.searchRequest1.DocumentPath = element.MarksheetPath;
           const data = await this.reportService.BterDuplicateCertificateDownload(this.searchRequest1);
           if (data && data.Data) {
             this.downloadBase64PDF(data.Data, `${this.searchRequest1.Action}.pdf`);
@@ -484,22 +520,21 @@ export class DuplicateDocumentComponent implements OnInit {
       }
     
       DownloadFile(fileName: string): void {
-        const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${fileName}`;
+        const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/BTER/DuplicateDocument/${fileName}`;
         this.http.get(fileUrl, { responseType: 'blob' }).subscribe(blob => {
           const link = document.createElement('a');
           const url = window.URL.createObjectURL(blob);
           link.href = url;
-          link.download = this.generateFileName('pdf');
+          link.download = this.generateFileName('pdf', fileName);
           link.click();
           window.URL.revokeObjectURL(url);
         });
       }
     
-      generateFileName(extension: string): string {
+  generateFileName(extension: string, fileName: string): string {
         const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
-        return `file_${timestamp}.${extension}`;
-      }
-
+         return `${fileName}_${timestamp}.${extension}`;
+  }
 
   downloadBase64PDF(base64: string, filename: string): void {
     const byteCharacters = atob(base64);

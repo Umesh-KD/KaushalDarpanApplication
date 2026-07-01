@@ -152,6 +152,10 @@ export class MarksheetDownloadComponent {
 
     //debugger
     try {
+
+      const fullSession = this.FinYearList.find((x: any) => x.EndTermID == row.EndTermID)?.FinancialYearName;
+      const Session = fullSession ? fullSession.split('-')[0] : '';
+
       this.downloadReq.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.downloadReq.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
       //this.downloadReq.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -162,16 +166,19 @@ export class MarksheetDownloadComponent {
       this.downloadReq.ResultTypeID = row.ResultTypeID;
       this.downloadReq.IsRevised = row.IsRevised;
       this.downloadReq.IsReval = row.IsReval;
-      console.log(JSON.stringify(this.downloadReq), 'SearchRequestData')
-      const requestArray = [this.downloadReq];
-      this.loaderService.requestStarted();
+      this.downloadReq.MarksheetID = row.MarksheetID;
+      this.downloadReq.SessionName = Session;
+      this.downloadReq.RollNo = row.RollNo;
 
+      this.loaderService.requestStarted();
       await this.reportService.DownloadMarksheet(this.downloadReq)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data, "Data");
+
           if (data.State == EnumStatus.Success) {
-            this.DownloadFile(data.Data, row.RollNo);
+            this.DownloadFile(data.Data, row);
+            await this.getAllData();
           }
           else {
             this.toastr.error(data.ErrorMessage)
@@ -190,18 +197,39 @@ export class MarksheetDownloadComponent {
     }
   }
 
-  DownloadFile(FileName: string, DownloadfileName: any): void {
+  DownloadFile(FileName: string, row: any): void {
+
+    const fullSession = this.FinYearList.find((x: any) => x.EndTermID == row.EndTermID)?.FinancialYearName;
+    const Session = fullSession ? fullSession.split('-')[0] : '';
+
+    const url = `${this.appsettingConfig.StaticFileRootPathURL}/Students/BTER/Marksheet/${Session}/${FileName}`;
+
+    // const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;
+    this.http.get(url, { responseType: 'blob' }).subscribe((blob: any) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      // downloadLink.download = this.generateFileName('pdf', DownloadfileName);
+      downloadLink.download = FileName || 'Marksheet.pdf'
+      downloadLink.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
+  DownloadFile_chunk(FileName: string, row: any): void {
 
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;
     this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
       const downloadLink = document.createElement('a');
       const url = window.URL.createObjectURL(blob);
       downloadLink.href = url;
-      downloadLink.download = this.generateFileName('pdf', DownloadfileName);
+      // downloadLink.download = this.generateFileName('pdf', DownloadfileName);
+      downloadLink.download = FileName || 'Marksheet.pdf'
       downloadLink.click();
       window.URL.revokeObjectURL(url);
     });
   }
+
   generateFileName(extension: string, name: string): string {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
     return `Marksheet_${name}_${timestamp}.${extension}`;
@@ -413,11 +441,12 @@ export class MarksheetDownloadComponent {
       this.loaderService.requestStarted();
 
       await this.reportService.StudentMarksheetDownloadChunk(StudentList)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data, "Data");
           if (data.State == EnumStatus.Success) {
-            this.DownloadFile(data.Data, 'file download');
+            this.DownloadFile_chunk(data.Data, 'file download');
+            await this.getAllData();
           }
           else {
             this.toastr.error(data.ErrorMessage)

@@ -240,7 +240,7 @@ export class MasterLayoutComponent implements OnInit {
 
 
     await this.checkJailCollege()
-    debugger
+    //debugger
     await this.CheckProfileStatus()
     // Subscribe to the sSOLoginDataModel$ observable
     //this.userDataSubscription = this.commonFunctionService.sSOLoginDataModel$.subscribe(

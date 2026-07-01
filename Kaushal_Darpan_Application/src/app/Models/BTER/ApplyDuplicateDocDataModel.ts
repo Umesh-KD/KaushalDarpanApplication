@@ -6,11 +6,11 @@ export class ApplyDuplicateDocument extends RequestBaseModel {
   public SemesterID: number = 0;
   public DepartmentTypeID: number = 0;
   public FeeAmount: number = 0;
-  public ServiceID: number = 0;
+  public ServiceID: number = 2920;
   public StudentID: number = 0;
   public CourseTypeID: number = 0;
   public ApplicationID: number = 0;
-  public UniqueServiceID: number = 2;
+  public UniqueServiceID: number = 57;
   public MobileNo: string = '';
   public StudentName: string = '';
   public ApplicationNo: string = '';
