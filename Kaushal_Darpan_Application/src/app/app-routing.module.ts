@@ -1797,7 +1797,7 @@ const routes: Routes = [
       { path: 'AdmissionDashboard', loadChildren: () => import('./Views/admission-dashboard/admission-dashboard.module').then(m => m.AdmissionDashboardModule), title: 'Admission Dashboard' },
       { path: 'InventoryItemReport', loadChildren: () => import('./Views/ITI/inventory-item-report/inventory-item-report.module').then(m => m.InventoryItemReportModule) },
       { path: 'ConsolatedTradeReport', loadChildren: () => import('./Views/ITI/consolated-iti-trade/consolated-iti-trade.module').then(m => m.ConsolatedItiTradeModule) },
-
+      { path: 'campus-removal-report', loadChildren: () => import('./Views/ITI/ITIs/campus-removal-report/campus-removal-report.module').then(m => m.CampusRemovalReportModule), title: 'campus-removal-report' },
     ]
   },
 
@@ -1862,7 +1862,7 @@ const routes: Routes = [
 
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
-      { path: 'campus-removal-report', loadChildren: () => import('./Views/ITI/ITIs/campus-removal-report/campus-removal-report.module').then(m => m.CampusRemovalReportModule), title: 'campus-removal-report' },
+    
 
     
 
