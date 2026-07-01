@@ -194,4 +194,12 @@ export class ExaminerService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetExaminerDataDetails(searchRequest: ExaminerSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetExaminerDataDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

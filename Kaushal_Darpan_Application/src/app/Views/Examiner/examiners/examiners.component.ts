@@ -9,7 +9,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { ReportService } from '../../../Services/Report/report.service';
-import { EnumStatus, GlobalConstants ,EnumDepartment} from '../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants, EnumDepartment } from '../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import { CommonDDLCommonSubjectModel } from '../../../Models/CommonDDLCommonSubjectModel';
@@ -54,6 +54,9 @@ export class ExaminersComponent implements OnInit {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   //end table feature default
+
+  public ExaminersDetailsList: any[] = [];
+
   constructor(
     private commonMasterService: CommonFunctionService,
     private examinerservice: ExaminerService,
@@ -202,11 +205,15 @@ export class ExaminersComponent implements OnInit {
         data = JSON.parse(JSON.stringify(data));
         this.ExaminersList = data.Data;
         this.loadInTable();
-        //console.log("this.ExaminersList", this.ExaminersList)
+        //
+        if (data.State == EnumStatus.Error) {
+          console.log(data.ErrorMessage)
+          this.toastr.error(data.Message)
+        }
       })
     } catch (error) {
       console.error(error);
-    } 
+    }
   }
 
   async btnDelete_OnClick(ExaminerID: number) {
@@ -222,7 +229,7 @@ export class ExaminersComponent implements OnInit {
                 if (data.State == EnumStatus.Success) {
                   this.toastr.success(data.Message)
                   //reload
-                 await this.getExaminerData();
+                  await this.getExaminerData();
                 }
                 else {
                   this.toastr.error(data.ErrorMessage)
@@ -400,7 +407,7 @@ export class ExaminersComponent implements OnInit {
     this.endInTableIndex = 0;
     this.totalInTableRecord = this.ExaminersList.length;
   }
-  
+
   get sortInTableDirectionAero(): string {
     return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
   }
@@ -408,13 +415,21 @@ export class ExaminersComponent implements OnInit {
 
   exportToExcel(): void {
 
-    const exportData = this.paginatedInTableData.map((row: any, index: number) => ({
-      'Sr No': this.startInTableIndex + index + 1,
-      'SSOID': row.SSOID,
+    // set column
+    const exportData = this.ExaminersDetailsList?.map((row: any, index: number) => ({
+      'Sr No': index + 1,
+      'Semester': row.SemesterName,
+      'Scheme': row.Scheme,
       'Group Code': row.Code,
+      'SSOID': row.SSOID,
       'Teacher Name': row.Name,
+      'Mobile': row.MobileNumber,
+      'College Name': row.InstituteName,
+      'Examiner Code': row.ExaminerCode,
+      'Branch': row.StreamName,
       'Email': row.Email,
-      'Subject': `${row.SubjectCode} (${row.SubjectName})`
+      'Subject': `${row.SubjectCode} (${row.SubjectName})`,
+      'Regiatred Students': row.TotalRegStudent
     }));
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
@@ -440,4 +455,32 @@ export class ExaminersComponent implements OnInit {
     XLSX.writeFile(wb, fileName);
   }
   // end table feature
+
+  async getExaminerDataForExcel() {
+    //console.log("searchRequest", this.searchRequest);
+    this.searchRequest.CommonSubjectYesNo = this.CommonSubjectYesNo;
+    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    try {
+      // get
+      await this.examinerservice.GetExaminerDataDetails(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ExaminersDetailsList = data.Data;
+          //
+          if (data.State == EnumStatus.Success) {
+            this.exportToExcel();
+          } else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.Message)
+          }
+          else {
+            console.log(data.ErrorMessage)
+            this.toastr.error(data.Message)
+          }
+        })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
