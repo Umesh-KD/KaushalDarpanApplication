@@ -49,6 +49,7 @@ export class StudentDashboardComponent implements OnInit {
   public IsShowDashboard: boolean = false;
   StudentRecentActivityList: any[] = [];
   StudentMarksheetList: any[] = [];
+  public FinYearList: any = [];
   public downloadReq = new DownloadMarksheetSearchModel();
 
 
@@ -154,10 +155,33 @@ export class StudentDashboardComponent implements OnInit {
 
     this.parent.InstituteName = this.ProfileLists?.InstituteName;
 
+    await this.YearDropdownData();
     await this.GetStudentRecentActivity();
     await this.GetStudentMarksheetList();
   }
 
+  async YearDropdownData() {
+    try {
+      this.loaderService.requestStarted();
+
+      await this.menuService.GetAcedmicYearList(this.sSOLoginDataModel.RoleID, this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.SelectedValue)
+        .then((AcedmicYear: any) => {
+          AcedmicYear = JSON.parse(JSON.stringify(AcedmicYear));
+          this.FinYearList = AcedmicYear['Data'];
+          //debugger
+          //this.loaderService.requestEnded();
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 10);
+    }
+  }
 
   async openModalCource(content: any) {
 
@@ -406,10 +430,11 @@ export class StudentDashboardComponent implements OnInit {
 async GetStudentMarksheetList() {
   try {
 
+    const request: any = {};
+    request.StudentID = this.sSOLoginDataModel.StudentID;
+    request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     const response: any =
-      await this.studentService.GetStudentMarksheetList(
-        this.sSOLoginDataModel.StudentID
-      );
+      await this.studentService.GetStudentMarksheetList(request);
     if (response?.State === 1 || response?.State === 'Success') {
       this.StudentMarksheetList = response.Data || [];
     } else {
@@ -422,9 +447,11 @@ async GetStudentMarksheetList() {
   }
 }
 
-async DownloadMarksheet(row: any) {
-    //debugger
-    //debugger
+  async DownloadMarksheet(row: any) {
+    debugger
+    const fullSession = this.FinYearList.find((x: any) => x.EndTermID == row.EndTermID)?.FinancialYearName;
+    const Session = fullSession ? fullSession.split('-')[0] : '';
+
     try {
       this.downloadReq.DepartmentID = row.DepartmentID;
       this.downloadReq.Eng_NonEngID = row.Eng_NonEng;
@@ -436,16 +463,19 @@ async DownloadMarksheet(row: any) {
       this.downloadReq.ResultTypeID = row.ResultTypeID;
       this.downloadReq.IsRevised = row.IsRevised;
       this.downloadReq.IsReval = row.IsReval;
-      console.log(JSON.stringify(this.downloadReq),'SearchRequestData')
-      const requestArray = [this.downloadReq];
+      this.downloadReq.MarksheetID = row.MarksheetID;
+      this.downloadReq.SessionName = Session;
+      this.downloadReq.RollNo = row.RollNo;
+
       this.loaderService.requestStarted();
 
       await this.reportService.DownloadMarksheet(this.downloadReq)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data, "Data");
           if (data.State == EnumStatus.Success) {
-            this.DownloadFile(data.Data, row.RollNo);
+            this.DownloadFile(data.Data, row);
+            await this.GetStudentMarksheetList();
           }
           else {
             this.toastr.error(data.ErrorMessage)
@@ -464,20 +494,36 @@ async DownloadMarksheet(row: any) {
     }
   }
 
-  DownloadFile(FileName: string, DownloadfileName: any): void {
+  DownloadFile(FileName: string, row: any): void {
 
-    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;
-    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
+    const fullSession = this.FinYearList.find((x: any) => x.EndTermID == row.EndTermID)?.FinancialYearName;
+    const Session = fullSession ? fullSession.split('-')[0] : '';
+
+    const url = `${this.appsettingConfig.StaticFileRootPathURL}/Students/BTER/Marksheet/${Session}/${FileName}`;
+
+    this.http.get(url, { responseType: 'blob' }).subscribe((blob: any) => {
       const downloadLink = document.createElement('a');
       const url = window.URL.createObjectURL(blob);
       downloadLink.href = url;
-      downloadLink.download = this.generateFileName('pdf', DownloadfileName); 
+      downloadLink.download = FileName || 'Marksheet.pdf'
       downloadLink.click();
       window.URL.revokeObjectURL(url);
     });
   }
-  generateFileName(extension: string, name: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    return `Marksheet_${name}_${timestamp}.${extension}`;
-  }
+
+  downloadFile_existing(row: any) {
+    const url = `${this.appsettingConfig.StaticFileRootPathURL}/Students/BTER/Marksheet/${row.MarksheetFilePath}`;
+
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = row.MarksheetFile || 'Marksheet.pdf'; // Use stored filename
+        link.click();
+        // Clean up
+        window.URL.revokeObjectURL(link.href);
+      })
+      .catch(() => console.error('Download failed. Check CORS settings on the server.'));
+  } 
 }

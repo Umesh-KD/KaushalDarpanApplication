@@ -514,19 +514,17 @@ export class ApplyDuplicateDocComponent implements OnInit {
 
       await this.Student.GetStudentDataBy_StudID(this.studentInfo)
         .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          
+          data = JSON.parse(JSON.stringify(data));          
           const student = data['Data']?.[0];
-
           if (student?.ApplicationID) {
             this.request.ApplicationNo = student.ApplicationID;
           } else {
             this.request.ApplicationNo = student?.EnrollmentNo;
           }
-
           // this.SemesterMasterList = data['Data'];
         }, (error: any) => console.error(error)
-        );
+      );
+
     }
     catch (ex) {
       console.log(ex);
