@@ -605,7 +605,7 @@ export class itiPendingCollegeFeeComponent implements OnInit
       const response = await this.commonMasterService.GetDateConfigSetting(data);
       const parsedData = JSON.parse(JSON.stringify(response));
       this.DateConfigSetting = parsedData['Data'][0];
-      this.MapKeyEng = this.DateConfigSetting.ExaminationFee;
+      this.MapKeyEng = this.DateConfigSetting.ExaminationFeeCollege;
 
       if (this.MapKeyEng == 1)
       {
