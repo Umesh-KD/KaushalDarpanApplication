@@ -79,6 +79,7 @@ export class StudentExaminationITIService {
       ).toPromise();
   }
 
+
   public async SaveSelectedForExamination(request: StudentMarkedModel[]) {
     const body = JSON.stringify(request);
     return this.http.post(`${this.APIUrl}/SaveSelectedForExamination`, body, this.headersOptions)

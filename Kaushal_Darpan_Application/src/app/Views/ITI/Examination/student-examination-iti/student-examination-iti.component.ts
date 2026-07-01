@@ -329,6 +329,7 @@ export class StudentExaminationITIComponent
           this.loaderService.requestStarted();
           this.Revert.StudentExamID = item.StudentExamID
           this.Revert.status = item.status
+          this.Revert.CreatedBy = this.sSOLoginDataModel.UserID;
           // Call service to save student exam status
           await this.studentExaminationITIService.RevertStatus(this.Revert)
             .then(async (data: any) => {
@@ -1887,9 +1888,13 @@ export class StudentExaminationITIComponent
         .then(async (data: any) =>
         {
           data = JSON.parse(JSON.stringify(data));
-          if (data.State == EnumStatus.Success)
-          {
+          if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message);
+            this.CloseModal();
+            this.GetPreExamStudent();
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.Message);
             this.CloseModal();
             this.GetPreExamStudent();
           }

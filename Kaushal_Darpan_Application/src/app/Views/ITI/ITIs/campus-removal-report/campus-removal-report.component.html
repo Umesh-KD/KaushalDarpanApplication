@@ -1,0 +1,72 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITIs</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/AdmissionMasterDashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ITICollegeMaster" class="text-sm font-medium text-slate-700" aria-current="page">ITIs</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid">
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h5 class="mb-0">CampusRemovalReport</h5>
+    </div>
+
+    <div class="card-body table-responsive">
+      <table class="table table-bordered table-hover table-striped align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Sr. No.</th>
+            <th>College Name</th>
+            <th>Campus Year</th>
+            <th>Removed Order No.</th>
+            <th>Removed Order Date</th>
+            <th>Remark</th>
+            <th>Order File</th>
+           
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of campusRemovalReportList; let i = index">
+            <td>{{ i + 1 }}</td>
+
+            <td>{{ item.collegeName }}</td>
+
+            <td>{{ item.campYear }}</td>
+
+            <td>{{ item.campusRemovedOrderNo }}</td>
+
+            <td>
+              {{ item.campusRemovedOrderDate | date:'dd-MM-yyyy' }}
+            </td>
+
+            <td>{{ item.campusRemovedRemark }}</td>
+
+            <td class="text-center">
+              <a *ngIf="item.campusRemovedFilePath"
+                 [href]="item.campusRemovedFilePath"
+                 target="_blank"
+                 class="btn btn-sm btn-primary">
+                View
+              </a>
+              <span *ngIf="!item.campusRemovedFilePath">-</span>
+            </td>
+
+          </tr>
+
+          <tr *ngIf="campusRemovalReportList?.length === 0">
+            <td colspan="6" class="text-center text-muted">
+              No Records Found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

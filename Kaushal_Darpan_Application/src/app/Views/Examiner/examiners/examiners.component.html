@@ -107,7 +107,7 @@
           </select>
         </div>
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Search by Teacher Name:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Teacher Name</label>
           <input class="form-input" type="text" [(ngModel)]="searchRequest.Name" />
         </div>
 
@@ -120,7 +120,7 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="paginatedInTableData && paginatedInTableData.length > 0">
+      <a href="javascript:void(0);" (click)="getExaminerDataForExcel()" class="btn bg-info btn-sm text-white" *ngIf="ExaminersList && ExaminersList?.length > 0">
         <i class="ti ti-excel"></i> Export Excel
       </a>
     </div>
