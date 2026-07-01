@@ -243,19 +243,15 @@
                    title="Edit Student Details" (click)="EditStudentData(MyModel_EditStudentDetails, row.StudentID,row.StudentExamID)">
                   <i class="ti ti-user"></i>
                 </a>
+                
                 <a href="javascript:void(0);" *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.ITIPrincipal && row.isPublish==0 && row.IsShowFaButton==1 "
                    title="Update Eligibility Status" (click)="ViewAttendenceModal(AttendenceModal, row)">
                   <i class="ti ti-list"></i>
                 </a>
-                <a style="display:none" href="javascript:void(0);" *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.Principal_NCVT
-|| this.sSOLoginDataModel.RoleID==_EnumRole.ITIPrincipal"
+                <a href="javascript:void(0);" *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.TITDTETraining"
                    title="Revert Attendence Details" (click)="RevertStatus(row)">
                   <i class="ti ti-reload"></i>
                 </a>
-
-
-
-
 
                 <a *ngIf="row.AdmitCard && row.IsShowAdmitCard==1" (click)="DownloadAdmitCard(row)" title="Download Admit Cards"><i class="ti ti-download"></i></a>
 
@@ -1204,7 +1200,6 @@
               <select class="form-select" formControlName="EligibilityStatus"
                       [(ngModel)]="attendence.EligibilityStatus" (change)="ddlChangeAttendence()">
                 <option value="0" selected>--Select Attendence--</option>
-
                 <option *ngFor="let item of EligibilityStatusData" [value]="item.ID">
                   {{item.Name}}
                 </option>
