@@ -1888,9 +1888,13 @@ export class StudentExaminationITIComponent
         .then(async (data: any) =>
         {
           data = JSON.parse(JSON.stringify(data));
-          if (data.State == EnumStatus.Success)
-          {
+          if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message);
+            this.CloseModal();
+            this.GetPreExamStudent();
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.Message);
             this.CloseModal();
             this.GetPreExamStudent();
           }
