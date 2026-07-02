@@ -15,6 +15,7 @@ import { ITIAdminUserDetailModel, ITIAdminUserSearchModel } from '../../../Model
 import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import * as XLSX from 'xlsx';
+import { AppsettingService } from '../../../Common/appsetting.service';
 
 @Component({
   selector: 'app-iti-Admin-Sub-User',
@@ -49,7 +50,9 @@ export class itiAdminSubUserComponent {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute, private routers: Router,
     private modalService: NgbModal, private toastr: ToastrService,
-    private loaderService: LoaderService, private Swal2: SweetAlert2) {
+    private loaderService: LoaderService, private Swal2: SweetAlert2,
+    public appsettingConfig: AppsettingService
+  ) {
 
   }
 
