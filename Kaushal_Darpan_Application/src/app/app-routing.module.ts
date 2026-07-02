@@ -736,6 +736,7 @@ const routes: Routes = [
       { path: 'bter-result-reports', loadChildren: () => import('./Views/Reports/bter-result-reports/bter-result-reports.module').then(m => m.BterResultReportsModule) },
       { path: 'bter-ufm-reports', loadChildren: () => import('./Views/Reports/bter-ufm-reports/bter-ufm-reports.module').then(m => m.BterUFMReportsModule) },
       { path: 'group-center-mapping-reports', loadChildren: () => import('./Views/Reports/group-center-mapping-reports/group-center-mapping-reports.module').then(m => m.GroupCenterMappingReportsModule) },
+      { path: 'marksheet-correction-history-report', loadChildren: () => import('./Views/Reports/marksheet-correction-history-report/marksheet-correction-history-report.module').then(m => m.MarksheetCorrectionHistoryReportModule) },
       { path: 'center-daily-reports', loadChildren: () => import('./Views/Reports/center-daily-reports/center-daily-reports.module').then(m => m.CenterDailyReportsModule) },
 
       { path: 'BTERAddSeatMetrixENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Matrix' },

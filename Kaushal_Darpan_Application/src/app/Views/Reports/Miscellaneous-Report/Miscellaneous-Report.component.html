@@ -20,12 +20,24 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Report Type</label>
-          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="Type" (change)="applyFilter($event.target.value)">
-            <option value="Select" ng-reflect-value="-1">--Select--</option>
-            @for (item of ReportTypelist; track item) {
-            <option [value]="item.ID">{{item.Name}}</option>
-            }
-          </select>
+          <!--<select class="form-select ng-pristine ng-valid ng-touched" formControlName="Type" (change)="applyFilter($event.target.value)">
+    <option value="Select" ng-reflect-value="-1">--Select--</option>
+    @for (item of ReportTypelist; track item) {
+    <option [value]="item.ID">{{item.Name}}</option>
+    }
+  </select>-->
+        <select class="form-select"
+                formControlName="Type">
+
+          <option [ngValue]="-1">--Select--</option>
+
+          @for(item of ReportTypelist; track item.ID){
+          <option [ngValue]="item.ID">
+            {{item.Name}}
+          </option>
+          }
+
+        </select>
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> End Term</label>
@@ -55,16 +67,30 @@
         </div>
         <div>
           <!--<button type="submit" class="btn bg-info mt-6 text-white">Search</button>-->
-          <button type="submit" class="btn bg-info mt-6 text-white">Export Excel </button>
+          <button *ngIf="!isPdfReport"
+                  type="submit"
+                  class="btn bg-info mt-6 text-white">
+            Export Excel
+          </button>
+
+          <button *ngIf="isPdfReport"
+                  type="button"
+                  class="btn bg-info text-white"
+                  (click)="ExportPdf()">
+            <i class="ti ti-file-type-pdf"></i>
+            Export PDF
+          </button>
+          <!--<button type="submit" class="btn bg-info mt-6 text-white">Export Excel </button>-->
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetReport()">
             <i class="ti ti-refresh"></i>
             Reset
           </button>
+
           <!--<a href="javascript:void(0);"
-             (click)="SubmitData(),exportToExcelTpye2()"
-             class="btn bg-info mt-6 text-white">
-            <i class="ti ti-download"></i> Export Excel
-          </a>-->
+     (click)="SubmitData(),exportToExcelTpye2()"
+     class="btn bg-info mt-6 text-white">
+    <i class="ti ti-download"></i> Export Excel
+  </a>-->
 
         </div>
 

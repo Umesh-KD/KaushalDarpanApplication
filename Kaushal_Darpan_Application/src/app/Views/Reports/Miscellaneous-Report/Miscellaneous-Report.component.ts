@@ -16,6 +16,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';  // Import MatSort
 import { PageEvent } from '@angular/material/paginator';
 import { MiscellaneousModel } from '../../../Models/MiscellaneousModel';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-Miscellaneous-Report',
@@ -44,7 +46,7 @@ export class MiscellaneousReportComponent implements OnInit {
   public repType: number = 0;
   public sem: number = 0;
   public IsSNo: boolean = false;
-
+ 
   //public requestData = new CustomizeReportCoulmnSearchModel();
   public requestData = new MiscellaneousModel();
   public GetfilteredList: any[] = [];
@@ -89,12 +91,15 @@ export class MiscellaneousReportComponent implements OnInit {
   ReportTypelist: any[] = [];
 
 
+  
   async ngOnInit() {
+
     const controls = this.UniqueKeys.map(column => {
       return this.fb.control(column.selected);
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
     this.groupForm = this.fb.group({
       displayColumns: [''],
       StateId: [''],
@@ -114,6 +119,8 @@ export class MiscellaneousReportComponent implements OnInit {
       SchemeID: ['0'],
     });
 
+   
+
     await this.loadReportType();
 
     await this.commonMasterService.SemesterMaster().then((data: any) => {
@@ -127,6 +134,7 @@ export class MiscellaneousReportComponent implements OnInit {
     }, (error: any) => console.error(error));
 
   }
+
 
   async loadReportType() {
     this.ReportTypelist = [
@@ -222,8 +230,9 @@ export class MiscellaneousReportComponent implements OnInit {
                 else if (this.requestData.Type == 11) {
                   this.exportToExcelGetZero_Marks_IA_Or_Practical_Record();
                 }
+              
                 else if (this.requestData.Type == 12 || this.requestData.Type == 13) {
-                  this.exportToExcelMinimumMaximumMarksIA_Or_PracticalReport();
+                  this.exportToPdfMinimumMaximumMarksReport();
                 }
                 else {
                   this.exportToExcelTpye2();
@@ -286,6 +295,8 @@ export class MiscellaneousReportComponent implements OnInit {
     this.UniqueKeys = [];
     this.CustomizeReportCoulmnDataPush = [];
     this.requestData = new MiscellaneousModel();
+   
+  
   }
 
   exportToExcelstaticType(): void {
@@ -576,52 +587,76 @@ export class MiscellaneousReportComponent implements OnInit {
     XLSX.writeFile(wb, `${this.SetfileName}.xlsx`);
   }
 
-  exportToExcelMinimumMaximumMarksIA_Or_PracticalReport(): void {
-    debugger
+  exportToPdfMinimumMaximumMarksReport(): void {
+
     if (!this.GetfilteredList || this.GetfilteredList.length === 0) {
       return;
     }
 
-    const wantedColumns = [
-      'S.No',
-      'InstituteName',
-      'Branch',
-      'SubjectCode',
-      'Below45',
-      'Above85',
-      'Remark'
-    ];
+    const doc = new jsPDF('l', 'mm', 'a4'); // Landscape
 
-    const exportData = this.GetfilteredList.map((row: any, index: number) => ({
-      'S.No': index + 1,
-      'InstituteName': row['InstituteName'] ?? '',
-      'Branch': row['Branch'] ?? '',
-      'SubjectCode': row['SubjectCode'] ?? '',
-      'Below45': row['Below45'] ?? '',
-      'Above85': row['Above85'] ?? '',
-      'Remark': row['Remark'] ?? ''
-    }));
-
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-
-    ws['!cols'] = wantedColumns.map(col => ({
-      wch: Math.max(
-        col.length,
-        ...exportData.map((r: any) => String(r[col] ?? '').length)
-      ) + 2
-    }));
-
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Report');
+    // Title
+    let title = '';
 
     if (this.requestData.Type === 12) {
+      title = 'Minimum & Maximum Marks IA Report';
       this.SetfileName = 'Minimum_Maximum_Marks_IA_Report';
     }
     else if (this.requestData.Type === 13) {
+      title = 'Minimum & Maximum Marks Practical Report';
       this.SetfileName = 'Minimum_Maximum_Marks_Practical_Report';
     }
 
-    XLSX.writeFile(wb, `${this.SetfileName}.xlsx`);
+    doc.setFontSize(14);
+    doc.text(title, 14, 15);
+
+    // Table Header
+    const head = [[
+      'S.No',
+      'Institute Name',
+      'Branch',
+      'Subject Code',
+      'Below 45',
+      'Above 85',
+      'Remark'
+    ]];
+
+    // Table Body
+    const body = this.GetfilteredList.map((row: any, index: number) => [
+      index + 1,
+      row.InstituteName ?? '',
+      row.Branch ?? '',
+      row.SubjectCode ?? '',
+      row.Below45 ?? '',
+      row.Above85 ?? '',
+      row.Remark ?? ''
+    ]);
+
+    autoTable(doc, {
+      head: head,
+      body: body,
+      startY: 25,
+      theme: 'grid',
+      styles: {
+        fontSize: 9,
+        cellPadding: 2,
+        halign: 'center'
+      },
+      headStyles: {
+        fillColor: [41, 128, 185],
+        textColor: 255,
+        fontStyle: 'bold'
+      }
+    });
+
+    doc.save(`${this.SetfileName}.pdf`);
   }
 
+  ExportPdf() {
+    this.SubmitData();
+  }
+  get isPdfReport(): boolean {
+    const type = Number(this.groupForm.get('Type')?.value);
+    return type === 12 || type === 13;
+  }
 }
