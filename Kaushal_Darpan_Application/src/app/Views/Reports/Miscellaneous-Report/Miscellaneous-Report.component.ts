@@ -187,7 +187,7 @@ export class MiscellaneousReportComponent implements OnInit {
 
           // IA Report
           if (this.requestData.Type == 8) {
-            this.requestData.Action = 'ViewData';
+            this.requestData.Action = 'ViewDataIAReport';
           }
           // Practical Report
           else if (this.requestData.Type == 14) {
