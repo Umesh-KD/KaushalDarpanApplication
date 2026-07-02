@@ -130,21 +130,24 @@ export class MiscellaneousReportComponent implements OnInit {
 
   async loadReportType() {
     this.ReportTypelist = [
-      { ID: 0, Name: 'Download Single Absent Report' },
-      { ID: 1, Name: 'Download Single Present Report' },
-      { ID: 2, Name: 'Download UFM Report' },
-      { ID: 3, Name: 'Download Consolidated Detain Student List report' },
-      { ID: 4, Name: 'Download Examiners With Group Code And Marking report' },
-      { ID: 5, Name: 'Download Grace Marks Student report' },
-      { ID: 6, Name: 'Download Detain Marks Student report' },
-      { ID: 7, Name: '(Reval) Download Examiners With Group Code And Marking report' },
-      { ID: 8, Name: '90 And Above Sessional Marks Institute Wise, Semester Wise report' },
-      { ID: 9, Name: 'Download Student Digilocker Report' },
-      { ID: 10, Name: 'Zero Marks IA Record' },
-      { ID: 11, Name: 'Zero Marks Practical Record' },
-      { ID: 12, Name: 'Minimum & Maximum Marks Report IA' },
-      { ID: 13, Name: 'Minimum & Maximum Marks Practical Report' }
+      { ID: 0, DisplayOrder: 1, Name: 'Download Single Absent Report' },
+      { ID: 1, DisplayOrder: 2, Name: 'Download Single Present Report' },
+      { ID: 2, DisplayOrder: 3, Name: 'Download UFM Report' },
+      { ID: 3, DisplayOrder: 4, Name: 'Download Consolidated Detain Student List Report' },
+      { ID: 4, DisplayOrder: 5, Name: 'Download Examiners With Group Code And Marking Report' },
+      { ID: 5, DisplayOrder: 6, Name: 'Download Grace Marks Student Report' },
+      { ID: 6, DisplayOrder: 7, Name: 'Download Detain Marks Student Report' },
+      { ID: 7, DisplayOrder: 8, Name: '(Reval) Download Examiners With Group Code And Marking Report' },
+      { ID: 8, DisplayOrder: 9, Name: '90 And Above Sessional Marks Institute Wise, Semester Wise Report IA' },
+      { ID: 14, DisplayOrder: 10, Name: '90 And Above Sessional Marks Institute Wise, Semester Wise Report Practical' },
+      { ID: 9, DisplayOrder: 11, Name: 'Download Student Digilocker Report' },
+      { ID: 10, DisplayOrder: 12, Name: 'Zero Marks IA Record' },
+      { ID: 11, DisplayOrder: 13, Name: 'Zero Marks Practical Record' },
+      { ID: 12, DisplayOrder: 14, Name: 'Minimum & Maximum Marks Report IA' },
+      { ID: 13, DisplayOrder: 15, Name: 'Minimum & Maximum Marks Practical Report' }
     ];
+
+    this.ReportTypelist.sort((a, b) => a.DisplayOrder - b.DisplayOrder);
   }
   get form() { return this.groupForm.controls; }
 
