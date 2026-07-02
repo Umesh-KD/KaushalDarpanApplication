@@ -183,9 +183,16 @@ export class MiscellaneousReportComponent implements OnInit {
       }
       try {
         debugger
-        if (this.requestData.Type == 8) {
+        if (this.requestData.Type == 8 || this.requestData.Type == 14) {
 
-          this.requestData.Action = 'ViewData';
+          // IA Report
+          if (this.requestData.Type == 8) {
+            this.requestData.Action = 'ViewData';
+          }
+          // Practical Report
+          else if (this.requestData.Type == 14) {
+            this.requestData.Action = 'ViewDataPractical';
+          }
 
           await this.reportService.GetMiscellaneousReport(this.requestData)
             .then((data: any) => {
@@ -194,8 +201,7 @@ export class MiscellaneousReportComponent implements OnInit {
                 this.toastr.warning(data.Message);
               }
               else if (data.State == EnumStatus.Success) {
-                //debugger
-                this.GetfilteredList = data["Data"];// list
+                this.GetfilteredList = data["Data"];
                 this.exportToExcelstaticType90();
               }
               else {
