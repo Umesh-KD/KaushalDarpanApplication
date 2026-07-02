@@ -74,7 +74,7 @@
                 </p>
                 <p *ngIf="_AdminUserFormGroup.txtMobileNo.errors.pattern">
                   Enter valid  mobile number
-                </p> 
+                </p>
               </div>
             </div>
 
@@ -105,7 +105,23 @@
                 <option value="255">Admission Incharge</option>
               </select>
             </div>
-
+            <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                     for="orderDocument">Order Document<span class="StarMarking">*</span></label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="orderDocument" formControlName="orderDocument" type="file" (change)="onFilechange($event,'orderDoc')">
+                <label for="orderDocument">
+                  <span>Choose File</span>
+                  {{adminRequest.orderDocument === '' ? 'No File Choosen' : adminRequest.orderDocument}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + adminRequest.orderDocument}}"
+                     *ngIf="this.adminRequest.orderDocument !=''"
+                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                </div>
+              </div>
+            </div>
 
 
 
