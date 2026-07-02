@@ -1373,7 +1373,7 @@ const routes: Routes = [
       { path: '10Final-admission', loadChildren: () => import('./Views/ITI/reports/final-admission/final-admission.module').then(m => m.FinalAdmissionModule) },
       { path: 'Genderadmission', loadChildren: () => import('./Views/ITI/reports/male-female-admission/male-female-admission.module').then(m => m.MaleFemaleAdmissionModule) },
       { path: '10Genderadmission', loadChildren: () => import('./Views/ITI/reports/male-female-admission/male-female-admission.module').then(m => m.MaleFemaleAdmissionModule) },
-      { path: ' ', loadChildren: () => import('./Views/ITI/center-superintendent-student/center-superintendent-student.module').then(m => m.CenterSuperintendentStudentModule) },
+      { path: 'CenterWiseStudent', loadChildren: () => import('./Views/ITI/center-superintendent-student/center-superintendent-student.module').then(m => m.CenterSuperintendentStudentModule) },
 
       { path: 'iti-student-enrollment', loadChildren: () => import('./Views/ITI/itistudent-enrollment-admitted/itistudent-enrollment-admitted.module').then(m => m.ITIStudentEnrollmentAdmittedModule), title: 'Student Enrollment' },
       { path: 'iti-student-enrollment/:id', loadChildren: () => import('./Views/ITI/itistudent-enrollment-admitted/itistudent-enrollment-admitted.module').then(m => m.ITIStudentEnrollmentAdmittedModule), title: 'Student Enrollment' },
