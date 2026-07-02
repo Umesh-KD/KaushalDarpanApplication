@@ -79,21 +79,19 @@
             </div>
           </div>
 
-          <!-- <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Academic Year
-    </label>
-    <select [(ngModel)]="searchRequest.EndTermID"
-            class="form-select">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Academic Year</label>
+            <select [(ngModel)]="searchRequest.EndTermID" class="form-select" name="EndTermID" formControlName="EndTermID">
+              <option [ngValue]="0">--Select--</option>
+              <option *ngFor="let item of EndTermList; trackBy: trackByEndTerm" [ngValue]="item.ID">
+                {{ item.Name }}
+              </option>
+            </select>
 
-      <option [ngValue]="0">--Select--</option>
-      <option *ngFor="let item of FinYearList; trackBy: trackByFinancialYear"
-              [ngValue]="item.EndTermID">
-
-        {{ item.EndTermName }}
-      </option>
-    </select>
-  </div> -->
+            <div *ngIf="isSubmitted && downLoadFG.get('EndTermID')?.hasError('defaultValue')" class="text-danger">
+              This field is required!
+            </div>
+          </div>
 
 
         </div>
@@ -133,33 +131,31 @@
     </div>
     <div class="flex items-center justify-between flex-wrap gap-3">
 
-  <!-- Dropdown -->
-  <div>
-    <select
-      id="ddlConter"
-      class="form-select couterDropDown"
-      [(ngModel)]="pageInTableSize"
-      (change)="loadInTable()">
-      <option value="50">50</option>
-      <option value="100">100</option>
-      <option value="500">500</option>
-      <option value="1000">1000</option>
-    </select>
-  </div>
+      <!-- Dropdown -->
+      <div>
+        <select id="ddlConter"
+                class="form-select couterDropDown"
+                [(ngModel)]="pageInTableSize"
+                (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
 
-  <!-- Buttons -->
-  <div *ngIf="buttonGroups?.length > 0" class="flex flex-wrap gap-2">
-    <a
-      *ngFor="let group of buttonGroups"
-      href="javascript:void(0);"
-      (click)="DownloadBulkMarksheet(group.startIndex, group.endIndex)"
-      class="btn bg-info btn-sm text-white whitespace-nowrap">
-      <i class="ti ti-download"></i>
-      Download Marksheet ({{ group.label }})
-    </a>
-  </div>
+      <!-- Buttons -->
+      <div *ngIf="buttonGroups?.length > 0" class="flex flex-wrap gap-2">
+        <a *ngFor="let group of buttonGroups"
+           href="javascript:void(0);"
+           (click)="DownloadBulkMarksheet(group.startIndex, group.endIndex)"
+           class="btn bg-info btn-sm text-white whitespace-nowrap">
+          <i class="ti ti-download"></i>
+          Download Marksheet ({{ group.label }})
+        </a>
+      </div>
 
-</div>
+    </div>
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">

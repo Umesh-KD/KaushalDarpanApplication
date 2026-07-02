@@ -52,6 +52,7 @@ export class MarksheetDownloadComponent {
   public FinYearList: any = [];
   buttonGroups: any[] = [];
   downLoadFG!: FormGroup;
+  public EndTermList: any = [];
 
   constructor(private commonFunctionService: CommonFunctionService,
     private marksheetDownloadService: MarksheetDownloadService,
@@ -76,6 +77,7 @@ export class MarksheetDownloadComponent {
       ResultTypeID: ['0', [Validators.required, notDefaultValueValidator('0')]],
       IsRevised: ['-1', [Validators.required, notDefaultValueValidator('-1')]],
       RollNo: ['', Validators.required],
+      EndTermID: [this.sSOLoginDataModel.EndTermID, [Validators.required, notDefaultValueValidator('0')]],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -123,11 +125,11 @@ export class MarksheetDownloadComponent {
     }
 
     try {
-      // this.searchRequest.EndTermID = this.searchRequest.EndTermID
-      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.searchRequest.EndTermID = this.searchRequest.EndTermID;
+      //this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       //this.searchRequest.FianancialYearID = this.searchRequest.FianancialYearID;
-      this.searchRequest.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng
-      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.searchRequest.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
       // get
       await this.marksheetDownloadService.GetAllData(this.searchRequest)
@@ -139,6 +141,11 @@ export class MarksheetDownloadComponent {
             //table feature load
             this.loadInTable();
             //end table feature load
+          } else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.Message);
+          } else {
+            console.log(data.ErrorMessage);
+            this.toastr.error(data.Message);
           }
 
         }, error => console.error(error));
@@ -374,7 +381,12 @@ export class MarksheetDownloadComponent {
 
   async YearDropdownData() {
     try {
-      this.loaderService.requestStarted();
+      // get
+      await this.reportService.GetEndTerm()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.EndTermList = data['Data'];
+        }, (error: any) => console.error(error));
 
       await this.menuService.GetAcedmicYearList(this.sSOLoginDataModel.RoleID, this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.SelectedValue)
         .then((AcedmicYear: any) => {
@@ -388,15 +400,10 @@ export class MarksheetDownloadComponent {
       console.log(Ex);
 
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 10);
-    }
   }
 
-  trackByFinancialYear(index: number, item: any): number {
-    return item.FinancialYearID;
+  trackByEndTerm(index: number, item: any): number {
+    return item.ID;
   }
 
   async createDynamicButtons(studentList: any[]) {
@@ -479,7 +486,7 @@ export class MarksheetDownloadComponent {
         window.URL.revokeObjectURL(link.href);
       })
       .catch(() => console.error('Download failed. Check CORS settings on the server.'));
-  } 
+  }
 
   refreshValidationOfRollNoOnly(isVaidateRollNoOnly: boolean) {
     // clear

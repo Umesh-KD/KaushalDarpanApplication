@@ -248,7 +248,6 @@ export class StudentExaminationITIComponent
 
       })
 
-
     this.AttendenceFormGroup = this.formBuilder.group(
       {
         //txtEnrollmentNo: ['', Validators.required, disable: true],
@@ -263,9 +262,6 @@ export class StudentExaminationITIComponent
         //DepositDate: ['', Validators.required]
       })
 
-    
-
-
     this.requestStudent.QualificationDetails = [];
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.statusID = Number(this.activatedRoute.snapshot.queryParamMap.get('status')?.toString());
@@ -273,12 +269,6 @@ export class StudentExaminationITIComponent
     {
       this.request.StudentFilterStatusId = this.statusID
     }
-
-   
-
-    
-
-
 
     this.UserID = this.sSOLoginDataModel.UserID
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID
@@ -292,9 +282,7 @@ export class StudentExaminationITIComponent
     } else {
       this.isShowdrop = false;
       this.SearchStudentDataFormGroup.get('ddlInstituteID')?.enable();
-
     }
-
 
     await this.GetMasterData();
     await this.StreamMaster();
@@ -306,12 +294,10 @@ export class StudentExaminationITIComponent
 
     if (this.PendingCollegeFeeStatus > 0) {
       this.request.PendingCollegeFeeStatus = this.PendingCollegeFeeStatus;
-
       this.request.StudentFilterStatusId =
         this.request.StudentFilterStatusId === 0
           ? 10
           : this.request.StudentFilterStatusId;
-
       this.btn_SearchClick();
     }
 
@@ -329,6 +315,7 @@ export class StudentExaminationITIComponent
           this.loaderService.requestStarted();
           this.Revert.StudentExamID = item.StudentExamID
           this.Revert.status = item.status
+          this.Revert.CreatedBy = this.sSOLoginDataModel.UserID;
           // Call service to save student exam status
           await this.studentExaminationITIService.RevertStatus(this.Revert)
             .then(async (data: any) => {
@@ -1887,9 +1874,13 @@ export class StudentExaminationITIComponent
         .then(async (data: any) =>
         {
           data = JSON.parse(JSON.stringify(data));
-          if (data.State == EnumStatus.Success)
-          {
+          if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message);
+            this.CloseModal();
+            this.GetPreExamStudent();
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.Message);
             this.CloseModal();
             this.GetPreExamStudent();
           }

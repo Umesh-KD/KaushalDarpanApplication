@@ -128,15 +128,17 @@ export class ITIDateConfigurationComponent implements OnInit, OnDestroy {
 
   async GetConfigType() {
 
-    try {
-
+    try
+    {
       this.RoleID = this.sSOLoginDataModel.RoleID;
-      await this.commonMasterService.GetConfigurationType(this.RoleID, EnumConfigTypeTabs.Date_Tab).then((data: any) => {
+      await this.commonMasterService.GetConfigurationType(this.RoleID, EnumConfigTypeTabs.Date_Tab).then((data: any) =>
+      {
         data = JSON.parse(JSON.stringify(data));
         this.TypeMasterDDL = data.Data;
         if (this.sSOLoginDataModel.RoleID == EnumRole.ITIAdmin_NCVT || this.sSOLoginDataModel.RoleID == EnumRole.ITIAdmin_SCVT
-        ) {
-          this.TypeMasterDDL = this.TypeMasterDDL.filter((e: any) => e.ID == 5)
+        )
+        {
+          this.TypeMasterDDL = this.TypeMasterDDL.filter((e: any) => e.ID == 5 || e.ID == 175)
         } 
 
       }, (error: any) => console.error(error))
