@@ -63,9 +63,8 @@ export class MarksheetCorrectionHistoryReportComponent implements OnInit {
       'Student Name': item.StudentName,
       'Father Name': item.FatherName,
       'Mother Name': item.MotherName,
-      'DOB': item.DOB
-        ? new Date(item.DOB).toLocaleDateString('en-GB')
-        : '',
+      'DOB': item.DOB,
+       
       'Correction Type':
         item.MarksheetType == 1
           ? 'Revised'
@@ -74,8 +73,7 @@ export class MarksheetCorrectionHistoryReportComponent implements OnInit {
             : '',
       'Modified By': item.CreatedSsoID,
       'Modified Date': item.CreatedDate
-        ? new Date(item.CreatedDate).toLocaleString('en-GB')
-        : ''
+      
     }));
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
@@ -119,8 +117,7 @@ export class MarksheetCorrectionHistoryReportComponent implements OnInit {
         item.FatherName,
         item.MotherName,
         item.DOB
-          ? new Date(item.DOB).toLocaleDateString('en-GB')
-          : '',
+         ,
         item.MarksheetType == 1
           ? 'Revised'
           : item.MarksheetType == 2
@@ -128,8 +125,7 @@ export class MarksheetCorrectionHistoryReportComponent implements OnInit {
             : '',
         item.CreatedSsoID,
         item.CreatedDate
-          ? new Date(item.CreatedDate).toLocaleString('en-GB')
-          : ''
+         
       ]),
 
       theme: 'grid',

@@ -54,9 +54,8 @@ export class CampusRemovalReportComponent {
       "Campus Year": item.CampYear,
       "(Order No / Order Date)": item.CampusDetails,
       "Remark": item.CampusRemovedRemark,
-      "Modified Date": item.ModifiedDate
-        ? new Date(item.ModifiedDate).toLocaleDateString('en-GB')
-        : '',
+      "Modified Date": item.ModifiedDate,
+       
       "Modified By": item.UpdatedBySSOID
     }));
 
@@ -94,9 +93,8 @@ export class CampusRemovalReportComponent {
         item.CampYear,
         item.CampusDetails,
         item.CampusRemovedRemark,
-        item.ModifiedDate
-          ? new Date(item.ModifiedDate).toLocaleDateString('en-GB')
-          : '',
+        item.ModifiedDate,
+         
         item.UpdatedBySSOID
       ]),
       theme: 'grid',
