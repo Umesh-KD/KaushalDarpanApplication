@@ -23,7 +23,7 @@
           <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="Searchrequest.DepartmentSubID">
             <option value="0">--Select--</option>
             <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.BTER">BTER</option>
-            <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.DTE">DTE</option>
+            <option  [value]="_EnumWS_DepartmentSub.DTE">DTE Training</option>
 
             <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_NCVT">ITI NCVT</option>
             <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_SCVT">ITI SCVT</option>
@@ -253,7 +253,7 @@
               <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="request.DepartmentSubID" formControlName="DepartmentSubID">
                 <option value="0">--Select--</option>
                 <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.BTER">BTER</option>
-                <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.DTE">DTE</option>
+                <option  [value]="_EnumWS_DepartmentSub.DTE">DTE Training</option>
 
                 <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_NCVT">ITI NCVT</option>
                 <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_SCVT">ITI SCVT</option>
