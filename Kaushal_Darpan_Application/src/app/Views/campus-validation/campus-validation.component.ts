@@ -77,7 +77,8 @@ export class CampusValidationComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-    this.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+    //this.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+    this.FinancialYearID = 30;
     this.currentStatus = Number(this.route.snapshot.queryParamMap.get("Status") ?? 0);
     await this.GetMasterData();
     await this.btn_SearchClick();
@@ -220,7 +221,9 @@ export class CampusValidationComponent {
     this.CompanyID = 0;
     this.InstituteID = 0;
     this.ApprovedStatus = "0";
-     this.FinancialYearID=0;
+    this.FinancialYearID = 0;
+
+    await this.btn_SearchClick();
   }
   async CampusOnPostAction(content: any, row: any) {
     debugger;
