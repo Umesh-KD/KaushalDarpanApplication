@@ -47,17 +47,16 @@ export class CampusRemovalReportComponent {
   }
 
   exportToExcel(): void {
-    debugger
-    const exportData = this.campusRemovalReportList.map((item: any) => ({
+    const exportData = this.campusRemovalReportList.map((item: any, index: number) => ({
+      "Sr. No.": index + 1,
       "College Name": item.CollegeName,
+      "Old Name": item.OldName,
       "Campus Year": item.CampYear,
-      //"Removed Order No": item.CampusRemovedOrderNo,
-      //"Removed Order Date": item.CampusRemovedOrderDate
-      //  ? new Date(item.CampusRemovedOrderDate).toLocaleDateString('en-GB')
-      //  : '',
-      "Campus Details": item.CampusDetails,
-      "Remark": item.CampusRemovedRemark
-     
+      "(Order No / Order Date)": item.CampusDetails,
+      "Remark": item.CampusRemovedRemark,
+      "Modified Date": item.ModifiedDate,
+       
+      "Modified By": item.UpdatedBySSOID
     }));
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
@@ -80,31 +79,30 @@ export class CampusRemovalReportComponent {
       head: [[
         'Sr. No.',
         'College Name',
+        'Old Name',
         'Campus Year',
-        //'Removed Order No',
-        //'Removed Order Date',
-        'Campus Details',
-        'Remark'
-        
+        '(Order No / Order Date)',
+        'Remark',
+        'Modified Date',
+        'Modified By'
       ]],
       body: this.campusRemovalReportList.map((item: any, index: number) => [
         index + 1,
         item.CollegeName,
+        item.OldName,
         item.CampYear,
-        //item.CampusRemovedOrderNo,
-        //item.CampusRemovedOrderDate
-        //  ? new Date(item.CampusRemovedOrderDate).toLocaleDateString('en-GB')
-        //  : '',
         item.CampusDetails,
-        item.CampusRemovedRemark
-       
+        item.CampusRemovedRemark,
+        item.ModifiedDate,
+         
+        item.UpdatedBySSOID
       ]),
       theme: 'grid',
       styles: {
         fontSize: 8
       },
       headStyles: {
-        fillColor: [13, 110, 253] // Bootstrap primary blue
+        fillColor: [13, 110, 253]
       }
     });
 

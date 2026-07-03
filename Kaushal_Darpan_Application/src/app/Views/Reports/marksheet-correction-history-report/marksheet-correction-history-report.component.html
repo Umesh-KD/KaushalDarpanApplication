@@ -78,7 +78,7 @@
             <td>{{ item.StudentName }}</td>
             <td>{{ item.FatherName }}</td>
             <td>{{ item.MotherName }}</td>
-            <td>{{ item.DOB | date:'dd-MM-yyyy' }}</td>
+            <td>{{ item.DOB }}</td>
             <!--<td>{{ item.SelectedEndTermID }}</td>-->
             <td>
               <span *ngIf="item.MarksheetType == 1">Revised</span>
@@ -87,7 +87,7 @@
             <td>  {{ item.CreatedSsoID }}
             </td>
 
-            <td>{{ item.CreatedDate | date:'dd-MM-yyyy hh:mm a' }}</td>
+            <td>{{ item.CreatedDate }}</td>
           </tr>
 
           <tr *ngIf="marksheetCorrectionHistoryList?.length == 0">
