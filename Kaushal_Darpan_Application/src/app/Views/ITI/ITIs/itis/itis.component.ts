@@ -462,6 +462,12 @@ export class ITIsComponent implements OnInit {
     await this.GetByID(id)
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
   }
+  async ViewandUpdatecampus(content: any, row: any) {
+    this.request.InstituteID = row.Id
+    this.request.CampusID = row.CampusID
+    this.request.IsCampus = row.IsCampus
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
+  }
 
   async GetByID(id: number) {
     try {
@@ -1070,5 +1076,40 @@ debugger
       this.loadInTable();
     }
   }
+  async SaveCampusStatus() {
+   
+ 
 
+    
+    this.loaderService.requestStarted();
+
+    try {
+      this.isSubmitted = true;
+
+      debugger
+      await this.ITIsService
+        .ChangeCampusByID(this.request)
+        .then((res: any) => {
+
+          if (res.State == EnumStatus.Success) {
+
+            this.toastr.success(res.Message);
+
+            this.modalService.dismissAll();
+            this.GetAllData()
+
+          }
+          else {
+
+            this.toastr.error(res.ErrorMessage);
+          }
+
+        });
+
+    }
+    finally {
+
+      this.loaderService.requestEnded();
+    }
+  }
 }
