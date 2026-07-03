@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { ExamLiveResultModel, ItiGetPassFailResultDataModel, ItiGetResultDataModel } from '../../Models/ITI/ITI_ResultModel';
+import { ExamLiveResultModel, ItiGetPassFailResultDataModel, ItiGetResultDataModel, ItiGetStudentRevisedResultDataModel } from '../../Models/ITI/ITI_ResultModel';
 
 @Injectable({
   providedIn: 'root'
@@ -79,6 +79,14 @@ export class ITIResultService {
   public async GetStudentPassFailResultData(requestObj: ItiGetPassFailResultDataModel) {
     var body = JSON.stringify(requestObj);
     return await this.http.post(`${this.APIUrl}/GetStudentPassFailResultData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetStudentDetailsReviseResult(requestObj: ItiGetStudentRevisedResultDataModel) {
+    var body = JSON.stringify(requestObj);
+    return await this.http.post(`${this.APIUrl}/GetStudentDetailsReviseResult`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
