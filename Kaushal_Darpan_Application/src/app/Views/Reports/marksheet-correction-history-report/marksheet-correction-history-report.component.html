@@ -52,7 +52,7 @@
 
     </div>
 
-    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+    <!--<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
         <select id="ddlConter" class="form-select  couterDropDown">
           <option value="50">50</option>
@@ -66,11 +66,11 @@
       <div class="">
       </div>
 
-    </div>
+    </div>-->
     <!-- Table -->
     <div class="overflow-x-auto">
       <table class="table table-border w-full table-auto">
-        <thead class="bg-light/40">
+        <thead class="bg-light/40 text-left">
           <tr>
             <th>Sr. No.</th>
             <th>Enrollment No</th>
@@ -78,10 +78,10 @@
             <th>Father Name</th>
             <th>Mother Name</th>
             <th>DOB</th>
-            <th>End Term</th>
-            <th>Marksheet Type</th>
-            <th>Created By</th>
-            <th>Created Date</th>
+            <!--<th>End Term</th>-->
+            <th>Correction Type</th>
+            <th>Modified By</th>
+            <th>Modified Date</th>
           </tr>
         </thead>
 
@@ -93,12 +93,14 @@
             <td>{{ item.FatherName }}</td>
             <td>{{ item.MotherName }}</td>
             <td>{{ item.DOB | date:'dd-MM-yyyy' }}</td>
-            <td>{{ item.SelectedEndTermID }}</td>
+            <!--<td>{{ item.SelectedEndTermID }}</td>-->
             <td>
               <span *ngIf="item.MarksheetType == 1">Revised</span>
               <span *ngIf="item.MarksheetType == 2">Duplicate</span>
             </td>
-            {{ item.CreatedSsoID }}
+            <td>  {{ item.CreatedSsoID }}
+            </td>
+
             <td>{{ item.CreatedDate | date:'dd-MM-yyyy hh:mm a' }}</td>
           </tr>
 
