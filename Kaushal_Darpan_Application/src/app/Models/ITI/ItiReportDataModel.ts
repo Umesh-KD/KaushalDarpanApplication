@@ -167,7 +167,7 @@ export class CampusRemovalReport {
   public UserID: number = 0
   public CampusDetails: string = '';
   public OldName: string = '';
-  public UdatedDate: number = 0;
+  public ModifiedDate: number = 0;
   public UpdatedBySSOID: string = '';
 }
 

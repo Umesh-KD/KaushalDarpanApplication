@@ -77,7 +77,7 @@
             <th>Campus Year</th>
             <!--<th>Removed Order No.</th>
   <th>Removed Order Date</th>-->
-            <th>Campus Details (Order No / Order Date)</th>
+            <th>(Order No / Order Date)</th>
             <th>Remark</th>
             <th>ModifiedDate</th>
             <th>ModifiedBy</th>
@@ -90,7 +90,7 @@
             <td>{{i+1}}</td>
             <td>{{item.CollegeName}}</td>
             <td>{{item.OldName}}</td>
-            <td>{{ item.CampYear | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+            <td>{{ item.CampYear  }}</td>
             <!--<td>{{item.CampusRemovedOrderNo}}</td>
   <td>{{item.CampusRemovedOrderDate | date:'dd-MM-yyyy'}}</td>-->
             <!--<td>{{item.CampusDetails}}</td>-->
@@ -103,7 +103,7 @@
               </a>
             </td>
             <td>{{item.CampusRemovedRemark}}</td>
-            <td>{{item.UdatedDate | date:'dd/MM/yyyy'}}</td>
+            <td>{{item.ModifiedDate}}</td>
             <td>{{item.UpdatedBySSOID}}</td>
             <!--<td>
     <a *ngIf="item.CampusRemovedFilePath"
