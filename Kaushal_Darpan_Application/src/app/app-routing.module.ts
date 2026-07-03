@@ -1350,6 +1350,7 @@ const routes: Routes = [
       { path: 'c-Form-Consolidated-report', loadChildren: () => import('./Views/ITI/results/c-Form-Consolidated/c-Form-Consolidated.module').then(m => m.cFormConsolidatedModule), title: 'Consolidated Report' },
       { path: 'iti-results', loadChildren: () => import('./Views/ITI/results/iti-result/iti-result.module').then(m => m.ITIResultModule), title: 'ITI Result' },
       { path: 'iti-student-pass-fail-result', loadChildren: () => import('./Views/ITI/results/iti-student-pass-fail-result/iti-student-pass-fail-result.module').then(m => m.itiStudentPassFailResultModule), title: 'iti-student-pass-fail-result' },
+      { path: 'iti-studentdetails-revised-result', loadChildren: () => import('./Views/ITI/results/iti-studentdetails-revised-result/iti-studentdetails-revised-result.module').then(m => m.ITIStudentDetailsRevisedResultModule), title: 'iti-studentdetails-revised-result' },
 
       { path: 'pass-fail-report', loadChildren: () => import('./Views/ITI/results/pass-fail-report/pass-fail-report.module').then(m => m.passfailreportDownloadModule), title: 'pass-fail-report' },
       { path: 'trade-wise-result', loadChildren: () => import('./Views/ITI/results/iti-tradewiseresult/iti-tradewiseresult.module').then(m => m.ItiTradeWiseResultModule), title: 'trade-wise-result' },
