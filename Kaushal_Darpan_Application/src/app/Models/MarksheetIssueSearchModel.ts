@@ -14,3 +14,4 @@ export class MarksheetIssueSearchModel {
   public RoleID: number = 0
   public SemesterID: number = 0;
 }
+

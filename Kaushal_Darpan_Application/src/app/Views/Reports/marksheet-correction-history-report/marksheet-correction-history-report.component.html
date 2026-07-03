@@ -1,0 +1,103 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2"> Marksheet Correction History Report</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/AdmissionMasterDashboard" class="text-sm font-medium text-slate-700">
+        Dashboard
+      </a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">
+        chevron_right
+      </i>
+      <a routerLink="/ITICollegeMaster"
+         class="text-sm font-medium text-slate-700"
+         aria-current="page">
+        Marksheet Correction History Report
+      </a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+
+
+    <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+
+      <b class="text-1xl-5">
+        <i class="ti ti-list"></i> Search Results
+      </b>
+
+      <div class="flex items-center gap-2">
+
+        <a href="javascript:void(0)"
+           (click)="exportToExcel()"
+           class="btn bg-info btn-sm text-white"
+           *ngIf="marksheetCorrectionHistoryList?.length > 0">
+          <i class="ti ti-download"></i> Export Excel
+        </a>
+
+        <a href="javascript:void(0)"
+           (click)="exportToPdf()"
+           class="btn bg-danger btn-sm text-white"
+           *ngIf="marksheetCorrectionHistoryList?.length > 0">
+          <i class="ti ti-file-text"></i> Export PDF
+        </a>
+
+
+      </div>
+
+
+    </div>
+
+   
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="table table-border w-full table-auto">
+        <thead class="bg-light/40 text-left">
+          <tr>
+            <th>Sr. No.</th>
+            <th>Enrollment No</th>
+            <th>Student Name</th>
+            <th>Father Name</th>
+            <th>Mother Name</th>
+            <th>DOB</th>
+            <!--<th>End Term</th>-->
+            <th>Correction Type</th>
+            <th>Modified By</th>
+            <th>Modified Date</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of marksheetCorrectionHistoryList; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ item.EnrollMentNo }}</td>
+            <td>{{ item.StudentName }}</td>
+            <td>{{ item.FatherName }}</td>
+            <td>{{ item.MotherName }}</td>
+            <td>{{ item.DOB | date:'dd-MM-yyyy' }}</td>
+            <!--<td>{{ item.SelectedEndTermID }}</td>-->
+            <td>
+              <span *ngIf="item.MarksheetType == 1">Revised</span>
+              <span *ngIf="item.MarksheetType == 2">Duplicate</span>
+            </td>
+            <td>  {{ item.CreatedSsoID }}
+            </td>
+
+            <td>{{ item.CreatedDate | date:'dd-MM-yyyy hh:mm a' }}</td>
+          </tr>
+
+          <tr *ngIf="marksheetCorrectionHistoryList?.length == 0">
+            <td colspan="10" class="text-center">
+              No Records Found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

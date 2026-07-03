@@ -2012,6 +2012,13 @@ export class ReportService {
       catchError(this.handleErrorObservable)
     ).toPromise();
   }
+
+  public async GetMarksheetCorrectionHistoryReport(data: any) {
+    return await this.http.post(this.APIUrl + "/GetMarksheetCorrectionHistoryReport/", data, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 
 

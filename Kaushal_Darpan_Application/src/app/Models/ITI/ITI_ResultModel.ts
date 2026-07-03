@@ -24,6 +24,21 @@ export class ItiGetPassFailResultDataModel {
   public SemesterID: number = 0;
 }
 
+export class ItiGetStudentRevisedResultDataModel {
+  public UserID: number = 0;
+  public EndTermID: number = 0;
+  public FinancialYearID: number = 0;
+  public InstituteId: number = 0;
+  public collegeID: number = 0;
+  public Results: number = 0;
+  public ExamType: number = 0;
+  public TradeScheme: number = 0;
+  public StudentType: number = 0;
+  public EnrollmentNo: string = '';
+  public TradeId: number = 0;
+  public SemesterID: number = 0;
+}
+
 export class ITIStateTradeCertificateSearchModel {
   public RollNo: string = '';
   public EnrollmentNo: string = '';
