@@ -69,15 +69,18 @@
     <!-- Table -->
     <div class="overflow-x-auto">
       <table class="table table-border w-full table-auto">
-        <thead class="bg-light/40">
+        <thead class="bg-light/40 text-left">
           <tr>
             <th>Sr. No.</th>
             <th>College Name</th>
+            <th>Old Name</th>
             <th>Campus Year</th>
             <!--<th>Removed Order No.</th>
-          <th>Removed Order Date</th>-->
-            <th>CampusDetails</th>
+  <th>Removed Order Date</th>-->
+            <th>Campus Details (Order No / Order Date)</th>
             <th>Remark</th>
+            <th>ModifiedDate</th>
+            <th>ModifiedBy</th>
             <!--<th>Order File</th>-->
           </tr>
         </thead>
@@ -86,9 +89,10 @@
           <tr *ngFor="let item of campusRemovalReportList; let i=index">
             <td>{{i+1}}</td>
             <td>{{item.CollegeName}}</td>
-            <td>{{item.CampYear}}</td>
+            <td>{{item.OldName}}</td>
+            <td>{{ item.CampYear | date:'dd/MM/yyyy HH:mm:ss' }}</td>
             <!--<td>{{item.CampusRemovedOrderNo}}</td>
-          <td>{{item.CampusRemovedOrderDate | date:'dd-MM-yyyy'}}</td>-->
+  <td>{{item.CampusRemovedOrderDate | date:'dd-MM-yyyy'}}</td>-->
             <!--<td>{{item.CampusDetails}}</td>-->
             <td>
               <a *ngIf="item.CampusRemovedFilePath"
@@ -99,15 +103,17 @@
               </a>
             </td>
             <td>{{item.CampusRemovedRemark}}</td>
+            <td>{{item.UdatedDate | date:'dd/MM/yyyy'}}</td>
+            <td>{{item.UpdatedBySSOID}}</td>
             <!--<td>
-            <a *ngIf="item.CampusRemovedFilePath"
-               [href]="item.CampusRemovedFilePath"
-               target="_blank"
-               class="btn bg-info btn-sm text-white">
-              View
-            </a>
-            <span *ngIf="!item.campusRemovedFilePath">-</span>
-          </td>-->
+    <a *ngIf="item.CampusRemovedFilePath"
+       [href]="item.CampusRemovedFilePath"
+       target="_blank"
+       class="btn bg-info btn-sm text-white">
+      View
+    </a>
+    <span *ngIf="!item.campusRemovedFilePath">-</span>
+  </td>-->
           </tr>
 
           <tr *ngIf="campusRemovalReportList?.length==0">
