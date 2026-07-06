@@ -40,11 +40,12 @@
       </div>
 
       <!--<div>
-        <a routerLink="/ItiEstablishmentList" class="btn bg-black btn-sm text-white me-2">
-          <i class="ti ti-plus"></i>Back
-        </a>
-      </div>-->
+      <a routerLink="/ItiEstablishmentList" class="btn bg-black btn-sm text-white me-2">
+        <i class="ti ti-plus"></i>Back
+      </a>
+    </div>-->
     </div>
+   
 
 
 
@@ -79,7 +80,7 @@
         </select>
 
       </div>
-
+      
       <div>
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date<span class="StarMarking">*</span></label>
         <input type="date" class="form-input" id="ApplicationId" [max]="minDate" [(ngModel)]="request.OrderDate" (change)="getExaminerData()">
@@ -212,6 +213,7 @@
               <option value="0">--Select--</option>
               <option [value]="1">Budget Annoucement</option>
               <option [value]="2">CM Annoucement </option>
+              <option [value]="3">Other</option>
             </select>
             <div *ngIf="isSubmitted && _ReportForm.AnnoucementType.errors" class="text-danger">
               <p *ngIf="!_ReportForm.AnnoucementType.errors.DropdownValidators">This field is required .!</p>
@@ -881,7 +883,7 @@
             <option value="">""--Select--</option>
 
             <option value="1">Bigha</option>
-            
+
 
             <option value="2">Hectaren></option>
 

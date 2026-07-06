@@ -43,38 +43,49 @@
 
 
         <div class="mt-2">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>
           <!--<select class="form-select" id="SubjectID" [disabled]="sSOLoginDataModel.RoleID == 20 ||sSOLoginDataModel.RoleID == 43" [(ngModel)]="searchRequest.InstituteID">
-            <option value="0">--All--</option>
-            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.ID">
-              {{item.Name}}
-            </option>
-          </select>-->
+      <option value="0">--All--</option>
+      <option *ngFor="let item of InstituteMasterDDLList" [value]="item.ID">
+        {{item.Name}}
+      </option>
+    </select>-->
 
-        <ng-select [items]="InstituteMasterDDLList"
-                   bindLabel="Name"
-                   bindValue="ID"
-                   placeholder="--Select--"
-                   [ngModel]="searchRequest.InstituteID == 0 ? null : searchRequest.InstituteID"
-                   (ngModelChange)="searchRequest.InstituteID = $event ?? 0"
-                   [disabled]="sSOLoginDataModel.RoleID == 20 || sSOLoginDataModel.RoleID == 43"
-                   [searchable]="true"
-                   [clearable]="true">
-        </ng-select>
+          <ng-select [items]="InstituteMasterDDLList"
+                     bindLabel="Name"
+                     bindValue="ID"
+                     placeholder="--Select--"
+                     [ngModel]="searchRequest.InstituteID == 0 ? null : searchRequest.InstituteID"
+                     (ngModelChange)="searchRequest.InstituteID = $event ?? 0"
+                     [disabled]="sSOLoginDataModel.RoleID == 20 || sSOLoginDataModel.RoleID == 43"
+                     [searchable]="true"
+                     [clearable]="true">
+          </ng-select>
 
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID != 20 && sSOLoginDataModel.RoleID != 43">
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Name </label>
-          <input type="text" class="form-input" id="ApplicationId"  placeholder="Enter Iti College Name"
-                 [(ngModel)]="searchRequest.CollegeName">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Type: </label>
+          <select class="form-select" id="CollegeID" [(ngModel)]="searchRequest.AnnoucementType">
+            <option value="-1">--Select--</option>
+            <option [value]="1">Budget Annoucement</option>
+            <option [value]="2">CM Annoucement </option>
+            <option [value]="0">Other</option>
+          </select>
+          
         </div>
+
+        <!--<div *ngIf="sSOLoginDataModel.RoleID != 20 && sSOLoginDataModel.RoleID != 43">
+    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Name </label>
+    <input type="text" class="form-input" id="ApplicationId"  placeholder="Enter Iti College Name"
+           [(ngModel)]="searchRequest.CollegeName">
+  </div>-->
         <!--commonsubject(yes/no)-->
         <!--branch-->
         <!--subject-->
         <!--group code-->
 
-        <div  *ngIf="sSOLoginDataModel.RoleID != 20 && sSOLoginDataModel.RoleID != 43">
+        <div *ngIf="sSOLoginDataModel.RoleID != 20 && sSOLoginDataModel.RoleID != 43">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">IsNewCollege</label>
           <select class="form-select" id="SubjectID" [(ngModel)]="searchRequest.IsNewCollege">
             <option [value]="2">--All--</option>
@@ -82,7 +93,7 @@
               New
             </option>
             <option [value]="0">
-             Old
+              Old
             </option>
           </select>
         </div>

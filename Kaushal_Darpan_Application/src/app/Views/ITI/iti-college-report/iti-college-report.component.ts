@@ -551,8 +551,9 @@ export class ItiCollegeReportComponent {
 
   async GetOrderList() {
     try {
-
+      debugger
       this.PostSanctionList = []
+     
 
       this.loaderService.requestStarted();
       await this.commonMasterService.GetCommonMasterData("OrderList", this.ParentID)
@@ -560,9 +561,20 @@ export class ItiCollegeReportComponent {
           data = JSON.parse(JSON.stringify(data));
 
           this.OrderList = data['Data'];
-
+         
           // console.log(this.DivisionMasterList)
         }, error => console.error(error));
+
+      if (this.ParentID == 1) {
+
+        this.request.OrderType = 2;
+      }
+
+        if(this.ParentID == 2) {
+        this.request.OrderType = 5;
+      }
+      
+
     }
     catch (Ex) {
       console.log(Ex);
