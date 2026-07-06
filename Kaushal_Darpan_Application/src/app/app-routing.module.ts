@@ -1686,6 +1686,9 @@ const routes: Routes = [
       { path: 'Admin-Sub-User', loadChildren: () => import('./Views/ITI/iti-Admin-Sub-User/iti-Admin-Sub-User.module').then(m => m.itiAdminSubUserModule), title: 'Admin Sub User' },
       { path: 'SanctionOrderList', loadChildren: () => import('./Views/ITI/sanction-order-list/sanction-order-list.module').then(m => m.SanctionOrderListModule) },
 
+      { path: 'AnnouncementTypeMaster', loadChildren: () => import('./Views/ITI/announcementType-master/announcementType-master.module').then(m => m.AnnouncementTypeMasterModule) },
+
+
       { path: 'SeatIntakePlanning', loadChildren: () => import('./Views/ITI/seat-intake-planning/seat-intake-planning.module').then(m => m.SeatIntakePlanningModule) },
       { path: 'AddIntakePlanning', loadChildren: () => import('./Views/ITI/add-intake-planning/add-intake-planning.module').then(m => m.AddIntakePlanningModule) },
 

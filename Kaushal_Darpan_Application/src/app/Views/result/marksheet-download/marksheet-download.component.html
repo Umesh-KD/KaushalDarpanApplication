@@ -148,10 +148,10 @@
       <div *ngIf="buttonGroups?.length > 0" class="flex flex-wrap gap-2">
         <a *ngFor="let group of buttonGroups"
            href="javascript:void(0);"
-           (click)="DownloadBulkMarksheet(group.startIndex, group.endIndex)"
+           (click)="DownloadChunkMarksheet(group.startIndex, group.endIndex)"
            class="btn bg-info btn-sm text-white whitespace-nowrap">
           <i class="ti ti-download"></i>
-          Download Marksheet ({{ group.label }})
+          Download Marksheet Chunk ({{ group.label }})
         </a>
       </div>
 
@@ -163,7 +163,7 @@
             <th class="text-left">Sr No.</th>
             <th class="text-left">Student Name</th>
             <th class="text-left">Father Name</th>
-            <th class="text-left">Student Roll Number</th>
+            <th class="text-left">Roll Number</th>
             <th class="text-left">Stream</th>
             <th class="text-left">Action</th>
           </tr>
@@ -176,11 +176,6 @@
             <td align="left">{{row.RollNo}}</td>
             <td align="left">{{row.StreamName}}</td>
             <td align="left">
-              <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"
-                 *ngIf="row.MarksheetFile == ''"
-                 (click)="DownloadMarksheet(row)">
-                <i class="ti ti-download"></i> Download Marksheet
-              </a>
               <a class="btn bg-info btn-sm text-white" style="cursor: pointer;"
                  *ngIf="row.MarksheetFile != ''"
                  (click)="downloadFile_existing(row)">

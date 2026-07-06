@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { HiringRoleMasterDataModel, SanctionOrderDataModel } from '../../Models/HiringRoleMasterDataModel';
+import { AnnouncementTypeMasterModel, HiringRoleMasterDataModel, SanctionOrderDataModel } from '../../Models/HiringRoleMasterDataModel';
 import { ItiSanctionOrderList } from '../../Models/ITI/ItiReportDataModel';
 
 @Injectable({
@@ -155,6 +155,47 @@ export class HiringRoleMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  
+  async GetAllAnnouncementTypes(request: AnnouncementTypeMasterModel) {
+    return await this.http.post(
+      `${this.APIUrl}/GetAllAnnouncementTypes`,
+      JSON.stringify(request),
+      this.headersOptions
+    )
+      .pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+  }
+
+  async GetAnnouncementTypeByID(id: number) {
+    return await this.http.get(
+      `${this.APIUrl}/GetAnnouncementTypeByID/${id}`,
+      this.headersOptions
+    )
+      .pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+  }
+
+  async SaveAnnouncementType(request: AnnouncementTypeMasterModel) {
+    return await this.http.post(
+      `${this.APIUrl}/SaveAnnouncementType`,
+      request,
+      this.headersOptions
+    )
+      .pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+  }
+
+  async DeleteAnnouncementTypeByID(id: number, updatedBy: number) {
+    return await this.http.post(
+      `${this.APIUrl}/DeleteAnnouncementTypeByID/${id}/${updatedBy}`,
+      {},
+      this.headersOptions
+    )
+      .pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+  }
+
 
 
 }

@@ -1,0 +1,132 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Announcement Type Master</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/announcementtypemaster"
+         class="text-sm font-medium text-slate-700"
+         aria-current="page">
+        Announcement Type Master
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card tab-panels">
+    <div class="card-body p-5">
+
+      <form [formGroup]="AnnouncementTypeFormGroup" class="form-horizontal">
+
+        <div class="mb-8">
+
+          <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">
+              <i class="ti ti-plus"></i>
+              Add Announcement Type
+            </b>
+
+            <span class="text-danger">(* fields are mandatory)</span>
+          </div>
+
+          <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+
+            <!-- Name -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-2">
+                Name <span class="StarMarking">*</span>
+              </label>
+
+              <input type="text"
+                     class="form-input"
+                     placeholder="Enter Name"
+                     formControlName="Name"
+                     [(ngModel)]="request.Name">
+
+              <div *ngIf="isSubmitted && form.Name.errors" class="text-danger">
+                <p *ngIf="form.Name.errors.required">
+                  This field is required.
+                </p>
+              </div>
+            </div>
+
+           
+          
+            <div>
+              <div class="flex align-center flexBtn mt-7">
+
+              
+                <button type="button" id="btnSave" (click)="SaveData()" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Save</button>
+                <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </form>
+
+      <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">
+          <i class="ti ti-list"></i>
+          List
+        </b>
+      </div>
+
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+
+        <div></div>
+        <div></div>
+        <div></div>
+
+        <div>
+          <input class="form-input"
+                 placeholder="Search..."
+                 [(ngModel)]="Table_SearchText">
+        </div>
+
+      </div>
+
+      <div class="overflow-auto mt-3">
+
+        <table class="table table-border w-full">
+
+          <thead class="bg-light/40 text-left">
+            <tr>
+              <th width="80">Sr. No.</th>
+              <th>Name</th>
+            
+              <th width="180" class="text-center">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let row of AnnouncementTypeList | tableSearchFilter:Table_SearchText; let i=index">
+
+              <td>{{i+1}}</td>
+              <td>{{row.Name}}</td>
+            
+              <td>
+                <div class="flex align-center justify-center actionBtns">
+                  <a href="javascript:void(0);" id="btnEdit" title="Edit" (click)="btnEdit_OnClick(row.ID)"><i class="ti ti-pencil"></i></a>
+                  <a href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.ID)"><i class="ti ti-trash"></i></a>
+
+
+                </div>
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+</div>
