@@ -69,7 +69,7 @@ export class StudentPlacementConsentComponent {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.btn_SearchClick();
-    await this.GetStudentConsentCount();
+   // await this.GetStudentConsentCount();
     //await this.GetStudentLatestResume();
   }
   //async GetMasterData() {
@@ -404,11 +404,11 @@ export class StudentPlacementConsentComponent {
     this.GetAllPlacementCompany()
   }
 
-  async GetStudentConsentCount() {
+  async GetStudentConsentCount(PostID:number) {
     debugger
     try {
       this.loaderService.requestStarted();
-      await this.placementservice.GetStudentConsentCount(this.sSOLoginDataModel.StudentID)
+      await this.placementservice.GetStudentConsentCount(this.sSOLoginDataModel.StudentID, PostID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
          // debugger;
@@ -499,7 +499,7 @@ export class StudentPlacementConsentComponent {
       this.Request.PostID = PostID;
 
       // Get Consent Count
-      await this.GetStudentConsentCount();
+      await this.GetStudentConsentCount(PostID);
 
       if (this.ConsentCount >= 5) {
         this.Swal2.Warning("You have already given consent for 5 companies");
@@ -664,7 +664,7 @@ export class StudentPlacementConsentComponent {
     // Reset Model
     debugger;
     // Get Consent Count
-    await this.GetStudentConsentCount();
+    //await this.GetStudentConsentCount();
 
     if (this.ConsentCount >= 5) {
       this.Swal2.Warning("You have already given consent for 5 companies");

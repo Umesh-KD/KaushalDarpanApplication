@@ -55,8 +55,9 @@ export class PlacementStudentService {
   }
 
 
-    public async GetStudentConsentCount(StudentID: number = 0) {
-    return await this.http.get(this.APIUrl + "/GetStudentConsentCount/"+StudentID, this.headersOptions)
+  public async GetStudentConsentCount(StudentID: number = 0, PostID: number = 0) {
+      debugger
+      return await this.http.get(this.APIUrl + "/GetStudentConsentCount/" + StudentID + '/' + PostID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
