@@ -405,7 +405,7 @@ export class StudentPlacementConsentComponent {
   }
 
   async GetStudentConsentCount() {
-    //debugger
+    debugger
     try {
       this.loaderService.requestStarted();
       await this.placementservice.GetStudentConsentCount(this.sSOLoginDataModel.StudentID)
@@ -662,6 +662,14 @@ export class StudentPlacementConsentComponent {
   ) {
 
     // Reset Model
+    debugger;
+    // Get Consent Count
+    await this.GetStudentConsentCount();
+
+    if (this.ConsentCount >= 5) {
+      this.Swal2.Warning("You have already given consent for 5 companies");
+      return;
+    }
 
     if (ConsentID == 0) {
       await this.GetStudentLatestResume();
