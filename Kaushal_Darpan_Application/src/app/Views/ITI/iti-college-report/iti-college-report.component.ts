@@ -831,7 +831,7 @@ export class ItiCollegeReportComponent {
       this.request.CollegePlace=''
     }
 
-    if (this.request.IsNewCollege == 1 && this.request.CollegePlace == '' && this.request.IsDistrictHq==true) {
+    if (this.request.IsNewCollege == 1 && this.request.CollegePlace == '' && this.request.IsDistrictHq == false) {
       this.toastr.warning("Please Enter Iti Place")
       return
     }
