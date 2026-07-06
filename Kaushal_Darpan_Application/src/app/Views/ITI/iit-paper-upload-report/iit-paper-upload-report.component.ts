@@ -80,6 +80,8 @@ export class IitPaperUploadReportComponent {
     debugger
     try {
       this.loaderService.requestStarted();
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       await this.apiService.GetITIPaperUpload_Reports(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

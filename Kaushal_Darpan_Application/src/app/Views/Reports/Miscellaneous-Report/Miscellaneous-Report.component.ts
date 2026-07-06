@@ -16,6 +16,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';  // Import MatSort
 import { PageEvent } from '@angular/material/paginator';
 import { MiscellaneousModel } from '../../../Models/MiscellaneousModel';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-Miscellaneous-Report',
@@ -44,7 +46,7 @@ export class MiscellaneousReportComponent implements OnInit {
   public repType: number = 0;
   public sem: number = 0;
   public IsSNo: boolean = false;
-
+ 
   //public requestData = new CustomizeReportCoulmnSearchModel();
   public requestData = new MiscellaneousModel();
   public GetfilteredList: any[] = [];
@@ -89,12 +91,15 @@ export class MiscellaneousReportComponent implements OnInit {
   ReportTypelist: any[] = [];
 
 
+  
   async ngOnInit() {
+
     const controls = this.UniqueKeys.map(column => {
       return this.fb.control(column.selected);
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
     this.groupForm = this.fb.group({
       displayColumns: [''],
       StateId: [''],
@@ -114,6 +119,8 @@ export class MiscellaneousReportComponent implements OnInit {
       SchemeID: ['0'],
     });
 
+   
+
     await this.loadReportType();
 
     await this.commonMasterService.SemesterMaster().then((data: any) => {
@@ -128,23 +135,28 @@ export class MiscellaneousReportComponent implements OnInit {
 
   }
 
+
   async loadReportType() {
     this.ReportTypelist = [
-      { ID: 0, Name: 'Download Single Absent Report' },
-      { ID: 1, Name: 'Download Single Present Report' },
-      { ID: 2, Name: 'Download UFM Report' },
-      { ID: 3, Name: 'Download Consolidated Detain Student List report' },
-      { ID: 4, Name: 'Download Examiners With Group Code And Marking report' },
-      { ID: 5, Name: 'Download Grace Marks Student report' },
-      { ID: 6, Name: 'Download Detain Marks Student report' },
-      { ID: 7, Name: '(Reval) Download Examiners With Group Code And Marking report' },
-      { ID: 8, Name: '90 And Above Sessional Marks Institute Wise, Semester Wise report' },
-      { ID: 9, Name: 'Download Student Digilocker Report' },
-      { ID: 10, Name: 'Zero Marks IA Record' },
-      { ID: 11, Name: 'Zero Marks Practical Record' },
-      { ID: 12, Name: 'Minimum & Maximum Marks Report IA' },
-      { ID: 13, Name: 'Minimum & Maximum Marks Practical Report' }
+      { ID: 0, DisplayOrder: 1, Name: 'Download Single Absent Report' },
+      { ID: 1, DisplayOrder: 2, Name: 'Download Single Present Report' },
+      { ID: 2, DisplayOrder: 3, Name: 'Download UFM Report' },
+      { ID: 3, DisplayOrder: 4, Name: 'Download Consolidated Detain Student List Report' },
+      { ID: 4, DisplayOrder: 5, Name: 'Download Examiners With Group Code And Marking Report' },
+      { ID: 5, DisplayOrder: 6, Name: 'Download Grace Marks Student Report' },
+      { ID: 6, DisplayOrder: 7, Name: 'Download Detain Marks Student Report' },
+      { ID: 7, DisplayOrder: 8, Name: '(Reval) Download Examiners With Group Code And Marking Report' },
+      { ID: 8, DisplayOrder: 9, Name: '90 And Above Sessional Marks Institute Wise, Semester Wise Report IA' },
+      { ID: 14, DisplayOrder: 10, Name: '90 And Above Sessional Marks Institute Wise, Semester Wise Report Practical' },
+      { ID: 9, DisplayOrder: 11, Name: 'Download Student Digilocker Report' },
+      { ID: 10, DisplayOrder: 12, Name: 'Zero Marks IA Record' },
+      { ID: 11, DisplayOrder: 13, Name: 'Zero Marks Practical Record' },
+      { ID: 12, DisplayOrder: 14, Name: 'Minimum & Maximum Marks Report IA' },
+      { ID: 13, DisplayOrder: 15, Name: 'Minimum & Maximum Marks Practical Report' },
+      { ID: 15, DisplayOrder: 16, Name: 'Marks Statistics IA Report' }
     ];
+
+    this.ReportTypelist.sort((a, b) => a.DisplayOrder - b.DisplayOrder);
   }
   get form() { return this.groupForm.controls; }
 
@@ -172,9 +184,16 @@ export class MiscellaneousReportComponent implements OnInit {
       }
       try {
         debugger
-        if (this.requestData.Type == 8) {
+        if (this.requestData.Type == 8 || this.requestData.Type == 14) {
 
-          this.requestData.Action = 'ViewData';
+          // IA Report
+          if (this.requestData.Type == 8) {
+            this.requestData.Action = 'ViewDataIAReport';
+          }
+          // Practical Report
+          else if (this.requestData.Type == 14) {
+            this.requestData.Action = 'ViewDataPractical';
+          }
 
           await this.reportService.GetMiscellaneousReport(this.requestData)
             .then((data: any) => {
@@ -183,8 +202,7 @@ export class MiscellaneousReportComponent implements OnInit {
                 this.toastr.warning(data.Message);
               }
               else if (data.State == EnumStatus.Success) {
-                //debugger
-                this.GetfilteredList = data["Data"];// list
+                this.GetfilteredList = data["Data"];
                 this.exportToExcelstaticType90();
               }
               else {
@@ -194,6 +212,14 @@ export class MiscellaneousReportComponent implements OnInit {
 
             }, (error: any) => console.error(error));
         }
+
+        if (this.requestData.Type == 15) {
+          this.requestData.Action = '_getMarksStatistics_IA_Report';
+         
+          // IA Report
+          this.DownloadStudentResult_Public();
+        }
+
         else {
           debugger
           await this.reportService.GetMiscellaneousReport(this.requestData)
@@ -222,8 +248,9 @@ export class MiscellaneousReportComponent implements OnInit {
                 else if (this.requestData.Type == 11) {
                   this.exportToExcelGetZero_Marks_IA_Or_Practical_Record();
                 }
+              
                 else if (this.requestData.Type == 12 || this.requestData.Type == 13) {
-                  this.exportToExcelMinimumMaximumMarksIA_Or_PracticalReport();
+                  this.exportToPdfMinimumMaximumMarksReport();
                 }
                 else {
                   this.exportToExcelTpye2();
@@ -286,6 +313,8 @@ export class MiscellaneousReportComponent implements OnInit {
     this.UniqueKeys = [];
     this.CustomizeReportCoulmnDataPush = [];
     this.requestData = new MiscellaneousModel();
+   
+  
   }
 
   exportToExcelstaticType(): void {
@@ -573,54 +602,115 @@ export class MiscellaneousReportComponent implements OnInit {
     } else {
       this.SetfileName = 'Download_Report';
     }
+    XLSX.writeFile(wb, `${this.SetfileName}.xlsx`);
   }
 
-  exportToExcelMinimumMaximumMarksIA_Or_PracticalReport(): void {
-    debugger
+  exportToPdfMinimumMaximumMarksReport(): void {
+
     if (!this.GetfilteredList || this.GetfilteredList.length === 0) {
       return;
     }
 
-    const wantedColumns = [
-      'S.No',
-      'InstituteName',
-      'Branch',
-      'SubjectCode',
-      'Below45',
-      'Above85',
-      'Remark'
-    ];
+    const doc = new jsPDF('l', 'mm', 'a4'); // Landscape
 
-    const exportData = this.GetfilteredList.map((row: any, index: number) => ({
-      'S.No': index + 1,
-      'InstituteName': row['InstituteName'] ?? '',
-      'Branch': row['Branch'] ?? '',
-      'SubjectCode': row['SubjectCode'] ?? '',
-      'Below45': row['Below45'] ?? '',
-      'Above85': row['Above85'] ?? '',
-      'Remark': row['Remark'] ?? ''
-    }));
-
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-
-    ws['!cols'] = wantedColumns.map(col => ({
-      wch: Math.max(
-        col.length,
-        ...exportData.map((r: any) => String(r[col] ?? '').length)
-      ) + 2
-    }));
-
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Report');
+    // Title
+    let title = '';
 
     if (this.requestData.Type === 12) {
+      title = 'Minimum & Maximum Marks IA Report';
       this.SetfileName = 'Minimum_Maximum_Marks_IA_Report';
     }
     else if (this.requestData.Type === 13) {
+      title = 'Minimum & Maximum Marks Practical Report';
       this.SetfileName = 'Minimum_Maximum_Marks_Practical_Report';
     }
 
-    XLSX.writeFile(wb, `${this.SetfileName}.xlsx`);
+    doc.setFontSize(14);
+    doc.text(title, 14, 15);
+
+    // Table Header
+    const head = [[
+      'S.No',
+      'Institute Name',
+      'Branch',
+      'Subject Code',
+      'Below 45',
+      'Above 85',
+      'Remark'
+    ]];
+
+    // Table Body
+    const body = this.GetfilteredList.map((row: any, index: number) => [
+      index + 1,
+      row.InstituteName ?? '',
+      row.Branch ?? '',
+      row.SubjectCode ?? '',
+      row.Below45 ?? '',
+      row.Above85 ?? '',
+      row.Remark ?? ''
+    ]);
+
+    autoTable(doc, {
+      head: head,
+      body: body,
+      startY: 25,
+      theme: 'grid',
+      styles: {
+        fontSize: 9,
+        cellPadding: 2,
+        halign: 'center'
+      },
+      headStyles: {
+        fillColor: [41, 128, 185],
+        textColor: 255,
+        fontStyle: 'bold'
+      }
+    });
+
+    doc.save(`${this.SetfileName}.pdf`);
+  }
+
+  ExportPdf() {
+    this.SubmitData();
+  }
+  get isPdfReport(): boolean {
+    const type = Number(this.groupForm.get('Type')?.value);
+    return type === 12 || type === 13;
+  }
+
+
+  async DownloadStudentResult_Public() {
+    try {
+      await this.reportService.GetGetMarksStatisticsReport(this.requestData).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.downloadBase64PDF(data.Data, `GetMarksStatistics.pdf`);
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.error(data.Message);
+        } else {
+          this.toastr.error(data.Message);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  downloadBase64PDF(base64: string, filename: string) {
+    const byteCharacters = atob(base64);
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
   }
 
 }

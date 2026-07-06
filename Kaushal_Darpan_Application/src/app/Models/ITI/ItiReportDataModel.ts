@@ -155,5 +155,19 @@ export class ItiSanctionOrderList {
   public SelectedDate?: string = ''
   public TypeID?: number = 0
 }
-
+export class CampusRemovalReport {
+  public CollegeID: number = 0;
+  public CollegeName: string = '';
+  public CampYear: number = 0;
+  public CampusRemovedOrderNo: string = '';
+  public CampusRemovedOrderDate: string = '';
+  public CampusRemovedRemark: string = '';
+  public CampusRemovedFilePath: string = '';
+  public RoleID: number = 0
+  public UserID: number = 0
+  public CampusDetails: string = '';
+  public OldName: string = '';
+  public ModifiedDate: number = 0;
+  public UpdatedBySSOID: string = '';
+}
 

@@ -77,4 +77,5 @@ export class CenterStudentSearchModel extends RequestBaseModel {
   public SubjectType: string = ''
   public StudentName: string = ''
   public SubjectName: string = ''
+  public IsFee:number=0
 }

@@ -35,8 +35,10 @@ export class ExcelOperationComponent implements OnInit {
 
 
   public ChunkSize: number = 100;
+  public ActionType: string = '';
 
   public TradeDDLList: any = [];  
+  public ActionList: any = [];  
 
   isSubmitted:boolean =false;
   closeResult:string | undefined;
@@ -66,8 +68,12 @@ export class ExcelOperationComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private ITIStudentRevaluationService:ITIStudentRevaluationService,
   ){}
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
+  async ngOnInit() {
+    //throw new Error('Method not implemented.');
+
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+    await this.GetCommondata();
   }
 
   //  --------------------------
@@ -86,7 +92,30 @@ export class ExcelOperationComponent implements OnInit {
          // Reset file input so selecting the same file again triggers change
         // event.target.value = null;
       }
-   
+
+
+  // get semestar ddl
+  async GetCommondata() {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.ExcelOperationCommon('_getExcelActionddlRoleWise', this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.RoleID, this.sSOLoginDataModel.Eng_NonEng)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ActionList = data['Data'];
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   ImportExcelFile(file: File): void {
     debugger
     this.Swal2.Confirmation("Do you want to Update Status?",

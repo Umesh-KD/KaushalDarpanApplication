@@ -14,7 +14,7 @@
 
 <div class="card">
   <div class="card-body p-5">
-    <div class="mb-8">  
+    <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <a *ngIf="sSOLoginDataModel.RoleID!=42 && sSOLoginDataModel.RoleID!=22 && sSOLoginDataModel.RoleID!=20 && sSOLoginDataModel.RoleID!=43" routerLink="/additi" class="btn bg-success btn-sm text-white">
@@ -24,13 +24,13 @@
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <!-- <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Zone:</label>
-    <select class="form-select" [(ngModel)]="searchrequest.ZoneID">
-      <option value="0">Choose Option</option>
-      <option value="1">ABC</option>
-      <option value="2">DEF</option>
-    </select>
-  </div> -->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Zone:</label>
+          <select class="form-select" [(ngModel)]="searchrequest.ZoneID">
+            <option value="0">Choose Option</option>
+            <option value="1">ABC</option>
+            <option value="2">DEF</option>
+          </select>
+        </div> -->
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District:</label>
@@ -56,23 +56,23 @@
 
 
         <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      ITI Name: <span class="StarMarking">*</span>
-    </label>
-    <input type="text" class="form-input" placeholder="Enter Name:" [(ngModel)]="searchrequest.Name">
-    <div *ngIf="isSubmitted && groupForm.controls.txtName.errors" class="text-danger">
-      <p *ngIf="groupForm.controls.txtName.errors.required">This field is required .!</p>
-    </div>
-  </div>
-  <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      ITI Code: <span class="StarMarking">*</span>
-    </label>
-    <input type="text" class="form-input" placeholder="Enter Name:" [(ngModel)]="searchrequest.ItiCode">
-    <div *ngIf="isSubmitted && groupForm.controls.txtName.errors" class="text-danger">
-      <p *ngIf="groupForm.controls.txtName.errors.required">This field is required .!</p>
-    </div>
-  </div>-->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            ITI Name: <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Name:" [(ngModel)]="searchrequest.Name">
+          <div *ngIf="isSubmitted && groupForm.controls.txtName.errors" class="text-danger">
+            <p *ngIf="groupForm.controls.txtName.errors.required">This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            ITI Code: <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Name:" [(ngModel)]="searchrequest.ItiCode">
+          <div *ngIf="isSubmitted && groupForm.controls.txtName.errors" class="text-danger">
+            <p *ngIf="groupForm.controls.txtName.errors.required">This field is required .!</p>
+          </div>
+        </div>-->
 
 
 
@@ -87,15 +87,15 @@
 
 
         <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade:</label>
-    <ng-select [(ngModel)]="searchrequest.TradeID"
-               [clearable]="false">
-      <ng-option [value]="0">Choose Option</ng-option>
-      <ng-container *ngFor="let item of ItiTradeList;">
-        <ng-option [value]="item.Id">{{item.TradeName}}</ng-option>
-      </ng-container>
-    </ng-select>
-  </div>-->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade:</label>
+          <ng-select [(ngModel)]="searchrequest.TradeID"
+                     [clearable]="false">
+            <ng-option [value]="0">Choose Option</ng-option>
+            <ng-container *ngFor="let item of ItiTradeList;">
+              <ng-option [value]="item.Id">{{item.TradeName}}</ng-option>
+            </ng-container>
+          </ng-select>
+        </div>-->
 
 
         <div>
@@ -112,15 +112,15 @@
 
 
         <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Fee Status:
-    </label>
-    <select class="form-select" [(ngModel)]="searchrequest.FeeStatus">
-      <option value="-1">ALL</option>
-      <option value="1">Entered</option>
-      <option value="0">Not Entered</option>
-    </select>
-  </div>-->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Fee Status:
+          </label>
+          <select class="form-select" [(ngModel)]="searchrequest.FeeStatus">
+            <option value="-1">ALL</option>
+            <option value="1">Entered</option>
+            <option value="0">Not Entered</option>
+          </select>
+        </div>-->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             ITI Type:
@@ -133,23 +133,23 @@
           </select>
         </div>
         <!-- <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Exam Type:
-    </label>
-    <select class="form-select w-full" name="ddlTradeScheme" [(ngModel)]="searchrequest.ExamTypeId">
-      <option value="0" hidden>Choose Option</option>
-      <option *ngFor="let item of ITITradeSchemeList" [value]="item.ID">{{item.Name}}</option>
-    </select>
-  </div> -->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Exam Type:
+          </label>
+          <select class="form-select w-full" name="ddlTradeScheme" [(ngModel)]="searchrequest.ExamTypeId">
+            <option value="0" hidden>Choose Option</option>
+            <option *ngFor="let item of ITITradeSchemeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div> -->
         <!-- <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Course:
-    </label>
-    <select class="form-select" id="CourseType" [(ngModel)]="searchrequest.CourseID">
-      <option value="0">Choose Option</option>
-      <option *ngFor="let item of CourseTypeList" [value]="item.StreamTypeID">{{item.StreamType}}</option>
-    </select>
-  </div> -->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Course:
+          </label>
+          <select class="form-select" id="CourseType" [(ngModel)]="searchrequest.CourseID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CourseTypeList" [value]="item.StreamTypeID">{{item.StreamType}}</option>
+          </select>
+        </div> -->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Status:
@@ -161,15 +161,15 @@
           </select>
         </div>
         <!-- <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Exam System:
-    </label>
-    <select class="form-select" [(ngModel)]="searchrequest.ExamSystemId">
-      <option value="0">Choose Option</option>
-      <option value="1">A</option>
-      <option value="2">B</option>
-    </select>
-  </div> -->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Exam System:
+          </label>
+          <select class="form-select" [(ngModel)]="searchrequest.ExamSystemId">
+            <option value="0">Choose Option</option>
+            <option value="1">A</option>
+            <option value="2">B</option>
+          </select>
+        </div> -->
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -263,10 +263,10 @@
           <tr *ngFor="let iti of paginatedInTableData | tableSearchFilter:Table_SearchText ; let i = index">
             <td align="left">{{ (startInTableIndex+1)+i}}</td>
             <!--<td align="left">{{ iti.CollegeName }}</td>-->
-          <td align="left">{{iti.Name}}</td>
-          <td align="left">{{iti.DgetCode}}</td>
-          <td align="left">{{iti.DistrictNameEnglish}}</td>
-          <!--<td align="left">{{ iti.campusName }}</td>-->
+            <td align="left">{{iti.Name}}</td>
+            <td align="left">{{iti.DgetCode}}</td>
+            <td align="left">{{iti.DistrictNameEnglish}}</td>
+            <!--<td align="left">{{ iti.campusName }}</td>-->
             <td align="center" *ngIf="sSOLoginDataModel.RoleID!=_EnumRole.DTETraing">
               <div class="flex">
                 <button class="dropdown mr-1" mat-raised-button [matMenuTriggerFor]="menu" style="width: 105px; padding: 5px;">
@@ -278,7 +278,7 @@
 
                   @if(sSOLoginDataModel.RoleID == _EnumRole.ITIPrincipal || sSOLoginDataModel.RoleID == 43)
                   {
-                    
+
 
                   <a *ngFor="let sem of Type1List"
                      mat-menu-item
@@ -308,16 +308,16 @@
                   </button>
                   <!--Third Semester-->
                   <!--<button mat-menu-item [routerLink]="'/ITIDownloadRollNoList'"
-                    [queryParams]="{ semid: 3, instID: iti.Id }"
-                    matTooltip="Roll List Third Semester">
-              <i class="ti ti-download"></i> Third Semester
-            </button>
-            Fourth Semester
-            <button mat-menu-item [routerLink]="'/ITIDownloadRollNoList'"
-                    [queryParams]="{ semid: 4, instID: iti.Id }"
-                    matTooltip="Roll List Fourth Semester">
-              <i class="ti ti-download"></i> Fourth Semester
-            </button>-->
+                          [queryParams]="{ semid: 3, instID: iti.Id }"
+                          matTooltip="Roll List Third Semester">
+                    <i class="ti ti-download"></i> Third Semester
+                  </button>
+                  Fourth Semester
+                  <button mat-menu-item [routerLink]="'/ITIDownloadRollNoList'"
+                          [queryParams]="{ semid: 4, instID: iti.Id }"
+                          matTooltip="Roll List Fourth Semester">
+                    <i class="ti ti-download"></i> Fourth Semester
+                  </button>-->
                   }
 
 
@@ -356,30 +356,28 @@
                     <i class="ti ti-download"></i> Second Year Main
                   </button>
                   <!--Third Semester
-            <button mat-menu-item [routerLink]="'/ITIGenerateAdmitCard'"
-                    [queryParams]="{ semid: 3, instID: iti.Id }"
-                    matTooltip="Admit Cards Third Semester">
-              <i class="ti ti-download"></i> Third Semester Main
-            </button>-->
+                  <button mat-menu-item [routerLink]="'/ITIGenerateAdmitCard'"
+                          [queryParams]="{ semid: 3, instID: iti.Id }"
+                          matTooltip="Admit Cards Third Semester">
+                    <i class="ti ti-download"></i> Third Semester Main
+                  </button>-->
                   <!--Fourth Semester-->
                   <!--<button mat-menu-item [routerLink]="'/ITIGenerateAdmitCard'"
-                    [queryParams]="{ semid: 4, instID: iti.Id }"
-                    matTooltip="Admit Cards Fourth Semester">
-              <i class="ti ti-download"></i> Fourth Semester Main
-            </button>-->
+                          [queryParams]="{ semid: 4, instID: iti.Id }"
+                          matTooltip="Admit Cards Fourth Semester">
+                    <i class="ti ti-download"></i> Fourth Semester Main
+                  </button>-->
                   }
 
                 </mat-menu>
               </div>
             </td>
             <!--<td align="left">
-        <span [class.text-red]="iti.Status === 0" [class.text-green]="iti.Status === 1">
-          {{ iti.FeePdf !== 0 ? 'Fee Completed' : 'Fee Pending' }}
-        </span>
-      </td>-->
+              <span [class.text-red]="iti.Status === 0" [class.text-green]="iti.Status === 1">
+                {{ iti.FeePdf !== 0 ? 'Fee Completed' : 'Fee Pending' }}
+              </span>
+            </td>-->
             <!--<td align="left">{{ iti.ModifyDate | date:'yyyy-MM-dd HH:mm:ss' }}</td>-->
-
-
             <!-- <td class="left">
               <div class="flex items-center">
                 <span>{{ iti.ActiveStatus == 1 ? 'Affiliated' : 'DeAffiliated' }}</span>
@@ -410,12 +408,21 @@
                     <i class="ti ti-pencil"></i> Update Details of ITI
                   </button> -->
 
-                  <button mat-menu-item 
-                    [routerLink]="['/ItiPlanning']"
-                    [queryParams]="{ id: iti.Id, Type: 1 }"
-                     matTooltip="Update ITI College Details">
+                  <button mat-menu-item
+                          [routerLink]="['/ItiPlanning']"
+                          [queryParams]="{ id: iti.Id, Type: 1 }"
+                          matTooltip="Update ITI College Details">
                     <i class="ti ti-pencil"></i> Update Details of ITI
                   </button>
+
+                  @if(iti.CampusID>0)
+                  {
+                  <button mat-menu-item
+                          (click)="ViewandUpdatecampus(MyModel_ViewCampusdetails,iti)"
+                          matTooltip="Update ITI Campus Details">
+                    <i class="ti ti-pencil"></i> Update Campus Details
+                  </button>
+                  }
 
                   <!-- Second Semester -->
                   <!-- <button mat-menu-item
@@ -423,7 +430,6 @@
                           matTooltip="Reset SSOID">
                     <i class="ti ti-refresh"></i> Reset SSOID
                   </button> -->
-
                   <!-- Third Semester -->
                   <button mat-menu-item matTooltip="Unlock Fee" (click)="UnlockFee(iti.Id,iti.FeePdf)">
                     <i [ngClass]="iti.FeePdf == 1 ? 'ti ti-lock-open' : 'ti ti-lock'"></i>
@@ -442,7 +448,6 @@
                           matTooltip="NCVT Mis">
                     <i class="ti ti-download"></i> NCVT Mis
                   </button> -->
-
                   <!-- Sixth Semester -->
                   <button mat-menu-item (click)="ViewandUpdate(MyModel_ViewTrades,iti.Id)"
                           matTooltip="View Trades">
@@ -546,6 +551,81 @@
           <button type="button" class="btn bg-info text-white mt-6" (click)="appointStaffAsExaminer()">Submit</button>
         </div> -->
       </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #MyModel_ViewCampusdetails let-modal
+             class="w-50 h-50 fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>Update Campus Details</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card">
+        <div class="card-body">
+
+          <div class="grid grid-cols-1 gap-6">
+
+            <!-- Is Campus -->
+            <!--<div>
+              <label class="block text-sm font-medium text-gray-800 mb-2">
+                Is Running on Campus?
+              </label>
+
+              <div class="flex items-center gap-6">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio"
+                         name="IsCampus"
+                         [value]="true"
+                         [(ngModel)]="request.IsCampus">
+                  <span>Yes</span>
+                </label>
+
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio"
+                         name="IsCampus"
+                         [value]="false"
+                         [(ngModel)]="request.IsCampus">
+                  <span>No</span>
+                </label>
+              </div>
+            </div>-->
+
+            <!-- College Dropdown -->
+            <div *ngIf="request.IsCampus">
+              <label class="block text-sm font-medium text-gray-800 mb-2">
+                Campus College
+              </label>
+
+              <ng-select [(ngModel)]="request.CampusID"
+                         [clearable]="false"
+                         appendTo="body"
+                         placeholder="Select Campus College">
+                <ng-option [value]="0">Choose Option</ng-option>
+                <ng-option *ngFor="let item of govCollegeList" [value]="item.ID">
+                  {{ item.Name }}
+                </ng-option>
+              </ng-select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-center pt-4">
+              <button type="button"
+                      class="btn bg-primary text-white px-6 py-2 rounded-md hover:bg-primary-dark"
+                      (click)="SaveCampusStatus()">
+                Submit
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
 </ng-template>

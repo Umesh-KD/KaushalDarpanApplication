@@ -20,7 +20,8 @@ import { StudentService } from '../../../Services/Student/student.service';
   templateUrl: './itiPendingCollegeFee.component.html',
   styleUrl: './itiPendingCollegeFee.component.css'
 })
-export class itiPendingCollegeFeeComponent implements OnInit {
+export class itiPendingCollegeFeeComponent implements OnInit
+{
   public Message: string = '';
   public ErrorMessage: string = '';
   public State: any = false;
@@ -58,10 +59,10 @@ export class itiPendingCollegeFeeComponent implements OnInit {
   ) {
   }
 
-  async ngOnInit() {
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    
+  async ngOnInit()
+  {
 
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetAllData();
   }
 
@@ -322,7 +323,8 @@ export class itiPendingCollegeFeeComponent implements OnInit {
 
 
 
-  async PayExamFee(item: StudentDetailsModel, IsMultiPayment = false) {
+  async PayExamFee(item: StudentDetailsModel, IsMultiPayment = false)
+  {
 
     const isValid = await this.ValidateExamDate(item.CourseType, item.FinancialYearID, item.EndTermID);
     if (isValid)
@@ -588,25 +590,25 @@ export class itiPendingCollegeFeeComponent implements OnInit {
 
 
   async ValidateExamDate(Eng_NonEng: number = 0, FinancialYearID: number = 0, EndTermID: number = 0): Promise<boolean> {
-    try {
-
+    try
+    {
       const data =
       {
         DepartmentID: EnumDepartment.ITI,
         CourseTypeId: Eng_NonEng,
         AcademicYearID: FinancialYearID,
         EndTermID: EndTermID,
-        Key: "ExaminationFee",
+        Key: "ExaminationFeeCollege",
         SSOID: this.sSOLoginDataModel.SSOID
       };
 
       const response = await this.commonMasterService.GetDateConfigSetting(data);
       const parsedData = JSON.parse(JSON.stringify(response));
       this.DateConfigSetting = parsedData['Data'][0];
-      this.MapKeyEng = this.DateConfigSetting.ExaminationFee;
-      console.log(this.DateConfigSetting, 'DATAAAAA')
+      this.MapKeyEng = this.DateConfigSetting.ExaminationFeeCollege;
 
-      if (this.MapKeyEng == 1) {
+      if (this.MapKeyEng == 1)
+      {
         return true; // Success case
       }
       else {

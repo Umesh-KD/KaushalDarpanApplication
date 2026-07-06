@@ -34,3 +34,6 @@
   color: #212121;
   word-break: break-word;
 }
+.ng-dropdown-panel {
+  z-index: 99999 !important;
+}

@@ -195,9 +195,10 @@ export class StudentAttendenceModel extends RequestBaseModel {
 
 
 }
-export class RevertDataModel {
+export class RevertDataModel  {
   public StudentExamID: number = 0;
   public status: number = 0;
+  public CreatedBy: number = 0;
 }
 
 

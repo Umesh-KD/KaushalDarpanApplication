@@ -81,7 +81,7 @@ export class ITIFeesPerYearListComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    if ((this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || EnumRole.Principal_NCVT)) {
+    if ((this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || EnumRole.Principal_NCVT || this.sSOLoginDataModel.RoleID == EnumRole.AdmissionIncharges)) {
       await this.CheckProfileStatus();
       if (this.isprofile == 0) {
         this.sweetAlert2.Confirmation("Your Profile Is not completed please create your profile?", async (result: any) => {
