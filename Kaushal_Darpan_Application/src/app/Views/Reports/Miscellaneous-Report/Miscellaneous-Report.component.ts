@@ -190,10 +190,12 @@ export class MiscellaneousReportComponent implements OnInit {
           // IA Report
           if (this.requestData.Type == 8) {
             this.requestData.Action = 'ViewDataIAReport';
+            this.SetfileName = '90AndAboveSessionalMarksInstituteWiseSemesterWiseIAReport';
           }
           // Practical Report
           else if (this.requestData.Type == 14) {
             this.requestData.Action = 'ViewDataPractical';
+            this.SetfileName = '90AndAboveSessionalMarksInstituteWiseSemesterWisePracticalReport';
           }
 
           await this.reportService.GetMiscellaneousReport(this.requestData)
@@ -527,7 +529,7 @@ export class MiscellaneousReportComponent implements OnInit {
 
     XLSX.writeFile(
       wb,
-      `90AndAboveSessionalMarksInstituteWiseSemesterWiseReport_${new Date().toISOString().split('T')[0]}.xlsx`
+      this.SetfileName + '_' + new Date().toISOString().split('T')[0] + '.xlsx'
     );
   }
 
