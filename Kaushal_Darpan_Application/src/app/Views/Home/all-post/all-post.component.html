@@ -64,6 +64,7 @@
                   <option value=0>--All--</option>
                   <option value=8>2024-2025</option>
                   <option value=9>2025-2026</option>
+                  <option value=30>2026-2027</option>
                   <!--<option *ngFor="let item of FinancialYear" [value]="item.FinancialYearID">
                     {{item.YearName}}
                   </option>-->
@@ -124,7 +125,7 @@
                         <!--<b class="d-block">{{item.PostNo}}</b>-->
 
                         <b style="border-color: #b4cedf;" width="140px">
-                          {{ ('2025-26')+ '-' + (item.InstituteCode | number:'3.0') + '-' + item.Dis_PostId }}
+                          {{ (item.PostNo? item.PostNo:'2024-25-') + (item.InstituteCode | number:'3.0') + '-' + item.Dis_PostId }}
                         </b>
 
                       </div>

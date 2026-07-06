@@ -152,7 +152,9 @@ export class MiscellaneousReportComponent implements OnInit {
       { ID: 10, DisplayOrder: 12, Name: 'Zero Marks IA Record' },
       { ID: 11, DisplayOrder: 13, Name: 'Zero Marks Practical Record' },
       { ID: 12, DisplayOrder: 14, Name: 'Minimum & Maximum Marks Report IA' },
-      { ID: 13, DisplayOrder: 15, Name: 'Minimum & Maximum Marks Practical Report' }
+      { ID: 13, DisplayOrder: 15, Name: 'Minimum & Maximum Marks Practical Report' },
+      { ID: 15, DisplayOrder: 16, Name: 'Marks Statistics IA Report' },
+      { ID: 16, DisplayOrder: 17, Name: 'Marks Statistics Practical Report' }
     ];
 
     this.ReportTypelist.sort((a, b) => a.DisplayOrder - b.DisplayOrder);
@@ -211,6 +213,19 @@ export class MiscellaneousReportComponent implements OnInit {
 
             }, (error: any) => console.error(error));
         }
+
+        if (this.requestData.Type == 15 || this.requestData.Type == 16) {
+          if (this.requestData.Type == 15) {
+            this.requestData.Action = '_getMarksStatistics_IA_Report';
+          }
+          if (this.requestData.Type == 16) {
+            this.requestData.Action = '_getMarksStatistics_Practical_Report';
+          }
+         
+          // IA Report
+          this.DownloadStudentResult_Public();
+        }
+
         else {
           debugger
           await this.reportService.GetMiscellaneousReport(this.requestData)
@@ -668,4 +683,46 @@ export class MiscellaneousReportComponent implements OnInit {
     const type = Number(this.groupForm.get('Type')?.value);
     return type === 12 || type === 13;
   }
+
+
+  async DownloadStudentResult_Public() {
+    try {
+      if (this.requestData.Type == 15) {
+        this.SetfileName = 'MarksStatistics_IA_Report';
+      }
+      if (this.requestData.Type == 16) {
+        this.SetfileName = 'MarksStatistics_Practical_Report';
+      }
+      await this.reportService.GetGetMarksStatisticsReport(this.requestData).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.downloadBase64PDF(data.Data, this.SetfileName +'.pdf');
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.error(data.Message);
+        } else {
+          this.toastr.error(data.Message);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  downloadBase64PDF(base64: string, filename: string) {
+    const byteCharacters = atob(base64);
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
+  }
+
 }

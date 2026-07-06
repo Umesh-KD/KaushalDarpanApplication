@@ -40,7 +40,7 @@ export class AllPostComponent implements OnInit {
   FilteredCampusPostList: any[] = [];
   CampusFromDate: string = '';
   CampusToDate: string = '';
-  FinancialYearID: number = 9;
+  FinancialYearID: number = 30;
   InstituteID: string = '0';
   
   OriginalCampusPostList: any[] = []; // Store unfiltered data
