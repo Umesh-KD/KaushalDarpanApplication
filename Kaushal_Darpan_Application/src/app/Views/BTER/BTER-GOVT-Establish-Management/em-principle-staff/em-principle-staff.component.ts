@@ -578,6 +578,7 @@ async GetTechnicianDll() {
       request.OfficeID = this.formData.OfficeID;
       request.StaffTypeID = this.formData.StaffTypeID;
       request.InstituteID = this.formData.InstituteID;
+      request.BranchID = this.formData.BranchID;
       request.RoleID = this.sSOLoginDataModel.RoleID;
       request.UserID = this.sSOLoginDataModel.UserID;
       request.Action = "GetSanctionedPost";
