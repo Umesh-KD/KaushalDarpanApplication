@@ -53,6 +53,8 @@ export class BTER_EM_AddStaffDataModel extends RequestBaseModel {
   public ParentRoleID?:number=0;
   public GuestHouseIDs?: BTER_EM_StaffHostelListModel[] = [];
   public MultiGuestHouseIDs?: string = '';
+  public OrderNo?: string = '';
+  public VacancyID?: number = 0;
 }
 
 export class BTER_EM_AddStaffBasicDetailDataModel extends RequestBaseModel {
@@ -110,7 +112,10 @@ export class BTER_EM_AddStaffBasicDetailDataModel extends RequestBaseModel {
   public guestRoomID: number = 0;
   public PostID: number = 0;
   public OfficeID?: number = 0;
-
+  public VacancyID?: number = 0;
+  public BugetHeadID?: number = 0;
+  public BugetHeadTypeID?: number = 0;
+  public OrderNo?: string = '';
 }
 
 export class BTER_EM_StaffHostelListModel {

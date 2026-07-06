@@ -153,7 +153,8 @@ export class MiscellaneousReportComponent implements OnInit {
       { ID: 11, DisplayOrder: 13, Name: 'Zero Marks Practical Record' },
       { ID: 12, DisplayOrder: 14, Name: 'Minimum & Maximum Marks Report IA' },
       { ID: 13, DisplayOrder: 15, Name: 'Minimum & Maximum Marks Practical Report' },
-      { ID: 15, DisplayOrder: 16, Name: 'Marks Statistics IA Report' }
+      { ID: 15, DisplayOrder: 16, Name: 'Marks Statistics IA Report' },
+      { ID: 16, DisplayOrder: 17, Name: 'Marks Statistics Practical Report' }
     ];
 
     this.ReportTypelist.sort((a, b) => a.DisplayOrder - b.DisplayOrder);
@@ -189,10 +190,12 @@ export class MiscellaneousReportComponent implements OnInit {
           // IA Report
           if (this.requestData.Type == 8) {
             this.requestData.Action = 'ViewDataIAReport';
+            this.SetfileName = '90AndAboveSessionalMarksInstituteWiseSemesterWiseIAReport';
           }
           // Practical Report
           else if (this.requestData.Type == 14) {
             this.requestData.Action = 'ViewDataPractical';
+            this.SetfileName = '90AndAboveSessionalMarksInstituteWiseSemesterWisePracticalReport';
           }
 
           await this.reportService.GetMiscellaneousReport(this.requestData)
@@ -213,8 +216,13 @@ export class MiscellaneousReportComponent implements OnInit {
             }, (error: any) => console.error(error));
         }
 
-        if (this.requestData.Type == 15) {
-          this.requestData.Action = '_getMarksStatistics_IA_Report';
+        if (this.requestData.Type == 15 || this.requestData.Type == 16) {
+          if (this.requestData.Type == 15) {
+            this.requestData.Action = '_getMarksStatistics_IA_Report';
+          }
+          if (this.requestData.Type == 16) {
+            this.requestData.Action = '_getMarksStatistics_Practical_Report';
+          }
          
           // IA Report
           this.DownloadStudentResult_Public();
@@ -521,7 +529,7 @@ export class MiscellaneousReportComponent implements OnInit {
 
     XLSX.writeFile(
       wb,
-      `90AndAboveSessionalMarksInstituteWiseSemesterWiseReport_${new Date().toISOString().split('T')[0]}.xlsx`
+      this.SetfileName + '_' + new Date().toISOString().split('T')[0] + '.xlsx'
     );
   }
 
@@ -675,16 +683,22 @@ export class MiscellaneousReportComponent implements OnInit {
   }
   get isPdfReport(): boolean {
     const type = Number(this.groupForm.get('Type')?.value);
-    return type === 12 || type === 13;
+    return type === 12 || type === 13 || type === 15 || type === 16;
   }
 
 
   async DownloadStudentResult_Public() {
     try {
+      if (this.requestData.Type == 15) {
+        this.SetfileName = 'MarksStatistics_IA_Report';
+      }
+      if (this.requestData.Type == 16) {
+        this.SetfileName = 'MarksStatistics_Practical_Report';
+      }
       await this.reportService.GetGetMarksStatisticsReport(this.requestData).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
-          this.downloadBase64PDF(data.Data, `GetMarksStatistics.pdf`);
+          this.downloadBase64PDF(data.Data, this.SetfileName +'.pdf');
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.error(data.Message);
         } else {
