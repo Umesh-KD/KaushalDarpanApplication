@@ -689,24 +689,31 @@ export class MiscellaneousReportComponent implements OnInit {
 
   async DownloadStudentResult_Public() {
     try {
+
       if (this.requestData.Type == 15) {
         this.SetfileName = 'MarksStatistics_IA_Report';
-      }
-      if (this.requestData.Type == 16) {
+      } else if (this.requestData.Type == 16) {
         this.SetfileName = 'MarksStatistics_Practical_Report';
       }
-      await this.reportService.GetGetMarksStatisticsReport(this.requestData).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State === EnumStatus.Success) {
-          this.downloadBase64PDF(data.Data, this.SetfileName +'.pdf');
-        } else if (data.State === EnumStatus.Warning) {
-          this.toastr.error(data.Message);
+
+      const data: any = await this.reportService.GetGetMarksStatisticsReport(this.requestData);
+      const response = JSON.parse(JSON.stringify(data));
+
+      if (response.State === EnumStatus.Success) {
+
+        if (response.Data && response.Data.length > 0) {
+          this.downloadBase64PDF(response.Data, this.SetfileName + '.pdf');
         } else {
-          this.toastr.error(data.Message);
+          this.toastr.warning('No data available to generate PDF.');
         }
-      })
+
+      } else {
+        this.toastr.error(response.Message);
+      }
+
     } catch (error) {
       console.error(error);
+      this.toastr.error('Something went wrong.');
     }
   }
 
