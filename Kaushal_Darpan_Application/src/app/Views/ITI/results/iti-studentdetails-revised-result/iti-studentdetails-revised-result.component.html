@@ -72,28 +72,41 @@
       </div>
     </div>-->
 
-    <form [formGroup]="form" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <form [formGroup]="form" class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-      <div>
-        <label>Enrollment No<span class="text-danger">*</span></label>
-        <input type="text" class="form-input" formControlName="Enrollment" [(ngModel)]="requestStudentRevisedModel.EnrollmentNo">
-        <div *ngIf="submitted && form.controls.Enrollment.errors" class="text-danger">
-          Required
-        </div>
-      </div>
-
-      <!--<div class="flex items-end">
-        <button type="button" class="btn bg-info text-white" (click)="search()">
-          Search
-        </button>
+    <div>
+      <label>Request Type<span class="text-danger">*</span></label>
+      <select class="form-select mb-0" id="ddlRequestTypeID" formControlName="ddlRequestTypeID" name="ddlRequestTypeID" placeholderName="Please Select" [(ngModel)]="requestStudentRevisedModel.RequestTypeID" (change)="OnRequestchange()">
+        <option value="0">--All--</option>
+        <option value="revised_req">Revised</option>
+        <option value="duplicate_req">Duplicate</option>
+      </select>
+      <!--<div *ngIf="form.controls.ddlRequestTypeID.errors" class="text-danger">
+        Required
       </div>-->
-      <!--(click)="searchData()"-->
-      <div class="flex items-end">
-        <button type="button" class="btn bg-info text-white" (click)="GetStudentDetailsReviseResult()">
-          Search
-        </button>
-      </div>
-    </form>
+      <!--<div class="text-danger" *ngIf="examForm.get('ExamID').hasError('required')  && examForm.get('ExamID').touched">This field is required</div>-->
+    </div>
+
+    <div *ngIf="requestStudentRevisedModel.RequestTypeID!='0'">
+      <label>Enrollment No<span class="text-danger">*</span></label>
+      <input type="text" class="form-input" formControlName="Enrollment" [(ngModel)]="requestStudentRevisedModel.EnrollmentNo">
+      <!--<div *ngIf="form.controls.Enrollment.errors" class="text-danger">
+       This field is Required
+      </div>-->
+    </div>
+
+    <!--<div class="flex items-end">
+    <button type="button" class="btn bg-info text-white" (click)="search()">
+      Search
+    </button>
+  </div>-->
+    <!--(click)="searchData()"-->
+    <div class="flex items-end">
+      <button type="button" class="btn bg-info text-white" (click)="GetStudentDetailsReviseResult()">
+        Search
+      </button>
+    </div>
+  </form>
 
   </div>
 
@@ -171,7 +184,7 @@
               <td align="left">{{row.Total_Marks}}</td>
               <td align="left">
                 <div class="flex " style="justify-content:center;" *ngIf="row.IsShowDownloadBtn==1 ">
-                  <div *ngIf="row.IsLatestSemester == 1" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <div *ngIf="row.IsLatestSemester == 1 && requestStudentRevisedModel.RequestTypeID=='revised_req'" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                     <a href="javascript:void(0);" title="Edit Student Info"
                        (click)="onEditInfo(Model_EditInfo, row)">
                       <i class="ti ti-pencil"></i>

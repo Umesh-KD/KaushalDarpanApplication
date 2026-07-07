@@ -36,7 +36,9 @@ export class ItiEstablishmentListComponent {
 
   public CommonSubjectYesNo: number = 1;
   public CommonSubjectDDLList: any[] = [];
-  public _enumrole = EnumRole
+  public _enumrole = EnumRole;
+  public AnnouncementTypeList: any[] = [];
+
   constructor(
     private commonMasterService: CommonFunctionService,
     private ITIsService: ITIsService,
@@ -72,8 +74,10 @@ export class ItiEstablishmentListComponent {
     //this.getExamMasterList();//grid data
     /*  this.getExaminerData()*/
 
-    await this.GetGovtITI()
-    await this.GetAllGovtITI()
+    await this.GetGovtITI();
+    await this.GetAllGovtITI();
+    await this.GetAnnouncementTypeList();
+    this.searchRequest.AnnoucementType = -1;
   }
 
 
@@ -229,5 +233,25 @@ export class ItiEstablishmentListComponent {
     XLSX.writeFile(wb, 'PlanningList.xlsx');
   }
 
+  async GetAnnouncementTypeList() {
+    try {
+      debugger
 
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData("AnnouncementType", 0)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.AnnouncementTypeList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 }

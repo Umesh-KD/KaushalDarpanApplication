@@ -217,6 +217,7 @@ export class DocumentDetailsService {
 
   async UploadFile(event: any, uploadModel: UploadFileModel) {
     try {
+      debugger
       const file: File = event.target.files[0];
       if (file) {
         let fileValue = event.target.value;

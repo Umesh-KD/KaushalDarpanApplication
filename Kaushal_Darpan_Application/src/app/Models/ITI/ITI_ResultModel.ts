@@ -37,6 +37,7 @@ export class ItiGetStudentRevisedResultDataModel {
   public EnrollmentNo: string = '';
   public TradeId: number = 0;
   public SemesterID: number = 0;
+  public RequestTypeID?: string='';
 }
 
 export class ITIStateTradeCertificateSearchModel {

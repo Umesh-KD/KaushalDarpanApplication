@@ -113,8 +113,11 @@ export class ITIStudentDetailsRevisedResultComponent {
       StudentName: [''],
       FatherName: [''],
       MotherName: [''],
-      DOB: ['']
+      DOB: [''],
+      ddlRequestTypeID: ['0']
     });
+
+
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     console.log(this.sSOLoginDataModel);
@@ -142,6 +145,9 @@ export class ITIStudentDetailsRevisedResultComponent {
     if (statusParam !== null && !isNaN(Number(statusParam)) && statusParam.trim() !== '') {
       this.requestPassFailModel.Results = Number(statusParam);
     }
+
+    this.requestStudentRevisedModel.RequestTypeID = '0';
+   
   }
 
   CloseModalPopup() {
@@ -488,6 +494,20 @@ export class ITIStudentDetailsRevisedResultComponent {
 
   async GetStudentDetailsReviseResult() {
     try {
+
+      if (this.requestStudentRevisedModel.RequestTypeID == '0' || this.requestStudentRevisedModel.EnrollmentNo=='')
+      {
+        if (this.requestStudentRevisedModel.RequestTypeID == '0') {
+          this.toastr.error("Please select Request Type");
+        }
+        else {
+          this.toastr.error("Please enter Enrollment No");
+        }
+        return;
+      }
+      
+
+
       this.loaderService.requestStarted();
       this.ResultData = [];
       this.isSearch = false;
@@ -579,6 +599,7 @@ export class ITIStudentDetailsRevisedResultComponent {
       MarksheetSearch.EndTermID = rollNo.EndTermId;
       MarksheetSearch.RollNo = rollNo.RollNo;
       MarksheetSearch.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
+      MarksheetSearch.RequestTypeID = this.requestStudentRevisedModel.RequestTypeID;
 
       await this.ReportServices.GetITIStudent_Marksheet(MarksheetSearch)
         .then((data: any) => {
@@ -929,5 +950,18 @@ export class ITIStudentDetailsRevisedResultComponent {
     }
   }
 
+
+  async OnRequestchange() {
+    debugger;
+    console.log("Me chal gya");
+    console.log("skjdhsjkdhskd", this.requestStudentRevisedModel.RequestTypeID);
+    if(this.requestStudentRevisedModel.RequestTypeID == '0') {
+      this.toastr.warning("Please select Request Type");
+      this.ResultData = [];
+      this.paginatedInTableData = [];
+      this.requestStudentRevisedModel.EnrollmentNo = '';
+      return;
+    }
+  }
 
 }

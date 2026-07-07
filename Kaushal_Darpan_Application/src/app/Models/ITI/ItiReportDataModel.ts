@@ -136,7 +136,8 @@ export class ItiReportDataModel {
   public Islanddetail:boolean=false
   public IsConstructdetail:boolean=false
   public IsElectricdetail:boolean=false
-  public IsDistrictHq:boolean=false
+  public IsDistrictHq: boolean = false
+
 
 }
 

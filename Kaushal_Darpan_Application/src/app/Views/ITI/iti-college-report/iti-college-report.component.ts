@@ -83,8 +83,13 @@ export class ItiCollegeReportComponent {
   public ApplicationID: number = 0;
   public searchrequest = new BterSearchmodel()
   public GenderList: any = ''
-  public ParentID: number = 0
+  public ParentID: number = 0;
+  public AnnouncementTypeList: any[] = [];
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
+  years: number[] = [];
+  currentYear = new Date().getFullYear();
+
+
 
 
   constructor(
@@ -512,8 +517,12 @@ export class ItiCollegeReportComponent {
     await this.GetDocumentPlan()
     await this.GetInstituteCategoryList()
     /*    await this.GetOrderList()*/
-
-
+    await this.GetAnnouncementTypeList();
+    for (let year = this.currentYear + 10; year >= 1900; year--) {
+      this.years.push(year);
+    }
+    this.request.AnnoucementType = -1;
+    this.request.Esttablishment_Year = 0;
   }
 
   get _ReportForm() { return this.ReportForm.controls; }
@@ -568,10 +577,12 @@ export class ItiCollegeReportComponent {
       if (this.ParentID == 1) {
 
         this.request.OrderType = 2;
+        this.getExaminerData();
       }
 
         if(this.ParentID == 2) {
-        this.request.OrderType = 5;
+          this.request.OrderType = 5;
+          
       }
       
 
@@ -638,7 +649,7 @@ export class ItiCollegeReportComponent {
 
 
       this.loaderService.requestStarted();
-      this.commonMasterService.AssemblyMaster_DistrictIDWise(0)
+      this.commonMasterService.AssemblyMaster_DistrictIDWise(this.request.DistrictID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
@@ -3141,6 +3152,28 @@ export class ItiCollegeReportComponent {
     } catch (Ex) {
       console.log(Ex);
     } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async GetAnnouncementTypeList() {
+    try {
+      debugger
+    
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData("AnnouncementType", 0)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.AnnouncementTypeList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
