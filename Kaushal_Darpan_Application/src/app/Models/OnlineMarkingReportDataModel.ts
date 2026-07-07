@@ -30,6 +30,7 @@ export class StudentMarksheetSearchModel {
   public ExamYearID: number = 0
   public PassFailID: number = 0
   public TradeScheme: number = 0
+  public RequestTypeID?: string = ''
 }
 export class StudentITIResultSearchModel {
   public RollNo?: string = ''
