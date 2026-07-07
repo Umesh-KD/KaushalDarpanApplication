@@ -343,6 +343,8 @@ export class MarksheetDownloadComponent {
         //element.EndTermID = this.sSOLoginDataModel.EndTermID;
         //element.EndTermID = this.searchRequest.EndTermID;
         element.SessionName = Session;
+        element.ModifyBy = this.sSOLoginDataModel.UserID;
+        element.RoleID = this.sSOLoginDataModel.RoleID;
       });
       // make file and save
       await this.reportService.StudentMarksheetDownloadChunk(StudentList)
