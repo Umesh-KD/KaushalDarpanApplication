@@ -65,12 +65,10 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Type: </label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Announcement Type: </label>
           <select class="form-select" id="CollegeID" [(ngModel)]="searchRequest.AnnoucementType">
             <option value="-1">--Select--</option>
-            <option [value]="1">Budget Annoucement</option>
-            <option [value]="2">CM Annoucement </option>
-            <option [value]="0">Other</option>
+            <option *ngFor="let item of AnnouncementTypeList" [value]="item.ID">{{item.Name}}</option>
           </select>
           
         </div>
