@@ -18,6 +18,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MiscellaneousModel } from '../../../Models/MiscellaneousModel';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { empty } from 'rxjs';
 
 @Component({
   selector: 'app-Miscellaneous-Report',
@@ -234,9 +235,19 @@ export class MiscellaneousReportComponent implements OnInit {
             .then((data: any) => {
               // message
               if (data.State == EnumStatus.Warning) {
-                this.toastr.warning(data.Message);
+               /* empty export to excel*/
+                if (this.requestData.Type == 10) {
+                  this.exportToExcelGetZero_Marks_IA_Or_Practical_Record();
+                }
+                else if (this.requestData.Type == 11) {
+                  this.exportToExcelGetZero_Marks_IA_Or_Practical_Record();
+                }
+                else {
+                  this.toastr.warning(data.Message);
+                }
               }
               else if (data.State == EnumStatus.Success) {
+                debugger
                 this.GetfilteredList = data["Data"];// list
                 if (this.requestData.Type == 4 || this.requestData.Type == 7) {
                   this.exportToExcelstaticType();
@@ -250,13 +261,9 @@ export class MiscellaneousReportComponent implements OnInit {
                 else if (this.requestData.Type == 9) {
                   this.exportToExcelType9();
                 }
-                else if (this.requestData.Type == 10) {
+                else if (this.requestData.Type == 10 || this.requestData.Type == 11) {
                   this.exportToExcelGetZero_Marks_IA_Or_Practical_Record();
                 }
-                else if (this.requestData.Type == 11) {
-                  this.exportToExcelGetZero_Marks_IA_Or_Practical_Record();
-                }
-              
                 else if (this.requestData.Type == 12 || this.requestData.Type == 13) {
                   this.exportToPdfMinimumMaximumMarksReport();
                 }
@@ -567,10 +574,7 @@ export class MiscellaneousReportComponent implements OnInit {
     );
   }
   exportToExcelGetZero_Marks_IA_Or_Practical_Record(): void {
-    debugger
-    if (!this.GetfilteredList || this.GetfilteredList.length === 0) {
-      return;
-    }
+    debugger;
 
     const wantedColumns = [
       'SrNo',
@@ -582,26 +586,32 @@ export class MiscellaneousReportComponent implements OnInit {
       'ObtainedMarks'
     ];
 
-    const exportData = this.GetfilteredList.map((row: any, index: number) =>
-      wantedColumns.reduce((obj: any, col: string) => {
-        obj[col] = col === 'SrNo' ? index + 1 : (row[col] ?? '');
-        return obj;
-      }, {})
-    );
+    // If no data, create empty array
+    const exportData = (this.GetfilteredList && this.GetfilteredList.length > 0)
+      ? this.GetfilteredList.map((row: any, index: number) =>
+        wantedColumns.reduce((obj: any, col: string) => {
+          obj[col] = col === 'SrNo' ? index + 1 : (row[col] ?? '');
+          return obj;
+        }, {})
+      )
+      : [];
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    // Create worksheet with headers even if no data
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, {
+      header: wantedColumns
+    });
 
+    // Auto column width
     ws['!cols'] = wantedColumns.map(col => ({
       wch: Math.max(
         col.length,
-        ...exportData.map((row: any) => String(row[col] ?? '').length)
+        ...exportData.map((row: any) => String(row[col] ?? '').length),
+        10
       ) + 2
     }));
-
+    debugger
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    const todayDate = new Date().toISOString().split('T')[0];
 
     if (this.requestData.Type === 10) {
       this.SetfileName = 'Download_GetZero_Marks_IA_Record_Report';
@@ -610,11 +620,58 @@ export class MiscellaneousReportComponent implements OnInit {
     } else {
       this.SetfileName = 'Download_Report';
     }
+
     XLSX.writeFile(wb, `${this.SetfileName}.xlsx`);
   }
+  //exportToExcelGetZero_Marks_IA_Or_Practical_Record(): void {
+  //  debugger
+  //  if (!this.GetfilteredList || this.GetfilteredList.length === 0) {
+  //    return;
+  //  }
+
+  //  const wantedColumns = [
+  //    'SrNo',
+  //    'StudentName',
+  //    'RollNo',
+  //    'SPN',
+  //    'InstituteName',
+  //    'SubjectName',
+  //    'ObtainedMarks'
+  //  ];
+
+  //  const exportData = this.GetfilteredList.map((row: any, index: number) =>
+  //    wantedColumns.reduce((obj: any, col: string) => {
+  //      obj[col] = col === 'SrNo' ? index + 1 : (row[col] ?? '');
+  //      return obj;
+  //    }, {})
+  //  );
+
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+  //  ws['!cols'] = wantedColumns.map(col => ({
+  //    wch: Math.max(
+  //      col.length,
+  //      ...exportData.map((row: any) => String(row[col] ?? '').length)
+  //    ) + 2
+  //  }));
+
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  //  const todayDate = new Date().toISOString().split('T')[0];
+  //  debugger
+  //  if (this.requestData.Type === 10) {
+  //    this.SetfileName = 'Download_GetZero_Marks_IA_Record_Report';
+  //  } else if (this.requestData.Type === 11) {
+  //    this.SetfileName = 'Download_GetZero_Marks_Practical_Record_Report';
+  //  } else {
+  //    this.SetfileName = 'Download_Report';
+  //  }
+  //  XLSX.writeFile(wb, `${this.SetfileName}.xlsx`);
+  //}
 
   exportToPdfMinimumMaximumMarksReport(): void {
-
+    debugger
     if (!this.GetfilteredList || this.GetfilteredList.length === 0) {
       return;
     }
