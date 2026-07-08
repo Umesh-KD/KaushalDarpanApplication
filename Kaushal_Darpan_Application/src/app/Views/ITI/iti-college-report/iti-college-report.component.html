@@ -90,14 +90,7 @@
 
 
 
-      <div *ngIf="request.OrderType!=0" class="pt-30">
-
-        <button (click)="AddPost()" type="button" class="btn bg-primary text-white">
-          <i class="ti ti-plus"></i> Add
-
-        </button>
-
-      </div>
+     
 
 
 
@@ -138,14 +131,22 @@
             </td>
 
             <!--<td *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin">
-            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deletePost(idx)">
-              <i class="ti ti-trash"></i>
-            </button>
+          <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deletePost(idx)">
+            <i class="ti ti-trash"></i>
+          </button>
 
-          </td>-->
+        </td>-->
           </tr>
         </tbody>
       </table>
+      <div *ngIf="request.OrderType!=0" class="pt-30 mt-4 mb-2">
+
+        <button (click)="AddPost()" type="button" class="btn bg-primary text-white">
+          <i class="ti ti-plus"></i> Add
+
+        </button>
+
+      </div>
     </div>
 
 
