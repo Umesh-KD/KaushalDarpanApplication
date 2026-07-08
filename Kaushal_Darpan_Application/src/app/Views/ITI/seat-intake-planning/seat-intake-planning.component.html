@@ -23,24 +23,24 @@
       </div>
       <form [formGroup]="SeatIntakeSearchFormGroup">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-          <!-- 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By District:</label>
-            <select class="form-select" formControlName="ddlDistrict" [(ngModel)]="searchRequest.DistrictID" (change)="GetTradeAndColleges()">
-              <option value="0">---Choose District---</option>
-              <option *ngFor="let item of DistrictList" value="{{item.ID}}">{{item.Name}}</option>
-            </select>
-          </div>
-      
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By College:
-            </label>
-            <select class="form-select" formControlName="ddlCollege" [(ngModel)]="searchRequest.CollegeID">
-              <option value="0">---Choose College---</option>
-              <option *ngFor="let item of ItiCollegesListAll" value="{{item.Id}}">{{item.Name}}</option>
-            </select>
-          </div> -->
+          <!--
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By District:</label>
+    <select class="form-select" formControlName="ddlDistrict" [(ngModel)]="searchRequest.DistrictID" (change)="GetTradeAndColleges()">
+      <option value="0">---Choose District---</option>
+      <option *ngFor="let item of DistrictList" value="{{item.ID}}">{{item.Name}}</option>
+    </select>
+  </div>
+
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Search By College:
+    </label>
+    <select class="form-select" formControlName="ddlCollege" [(ngModel)]="searchRequest.CollegeID">
+      <option value="0">---Choose College---</option>
+      <option *ngFor="let item of ItiCollegesListAll" value="{{item.Id}}">{{item.Name}}</option>
+    </select>
+  </div> -->
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -48,18 +48,18 @@
             </label>
 
             <ng-select [items]="DistrictList" bindLabel="Name" bindValue="ID" placeholder="---Choose District---"
-              formControlName="ddlDistrict" [(ngModel)]="searchRequest.DistrictID" (change)="GetTradeAndColleges()"
-              [searchable]="true" [clearable]="true">
+                       formControlName="ddlDistrict" [(ngModel)]="searchRequest.DistrictID" (change)="GetTradeAndColleges()"
+                       [searchable]="true" [clearable]="true">
             </ng-select>
           </div>
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By College:
+              Search By Institute Name:
             </label>
 
             <ng-select [items]="ItiCollegesListAll" bindLabel="Name" bindValue="Id" placeholder="---Choose College---"
-              formControlName="ddlCollege" [(ngModel)]="searchRequest.CollegeID" [searchable]="true" [clearable]="true">
+                       formControlName="ddlCollege" [(ngModel)]="searchRequest.CollegeID" [searchable]="true" [clearable]="true">
             </ng-select>
           </div>
 
@@ -68,55 +68,70 @@
               Search By Trade:
             </label>
             <!-- <select class="form-select" formControlName="ddlTrade" [(ngModel)]="searchRequest.TradeID">
-              <option value="0">Choose Option</option>
-              <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
-            </select> -->
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
+    </select> -->
 
             <ng-select [items]="ItiTradeListAll" bindLabel="TradeName" bindValue="Id" placeholder="---Choose Trade---"
-              formControlName="ddlTrade" [(ngModel)]="searchRequest.TradeID" [searchable]="true" [clearable]="true">
+                       formControlName="ddlTrade" [(ngModel)]="searchRequest.TradeID" [searchable]="true" [clearable]="true">
             </ng-select>
           </div>
-          <!-- <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By Trade Scheme:
-            </label>
-            <select class="form-select" formControlName="ddlTradeScheme" [(ngModel)]="searchRequest.TradeSchemeID">
-              <option value="0">Choose Option</option>
-              <option *ngFor="let item of ITITradeSchemeList" value="{{item.ID}}">{{item.Name}}</option>
-            </select>
-          </div> -->
-          <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By Remark:
-            </label>
-            <select class="form-select" formControlName="ddlRemark" [(ngModel)]="searchRequest.RemarkID">
-              <option value="0">Choose Option</option>
-              <option *ngFor="let item of ITIRemarkList" value="{{item.ID}}">{{item.Name}}</option>
-            </select>
-          </div>-->
-          <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By Shift:
-            </label>
-            <input type="text" class="form-input" placeholder="Search By Shift" formControlName="txtShift" [(ngModel)]="searchRequest.Shift">
-          </div>
+        
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By Unit No:
+              Announcement Year:
             </label>
-            <input type="text" class="form-input" placeholder="Search By Unit No" formControlName="txtUnitNo" [(ngModel)]="searchRequest.UnitNo">
-          </div>-->
+            
+            <select class="form-select"
+            [(ngModel)]="searchRequest.Esttablishment_Year"
+            name="txtYear" formControlName="Esttablishment_Year">
 
+      <option [ngValue]="0">--Select Year--</option>
 
+      <option *ngFor="let year of years" [ngValue]="year">
+        {{ year }}
+      </option>
+    </select>
+          </div>
 
           <!-- <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
-            <input type="text" class="form-input" formControlName="CollegeCode" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
-          </div>
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
-            <input type="text" class="form-input" formControlName="TradeCode" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
-          </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Search By Trade Scheme:
+    </label>
+    <select class="form-select" formControlName="ddlTradeScheme" [(ngModel)]="searchRequest.TradeSchemeID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of ITITradeSchemeList" value="{{item.ID}}">{{item.Name}}</option>
+    </select>
+  </div> -->
+          <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Search By Remark:
+    </label>
+    <select class="form-select" formControlName="ddlRemark" [(ngModel)]="searchRequest.RemarkID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of ITIRemarkList" value="{{item.ID}}">{{item.Name}}</option>
+    </select>
+  </div>-->
+          <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Search By Shift:
+    </label>
+    <input type="text" class="form-input" placeholder="Search By Shift" formControlName="txtShift" [(ngModel)]="searchRequest.Shift">
+  </div>
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Search By Unit No:
+    </label>
+    <input type="text" class="form-input" placeholder="Search By Unit No" formControlName="txtUnitNo" [(ngModel)]="searchRequest.UnitNo">
+  </div>-->
+          <!-- <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
+    <input type="text" class="form-input" formControlName="CollegeCode" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
+  </div>
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
+    <input type="text" class="form-input" formControlName="TradeCode" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
+  </div> -->
 
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="onSearch() ">Search</button>
@@ -174,7 +189,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">#</th>
-            <th class="text-left">Institute Name</th>
+            <th class="text-left">Institute Name/Code</th>
             <th class="text-left">Trade Name</th>
 
             <!--<th class="text-left">Only For Women</th>-->
@@ -184,13 +199,15 @@
               Shift
               <span class="shortingSpan" *ngIf="sortInTableColumn=='Shift'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>-->
-            <th class="text-left">Number Of Unit</th>
-            <th class="text-left">{{_OrderNoHendingRoleWise}} (Order Date)</th>
+            <th class="text-left">Number of Sanctioned Units</th>
+            <th class="text-left">{{_OrderNoHendingRoleWise}} </th>
+            <th class="text-left">Sanction Order Date</th>
             <th class="text-left">Financial Order No(Order Date)</th>
             <!--<th class="text-left">Sanctioned</th>-->
             <!--<th class="text-left">Last Session</th>
             <th class="text-left">Duration</th>-->
             <th class="text-left">Number Of Seat</th>
+            <th class="text-left">Esttablishment Year</th>
             <!--<th class="text-left">Sanction No</th>
             <th class="text-left">Sanction Date</th>-->
             <!--<th class="text-left">Last Updated</th>-->
@@ -211,8 +228,12 @@
   <td align="left">{{row.MinPercentageInMath}}</td>-->
             <!--<td align="left">{{row.Shift}}</td>-->
             <td align="left">{{row.Unit_no}}</td>
-            <td align="left"><a target="_blank"
-                href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.OrderCopy}}">{{row.AdminOrderNo}}({{row.AdmSanctionDate}})</a>
+            <td align="left">
+              <a target="_blank"
+                 href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.OrderCopy}}">{{row.AdminOrderNo}}</a>
+            </td>
+            <td>
+              {{row.AdmSanctionDate}}
             </td>
 
             <td align="left"><a href="javascript:void(0);">{{row.FinancialOrderNo}}({{row.FinancialOrderDate}})</a></td>
@@ -221,12 +242,13 @@
   <td align="left">{{row.LastSessionStr}}</td>
   <td align="left">{{row.DurationYear}}</td>-->
             <td align="left">{{row.NoOfSanctionedSeats}}</td>
+            <td>{{row.Esttablishment_Year}}</td>
             <!--<td align="left">{{row.OrderNo}}</td>
   <td align="left">{{row.OrderDate}}</td>
   <td align="left">{{row.LastUpdated}}</td>
   <td align="left">	{{ row.ActiveOrderNo }}{{ row.ActiveOrderDate }}{{ row.InActiveOrderNo }}{{ row.InActiveOrderDate }} </td>-->
             <!--<td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-    <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">-->
+  <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">-->
             <!--<label class="block">Status</label>-->
             <!--<label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
         <input class="sr-only peer" type="checkbox" id="Active" [checked]="row.ActiveStatus == 1" (click)="onToggleChange($event , row.SeatIntakeID, row.ActiveStatus)">
@@ -240,7 +262,7 @@
             <td *ngIf="SSOLoginDataModel.RoleID==_enumrole.ITIPlanningAdmin">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0);" title="Edit" [routerLink]="'/AddIntakePlanning'"
-                  [queryParams]="{id:row.SeatIntakeID}"><i class="ti ti-pencil"></i></a>
+                   [queryParams]="{id:row.SeatIntakeID}"><i class="ti ti-pencil"></i></a>
                 <!--<a href="javascript:void(0);" title="Delete" (click)="DeleteById(row.SeatIntakeID)"><i class="ti ti-trash"></i></a>-->
               </div>
             </td>

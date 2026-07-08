@@ -52,6 +52,7 @@ export class SeatIntakeSearchModel {
 
   public DivisionId?: number = 0;
   public CourseTypeID?: number = 0;
+  public Esttablishment_Year: number = 0;
 
 }
 
