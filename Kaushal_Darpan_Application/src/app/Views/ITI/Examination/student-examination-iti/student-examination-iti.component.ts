@@ -287,7 +287,7 @@ export class StudentExaminationITIComponent
     await this.GetMasterData();
     await this.StreamMaster();
     await this.GetcOmmonData();
-    debugger
+    //debugger
     this.PendingCollegeFeeStatus = Number(
       this.activatedRoute.snapshot.paramMap.get('id') ?? 0
     );
@@ -539,7 +539,7 @@ export class StudentExaminationITIComponent
     const MasterCode = "Lateral_Trade";
     try {
       this.loaderService.requestStarted();
-      debugger;
+      //debugger;
       var InstID = this.sSOLoginDataModel.InstituteID;
       var InstituteID1 = this.InstituteMasterList.InstituteID;
       var id = this.request.InstituteID;
@@ -1785,7 +1785,7 @@ export class StudentExaminationITIComponent
     }, (reason: any) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    debugger
+    //debugger
     this.attendence.EligibilityStatus = item.EligibilityStatus;
     this.attendence.StudentExamID = item.StudentExamID
     this.attendence.StudentName = item.StudentName
@@ -1844,7 +1844,7 @@ export class StudentExaminationITIComponent
   {
     try
     {
-      debugger;
+      //debugger;
       this.isFormSubmitted = true;
       if (this.AttendenceFormGroup.invalid) {
         return
@@ -1944,7 +1944,7 @@ export class StudentExaminationITIComponent
   
   async onFilechangeDropout(event: any) {
     try {
-      debugger;
+      //debugger;
       this.file = event.target.files[0];
       if (this.file) {
 

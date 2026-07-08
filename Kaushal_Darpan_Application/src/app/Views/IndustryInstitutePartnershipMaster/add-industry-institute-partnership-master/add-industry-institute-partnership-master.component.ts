@@ -503,7 +503,7 @@ debugger
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
-debugger
+//debugger
       //save
       await this.industryInstitutePartnershipMasterService.SaveData_IIP_Company(this.request)
         .then((data: any) => {

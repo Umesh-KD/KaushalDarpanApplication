@@ -244,7 +244,7 @@ export class AllPostComponent implements OnInit {
      ;
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + FileName;; // Replace with your URL
     // Fetch the file as a blob
-    debugger
+    //debugger
     try {
       this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
         const downloadLink = document.createElement('a');
