@@ -45,7 +45,7 @@
       </a>
     </div>-->
     </div>
-   
+
 
 
 
@@ -80,7 +80,7 @@
         </select>
 
       </div>
-      
+
       <div>
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date<span class="StarMarking">*</span></label>
         <input type="date" class="form-input" id="ApplicationId" [max]="minDate" [(ngModel)]="request.OrderDate" (change)="getExaminerData()">
@@ -90,14 +90,7 @@
 
 
 
-      <div *ngIf="request.OrderType!=0" class="pt-30">
 
-        <button (click)="AddPost()" type="button" class="btn bg-primary text-white">
-          <i class="ti ti-plus"></i> Add
-
-        </button>
-
-      </div>
 
 
 
@@ -138,16 +131,25 @@
             </td>
 
             <!--<td *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin">
-            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deletePost(idx)">
-              <i class="ti ti-trash"></i>
-            </button>
+          <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deletePost(idx)">
+            <i class="ti ti-trash"></i>
+          </button>
 
-          </td>-->
+        </td>-->
           </tr>
         </tbody>
       </table>
-    </div>
 
+      <div *ngIf="request.OrderType!=0" class="pt-30">
+
+        <button (click)="AddPost()" type="button" class="btn bg-primary text-white">
+          <i class="ti ti-plus"></i> Add
+
+        </button>
+
+      </div>
+    </div>
+   
 
 
     <div *ngIf="filterplanorderList?.length>0 && request.IsNewCollege==1" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
@@ -213,8 +215,8 @@
               <option value="-1">--Select--</option>
               <option *ngFor="let item of AnnouncementTypeList" [value]="item.ID">{{item.Name}}</option>
               <!--<option [value]="1">Budget Annoucement</option>
-      <option [value]="2">CM Annoucement </option>
-      <option [value]="3">Other</option>-->
+            <option [value]="2">CM Annoucement </option>
+            <option [value]="3">Other</option>-->
             </select>
             <div *ngIf="isSubmitted && _ReportForm.AnnoucementType.errors" class="text-danger">
               <p *ngIf="!_ReportForm.AnnoucementType.errors.DropdownValidators">This field is required .!</p>
@@ -233,9 +235,9 @@
             </select>
 
             <!--<input type="date" class="form-input" id="ApplicationId" formControlName="txtYear" [max]="minDate" [(ngModel)]="request.Esttablishment_Year" placeholder="Enter Establishment Year">
-    <div *ngIf="isSubmitted && _ReportForm.txtYear.errors" class="text-danger">
-      <p *ngIf="_ReportForm.txtYear.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>-->
+          <div *ngIf="isSubmitted && _ReportForm.txtYear.errors" class="text-danger">
+            <p *ngIf="_ReportForm.txtYear.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>-->
           </div>
 
 
@@ -264,12 +266,12 @@
 
 
           <!--<div *ngIf="request.IsNewCollege==1">
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Name <span class="StarMarking">*</span></label>
-    <input type="text" class="form-input" id="ApplicationId" formControlName="txtName" placeholder="Enter Iti College Name" [(ngModel)]="request.CollegeName">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Name <span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="ApplicationId" formControlName="txtName" placeholder="Enter Iti College Name" [(ngModel)]="request.CollegeName">
 
 
 
-  </div>-->
+        </div>-->
 
 
           <div *ngIf="request.IsNewCollege==0">
@@ -285,16 +287,16 @@
           </div>
 
           <!--<div>
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">MIS Code <span class="StarMarking">*</span></label>
-    <input type="text" class="form-input" id="ApplicationId" formControlName="MISCode" placeholder="Enter Iti MIS Code" [(ngModel)]="request.MISCode">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">MIS Code <span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="ApplicationId" formControlName="MISCode" placeholder="Enter Iti MIS Code" [(ngModel)]="request.MISCode">
 
-    <div *ngIf="isSubmitted&&_ReportForm.MISCode.errors" class="text-danger">
-      <p *ngIf="_ReportForm.MISCode.errors.required">
-        <i aria-hidden="true"></i>This field is required .!
-      </p>
-    </div>
+          <div *ngIf="isSubmitted&&_ReportForm.MISCode.errors" class="text-danger">
+            <p *ngIf="_ReportForm.MISCode.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
 
-  </div>-->
+        </div>-->
 
 
           <div>
@@ -384,6 +386,7 @@
               <p *ngIf="_ReportForm.Loksabha.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
             </div>
           </div>
+
           <!--{{AssemblyMaster|json}}-->
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Vidhansabha Constituency<span class="StarMarking">*</span></label>
@@ -449,6 +452,8 @@
             </div>
           </div>
 
+
+
           <!--{{request.IsDistrictHq|json}}-->
           <div *ngIf="request.IsNewCollege == 1 && request.IsDistrictHq == false">
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Place  <span class="StarMarking">*</span></label>
@@ -490,49 +495,49 @@
 
 
           <!--<div>
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Sanction Order No<span class="StarMarking">*</span></label>
-    <input type="text" class="form-input" id="ApplicationId"  formControlName="AdministrativeeOrderNo" [(ngModel)]="request.AdministrativeOrderNo" placeholder="Enter Administrative Sanction Order No">
-    <div *ngIf="isSubmitted && _ReportForm.AdministrativeeOrderNo.errors" class="text-danger">
-      <p *ngIf="_ReportForm.AdministrativeeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Sanction Order No<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="ApplicationId"  formControlName="AdministrativeeOrderNo" [(ngModel)]="request.AdministrativeOrderNo" placeholder="Enter Administrative Sanction Order No">
+          <div *ngIf="isSubmitted && _ReportForm.AdministrativeeOrderNo.errors" class="text-danger">
+            <p *ngIf="_ReportForm.AdministrativeeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
 
-  <div>
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Sanction Order Date<span class="StarMarking">*</span></label>
-    <input type="date" class="form-input" id="ApplicationId" formControlName="AdministrativeOrderDate" [(ngModel)]="request.AdministrativeOrderDate">
-    <div *ngIf="isSubmitted && _ReportForm.AdministrativeOrderDate.errors" class="text-danger">
-      <p *ngIf="_ReportForm.AdministrativeOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Sanction Order Date<span class="StarMarking">*</span></label>
+          <input type="date" class="form-input" id="ApplicationId" formControlName="AdministrativeOrderDate" [(ngModel)]="request.AdministrativeOrderDate">
+          <div *ngIf="isSubmitted && _ReportForm.AdministrativeOrderDate.errors" class="text-danger">
+            <p *ngIf="_ReportForm.AdministrativeOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
 
 
 
-  <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Administrative Sanction Order Copy<span class="StarMarking">*</span> </label>
-    <div class="flex fileUploader">
-      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-             id="AdministrativeCopy" type="file" (change)="onFilechange($event,'AdministrativeCopy')" />
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Administrative Sanction Order Copy<span class="StarMarking">*</span> </label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="AdministrativeCopy" type="file" (change)="onFilechange($event,'AdministrativeCopy')" />
 
-      <label for="AdministrativeCopy">
-        <span>Choose File</span>
-        {{ request.AdministrativeCopy === '' ? 'No File Chosen' : request.AdministrativeCopy }}
-      </label>
-      <div class="flex">
-        <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.AdministrativeCopy}}"
-           *ngIf="this.request.AdministrativeCopy  !=''"
-           class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
+            <label for="AdministrativeCopy">
+              <span>Choose File</span>
+              {{ request.AdministrativeCopy === '' ? 'No File Chosen' : request.AdministrativeCopy }}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.AdministrativeCopy}}"
+                 *ngIf="this.request.AdministrativeCopy  !=''"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
           <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-  (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-  *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
           <!--</div>
 
 
 
-    </div>
-  </div>-->
+          </div>
+        </div>-->
           <!--<div class="col-span-3 text-center">-->
           <!--<button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
-  <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()"><i class="ti ti-refresh"></i> Reset</button>-->
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()"><i class="ti ti-refresh"></i> Reset</button>-->
           <!--</div>-->
 
         </div>
