@@ -45,7 +45,7 @@
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              College Type:
+              Management Type:
             </label>
             <select (change)="GetTradeAndColleges()" class="form-select" formControlName="ddlCollegeType" [(ngModel)]="searchRequest.CollegeTypeID">
               <option value="0">---Choose College Type---</option>
@@ -63,7 +63,7 @@
   </div>-->
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College:</label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute:</label>
             <ng-select [(ngModel)]="searchRequest.CollegeID"
                        formControlName="ddlCollege"
                        [clearable]="false">
