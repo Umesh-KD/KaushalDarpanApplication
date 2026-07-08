@@ -576,12 +576,16 @@ export class ItiCollegeReportComponent {
 
       if (this.ParentID == 1) {
 
-        this.request.OrderType = 2;
+        this.request.OrderType = this.OrderList.find(
+          (e: any) => e.Name === 'Institute'
+        )?.ID ?? 0;
         this.getExaminerData();
       }
 
         if(this.ParentID == 2) {
-          this.request.OrderType = 5;
+          this.request.OrderType = this.OrderList.find(
+            (e: any) => e.Name === 'Institute'
+          )?.ID ?? 0;
           
       }
       
