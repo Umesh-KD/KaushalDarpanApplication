@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.m
     CommonModule,
     LoaderModule,
     TableSearchFilterModule,
+    NgSelectModule,
     NgMultiSelectDropDownModule.forRoot()
   ]
 })
