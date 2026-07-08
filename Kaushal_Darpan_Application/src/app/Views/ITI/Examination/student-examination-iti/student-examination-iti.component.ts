@@ -186,7 +186,7 @@ export class StudentExaminationITIComponent
     this.SearchStudentDataFormGroup = this.formBuilder.group(
       {
         txtEnrollmentNo: [''],
-        ddlInstituteID: [{ value: '' }],
+        ddlInstituteID: [''],
         //ddlFinancialYearID: ['', [DropdownValidators]],
         ddlStreamID: [''],
         ddlSemesterID: [''],
