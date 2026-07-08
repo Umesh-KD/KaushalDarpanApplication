@@ -31,13 +31,14 @@ import { BterCertificateReportDataModel, BterDuplicateCertificateReportDataModel
 import { MarksheetLetterSearchModel } from '../../Models/MarksheetLetterDataModel';
 import { RelievingLetterSearchModel } from '../../Models/ITI/UserRequestModel';
 import { CenterAllocationSearchModel } from '../../Models/CenterAllocationDataModels';
-import { TabulationReportSearchModel } from '../../models/bter/TabulationReportModel';
+
 import { CollegesWiseExaminationRptSearchModel } from '../../Models/CollegesWiseExaminationRptsModel';
 import { StudentItiResultModel } from '../../Models/StudentSearchModel';
 import { InternalMarksReportCollegeWiseSearchModel } from '../../Models/CompanyMasterDataModel';
 import { CertificateLetterSearchModel } from '../../Models/CertificateLetterDataModel';
 import { ExaminerStaticReportFeedbackDataModel } from '../../Models/BTER/StaticsReportDataModel';
 import { ExaminerwithGroupcodeModel } from '../../Models/MiscellaneousModel';
+import { TabulationReportSearchModel } from '../../models/bter/TabulationReportModel';
 
 
 
@@ -2028,6 +2029,17 @@ export class ReportService {
       ).toPromise();
 
 
+  }
+
+
+  public Get85and45percentageStudentIAReport(payload: any) {
+    //debugger
+    return this.http.post(`${this.APIUrl}/Get85and45percentageStudentIAReport/`,
+      payload,
+      {
+        responseType: 'blob'
+      }
+    );
   }
 }
 

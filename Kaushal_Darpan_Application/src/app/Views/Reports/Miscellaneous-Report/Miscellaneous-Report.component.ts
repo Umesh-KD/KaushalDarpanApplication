@@ -65,7 +65,7 @@ export class MiscellaneousReportComponent implements OnInit {
     private routers: ActivatedRoute,
     private modalService: NgbModal,
     private Swal2: SweetAlert2,
-    private reportService: ReportService
+    private reportService: ReportService,
   ) {
 
     this.repType = parseInt(this.routers.snapshot.paramMap.get('repType') ?? "0");
@@ -155,7 +155,8 @@ export class MiscellaneousReportComponent implements OnInit {
       { ID: 12, DisplayOrder: 14, Name: 'Minimum & Maximum Marks Report IA' },
       { ID: 13, DisplayOrder: 15, Name: 'Minimum & Maximum Marks Practical Report' },
       { ID: 15, DisplayOrder: 16, Name: 'Marks Statistics IA Report' },
-      { ID: 16, DisplayOrder: 17, Name: 'Marks Statistics Practical Report' }
+      { ID: 16, DisplayOrder: 17, Name: 'Marks Statistics Practical Report' },
+      { ID: 17, DisplayOrder: 18, Name: '85%and%45percentageStudentIAReport' }
     ];
 
     this.ReportTypelist.sort((a, b) => a.DisplayOrder - b.DisplayOrder);
@@ -228,7 +229,10 @@ export class MiscellaneousReportComponent implements OnInit {
           // IA Report
           this.DownloadStudentResult_Public();
         }
+        if (this.requestData.Type == 17) {
 
+          this.DownloadGet85and45percentageStudentIAReport();
+        }
         else {
           debugger
           await this.reportService.GetMiscellaneousReport(this.requestData)
@@ -790,5 +794,50 @@ export class MiscellaneousReportComponent implements OnInit {
     document.body.removeChild(link);
     URL.revokeObjectURL(blobUrl);
   }
+
+
+  async DownloadGet85and45percentageStudentIAReport() {
+    try {
+      debugger
+      var body = {
+        InstituteID: this.sSOLoginDataModel.InstituteID,
+        CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
+        EndTermID: this.requestData.EndTermID
+      }
+
+      this.reportService.Get85and45percentageStudentIAReport(body)
+        .subscribe({
+          next: (blob: Blob) => {
+
+            const now = new Date();
+            const dateTime =
+              now.getFullYear().toString() +
+              ('0' + (now.getMonth() + 1)).slice(-2) +
+              ('0' + now.getDate()).slice(-2) + '_' +
+              ('0' + now.getHours()).slice(-2) +
+              ('0' + now.getMinutes()).slice(-2);
+
+            const fileName = `Get85and45percentageStudentIAReport_${dateTime}.pdf`;
+
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            a.click();
+
+            window.URL.revokeObjectURL(url);
+          },
+          error: (err) => {
+            console.error(err);
+            this.toastr.error('Failed to download report');
+          }
+        });
+
+    } catch (error) {
+      console.error(error);
+      this.toastr.error('Something went wrong.');
+    }
+  }
+
 
 }
