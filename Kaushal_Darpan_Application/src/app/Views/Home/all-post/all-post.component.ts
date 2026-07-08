@@ -11,6 +11,7 @@ import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { StreamMasterService } from '../../../Services/BranchesMaster/branches-master.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
+import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -310,5 +311,65 @@ export class AllPostComponent implements OnInit {
 
   }
 
+
+  ResetData() {
+    this.SelectedStreamID = []
+    this.SelectedInstituteId = [];
+    this.CampusFromDate = '';
+    this.CampusToDate = '';
+    this.FinancialYearID = 30;
+    //InstituteID: string = '0';
+  }
+
+  exportToExcel(): void {
+    const unwantedColumns = [
+      'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID', 'MobileNo', 'Email', 'Mobile', 'Email Address', 'Marked', 'UploadedResume', 'Selected', 'HiringRole', 'CampusPostID'
+    ];
+    //const filteredData = this.CampusPostList.map((item: any) => {
+    //  const filteredItem: any = {};
+    //  Object.keys(item).forEach(key => {
+    //    if (!unwantedColumns.includes(key)) {
+    //      filteredItem[key] = item[key];
+    //    }
+    //  });
+    //  return filteredItem;
+    //});
+
+    const exportData = this.CampusPostList.map((item: any) => ({
+      CampusID: `${item.PostNo || '2024-25'}${item.InstituteCode}-${item.Dis_PostId}`,
+      //InstituteName: item.InstituteName,
+      CompanyName: item.CompanyName,
+      CompanyAddress: item.CompanyAddress,
+      Website: item.Website,
+      HR_Name: item.HR_Name,   
+      CampusFromDate: item.CampusFromDate,
+      CampusToDate: item.CampusToDate,
+      CampusVenue: item.CampusVenue,
+      CampusVenueLocation:item.CampusVenueLocation,
+      CampusAddress: item.CampusAddress,
+      TPOSSOID: item.TPOSSOID,
+      TPOCollegeName: item.TPOCollegeName,
+      CampusTypeClass: item.CampusTypeClass,
+      TotalPositions: item.TotalPositions
+      //CampusModeType: item.CampusModeType,
+      // Add other columns you want to export
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    const cols = Object.keys(exportData[0]).map(key => ({
+      wch: Math.max(
+        key.length,
+        ...exportData.map((row: any) => String(row[key] ?? '').length)
+      ) + 2 // extra padding
+    }));
+
+    ws['!cols'] = cols;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'PlacmentData.xlsx');
+  }
 
 }
