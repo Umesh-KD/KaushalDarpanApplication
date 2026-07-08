@@ -3,6 +3,7 @@ export class SeatIntakeDataModel {
   public CollegeID: number = 0;
   public TradeID: number = 0;
   public Shift: string = '';
+  public TradeIds: string = '';
   public LastSession: number = 0;
   public RemarkID: number = 0;
   public TradeSchemeID: number = 0;
