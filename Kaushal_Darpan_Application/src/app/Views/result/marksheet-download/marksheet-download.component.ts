@@ -169,7 +169,11 @@ export class MarksheetDownloadComponent {
       this.downloadReq.MarksheetID = row.MarksheetID;
       this.downloadReq.SessionName = Session;
       this.downloadReq.RollNo = row.RollNo;
-
+      this.downloadReq.SRNO = row.SRNO;
+      this.downloadReq.DOB = row.DOB;
+      this.downloadReq.ModifyBy = this.sSOLoginDataModel.UserID;
+      this.downloadReq.StudentTypeID = row.StudentTypeID;
+      
       this.loaderService.requestStarted();
       await this.reportService.DownloadMarksheet(this.downloadReq)
         .then(async (data: any) => {
