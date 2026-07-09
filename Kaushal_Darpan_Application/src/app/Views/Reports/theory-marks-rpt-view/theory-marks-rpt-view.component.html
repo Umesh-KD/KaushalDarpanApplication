@@ -117,8 +117,10 @@
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" 
-          *ngIf="sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng"
+          *ngIf="sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng
+                  || sSOLoginDataModel.RoleID == _EnumRole.Examiner"
           (click)="PDFDownload()"><i class="ti ti-download"></i> Download PDF</a>
+
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"
            *ngIf="sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng"
            (click)="exportToExcel()">
