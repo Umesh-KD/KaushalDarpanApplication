@@ -802,7 +802,8 @@ export class MiscellaneousReportComponent implements OnInit {
       var body = {
         InstituteID: this.sSOLoginDataModel.InstituteID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
-        EndTermID: this.requestData.EndTermID
+        EndTermID: this.requestData.EndTermID,
+        SemesterID: this.requestData.SemesterID
       }
 
       this.reportService.Get85and45percentageStudentIAReport(body)
