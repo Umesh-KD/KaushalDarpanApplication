@@ -244,7 +244,7 @@ export class AllPostComponent implements OnInit {
      ;
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + FileName;; // Replace with your URL
     // Fetch the file as a blob
-    debugger
+    //debugger
     try {
       this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
         const downloadLink = document.createElement('a');
@@ -270,7 +270,6 @@ export class AllPostComponent implements OnInit {
     this.toastr.success("PDF Genetrated Successfully");
   }
 
-
   onFilterChange(event: any) {
       // Handle filtering logic (if needed)
       console.log(event);
@@ -288,37 +287,28 @@ export class AllPostComponent implements OnInit {
     onItemSelect(evet:any) {
       console.log("on select", evet);
 
-
   }
 
   onDeSelect(event:any) {
 
-
-
   }
 
-
-
   // onSelectAll(items: any[], centerID: number) {
-
-
 
   // }
 
   onDeSelectAll(event:any) {
 
-
-
   }
 
-
-  ResetData() {
+  async ResetData() {
     this.SelectedStreamID = []
     this.SelectedInstituteId = [];
     this.CampusFromDate = '';
     this.CampusToDate = '';
     this.FinancialYearID = 30;
     //InstituteID: string = '0';
+    await this.GetAllData();
   }
 
   exportToExcel(): void {

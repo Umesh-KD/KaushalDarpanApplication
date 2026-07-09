@@ -26,10 +26,16 @@
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Company Name</label>
-          <select class="form-select" abbr="Company Name" id="PlacementCompanyID" [(ngModel)]="searchRequest.PlacementCompanyID">
+          <!--<select class="form-select" abbr="Company Name" id="PlacementCompanyID" [(ngModel)]="searchRequest.PlacementCompanyID">
             <option value="0">--Select--</option>
             <option *ngFor="let item of CompanyMasterDDLList" [value]="item.ID">{{item.Name}}</option>
-          </select>
+          </select>-->
+          <ng-select id="PlacementCompanyID" [(ngModel)]="searchRequest.PlacementCompanyID">
+            <ng-option [value]="0" selected>--All--</ng-option>
+            <ng-container *ngFor="let item of CompanyMasterDDLList">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>

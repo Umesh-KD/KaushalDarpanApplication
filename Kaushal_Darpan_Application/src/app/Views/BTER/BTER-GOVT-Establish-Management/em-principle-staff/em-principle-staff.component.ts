@@ -599,6 +599,7 @@ async GetTechnicianDll() {
       request.OfficeID = this.formData.OfficeID;
       request.StaffTypeID = this.formData.StaffTypeID;
       request.DesignationID = this.formData.PostID;
+      request.BranchID = this.formData.BranchID;
       request.OfficeID = 21;  // static passing because we are using this only for institute level
       request.InstituteID = this.formData.InstituteID;
       request.RoleID = this.sSOLoginDataModel.RoleID;

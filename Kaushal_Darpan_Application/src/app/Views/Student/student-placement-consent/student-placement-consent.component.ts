@@ -229,7 +229,7 @@ export class StudentPlacementConsentComponent {
 
   public file!: File;
   async onFilechange(event: any, Type: string) {
-    debugger;
+    //debugger;
     try {
       this.file = event.target.files[0];
       if (this.file) {
@@ -405,7 +405,7 @@ export class StudentPlacementConsentComponent {
   }
 
   async GetStudentConsentCount(PostID:number) {
-    debugger
+    //debugger
     try {
       this.loaderService.requestStarted();
       await this.placementservice.GetStudentConsentCount(this.sSOLoginDataModel.StudentID, PostID)
@@ -438,7 +438,7 @@ export class StudentPlacementConsentComponent {
       await this.placementservice.GetStudentLatestResume(this.sSOLoginDataModel.StudentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          debugger;
+          //debugger;
          // this.ConsentCount = data['Data'][0]['ConsentCount'];
           if (data['Data'][0]['UploadedResume'] != '') {
             this.Request.Dis_UploadedResume = data['Data'][0]['Dis_UploadedResume'];
@@ -459,7 +459,7 @@ export class StudentPlacementConsentComponent {
 
   async GetCampusSMSDataByID(PostID:number) {
     try {
-      debugger
+      //debugger
       this.loaderService.requestStarted();
       this.SmsDataModel.PostID = PostID;
       this.SmsDataModel.StudentID = this.sSOLoginDataModel.StudentID;
@@ -486,7 +486,7 @@ export class StudentPlacementConsentComponent {
 
     try {
 
-      debugger;
+      //debugger;
 
       if (!this.validateEmailAndMobile()) {
         return;
@@ -600,7 +600,7 @@ export class StudentPlacementConsentComponent {
 
 
   async SendApplicationMessage(PostID: number) {
-    debugger
+    //debugger
     try {
       this.loaderService.requestStarted();
 
@@ -662,7 +662,7 @@ export class StudentPlacementConsentComponent {
   ) {
 
     // Reset Model
-    debugger;
+    //debugger;
     // Get Consent Count
     //await this.GetStudentConsentCount();
 
@@ -680,7 +680,7 @@ export class StudentPlacementConsentComponent {
       this.Request.Dis_UploadedResume = Dis_UploadedResume;
     }
   
-    debugger
+    //debugger
     // Assign Values
     this.Request.PostID = ID;
 

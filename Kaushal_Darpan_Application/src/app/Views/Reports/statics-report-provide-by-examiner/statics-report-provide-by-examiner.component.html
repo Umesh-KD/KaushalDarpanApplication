@@ -156,6 +156,11 @@
               class="btn bg-secondary" target="_blank" title="Mass Copy Document"><i class="ti ti-eye"></i>
             </a>
 
+            <a href="javascript:void(0);" class="btn bg-info" title="Download Theory Marks Report GroupCode Wise"
+              *ngIf="element.Status == 1"
+              (click)="PDFDownload_theoryMarksReport(element)" ><i class="ti ti-download"></i>
+            </a>
+
           </div>
         </td>
       </ng-container>
