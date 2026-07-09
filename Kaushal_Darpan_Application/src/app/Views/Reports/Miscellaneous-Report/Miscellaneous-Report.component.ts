@@ -744,7 +744,7 @@ export class MiscellaneousReportComponent implements OnInit {
   }
   get isPdfReport(): boolean {
     const type = Number(this.groupForm.get('Type')?.value);
-    return type === 12 || type === 13 || type === 15 || type === 16;
+    return type === 12 || type === 13 || type === 15 || type === 16 || type === 17;
   }
 
 
