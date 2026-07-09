@@ -70,7 +70,6 @@
     <option value="0">Choose Option</option>
     <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
   </select> -->
-
               <ng-select *ngIf="isedit" [items]="ItiTradeListAll"
                          bindLabel="TradeName"
                          bindValue="Id"
@@ -82,7 +81,7 @@
 
               </ng-select>
 
-              <ng-select *ngIf="!isedit" appendTo="body"
+              <ng-select *ngIf="!isedit"
                          formControlName="ddlTrade"
                          [items]="ItiTradeListAll"
                          bindLabel="TradeName"
@@ -104,7 +103,7 @@
 
                 <ng-template ng-option-tmp let-item="item" let-item$="item$">
                   <input type="checkbox" [checked]="item$.selected" class="me-2" />
-                  {{ item.Name }}
+                  {{ item.TradeName }}
                 </ng-template>
 
               </ng-select>
@@ -162,7 +161,8 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Administrative Sanction Date:
               </label>
-              <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate"  (change)="OnOrderDateChange(1)" formControlName="AdminOrderDate" [(ngModel)]="request.AdminOrderDate">
+              <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate"  
+                (change)="OnOrderDateChange(1)" formControlName="AdminOrderDate" [(ngModel)]="request.AdminOrderDate">
               <!-- <div *ngIf="isSubmitted && _SeatIntakeFormGroup.AdminOrderDate.errors" class="text-danger">
       <p *ngIf="_SeatIntakeFormGroup.AdminOrderDate.errors.required">
         <i aria-hidden="true"></i> This field is
