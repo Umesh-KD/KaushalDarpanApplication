@@ -150,7 +150,7 @@ export class MarksheetDownloadComponent {
 
           if (data.State == EnumStatus.Warning) {
             this.toastr.warning(data.Message);
-          } else if (data.State == EnumStatus.Warning) {
+          } else if (data.State == EnumStatus.Error) {
             console.log(data.ErrorMessage);
             this.toastr.error(data.Message);
           }
@@ -390,10 +390,8 @@ export class MarksheetDownloadComponent {
   }
 
   refreshValidationOfRollNoOnly(isVaidateRollNoOnly: boolean) {
+    //debugger
     // clear
-    this.downLoadFG.get('InstituteID')?.clearValidators();
-    this.downLoadFG.get('SemesterID')?.clearValidators();
-    this.downLoadFG.get('ResultTypeID')?.clearValidators();
     this.downLoadFG.get('IsRevised')?.clearValidators();
     this.downLoadFG.get('RollNo')?.clearValidators();
     // set
@@ -401,15 +399,9 @@ export class MarksheetDownloadComponent {
       this.downLoadFG.get('RollNo')?.setValidators(Validators.required);
     }
     else {
-      this.downLoadFG.get('InstituteID')?.setValidators(Validators.required);
-      this.downLoadFG.get('SemesterID')?.setValidators([Validators.required, notDefaultValueValidator('0')]);
-      this.downLoadFG.get('ResultTypeID')?.setValidators([Validators.required, notDefaultValueValidator('0')]);
       this.downLoadFG.get('IsRevised')?.setValidators([Validators.required, notDefaultValueValidator('-1')]);
     }
     // update
-    this.downLoadFG.get('InstituteID')?.updateValueAndValidity();
-    this.downLoadFG.get('SemesterID')?.updateValueAndValidity();
-    this.downLoadFG.get('ResultTypeID')?.updateValueAndValidity();
     this.downLoadFG.get('IsRevised')?.updateValueAndValidity();
     this.downLoadFG.get('RollNo')?.updateValueAndValidity();
   }
