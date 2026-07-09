@@ -73,17 +73,17 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   async ngOnInit() {
     this.SeatIntakeSearchFormGroup = this.formBuilder.group(
       {
-        ddlDivision:[''],
+        //ddlDivision:[''],
         ddlCollege: [''],
-        ddlDistrict: [''],
+        //ddlDistrict: [''],
         ddlCollegeType: [''],
         ddlInstitutionCategory: [''],
-        ddlTrade: [''],
-        txtShift: [''],
+        //ddlTrade: [''],
+        //txtShift: [''],
         ddlLastSession: [''],
-        ddlRemark: [''],
+        //ddlRemark: [''],
         ddlTradeScheme: [''],
-        txtUnitNo: [''],
+        //txtUnitNo: [''],
         ddlSanctioned: [''],
         ddlStatus: [''],
         CollegeCode: [''],
@@ -266,6 +266,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
 
   ExportActiveSeatIntake(Action: string ='_getActiveSeatIntake'): void {
     try {
+      debugger
       this.loaderService.requestStarted();
       this.searchRequest.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
       this.searchRequest.Action = Action;
@@ -287,10 +288,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
           //const wb: XLSX.WorkBook = XLSX.utils.book_new();
           //XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
           //XLSX.writeFile(wb, 'SeatIntakeDetails.xlsx');
-
-
           const now = new Date();
-
           const day = String(now.getDate()).padStart(2, '0');
           const month = String(now.getMonth() + 1).padStart(2, '0');
           const year = String(now.getFullYear()).slice(-2);
@@ -367,7 +365,8 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   }
 
   async onReset() {
-    this.searchRequest = new SeatIntakeSearchModel()
+    this.searchRequest = new SeatIntakeSearchModel();
+    this.searchRequest.SanctionedID = -2;
     this.onSearch()
   }
 
