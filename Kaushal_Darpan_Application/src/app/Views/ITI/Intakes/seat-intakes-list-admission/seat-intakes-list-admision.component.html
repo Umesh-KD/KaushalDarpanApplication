@@ -30,16 +30,16 @@
     </select>
   </div>-->
 
-          <div>
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Zone</label>
             <select (change)="ddlDivision_Change()" formControlName="ddlDivision" [(ngModel)]="searchRequest.DivisionId" class="form-select" id="DivisionId">
               <option value="0">--Select--</option>
               <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
             </select>
-          </div>
+          </div>-->
 
 
-          <div>
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District:</label>
             <ng-select [(ngModel)]="searchRequest.DistrictID"
                        formControlName="ddlDistrict"
@@ -49,7 +49,7 @@
                 <ng-option [value]="item.ID">{{item.Name}}</ng-option>
               </ng-container>
             </ng-select>
-          </div>
+          </div>-->
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -110,7 +110,7 @@
 
 
 
-          <div>
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade:</label>
             <ng-select [(ngModel)]="searchRequest.TradeID"
                        formControlName="ddlTrade"
@@ -120,7 +120,7 @@
                 <ng-option [value]="item.Id">{{item.TradeName}}</ng-option>
               </ng-container>
             </ng-select>
-          </div>
+          </div>-->
 
 
           <div>
@@ -134,7 +134,8 @@
               <!--<option *ngFor="let item of ITITradeSchemeList" value="{{item.ID}}">{{item.Name}}</option>-->
             </select>
           </div>
-          <div>
+
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Reservation category	:
             </label>
@@ -142,19 +143,22 @@
               <option value="0">Choose Option</option>
               <option *ngFor="let item of ITIRemarkList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
-          </div>
-          <div>
+          </div>-->
+
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Shift:
             </label>
             <input type="text" class="form-input" placeholder="Shift" formControlName="txtShift" [(ngModel)]="searchRequest.Shift">
-          </div>
-          <div>
+          </div>-->
+
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Unit No:
             </label>
             <input type="text" class="form-input" placeholder="Unit No" formControlName="txtUnitNo" [(ngModel)]="searchRequest.UnitNo">
-          </div>
+          </div>-->
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Status:
@@ -189,7 +193,6 @@
             <button type="button" class="btn bg-info text-white mt-6" (click)="onSearch() ">Search</button>
             <button type="button" class="btn bg-danger text-white mt-6" (click)="onReset()">Reset</button>
           </div>
-
         </div>
       </form>
 
@@ -198,7 +201,18 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
-        <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake('_getActiveSeatIntakeColleges')"><i class="ti ti-download"></i> Active Colleges For Admission</a>
+        <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake('_getActiveSeatIntakeColleges')">
+          <i class="ti ti-download"></i>
+          {{
+              searchRequest.SanctionedID == 1
+                ? 'Active Institute For Admission'
+                : searchRequest.SanctionedID == 0
+                  ? 'Inactive Institute For Admission'
+                  : searchRequest.SanctionedID == -2
+                    ? 'All Institute For Admission'
+                    : 'Institute For Admission'
+          }}
+        </a>
         <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake('_getActiveSeatIntake')"><i class="ti ti-download"></i> Active Seat Matrix</a>
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Intake Execl</a>
         <!--<a href="javascript:void(0);" class="btn btn-sm bg-info text-white"><i class="ti ti-download"></i> Export Intake</a>-->
@@ -229,7 +243,7 @@
           <tr>
             <th class="text-left">Sno</th>
             <th class="text-left" style="width: 15%;">District Name</th>
-            <th class="text-left" style="width: 22%;">College Name</th>
+            <th class="text-left" style="width: 22%;">Institute Name</th>
             <th class="text-left" style="width: 13%;">Trade Name</th>
             <th class="text-left" style="width:7%;">Scheme</th>
             <th class="text-left">No Of Seats</th>
