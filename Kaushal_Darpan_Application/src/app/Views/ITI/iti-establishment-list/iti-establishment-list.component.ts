@@ -38,7 +38,8 @@ export class ItiEstablishmentListComponent {
   public CommonSubjectDDLList: any[] = [];
   public _enumrole = EnumRole;
   public AnnouncementTypeList: any[] = [];
-
+  years: number[] = [];
+  currentYear = new Date().getFullYear();
   constructor(
     private commonMasterService: CommonFunctionService,
     private ITIsService: ITIsService,
@@ -78,6 +79,9 @@ export class ItiEstablishmentListComponent {
     await this.GetAllGovtITI();
     await this.GetAnnouncementTypeList();
     this.searchRequest.AnnoucementType = -1;
+    for (let year = this.currentYear + 10; year >= 1900; year--) {
+      this.years.push(year);
+    }
   }
 
 
@@ -111,6 +115,8 @@ export class ItiEstablishmentListComponent {
 
   async GetAllGovtITI() {
     try {
+      
+
 
       this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID

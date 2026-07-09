@@ -199,7 +199,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
     }
   }
   async ddlDivision_Change() {
-    debugger
+    //debugger
     try {
       this.searchRequest.DistrictID = 0;
       //const DivisionId = this.SeatIntakeSearchFormGroup.get('ddlDivision')?.value ?? 0;
@@ -334,7 +334,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   }
 
   async onSearch() {
-    debugger
+    //debugger
     try {
       this.loaderService.requestStarted();
       this.searchRequest.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
@@ -693,7 +693,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
 
 
   async UpdateIntakeStatus() {
-    debugger;
+    //debugger;
     try {
 
       // Show loading indicator
@@ -742,7 +742,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   }
 
   async SaveDataModal() {
-    debugger;
+    //debugger;
     //alert(this.SeatIntakeIDnew);
     //console.log('testdata', this.popUpsearchRequest)
     try {
@@ -772,7 +772,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   }
 
   onSearchChange() {
-    debugger
+    //debugger
 
     if (this.Table_SearchText == '') {
       this.pageInTableSize = "50"; // reset pagination

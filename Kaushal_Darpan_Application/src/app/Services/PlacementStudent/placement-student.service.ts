@@ -56,7 +56,7 @@ export class PlacementStudentService {
 
 
   public async GetStudentConsentCount(StudentID: number = 0, PostID: number = 0) {
-      debugger
+      //debugger
       return await this.http.get(this.APIUrl + "/GetStudentConsentCount/" + StudentID + '/' + PostID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)

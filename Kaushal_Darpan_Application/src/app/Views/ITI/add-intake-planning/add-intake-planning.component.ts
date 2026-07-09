@@ -26,6 +26,8 @@ export class AddIntakePlanningComponent {
   public isSubmitted = false;
   public tradeSearchRequest = new ItiTradeSearchModel()
   public collegeSearchRequest = new ItiCollegesSearchModel()
+  public isedit:boolean=false
+
 
   public OrderNoList: any = [];
   public AcademicOrderNoList:any=[];
@@ -69,7 +71,8 @@ export class AddIntakePlanningComponent {
       {
         ddlCollege: ['', [DropdownValidators]],
         //ddlTradeLevel: ['', [DropdownValidators]],
-        ddlTrade: ['', [DropdownValidators]],
+        ddlTrade: ['', [Validators.required]],
+        ddlTradeID: ['', [DropdownValidators]],
         // txtShift: ['', Validators.required],
         ddlLastSession: [''],
        /* ddlRemark: ['', [DropdownValidators]],*/
@@ -104,6 +107,7 @@ export class AddIntakePlanningComponent {
 
     this.SeatIntakeID = Number(this.route.snapshot.queryParamMap.get('id')?.toString());
     if (this.SeatIntakeID) {
+      this.isedit =true
       await this.GetByID(this.SeatIntakeID)
     }
   }
@@ -254,6 +258,20 @@ export class AddIntakePlanningComponent {
 async onSubmit() {
   this.isSubmitted = true;
 
+  debugger
+  if (this.isedit == false) {
+
+    this.SeatIntakeFormGroup.controls['ddlTradeID'].clearValidators()
+    this.SeatIntakeFormGroup.controls['ddlTradeID'].updateValueAndValidity()
+
+    this.request.TradeIds =
+      this.SeatIntakeFormGroup.value.ddlTrade?.join(',') || '';
+  } else{
+    this.SeatIntakeFormGroup.controls['ddlTrade'].clearValidators()
+    this.SeatIntakeFormGroup.controls['ddlTrade'].updateValueAndValidity()
+    this.request.TradeIds=''
+  }
+
   if (this.SeatIntakeFormGroup.invalid) {
     this.toastr.error("Invalid form data");
     return;
@@ -380,21 +398,22 @@ async onSubmit() {
   async GetByID(id: number) {
     try {
       this.loaderService.requestStarted();
-      await this.ItiSeatIntakeService.GetByIdPlanning(id).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.request = data.Data;
-      // this.request.TradeSchemeID = data.data['TradeSchemeID']
-        this.SeatIntakeFormGroup.get('ddlCollege')?.disable();
-        //this.SeatIntakeFormGroup.get('ddlTradeLevel')?.disable();
-        this.SeatIntakeFormGroup.get('ddlTrade')?.disable();
-        this.GetOrderDetailsList()
-        this.request.TradeSchemeID = data.data['TradeSchemeID']
 
-        console.log(this.request, "request")
-        this.OnTradeSchemechange()
-      });
+      const data: any = await this.ItiSeatIntakeService.GetByIdPlanning(id);
+      this.request = data.Data;
+
+      this.SeatIntakeFormGroup.get('ddlCollege')?.disable();
+      this.SeatIntakeFormGroup.get('ddlTradeID')?.disable();
+
+      // Wait until GetOrderDetailsList completes
+      await this.GetOrderDetailsList();
+
+      // Then call OnOrderDateChange
+      await this.OnOrderDateChange(1);
+
+      console.log(this.request, "request");
     } catch (error) {
-      console.error(error);
+      console.error(error);   
     } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
@@ -426,7 +445,9 @@ async onSubmit() {
         // this.request = data.Data[0];
         this.OrderNoList=data.Data;
         this.AcademicOrderNoList=this.OrderNoList.filter((x: any) => x.ParentID==1);
-        this.FinancialOrderNoList = this.OrderNoList.filter((x: any) => x.ParentID ==2);
+        this.FinancialOrderNoList = this.OrderNoList.filter((x: any) => x.ParentID == 2);
+
+
        
         console.log(this.OrderNoList, "orderlist");
       });
@@ -498,7 +519,7 @@ async onSubmit() {
   }
 
   async OnOrderDateChange(type: number) {
-    //debugger
+    debugger
     if (type == 1) {
 
       this.filteredAcademicOrderNoList = this.AcademicOrderNoList.filter(
@@ -521,6 +542,31 @@ async onSubmit() {
         this.filteredFinancialOrderNoList.length === 1
           ? this.filteredFinancialOrderNoList[0].ID
           : 0;
+    }
+  }
+  isAllSelected(): boolean {
+    const selected =
+      this.SeatIntakeFormGroup.get('ddlTrade')?.value || [];
+
+    return (
+      this.ItiTradeListAll?.length > 0 &&
+      selected.length === this.ItiTradeListAll.length
+    );
+  }
+
+  toggleSelectAll(event: any): void {
+    const checked = event.target.checked;
+
+    if (checked) {
+      const allIds = this.ItiTradeListAll.map((x: any) => x.Id);
+
+      this.SeatIntakeFormGroup.patchValue({
+        ddlTrade: allIds
+      });
+    } else {
+      this.SeatIntakeFormGroup.patchValue({
+        ddlTrade: []
+      });
     }
   }
 

@@ -56,7 +56,8 @@ export class SeatIntakePlanningComponent {
   public totalInTableRecord: number = 0;
   //end table feature default
   public _OrderNoHendingRoleWise: string = '';
-
+  years: number[] = [];
+  currentYear = new Date().getFullYear();
   constructor(
     private formBuilder: FormBuilder,
     private commonFunctionService: CommonFunctionService,
@@ -84,8 +85,8 @@ export class SeatIntakePlanningComponent {
         ddlSanctioned: [''],
         ddlStatus: [''],
         CollegeCode: [''],
-        TradeCode: ['']
-
+        TradeCode: [''],
+        Esttablishment_Year: ['']
       });
 
     this.SeatIntakeSearchFormGroupPopUp = this.formBuilder.group(
@@ -100,13 +101,16 @@ export class SeatIntakePlanningComponent {
     console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
     
     if (this.SSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
-      this._OrderNoHendingRoleWise = 'Post-sanctioned';
+      this._OrderNoHendingRoleWise = 'Sanctioned Order No';
     } else {
       this._OrderNoHendingRoleWise = 'Administrative Order No';
     }
     await this.GetDropdownData()
     await this.GetTradeAndColleges()
     this.onSearch();
+    for (let year = this.currentYear + 10; year >= 1970; year--) {
+      this.years.push(year);
+    }
   }
   get _SeatIntakeSearchFormGroup() { return this.SeatIntakeSearchFormGroup.controls; }
   get _SeatIntakeSearchFormGroupPopUp() { return this.SeatIntakeSearchFormGroupPopUp.controls; }
@@ -233,6 +237,7 @@ export class SeatIntakePlanningComponent {
 
   async onSearch() {
     try {
+      debugger
       this.loaderService.requestStarted();
       this.searchRequest.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
       await this.ItiSeatIntakeService.GetAllDataPlanning(this.searchRequest)

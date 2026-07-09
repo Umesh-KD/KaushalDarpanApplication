@@ -446,7 +446,7 @@ export class ITIStudentDetailsRevisedResultComponent {
 
 
   onSearchChange() {
-    debugger
+    //debugger
 
     if (this.Table_SearchText == '') {
       this.pageInTableSize = "50"; // reset pagination
@@ -511,7 +511,7 @@ export class ITIStudentDetailsRevisedResultComponent {
       this.loaderService.requestStarted();
       this.ResultData = [];
       this.isSearch = false;
-      debugger
+      //debugger
       await this.itiResultService.GetStudentDetailsReviseResult(this.requestStudentRevisedModel)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -533,7 +533,7 @@ export class ITIStudentDetailsRevisedResultComponent {
   }
 
   handleChangeSemester() {
-    debugger
+    //debugger
     this.ResultData = [];
     //this.searchData();
   }
@@ -672,7 +672,7 @@ export class ITIStudentDetailsRevisedResultComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           data = JSON.parse(JSON.stringify(data));
-          debugger
+          //debugger
           if (data && data.Data) {
             if (Object.keys(data).includes('Data')) {
               this.GetStudentITI_MarksheetList = data['Data'];
@@ -706,7 +706,7 @@ export class ITIStudentDetailsRevisedResultComponent {
 
     try
     {
-      debugger;
+      //debugger;
       this.loaderService.requestStarted();
       this.searchRequestConsolidated.EnrollmentNo = item.enrollment;
       this.searchRequestConsolidated.EndTermID = item.EndTermId;
@@ -809,7 +809,7 @@ export class ITIStudentDetailsRevisedResultComponent {
 
 
   async GetITITradeList() {
-    debugger
+    //debugger
     try {
       this.loaderService.requestStarted();
       this.TradeListData = [];
@@ -873,11 +873,11 @@ export class ITIStudentDetailsRevisedResultComponent {
     };
 
     await this.openOTP();
-    debugger;
+    //debugger;
 
     let res: any = await this.service.UpdateStudentWithHistory(request);
 
-    debugger;
+    //debugger;
 
     if (res && res.State === 1) { // assuming 0 = Success
       //alert("Updated successfully with history");
@@ -890,7 +890,7 @@ export class ITIStudentDetailsRevisedResultComponent {
   }
 
   async openOTP() {
-    debugger
+    //debugger
     console.log(this.childComponent);
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno??''
     // await for open model
@@ -952,7 +952,7 @@ export class ITIStudentDetailsRevisedResultComponent {
 
 
   async OnRequestchange() {
-    debugger;
+    //debugger;
     console.log("Me chal gya");
     console.log("skjdhsjkdhskd", this.requestStudentRevisedModel.RequestTypeID);
     if(this.requestStudentRevisedModel.RequestTypeID == '0') {

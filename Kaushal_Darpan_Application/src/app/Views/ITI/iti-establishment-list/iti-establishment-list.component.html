@@ -43,7 +43,7 @@
 
 
         <div class="mt-2">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
           <!--<select class="form-select" id="SubjectID" [disabled]="sSOLoginDataModel.RoleID == 20 ||sSOLoginDataModel.RoleID == 43" [(ngModel)]="searchRequest.InstituteID">
       <option value="0">--All--</option>
       <option *ngFor="let item of InstituteMasterDDLList" [value]="item.ID">
@@ -72,6 +72,22 @@
           </select>
           
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Announcement Year:
+          </label>
+
+          <select class="form-select"
+                  [(ngModel)]="searchRequest.Esttablishment_Year"
+                  name="txtYear">
+            <option value="0">--Select Year--</option>
+            <option *ngFor="let year of years" [value]="year">
+              {{ year }}
+            </option>
+          </select>
+        </div>
+
 
         <!--<div *ngIf="sSOLoginDataModel.RoleID != 20 && sSOLoginDataModel.RoleID != 43">
     <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Name </label>
