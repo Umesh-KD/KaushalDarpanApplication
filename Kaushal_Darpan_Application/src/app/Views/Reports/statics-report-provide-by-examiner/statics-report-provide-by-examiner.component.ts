@@ -17,6 +17,7 @@ import { CommonDDLExaminerGroupCodeModel } from '../../../Models/CommonDDLExamin
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ExaminerStaticReportFeedbackDataModel, ExaminerStaticReportSearchModel } from '../../../Models/BTER/StaticsReportDataModel';
 import { ToastrService } from 'ngx-toastr';
+import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
 
 @Component({
   selector: 'app-statics-report-provide-by-examiner',
@@ -72,6 +73,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
     private http: HttpClient,
     private modalService: NgbModal,
     private toastr: ToastrService,
+    public commonFunctionHelper: CommonFunctionHelper,
   ) {}
 
   async ngOnInit() {
@@ -510,4 +512,34 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
     }
   }
   
+  async PDFDownload_theoryMarksReport(row: any) {
+    try {
+      //session
+      const searchRequest: any = {};
+      searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      searchRequest.RollNo = row.GroupCode;   // using RollNo param as in theory marks same is used
+
+      await this.reportService.TheorymarksReportPdf_BTER(searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            this.commonFunctionHelper.downloadBase64OfPdf(data.Data, 'TheoryMarksReport.pdf');
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.error(data.Message);
+          }
+          else {
+            this.toastr.error(data.Message);
+            console.log(data.ErrorMessage);
+          }
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
 }
