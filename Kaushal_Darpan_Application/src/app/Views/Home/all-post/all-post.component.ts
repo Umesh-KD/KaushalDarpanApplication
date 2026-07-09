@@ -11,6 +11,7 @@ import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { StreamMasterService } from '../../../Services/BranchesMaster/branches-master.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
+import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -40,7 +41,7 @@ export class AllPostComponent implements OnInit {
   FilteredCampusPostList: any[] = [];
   CampusFromDate: string = '';
   CampusToDate: string = '';
-  FinancialYearID: number = 9;
+  FinancialYearID: number = 30;
   InstituteID: string = '0';
   
   OriginalCampusPostList: any[] = []; // Store unfiltered data
@@ -243,7 +244,7 @@ export class AllPostComponent implements OnInit {
      ;
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + FileName;; // Replace with your URL
     // Fetch the file as a blob
-    debugger
+    //debugger
     try {
       this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
         const downloadLink = document.createElement('a');
@@ -269,7 +270,6 @@ export class AllPostComponent implements OnInit {
     this.toastr.success("PDF Genetrated Successfully");
   }
 
-
   onFilterChange(event: any) {
       // Handle filtering logic (if needed)
       console.log(event);
@@ -287,28 +287,79 @@ export class AllPostComponent implements OnInit {
     onItemSelect(evet:any) {
       console.log("on select", evet);
 
-
   }
 
   onDeSelect(event:any) {
 
-
-
   }
 
-
-
   // onSelectAll(items: any[], centerID: number) {
-
-
 
   // }
 
   onDeSelectAll(event:any) {
 
-
-
   }
 
+  async ResetData() {
+    this.SelectedStreamID = []
+    this.SelectedInstituteId = [];
+    this.CampusFromDate = '';
+    this.CampusToDate = '';
+    this.FinancialYearID = 30;
+    //InstituteID: string = '0';
+    await this.GetAllData();
+  }
+
+  exportToExcel(): void {
+    const unwantedColumns = [
+      'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID', 'MobileNo', 'Email', 'Mobile', 'Email Address', 'Marked', 'UploadedResume', 'Selected', 'HiringRole', 'CampusPostID'
+    ];
+    //const filteredData = this.CampusPostList.map((item: any) => {
+    //  const filteredItem: any = {};
+    //  Object.keys(item).forEach(key => {
+    //    if (!unwantedColumns.includes(key)) {
+    //      filteredItem[key] = item[key];
+    //    }
+    //  });
+    //  return filteredItem;
+    //});
+
+    const exportData = this.CampusPostList.map((item: any) => ({
+      CampusID: `${item.PostNo || '2024-25'}${item.InstituteCode}-${item.Dis_PostId}`,
+      //InstituteName: item.InstituteName,
+      CompanyName: item.CompanyName,
+      CompanyAddress: item.CompanyAddress,
+      Website: item.Website,
+      HR_Name: item.HR_Name,   
+      CampusFromDate: item.CampusFromDate,
+      CampusToDate: item.CampusToDate,
+      CampusVenue: item.CampusVenue,
+      CampusVenueLocation:item.CampusVenueLocation,
+      CampusAddress: item.CampusAddress,
+      TPOSSOID: item.TPOSSOID,
+      TPOCollegeName: item.TPOCollegeName,
+      CampusTypeClass: item.CampusTypeClass,
+      TotalPositions: item.TotalPositions
+      //CampusModeType: item.CampusModeType,
+      // Add other columns you want to export
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    const cols = Object.keys(exportData[0]).map(key => ({
+      wch: Math.max(
+        key.length,
+        ...exportData.map((row: any) => String(row[key] ?? '').length)
+      ) + 2 // extra padding
+    }));
+
+    ws['!cols'] = cols;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'PlacmentData.xlsx');
+  }
 
 }

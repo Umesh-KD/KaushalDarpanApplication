@@ -12,7 +12,7 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { MarksheetDownloadService } from '../../../Services/MarksheetDownload/marksheet-download.service';
 import { ReportService } from '../../../Services/Report/report.service';
-import { EnumCourseType, EnumDepartment, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumCourseType, EnumDepartment, EnumResultType, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { SSOLoginService } from '../../../Services/SSOLogin/ssologin.service';
 import { MenuService } from '../../../Services/Menu/menu.service';
 import { notDefaultValueValidator } from '../../../Services/CustomValidators/custom-validators.service';
@@ -52,6 +52,7 @@ export class MarksheetDownloadComponent {
   public FinYearList: any = [];
   buttonGroups: any[] = [];
   downLoadFG!: FormGroup;
+  public EndTermList: any = [];
 
   constructor(private commonFunctionService: CommonFunctionService,
     private marksheetDownloadService: MarksheetDownloadService,
@@ -76,6 +77,7 @@ export class MarksheetDownloadComponent {
       ResultTypeID: ['0', [Validators.required, notDefaultValueValidator('0')]],
       IsRevised: ['-1', [Validators.required, notDefaultValueValidator('-1')]],
       RollNo: ['', Validators.required],
+      EndTermID: [this.sSOLoginDataModel.EndTermID, [Validators.required, notDefaultValueValidator('0')]],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -91,6 +93,12 @@ export class MarksheetDownloadComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.ResultTypeList = data['Data'];
+          // exclude some ids
+          this.ResultTypeList = this.ResultTypeList.filter((x: any) => ![
+            EnumResultType.RevaluationResult,
+            EnumResultType.Ufm,
+            EnumResultType.RwhRevalEffected
+          ].includes(x.ID));
         }, (error: any) => console.error(error)
         );
 
@@ -123,22 +131,28 @@ export class MarksheetDownloadComponent {
     }
 
     try {
-      // this.searchRequest.EndTermID = this.searchRequest.EndTermID
-      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
-      //this.searchRequest.FianancialYearID = this.searchRequest.FianancialYearID;
-      this.searchRequest.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng
-      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.searchRequest.EndTermID = this.searchRequest.EndTermID;
+      //this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.searchRequest.FianancialYearID = this.searchRequest.FianancialYearID;
+      this.searchRequest.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
       // get
       await this.marksheetDownloadService.GetAllData(this.searchRequest)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if (data.State == EnumStatus.Success) {
-            this.StudentList = data['Data'];
-            await this.createDynamicButtons(this.StudentList);
-            //table feature load
-            this.loadInTable();
-            //end table feature load
+
+          this.StudentList = data['Data'];
+          await this.createDynamicButtons(this.StudentList);
+          //table feature load
+          this.loadInTable();
+          //end table feature load
+
+          if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.Message);
+          } else if (data.State == EnumStatus.Warning) {
+            console.log(data.ErrorMessage);
+            this.toastr.error(data.Message);
           }
 
         }, error => console.error(error));
@@ -146,78 +160,6 @@ export class MarksheetDownloadComponent {
     catch (Ex) {
       console.log(Ex);
     }
-  }
-
-  async DownloadMarksheet(row: any) {
-
-    //debugger
-    try {
-
-      const fullSession = this.FinYearList.find((x: any) => x.EndTermID == row.EndTermID)?.FinancialYearName;
-      const Session = fullSession ? fullSession.split('-')[0] : '';
-
-      this.downloadReq.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.downloadReq.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
-      //this.downloadReq.EndTermID = this.sSOLoginDataModel.EndTermID;
-      this.downloadReq.EndTermID = this.searchRequest.EndTermID;
-
-      this.downloadReq.StudentID = row.StudentID;
-      this.downloadReq.SemesterID = row.SemesterID;
-      this.downloadReq.ResultTypeID = row.ResultTypeID;
-      this.downloadReq.IsRevised = row.IsRevised;
-      this.downloadReq.IsReval = row.IsReval;
-      this.downloadReq.MarksheetID = row.MarksheetID;
-      this.downloadReq.SessionName = Session;
-      this.downloadReq.RollNo = row.RollNo;
-      this.downloadReq.SRNO = row.SRNO;
-      this.downloadReq.DOB = row.DOB;
-      this.downloadReq.ModifyBy = this.sSOLoginDataModel.UserID;
-      this.downloadReq.StudentTypeID = row.StudentTypeID;
-      
-      this.loaderService.requestStarted();
-      await this.reportService.DownloadMarksheet(this.downloadReq)
-        .then(async (data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          console.log(data, "Data");
-
-          if (data.State == EnumStatus.Success) {
-            this.DownloadFile(data.Data, row);
-            await this.getAllData();
-          }
-          else {
-            this.toastr.error(data.ErrorMessage)
-            //    data.ErrorMessage
-          }
-        }, (error: any) => console.error(error)
-        );
-    }
-    catch (ex) {
-      console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
-
-  DownloadFile(FileName: string, row: any): void {
-
-    const fullSession = this.FinYearList.find((x: any) => x.EndTermID == row.EndTermID)?.FinancialYearName;
-    const Session = fullSession ? fullSession.split('-')[0] : '';
-
-    const url = `${this.appsettingConfig.StaticFileRootPathURL}/Students/BTER/Marksheet/${Session}/${FileName}`;
-
-    // const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;
-    this.http.get(url, { responseType: 'blob' }).subscribe((blob: any) => {
-      const downloadLink = document.createElement('a');
-      const url = window.URL.createObjectURL(blob);
-      downloadLink.href = url;
-      // downloadLink.download = this.generateFileName('pdf', DownloadfileName);
-      downloadLink.download = FileName || 'Marksheet.pdf'
-      downloadLink.click();
-      window.URL.revokeObjectURL(url);
-    });
   }
 
   DownloadFile_chunk(FileName: string, row: any): void {
@@ -232,48 +174,6 @@ export class MarksheetDownloadComponent {
       downloadLink.click();
       window.URL.revokeObjectURL(url);
     });
-  }
-
-  generateFileName(extension: string, name: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    return `Marksheet_${name}_${timestamp}.${extension}`;
-  }
-
-  async DownloadMarksheetBulk() {
-    //debugger
-    try {
-
-      this.StudentList.forEach((element: any) => {
-        element.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-        element.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
-        //element.EndTermID = this.sSOLoginDataModel.EndTermID;
-        element.EndTermID = this.searchRequest.EndTermID;
-      });
-
-      this.loaderService.requestStarted();
-
-      await this.reportService.DownloadMarksheetBulk(this.StudentList)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          console.log(data, "Data");
-          if (data.State == EnumStatus.Success) {
-            this.DownloadFile(data.Data, 'file download');
-          }
-          else {
-            this.toastr.error(data.ErrorMessage)
-            //    data.ErrorMessage
-          }
-        }, (error: any) => console.error(error)
-        );
-    }
-    catch (ex) {
-      console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
 
 
@@ -378,7 +278,12 @@ export class MarksheetDownloadComponent {
 
   async YearDropdownData() {
     try {
-      this.loaderService.requestStarted();
+      // get
+      await this.reportService.GetEndTerm()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.EndTermList = data['Data'];
+        }, (error: any) => console.error(error));
 
       await this.menuService.GetAcedmicYearList(this.sSOLoginDataModel.RoleID, this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.SelectedValue)
         .then((AcedmicYear: any) => {
@@ -392,26 +297,22 @@ export class MarksheetDownloadComponent {
       console.log(Ex);
 
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 10);
-    }
   }
 
-  trackByFinancialYear(index: number, item: any): number {
-    return item.FinancialYearID;
+  trackByEndTerm(index: number, item: any): number {
+    return item.ID;
   }
 
   async createDynamicButtons(studentList: any[]) {
     //debugger
+    this.buttonGroups = [];
+
     if (!studentList || studentList.length === 0) return;
     const totalStudents = studentList.length;
-    const chunkSize = studentList[0].ChunkSize || 50; // Fallback to 50
+    const chunkSize = studentList[0].ChunkSize || 100; // Fallback to 100
 
     const numberOfButtons = Math.ceil(totalStudents / chunkSize);
 
-    this.buttonGroups = [];
 
     for (let i = 0; i < numberOfButtons; i++) {
       const startIndex = i * chunkSize;
@@ -428,7 +329,9 @@ export class MarksheetDownloadComponent {
     }
   }
 
-  async DownloadBulkMarksheet(start: number, end: number) {
+  async DownloadChunkMarksheet(start: number, end: number) {
+    //debugger
+
     const StudentList: any[] = this.StudentList.slice(start, end + 1);
     try {
       const fullSession = this.FinYearList.find((x: any) => x.EndTermID == this.searchRequest.EndTermID)?.FinancialYearName;
@@ -438,34 +341,35 @@ export class MarksheetDownloadComponent {
         element.DepartmentID = this.sSOLoginDataModel.DepartmentID;
         element.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
         //element.EndTermID = this.sSOLoginDataModel.EndTermID;
-        element.EndTermID = this.searchRequest.EndTermID;
+        //element.EndTermID = this.searchRequest.EndTermID;
         element.SessionName = Session;
+        element.ModifyBy = this.sSOLoginDataModel.UserID;
+        element.RoleID = this.sSOLoginDataModel.RoleID;
       });
-
-      this.loaderService.requestStarted();
-
+      // make file and save
       await this.reportService.StudentMarksheetDownloadChunk(StudentList)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data, "Data");
+          //
           if (data.State == EnumStatus.Success) {
             this.DownloadFile_chunk(data.Data, 'file download');
-            await this.getAllData();
+            if (data.Message?.includes("<br/>")) {
+              this.Swal2.Info(data.Message);
+            }
+          } else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.Message,);
           }
           else {
-            this.toastr.error(data.ErrorMessage)
-            //    data.ErrorMessage
+            this.toastr.error(data.Message);
+            console.log(data.ErrorMessage);
           }
+          await this.getAllData();// refresh list
         }, (error: any) => console.error(error)
         );
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -483,7 +387,7 @@ export class MarksheetDownloadComponent {
         window.URL.revokeObjectURL(link.href);
       })
       .catch(() => console.error('Download failed. Check CORS settings on the server.'));
-  } 
+  }
 
   refreshValidationOfRollNoOnly(isVaidateRollNoOnly: boolean) {
     // clear

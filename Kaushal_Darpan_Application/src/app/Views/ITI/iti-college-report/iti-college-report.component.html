@@ -40,11 +40,12 @@
       </div>
 
       <!--<div>
-        <a routerLink="/ItiEstablishmentList" class="btn bg-black btn-sm text-white me-2">
-          <i class="ti ti-plus"></i>Back
-        </a>
-      </div>-->
+      <a routerLink="/ItiEstablishmentList" class="btn bg-black btn-sm text-white me-2">
+        <i class="ti ti-plus"></i>Back
+      </a>
+    </div>-->
     </div>
+
 
 
 
@@ -89,14 +90,7 @@
 
 
 
-      <div *ngIf="request.OrderType!=0" class="pt-30">
-
-        <button (click)="AddPost()" type="button" class="btn bg-primary text-white">
-          <i class="ti ti-plus"></i> Add
-
-        </button>
-
-      </div>
+     
 
 
 
@@ -137,16 +131,24 @@
             </td>
 
             <!--<td *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin">
-            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deletePost(idx)">
-              <i class="ti ti-trash"></i>
-            </button>
+          <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deletePost(idx)">
+            <i class="ti ti-trash"></i>
+          </button>
 
-          </td>-->
+        </td>-->
           </tr>
         </tbody>
       </table>
-    </div>
+      <div *ngIf="request.OrderType!=0" class="pt-30 mt-4 mb-2">
 
+        <button (click)="AddPost()" type="button" class="btn bg-primary text-white">
+          <i class="ti ti-plus"></i> Add
+
+        </button>
+
+      </div>
+    </div>
+   
 
 
     <div *ngIf="filterplanorderList?.length>0 && request.IsNewCollege==1" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
@@ -207,11 +209,13 @@
         <div *ngIf="request.IsNewCollege!=undefined" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Type: <span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Announcement Type: <span class="StarMarking">*</span></label>
             <select class="form-select" id="CollegeID" [(ngModel)]="request.AnnoucementType" formControlName="AnnoucementType">
-              <option value="0">--Select--</option>
-              <option [value]="1">Budget Annoucement</option>
-              <option [value]="2">CM Annoucement </option>
+              <option value="-1">--Select--</option>
+              <option *ngFor="let item of AnnouncementTypeList" [value]="item.ID">{{item.Name}}</option>
+              <!--<option [value]="1">Budget Annoucement</option>
+            <option [value]="2">CM Annoucement </option>
+            <option [value]="3">Other</option>-->
             </select>
             <div *ngIf="isSubmitted && _ReportForm.AnnoucementType.errors" class="text-danger">
               <p *ngIf="!_ReportForm.AnnoucementType.errors.DropdownValidators">This field is required .!</p>
@@ -219,12 +223,23 @@
           </div>
 
           <div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Establishment Date <span class="StarMarking">*</span></label>
-            <input type="date" class="form-input" id="ApplicationId" formControlName="txtYear" [max]="minDate" [(ngModel)]="request.Esttablishment_Year" placeholder="Enter Establishment Year">
-            <div *ngIf="isSubmitted && _ReportForm.txtYear.errors" class="text-danger">
-              <p *ngIf="_ReportForm.txtYear.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Announcement Year <span class="StarMarking">*</span></label>
+            <select class="form-select"
+                    formControlName="txtYear"
+                    [(ngModel)]="request.Esttablishment_Year">
+              <option value="0">--Select Year--</option>
+              <option *ngFor="let year of years" [value]="year">
+                {{ year }}
+              </option>
+            </select>
+
+            <!--<input type="date" class="form-input" id="ApplicationId" formControlName="txtYear" [max]="minDate" [(ngModel)]="request.Esttablishment_Year" placeholder="Enter Establishment Year">
+          <div *ngIf="isSubmitted && _ReportForm.txtYear.errors" class="text-danger">
+            <p *ngIf="_ReportForm.txtYear.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>-->
           </div>
+
+
 
 
 
@@ -370,6 +385,8 @@
               <p *ngIf="_ReportForm.Loksabha.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
             </div>
           </div>
+
+          <!--{{AssemblyMaster|json}}-->
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Vidhansabha Constituency<span class="StarMarking">*</span></label>
 
@@ -435,7 +452,9 @@
           </div>
 
 
-          <div *ngIf="request.IsNewCollege==1 && request.IsDistrictHq==false">
+
+          <!--{{request.IsDistrictHq|json}}-->
+          <div *ngIf="request.IsNewCollege == 1 && request.IsDistrictHq == false">
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Place  <span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="CollegePlace" placeholder="Enter Iti College Place" [(ngModel)]="request.CollegePlace">
 
@@ -444,13 +463,13 @@
 
 
 
-          <div *ngIf="request.IsNewCollege==1">
+          <div *ngIf="request.IsNewCollege == 1">
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Name <span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="txtName" placeholder="Enter Iti College Name" [(ngModel)]="request.CollegeName">
 
           </div>
 
-          <div *ngIf="request.IsNewCollege==1">
+          <div *ngIf="request.IsNewCollege == 1">
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Code <span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="ItiCode" placeholder="Enter Iti College Code" [(ngModel)]="request.ItiCode">
 
@@ -463,7 +482,7 @@
           </div>
 
 
-          <div *ngIf="request.IsNewCollege==1 && request.Eid==0" class="mt-6">
+          <div *ngIf="request.IsNewCollege == 1 && request.Eid == 0" class="mt-6">
             <button type="button"
                     class="btn bg-info text-white px-4 py-2 rounded"
                     (click)="GetDetails()">
@@ -881,7 +900,7 @@
             <option value="">""--Select--</option>
 
             <option value="1">Bigha</option>
-            
+
 
             <option value="2">Hectaren></option>
 

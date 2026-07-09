@@ -186,7 +186,7 @@ export class StudentExaminationITIComponent
     this.SearchStudentDataFormGroup = this.formBuilder.group(
       {
         txtEnrollmentNo: [''],
-        ddlInstituteID: [{ value: '' }],
+        ddlInstituteID: [''],
         //ddlFinancialYearID: ['', [DropdownValidators]],
         ddlStreamID: [''],
         ddlSemesterID: [''],
@@ -248,7 +248,6 @@ export class StudentExaminationITIComponent
 
       })
 
-
     this.AttendenceFormGroup = this.formBuilder.group(
       {
         //txtEnrollmentNo: ['', Validators.required, disable: true],
@@ -263,9 +262,6 @@ export class StudentExaminationITIComponent
         //DepositDate: ['', Validators.required]
       })
 
-    
-
-
     this.requestStudent.QualificationDetails = [];
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.statusID = Number(this.activatedRoute.snapshot.queryParamMap.get('status')?.toString());
@@ -273,12 +269,6 @@ export class StudentExaminationITIComponent
     {
       this.request.StudentFilterStatusId = this.statusID
     }
-
-   
-
-    
-
-
 
     this.UserID = this.sSOLoginDataModel.UserID
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID
@@ -292,26 +282,22 @@ export class StudentExaminationITIComponent
     } else {
       this.isShowdrop = false;
       this.SearchStudentDataFormGroup.get('ddlInstituteID')?.enable();
-
     }
-
 
     await this.GetMasterData();
     await this.StreamMaster();
     await this.GetcOmmonData();
-    debugger
+    //debugger
     this.PendingCollegeFeeStatus = Number(
       this.activatedRoute.snapshot.paramMap.get('id') ?? 0
     );
 
     if (this.PendingCollegeFeeStatus > 0) {
       this.request.PendingCollegeFeeStatus = this.PendingCollegeFeeStatus;
-
       this.request.StudentFilterStatusId =
         this.request.StudentFilterStatusId === 0
           ? 10
           : this.request.StudentFilterStatusId;
-
       this.btn_SearchClick();
     }
 
@@ -553,7 +539,7 @@ export class StudentExaminationITIComponent
     const MasterCode = "Lateral_Trade";
     try {
       this.loaderService.requestStarted();
-      debugger;
+      //debugger;
       var InstID = this.sSOLoginDataModel.InstituteID;
       var InstituteID1 = this.InstituteMasterList.InstituteID;
       var id = this.request.InstituteID;
@@ -1799,7 +1785,7 @@ export class StudentExaminationITIComponent
     }, (reason: any) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    debugger
+    //debugger
     this.attendence.EligibilityStatus = item.EligibilityStatus;
     this.attendence.StudentExamID = item.StudentExamID
     this.attendence.StudentName = item.StudentName
@@ -1858,7 +1844,7 @@ export class StudentExaminationITIComponent
   {
     try
     {
-      debugger;
+      //debugger;
       this.isFormSubmitted = true;
       if (this.AttendenceFormGroup.invalid) {
         return
@@ -1958,7 +1944,7 @@ export class StudentExaminationITIComponent
   
   async onFilechangeDropout(event: any) {
     try {
-      debugger;
+      //debugger;
       this.file = event.target.files[0];
       if (this.file) {
 

@@ -64,6 +64,7 @@
                   <option value=0>--All--</option>
                   <option value=8>2024-2025</option>
                   <option value=9>2025-2026</option>
+                  <option value=30>2026-2027</option>
                   <!--<option *ngFor="let item of FinancialYear" [value]="item.FinancialYearID">
                     {{item.YearName}}
                   </option>-->
@@ -92,17 +93,31 @@
                   </option>
                 </select> -->
               </div>
-              <div class="col-md-3" >
+              <div class="col-md-6 d-flex align-items-end gap-2">
                 <button type="button" class="btn btn-primary d-flex align-items-center" style="background-color: #7d1c2f;" (click)="GetAllData()">
                   <i class="ti ti-search me-2"></i> Search
                 </button>
+                <button type="button" class="btn btn-danger " style="background-color: #7d1c2f;" (click)="ResetData()">
+                  <i class="ti ti-refresh me-2"></i> Reset
+                </button>
+               
+                <!--<button type="button" (click)="closeModal()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>-->
               </div>
-              <div>
-                <div class="btn text-white StateLevelPoolCampus"></div><label>State Level Pool Campus</label>
-                <div class="btn text-white InstituteLevelCampus"></div><label>Institute Level Campus</label>
-                <div class="btn text-white DivisionLevelPoolCampus"></div><label>Division Level Pool Campus</label>
-                <!--<div  class="btn text-white SuspendLevelCampus mt-4"></div><label>Suspend Level Campus</label>-->
+
+              <div class="d-flex justify-content-between">
+
+                <div>
+                  <div class="btn text-white StateLevelPoolCampus"></div><label>State Level Pool Campus</label>
+                  <div class="btn text-white InstituteLevelCampus"></div><label>Institute Level Campus</label>
+                  <div class="btn text-white DivisionLevelPoolCampus"></div><label>Division Level Pool Campus</label>
+                  <!--<div  class="btn text-white SuspendLevelCampus mt-4"></div><label>Suspend Level Campus</label>-->
+                </div>
+                <div>
+                  <button type="button" class="btn btn-primary text-white" (click)="exportToExcel()">Export</button>
+                </div>
               </div>
+
+             
             </form>
           </div>
         </div>
@@ -124,7 +139,7 @@
                         <!--<b class="d-block">{{item.PostNo}}</b>-->
 
                         <b style="border-color: #b4cedf;" width="140px">
-                          {{ ('2025-26')+ '-' + (item.InstituteCode | number:'3.0') + '-' + item.Dis_PostId }}
+                          {{ (item.PostNo? item.PostNo:'2024-25-') + (item.InstituteCode | number:'3.0') + '-' + item.Dis_PostId }}
                         </b>
 
                       </div>

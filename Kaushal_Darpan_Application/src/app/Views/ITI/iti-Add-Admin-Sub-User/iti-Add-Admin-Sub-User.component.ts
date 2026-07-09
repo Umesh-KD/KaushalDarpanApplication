@@ -13,6 +13,7 @@ import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel'
 import { ITIAdminUserService } from '../../../Services/ITI/ITI-Admin-User/itiadmin-user.service';
 import { Router } from '@angular/router';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
+import { UploadFileModel } from '../../../Models/UploadFileModel';
 
 
 
@@ -42,6 +43,9 @@ export class itiAddAdminSubUserComponent {
   public Isverifed: boolean = false
   public requestSSoApi = new CommonVerifierApiDataModel();
   public IsView: boolean = false;
+  UploadFileModel = new UploadFileModel();
+
+
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
   constructor(private adminUserService: ITIAdminUserService,
     private commonMasterService: CommonFunctionService, 
@@ -59,7 +63,8 @@ export class itiAddAdminSubUserComponent {
         RoleID: ['', [DropdownValidators]],
         //InstituteID: [{ value: '', disabled: false }, [DropdownValidators]],
         txtSSOID: ['', [Validators.required, Validators.pattern(GlobalConstants.SSOIDPattern)]],
-        txtMobileNo: [Validators.required,Validators.pattern(/^[6-9][0-9]{9}$/)],
+        txtMobileNo: [Validators.required, Validators.pattern(/^[6-9][0-9]{9}$/)],
+        orderDocument: [''], 
       });
 
     //this.GetAllDataITI();
@@ -105,8 +110,8 @@ export class itiAddAdminSubUserComponent {
 
       this.isSubmitted = true;
       if (this.AdminUserFormGroup.invalid) {
-        console.log("errro")
-        return
+        this.toastr.error("Please fill in the required fields.");
+        return;
       }
       this.isLoading = true;
       this.loaderService.requestStarted();
@@ -238,5 +243,49 @@ export class itiAddAdminSubUserComponent {
   if (charCode < 48 || charCode > 57) {
     event.preventDefault();
   }
-}
+  }
+
+  public file!: File;
+
+  async onFilechange(event: any, Type: string) {
+
+    try {
+      this.UploadFileModel.FolderName = '/ITI/Planing/NodalUser'
+      this.file = event.target.files[0];
+      if (this.file) {
+        this.loaderService.requestStarted();
+
+        await this.commonMasterService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              if (Type == "orderDoc") {
+                this.adminRequest.orderDocument = data['Data'][0]["FileName"];
+              }
+
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      /*setTimeout(() => {*/
+      this.loaderService.requestEnded();
+      /*  }, 200);*/
+    }
+  }
 }

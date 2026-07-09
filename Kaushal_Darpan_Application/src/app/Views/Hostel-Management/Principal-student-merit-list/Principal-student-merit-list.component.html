@@ -195,7 +195,14 @@
     <i class="ti ti-download downloadIcon"></i>
 
   </a>-->
-                <a *ngIf="item.AllotmentStatus !== 1 && item.AffidavitDocument"
+                <!--<a *ngIf="item.AllotmentStatus !== 1 && item.AffidavitDocument"
+     [href]="appsettingConfig.StaticFileRootPathURL + item.AffidavitDocument"
+     target="_blank"
+     class="text-success"
+     title="Show Affidavit Details">
+    <i class="ti ti-download downloadIcon"></i>
+  </a>-->
+                <a *ngIf="item.AllotmentStatus !== 1 && item.AllotmentStatus !== 3 && item.AffidavitDocument"
                    [href]="appsettingConfig.StaticFileRootPathURL + item.AffidavitDocument"
                    target="_blank"
                    class="text-success"

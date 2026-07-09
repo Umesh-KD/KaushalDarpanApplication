@@ -9,6 +9,7 @@ import { StudentStatusHistoryModule } from '../../../Student/student-status-hist
 import { AddStaffInitialDetailsComponent } from './add-staff-initial-details.component';
 import { AddStaffInitialDetailsRoutingModule } from './add-staff-initial-details-routing.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     TableSearchFilterModule,
     StudentStatusHistoryModule,
     NgMultiSelectDropDownModule.forRoot(),
+    NgSelectModule,
   ]
 })
 export class AddStaffInitialDetailsModule { }

@@ -2600,6 +2600,14 @@ async UpdateContentVisibilitySettings(request: any) {
   )
     .pipe(catchError(this.handleErrorObservable))
     .toPromise();
-}
+  }
+
+  public async ExcelOperationCommon(MasterCode: string, DepartmentID: number = 0,RoleID:number=0, CourseType: number = 0) {
+
+    return await this.http.get(this.APIUrl + '/ExcelOperationCommon/' + MasterCode + '/' + DepartmentID + '/' + RoleID + '/' + CourseType , this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 

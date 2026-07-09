@@ -92,6 +92,7 @@ export class EMPrincipleStaffComponent {
   public isLoading: boolean = false;
   public isApprove: boolean = false;
   public BugetHeadList: any= [];
+  public PostBudgetHeadList: any = [];
 
   @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
 
@@ -123,7 +124,8 @@ export class EMPrincipleStaffComponent {
       Hostel: [''],
       guestRoomID: [0, []],
       ddlPost: ['', [DropdownValidators]],
-      BranchID:['',[DropdownValidators]] 
+      BranchID:['',[DropdownValidators]] ,
+      BugetHeadID:['',[DropdownValidators]] 
     })
 
     this.settingsMultiselect = {
@@ -578,12 +580,34 @@ async GetTechnicianDll() {
       request.OfficeID = this.formData.OfficeID;
       request.StaffTypeID = this.formData.StaffTypeID;
       request.InstituteID = this.formData.InstituteID;
+      request.BranchID = this.formData.BranchID;
       request.RoleID = this.sSOLoginDataModel.RoleID;
       request.UserID = this.sSOLoginDataModel.UserID;
       request.Action = "GetSanctionedPost";
       await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.SactionedPostList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getBudgetHeadPostWise() {
+    try {
+      const request: any = {};
+      request.OfficeID = this.formData.OfficeID;
+      request.StaffTypeID = this.formData.StaffTypeID;
+      request.DesignationID = this.formData.PostID;
+      request.OfficeID = 21;  // static passing because we are using this only for institute level
+      request.InstituteID = this.formData.InstituteID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Action = "GetBudgetHead_PostWise";
+
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.PostBudgetHeadList = data['Data'];
       })
     } catch (error) {
       console.error(error);
@@ -820,6 +844,7 @@ async GetTechnicianDll() {
       }
       this.formData.OfficeID = 21;
       this.loaderService.requestStarted();
+      this.formData.BugetHeadTypeID = this.PostBudgetHeadList.find((x: any) => x.ID == this.formData.BugetHeadID)?.BudgetTypeID || 0;
       debugger;
       await this.bterEstablishManagementService.BTER_EM_AddStaffPrinciple(this.formData)
         .then(async (data: any) => {

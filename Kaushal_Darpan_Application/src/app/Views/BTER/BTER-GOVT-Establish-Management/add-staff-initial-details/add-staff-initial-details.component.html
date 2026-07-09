@@ -108,10 +108,16 @@
 
           <div *ngIf="this.IsGuestHouseAdmin != true && formData.IsNodal==true">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
-            <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="InstituteID">
+            <!-- <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="InstituteID">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of InstituteMasterDDL" [value]="item.InstituteID">{{item.InstituteName}}</option>
-            </select>
+            </select> -->
+
+            <ng-select [items]="InstituteMasterDDL" bindLabel="InstituteName" bindValue="InstituteID" placeholder="---Choose Institute---"
+              formControlName="InstituteID" [(ngModel)]="formData.InstituteID" [searchable]="true" [clearable]="true"
+              (change)="getSactionedPostList()">
+            </ng-select>
+
             <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.InstituteID.errors" class="text-danger">
               <p *ngIf="!_AddStaffBasicDetailFromGroup.InstituteID.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This
@@ -167,10 +173,15 @@
           <!-- *ngIf="this.IsGuestHouseAdmin != true" -->
           <div >
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
-            <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost" (change)="getBudgetHeadPostWise()">
+            <!-- <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost" (change)="getBudgetHeadPostWise()">
               <option value="0">--Select--</option>
               <option *ngFor="let item of SactionedPostList" [value]="item.ID">{{item.Name}}</option>
-            </select>
+            </select> -->
+
+            <ng-select [items]="SactionedPostList" bindLabel="Name" bindValue="ID" placeholder="---Choose Post---"
+              formControlName="ddlPost" [(ngModel)]="formData.PostID" [searchable]="true" [clearable]="true" (change)="getBudgetHeadPostWise()">
+            </ng-select>
+
             <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPost.errors" class="text-danger">
               <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPost.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This

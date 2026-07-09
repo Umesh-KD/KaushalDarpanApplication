@@ -136,7 +136,8 @@ export class ItiReportDataModel {
   public Islanddetail:boolean=false
   public IsConstructdetail:boolean=false
   public IsElectricdetail:boolean=false
-  public IsDistrictHq:boolean=false
+  public IsDistrictHq: boolean = false
+
 
 }
 
@@ -164,6 +165,10 @@ export class CampusRemovalReport {
   public CampusRemovedRemark: string = '';
   public CampusRemovedFilePath: string = '';
   public RoleID: number = 0
-  public UserID: number =0
+  public UserID: number = 0
+  public CampusDetails: string = '';
+  public OldName: string = '';
+  public ModifiedDate: number = 0;
+  public UpdatedBySSOID: string = '';
 }
 

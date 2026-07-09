@@ -165,7 +165,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     //this.filterForm.valueChanges.subscribe((values) => {
     //  this.applyFilter(values);
     //});
-    debugger
+    //debugger
     this.PaperID = Number(
       this.Activeroute.snapshot.queryParamMap.get('PaperUploadID') ?? 0
     );
@@ -221,7 +221,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
   }
 
   async onExamChange(event: any) {
-    debugger;
+    //debugger;
     const selectedExam = this.ExamList.find((exam: { ID: any; }) => exam.ID == event);
     if (selectedExam) {
       this.examForm.get('ExamName')?.setValue(selectedExam.Name);
@@ -299,7 +299,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     {
       this.examForm.get('Password')?.enable();
       const formData = this.examForm.value as PaperUpload;
-      debugger;
+      //debugger;
       const Pcode = this.PaperMasterList
         .find(f => f.PaperID == formData.PaperID)
         ?.SubjectCode;
@@ -547,7 +547,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
 
   seletDeselectCenters(event: any) {
 
-    debugger;
+    //debugger;
     this.isAllSelected = false;
     const selected = event;
     const allIDs = this.CenterMasterList.map((item: { ID: any; }) => item.ID);
@@ -575,7 +575,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
   async GetCenterDatapaperWise(PaperID: number)
   {
     const formData = this.examForm.value as PaperUpload;
-    debugger;
+    //debugger;
 
     if (formData.StreamID == 0) {
       return;
@@ -612,7 +612,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
   selectCenterAcordigntoPapers()
   {
 
-    debugger;
+    //debugger;
     const allIDs = this.CenterListPaperWise.map((item: { CenterID: any; }) => item.CenterID);
     if (allIDs.length>0)
     {
@@ -654,7 +654,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
       {
         data = JSON.parse(JSON.stringify(data));
         this.fillEditData(data.Data[0]);
-        debugger
+        //debugger
         if (!this.documentDetails || this.documentDetails.length === 0) {
           this.documentDetails = [{} as DocumentDetailsModel];
         }

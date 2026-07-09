@@ -69,7 +69,7 @@ export class StudentPlacementConsentComponent {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.btn_SearchClick();
-    await this.GetStudentConsentCount();
+   // await this.GetStudentConsentCount();
     //await this.GetStudentLatestResume();
   }
   //async GetMasterData() {
@@ -229,7 +229,7 @@ export class StudentPlacementConsentComponent {
 
   public file!: File;
   async onFilechange(event: any, Type: string) {
-    debugger;
+    //debugger;
     try {
       this.file = event.target.files[0];
       if (this.file) {
@@ -404,11 +404,11 @@ export class StudentPlacementConsentComponent {
     this.GetAllPlacementCompany()
   }
 
-  async GetStudentConsentCount() {
+  async GetStudentConsentCount(PostID:number) {
     //debugger
     try {
       this.loaderService.requestStarted();
-      await this.placementservice.GetStudentConsentCount(this.sSOLoginDataModel.StudentID)
+      await this.placementservice.GetStudentConsentCount(this.sSOLoginDataModel.StudentID, PostID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
          // debugger;
@@ -438,7 +438,7 @@ export class StudentPlacementConsentComponent {
       await this.placementservice.GetStudentLatestResume(this.sSOLoginDataModel.StudentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          debugger;
+          //debugger;
          // this.ConsentCount = data['Data'][0]['ConsentCount'];
           if (data['Data'][0]['UploadedResume'] != '') {
             this.Request.Dis_UploadedResume = data['Data'][0]['Dis_UploadedResume'];
@@ -459,7 +459,7 @@ export class StudentPlacementConsentComponent {
 
   async GetCampusSMSDataByID(PostID:number) {
     try {
-      debugger
+      //debugger
       this.loaderService.requestStarted();
       this.SmsDataModel.PostID = PostID;
       this.SmsDataModel.StudentID = this.sSOLoginDataModel.StudentID;
@@ -486,7 +486,7 @@ export class StudentPlacementConsentComponent {
 
     try {
 
-      debugger;
+      //debugger;
 
       if (!this.validateEmailAndMobile()) {
         return;
@@ -499,7 +499,7 @@ export class StudentPlacementConsentComponent {
       this.Request.PostID = PostID;
 
       // Get Consent Count
-      await this.GetStudentConsentCount();
+      await this.GetStudentConsentCount(PostID);
 
       if (this.ConsentCount >= 5) {
         this.Swal2.Warning("You have already given consent for 5 companies");
@@ -600,7 +600,7 @@ export class StudentPlacementConsentComponent {
 
 
   async SendApplicationMessage(PostID: number) {
-    debugger
+    //debugger
     try {
       this.loaderService.requestStarted();
 
@@ -662,6 +662,14 @@ export class StudentPlacementConsentComponent {
   ) {
 
     // Reset Model
+    //debugger;
+    // Get Consent Count
+    //await this.GetStudentConsentCount();
+
+    if (this.ConsentCount >= 5) {
+      this.Swal2.Warning("You have already given consent for 5 companies");
+      return;
+    }
 
     if (ConsentID == 0) {
       await this.GetStudentLatestResume();
@@ -672,7 +680,7 @@ export class StudentPlacementConsentComponent {
       this.Request.Dis_UploadedResume = Dis_UploadedResume;
     }
   
-    debugger
+    //debugger
     // Assign Values
     this.Request.PostID = ID;
 

@@ -73,6 +73,20 @@
           <input class="form-input" placeholder="Student Roll No" type="text" id="txtStudentRollNo" [(ngModel)]="searchRequest.RollNo">
         </div>
 
+        <div *ngIf="sSOLoginDataModel.Eng_NonEng==1">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            IsFeeUpdate:<span class="StarMarking"></span>
+          </label>
+          <select class="form-select" id="ddlBranch"
+                  [(ngModel)]="searchRequest.IsFee">
+            <option value="0">--All--</option>
+            <option value="1">Yes</option>
+            <option value="2">No</option>
+  
+          </select>
+        </div>
+
+
         <!-- <div>
     <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Marks Entered: </label>
     <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">

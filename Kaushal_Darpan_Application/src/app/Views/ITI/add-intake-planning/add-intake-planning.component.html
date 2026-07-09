@@ -67,23 +67,51 @@
                 Trade:<span class="StarMarking">*</span>
               </label>
               <!-- <select class="form-select" formControlName="ddlTrade" [(ngModel)]="request.TradeID">
-      <option value="0">Choose Option</option>
-      <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
-    </select> -->
-              
-              <ng-select [items]="ItiTradeListAll"
+    <option value="0">Choose Option</option>
+    <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
+  </select> -->
+
+              <ng-select *ngIf="isedit" [items]="ItiTradeListAll"
                          bindLabel="TradeName"
                          bindValue="Id"
                          placeholder="----Search Trade---"
-                         formControlName="ddlTrade"
+                         formControlName="ddlTradeID"
                          [(ngModel)]="request.TradeID"
                          [searchable]="true"
                          [clearable]="true">
 
               </ng-select>
 
+              <ng-select *ngIf="!isedit" appendTo="body"
+                         formControlName="ddlTrade"
+                         [items]="ItiTradeListAll"
+                         bindLabel="TradeName"
+                         bindValue="Id"
+                         [multiple]="true"
+                         [closeOnSelect]="false"
+                         [searchable]="true"
+                         placeholder="--Select Trade--">
+
+                <ng-template ng-header-tmp>
+                  <div class="px-2 py-2 border-bottom">
+                    <input type="checkbox"
+                           [checked]="isAllSelected()"
+                           (change)="toggleSelectAll($event)"
+                           class="me-2" />
+                    <span>Select All</span>
+                  </div>
+                </ng-template>
+
+                <ng-template ng-option-tmp let-item="item" let-item$="item$">
+                  <input type="checkbox" [checked]="item$.selected" class="me-2" />
+                  {{ item.Name }}
+                </ng-template>
+
+              </ng-select>
+
+
               <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlTrade.errors" class="text-danger">
-                <p *ngIf="!_SeatIntakeFormGroup.ddlTrade.errors.DropdownValidators">
+                <p *ngIf="_SeatIntakeFormGroup.ddlTrade.errors.required">
                   <i aria-hidden="true"></i>This field is required .!
                 </p>
               </div>

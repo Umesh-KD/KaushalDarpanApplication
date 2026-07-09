@@ -89,7 +89,7 @@ export class PlacementDashReportComponent implements OnInit {
 
   }
   async GetCampusPostMasterDDL() {
-    debugger
+    //debugger
     try {
 
       await this.commonMasterService.GetCampusPostMasterDDL(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.UserID)
@@ -109,7 +109,7 @@ export class PlacementDashReportComponent implements OnInit {
   }
 
   async GetMasterDDL() {
-    debugger
+    //debugger
     try {
 
       await this.commonMasterService.GetFinancialYear()
@@ -139,7 +139,7 @@ export class PlacementDashReportComponent implements OnInit {
   }
 
   async GetAllData() {
-        debugger
+        //debugger
     let collegeId = 0;
     if (this.sSOLoginDataModel.RoleID != 5) {
       collegeId = this.sSOLoginDataModel.InstituteID;
@@ -246,7 +246,7 @@ export class PlacementDashReportComponent implements OnInit {
 
   async ViewWorkflow(StudentID: number = 0, PostID: number = 0) {
     try {
-      debugger
+      //debugger
       const requestData: any = {
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,

@@ -87,7 +87,7 @@ export class DocumentDetailsService {
   //document
   async UploadBTERDocument(event: any, uploadModel: UploadBTERFileModel) {
     try {
-      debugger
+      //debugger
       const file: File = event.target.files[0];
       if (file) {
         let fileValue = event.target.value;
@@ -152,7 +152,7 @@ export class DocumentDetailsService {
 
   async UploadBTEROriginalDocument(event: any, uploadModel: UploadBTERFileModel) {
     try {
-      debugger
+      //debugger
       const file: File = event.target.files[0];
       if (file) {
         let fileValue = event.target.value;
@@ -217,6 +217,7 @@ export class DocumentDetailsService {
 
   async UploadFile(event: any, uploadModel: UploadFileModel) {
     try {
+      //debugger
       const file: File = event.target.files[0];
       if (file) {
         let fileValue = event.target.value;
@@ -319,7 +320,7 @@ export class DocumentDetailsService {
 
   async Counselling_UploadDocument(event: any, uploadModel: UploadCounsellingFileModel) {
     try {
-      debugger
+      //debugger
       const file: File = event.target.files[0];
       if (file) {
         let fileValue = event.target.value;

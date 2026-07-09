@@ -3,6 +3,7 @@ export class SeatIntakeDataModel {
   public CollegeID: number = 0;
   public TradeID: number = 0;
   public Shift: string = '';
+  public TradeIds: string = '';
   public LastSession: number = 0;
   public RemarkID: number = 0;
   public TradeSchemeID: number = 0;
@@ -27,7 +28,7 @@ export class SeatIntakeDataModel {
   public FinancialSanctionID: number = 0;
   public AdminSanctionedID: number = 0;
 
-  public Status?: number = 0;
+  public Status?: number = 117; // by default sanctioned
 }
 
 export class SeatIntakeSearchModel {
@@ -52,6 +53,7 @@ export class SeatIntakeSearchModel {
 
   public DivisionId?: number = 0;
   public CourseTypeID?: number = 0;
+  public Esttablishment_Year: number = 0;
 
 }
 

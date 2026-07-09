@@ -103,4 +103,6 @@ export class ItiPlanningSearchModel {
   public CollegeName: string = ''
   public RoleID:number=0
   public UserID:number=0
+  public AnnoucementType:number=0
+  public Esttablishment_Year: number = 0
 }

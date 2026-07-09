@@ -233,7 +233,8 @@ public PostId: number = 0;
     this.InstituteID = 0;
     this.ApprovedStatus = "0";
     this.FinancialYearID=0;
-    
+
+    await this.btn_SearchClick();
     //this.CampusValidationListData = [];
   }
   async CampusOnPostAction(content: any, PostID: number) {

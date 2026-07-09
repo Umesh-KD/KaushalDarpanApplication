@@ -736,6 +736,7 @@ const routes: Routes = [
       { path: 'bter-result-reports', loadChildren: () => import('./Views/Reports/bter-result-reports/bter-result-reports.module').then(m => m.BterResultReportsModule) },
       { path: 'bter-ufm-reports', loadChildren: () => import('./Views/Reports/bter-ufm-reports/bter-ufm-reports.module').then(m => m.BterUFMReportsModule) },
       { path: 'group-center-mapping-reports', loadChildren: () => import('./Views/Reports/group-center-mapping-reports/group-center-mapping-reports.module').then(m => m.GroupCenterMappingReportsModule) },
+      { path: 'marksheet-correction-history-report', loadChildren: () => import('./Views/Reports/marksheet-correction-history-report/marksheet-correction-history-report.module').then(m => m.MarksheetCorrectionHistoryReportModule) },
       { path: 'center-daily-reports', loadChildren: () => import('./Views/Reports/center-daily-reports/center-daily-reports.module').then(m => m.CenterDailyReportsModule) },
 
       { path: 'BTERAddSeatMetrixENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Matrix' },
@@ -1046,13 +1047,6 @@ const routes: Routes = [
       { path: 'iti-flying-squad-deployment', loadChildren: () => import('./Views/ITI/ITIFlyingSquad/iti-flying-squad-deployment/iti-flying-squad-deployment.module').then(m => m.ItiCenterObserverDeploymentModule), title: 'ITI Flying Squad' },
       { path: 'verify-iti-flying-squad-deployment/:id', loadChildren: () => import('./Views/ITI/ITIFlyingSquad/verify-iti-flying-squad-deployment/verify-iti-flying-squad-deployment.module').then(m => m.VerifyItiCenterObserverDeploymentModule), title: 'ITI Flying Squad' },
       { path: 'iti-flying-squad-report', loadChildren: () => import('./Views/ITI/ITIFlyingSquad/iti-flying-squad-report/iti-flying-squad-report.module').then(m => m.ITIFlyingSquadReportModule), title: 'ITI Inspection Report' },
-      { path: 'ApplyLeave', loadChildren: () => import('./Views/apply-leave/apply-leave.module').then(m => m.ApplyLeaveModule) },
-      { path: 'LeaveList', loadChildren: () => import('./Views/leave-list/leave-list.module').then(m => m.LeaveListModule) },
-      { path: 'LeaveValidation', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
-      { path: 'LeaveValidation/:id', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
-      { path: 'LeaveCredit', loadChildren: () => import('./Views/leave-credit/leave-credit.module').then(m => m.LeaveCreditModule) },
-      { path: 'LeaveBalance', loadChildren: () => import('./Views/leave-balance/leave-balance.module').then(m => m.LeaveBalanceModule) },
-
 
       { path: 'ItiCollegeReport', loadChildren: () => import('./Views/ITI/iti-college-report/iti-college-report.module').then(m => m.ItiCollegeReportModule) },
 
@@ -1244,6 +1238,13 @@ const routes: Routes = [
       { path: 'bter-establishment-dashboard', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/establishment-dashboard-bter/establishment-dashboard-bter.module').then(m => m.EstablishmentDashboardBTERModule), title: 'Establishment Dashboard' },
       { path: 'thte-report', loadChildren: () => import('./Views//BTER/THTE/teacher-higher-technical-education-report/teacher-higher-technical-education-report.module').then(m => m.TeacherHigherTechnicalEducationReportModule), title: 'Teacher Higher Technical Education Report' },
       
+      { path: 'ApplyLeave', loadChildren: () => import('./Views/apply-leave/apply-leave.module').then(m => m.ApplyLeaveModule) },
+      { path: 'LeaveList', loadChildren: () => import('./Views/leave-list/leave-list.module').then(m => m.LeaveListModule) },
+      { path: 'LeaveValidation', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
+      { path: 'LeaveValidation/:id', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
+      { path: 'LeaveCredit', loadChildren: () => import('./Views/leave-credit/leave-credit.module').then(m => m.LeaveCreditModule) },
+      { path: 'LeaveBalance', loadChildren: () => import('./Views/leave-balance/leave-balance.module').then(m => m.LeaveBalanceModule) },
+      
       // ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, BTER Establishment END ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
       // ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, ITI Establishment ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -1349,6 +1350,7 @@ const routes: Routes = [
       { path: 'c-Form-Consolidated-report', loadChildren: () => import('./Views/ITI/results/c-Form-Consolidated/c-Form-Consolidated.module').then(m => m.cFormConsolidatedModule), title: 'Consolidated Report' },
       { path: 'iti-results', loadChildren: () => import('./Views/ITI/results/iti-result/iti-result.module').then(m => m.ITIResultModule), title: 'ITI Result' },
       { path: 'iti-student-pass-fail-result', loadChildren: () => import('./Views/ITI/results/iti-student-pass-fail-result/iti-student-pass-fail-result.module').then(m => m.itiStudentPassFailResultModule), title: 'iti-student-pass-fail-result' },
+      { path: 'iti-studentdetails-revised-result', loadChildren: () => import('./Views/ITI/results/iti-studentdetails-revised-result/iti-studentdetails-revised-result.module').then(m => m.ITIStudentDetailsRevisedResultModule), title: 'iti-studentdetails-revised-result' },
 
       { path: 'pass-fail-report', loadChildren: () => import('./Views/ITI/results/pass-fail-report/pass-fail-report.module').then(m => m.passfailreportDownloadModule), title: 'pass-fail-report' },
       { path: 'trade-wise-result', loadChildren: () => import('./Views/ITI/results/iti-tradewiseresult/iti-tradewiseresult.module').then(m => m.ItiTradeWiseResultModule), title: 'trade-wise-result' },
@@ -1683,6 +1685,9 @@ const routes: Routes = [
       { path: 'Add-Admin-Sub-User', loadChildren: () => import('./Views/ITI/iti-Add-Admin-Sub-User/iti-Add-Admin-Sub-User.module').then(m => m.itiAddAdminSubUserModule) },
       { path: 'Admin-Sub-User', loadChildren: () => import('./Views/ITI/iti-Admin-Sub-User/iti-Admin-Sub-User.module').then(m => m.itiAdminSubUserModule), title: 'Admin Sub User' },
       { path: 'SanctionOrderList', loadChildren: () => import('./Views/ITI/sanction-order-list/sanction-order-list.module').then(m => m.SanctionOrderListModule) },
+
+      { path: 'AnnouncementTypeMaster', loadChildren: () => import('./Views/ITI/announcementType-master/announcementType-master.module').then(m => m.AnnouncementTypeMasterModule) },
+
 
       { path: 'SeatIntakePlanning', loadChildren: () => import('./Views/ITI/seat-intake-planning/seat-intake-planning.module').then(m => m.SeatIntakePlanningModule) },
       { path: 'AddIntakePlanning', loadChildren: () => import('./Views/ITI/add-intake-planning/add-intake-planning.module').then(m => m.AddIntakePlanningModule) },
