@@ -135,9 +135,17 @@
               Trade Name
               <span class="shortingSpan" *ngIf="sortInTableColumn=='Programme'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
+            <th title="Click to sorting" (click)="sortInTableData('TradeType')">
+              Trade Type
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='TradeType'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
             <th title="Click to sorting" (click)="sortInTableData('StudentName')">
               Student Name
               <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th title="Click to sorting" (click)="sortInTableData('StudentType')">
+              Student Type
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentType'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
             <th title="Click to sorting" (click)="sortInTableData('EnrollmentNo')">
               Enrollment/Srn N0
@@ -154,7 +162,7 @@
             <th>Paper 3</th>
             <th>Paper 4</th>
             <th>Practical</th>
- 
+
             <!--<th>Status</th>
   <th *ngIf="isAnyUFMSelected">Document Required</th>-->
           </tr>

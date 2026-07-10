@@ -303,7 +303,15 @@ export class SeatIntakesListAdmissionComponent implements OnInit
           if (Action == '_getActiveSeatIntakeColleges')
           
           {
-           filename = 'ActiveSeatCollegeDetails';
+            if (this.searchRequest.SanctionedID == 1) {
+              filename = 'ActiveSeatCollegeDetails';
+            }
+            else if (this.searchRequest.SanctionedID == 0) {
+              filename = 'InActiveSeatCollegeDetails';
+            }
+            else {
+              filename = 'AllSeatCollegeDetails';
+            }
        
           }
 

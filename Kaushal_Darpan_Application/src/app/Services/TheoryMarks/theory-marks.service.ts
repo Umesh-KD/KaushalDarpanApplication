@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ExaminerFeedbackDataModel, TheoryMarksSearchModel, UFMExtraInfoSaveModel, UFMStudentExtraInfoGetModel, UFMStudentExtraInfoSaveModel } from '../../Models/TheoryMarksDataModels';
+import { ExaminerFeedbackDataModel, ExaminerReportSearchModel, TheoryMarksSearchModel, UFMExtraInfoSaveModel, UFMStudentExtraInfoGetModel, UFMStudentExtraInfoSaveModel } from '../../Models/TheoryMarksDataModels';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { RoleMasterDataModel, UserRoleRightsDataModel } from '../../Models/RoleMasterDataModel';
@@ -106,5 +106,11 @@ export class TheoryMarksService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
+  public async GetAllExaminerReport(searchRequest: ExaminerReportSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllExaminerReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

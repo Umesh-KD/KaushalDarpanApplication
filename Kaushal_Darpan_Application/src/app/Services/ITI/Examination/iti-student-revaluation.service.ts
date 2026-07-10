@@ -108,12 +108,12 @@ export class ITIStudentRevaluationService {
     }
 
        // service to Update EnrollResponse in BulkExcel
-    public async DynamicUpdateExcelData(file: any | null = null, ChunkSize: number = 100) {
+  public async DynamicUpdateExcelData(file: any | null = null, ActionType:string='', ChunkSize: number = 100) {
       //formdata
       const formData = new FormData();
       formData.append("file", file);
       formData.append("ChunkSize", ChunkSize.toString());
-      return await this.http.post(this.APIUrl + "/DynamicUpdateExcelData", formData)
+    return await this.http.post(this.APIUrl + "/DynamicUpdateExcelData" + "/" + ActionType, formData)
         .pipe(
           catchError(this.handleErrorObservable)
         ).toPromise();

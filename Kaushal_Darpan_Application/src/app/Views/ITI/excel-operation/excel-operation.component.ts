@@ -35,7 +35,7 @@ export class ExcelOperationComponent implements OnInit {
 
 
   public ChunkSize: number = 100;
-  public ActionType: string = '';
+  public ActionType: string = '0';
 
   public TradeDDLList: any = [];  
   public ActionList: any = [];  
@@ -124,7 +124,7 @@ export class ExcelOperationComponent implements OnInit {
          if (result.isConfirmed) {
           try{
             this.loaderService.requestStarted();
-            await  this.ITIStudentRevaluationService.DynamicUpdateExcelData(file,this.ChunkSize)
+            await this.ITIStudentRevaluationService.DynamicUpdateExcelData(file, this.ActionType, this.ChunkSize)
             .then((data: any) => {
 
               data = JSON.parse(JSON.stringify(data));
