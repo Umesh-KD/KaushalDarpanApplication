@@ -1803,6 +1803,7 @@ const routes: Routes = [
       { path: 'InventoryItemReport', loadChildren: () => import('./Views/ITI/inventory-item-report/inventory-item-report.module').then(m => m.InventoryItemReportModule) },
       { path: 'ConsolatedTradeReport', loadChildren: () => import('./Views/ITI/consolated-iti-trade/consolated-iti-trade.module').then(m => m.ConsolatedItiTradeModule) },
       { path: 'campus-removal-report', loadChildren: () => import('./Views/ITI/ITIs/campus-removal-report/campus-removal-report.module').then(m => m.CampusRemovalReportModule), title: 'campus-removal-report' },
+      { path: 'ResultReport', loadChildren: () => import('./Views/Reports/BterResultReport/BterResultReport.module').then(m => m.BterResultReportModule), title: 'Miscellaneous Report' },
     ]
   },
 
