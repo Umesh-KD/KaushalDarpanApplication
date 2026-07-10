@@ -6,6 +6,7 @@ import { AdminTheoryMarksUpdateRevalComponent } from './admin-theory-marks-updat
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
 import { OTPModalModule } from '../../otpmodal/otpmodal.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { OTPModalModule } from '../../otpmodal/otpmodal.module';
     FormsModule,
     ReactiveFormsModule,
     TableSearchFilterModule,
-    OTPModalModule
+    OTPModalModule,
+    NgSelectModule,
   ]
 })
 export class AdminTheoryMarksUpdateRevalModule { }

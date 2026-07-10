@@ -19,8 +19,10 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="OfficeID" (change)="onOfficeChange()">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span
+              class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="OfficeID"
+            (change)="onOfficeChange()">
             <option value="0">--Choose Option--</option>
             <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -35,15 +37,13 @@
   </div> -->
 
         <div *ngIf="formData.OfficeID==_EnumOffice.ITI">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">College: <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">College: <span
+              class="StarMarking">*</span></label>
 
-          <ng-select [(ngModel)]="formData.PlanningID"
-                     formControlName="ddlCollege"
-                     [clearable]="false"
-                     (change)="GetOrderDetailsList()">
+          <ng-select [(ngModel)]="formData.PlanningID" formControlName="ddlCollege" [clearable]="false"
+            (change)="GetOrderDetailsList()">
             <ng-option [value]="0">--Choose Option--</ng-option>
-            <ng-option *ngFor="let item of ItiCollegesListAll;"
-                       [value]="item.ID">{{item.Name}}</ng-option>
+            <ng-option *ngFor="let item of ItiCollegesListAll;" [value]="item.ID">{{item.Name}}</ng-option>
           </ng-select>
         </div>
 
@@ -56,21 +56,21 @@
   </div> -->
 
         <div *ngIf="formData.OfficeID==_EnumOffice.NODAL_OFFICE">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">District: <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">District: <span
+              class="StarMarking">*</span></label>
 
-          <ng-select [(ngModel)]="formData.NodalDistrictID"
-                     formControlName="NodalDistrictID"
-                     [clearable]="false"
-                     (change)="GetOrderDetailsList()">
+          <ng-select [(ngModel)]="formData.NodalDistrictID" formControlName="NodalDistrictID" [clearable]="false"
+            (change)="GetOrderDetailsList()">
             <ng-option [value]="0">--Choose Option--</ng-option>
-            <ng-option *ngFor="let item of DistrictList;"
-                       [value]="item.ID">{{item.Name}}</ng-option>
+            <ng-option *ngFor="let item of DistrictList;" [value]="item.ID">{{item.Name}}</ng-option>
           </ng-select>
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
-          <select class="form-select" formControlName="StaffTypeID" [(ngModel)]="formData.StaffTypeID" (change)="fillupDesignation()">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span
+              class="StarMarking">*</span></label>
+          <select class="form-select" formControlName="StaffTypeID" [(ngModel)]="formData.StaffTypeID"
+            (change)="fillupDesignation()">
             <option value="0">--Choose Option--</option>
             <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -85,14 +85,12 @@
   </div> -->
 
         <div *ngIf="formData.StaffTypeID==2">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade: <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade: <span
+              class="StarMarking">*</span></label>
 
-          <ng-select [(ngModel)]="formData.TradeID"
-                     formControlName="TradeID"
-                     [clearable]="false">
+          <ng-select [(ngModel)]="formData.TradeID" formControlName="TradeID" [clearable]="false">
             <ng-option [value]="0">--Choose Option--</ng-option>
-            <ng-option *ngFor="let item of TradeList;"
-                       [value]="item.Id">{{item.TradeName}}</ng-option>
+            <ng-option *ngFor="let item of TradeList;" [value]="item.Id">{{item.TradeName}}</ng-option>
           </ng-select>
         </div>
 
@@ -105,59 +103,57 @@
   </div> -->
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post: <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post: <span
+              class="StarMarking">*</span></label>
 
-          <ng-select [(ngModel)]="formData.DesignationID"
-                     formControlName="DesignationID"
-                     [clearable]="false">
+          <ng-select [(ngModel)]="formData.DesignationID" formControlName="DesignationID" [clearable]="false">
             <ng-option [value]="0">--Choose Option--</ng-option>
-            <ng-option *ngFor="let item of PostList;"
-                       [value]="item.ID">{{item.Name}}</ng-option>
+            <ng-option *ngFor="let item of PostList;" [value]="item.ID">{{item.Name}}</ng-option>
           </ng-select>
         </div>
 
-        <div>
-          <label for="TotalSeatID">Total Post <span class="StarMarking">*</span></label>
-          <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
-                 [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
-        </div>
-        <div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Post Sanction Date: <span class="StarMarking">*</span>
           </label>
-          <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" formControlName="PostSanctionDate" [(ngModel)]="formData.PostSanctionDate">
-        </div>
-
-
+          <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate"
+            formControlName="PostSanctionDate" [(ngModel)]="formData.PostSanctionDate" (change)="OnOrderDateChange(3)">
+        </div> -->
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Order Date: <span class="StarMarking">*</span>
+            Sanction Order Date: <span class="StarMarking">*</span>
           </label>
-          <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate"  (change)="OnOrderDateChange(3)" formControlName="PostSanctionDate" [(ngModel)]="formData.PostSanctionDate">
+          <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate"
+            (change)="OnOrderDateChange(3)" formControlName="PostSanctionDate" [(ngModel)]="formData.PostSanctionDate">
         </div>
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Order No: <span class="StarMarking">*</span>
+            Sanction Order Number: <span class="StarMarking">*</span>
           </label>
           <!-- [(ngModel)]="request.FinancialSanctionID" -->
-          <select class="form-select" formControlName="PostSanctionedID" (change)="OnOrderChange(1)" [(ngModel)]="formData.PostSanctionedID">
+          <select class="form-select" formControlName="PostSanctionedID" (change)="OnOrderChange(1)"
+            [(ngModel)]="formData.PostSanctionedID">
             <option value="0">--Choose Option--</option>
             <option *ngFor="let item of AcademicOrderNoList" value="{{item.ID}}">{{item.OrderNo}}</option>
           </select>
         </div>
 
-
-
+        <div>
+          <label for="TotalSeatID">Total Post <span class="StarMarking">*</span></label>
+          <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
+            [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
+        </div>
 
         <div class="form-group col-span-3">
           <label for="Comments">Comments:</label>
-          <textarea id="Comments" formControlName="Comments" class="form-control" [(ngModel)]="formData.Comments"></textarea>
+          <textarea id="Comments" formControlName="Comments" class="form-control"
+            [(ngModel)]="formData.Comments"></textarea>
         </div>
       </div>
 
-      <div  *ngIf="sSOLoginDataModel.RoleID==231" class="flex gap-4 mt-6">
+      <div *ngIf="sSOLoginDataModel.RoleID==231" class="flex gap-4 mt-6">
         <button type="submit" class="btn btn-primary" (click)="addOfficeVacancy()">Add</button>
         <button type="submit" class="btn btn-success" (click)="OnfinalSave()">Final Save</button>
       </div>
@@ -192,7 +188,7 @@
             <th>Order No</th>
             <th>Additional Post</th>
             <th>Comments</th>
-            <th  *ngIf="sSOLoginDataModel.RoleID==231">Actions</th>
+            <th *ngIf="sSOLoginDataModel.RoleID==231">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -208,8 +204,9 @@
             <td>{{ leave.TotalSeatID }}</td>
             <!--<td>{{ leave.PostedSeat }}</td>-->
             <!--<td>{{ leave.RemainingSeatID }}</td>-->
-     
-            <td align="left"><a target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}/{{leave.OrderCopy}}">{{leave.OrderName}}</a></td>
+
+            <td align="left"><a target="_blank"
+                href="{{appsettingConfig.StaticFileRootPathURL}}/{{leave.OrderCopy}}">{{leave.OrderName}}</a></td>
             <!--<td>{{ leave.OrderName }}</td>-->
             <td>{{ leave.AddPostCount }}</td>
             <td>{{ leave.Comments }}</td>
@@ -221,13 +218,14 @@
     </button>-->
               <div class="row-line-btn">
                 <label class="switch">
-                  <input type="checkbox"
-                         [checked]="leave.ActiveStatus"
-                         (change)="OfficeVacancyActiveDeActive(leave.ID, $event.target.checked)" />
+                  <input type="checkbox" [checked]="leave.ActiveStatus"
+                    (change)="OfficeVacancyActiveDeActive(leave.ID, $event.target.checked)" />
                   <span class="slider round"></span>
                 </label>
-                <button *ngIf="!IsView" class="btn bg-info text-white" (click)="Function_UpdateVacancyPost(modal_UpdateVacancyPost,leave)">Update</button>
-                <button *ngIf="leave.PostedSeat == 0" class="btn btn-danger btn-sm" (click)="removeLeave(idx, leave.ID)">
+                <button *ngIf="!IsView" class="btn bg-info text-white"
+                  (click)="Function_UpdateVacancyPost(modal_UpdateVacancyPost,leave)">Update</button>
+                <button *ngIf="leave.PostedSeat == 0" class="btn btn-danger btn-sm"
+                  (click)="removeLeave(idx, leave.ID)">
                   Remove
                 </button>
               </div>
@@ -263,7 +261,8 @@
 
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span
+                class="StarMarking">*</span></label>
             <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="OfficeID">
               <option value="0">--Select--</option>
               <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
@@ -294,7 +293,8 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Staff Type<span class="StarMarking">*</span>
             </label>
-            <select class="form-select" name="StaffType" id="StaffTypeID" formControlName="StaffTypeID" [(ngModel)]="formData.StaffTypeID" (change)="fillupDesignation()">
+            <select class="form-select" name="StaffType" id="StaffTypeID" formControlName="StaffTypeID"
+              [(ngModel)]="formData.StaffTypeID" (change)="fillupDesignation()">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
             </select>
@@ -338,7 +338,8 @@
           <!--{{formData.PostedSeat|json}}-->
           <!--{{formData.DesignationID|json}}-->
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span
+                class="StarMarking">*</span></label>
             <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
               <option [ngValue]="0">--Select--</option>
               <option *ngFor="let item of PostList" [ngValue]="item.ID">
@@ -359,7 +360,7 @@
           <div>
             <label for="TotalSeatID">Total Seat:</label>
             <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
-                   [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
+              [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
             <div *ngIf="isSubmitted&&_groupForm.TotalSeatID.errors" class="text-danger">
               <p *ngIf="_groupForm.TotalSeatID.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This
@@ -370,7 +371,8 @@
 
           <div class="form-group">
             <label for="Comments">Comments:</label>
-            <textarea id="Comments" formControlName="Comments" class="form-control" [(ngModel)]="formData.Comments"></textarea>
+            <textarea id="Comments" formControlName="Comments" class="form-control"
+              [(ngModel)]="formData.Comments"></textarea>
           </div>
           <button type="submit" class="btn btn-primary" (click)="VacancyPostUpdate()">Update</button>
         </div>

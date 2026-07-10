@@ -270,7 +270,6 @@ export class AllPostComponent implements OnInit {
     this.toastr.success("PDF Genetrated Successfully");
   }
 
-
   onFilterChange(event: any) {
       // Handle filtering logic (if needed)
       console.log(event);
@@ -288,37 +287,28 @@ export class AllPostComponent implements OnInit {
     onItemSelect(evet:any) {
       console.log("on select", evet);
 
-
   }
 
   onDeSelect(event:any) {
 
-
-
   }
 
-
-
   // onSelectAll(items: any[], centerID: number) {
-
-
 
   // }
 
   onDeSelectAll(event:any) {
 
-
-
   }
 
-
-  ResetData() {
+  async ResetData() {
     this.SelectedStreamID = []
     this.SelectedInstituteId = [];
     this.CampusFromDate = '';
     this.CampusToDate = '';
     this.FinancialYearID = 30;
     //InstituteID: string = '0';
+    await this.GetAllData();
   }
 
   exportToExcel(): void {

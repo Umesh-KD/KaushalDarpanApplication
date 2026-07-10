@@ -6,6 +6,7 @@ import { CampusPostListComponent } from './campus-post-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../Pipes/table-search-filter.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { TableSearchFilterModule } from '../../Pipes/table-search-filter.module'
   imports: [
     CommonModule,
     CampusPostListRoutingModule
-    , FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule
+    , FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule, NgSelectModule
+
   ]
 })
 export class CampusPostListModule { }

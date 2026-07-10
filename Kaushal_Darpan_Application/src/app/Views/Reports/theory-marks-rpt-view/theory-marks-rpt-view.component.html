@@ -33,10 +33,14 @@
           || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng">
 
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
-          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID">
+          <!-- <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID">
             <option value="0">--All--</option>
             <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-          </select>
+          </select> -->
+
+          <ng-select [items]="InstituteMasterDDLList" bindLabel="InstituteName" bindValue="InstituteID" placeholder="--All--"
+            [(ngModel)]="searchRequest.InstituteID" [searchable]="true" [clearable]="true">
+          </ng-select>
         </div>
 
         <div>
@@ -52,11 +56,15 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Branch:<span class="StarMarking"></span>
           </label>
-          <select class="form-select" id="ddlBranch"
+          <!-- <select class="form-select" id="ddlBranch"
                   [(ngModel)]="searchRequest.StreamID">
             <option value="0">--All--</option>
             <option *ngFor="let item of Branchlist" [value]="item?.StreamID">{{item.StreamName}}</option>
-          </select>
+          </select> -->
+
+          <ng-select [items]="Branchlist" bindLabel="StreamName" bindValue="StreamID" placeholder="--All--"
+            [(ngModel)]="searchRequest.StreamID" [searchable]="true" [clearable]="true">
+          </ng-select>
         </div>
 
         <div>
@@ -108,7 +116,11 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
-        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="PDFDownload()"><i class="ti ti-download"></i> Download PDF</a>
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" 
+          *ngIf="sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng
+                  || sSOLoginDataModel.RoleID == _EnumRole.Examiner"
+          (click)="PDFDownload()"><i class="ti ti-download"></i> Download PDF</a>
+
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"
            *ngIf="sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng"
            (click)="exportToExcel()">

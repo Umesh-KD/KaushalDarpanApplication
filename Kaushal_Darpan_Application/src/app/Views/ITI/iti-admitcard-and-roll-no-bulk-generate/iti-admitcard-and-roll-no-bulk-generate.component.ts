@@ -46,10 +46,10 @@ export class ITIAdmitcardAndRollNoBulkGenerateComponent {
 
   async GenerateITIAdmitCard() {
     debugger
-    if (this.Status != 14) {
-      this.swat.Warning("Please Publish the Time Table first")
-      return
-    }
+    //if (this.Status != 14) {
+    //  this.swat.Warning("Please Publish the Time Table first")
+    //  return
+    //}
     try {
       //this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
       this.loaderService.requestStarted();

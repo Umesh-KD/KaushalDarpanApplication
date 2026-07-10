@@ -1,0 +1,106 @@
+ 
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ResultReport</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ResultReport" class="text-sm font-medium text-slate-700" aria-current="page">ResultReport</a>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <form>
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Filter</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Report Type</label>
+          
+        <select class="form-select"
+                formControlName="Type">
+
+          <option [ngValue]="-1">--Select--</option>
+
+          @for(item of ReportTypelist; track item.ID){
+          <option [ngValue]="item.ID">
+            {{item.Name}}
+          </option>
+          }
+
+        </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> End Term</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="EndTerm" (change)="applyFilter($event.target.value)">
+            <option value="Select" ng-reflect-value="0">--Select--</option>
+            @for (item of EndTermList; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="SemesterID" (change)="applyFilter($event.target.value)">
+            <option [value]="0">--Select--</option>
+            @for (item of SemesterMasterList; track item) {
+            <option [value]="item.SemesterID">{{item.SemesterName}}</option>
+            }
+          </select>
+        </div>
+        <div >
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
+          <select class="form-select" id="SchemeID" formControlName="SchemeID">
+            <option value="0">--All--</option>
+            <option value="1347">Old</option>
+            <option value="1348">New</option>
+          </select>
+        </div>-->
+        <div>
+          <button 
+                  type="button"
+                  class="btn bg-info text-white"
+                  (click)="DownloadPdf()">
+            <i class="ti ti-file-type-pdf"></i>
+            Download PDF
+          </button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetReport()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> Filtered Data</b>
+    </div>
+    <!--<div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto tableLastRecordHighlight" cellpadding="5" *ngIf="CustomizeReportCoulmnDataPush.length>0">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>S.No</th>
+            <th class="text-left" *ngFor="let column of selectedNames">{{ column }}</th>-->
+            <!-- <th *ngIf="this.requestData.Type == 2" class="text-left">Total</th> -->
+          <!--</tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of GetfilteredList; let idx = index;">
+            <td>{{ idx + 1 }}</td>
+            <td *ngFor="let column of selectedNames">
+              {{ row[column]}}
+            </td>-->
+            <!-- <td *ngIf="this.requestData.Type == 2">{{ row['Total'] }}</td> -->
+          <!--</tr>
+        </tbody>
+      </table>
+    </div>-->
+  </div>
+</div>
+
+

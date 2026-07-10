@@ -22,7 +22,11 @@ export class DownloadMarksheetSearchModel {
   public FianancialYearID?:number=0
   public DocumentID?:number=0
   public MarksheetID?:number=0
+  public ModifyBy?:number=0
+  public StudentTypeID?:number=0
   public SessionName?: string = ''
+  public SRNO?: string = ''
+  public DOB?: string = ''
 }
 
 

@@ -2041,6 +2041,15 @@ export class ReportService {
       }
     );
   }
+
+  public async GetToppersReport(searchRequest: any) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetToppersReport`, body, this.headersOptions)
+      .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+
+
+  }
 }
 
 

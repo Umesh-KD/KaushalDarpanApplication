@@ -744,7 +744,7 @@ export class MiscellaneousReportComponent implements OnInit {
   }
   get isPdfReport(): boolean {
     const type = Number(this.groupForm.get('Type')?.value);
-    return type === 12 || type === 13 || type === 15 || type === 16;
+    return type === 12 || type === 13 || type === 15 || type === 16 || type === 17;
   }
 
 
@@ -802,7 +802,8 @@ export class MiscellaneousReportComponent implements OnInit {
       var body = {
         InstituteID: this.sSOLoginDataModel.InstituteID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
-        EndTermID: this.requestData.EndTermID
+        EndTermID: this.requestData.EndTermID,
+        SemesterID: this.requestData.SemesterID
       }
 
       this.reportService.Get85and45percentageStudentIAReport(body)

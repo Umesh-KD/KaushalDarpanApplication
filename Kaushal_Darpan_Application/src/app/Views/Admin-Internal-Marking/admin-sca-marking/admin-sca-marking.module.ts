@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
 import { AdminSCAMarkingComponent } from './admin-sca-marking.component';
 import { AdminSCAMarkingRoutingModule } from './admin-sca-marking-routing.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -16,8 +17,8 @@ import { AdminSCAMarkingRoutingModule } from './admin-sca-marking-routing.module
     AdminSCAMarkingRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    TableSearchFilterModule
-
+    TableSearchFilterModule,
+    NgSelectModule
   ]
 })
 export class AdminSCAMarkingModule { }
