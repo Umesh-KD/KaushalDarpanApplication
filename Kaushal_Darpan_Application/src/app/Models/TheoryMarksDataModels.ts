@@ -333,3 +333,42 @@ export class UFMExtraInfoSaveModel extends ResponseBaseModel {
   public BundleSendDate?: string;
   public Date2?: string;
 }
+
+export class ExaminerReportSearchModel extends RequestBaseModel {
+  public SemesterID: number = 0;
+  public StreamID: number = 0;
+  public StudentID: number = 0;
+  public SubjectID: number = 0;
+  public MarkEnter: number = 0;
+  public UserID: number = 0;
+  public UserAdditionalID: number = 0;
+  public RollNo: string = '';
+  public InternalPracticalID: number = 0;
+  public GroupCodeID: number = 0;
+  public InstituteID: number = 0;
+  public IsConfirmed: boolean = false;
+  public UFMDocument: string = '';
+  public Dis_UFMDocument: string = '';
+  public ExaminerCode: string = '';
+  public SSOID: string = ''
+  public SubjectType: string = ''
+  public SubjectName: string = ''
+  public CheckedStatus?: number = -1;
+  public centersubmitstatus?: number = 0;
+  public centerpresentstatus?: number = 0;
+  public StudentStatus?: number = -1;
+  public StrKey?: string = '';
+  public CenterCode?: number = 0;
+  public isUFM?: number = 0;
+  public IsReval?: number = 0;
+  public StaffID?: number = 0;
+
+  public GroupCode: string = '';
+
+  public Allotted_No_Of_copies: string = '';
+
+  public No_Of_Student_Save: string = '';
+
+  public Pending_Students: string = '';
+}
+

@@ -1114,6 +1114,7 @@ const routes: Routes = [
       { path: 'internal-practical-rpt-view', loadChildren: () => import('./Views/internal-practical-rpt-view/internal-practical-rpt-view.module').then(m => m.InternalPracticalRptViewModule) },
       { path: 'ScaReport', loadChildren: () => import('./Views/sca-report/sca-report.module').then(m => m.ScaReportModule) },
       { path: 'theory-marks-report', loadChildren: () => import('./Views/Reports/theory-marks-rpt-view/theory-marks-rpt-view.module').then(m => m.TheoryMarksRptViewModule), title: 'Theory Marks Report' },
+      { path: 'AllExaminerReport', loadChildren: () => import('./Views/Reports/AllExaminerReport/AllExaminerReport.module').then(m => m.AllExaminerReportodule), title: 'AllExaminerReport' },
 
       { path: 'AssignHod', loadChildren: () => import('./Views/assign-hod/assign-hod.module').then(m => m.AssignHodModule) },
       { path: 'PrincipleList', loadChildren: () => import('./Views/PrincipleUpdateList/PrincipleUpdateList.module').then(m => m.PrincipleListModule), title: 'Principle List' },
