@@ -19,7 +19,7 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Sanction Details</b>
       <a routerLink="/SanctionOrderList" class="btn bg-info btn-sm text-white me-2">
-        <i class="ti ti-plus"></i>Back
+        <i class="bi bi-arrow-left-circle"></i>Back
       </a>
     </div>
     <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
@@ -60,6 +60,16 @@
         </select>
 
       </div>
+
+      <div *ngIf="request.OrderType == 9999">
+        <label for="OrderTypeName" class="text-gray-800 text-sm font-medium inline-block mb-2">Order Type Name<span class="StarMarking">*</span></label>
+        <input type="text" class="form-input" id="OrderTypeName" [(ngModel)]="request.OrderTypeName" placeholder="Enter Order Type Name">
+        <!--<div *ngIf="isSubmitted && _ReportForm.SanctionOrderNo.errors" class="text-danger">
+      <p *ngIf="_ReportForm.SanctionOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>-->
+
+      </div>
+
       <div>
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order No<span class="StarMarking">*</span></label>
         <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="request.OrderNo" placeholder="Enter Post Sanction Order No">
