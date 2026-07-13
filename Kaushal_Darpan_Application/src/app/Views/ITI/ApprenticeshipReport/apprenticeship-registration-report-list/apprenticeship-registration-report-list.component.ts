@@ -56,7 +56,7 @@ export class ApprenticeshipRegistrationReportList {
   includedKeys: string[] = [
     'NumberofTrainees',
     '__SKIP_Nameofapprentices__',
-    'Numberofapprentices',
+
   
 
   ];
@@ -442,4 +442,9 @@ export class ApprenticeshipRegistrationReportList {
     this.sortInTableColumn = field;
     this.loaderService.requestEnded();
   }
+
+  formatWithBreak(value: string): string {
+    return value ? value.replace(/,\s*/g, '<br>') : '';
+  }
+
 }

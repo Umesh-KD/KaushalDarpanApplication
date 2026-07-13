@@ -68,8 +68,8 @@ export class ApprenticeshipRegistrationReport {
       dateofregistration: ['', Validators.required],
       BusinessName: [[], this.atLeastOneSelectedValidator()],
       NumberofTrainees: ['', Validators.required],
-      Numberofapprentices: ['', ],
-      Nameofapprentices: [''],
+      Numberofapprentices: ['', Validators.required],
+      Nameofapprentices: ['', Validators.required],
       Remarks: [''],
       NumberOfRegistrationDoc: [''],
       TypeID: [0, [DropdownValidators]]
@@ -81,9 +81,11 @@ export class ApprenticeshipRegistrationReport {
     const Editid = sessionStorage.getItem('ApprenticeshipRegistrationReportPKID');
     const Flag = Number(sessionStorage.getItem('Flag'));
     if (Editid != undefined && parseInt(Editid) > 0) {
+      this.UpdateEditID = Number(Editid)
       if (Flag > 0) {
         this.ApprenticeshipReportFormGroup.enable(); // Disables all form controls
-        this.disable=false
+        this.disable = false
+        this.UpdateEditID=0
       } else {
         this.ApprenticeshipReportFormGroup.disable(); // Disables all form controls
         this.disable = true
@@ -162,11 +164,13 @@ export class ApprenticeshipRegistrationReport {
 
     this.registrationList ??= [];
 
+    const lastItem = this.registrationList[this.registrationList.length - 1];
+    debugger
     if (
       this.registrationList.length > 0 &&
       (
-        !this.registrationList[this.registrationList.length - 1].Name?.trim() ||
-        !this.registrationList[this.registrationList.length - 1].RegistrationNo?.trim()
+        !lastItem?.Name?.trim() ||
+        !String(lastItem?.RegistrationNo ?? '').trim()
       )
     ) {
       this.toastr.warning('Please fill the current registration details first.');
@@ -183,33 +187,36 @@ export class ApprenticeshipRegistrationReport {
     this.registrationList.splice(index, 1);
   }
   async AddRow() {
-    debugger;
-    this.ApprenticeshipReportFormGroup.value.NumberOfRegistrationDoc = this.request.FileName;
-    if (this.ApprenticeshipReportFormGroup.value.BusinessName.length == 0 ||
-      this.ApprenticeshipReportFormGroup.value.BusinessName.length == null
-
-    )
-    {
-      this.toastr.warning("Please Fill All Required Fileds !");
+    if (this.ApprenticeshipReportFormGroup.invalid) {
+      this.ApprenticeshipReportFormGroup.markAllAsTouched();
       return;
     }
 
-    if (this.ApprenticeshipReportFormGroup.valid) {
-      const newRow = { ...this.ApprenticeshipReportFormGroup.value };
-      if (newRow.NumberOfRegistrationDoc && typeof newRow.NumberOfRegistrationDoc === 'string') {
-        const fakePath = newRow.NumberOfRegistrationDoc;
-        newRow.NumberOfRegistrationDoc = fakePath.split('\\').pop(); // just get the file name
-      }
+    const newRow: any = { ...this.ApprenticeshipReportFormGroup.getRawValue() };
 
-      this.ApprenticeshipRows.push(newRow);
-      this.ApprenticeshipReportFormGroup.reset(); // Optionally reset after adding
-      this.isAllSelected = false;
-      this.request.Dis_FilePath = '';
-      this.ApprenticeshipReportFormGroup.value.NumberOfRegistrationDoc = '';
-    }
-    else {
-      this.ApprenticeshipReportFormGroup.markAllAsTouched(); // show errors if invalid
-    }
+    // Store Trade Name
+    const trade = this.TradeList.find((x: any) => x.Id == newRow.BusinessName);
+    newRow.BusinessNameText = trade ? trade.TradeName : '';
+
+    // Store Institute Name
+    const institute = this.CollegeList.find((x: any) => x.ID == newRow.Nameofinstitute);
+    newRow.InstituteNameText = institute ? institute.Name : '';
+
+    this.ApprenticeshipRows.push(newRow);
+
+    this.ApprenticeshipReportFormGroup.reset({
+      TypeID: 0,
+      Nameofinstitute: 0,
+      BusinessName: null,
+      NumberofTrainees: '',
+      Nameofapprentices: '',
+      Numberofapprentices: '',
+      Remarks: '',
+      dateofregistration: ''
+    });
+
+    this.request.Dis_FilePath = '';
+    this.request.FileName = '';
   }
   removeRow(index: number) {
     this.ApprenticeshipRows.splice(index, 1);
@@ -275,31 +282,37 @@ export class ApprenticeshipRegistrationReport {
 
   async onFinalSubmit() {
     debugger;
-    if (this.ApprenticeshipReportFormGroup.value.BusinessName.length == 0 ||
-      this.ApprenticeshipReportFormGroup.value.BusinessName.length == null
+    //if (this.ApprenticeshipReportFormGroup.value.BusinessName.length == 0 ||
+    //  this.ApprenticeshipReportFormGroup.value.BusinessName.length == null
 
-    ) {
-      this.toastr.warning("Please Fill All Required Fileds !");
-      return;
-    }
+    //) {
+    //  this.toastr.warning("Please Fill All Required Fileds !");
+    //  return;
+    //}
 
-    if (
-      !this.registrationList ||
-      this.registrationList.length === 0 ||
-      this.registrationList.some(x =>
-        !x.Name?.trim() || !x.RegistrationNo?.trim()
-      )
-    ) {
-      this.toastr.error('Please enter Apprentice Name and Registration Number for all rows.');
-      return;
-    }
+    // Remove completely empty rows
+    //this.registrationList = this.registrationList.filter(x =>
+    //  x?.Name?.trim() || String(x?.RegistrationNo ?? '').trim()
+    //);
+
+    // Check for partially filled rows
+    //if (
+    //  this.registrationList.length === 0 ||
+    //  this.registrationList.some(x =>
+    //    !x?.Name?.trim() ||
+    //    !String(x?.RegistrationNo ?? '').trim()
+    //  )
+    //) {
+    //  this.toastr.error('Please enter Apprentice Name and Registration Number for all rows.');
+    //  return;
+    //}
 
     const commonProps = {
       EndTermID: this.ssoLoginDataModel?.EndTermID || 0,
       DepartmentID: this.ssoLoginDataModel?.DepartmentID || 0,
       RoleID: this.ssoLoginDataModel?.RoleID || 0,
       Createdby: this.ssoLoginDataModel?.UserID || 0,
-      PKID: 0,
+      PKID: this.UpdateEditID,
       FinnacialYearID: this.ssoLoginDataModel.FinancialYearID,
       TypeID: this.ApprenticeshipReportFormGroup.getRawValue().TypeID,
       Nameofinstitute: this.ApprenticeshipReportFormGroup.getRawValue().Nameofinstitute,
@@ -317,128 +330,15 @@ export class ApprenticeshipRegistrationReport {
     //  ...commonProps // keep them outside too, if needed by API
     //};
 
-    //const payload = {
-    //  apprenticeshipEntries: this.ApprenticeshipRows,
-    //  EndTermID: this.ssoLoginDataModel?.EndTermID || 0,
-    //  DepartmentID: this.ssoLoginDataModel?.DepartmentID || 0,
-    //  RoleID: this.ssoLoginDataModel?.RoleID || 0,
-    //  Createdby: this.ssoLoginDataModel?.UserID || 0
-    //}
-    try {
-      this.loaderService.requestStarted();
+   
 
-      await this.ApprenticeShipRPTService.Submit_Apprenticeship_data(commonProps).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.Data.length > 0) {
-          this.toastr.success(data.Data['0'].msg);
-          setTimeout(() => {
-            this.routers.navigate(['/ApprenticeshipRegistrationReport-list']);
-          }, 1300);
-        }
-      })
-    }
-    catch (ex) {
-      console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
-
-
-  async GetReportDatabyID(ReportID: number) {
-    debugger
-    try {
-      this.loaderService.requestStarted();
-
-      let obj = {
-        EndTermID: this.ssoLoginDataModel.EndTermID,
-        DepartmentID: this.ssoLoginDataModel.DepartmentID,
-        RoleID: this.ssoLoginDataModel.RoleID,
-        Createdby: 0,
-        PKID: ReportID,  //  get Record by ID for Edit
-      };
-      debugger;
-
-
-      await this.ApprenticeShipRPTService.Get_ApprenticeshipRegistrationReportAllData(obj)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          debugger;
-          if (data.Data.length > 0) {
-
-            debugger
-            this.ApprenticeshipReportFormGroup.patchValue({
-              Nameofinstitute: data.Data['0'].InId,
-              dateofregistration: data.Data['0'].Dateofregistration,
-              NumberofTrainees: data.Data['0'].NumberofTrainees,
-              Numberofapprentices: data.Data['0'].Numberofapprentices,
-              Remarks: data.Data['0'].Remarks,
-              BusinessName: data.Data['0'].BusinessID.split(',').map(Number),
-              
-            })
-            this.request.FileName = data.Data['0'].NumberOfRegistrationDoc;
-            this.IsUpdateCase = true;
-            this.UpdateEditID = ReportID;
-          }
-          else {
-            // this.DataList = [];
-          }
-
-          //console.log(this.DataList)
-        }, (error: any) => console.error(error)
-        );
-
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
-
-
-  async UpdateRecordbyID(UpdateEditID: number) {
-    debugger;
-    this.ApprenticeshipReportFormGroup.value.NumberOfRegistrationDoc = this.request.FileName;
-    if (this.ApprenticeshipReportFormGroup.invalid) {
-      const newRow = { ...this.ApprenticeshipReportFormGroup.value };
-      if (newRow.NumberOfRegistrationDoc && typeof newRow.NumberOfRegistrationDoc === 'string') {
-        const fakePath = newRow.NumberOfRegistrationDoc;
-        newRow.NumberOfRegistrationDoc = fakePath.split('\\').pop(); // just get the file name
-      }
-      this.ApprenticeshipRows.push(newRow);
-      this.ApprenticeshipReportFormGroup.reset(); // Optionally reset after adding
-      this.isAllSelected = false;
-    }
-    else {
-      this.ApprenticeshipReportFormGroup.markAllAsTouched(); // show errors if invalid
-    }
-
-    if (!this.UpdateRowRecordList) {
-      this.UpdateRowRecordList = [];
-    }
-
-
-    const commonProps = {
+    const payload = {
+      apprenticeshipEntries: this.ApprenticeshipRows,
       EndTermID: this.ssoLoginDataModel?.EndTermID || 0,
       DepartmentID: this.ssoLoginDataModel?.DepartmentID || 0,
       RoleID: this.ssoLoginDataModel?.RoleID || 0,
-      Createdby: this.ssoLoginDataModel?.UserID || 0,
-      PKID: UpdateEditID
-    };
-
-    const payload = {
-      apprenticeshipEntries: this.ApprenticeshipRows.map(entry => ({
-        ...entry,
-        ...commonProps // push outer properties into each entry
-      })),
-      ...commonProps // keep them outside too, if needed by API
-    };
-  
+      Createdby: this.ssoLoginDataModel?.UserID || 0
+    }
     try {
       this.loaderService.requestStarted();
 
@@ -460,7 +360,98 @@ export class ApprenticeshipRegistrationReport {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
 
+
+  async GetReportDatabyID(ReportID: number) {
+    try {
+      this.loaderService.requestStarted();
+
+      const obj = {
+        EndTermID: this.ssoLoginDataModel.EndTermID,
+        DepartmentID: this.ssoLoginDataModel.DepartmentID,
+        RoleID: this.ssoLoginDataModel.RoleID,
+        Createdby: 0,
+        PKID: ReportID
+      };
+
+      const data: any = await this.ApprenticeShipRPTService.Get_ApprenticeshipRegistrationReportAllData(obj);
+
+      if (data?.Data?.length > 0) {
+
+        const report = data.Data[0];
+
+        this.ApprenticeshipReportFormGroup.patchValue({
+          Nameofinstitute: report.InId,
+          TypeID: report.TypeID,
+          dateofregistration: report.Dateofregistration,
+          NumberofTrainees: report.NumberofTrainees,
+          Numberofapprentices: report.Numberofapprentices,
+          Nameofapprentices: report.Nameofapprentices,
+          Remarks: report.Remarks,
+          BusinessName: Number(report.BusinessID)
+        });
+
+        await this.GetTradeMatserDDL();
+
+        this.request.FileName = report.NumberOfRegistrationDoc;
+        this.IsUpdateCase = true;
+        this.UpdateEditID = ReportID;
+      }
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async UpdateRecordbyID(UpdateEditID: number) {
+
+    if (this.ApprenticeshipReportFormGroup.invalid) {
+      this.ApprenticeshipReportFormGroup.markAllAsTouched();
+      return;
+    }
+
+    const commonProps = {
+      EndTermID: this.ssoLoginDataModel.EndTermID,
+      DepartmentID: this.ssoLoginDataModel.DepartmentID,
+      RoleID: this.ssoLoginDataModel.RoleID,
+      Createdby: this.ssoLoginDataModel.UserID,
+      PKID: UpdateEditID
+    };
+
+    const entry = {
+      ...this.ApprenticeshipReportFormGroup.getRawValue(),
+      ...commonProps
+    };
+
+    const payload = {
+      apprenticeshipEntries: [entry],
+      ...commonProps
+    };
+
+    try {
+      this.loaderService.requestStarted();
+
+      const data: any = await this.ApprenticeShipRPTService.Submit_Apprenticeship_data(payload);
+
+      if (data?.Data?.length > 0) {
+        this.toastr.success(data.Data[0].msg);
+
+        setTimeout(() => {
+          this.routers.navigate(['/ApprenticeshipRegistrationReport-list']);
+        }, 1300);
+      }
+
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
   }
 
   async SampleexportExcelDataYearly() {

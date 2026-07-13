@@ -171,8 +171,8 @@
             <td>{{row.Dateofregistration}}</td>
             <td>{{row.BusinessName}}</td>
             <td class="text-center">{{row.NumberofTrainees}}</td>
-            <td class="text-center">{{row.Nameofapprentices}}</td>
-            <td class="text-center">{{row.Numberofapprentices}}</td>
+            <td [innerHTML]="formatWithBreak(row.Nameofapprentices)"></td>
+            <td [innerHTML]="formatWithBreak(row.Numberofapprentices)"></td>
             <td class="border px-4 py-2">
               <a target="_blank" href="{{ appsettingConfig.StaticFileRootPathURL + '/' + row.NumberOfRegistrationDoc}}">View</a>
             </td>
