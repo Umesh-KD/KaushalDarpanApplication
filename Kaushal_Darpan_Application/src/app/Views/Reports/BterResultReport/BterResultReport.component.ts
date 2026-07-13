@@ -134,16 +134,19 @@ export class BterResultReportComponent implements OnInit {
     await this.reportService.GetEndTerm().then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.EndTermList = data['Data'];
+      this.groupForm.patchValue({
+        EndTerm: 3
+      });
     }, (error: any) => console.error(error));
     
 
   }
   async loadReportType() {
     this.ReportTypelist = [
-      { ID: 0, DisplayOrder: 1, Name: 'Toppers-List' },
-      { ID: 1, DisplayOrder: 2, Name: 'Provesional-Merit-List' },
-      { ID: 2, DisplayOrder: 3, Name: 'Final-Merit-List' },
-      { ID: 3, DisplayOrder: 4, Name: 'Check Merit List' },
+      { ID: 0, DisplayOrder: 4, Name: 'Toppers-List' },
+      { ID: 1, DisplayOrder: 3, Name: 'Provesional-Merit-List' },
+      { ID: 2, DisplayOrder: 2, Name: 'Final-Merit-List' },
+      { ID: 3, DisplayOrder: 1, Name: 'Check Merit List' },
 
     ];
 
