@@ -185,7 +185,7 @@ export class CenterRollListComponent {
 
       this.loaderService.requestStarted();
       //call
-      await this.GetRollService.GetCenterAdmit_RollListPdf(this.searchRequest).then(
+      await this.GetRollService.GetCenterAdmit_RollListPdf_New(this.searchRequest).then(
         (data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
@@ -725,11 +725,12 @@ export class CenterRollListComponent {
   async GenerateITIRollNumberList(Inst:number=0,Sem:number=0) {
     ;
     try {
+      debugger
       this.loaderService.requestStarted();
       this.GenerateRollNosearchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.GenerateRollNosearchRequest.DepartmentID = 2
       this.GenerateRollNosearchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
-      this.GenerateRollNosearchRequest.CenterID = this.sSOLoginDataModel.InstituteID
+      this.GenerateRollNosearchRequest.CenterID = Inst //this.sSOLoginDataModel.InstituteID
       this.GenerateRollNosearchRequest.InstituteID = Inst
       this.GenerateRollNosearchRequest.SemesterID = Sem
 

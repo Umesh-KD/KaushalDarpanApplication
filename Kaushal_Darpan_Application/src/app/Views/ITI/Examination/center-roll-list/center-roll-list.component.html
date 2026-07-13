@@ -102,15 +102,15 @@
               <th class="text-center">Financial Year Name</th>
               <th class="text-center">EndTerm Name</th>
 
-              <th class="text-center">Center Name</th>
+              <!--<th class="text-center">Center Name</th>-->
               <th class="text-center">ITI Name</th>
               <th class="text-center">Year Name</th>
               <!--<th class="text-center">File Name</th>-->
               <!--<th class="text-center">ExamIncharge Status</th>
               <th class="text-center">Registrar Status</th>-->
-              <th class="text-center">Status</th>
+              <!--<th class="text-center">Status</th>-->
               <!--<th class="text-center">Student Count</th>-->
-              <th class="text-center">Created Date</th>
+              <!--<th class="text-center">Created Date</th>-->
               <th class="text-center">Action</th>
             </tr>
           </thead>
@@ -123,7 +123,7 @@
               <td class="text-center">{{idx+1}}</td>
               <td class="text-center">{{row.FinancialYearName}}</td>
               <td class="text-center">{{row.EndTermName}}</td>
-              <td class="text-center">{{row.CenterName	}}</td>
+              <!--<td class="text-center">{{row.CenterName	}}</td>-->
               <td class="text-center">{{row.InstituteNameEnglish	}}</td>
               <td class="text-center">{{row.SemesterName	}} </td>
               <!--<td class="text-center">{{row.FileName}}</td>-->
@@ -135,12 +135,12 @@
                 {{ row.IsRegistrarVerified ? 'Verified' : 'Not Verified' }}
               </td>-->
 
-              <td class="text-center">{{row.ActionCode}}</td>
+              <!--<td class="text-center">{{row.ActionCode}}</td>-->
               <!--<td class="text-center">{{row.TotalStudent}}</td>-->
-              <td class="text-center">{{row.CreatedDate}}</td>
+              <!--<td class="text-center">{{row.CreatedDate}}</td>-->
               <td class="text-center">
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                  <a download target="_blank" (click)="GenerateITIRollNumberList(row.InstituteID,row.SemesterID)" title="Download"><i class="ti ti-download"></i></a>
+                  <a download target="_blank" (click)="GenerateITIRollNumberList(row.CenterID,row.SemesterID)" title="Download"><i class="ti ti-download"></i></a>
                 </div>
               </td>
 

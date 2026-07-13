@@ -44,6 +44,7 @@ export class PMNAMMelaReportBeforeAfterComponent {
   public NumberofEmployedStudentAfter: string = '';
   public BeforeDate: string = '';
   public AfterDate: string = '';
+  public Remarks: string = '';
   //public FinancialYearID: number = 0;
   SelectedFinancialYearID: number = 0;
   FinancialYearName: string = '';
@@ -109,7 +110,8 @@ export class PMNAMMelaReportBeforeAfterComponent {
       FinancialYearID: this.SelectedFinancialYearID,
       BeforeMonth: this.BeforeMonth,
       PNMMelaDocument: this.PNMMelaDocument,
-      provisionLetterDocument: this.provisionLetterDocument
+      provisionLetterDocument: this.provisionLetterDocument,
+      Remarks: this.Remarks
     };
 
     try {
@@ -146,6 +148,7 @@ export class PMNAMMelaReportBeforeAfterComponent {
     this.NumberofEmployedStudentAfter = '';
     this.PNMMelaDocument = '';
     this.provisionLetterDocument = '';
+    this.Remarks = '';
     this.MonthID = 0;
   }
 
@@ -174,6 +177,7 @@ export class PMNAMMelaReportBeforeAfterComponent {
             this.PNMMelaDocument = data.Data['0'].PNMMelaDocument;
             this.BeforeMonth = data.Data['0'].MonthID;
             this.SelectedFinancialYearID = data.Data['0'].FinancialYearID;
+            this.Remarks = data.Data['0']?.Remarks??'';
             this.FinancialYearName = String(this.SelectedFinancialYearID);
             this.id = data.Data['0'].ID;
 

@@ -147,6 +147,16 @@ export class GetRollService {
   }
 
 
+  //For ITI center wise Roll List PDF Generation
+  public async GetCenterAdmit_RollListPdf_New(request: GenerateRollSearchModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/GetCenterAdmit_RollListPdf_New", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 
   public async ChangeRollNoStatus(request: GenerateRollSearchModel)
   {
