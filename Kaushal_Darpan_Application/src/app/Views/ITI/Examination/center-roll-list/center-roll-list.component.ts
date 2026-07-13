@@ -188,7 +188,7 @@ export class CenterRollListComponent {
       await this.GetRollService.GetCenterAdmit_RollListPdf_New(this.searchRequest).then(
         (data: any) => {
           data = JSON.parse(JSON.stringify(data));
-
+          debugger
           if (data.State == EnumStatus.Success) {
             this.VerifyRollList = data['Data'];
 
