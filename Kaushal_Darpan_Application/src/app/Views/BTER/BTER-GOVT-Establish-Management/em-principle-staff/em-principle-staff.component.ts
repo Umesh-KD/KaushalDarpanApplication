@@ -18,6 +18,8 @@ import { GuestRoomManagmentService } from '../../../../Services/GuestRoomManagme
 import { GuestRoomSeatSearchModel } from '../../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
 import { RequestUpdateStatus } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
 import { ViewStaffProfileModalComponent } from '../view-staff-profile-modal/view-staff-profile-modal.component';
+import { AssignRoleRightsService } from '../../../../Services/AssignRoleRights/assign-role-rights.service';
+import { UserMasterService } from '../../../../Services/UserMaster/user-master.service';
 
 @Component({
   selector: 'app-em-principle-staff',
@@ -30,6 +32,7 @@ export class EMPrincipleStaffComponent {
   StaffMasterFormGroup!: FormGroup;
   StaffMasterFormGroupOterFaculty!: FormGroup;
   groupForm!: FormGroup;
+
   public formData = new BTER_EM_AddStaffBasicDetailDataModel();
   public searchRequest = new BTER_EM_StaffMasterSearchModel();
   public requestSSoApi = new CommonVerifierApiDataModel();
@@ -40,21 +43,14 @@ export class EMPrincipleStaffComponent {
   public requestUser = new BTER_EM_GetPersonalDetailByUserID();
   public unlockRequest = new BTER_EM_UnlockProfileDataModel();
   public searchRequestUserProfileStatus = new Bter_Govt_EM_UserRequestHistoryListSearchDataModel();
-  public type: string = ''
-  public UserProfileStatusHistoryList: any = [];
-  public settingsMultiselect: object = {};
-  public isSubmitted: boolean = false;
-  public isApproveSubmitted: boolean = false;
-  public isSSOVisible: boolean = false;
-  public GetDesignationID: number = 0
-  public StaffParentID: number = 0
-  Table_SearchText: string = "";
-  modalReference: NgbModalRef | undefined;
-  IsView: boolean = false
-  public IsHideShow: boolean = false
-  public GuestHouseNameList: any = [];
-  _EnumRole = EnumRole;
   public RequestUpdateStatus = new RequestUpdateStatus();
+  _DesignationWiseBranchDataModel = new BTER_DesignationWiseBranchDataModel();
+  public searchRequest1 = new GuestRoomSeatSearchModel();
+  public hostelSearchReq = new StaffHostelSearchModel();
+
+  public GuestHouseNameList: any = [];
+  public UserProfileStatusHistoryList: any = [];
+  _EnumRole = EnumRole;
   PostList: any[] = [];
   public StaffLevelList: any = [];
   public StaffLevelChildList: any = [];
@@ -72,27 +68,38 @@ export class EMPrincipleStaffComponent {
   public GenderList: any = [];
   public DesignationWiseBranchListRole: any[] = [];
   public DesignationWiseBranchList: any[] = [];
-  _DesignationWiseBranchDataModel = new BTER_DesignationWiseBranchDataModel();
   public OfficeList: any = [];
   public OfficeWorkList: any = [];
   public SactionedPostList: any = [];
-  public searchRequest1 = new GuestRoomSeatSearchModel();
+  public RoleMasterList: any = [];
+  public filteredStatusList: any[] = [];
+  public StaffHostelDetails: BTER_EM_StaffHostelListModel[] = []
+  public BugetHeadList: any= [];
+  public PostBudgetHeadList: any = [];
+
   _ITIGovtEM_EnumStaffLevel = ITIGovtEM_EnumStaffLevel;
   _ITIGovtEM_EnumStaffLevelChild = ITIGovtEM_EnumStaffLevelChild;
   _ITIGovtEM_EnumStaffType = ITIGovtEM_EnumStaffType;
   _BTERGovtEM_EnumStaffType = BTERGovtEM_EnumStaffType;
+
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
-  public filteredStatusList: any[] = [];
-  public hostelSearchReq = new StaffHostelSearchModel();
-  public StaffHostelDetails: BTER_EM_StaffHostelListModel[] = []
   public staffHostelIDs: string = ''
   public StaffIDforHostel: number = 0
   public isLoading: boolean = false;
   public isApprove: boolean = false;
-  public BugetHeadList: any= [];
-  public PostBudgetHeadList: any = [];
+  public type: string = ''
+  public settingsMultiselect: object = {};
+  public isSubmitted: boolean = false;
+  public isApproveSubmitted: boolean = false;
+  public isSSOVisible: boolean = false;
+  public GetDesignationID: number = 0
+  public StaffParentID: number = 0
+  Table_SearchText: string = "";
+  modalReference: NgbModalRef | undefined;
+  IsView: boolean = false
+  public IsHideShow: boolean = false
 
   @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
 
@@ -106,7 +113,9 @@ export class EMPrincipleStaffComponent {
     private bterEstablishManagementService: BTEREstablishManagementService,
     private Swal2: SweetAlert2,
     private modalService: NgbModal,
-    private guestRoomManagmentService: GuestRoomManagmentService
+    private guestRoomManagmentService: GuestRoomManagmentService,
+    private assignRoleRightsService: AssignRoleRightsService,
+    private UserMasterService: UserMasterService,
   ) {}
 
   async ngOnInit() {
@@ -1618,4 +1627,27 @@ async GetCategroyData() {
   }
 
   async exportToExcel() {}
+
+  async GetAssignedRole_USerWise(UserID: number) {
+    try {
+      let request : any = {};
+      request.UserID = UserID;
+      request.ParentRoleID = this.sSOLoginDataModel.RoleID;
+      await this.assignRoleRightsService.GetAssignedRole_USerWise(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.RoleMasterList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async ViewandUpdate(content: any, UserID: number) {
+    await this.GetAssignedRole_USerWise(UserID);
+
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
+  }
+  CloseModalPopup() {
+    this.modalService.dismissAll();
+  }
 }

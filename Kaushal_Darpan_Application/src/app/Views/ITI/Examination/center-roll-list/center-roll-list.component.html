@@ -98,20 +98,20 @@
                        (change)="checkboxthView_checkboxchange($event.target.checked)">
 
               </th>-->
-              <th class="text-center">Sr. No.</th>
-              <th class="text-center">Financial Year Name</th>
-              <th class="text-center">EndTerm Name</th>
-
+              <th class="text-left">Sr. No.</th>
+              <th class="text-left">Financial Year Name</th>
+              <th class="text-left">EndTerm Name</th>
               <!--<th class="text-center">Center Name</th>-->
-              <th class="text-center">ITI Name</th>
-              <th class="text-center">Year Name</th>
+              <th class="text-left" style="width:1%; white-space:nowrap;">Center Name</th>
+              <th class="text-left">Year Name</th>
+              <th class="text-left">Total Students</th>
               <!--<th class="text-center">File Name</th>-->
               <!--<th class="text-center">ExamIncharge Status</th>
               <th class="text-center">Registrar Status</th>-->
               <!--<th class="text-center">Status</th>-->
               <!--<th class="text-center">Student Count</th>-->
               <!--<th class="text-center">Created Date</th>-->
-              <th class="text-center">Action</th>
+              <th class="text-left">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -120,12 +120,13 @@
                 <input type="checkbox" name="MarkCheck"
                        [(ngModel)]="row.Selected" />
               </td>-->
-              <td class="text-center">{{idx+1}}</td>
-              <td class="text-center">{{row.FinancialYearName}}</td>
-              <td class="text-center">{{row.EndTermName}}</td>
+              <td class="text-left">{{idx+1}}</td>
+              <td class="text-left">{{row.FinancialYearName}}</td>
+              <td class="text-left">{{row.EndTermName}}</td>
               <!--<td class="text-center">{{row.CenterName	}}</td>-->
-              <td class="text-center">{{row.InstituteNameEnglish	}}</td>
-              <td class="text-center">{{row.SemesterName	}} </td>
+              <td class="text-left whitespace-nowrap" >{{row.InstituteNameEnglish	}}</td>
+              <td class="text-left">{{row.SemesterName	}} </td>
+              <td class="text-left">{{row.TotalNo	}} </td>
               <!--<td class="text-center">{{row.FileName}}</td>-->
               <!--<td class="text-center">
                 {{ row.IsExaminationVerified ? 'Verified' : 'Not Verified' }}

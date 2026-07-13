@@ -372,3 +372,22 @@ export class ExaminerReportSearchModel extends RequestBaseModel {
   public Pending_Students: string = '';
 }
 
+    // public class TheoryAbsentReportDataModel
+    // {
+    //     public int? GroupCodeID { get; set; }
+    //     public int? EndTermID { get; set; }
+    //     public int? Eng_NonEng { get; set; }
+    //     public int? DepartmentID { get; set; }
+    //     public string? SSOID{ get; set; }
+    // }
+
+export class TheoryAbsentReportDataModel {
+  public GroupCodeID: number = 0;
+  public EndTermID: number = 0;
+  public Eng_NonEng: number = 0;
+  public DepartmentID: number = 0;
+  public SSOID: string = '';
+  public GroupCode: string = '';
+  public RoleID: string = '';
+  public UserID: string = '';
+}
