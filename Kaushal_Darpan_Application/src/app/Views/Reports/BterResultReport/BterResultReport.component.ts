@@ -161,6 +161,8 @@ export class BterResultReportComponent implements OnInit {
     } else {
       this.dataSource.filter = filterValue.trim().toLowerCase();
     }
+
+     this.GetStream();
   }
 
   onPaginationChange(event: PageEvent): void {
