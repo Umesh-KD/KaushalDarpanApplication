@@ -71,7 +71,7 @@ export class WorkshopProgressReportComponent {
       representativeName: ['', Validators.required],
       representativedesignation: ['', Validators.required],
       representativeMobile: ['', [Validators.required, Validators.pattern( GlobalConstants.MobileNumberPattern)]],
-      Remars: ['', Validators.required],
+      Remars: [''],
       workProgressDocument: [''],
 
 

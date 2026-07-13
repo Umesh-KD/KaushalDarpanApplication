@@ -175,7 +175,7 @@ export class ApprenticeReportServiceService {
       ).toPromise();
   }
 
-  public Submit_Apprenticeship_data(payload: ApprenticeshipSubmission) {
+  public Submit_Apprenticeship_data(payload: any) {
     //debugger;
     const body = JSON.stringify(payload);
     console.log('Submitting:', body);

@@ -124,7 +124,7 @@
 
           <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                   for="PNMMelaDocument">PNM मेला दस्तावेज़:<span class="StarMarking">*</span></label>
+                   for="PNMMelaDocument">PNM मेला दस्तावेज़:</label>
             <div class="flex fileUploader">
               <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                      id="PNMMelaDocument" type="file" (change)="onFilechange($event,'MelaDocument')">
@@ -143,7 +143,7 @@
 
           <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                   for="provisionLetterDocument">प्रावधान पत्र दस्तावेज़:<span class="StarMarking">*</span></label>
+                   for="provisionLetterDocument">प्रावधान पत्र दस्तावेज़:</label>
             <div class="flex fileUploader">
               <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                      id="provisionLetterDocument" type="file" (change)="onFilechange($event,'provnLetterDocument')">
@@ -160,6 +160,15 @@
 
 
           </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">विविध विवरण :</label>
+            <input class="form-input" type="text" placeholder="Enter Remarks"  [(ngModel)]="Remarks" />
+     
+
+          </div>
+
         </div>
 
         <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3" *ngIf="SSOLoginDataModel.RoleID == 97 && IsDisable==false">

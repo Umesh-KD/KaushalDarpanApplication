@@ -75,7 +75,7 @@ export class NodalWorkshopReportComponent {
         QuaterIncreaseEstablishment: ['', Validators.required],
         QuaterIncreaseSeat: ['', Validators.required],
         QuaterIncreaseStudent: ['', Validators.required],
-        Remarks: ['', Validators.required],
+        Remarks: [''],
        
         QuaterID: ['', [DropdownValidators]],
         FinancialYearID: ['', [DropdownValidators]],
@@ -410,7 +410,10 @@ export class NodalWorkshopReportComponent {
      // this.request.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
       this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-
+      if (this.request.RegisterStudentPdf == '' || this.request.WorkshopPdf=='') {
+        this.toastr.error("Upload Required Documents")
+        return
+      }
 
       this.request.ApprenticeshipWorkshopMembersList = this.AddedAAAList;
    

@@ -322,12 +322,12 @@
             <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">पुरुष <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit" type="number" placeholder="पुरुष संख्या"  onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.CandidatessselectedMaleNo" name="CandidatessselectedMaleNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit" type="number" placeholder="पुरुष संख्या" onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.CandidatessselectedMaleNo" name="CandidatessselectedMaleNo">
               </div>
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">महिला <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit" type="number"  onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;"
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit" type="number" onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;"
                        placeholder="महिला संख्या" class="form-input ng-untouched ng-pristine ng-invalid"
                        [(ngModel)]="obj.CandidatessselectedFemaleNo" name="CandidatessselectedFemaleNo">
               </div>
@@ -335,7 +335,7 @@
 
               <div>
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                       for="PNMMelaDocumentreport">दस्तावेज़ अपलोड<span class="StarMarking">*</span></label>
+                       for="PNMMelaDocumentreport">दस्तावेज़ अपलोड</label>
                 <div class="flex fileUploader">
                   <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                          id="PNMMelaDocumentreport" type="file" (change)="onFilechange($event,'PNMMelaDocreport')">
@@ -353,7 +353,7 @@
 
               <div>
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                       for="provisionLetterDocumentreport">PNM प्रावधिक पत्र<span class="StarMarking">*</span></label>
+                       for="provisionLetterDocumentreport">PNM प्रावधिक पत्र</label>
                 <div class="flex fileUploader">
                   <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                          id="provisionLetterDocumentreport" type="file" (change)="onFilechange($event,'provisionLetterDocureport')">
@@ -373,6 +373,13 @@
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">दिनांक <span class="StarMarking">*</span></label>
                 <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit" type="date" class="form-input ng-untouched ng-pristine ng-invalid"
                        [(ngModel)]="obj.PmnamMelaDate" name="PmnamMelaDate">
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">विविध विवरण :</label>
+                <input class="form-input" type="text" placeholder="Enter Remarks"  [(ngModel)]="obj.Remark" />
+               
+
               </div>
 
             </div>

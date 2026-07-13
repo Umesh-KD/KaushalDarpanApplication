@@ -21,6 +21,7 @@ export class ApprenticeshipReportEntity {
   public provisionLetterDocumentreport: string = '';
   public PmnamMelaDate: string = '';
   public BeforeMonth: string = '';
+  public Remark: string = '';
   public FinancialYearID: number = 0;
   public MonthID: number = 0;
   public ZoneID:number=0

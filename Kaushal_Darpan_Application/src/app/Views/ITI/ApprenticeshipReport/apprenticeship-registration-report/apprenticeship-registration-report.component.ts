@@ -28,6 +28,12 @@ export class ApprenticeshipRegistrationReport {
   ApprenticeshipReportFormGroup!: FormGroup;
   public TradeList: any = [];
   public UpdateRowRecordList: any = [];
+  registrationList = [
+    {
+      Name: '',
+      RegistrationNo: ''
+    }
+  ];
   isAllSelected = false;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -62,13 +68,13 @@ export class ApprenticeshipRegistrationReport {
       dateofregistration: ['', Validators.required],
       BusinessName: [[], this.atLeastOneSelectedValidator()],
       NumberofTrainees: ['', Validators.required],
-      Numberofapprentices: ['', Validators.required],
-      Nameofapprentices: ['', Validators.required],
-      Remarks: ['', Validators.required],
-      NumberOfRegistrationDoc: ['', Validators.required],
+      Numberofapprentices: ['', ],
+      Nameofapprentices: [''],
+      Remarks: [''],
+      NumberOfRegistrationDoc: [''],
       TypeID: [0, [DropdownValidators]]
     });
-    this.ssoLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.ssoLoginDataModel = await JSON.parse(String( localStorage.getItem('SSOLoginUser')));
     //this.GetTradeMatserDDL();
     await this.GetITICollege();
     this.request.FileName = '';
@@ -152,7 +158,30 @@ export class ApprenticeshipRegistrationReport {
       }, 200);
     }
   }
+  addRegistration() {
 
+    this.registrationList ??= [];
+
+    if (
+      this.registrationList.length > 0 &&
+      (
+        !this.registrationList[this.registrationList.length - 1].Name?.trim() ||
+        !this.registrationList[this.registrationList.length - 1].RegistrationNo?.trim()
+      )
+    ) {
+      this.toastr.warning('Please fill the current registration details first.');
+      return;
+    }
+
+    this.registrationList.push({
+      Name: '',
+      RegistrationNo: ''
+    });
+  }
+
+  removeRegistration(index: number) {
+    this.registrationList.splice(index, 1);
+  }
   async AddRow() {
     debugger;
     this.ApprenticeshipReportFormGroup.value.NumberOfRegistrationDoc = this.request.FileName;
@@ -246,6 +275,24 @@ export class ApprenticeshipRegistrationReport {
 
   async onFinalSubmit() {
     debugger;
+    if (this.ApprenticeshipReportFormGroup.value.BusinessName.length == 0 ||
+      this.ApprenticeshipReportFormGroup.value.BusinessName.length == null
+
+    ) {
+      this.toastr.warning("Please Fill All Required Fileds !");
+      return;
+    }
+
+    if (
+      !this.registrationList ||
+      this.registrationList.length === 0 ||
+      this.registrationList.some(x =>
+        !x.Name?.trim() || !x.RegistrationNo?.trim()
+      )
+    ) {
+      this.toastr.error('Please enter Apprentice Name and Registration Number for all rows.');
+      return;
+    }
 
     const commonProps = {
       EndTermID: this.ssoLoginDataModel?.EndTermID || 0,
@@ -253,16 +300,22 @@ export class ApprenticeshipRegistrationReport {
       RoleID: this.ssoLoginDataModel?.RoleID || 0,
       Createdby: this.ssoLoginDataModel?.UserID || 0,
       PKID: 0,
-      FinnacialYearID: this.ssoLoginDataModel.FinancialYearID
+      FinnacialYearID: this.ssoLoginDataModel.FinancialYearID,
+      TypeID: this.ApprenticeshipReportFormGroup.getRawValue().TypeID,
+      Nameofinstitute: this.ApprenticeshipReportFormGroup.getRawValue().Nameofinstitute,
+      dateofregistration: this.ApprenticeshipReportFormGroup.getRawValue().dateofregistration,
+      BusinessName: this.ApprenticeshipReportFormGroup.getRawValue().BusinessName,
+      NumberofTrainees: this.ApprenticeshipReportFormGroup.getRawValue().NumberofTrainees,
+      RegistrationList: this.registrationList
     };
 
-    const payload = {
-      apprenticeshipEntries: this.ApprenticeshipRows.map(entry => ({
-        ...entry,
-        ...commonProps // push outer properties into each entry
-      })),
-      ...commonProps // keep them outside too, if needed by API
-    };
+    //const payload = {
+    //  apprenticeshipEntries: this.ApprenticeshipRows.map(entry => ({
+    //    ...entry,
+    //    ...commonProps // push outer properties into each entry
+    //  })),
+    //  ...commonProps // keep them outside too, if needed by API
+    //};
 
     //const payload = {
     //  apprenticeshipEntries: this.ApprenticeshipRows,
@@ -274,7 +327,7 @@ export class ApprenticeshipRegistrationReport {
     try {
       this.loaderService.requestStarted();
 
-      await this.ApprenticeShipRPTService.Submit_Apprenticeship_data(payload).then((data: any) => {
+      await this.ApprenticeShipRPTService.Submit_Apprenticeship_data(commonProps).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.Data.length > 0) {
           this.toastr.success(data.Data['0'].msg);

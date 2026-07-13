@@ -338,6 +338,7 @@ export class PmnamMelaReportComponent {
     this.obj.BeforeMonth = '';
     this.obj.FinancialYearID = 0;
     this.obj.ZoneID = 0;
+    this.obj.Remark = '';
   }
 
   async GetAllData() {
@@ -391,6 +392,7 @@ export class PmnamMelaReportComponent {
     this.obj.provisionLetterDocumentreport = row.provisionLetterDocumentreport;
     this.obj.PmnamMelaDate = row.PmnamMelaDate;
     this.obj.FinancialYearID = row.FinancialYearID;
+    this.obj.Remark = row.Remark;
     this.obj.BeforeMonth = String(row.MonthID);
 
 
