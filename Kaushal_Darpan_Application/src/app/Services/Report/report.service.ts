@@ -2050,6 +2050,22 @@ export class ReportService {
 
 
   }
+  public async GetProvesionalMeritList(searchRequest: any) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetProvesionalMeritList`, body, this.headersOptions)
+      .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetCheck_Merit_List(searchRequest: any) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetCheck_Merit_List`, body, this.headersOptions)
+      .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  
+
+  
 }
 
 

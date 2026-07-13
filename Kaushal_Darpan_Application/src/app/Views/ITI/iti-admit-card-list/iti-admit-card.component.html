@@ -100,23 +100,22 @@
                 <input *ngIf="VerifyRollList?.length>0" type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
                        [checked]="AllSelect"
                        (change)="checkboxthView_checkboxchange($event.target.checked)">
-
               </th>-->
-              <th class="text-center">Sr. No.</th>
-              <th class="text-center">Financial Year Name</th>
-              <th class="text-center">EndTerm Name</th>
+              <th class="text-left">Sr. No.</th>
+              <th class="text-left">Financial Year Name</th>
+              <th class="text-left">EndTerm Name</th>
 
-              <th class="text-center">ITI Name</th>
-              <th class="text-center">Year Name</th>
+              <th class="text-left">ITI Name</th>
+              <th class="text-left">Year Name</th>
               <!--<th class="text-center">File Name</th>-->
 
 
               <!--<th class="text-center">ExamIncharge Status</th>
               <th class="text-center">Registrar Status</th>-->
-              <th class="text-center">Status</th>
+              <th class="text-left">Status</th>
               <!--<th class="text-center">Student Count</th>-->
-              <th class="text-center">Created Date</th>
-              <th class="text-center">Action</th>
+              <th class="text-left">Created Date</th>
+              <th class="text-left">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -125,11 +124,11 @@
                 <input type="checkbox" name="MarkCheck"
                        [(ngModel)]="row.Selected" />
               </td>-->
-              <td class="text-center">{{idx+1}}</td>
-              <td class="text-center">{{row.FinancialYearName}}</td>
-              <td class="text-center">{{row.EndTermName}}</td>
-              <td class="text-center">{{row.InstituteNameEnglish	}}</td>
-              <td class="text-center">{{row.SemesterName	}} </td>
+              <td class="text-left">{{idx+1}}</td>
+              <td class="text-left">{{row.FinancialYearName}}</td>
+              <td class="text-left">{{row.EndTermName}}</td>
+              <td class="text-left">{{row.InstituteNameEnglish	}}</td>
+              <td class="text-left">{{row.SemesterName	}} </td>
 
               <!--<td class="text-center">{{row.FileName}}</td>-->
 
@@ -142,9 +141,9 @@
                 {{ row.IsRegistrarVerified ? 'Verified' : 'Not Verified' }}
               </td>-->
 
-              <td class="text-center">{{row.ActionCode}}</td>
+              <td class="text-left">{{row.ActionCode}}</td>
              <!--<td class="text-center">{{row.TotalStudent}}</td>-->
-              <td class="text-center">{{row.CreatedDate}}</td>
+              <td class="text-left">{{row.CreatedDate}}</td>
               <td class="text-center">
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                   <a download target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}{{_GlobalConstants.ReportsFolder}}/{{row.FileName}}" title="Download"><i class="ti ti-download"></i></a>

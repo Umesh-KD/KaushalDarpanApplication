@@ -38,6 +38,7 @@ export class AllExaminerReportComponent {
   public Branchlist: any = [];
   public CenterCodeList: any = [];
   public InstituteMasterDDLList: any = [];
+  public TheoryMarksAbsentReportData: any = [];
 
   public _GlobalConstants: any = GlobalConstants;
   public _EnumRenumerationExaminer = EnumRenumerationExaminer;
@@ -332,54 +333,6 @@ export class AllExaminerReportComponent {
 
   //end table feature
 
-  //exportToExcel(): void {
-  //  const unwantedColumns = [
-  //   'StudentID','StudentExamID','StudentExamPaperMarksID','StudentExamPaperID','rowclass'
-  //  ];
-  //  const filteredData = this.TheoryMarksRptDataList.map((item: any) => {
-  //    const filteredItem: any = {};
-  //    Object.keys(item).forEach(key => {
-  //      if (!unwantedColumns.includes(key)) {
-  //        filteredItem[key] = item[key];
-  //      }
-  //    });
-  //    return filteredItem;
-  //  });
-  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
-  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  //  XLSX.writeFile(wb, 'Theory-Marks-Report-Data.xlsx');
-  //}
-
-
-
-
-  exportToExcel(): void {
-    const unwantedColumns = [
-      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'StudentExamPaperID', 'rowclass'
-    ];
-
-    const filteredData = this.TheoryMarksRptDataList.map((item: any) => {
-      const filteredItem: any = {};
-      Object.keys(item).forEach(key => {
-        if (!unwantedColumns.includes(key)) {
-          filteredItem[key] = item[key];
-        }
-      });
-      return filteredItem;
-    });
-
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    const fileName = `Theory-Marks-Report-Data_${new Date()
-      .toISOString()
-      .replace(/[:.]/g, '-')}.xlsx`;
-
-    XLSX.writeFile(wb, fileName);
-  }
-
   DownloadFile(FileName: string, DownloadfileName: any): void {
 
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
@@ -411,10 +364,60 @@ export class AllExaminerReportComponent {
   }
 
 
-    downloadTheoryReport(row: any) {
-      window.open(`/theory-marks-report?groupCode=${row.GroupCode}`, '_blank');
+  downloadTheoryReport(row: any) {
+    window.open(`/theory-marks-report?groupCode=${row.GroupCode}`, '_blank');
+  }
+
+  async downloadTheoryAbsentReportExl(row: any) {
+    try {
+
+      const request: any = {};
+      request.EndTermID = this.sSOLoginDataModel.EndTermID;
+      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+
+      request.GroupCode = row.GroupCode;
+      request.GroupCodeID = row.GroupCodeID;
+      request.SSOID = row.SSOID;
+
+      await this.TheoryMarksService.GetTheoryAbsentReportData(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.TheoryMarksAbsentReportData = data.Data;
+        this.exportToExcel();
+      })
+    } catch (error) {
+      console.error(error);
     }
   }
+
+  exportToExcel(): void {
+    const unwantedColumns = [
+      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'StudentExamPaperID', 'rowclass'
+    ];
+
+    const filteredData = this.TheoryMarksAbsentReportData.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    const fileName = `Theory-Marks-Report-Data_${new Date()
+      .toISOString()
+      .replace(/[:.]/g, '-')}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
+  }
+}
 
 
 
