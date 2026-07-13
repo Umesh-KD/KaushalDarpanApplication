@@ -90,6 +90,8 @@ export class BterResultReportComponent implements OnInit {
   EndTermList: any[] = [];
   ReportFlaglist: any[] = [];
   ReportTypelist: any[] = [];
+  public Branchlist: any = [];
+
   async ngOnInit() {
 
     const controls = this.UniqueKeys.map(column => {
@@ -109,12 +111,13 @@ export class BterResultReportComponent implements OnInit {
       Block: [''],
       CourseType: [''],
       Institute: [''],
-      EndTerm: [this.ssoLoginUser.EndTermID],
+      EndTerm: [''],
       CategaryCast: [''],
       UniqueCol: [''],
       ReportFlagID: [''],
       Type: [this.repType],
       SchemeID: ['0'],
+      BranchID:['0']
     });
 
    
@@ -130,6 +133,7 @@ export class BterResultReportComponent implements OnInit {
       data = JSON.parse(JSON.stringify(data));
       this.EndTermList = data['Data'];
     }, (error: any) => console.error(error));
+    
 
   }
   async loadReportType() {
@@ -199,9 +203,12 @@ export class BterResultReportComponent implements OnInit {
   async DownloadGetToppersReport() {
     try {
       debugger
+      const endTermId = this.groupForm.get('EndTerm')?.value;
+      const BranchID = this.groupForm.get('BranchID')?.value;
       const ToppersModel = {
-        EndTermId: 13,
-        CourseType: this.sSOLoginDataModel.Eng_NonEng
+        EndTermId: endTermId,
+        CourseType: this.sSOLoginDataModel.Eng_NonEng,
+        BranchID: BranchID
       };
       this.SetfileName ='GetToppersReport_'
       const data: any = await this.reportService.GetToppersReport(ToppersModel);
@@ -237,5 +244,26 @@ export class BterResultReportComponent implements OnInit {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(blobUrl);
+  }
+
+  async GetStream() {
+    try {
+      debugger
+      this.loaderService.requestStarted();
+      const endTermId = this.groupForm.get('EndTerm')?.value;
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, endTermId)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.Branchlist = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 }
