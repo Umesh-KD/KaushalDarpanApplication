@@ -54,6 +54,8 @@ export class BterResultReportComponent implements OnInit {
   public GetfilteredColumnlist: any[] = [];
   public selectedNames: string[] = [];
   public SetfileName: string = '';
+  public Action: string = '';
+
   ssoLoginUser = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
@@ -138,8 +140,10 @@ export class BterResultReportComponent implements OnInit {
   }
   async loadReportType() {
     this.ReportTypelist = [
-      { ID: 0, DisplayOrder: 1, Name: 'Toppers List' },
-      { ID: 1, DisplayOrder: 2, Name: 'Provesional Merit List' }
+      { ID: 0, DisplayOrder: 1, Name: 'Toppers-List' },
+      { ID: 1, DisplayOrder: 2, Name: 'Provesional-Merit-List' },
+      { ID: 2, DisplayOrder: 3, Name: 'Final-Merit-List' },
+      { ID: 3, DisplayOrder: 4, Name: 'Check Merit List' },
 
     ];
 
@@ -157,9 +161,13 @@ export class BterResultReportComponent implements OnInit {
       }
       else if (Type == 1) {
         this.DownloadGetProvesionalMeritList();
+        this.Action = "ProvesionalMeritList";
+      } else if (Type == 2) {
+        this.DownloadGetProvesionalMeritList();
+        this.Action = "FinalMeritList";
       }
       else {
-
+        this.DownloadCheck_Merit_ListExcel();
       }
      
        
@@ -268,7 +276,6 @@ export class BterResultReportComponent implements OnInit {
     document.body.removeChild(link);
     URL.revokeObjectURL(blobUrl);
   }
-
   async GetStream() {
     try {
       debugger
@@ -289,8 +296,6 @@ export class BterResultReportComponent implements OnInit {
       }, 200);
     }
   }
-
-
   async DownloadGetProvesionalMeritList() {
     try {
       debugger
@@ -299,7 +304,8 @@ export class BterResultReportComponent implements OnInit {
       const ToppersModel = {
         EndTermId: endTermId,
         CourseType: this.sSOLoginDataModel.Eng_NonEng,
-        BranchID: BranchID
+        BranchID: BranchID,
+        Action: this.Action
       };
       this.SetfileName = 'GetProvesionalMeritList_'
 
@@ -325,5 +331,77 @@ export class BterResultReportComponent implements OnInit {
       console.error(error);
       this.toastr.error('Something went wrong.');
     }
+  }
+
+
+
+  async DownloadCheck_Merit_ListExcel() {
+    try {
+      debugger
+      const endTermId = this.groupForm.get('EndTerm')?.value;
+      const BranchID = this.groupForm.get('BranchID')?.value;
+      const ToppersModel = {
+        EndTermId: endTermId,
+        CourseType: this.sSOLoginDataModel.Eng_NonEng,
+        BranchID: BranchID
+      };
+      this.SetfileName = 'Check_Merit_List_'
+      const data: any = await this.reportService.GetCheck_Merit_List(ToppersModel);
+
+
+      debugger
+      const response = JSON.parse(JSON.stringify(data));
+      if (response.State === EnumStatus.Success) {
+        if (response.Data && response.Data.length > 0) {
+          this.GetfilteredList = response.Data;
+          this.exportToExcel();
+
+        } else {
+          this.toastr.warning('No data available to generate Excel.');
+        }
+
+      } else {
+        this.toastr.error(response.Message);
+      }
+
+    } catch (error) {
+      console.error(error);
+      this.toastr.error('Something went wrong.');
+    }
+  }
+
+
+  exportToExcel(): void {
+    debugger
+    const wantedColumns =
+      ['SrNo', 'InstituteCode', 'Student Name', 'EndTermSem1', 'EndTermSem2', 'EndTermSem3', 'EndTermSem4', 'EndTermSem5', 'EndTermSem6',
+        'Total','Percentage'];
+
+    const exportData = this.GetfilteredList.map((row: any, index: number) => {
+      const filteredRow: any = {};
+      wantedColumns.forEach(col => {
+        filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
+      });
+      return filteredRow;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    const colWidths = wantedColumns.map(col => {
+      const maxLength = Math.max(
+        col.length,
+        ...exportData.map((row: { [x: string]: { toString: () => { (): any; new(): any; length: any; }; }; }) =>
+          row[col] ? row[col].toString().length : 0
+        )
+      );
+      return { wch: maxLength + 2 };
+    });
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    const fileName = `Check_Merit_List_${todayDate}.xlsx`;
+    XLSX.writeFile(wb, fileName);
   }
 }
