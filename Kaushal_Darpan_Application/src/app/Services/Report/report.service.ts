@@ -2050,6 +2050,16 @@ export class ReportService {
 
 
   }
+  public async GetProvesionalMeritList(searchRequest: any) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetProvesionalMeritList`, body, this.headersOptions)
+      .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+
+
+  }
+
+  
 }
 
 

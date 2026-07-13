@@ -138,7 +138,9 @@ export class BterResultReportComponent implements OnInit {
   }
   async loadReportType() {
     this.ReportTypelist = [
-      { ID: 0, DisplayOrder: 1, Name: 'ResultReport' }
+      { ID: 0, DisplayOrder: 1, Name: 'Toppers List' },
+      { ID: 1, DisplayOrder: 2, Name: 'Provesional Merit List' }
+
     ];
 
     this.ReportTypelist.sort((a, b) => a.DisplayOrder - b.DisplayOrder);
@@ -147,7 +149,20 @@ export class BterResultReportComponent implements OnInit {
 
   async SubmitData() {
     try {
+      debugger
+      const Type = this.groupForm.get('Type')?.value;
+      if (Type == 0) {
+        
         this.DownloadGetToppersReport();
+      }
+      else if (Type == 1) {
+        this.DownloadGetProvesionalMeritList();
+      }
+      else {
+
+      }
+     
+       
     }
     catch (ex) {
       console.log(ex);
@@ -212,8 +227,14 @@ export class BterResultReportComponent implements OnInit {
         CourseType: this.sSOLoginDataModel.Eng_NonEng,
         BranchID: BranchID
       };
-      this.SetfileName ='GetToppersReport_'
+      this.SetfileName = 'GetToppersReport_'
+
+
+
       const data: any = await this.reportService.GetToppersReport(ToppersModel);
+
+
+
       const response = JSON.parse(JSON.stringify(data));
       if (response.State === EnumStatus.Success) {
         if (response.Data && response.Data.length > 0) {
@@ -266,6 +287,43 @@ export class BterResultReportComponent implements OnInit {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+
+  async DownloadGetProvesionalMeritList() {
+    try {
+      debugger
+      const endTermId = this.groupForm.get('EndTerm')?.value;
+      const BranchID = this.groupForm.get('BranchID')?.value;
+      const ToppersModel = {
+        EndTermId: endTermId,
+        CourseType: this.sSOLoginDataModel.Eng_NonEng,
+        BranchID: BranchID
+      };
+      this.SetfileName = 'GetProvesionalMeritList_'
+
+
+
+      const data: any = await this.reportService.GetProvesionalMeritList(ToppersModel);
+
+
+
+      const response = JSON.parse(JSON.stringify(data));
+      if (response.State === EnumStatus.Success) {
+        if (response.Data && response.Data.length > 0) {
+          this.downloadBase64PDF(response.Data, this.SetfileName + '.pdf');
+        } else {
+          this.toastr.warning('No data available to generate PDF.');
+        }
+
+      } else {
+        this.toastr.error(response.Message);
+      }
+
+    } catch (error) {
+      console.error(error);
+      this.toastr.error('Something went wrong.');
     }
   }
 }
