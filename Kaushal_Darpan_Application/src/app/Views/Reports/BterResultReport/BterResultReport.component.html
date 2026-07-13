@@ -10,7 +10,7 @@
   </div>
 </div>
 <div class="card">
-  <form>
+  <form [formGroup]="groupForm">
     <div class="card-body p-5">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-plus"></i> Filter</b>
@@ -19,49 +19,42 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Report Type</label>
-          
-        <select class="form-select"
-                formControlName="Type">
 
-          <option [ngValue]="-1">--Select--</option>
+          <select class="form-select"
+                  formControlName="Type">
 
-          @for(item of ReportTypelist; track item.ID){
-          <option [ngValue]="item.ID">
-            {{item.Name}}
-          </option>
-          }
+            <option [ngValue]="-1">--Select--</option>
 
-        </select>
+            @for(item of ReportTypelist; track item.ID){
+            <option [ngValue]="item.ID">
+              {{item.Name}}
+            </option>
+            }
+
+          </select>
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> End Term</label>
           <select class="form-select ng-pristine ng-valid ng-touched" formControlName="EndTerm" (change)="applyFilter($event.target.value)">
-            <option value="Select" ng-reflect-value="0">--Select--</option>
+            <option value="Select" ng-reflect-value="0" (change)="GetStream()">--Select--</option>
             @for (item of EndTermList; track item) {
             <option [value]="item.ID">{{item.Name}}</option>
             }
           </select>
         </div>
-        <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
-          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="SemesterID" (change)="applyFilter($event.target.value)">
-            <option [value]="0">--Select--</option>
-            @for (item of SemesterMasterList; track item) {
-            <option [value]="item.SemesterID">{{item.SemesterName}}</option>
-            }
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Branch</label>
+          <select class="form-select" id="ddlBranch" formControlName="BranchID" >
+            <option value="0">--All--</option>
+            <option *ngFor="let item of Branchlist" [value]="item?.ID">{{item.Name}}</option>
           </select>
         </div>
-        <div >
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
-          <select class="form-select" id="SchemeID" formControlName="SchemeID">
-            <option value="0">--All--</option>
-            <option value="1347">Old</option>
-            <option value="1348">New</option>
-          </select>
-        </div>-->
+
+        
+
+
         <div>
-          <button 
-                  type="button"
+          <button type="button"
                   class="btn bg-info text-white"
                   (click)="DownloadPdf()">
             <i class="ti ti-file-type-pdf"></i>

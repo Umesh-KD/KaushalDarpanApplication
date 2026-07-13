@@ -520,6 +520,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
       searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      searchRequest.SSOID = this.sSOLoginDataModel.SSOID;
       searchRequest.RollNo = row.GroupCode;   // using RollNo param as in theory marks same is used
 
       await this.reportService.TheorymarksReportPdf_BTER(searchRequest)

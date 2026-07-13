@@ -5,7 +5,7 @@ import { TheoryMarksService } from '../../../Services/TheoryMarks/theory-marks.s
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import * as XLSX from 'xlsx';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { EnumRole } from '../../../Common/GlobalConstants';
+import { EnumRenumerationExaminer, EnumRole } from '../../../Common/GlobalConstants';
 import { ReportService } from '../../../Services/Report/report.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
@@ -18,6 +18,9 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { Router } from '@angular/router';
+import { RenumerationExaminerRequestModel } from '../../../Models/RenumerationExaminerModel';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-AllExaminerReport',
@@ -27,15 +30,18 @@ import autoTable from 'jspdf-autotable';
 })
 export class AllExaminerReportComponent {
   public searchRequest = new ExaminerReportSearchModel();
-  _EnumRole = EnumRole
-
+  public RenumerationExaminerRequest = new RenumerationExaminerRequestModel();
   sSOLoginDataModel = new SSOLoginDataModel();
+
   public TheoryMarksRptDataList: any = [];
   public SemesterMasterList: any = [];
   public Branchlist: any = [];
   public CenterCodeList: any = [];
   public InstituteMasterDDLList: any = [];
+
   public _GlobalConstants: any = GlobalConstants;
+  public _EnumRenumerationExaminer = EnumRenumerationExaminer;
+  public _EnumRole = EnumRole
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -60,9 +66,7 @@ export class AllExaminerReportComponent {
     private http: HttpClient,
     private toastr: ToastrService,
     public commonFunctionHelper: CommonFunctionHelper,
-    private formBuilder: FormBuilder,
-    private Swal2: SweetAlert2,
-    private modalService: NgbModal
+    private router: Router,
   ) {
   }
 
@@ -99,13 +103,6 @@ export class AllExaminerReportComponent {
         console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
       });
 
-      //await this.commonMasterService.CenterCode()
-      //.then((data: any) => {
-      //  data = JSON.parse(JSON.stringify(data));
-      //  this.CenterCodeList = data['Data'];
-      //}
-      // , error => console.error(error));
-
     }
     catch (ex) {
       console.log(ex);
@@ -127,16 +124,6 @@ export class AllExaminerReportComponent {
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
       this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
 
-      // this.searchRequest.IsConfirmed = this.IsConfirmed = true;
-
-      // //group code id
-      // if (this.IsCountShow == false) {
-      //   this.searchRequest.ExaminerCode = this.examinerCodeLoginModel.ExaminerCode
-      // } else {
-      //   this.searchRequest.ExaminerCode = this.ExaminerCode
-      // }
-      // this.searchRequest.GroupCodeID = this.TheoryMarksDashBoardCount[0].GroupCodeID;
-      // //call
       this.loaderService.requestStarted();
       await this.TheoryMarksService.GetAllExaminerReport(this.searchRequest)
         .then((data: any) => {
@@ -159,35 +146,53 @@ export class AllExaminerReportComponent {
     }
   }
 
+  async PDFDownload_TheoryMarksReport(row: any) {
+   try {
+     //session
+     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+     this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+     this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID;
+     this.searchRequest.RollNo = row.GroupCode;
 
+     await this.reportService.TheorymarksReportPdf_BTER(this.searchRequest)
+       .then((data: any) => {
+         data = JSON.parse(JSON.stringify(data));
+         if (data.State == EnumStatus.Success) {
+           this.toastr.success(data.Message);
+           this.commonFunctionHelper.downloadBase64OfPdf(data.Data, 'TheoryMarksReport.pdf');
+         }
+         else if (data.State == EnumStatus.Warning) {
+           this.toastr.error(data.Message);
+         }
+         else {
+           this.toastr.error(data.Message);
+           console.log(data.ErrorMessage);
+         }
+       }, (error: any) => console.error(error));
+   }
+   catch (Ex) {
+     console.log(Ex);
+   }
+  }
 
-  //async PDFDownload() {
-  //  try {
-  //    //session
-  //    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
-  //    this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-  //    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-  //    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-  //    await this.reportService.TheorymarksReportPdf_BTER(this.searchRequest)
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        if (data.State == EnumStatus.Success) {
-  //          this.toastr.success(data.Message);
-  //          this.commonFunctionHelper.downloadBase64OfPdf(data.Data, 'TheoryMarksReport.pdf');
-  //        }
-  //        else if (data.State == EnumStatus.Warning) {
-  //          this.toastr.error(data.Message);
-  //        }
-  //        else {
-  //          this.toastr.error(data.Message);
-  //          console.log(data.ErrorMessage);
-  //        }
-  //      }, (error: any) => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //}
+  async downloadConf14Report() {
+    this.router.navigate(['/statics-report-provide-by-examiner']);
+  }
+
+  async downloadRemunerationBill(row: any) {
+    const url = `${this.appsettingConfig.StaticFileRootPathURL}/${this._GlobalConstants.ReportsFolder}/${row.FileName}`;
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank'; // Opens in a new tab
+    link.download = row.FileName; // Downloads the file (if supported by the server)
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   PDFDownload(): void {
 
     if (!this.paginatedInTableData?.length) {
