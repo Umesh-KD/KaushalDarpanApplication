@@ -5,6 +5,7 @@ import { LoaderModule } from '../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../Pipes/table-search-filter.module';
 import { EligibleStudentListMasterComponent } from './eligible-student-list-master.component';
 import { EligibleStudentListMasterRoutingModule } from './eligible-student-list-master.routing.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,7 @@ import { EligibleStudentListMasterRoutingModule } from './eligible-student-list-
   imports: [
     CommonModule,
     EligibleStudentListMasterRoutingModule
-    , FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule
+    , FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule, NgSelectModule
   ]
 })
 export class EligibleStudentListMasterModule { }

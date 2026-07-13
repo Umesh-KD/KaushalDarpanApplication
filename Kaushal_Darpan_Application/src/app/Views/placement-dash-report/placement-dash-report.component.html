@@ -74,7 +74,7 @@
       <option value="0">--Select--</option>
       <option *ngFor="let item of CampusMasterList" [value]="item.ID">{{item.Name}}</option>
     </select> -->
-        <ng-select [items]="CampusMasterList"
+        <!--<ng-select [items]="CampusMasterList"
                    bindLabel="Name"
                    bindValue="ID"
                    [(ngModel)]="CampusID"
@@ -82,6 +82,15 @@
                    [searchable]="true"
                    [clearable]="true"
                    [virtualScroll]="true">
+        </ng-select>-->
+        <ng-select [(ngModel)]="CampusID"
+                   [searchable]="true"
+                   [clearable]="true"
+                   [virtualScroll]="true">
+          <ng-option [value]="0" selected>--All--</ng-option>
+          <ng-container *ngFor="let item of CampusMasterList">
+            <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+          </ng-container>
         </ng-select>
 
       </div>

@@ -23,10 +23,17 @@
 
         <div *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
-          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID">
+          <!-- <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID">
             <option value="0">--Select--</option>
             <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-          </select>
+          </select> -->
+
+          <ng-select [(ngModel)]="searchRequest.InstituteID" [clearable]="false">
+            <ng-option [value]="0">--Select--</ng-option>
+            <ng-container *ngFor="let item of InstituteMasterDDLList">
+              <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+            </ng-container>
+          </ng-select>
         </div>
 
         <div>
@@ -41,11 +48,18 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Branch:<span class="StarMarking"></span>
           </label>
-          <select class="form-select" id="ddlBranch"
+          <!-- <select class="form-select" id="ddlBranch"
                   [(ngModel)]="searchRequest.StreamID">
             <option value="0">--All--</option>
             <option *ngFor="let item of Branchlist" [value]="item?.StreamID">{{item.StreamName}}</option>
-          </select>
+          </select> -->
+
+          <ng-select [(ngModel)]="searchRequest.StreamID" [clearable]="false">
+            <ng-option [value]="0">--All--</ng-option>
+            <ng-container *ngFor="let item of Branchlist">
+              <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
+            </ng-container>
+          </ng-select>
         </div>
 
         <div>

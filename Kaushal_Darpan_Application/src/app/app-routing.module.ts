@@ -1047,13 +1047,6 @@ const routes: Routes = [
       { path: 'iti-flying-squad-deployment', loadChildren: () => import('./Views/ITI/ITIFlyingSquad/iti-flying-squad-deployment/iti-flying-squad-deployment.module').then(m => m.ItiCenterObserverDeploymentModule), title: 'ITI Flying Squad' },
       { path: 'verify-iti-flying-squad-deployment/:id', loadChildren: () => import('./Views/ITI/ITIFlyingSquad/verify-iti-flying-squad-deployment/verify-iti-flying-squad-deployment.module').then(m => m.VerifyItiCenterObserverDeploymentModule), title: 'ITI Flying Squad' },
       { path: 'iti-flying-squad-report', loadChildren: () => import('./Views/ITI/ITIFlyingSquad/iti-flying-squad-report/iti-flying-squad-report.module').then(m => m.ITIFlyingSquadReportModule), title: 'ITI Inspection Report' },
-      { path: 'ApplyLeave', loadChildren: () => import('./Views/apply-leave/apply-leave.module').then(m => m.ApplyLeaveModule) },
-      { path: 'LeaveList', loadChildren: () => import('./Views/leave-list/leave-list.module').then(m => m.LeaveListModule) },
-      { path: 'LeaveValidation', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
-      { path: 'LeaveValidation/:id', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
-      { path: 'LeaveCredit', loadChildren: () => import('./Views/leave-credit/leave-credit.module').then(m => m.LeaveCreditModule) },
-      { path: 'LeaveBalance', loadChildren: () => import('./Views/leave-balance/leave-balance.module').then(m => m.LeaveBalanceModule) },
-
 
       { path: 'ItiCollegeReport', loadChildren: () => import('./Views/ITI/iti-college-report/iti-college-report.module').then(m => m.ItiCollegeReportModule) },
 
@@ -1114,6 +1107,7 @@ const routes: Routes = [
       { path: 'internal-practical-rpt-view', loadChildren: () => import('./Views/internal-practical-rpt-view/internal-practical-rpt-view.module').then(m => m.InternalPracticalRptViewModule) },
       { path: 'ScaReport', loadChildren: () => import('./Views/sca-report/sca-report.module').then(m => m.ScaReportModule) },
       { path: 'theory-marks-report', loadChildren: () => import('./Views/Reports/theory-marks-rpt-view/theory-marks-rpt-view.module').then(m => m.TheoryMarksRptViewModule), title: 'Theory Marks Report' },
+      { path: 'AllExaminerReport', loadChildren: () => import('./Views/Reports/AllExaminerReport/AllExaminerReport.module').then(m => m.AllExaminerReportodule), title: 'AllExaminerReport' },
 
       { path: 'AssignHod', loadChildren: () => import('./Views/assign-hod/assign-hod.module').then(m => m.AssignHodModule) },
       { path: 'PrincipleList', loadChildren: () => import('./Views/PrincipleUpdateList/PrincipleUpdateList.module').then(m => m.PrincipleListModule), title: 'Principle List' },
@@ -1244,6 +1238,13 @@ const routes: Routes = [
       { path: 'establishment-report', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/establishment-report-bter/establishment-report-bter.module').then(m => m.EstablishmentReportBTERModule), title: 'Establishment Report' },
       { path: 'bter-establishment-dashboard', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/establishment-dashboard-bter/establishment-dashboard-bter.module').then(m => m.EstablishmentDashboardBTERModule), title: 'Establishment Dashboard' },
       { path: 'thte-report', loadChildren: () => import('./Views//BTER/THTE/teacher-higher-technical-education-report/teacher-higher-technical-education-report.module').then(m => m.TeacherHigherTechnicalEducationReportModule), title: 'Teacher Higher Technical Education Report' },
+      
+      { path: 'ApplyLeave', loadChildren: () => import('./Views/apply-leave/apply-leave.module').then(m => m.ApplyLeaveModule) },
+      { path: 'LeaveList', loadChildren: () => import('./Views/leave-list/leave-list.module').then(m => m.LeaveListModule) },
+      { path: 'LeaveValidation', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
+      { path: 'LeaveValidation/:id', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
+      { path: 'LeaveCredit', loadChildren: () => import('./Views/leave-credit/leave-credit.module').then(m => m.LeaveCreditModule) },
+      { path: 'LeaveBalance', loadChildren: () => import('./Views/leave-balance/leave-balance.module').then(m => m.LeaveBalanceModule) },
       
       // ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, BTER Establishment END ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
@@ -1803,6 +1804,7 @@ const routes: Routes = [
       { path: 'InventoryItemReport', loadChildren: () => import('./Views/ITI/inventory-item-report/inventory-item-report.module').then(m => m.InventoryItemReportModule) },
       { path: 'ConsolatedTradeReport', loadChildren: () => import('./Views/ITI/consolated-iti-trade/consolated-iti-trade.module').then(m => m.ConsolatedItiTradeModule) },
       { path: 'campus-removal-report', loadChildren: () => import('./Views/ITI/ITIs/campus-removal-report/campus-removal-report.module').then(m => m.CampusRemovalReportModule), title: 'campus-removal-report' },
+      { path: 'ResultReport', loadChildren: () => import('./Views/Reports/BterResultReport/BterResultReport.module').then(m => m.BterResultReportModule), title: 'Miscellaneous Report' },
     ]
   },
 

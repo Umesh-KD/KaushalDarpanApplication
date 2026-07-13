@@ -99,7 +99,7 @@ export class ItiPlanningListComponent {
       }
       else
       {
-        if (this.sSOLoginDataModel.RoleID == 97 || this.sSOLoginDataModel.RoleID == 256 )
+        if ( this.sSOLoginDataModel.RoleID == 256 )
         {
           this.ApprovedStatus = 0;
         }

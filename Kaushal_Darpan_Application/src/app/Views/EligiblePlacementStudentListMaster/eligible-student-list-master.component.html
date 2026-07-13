@@ -42,10 +42,12 @@
         </div>
         <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch<span class="StarMarking">*</span></label>
-            <select  class="form-select" id="StreamID" [(ngModel)]="searchRequest.StreamID">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of BranchList" [value]="item.StreamID">{{item.StreamName}}</option>
-            </select>
+            <ng-select  id="StreamID" [(ngModel)]="searchRequest.StreamID">
+              <ng-option [value]=0>--Select--</ng-option>
+              <ng-container>
+                <ng-option *ngFor="let item of BranchList" [value]="item.StreamID">{{item.StreamName}}</ng-option>
+              </ng-container>              
+            </ng-select>
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Student Status</label>

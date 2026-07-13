@@ -122,7 +122,6 @@ export class HiringRoleMasterService {
   //Get all data
   public async GetsanctionOrder(searchRequest: ItiSanctionOrderList) {
     var body = JSON.stringify(searchRequest);
-    debugger;
     return await this.http.post(`${this.APIUrl}/GetsanctionOrder`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -131,7 +130,6 @@ export class HiringRoleMasterService {
 
   public async GetOrderDetailsList_ByDate(searchRequest: ItiSanctionOrderList) {
     var body = JSON.stringify(searchRequest);
-    debugger;
     return await this.http.post(`${this.APIUrl}/GetOrderDetailsList_ByDate`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -140,7 +138,6 @@ export class HiringRoleMasterService {
 
   public async GetsanctionOrderNotAssign(searchRequest: any) {
     var body = JSON.stringify(searchRequest);
-    debugger;
     return await this.http.post(`${this.APIUrl}/GetsanctionOrderNotAssign`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)

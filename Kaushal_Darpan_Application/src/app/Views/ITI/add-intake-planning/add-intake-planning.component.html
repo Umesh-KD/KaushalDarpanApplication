@@ -62,61 +62,6 @@
 
   </div>-->
 
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Trade:<span class="StarMarking">*</span>
-              </label>
-              <!-- <select class="form-select" formControlName="ddlTrade" [(ngModel)]="request.TradeID">
-    <option value="0">Choose Option</option>
-    <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
-  </select> -->
-
-              <ng-select *ngIf="isedit" [items]="ItiTradeListAll"
-                         bindLabel="TradeName"
-                         bindValue="Id"
-                         placeholder="----Search Trade---"
-                         formControlName="ddlTradeID"
-                         [(ngModel)]="request.TradeID"
-                         [searchable]="true"
-                         [clearable]="true">
-
-              </ng-select>
-
-              <ng-select *ngIf="!isedit" appendTo="body"
-                         formControlName="ddlTrade"
-                         [items]="ItiTradeListAll"
-                         bindLabel="TradeName"
-                         bindValue="Id"
-                         [multiple]="true"
-                         [closeOnSelect]="false"
-                         [searchable]="true"
-                         placeholder="--Select Trade--">
-
-                <ng-template ng-header-tmp>
-                  <div class="px-2 py-2 border-bottom">
-                    <input type="checkbox"
-                           [checked]="isAllSelected()"
-                           (change)="toggleSelectAll($event)"
-                           class="me-2" />
-                    <span>Select All</span>
-                  </div>
-                </ng-template>
-
-                <ng-template ng-option-tmp let-item="item" let-item$="item$">
-                  <input type="checkbox" [checked]="item$.selected" class="me-2" />
-                  {{ item.Name }}
-                </ng-template>
-
-              </ng-select>
-
-
-              <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlTrade.errors" class="text-danger">
-                <p *ngIf="_SeatIntakeFormGroup.ddlTrade.errors.required">
-                  <i aria-hidden="true"></i>This field is required .!
-                </p>
-              </div>
-            </div>
-
 
             <!-- shift comment -->
             <!-- <div>
@@ -136,33 +81,14 @@
       </p>
     </div>
   </div> -->
-            <!-- unit no commented  -->
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Unit No: <span class="StarMarking">*</span>
-              </label>
-
-              <!-- <select type="text" class="form-input" placeholder="Select UnitNo" formControlName="txtUnitNo" [(ngModel)]="request.UnitNo">
-      <option value="">Choose Option</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-    </select> -->
-              <input type="number" class="form-input" placeholder="Enter Unit No" formControlName="txtUnitNo" [(ngModel)]="request.UnitNo" min="1">
-
-              <div *ngIf="isSubmitted && _SeatIntakeFormGroup.txtUnitNo.errors" class="text-danger">
-                <p *ngIf="_SeatIntakeFormGroup.txtUnitNo.errors.required">
-                  <i aria-hidden="true"></i> This field is
-                  required.!
-                </p>
-              </div>
-            </div>
 
             <!--(change)="GetOrderDetailsList_ByDate(1)"-->
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Administrative Sanction Date:
               </label>
-              <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate"  (change)="OnOrderDateChange(1)" formControlName="AdminOrderDate" [(ngModel)]="request.AdminOrderDate">
+              <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate"  
+                (change)="OnOrderDateChange(1)" formControlName="AdminOrderDate" [(ngModel)]="request.AdminOrderDate">
               <!-- <div *ngIf="isSubmitted && _SeatIntakeFormGroup.AdminOrderDate.errors" class="text-danger">
       <p *ngIf="_SeatIntakeFormGroup.AdminOrderDate.errors.required">
         <i aria-hidden="true"></i> This field is
@@ -237,7 +163,69 @@
     </div> -->
             </div>
 
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Trade:<span class="StarMarking">*</span>
+              </label>
+              <ng-select *ngIf="isedit" [items]="ItiTradeListAll"
+                         bindLabel="TradeName"
+                         bindValue="Id"
+                         placeholder="----Search Trade---"
+                         formControlName="ddlTradeID"
+                         [(ngModel)]="request.TradeID"
+                         [searchable]="true"
+                         [clearable]="true">
 
+              </ng-select>
+
+              <ng-select *ngIf="!isedit"
+                         formControlName="ddlTrade"
+                         [items]="ItiTradeListAll"
+                         bindLabel="TradeName"
+                         bindValue="Id"
+                         [multiple]="true"
+                         [closeOnSelect]="false"
+                         [searchable]="true"
+                         placeholder="--Select Trade--">
+
+                <ng-template ng-header-tmp>
+                  <div class="px-2 py-2 border-bottom">
+                    <input type="checkbox"
+                           [checked]="isAllSelected()"
+                           (change)="toggleSelectAll($event)"
+                           class="me-2" />
+                    <span>Select All</span>
+                  </div>
+                </ng-template>
+
+                <ng-template ng-option-tmp let-item="item" let-item$="item$">
+                  <input type="checkbox" [checked]="item$.selected" class="me-2" />
+                  {{ item.TradeName }}
+                </ng-template>
+
+              </ng-select>
+
+
+              <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlTrade.errors" class="text-danger">
+                <p *ngIf="_SeatIntakeFormGroup.ddlTrade.errors.required">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Unit No: <span class="StarMarking">*</span>
+              </label>
+              <input type="number" class="form-input" placeholder="Enter Unit No" formControlName="txtUnitNo" [(ngModel)]="request.UnitNo" min="1">
+
+              <div *ngIf="isSubmitted && _SeatIntakeFormGroup.txtUnitNo.errors" class="text-danger">
+                <p *ngIf="_SeatIntakeFormGroup.txtUnitNo.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
 
             <!-- financial order no: end -->
             <!--<div>

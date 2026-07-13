@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
 import { AdminInternalPracticalComponent } from './admin-internal-practical.component';
 import { AdminInternalPracticalRoutingModule } from './admin-internal-practical-routing.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -16,8 +17,8 @@ import { AdminInternalPracticalRoutingModule } from './admin-internal-practical-
     AdminInternalPracticalRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    TableSearchFilterModule
-
+    TableSearchFilterModule,
+    NgSelectModule
   ]
 })
 export class AdminInternalPracticalModule { }

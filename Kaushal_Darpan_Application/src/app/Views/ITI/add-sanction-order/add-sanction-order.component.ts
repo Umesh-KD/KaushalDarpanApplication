@@ -174,6 +174,11 @@ export class AddSanctionOrderComponent {
         return
       }
 
+      if(this.request.OrderType == 9999 && (this.request.OrderTypeName == '' || this.request.OrderTypeName == null || this.request.OrderTypeName == undefined)){
+        this.toastr.warning("Please Enter Order Type Name")
+        return
+      }
+
     this.isSubmitted = true;
     //  if (this.ScholarshipFormGroup.invalid) {
     //    return
@@ -191,17 +196,17 @@ export class AddSanctionOrderComponent {
       await this.ScholarshipService.SaveSanctionOrder(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
 
-          if (this.State == EnumStatus.Success) {
-            this.toastr.success(this.Message)
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message)
             this.ResetControls();
             this.routers.navigate(['/SanctionOrderList']);
           }
+          else if(data.State == EnumStatus.Warning){
+            this.toastr.warning(data.Message)
+          }
           else {
-            this.toastr.error(this.ErrorMessage)
+            this.toastr.error(data.ErrorMessage)
           }
 
         }, (error: any) => console.error(error)

@@ -269,7 +269,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   }
 
   async SaveReject() {
-    debugger
+    //debugger
     this.isSubmitted = true;
     //
     this.refreshBranchRefValidation(true);
