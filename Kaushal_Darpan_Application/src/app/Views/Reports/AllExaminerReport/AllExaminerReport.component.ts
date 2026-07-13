@@ -406,10 +406,34 @@ export class AllExaminerReportComponent {
   }
 
 
-    downloadTheoryReport(row: any) {
-      window.open(`/theory-marks-report?groupCode=${row.GroupCode}`, '_blank');
+  downloadTheoryReport(row: any) {
+    window.open(`/theory-marks-report?groupCode=${row.GroupCode}`, '_blank');
+  }
+
+  async downloadTheoryAbsentReportExl(row: any) {
+    try {
+
+      const request: any = {};
+      request.EndTermID = this.sSOLoginDataModel.EndTermID;
+      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+
+      request.GroupCode = row.GroupCode;
+      request.GroupCodeID = row.GroupCodeID;
+      request.SSOID = row.SSOID;
+
+      await this.TheoryMarksService.GetTheoryAbsentReportData(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+
+      })
+    } catch (error) {
+      console.error(error);
     }
   }
+
+}
 
 
 
