@@ -52,7 +52,7 @@
         <!--semester-->
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID == 97" >
+        <div *ngIf="sSOLoginDataModel.RoleID == 97">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             संस्थान का नाम : <span class="StarMarking">*</span>
           </label>
@@ -64,7 +64,21 @@
 
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID != 97" >
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            व्यवसाय का नाम : <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.TradeID">
+            <option value="0">--Select--</option>
+
+            <option *ngFor="let row of TradeList" [value]="row.Id">{{row.TradeName}}</option>
+          </select>
+
+        </div>
+
+
+        <div *ngIf="sSOLoginDataModel.RoleID != 97">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             संस्थान का नाम : <span class="StarMarking">*</span>
           </label>
@@ -76,7 +90,17 @@
 
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            आईटीआई उत्तीर्ण करने का वर्ष : <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select"  [(ngModel)]="searchRequest.PassYear">
+            <option value="">--Select--</option>
 
+            <option *ngFor="let row of PassYearList" [value]="row.Year">{{row.Year}}</option>
+          </select>
+        
+        </div>
         <!--commonsubject(yes/no)-->
         <!--branch-->
         <!--subject-->
@@ -129,50 +153,94 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr No</th>
-            <th class="text-left">संस्थान का नाम</th>
+            <th class="text-left">पंजीकरण करने वाले संस्थान का नाम</th>
             <th class="text-left">पोर्टल पर पंजीकरण करने की तिथि</th>
             <th class="text-left">पंजीकरण संख्या</th>
-            <th class="text-left">दस्तावेज़</th>
-            <th class="text-left">विविध विवरण</th>
-            <th class="text-left">कार्रवाई</th>
+            <th class="text-left">नाम / पिता का नाम</th>
+            <th class="text-left">आधार नम्बर</th>
+            <th class="text-left">व्यवसाय का नाम</th>
+            <th class="text-left">संस्थान, जहां से आईटीआई उत्तीर्ण की है</th>
+            <th class="text-left">आईटीआई उत्तीर्ण करने का वर्ष</th>
+            <th class="text-left">NCVT / SCVT</th>
+            <th class="text-left">विशेष विवरण</th>
+            <!--<th class="text-left">दस्तावेज़</th>-->
+            <th class="text-center">कार्रवाई</th>
           </tr>
-
         </thead>
         <tbody>
-          <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index; ">
+          <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index">
 
-            <td>{{idx+1}}</td>
-            <td>{{row.Name}}</td>
-            <td>{{row.RegDate}}</td>
-            <td>{{row.RegCount}}</td>
+            <td>{{ idx + 1 }}</td>
+
+            <td>{{ row.Name }}</td>
+
+            <td>{{ row.RegDate }}</td>
+
+            <td>{{ row.RegCount }}</td>
+
             <td>
-              <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.FileName}}"
-                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-
-              </div>
-
+              {{ row.StudentName }}
+              <br>
+              <small>{{ row.FatherName }}</small>
             </td>
-            <td>{{ row.Remarks}}</td>
-            <td>
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a *ngIf="sSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,1)"><i class="ti ti-pencil"></i></a>
-                <a *ngIf="sSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,0)"><i class="ti ti-eye"></i></a>
-                <a *ngIf="sSOLoginDataModel.RoleID != 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
 
-                <a *ngIf="sSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>
+            <td>{{ row.Aadhar }}</td>
+
+            <td>{{ row.TradeName }}</td>
+
+            <td>{{ row.PassITIName }}</td>
+
+            <td>{{ row.PassYearName }}</td>
+
+            <td>{{ row.TradeSchemeName }}</td>
+
+            <td>{{ row.Remarks }}</td>
+
+            <!--<td>
+              <a *ngIf="row.FileName"
+                 [href]="appsettingConfig.StaticFileRootPathURL + '/' + row.FileName"
+                 target="_blank"
+                 class="btn bg-primary text-white m-0">
+                <i class="ti ti-eye"></i>
+              </a>
+            </td>-->
+
+            <td>
+              <div class="flex align-center justify-center actionBtns">
+
+                <a *ngIf="sSOLoginDataModel.RoleID == 97"
+                   href="javascript:void(0)"
+                   title="Edit"
+                   (click)="EditData(row.ID,1)">
+                  <i class="ti ti-pencil"></i>
+                </a>
+
+                <a href="javascript:void(0)"
+                   title="View"
+                   (click)="EditData(row.ID,0)">
+                  <i class="ti ti-eye"></i>
+                </a>
+
+                <a *ngIf="sSOLoginDataModel.RoleID == 97"
+                   href="javascript:void(0)"
+                   title="Delete"
+                   (click)="DeleteByID(row.ID)">
+                  <i class="ti ti-trash"></i>
+                </a>
+
               </div>
             </td>
 
           </tr>
-          <tr *ngIf="DataList.length>0" class="font-bold bg-gray-100">
+          <tr *ngIf="DataList.length > 0" class="font-bold bg-gray-100">
             <td colspan="3" class="text-center">Total</td>
 
             <td *ngFor="let key of Object.keys(totals)">
               {{ totals[key] }}
             </td>
 
-            <td colspan="3"></td>
+            <!-- Remaining columns -->
+            <td colspan="9"></td>
           </tr>
         </tbody>
       </table>
