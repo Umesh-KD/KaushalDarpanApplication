@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PassoutRegistrationReportRoutingModule } from './passout-registration-report-routing.module';
 import { PassoutRegistrationReportComponent } from './passout-registration-report.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     PassoutRegistrationReportRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgSelectModule
   ]
 })
 export class PassoutRegistrationReportModule { }

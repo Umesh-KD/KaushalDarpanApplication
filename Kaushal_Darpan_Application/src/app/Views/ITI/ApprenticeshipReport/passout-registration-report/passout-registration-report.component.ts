@@ -23,6 +23,7 @@ import { ITIApprenticeshipRegPassOutModel } from '../../../../Models/ITI/ITIAppr
 import { ITIApprenticeshipService } from '../../../../Services/ITI/ITI-Apprenticeship/iti-apprenticeship.service';
 import { ApprenticeReportServiceService } from '../../../../Services/ITI/ApprenticeReport/apprentice-report-service.service';
 import { AppsettingService } from '../../../../Common/appsetting.service';
+import { ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
 
 @Component({
   selector: 'app-passout-registration-report',
@@ -35,18 +36,23 @@ export class PassoutRegistrationReportComponent {
   ITITimeTableForm!: FormGroup;
   public isUpdate: boolean = false;
   public TimeTableID: number | null = null;
+  public tradeSearchRequest = new ItiTradeSearchModel()
   public Message: any = [];
   public ErrorMessage: any = [];
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
+
   public minDate: string = '';
   public State: number = -1;
   public ExamShiftList: any = [];
+  public PassYearList: any = [];
   public PaperList: any = [];
   public SubjectList: any = [];
   public SubjectCodeMasterDDLList: any[] = [];
   public SemesterList: any = [];
   public TradeMasterList: any = []
+  public TradeList: any = []
+
   public SubjectMasterDDLList: any[] = [];
   public UserID: number = 0;
   public subjectCodeDDLRequest = new CommonDDLSubjectCodeMasterModel();
@@ -110,7 +116,14 @@ export class PassoutRegistrationReportComponent {
       RegDate: ['', Validators.required],
       FileNameDoc: [''],
       RegCount: ['', Validators.required],
-      Remarks: ['', Validators.required],
+      Remarks: ['',],
+      StudentName: ['', Validators.required],
+      FatherName: ['', Validators.required],
+      AadharNo: ['', [Validators.required, Validators.pattern(/^[2-9]{1}[0-9]{11}$/)]],
+      TradeID: [0, DropdownValidators], 
+      PassIti: [0, DropdownValidators],
+      TradeScheme: [0, DropdownValidators],
+      PassYearID: [, Validators.required], 
     });
     const Editid = sessionStorage.getItem('PaasoutRegistrationReportPKID');
      this.flag = sessionStorage.getItem('flag');
@@ -129,6 +142,8 @@ export class PassoutRegistrationReportComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     await this.GetExamShift();
+    await this.GetTradeMatserDDL()
+    await this.GetPassYear()
     //if (this.sSOLoginDataModel.RoleID != 97) {
     //  this.ITITimeTableForm.disable()
     //} else {
@@ -162,7 +177,27 @@ export class PassoutRegistrationReportComponent {
     }
   }
 
- 
+  async GetPassYear() {
+    try {
+      this.loaderService.requestStarted();
+      var DepartmentID = EnumDepartment.ITI
+      await this.commonMasterService.PassingYear()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PassYearList = data['Data'];
+          console.log("this.ExamShiftList", this.PassYearList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   async GetReportDatabyID(ReportID: number) {
     debugger;
@@ -188,13 +223,23 @@ export class PassoutRegistrationReportComponent {
               InstituteID: data.Data['0'].InstituteId,
               RegDate: data.Data['0'].RegDate,
               RegCount: data.Data['0'].RegCount,
-              Remarks: data.Data['0'].Remarks
+              Remarks: data.Data['0'].Remarks,
+              StudentName: data.Data['0'].StudentName,
+              FatherName: data.Data['0'].FatherName,
+              TradeID: data.Data['0'].TradeID,
+              TradeScheme: data.Data['0'].TradeScheme,
+              PassIti: data.Data['0'].PassIti,
+              PassYearID: data.Data['0'].PassYearID,
+              AadharNo: data.Data['0'].Aadhar,
+
 
             })
+
+
             this.request.ID = ReportID;
             console.log(data.Data)
-            this.request.FileName= data.Data['0'].FileName,
-              this.request.Dis_FilePath= data.Data['0'].Dis_FilePath
+            this.request.InstituteID = data.Data['0'].InstituteId,
+              this.request.PassIti = data.Data['0'].PassIti,
             
             this.UpdateEditID = ReportID;
             if(this.flag != undefined && parseInt(this.flag) == 1){
@@ -679,6 +724,30 @@ export class PassoutRegistrationReportComponent {
 
   }
 
+  async GetTradeMatserDDL() {
 
+    this.tradeSearchRequest.action = '_getAllData'
+
+
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.TradeListGetAllData(this.tradeSearchRequest)
+        .then((data: any) => {
+          debugger
+          data = JSON.parse(JSON.stringify(data));
+          this.TradeList = data['Data'];
+          console.log(this.TradeList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 }

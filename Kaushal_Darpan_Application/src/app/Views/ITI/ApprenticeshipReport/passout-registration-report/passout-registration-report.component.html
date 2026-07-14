@@ -45,7 +45,7 @@
             </div>-->
           <!--</div>-->
           <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="SampleexportExcelData()"><i class="ti ti-download"></i> Sample Format Semester</a> -->
-          <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="SampleexportExcelDataYearly()"><i class="ti ti-download"></i> Sample Format </a>
+          <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="SampleexportExcelDataYearly()"><i class="ti ti-download"></i> Sample Format </a>-->
         </div>
       </div>
       <form [formGroup]="ITITimeTableForm">
@@ -75,11 +75,131 @@
             </div>
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">पंजीकरण संख्या: <span class="StarMarking">*</span></label>
-              <input type="text" class="form-input" placeholder="Enter Registration Count" (keypress)="numberOnly($event)" [(ngModel)]="request.RegCount" formControlName="RegCount">
+              <input type="text" class="form-input" placeholder="Enter Student Name" (keypress)="numberOnly($event)" [(ngModel)]="request.RegCount" formControlName="RegCount">
               <div *ngIf="isSubmitted && _TimeTableForm.RegCount.errors" class="text-danger">
                 <p *ngIf="_TimeTableForm.RegCount.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
               </div>
             </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> शिक्षुओं का नाम: <span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" placeholder="Enter Father Name" [(ngModel)]="request.StudentName" formControlName="StudentName">
+              <div *ngIf="isSubmitted && _TimeTableForm.StudentName.errors" class="text-danger">
+                <p *ngIf="_TimeTableForm.StudentName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                पिता का नाम: <span class="StarMarking">*</span>
+              </label>
+
+              <input type="text"
+                     class="form-input"
+                     placeholder="Enter Father Name"
+                     [(ngModel)]="request.FatherName"
+                     formControlName="FatherName">
+
+              <div *ngIf="isSubmitted && _TimeTableForm.FatherName.errors" class="text-danger">
+                <p *ngIf="_TimeTableForm.FatherName.errors.required">
+                  <i aria-hidden="true"></i> This field is required.
+                </p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                आधार नं.: <span class="StarMarking">*</span>
+              </label>
+
+              <input type="text"
+                     class="form-input"
+                     placeholder="Enter Aadhaar Number"
+                     [(ngModel)]="request.Aadhar"
+                     formControlName="AadharNo"
+                     maxlength="12">
+
+              <div *ngIf="isSubmitted && _TimeTableForm.AadharNo.errors" class="text-danger">
+                <p *ngIf="_TimeTableForm.AadharNo.errors.required">
+                  <i aria-hidden="true"></i> This field is required.
+                </p>
+                <p *ngIf="_TimeTableForm.AadharNo.errors.pattern">
+                  <i aria-hidden="true"></i> Please enter a valid 12-digit Aadhaar Number.
+                </p>
+              </div>
+            </div>
+
+            <div class="allStatics">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                व्यवसाय का नाम: <span class="StarMarking">*</span>
+              </label>
+
+              <ng-select [items]="TradeList"
+                         bindLabel="TradeName"
+                         bindValue="Id"
+                         formControlName="TradeID"
+                         placeholder="Select Trade"
+                         [(ngModel)]="request.TradeID"
+                         [searchable]="true"
+                         [clearable]="true"
+                         appendTo="body">
+              </ng-select>
+
+              <div *ngIf="isSubmitted && _TimeTableForm.TradeID.errors" class="text-danger">
+                <p *ngIf="!_TimeTableForm.TradeID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i> This field is required.
+                </p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                संस्थान, जहां से आईटीआई उत्तीर्ण की है : <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" formControlName="PassIti" [(ngModel)]="request.PassIti">
+                <option value="0">--Select--</option>
+
+                <option *ngFor="let row of ExamShiftList" [value]="row.ID">{{row.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_TimeTableForm.PassIti.errors" class="text-danger">
+                <p *ngIf="!_TimeTableForm.PassIti.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                आईटीआई उत्तीर्ण करने का वर्ष : <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" formControlName="PassYearID" [(ngModel)]="request.PassYearID">
+                <option value="">--Select--</option>
+
+                <option *ngFor="let row of PassYearList" [value]="row.Year">{{row.Year}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_TimeTableForm.PassYearID.errors" class="text-danger">
+                <p *ngIf="_TimeTableForm.PassYearID.errors.required">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                NCVT / SCVT : <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" formControlName="TradeScheme" [(ngModel)]="request.TradeScheme">
+                <option value="0">--Select--</option>
+
+                <option [value]="1">NCVT</option>
+                <option [value]="2">SCVT</option>
+              </select>
+              <div *ngIf="isSubmitted&&_TimeTableForm.TradeScheme.errors" class="text-danger">
+                <p *ngIf="!_TimeTableForm.TradeScheme.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">विविध विवरण: <span class="StarMarking">*</span></label>
               <input type="text" class="form-input" placeholder="Enter Remarks" [(ngModel)]="request.Remarks" formControlName="Remarks">
@@ -87,35 +207,36 @@
                 <p *ngIf="_TimeTableForm.Remarks.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
               </div>
             </div>
-            <div>
-              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                     for="fileStudentPhoto2">
-                एक्सेल अपलोड करें
-              </label>
-              <div class="flex fileUploader">
-                <input [disabled]="sSOLoginDataModel.RoleID != 97" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                       id="fileStudentPhoto2" type="file" (change)="onFilechange($event,'Photo')" formControlName="FileNameDoc">
-                <label for="fileStudentPhoto2">
-                  <span>Choose File</span>
-                  {{request.Dis_FilePath === '' ? 'No File Choosen' : request.Dis_FilePath}}
-                </label>
-                <div class="flex">
-                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FileName}}"
-                     *ngIf="this.request.FileName !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-                  <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
-           (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
-          <i class="ti ti-trash"></i>
-        </a>-->
-                </div>
-              </div>
-            </div>
-            <div *ngIf="sSOLoginDataModel.RoleID == 97" class="flex justify-center items-center">
-              <button *ngIf="!IsUpdateCase" type="submit" class="btn bg-info text-white" (click)="saveData()">Submit</button>
-              <button *ngIf="!IsUpdateCase" type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
-                <i class="ti ti-refresh"></i> Reset
-              </button>
-              <!--<button *ngIf="IsUpdateCase" type="submit" class="btn bg-info text-white" (click)="UpdateRecordbyID(UpdateEditID)">Update</button>-->
-            </div>
+            <!--<div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+           for="fileStudentPhoto2">
+      एक्सेल अपलोड करें
+    </label>
+    <div class="flex fileUploader">
+      <input [disabled]="sSOLoginDataModel.RoleID != 97" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+             id="fileStudentPhoto2" type="file" (change)="onFilechange($event,'Photo')" formControlName="FileNameDoc">
+      <label for="fileStudentPhoto2">
+        <span>Choose File</span>
+        {{request.Dis_FilePath === '' ? 'No File Choosen' : request.Dis_FilePath}}
+      </label>
+      <div class="flex">
+        <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FileName}}"
+           *ngIf="this.request.FileName !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
+            <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+       (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+      <i class="ti ti-trash"></i>
+    </a>-->
+            <!--</div>
+      </div>
+    </div>-->
+
+          </div>
+          <div *ngIf="sSOLoginDataModel.RoleID == 97" class="flex justify-center items-center mt-4">
+            <button *ngIf="!IsUpdateCase" type="submit" class="btn bg-info text-white" (click)="saveData()">Submit</button>
+            <button *ngIf="!IsUpdateCase" type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+              <i class="ti ti-refresh"></i> Reset
+            </button>
+            <!--<button *ngIf="IsUpdateCase" type="submit" class="btn bg-info text-white" (click)="UpdateRecordbyID(UpdateEditID)">Update</button>-->
           </div>
         </div>
       </form>

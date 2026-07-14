@@ -415,14 +415,14 @@
                     <i class="ti ti-pencil"></i> Update Details of ITI
                   </button>
 
-                  @if(iti.CampusID>0)
-                  {
+                  
+                  
                   <button mat-menu-item
                           (click)="ViewandUpdatecampus(MyModel_ViewCampusdetails,iti)"
                           matTooltip="Update ITI Campus Details">
                     <i class="ti ti-pencil"></i> Update Campus Details
                   </button>
-                  }
+                 
 
                   <!-- Second Semester -->
                   <!-- <button mat-menu-item
@@ -596,7 +596,7 @@
             </div>-->
 
             <!-- College Dropdown -->
-            <div *ngIf="request.IsCampus">
+            <div >
               <label class="block text-sm font-medium text-gray-800 mb-2">
                 Campus College
               </label>
