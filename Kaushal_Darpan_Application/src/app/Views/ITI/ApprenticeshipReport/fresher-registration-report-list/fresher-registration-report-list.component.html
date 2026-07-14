@@ -132,9 +132,16 @@
             <th class="text-left">संस्थान का नाम</th>
             <th class="text-left">पोर्टल पर पंजीकरण करने की तिथि</th>
             <th class="text-left">पंजीकरण संख्या</th>
-            <th class="text-left">दस्तावेज़</th>
-            <th class="text-left">विविध विवरण</th>
-            <th class="text-center">कार्रवाई</th>
+            <th class="text-center">पिता का नाम</th>
+            <th class="text-center">आधार नंबर</th>
+            <th class="text-center">जन्म तिथि</th>
+            <th class="text-center">पता</th>
+            <th class="text-center">शैक्षणिक योग्यता</th>
+            <th class="text-center">वर्तमान में क्या कर रहे हैं</th>
+            <!--<th class="text-left">दस्तावेज़</th>-->
+            <!--<th class="text-left">विविध विवरण</th>-->
+            <th class="text-left">विशेष विवरण</th>
+            <!--<th class="text-center">कार्रवाई</th>-->
           </tr>
 
         </thead>
@@ -145,6 +152,12 @@
             <td>{{row.Name}}</td>
             <td>{{row.RegDate}}</td>
             <td>{{row.RegCount}}</td>
+            <td>{{row.FatherName}}</td>
+            <td>{{row.AadharNo}}</td>
+            <td>{{row.DOB}}</td>
+            <td>{{row.Address}}</td>
+            <td>{{row.EducationalQualification}}</td>
+            <td>{{row.CurrentOccupation}}</td>
             <td>
               <div class="flex">
                 <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.FileName}}"

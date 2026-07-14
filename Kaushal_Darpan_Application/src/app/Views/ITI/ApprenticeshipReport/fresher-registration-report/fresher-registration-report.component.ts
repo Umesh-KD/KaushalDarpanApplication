@@ -111,6 +111,12 @@ export class fresherRegistrationReportComponent {
       FileNameDoc: [''],
       RegCount: ['', Validators.required],
       Remarks: ['', Validators.required],
+      Aadhar: ['', Validators.required],
+      FatherName: ['', Validators.required],
+      Address: ['', Validators.required],
+      DOB: ['', Validators.required],
+      EducationalQualification: ['', Validators.required],
+      CurrentOccupation: ['', Validators.required],
     });
     const Editid = sessionStorage.getItem('fresherRegistrationReportPKID');
     const flag = sessionStorage.getItem('flag');
