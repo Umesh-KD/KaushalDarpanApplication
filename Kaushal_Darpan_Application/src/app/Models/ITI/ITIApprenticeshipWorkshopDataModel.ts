@@ -49,6 +49,7 @@ export class ITIApprenticeshipRegPassOutModel extends RequestBaseModel{
   public StudentName: string = ''
   public PKID : number = 0
   public PassIti : number = 0
+  public PassYearID : string = ''
   public TradeScheme : number = 0
   public Aadhar: string = ''
   public DOB: string = ''
