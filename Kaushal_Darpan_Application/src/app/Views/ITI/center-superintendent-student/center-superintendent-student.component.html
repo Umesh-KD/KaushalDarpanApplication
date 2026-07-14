@@ -165,12 +165,12 @@
             <td align="left">{{row.InstituteName}}</td>
             <td>
               <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
-                <a title="Download AdmitCard" (click)="DownloadFile(row.AdmitCard)">
+                <a  *ngIf="row.IsShowAdmitCard==1" title="Download AdmitCard" (click)="DownloadFile(row.AdmitCard)">
                   <i class="ti ti-download"></i>
                 </a>
+                <span  *ngIf="row.IsShowAdmitCard==0">Admit Not Generated Yet!</span>
                 </div>
             </td>
-
 
           </tr>
           <tr *ngIf="paginatedInTableData.length === 0">

@@ -222,9 +222,6 @@ export class ScvtCenterAllocationComponent {
 
   }
 
-
-
-
   async GetCenterMasterList() {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
