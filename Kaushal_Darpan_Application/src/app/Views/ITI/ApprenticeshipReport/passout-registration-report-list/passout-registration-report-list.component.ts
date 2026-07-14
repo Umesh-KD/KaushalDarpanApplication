@@ -14,6 +14,7 @@ import { EnumDepartment, EnumRole, EnumStatus, GlobalConstants } from '../../../
 import { ITIApprenticeshipRegPassOutModel } from '../../../../Models/ITI/ITIApprenticeshipWorkshopDataModel';
 import { ApprenticeReportServiceService } from '../../../../Services/ITI/ApprenticeReport/apprentice-report-service.service';
 import * as XLSX from 'xlsx';
+import { ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
 @Component({
   selector: 'app-passout-registration-report-list',
   standalone: false,
@@ -27,10 +28,12 @@ export class PassoutRegistrationReportListComponent {
   public ExaminersList: any[] = [];
   public ExamList: any[] = [];
   public GroupMasterDDLList: any[] = [];
+  public PassYearList: any[] = [];
+  public TradeList: any[] = [];
   public Table_SearchText: any = '';
   public DataList: any = [];
   public ExamShiftList: any = [];
-
+  public tradeSearchRequest = new ItiTradeSearchModel()
   public isSubmitted: boolean = false;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public searchRequest = new ITIApprenticeshipRegPassOutModel();
@@ -88,7 +91,9 @@ export class PassoutRegistrationReportListComponent {
     //this.getExamMasterList();//grid data
   await  this.GetReportAllData();
     await this.calculateDynamicTotals(this.DataList);
-  await  this.GetInstituteList();
+    await this.GetInstituteList();
+    await this.GetTradeMatserDDL();
+    await this.GetPassYear();
   }
   GoToReportEntryPage() {
     sessionStorage.setItem('PaasoutRegistrationReportPKID', '0');
@@ -124,6 +129,32 @@ export class PassoutRegistrationReportListComponent {
     });
   }
 
+  async GetTradeMatserDDL() {
+
+    this.tradeSearchRequest.action = '_getAllData'
+
+
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.TradeListGetAllData(this.tradeSearchRequest)
+        .then((data: any) => {
+          debugger
+          data = JSON.parse(JSON.stringify(data));
+          this.TradeList = data['Data'];
+          console.log(this.TradeList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   async getExamMasterList() {
     try {
       this.loaderService.requestStarted();
@@ -157,6 +188,26 @@ export class PassoutRegistrationReportListComponent {
       }, 200);
     }
   }
+  async GetPassYear() {
+    try {
+      this.loaderService.requestStarted();
+      var DepartmentID = EnumDepartment.ITI
+      await this.commonMasterService.PassingYear()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PassYearList = data['Data'];
+          console.log("this.ExamShiftList", this.PassYearList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 
 
@@ -177,7 +228,9 @@ export class PassoutRegistrationReportListComponent {
         RoleID: this.sSOLoginDataModel.RoleID,
         Createdby: this.sSOLoginDataModel.UserID,
         InstituteID: this.searchRequest.InstituteID,
-        UserID: UserID
+        UserID: UserID,
+        TradeID: this.searchRequest.TradeID,
+        PassYear: this.searchRequest.PassYear
       };
 
 
@@ -299,42 +352,44 @@ export class PassoutRegistrationReportListComponent {
 
   async DownloadPassoutApprenticeshipReport() {
     try {
-      var UserID: number = 0
-      if (this.sSOLoginDataModel.RoleID != 97 && this.sSOLoginDataModel.RoleID != 100) {
-        UserID = 0
-      } else {
-        UserID = this.sSOLoginDataModel.UserID
-      }
 
-      let obj = {
+      let UserID = (this.sSOLoginDataModel.RoleID == 97 || this.sSOLoginDataModel.RoleID == 100)
+        ? this.sSOLoginDataModel.UserID
+        : 0;
+
+      const obj = {
         EndTermID: this.sSOLoginDataModel.EndTermID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         RoleID: this.sSOLoginDataModel.RoleID,
         Createdby: this.sSOLoginDataModel.UserID,
         InstituteID: this.searchRequest.InstituteID,
-        UserID: UserID
+        UserID: UserID,
+        TradeID: this.searchRequest.TradeID,
+        PassYear: this.searchRequest.PassYear
       };
 
       this.loaderService.requestStarted();
-      await this.reportService.GetPassoutApprenticeship(obj)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          console.log("DownloadPassoutApprenticeshipReport", data);
-          if (data.State === EnumStatus.Success) {
-            // this.toastr.success(data.Message);
-            this.DownloadFile(data.Data);
-          } else {
-            this.toastr.error(data.ErrorMessage);
-          }
-        }, error => console.error(error));
+
+      const data: any = await this.reportService.GetPassoutApprenticeship(obj);
+
+      const blob = new Blob([data], { type: 'application/pdf' });
+
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ApprenticeshipPassoutReport.pdf';
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+
     }
-    catch (Ex) {
-      console.log(Ex);
+    catch (ex) {
+      console.log(ex);
+      this.toastr.error("Unable to download report.");
     }
     finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
+      this.loaderService.requestEnded();
     }
   }
 
