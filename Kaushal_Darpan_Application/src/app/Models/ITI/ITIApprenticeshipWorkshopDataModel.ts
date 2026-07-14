@@ -52,6 +52,10 @@ export class ITIApprenticeshipRegPassOutModel extends RequestBaseModel{
   public PassYearID : string = ''
   public TradeScheme : number = 0
   public Aadhar: string = ''
+  public DOB: string = ''
+  public Address: string = ''
+  public EducationalQualification: string = ''
+  public CurrentOccupation: string = ''
 }
 export class ITIAAA_SSODetailsModel {
   

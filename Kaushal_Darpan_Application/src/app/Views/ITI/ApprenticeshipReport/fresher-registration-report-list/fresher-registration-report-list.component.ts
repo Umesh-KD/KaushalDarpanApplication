@@ -56,6 +56,8 @@ export class fresherRegistrationReportListComponent {
 
   ];
   Object = Object;
+  public SetfileName: string = '';
+
   constructor(
     private commonMasterService: CommonFunctionService,
     private ScholarshipService: ScholarshipService,
@@ -251,46 +253,49 @@ export class fresherRegistrationReportListComponent {
    
   }
 
-  async DownloadFresherApprenticeshipReport() {
-    try {
+  //async DownloadFresherApprenticeshipReport() {
+  //  try {
 
-      var UserID: number = 0
-      if (this.sSOLoginDataModel.RoleID != 97 && this.sSOLoginDataModel.RoleID != 100) {
-        UserID = 0
-      } else {
-        UserID = this.sSOLoginDataModel.UserID
-      }
-      let obj = {
-        EndTermID: this.sSOLoginDataModel.EndTermID,
-        DepartmentID: this.sSOLoginDataModel.DepartmentID,
-        RoleID: this.sSOLoginDataModel.RoleID,
-        Createdby: this.sSOLoginDataModel.UserID,
-        InstituteID: this.searchRequest.InstituteID,
-        UserID: UserID
-      };
+  //    var UserID: number = 0
+  //    if (this.sSOLoginDataModel.RoleID != 97 && this.sSOLoginDataModel.RoleID != 100) {
+  //      UserID = 0
+  //    } else {
+  //      UserID = this.sSOLoginDataModel.UserID
+  //    }
+  //    let obj = {
+  //      EndTermID: this.sSOLoginDataModel.EndTermID,
+  //      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+  //      RoleID: this.sSOLoginDataModel.RoleID,
+  //      Createdby: this.sSOLoginDataModel.UserID,
+  //      InstituteID: this.searchRequest.InstituteID,
+  //      UserID: UserID
+  //    };
 
-      this.loaderService.requestStarted();
-      await this.reportService.GetFresherApprenticeship(obj)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          console.log("DownloadFresherApprenticeshipReport", data)
-          if (data.State === EnumStatus.Success) {
-            // this.toastr.success(data.Message);
-            this.DownloadFile(data.Data)
-          } else {
-            this.toastr.error(data.ErrorMessage);
-          }
-        }, error => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
+  //    this.loaderService.requestStarted();
+
+      
+
+  //    //await this.reportService.GetFresherApprenticeship(obj)
+  //    //  .then((data: any) => {
+  //    //    data = JSON.parse(JSON.stringify(data));
+  //    //    console.log("DownloadFresherApprenticeshipReport", data)
+  //    //    if (data.State === EnumStatus.Success) {
+  //    //      // this.toastr.success(data.Message);
+  //    //      this.DownloadFile(data.Data)
+  //    //    } else {
+  //    //      this.toastr.error(data.ErrorMessage);
+  //    //    }
+  //    //  }, error => console.error(error));
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
 
   DownloadFile(FileName: string): void {
 
@@ -365,5 +370,58 @@ export class fresherRegistrationReportListComponent {
     this.sortInTableColumn = field;
     this.loaderService.requestEnded();
   }
-  
+
+  downloadBase64PDF(base64: string, filename: string) {
+    const byteCharacters = atob(base64);
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
+  }
+
+  async DownloadFresherApprenticeshipReport() {
+    try {
+      debugger
+      this.SetfileName ='ApprenticeshipRegistration_'
+      var UserID: number = 0
+          if (this.sSOLoginDataModel.RoleID != 97 && this.sSOLoginDataModel.RoleID != 100) {
+            UserID = 0
+          } else {
+            UserID = this.sSOLoginDataModel.UserID
+          }
+      let obj = {
+            EndTermID: this.sSOLoginDataModel.EndTermID,
+            DepartmentID: this.sSOLoginDataModel.DepartmentID,
+            RoleID: this.sSOLoginDataModel.RoleID,
+            Createdby: this.sSOLoginDataModel.UserID,
+            InstituteID: this.searchRequest.InstituteID,
+            UserID: UserID
+          };
+      const data: any = await this.reportService.ApprenticeshipFresherReports(obj);
+      const response = JSON.parse(JSON.stringify(data));
+      if (response.State === EnumStatus.Success) {
+        if (response.Data && response.Data.length > 0) {
+          this.downloadBase64PDF(response.Data, this.SetfileName + '.pdf');
+        } else {
+          this.toastr.warning('No data available to generate PDF.');
+        }
+
+      } else {
+        this.toastr.error(response.Message);
+      }
+
+    } catch (error) {
+      console.error(error);
+      this.toastr.error('Something went wrong.');
+    }
+  }
 }
