@@ -1599,15 +1599,24 @@ export class ReportService {
       ).toPromise();
   }
 
-  public async GetApprenticeship(obj: any) {
+  public GetApprenticeship(obj: any): Promise<Blob> {
 
-    var body = JSON.stringify(obj);
-    console.log(body);
-    const headers = { 'content-type': 'application/json' }
-    return await this.http.post(this.APIUrl + "/ApprenticeshipReport", body, { 'headers': headers })
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    return this.http.post(
+      this.APIUrl + "/ApprenticeshipReport",
+      obj,
+      {
+        headers: headers,
+        responseType: 'blob'
+      }
+    )
       .pipe(
         catchError(this.handleErrorObservable)
-      ).toPromise();
+      )
+      .toPromise() as Promise<Blob>;
   }
 
   public async GetWorkshopProgress(obj: any) {
