@@ -111,7 +111,13 @@ export class fresherRegistrationReportComponent {
       FileNameDoc: [''],
       RegCount: ['', Validators.required],
       Remarks: ['', Validators.required],
-      Aadhar: ['', Validators.required],
+      Aadhar: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]{12}$')
+        ]
+      ],
       FatherName: ['', Validators.required],
       Address: ['', Validators.required],
       DOB: ['', Validators.required],
@@ -196,7 +202,15 @@ export class fresherRegistrationReportComponent {
               InstituteID: data.Data['0'].InstituteId,
               RegDate: data.Data['0'].RegDate,
               RegCount: data.Data['0'].RegCount,           
-              Remarks: data.Data['0'].Remarks, 
+              Remarks: data.Data['0'].Remarks,     
+              FatherName: data.Data['0'].FatherName,     
+              Address: data.Data['0'].Address,     
+              DOB: data.Data[0].DOB
+                ? new Date(data.Data[0].DOB).toISOString().split('T')[0]
+                : null,
+              EducationalQualification: data.Data['0'].EducationalQualification,     
+              CurrentOccupation: data.Data['0'].CurrentOccupation,    
+              Aadhar: data.Data[0].AadharNo,
             })
             this.request.FileName = data.Data['0'].FileName,
               this.request.Dis_FilePath = data.Data['0'].Dis_FilePath
@@ -674,5 +688,17 @@ export class fresherRegistrationReportComponent {
 
     return true;
 
+  }
+
+  onlyNumber(event: KeyboardEvent): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+
+    // Allow only digits (0-9)
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+      return false;
+    }
+
+    return true;
   }
 }

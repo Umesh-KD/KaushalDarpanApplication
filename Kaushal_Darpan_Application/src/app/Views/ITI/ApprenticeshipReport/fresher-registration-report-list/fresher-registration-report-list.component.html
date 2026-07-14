@@ -141,7 +141,7 @@
             <!--<th class="text-left">दस्तावेज़</th>-->
             <!--<th class="text-left">विविध विवरण</th>-->
             <th class="text-left">विशेष विवरण</th>
-            <!--<th class="text-center">कार्रवाई</th>-->
+            <th class="text-center">Action</th>
           </tr>
 
         </thead>
@@ -158,13 +158,13 @@
             <td>{{row.Address}}</td>
             <td>{{row.EducationalQualification}}</td>
             <td>{{row.CurrentOccupation}}</td>
-            <td>
+            <!--<td>
               <div class="flex">
                 <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.FileName}}"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
 
               </div>
-            </td>
+            </td>-->
             <td>{{row.Remarks}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
@@ -186,7 +186,7 @@
               {{ totals[key] }}
             </td>
 
-            <td colspan="3"></td>
+            <td colspan="8"></td>
           </tr>
         </tbody>
       </table>

@@ -17,10 +17,7 @@
     <i class="ti ti-chevron-left"></i>
     Back
   </a>-->
-  <a (click)="GoToReportEntryPage()" class="inline-flex items-center btn bg-dark text-white btn-sm">
-    <i class="ti ti-chevron-left"></i>
-    Back
-  </a>
+  
 </div>
 <!-- Page Title End -->
 <!-- Form Start -->
@@ -32,20 +29,24 @@
 
         <div class="flex justify-between items-center">
           <!--<div class="flex items-center me-3">
-        <label class="block me-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-               for="fileStudentPhoto">Import Excel</label>-->
+  <label class="block me-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+         for="fileStudentPhoto">Import Excel</label>-->
           <!--<div class="flex fileUploader bg-gray-100">
 
-        <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
-               id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
-        <label for="fileStudentPhoto">
-          <span>Choose File</span>
-          {{selectedFile ? selectedFile.name : 'No file chosen'}}
-        </label>
-      </div>-->
+    <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
+           id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
+    <label for="fileStudentPhoto">
+      <span>Choose File</span>
+      {{selectedFile ? selectedFile.name : 'No file chosen'}}
+    </label>
+  </div>-->
           <!--</div>-->
           <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="SampleexportExcelData()"><i class="ti ti-download"></i> Sample Format Semester</a> -->
-          <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="SampleexportExcelDataYearly()"><i class="ti ti-download"></i> Sample Format </a>
+          <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="SampleexportExcelDataYearly()"><i class="ti ti-download"></i> Sample Format </a>-->
+          <a (click)="GoToReportEntryPage()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+            <i class="ti ti-chevron-left"></i>
+            Back
+          </a>
         </div>
 
       </div>
@@ -90,10 +91,29 @@
               </div>
             </div>
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">आधार नंबर: <span class="StarMarking">*</span></label>
-              <input type="text" class="form-input" placeholder="Enter Aadhar" [(ngModel)]="request.Aadhar" formControlName="Aadhar">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                आधार नंबर: <span class="StarMarking">*</span>
+              </label>
+
+              <input type="text"
+                     class="form-input"
+                     placeholder="Enter Aadhar"
+                     formControlName="Aadhar"
+                     [(ngModel)]="request.Aadhar"
+                     maxlength="12"
+                     inputmode="numeric"
+                     (keypress)="onlyNumber($event)">
+
               <div *ngIf="isSubmitted && _TimeTableForm.Aadhar.errors" class="text-danger">
-                <p *ngIf="_TimeTableForm.Aadhar.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+
+                <p *ngIf="_TimeTableForm.Aadhar.errors.required">
+                  This field is required.
+                </p>
+
+                <p *ngIf="_TimeTableForm.Aadhar.errors.pattern">
+                  Aadhar number must contain exactly 12 digits.
+                </p>
+
               </div>
             </div>
 
