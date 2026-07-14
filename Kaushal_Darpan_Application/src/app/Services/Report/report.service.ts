@@ -2086,6 +2086,15 @@ export class ReportService {
       .pipe(catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async StudentDiplomaCertificateDownloadChunk(request: any[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/StudentDiplomaCertificateDownloadChunk`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
   
 }
 

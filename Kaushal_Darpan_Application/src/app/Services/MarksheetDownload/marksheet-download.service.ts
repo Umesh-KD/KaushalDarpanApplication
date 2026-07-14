@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { DownloadMarksheetSearchModel, StudentResultSearchModel } from '../../Models/DownloadMarksheetDataModel';
+import { DiplomaCertificateDownloadSearchModel, DownloadMarksheetSearchModel, StudentResultSearchModel } from '../../Models/DownloadMarksheetDataModel';
 import { MarksheetLetterSearchModel } from '../../Models/MarksheetLetterDataModel';
 
 @Injectable({
@@ -60,6 +60,15 @@ export class MarksheetDownloadService {
   public async DownloadStudentResult_Public(searchRequest: StudentResultSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/DownloadStudentResult_Public`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetStudentsDiplomaCertificate(searchRequest: DiplomaCertificateDownloadSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetStudentsDiplomaCertificate", body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
