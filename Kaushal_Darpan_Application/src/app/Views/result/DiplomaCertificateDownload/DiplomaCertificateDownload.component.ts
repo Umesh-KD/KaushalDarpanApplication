@@ -78,6 +78,7 @@ export class DiplomaCertificateDownloadComponent {
       IsRevised: ['-1', [Validators.required, notDefaultValueValidator('-1')]],
       RollNo: ['', Validators.required],
       EndTermID: [this.sSOLoginDataModel.EndTermID, [Validators.required, notDefaultValueValidator('0')]],
+      SchemeID:['']
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
