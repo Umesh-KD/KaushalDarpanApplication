@@ -1211,7 +1211,6 @@ const routes: Routes = [
       { path: 'Staff-New-Process-Training', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/EM-Staff-New-Process-Training/EM-Staff-New-Process-Training.module').then(m => m.EMStaffNewProcessTrainingModule), title: 'Training Details' },
       { path: 'ShorTrainingDetailsList', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/EM_TrainingDetailsList/EM_TrainingDetailsList.module').then(m => m.EM_TrainingDetailsListModule), title: 'Training Details' },
 
-
       { path: 'Bter-AddUserRequest', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-em-request-add/bter-em-request-add.module').then(m => m.BtereEMRequestAddModule), title: 'Bter-AddUserRequest' },
       { path: 'Bter-AddUserRequest/:id', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-em-request-add/bter-em-request-add.module').then(m => m.BtereEMRequestAddModule), title: 'Bter-AddUserRequest' },
       { path: 'BterUserRequestList', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-request-list/bter-request-list.module').then(m => m.BterUserRequestListModule) },
