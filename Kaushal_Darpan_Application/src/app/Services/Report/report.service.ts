@@ -1599,15 +1599,24 @@ export class ReportService {
       ).toPromise();
   }
 
-  public async GetApprenticeship(obj: any) {
+  public GetApprenticeship(obj: any): Promise<Blob> {
 
-    var body = JSON.stringify(obj);
-    console.log(body);
-    const headers = { 'content-type': 'application/json' }
-    return await this.http.post(this.APIUrl + "/ApprenticeshipReport", body, { 'headers': headers })
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    return this.http.post(
+      this.APIUrl + "/ApprenticeshipReport",
+      obj,
+      {
+        headers: headers,
+        responseType: 'blob'
+      }
+    )
       .pipe(
         catchError(this.handleErrorObservable)
-      ).toPromise();
+      )
+      .toPromise() as Promise<Blob>;
   }
 
   public async GetWorkshopProgress(obj: any) {
@@ -2075,6 +2084,15 @@ export class ReportService {
     const body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/ApprenticeshipFresherReports`, body, this.headersOptions)
       .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async StudentDiplomaCertificateDownloadChunk(request: any[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/StudentDiplomaCertificateDownloadChunk`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
       ).toPromise();
   }
   

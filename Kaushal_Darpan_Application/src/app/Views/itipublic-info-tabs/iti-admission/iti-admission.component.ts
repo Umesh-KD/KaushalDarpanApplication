@@ -35,7 +35,8 @@ export class ItiAdmissionComponent {
   public ImportantLinksITI: any[] = [];
   public searchRequest = new DynamicUploadContentListsModal();
   public sSOLoginDataModel = new SSOLoginDataModel();
-
+  public QueryEmail: string = 'DDTCTS.DTETRAINING@RAJASTHAN.GOV.IN';
+  public HelplineNo: string = '8824904570';
 
 
   constructor(private commonMasterService: CommonFunctionService,
@@ -48,6 +49,7 @@ export class ItiAdmissionComponent {
     this.sSOLoginDataModel.DepartmentID = 2;
 
     //await this.GetDynamicUploadContentNotificationBTER();
+    await this.GetDynamicContactContentITI();
   }
 
 
@@ -57,10 +59,38 @@ export class ItiAdmissionComponent {
       this.searchRequest.DepartmentSubID = 243;
       this.searchRequest.Key = 'DynamicUploadShortList';
       this.loaderService.requestStarted();
+      debugger
       await this.home2Service.GetDynamicUploadContent(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.ImportantLinksITI = data.Data;
+          console.log("BTERList", this.ImportantLinksITI);
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async GetDynamicContactContentITI() {
+    try {
+      this.searchRequest.DynamicUploadTypeID = 5; // Only Notifications List For Home Page (DTE,BTER, ITI)
+      this.searchRequest.DepartmentSubID = 243;
+      this.searchRequest.Key = 'DynamicContactdataITI';
+      this.loaderService.requestStarted();
+      debugger
+      await this.home2Service.GetDynamicUploadContent(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.QueryEmail = data.Data[0]['QueryEmail'];
+          this.HelplineNo = data.Data[0]['HelplineNo'];
           console.log("BTERList", this.ImportantLinksITI);
         }, (error: any) => console.error(error)
         );

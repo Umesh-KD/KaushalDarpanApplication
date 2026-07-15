@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DocumentDetailList, DocumentDetailsDataModel } from '../../../Models/ITIFormDataModel';
+import { DocumentDetailList, DocumentDetailsDataModel, PersonalDetailsDatamodel, PersonalDetailsDatamodell } from '../../../Models/ITIFormDataModel';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
@@ -15,6 +15,7 @@ import { DocumentDetailsService } from '../../../Common/document-details';
 import { DeleteDocumentDetailsModel } from '../../../Models/DeleteDocumentDetailsModel';
 import { UploadFileModel } from '../../../Models/UploadFileModel';
 import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
+import { ItiApplicationDataModel } from '../../../Models/ItiApplicationDataModel';
 
 @Component({
     selector: 'app-document-details-form-tab',
@@ -36,7 +37,7 @@ export class DocumentDetailsFormTabComponent implements OnInit {
   public box12thChecked:boolean = false
   public addrequest: DocumentDetailList[] = []
   public ApplicationID: number = 0;
-  public PersonalDetailsData: any = []
+  public PersonalDetailsData = new PersonalDetailsDatamodell()
   public documentDetails: DocumentDetailsModel[] = []
   groupedDocs: any = [];
   docsForUpload: any = [];
@@ -142,18 +143,18 @@ export class DocumentDetailsFormTabComponent implements OnInit {
     if (groupNo == 2) {
       if (!this.filteredDocuments.length) {
         let filtered = this.documentDetails.filter((x) => x.GroupNo == groupNo);
-
-        if (this.PersonalDetailsData.IsTSP == false) {
+        
+        if (this.PersonalDetailsData.IsTSP !=true) {
           filtered = filtered.filter((x: any) => x.ColumnName != "TSPAreaCertificatePhoto");
         }
         if (!this.box10thChecked) {
-          filtered = filtered.filter((x: any) => x.ColumnName !== "Marksheet10");
+          filtered = filtered.filter((x: any) => x.ColumnName != "Marksheet10");
         }
         if (!this.box8thChecked) {
-          filtered = filtered.filter((x: any) => x.ColumnName !== "Marksheet8");
+          filtered = filtered.filter((x: any) => x.ColumnName != "Marksheet8");
         }
         if (!this.box12thChecked) {
-          filtered = filtered.filter((x: any) => x.ColumnName !== "Marksheet12");
+          filtered = filtered.filter((x: any) => x.ColumnName != "Marksheet12");
         }
         if (this.PersonalDetailsData.CategoryC !== 69) {
           filtered = filtered.filter((x: any) => x.ColumnName != "PhysicallyHandicappedCertificatePhoto");
@@ -162,10 +163,10 @@ export class DocumentDetailsFormTabComponent implements OnInit {
         if (this.PersonalDetailsData.CategoryC !== 68) {
           filtered = filtered.filter((x: any) => x.ColumnName != "KashmiriMigrantsCertificatePhoto");
         }
-        if (this.PersonalDetailsData.IsMinority == false) {
+        if (this.PersonalDetailsData.IsMinority !=true) {
           filtered = filtered.filter((x: any) => x.ColumnName != "Minority");
         }
-        if(this.PersonalDetailsData.IsDevnarayan == false) {
+        if(this.PersonalDetailsData.IsDevnarayan !=1) {
           filtered = filtered.filter((x: any) => x.ColumnName != "DevnarayanCertificate");
         }
 
@@ -203,7 +204,7 @@ export class DocumentDetailsFormTabComponent implements OnInit {
 
         setTimeout(() => {
           this.filteredDocuments = filtered;
-        }, 200);
+        }, 100);
 
       }
       return this.filteredDocuments;

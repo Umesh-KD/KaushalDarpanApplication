@@ -214,13 +214,15 @@ export class ApprenticeshipRegistrationReportList {
   }
 
   async DownloadApprenticeshipReport() {
+
     try {
 
       if (this.ssoLoginDataModel.RoleID == 97) {
-        this.DistrictID = this.ssoLoginDataModel.DistrictID
+        this.DistrictID = this.ssoLoginDataModel.DistrictID;
       }
 
-      let obj = {
+      const obj = {
+
         EndTermID: this.ssoLoginDataModel.EndTermID,
         DepartmentID: this.ssoLoginDataModel.DepartmentID,
         RoleID: this.ssoLoginDataModel.RoleID,
@@ -234,28 +236,44 @@ export class ApprenticeshipRegistrationReportList {
 
       };
 
-
       this.loaderService.requestStarted();
-      await this.reportService.GetApprenticeship(obj)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          console.log("DownloadApprenticeshipReport", data)
-          if (data.State === EnumStatus.Success) {
-            // this.toastr.success(data.Message);
-            this.DownloadFile(data.Data)
-          } else {
-            this.toastr.error(data.ErrorMessage);
-          }
-        }, error => console.error(error));
+
+      const blob = await this.reportService.GetApprenticeship(obj);
+
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+
+      a.href = url;
+
+      a.download = 'ApprenticeshipReport.pdf';
+
+      document.body.appendChild(a);
+
+      a.click();
+
+      document.body.removeChild(a);
+
+      window.URL.revokeObjectURL(url);
+
     }
-    catch (Ex) {
-      console.log(Ex);
+    catch (ex) {
+
+      console.error(ex);
+
+      this.toastr.error('Unable to download report.');
+
     }
     finally {
+
       setTimeout(() => {
+
         this.loaderService.requestEnded();
+
       }, 200);
+
     }
+
   }
 
   DownloadFile(FileName: string): void {
