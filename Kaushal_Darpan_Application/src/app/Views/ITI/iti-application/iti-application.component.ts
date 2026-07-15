@@ -191,13 +191,11 @@ export class ItiApplicationComponent {
     }
 
     try {
-
+      debugger
       this.searchRequest.PageNumber = this.pageNo
       this.searchRequest.PageSize = this.pageSize
-
       this.searchRequest.SortColumn = this.sortColumn;
       this.searchRequest.SortOrder = this.sortOrder;
-
       this.loaderService.requestStarted();
       this.searchRequest.UrlStatus = this.UrlStatus;
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
