@@ -20,6 +20,7 @@ import { RequestUpdateStatus } from '../../../../Models/ITIGovtEMStaffMasterData
 import { ViewStaffProfileModalComponent } from '../view-staff-profile-modal/view-staff-profile-modal.component';
 import { AssignRoleRightsService } from '../../../../Services/AssignRoleRights/assign-role-rights.service';
 import { UserMasterService } from '../../../../Services/UserMaster/user-master.service';
+import { AssignRoleRightsDataModel, UserMasterModel } from '../../../../Models/UserMasterDataModel';
 
 @Component({
   selector: 'app-em-principle-staff',
@@ -47,6 +48,7 @@ export class EMPrincipleStaffComponent {
   _DesignationWiseBranchDataModel = new BTER_DesignationWiseBranchDataModel();
   public searchRequest1 = new GuestRoomSeatSearchModel();
   public hostelSearchReq = new StaffHostelSearchModel();
+  request = new UserMasterModel();
 
   public GuestHouseNameList: any = [];
   public UserProfileStatusHistoryList: any = [];
@@ -76,6 +78,7 @@ export class EMPrincipleStaffComponent {
   public StaffHostelDetails: BTER_EM_StaffHostelListModel[] = []
   public BugetHeadList: any= [];
   public PostBudgetHeadList: any = [];
+  public AssignedRoleRights: any = [];
 
   _ITIGovtEM_EnumStaffLevel = ITIGovtEM_EnumStaffLevel;
   _ITIGovtEM_EnumStaffLevelChild = ITIGovtEM_EnumStaffLevelChild;
@@ -100,6 +103,7 @@ export class EMPrincipleStaffComponent {
   modalReference: NgbModalRef | undefined;
   IsView: boolean = false
   public IsHideShow: boolean = false
+  public allSelected: boolean = false;
 
   @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
 
@@ -1642,12 +1646,116 @@ async GetCategroyData() {
     }
   }
 
-  async ViewandUpdate(content: any, UserID: number) {
-    await this.GetAssignedRole_USerWise(UserID);
+  async ViewandUpdate(content: any, row: any) {
+    this.request.UserID = row.StaffUserID;
+    this.request.SSOID = row.SSOID;
+    await this.GetAssignedRole_USerWise(row.StaffUserID);
 
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
   }
   CloseModalPopup() {
     this.modalService.dismissAll();
+    this.request = new UserMasterModel();
   }
+
+  checkMainRoleSelected(): boolean {
+    return this.RoleMasterList.some((role: any) => role.IsMainRole && role.Marked);
+  }
+
+  toggleAllCheckboxes(event: any): void {
+    const isChecked = event.target.checked;
+    this.RoleMasterList.forEach((r: any) => {
+      const assignedRole = this.AssignedRoleRights.find((role: { ID: number; }) => role.ID === r.ID);
+      if (assignedRole) {
+        assignedRole.Marked = isChecked;
+      }
+    });
+  }
+
+  toggleCheckbox(role: any): void {
+    const assignedRole = this.AssignedRoleRights.some((r: { ID: any; }) => r.ID === role.ID);
+    if (assignedRole) {
+      role.Marked = !assignedRole.Marked;
+    }
+    this.allSelected = this.RoleMasterList.every((r: any) => this.isChecked(r.ID));
+  }
+
+  ResetCheck(row: AssignRoleRightsDataModel) {
+    this.RoleMasterList.forEach((r: any) => r.IsMainRole = false);
+    this.RoleMasterList.forEach((r: any) => r.Marked = false);
+  }
+
+  isChecked(roleId: number, row?: any): boolean {
+    const assignedRole = this.AssignedRoleRights.some((role: { ID: number; }) => role.ID === roleId);
+    if (assignedRole) {
+      row.Marked = true;
+    }
+    return this.AssignedRoleRights.some((role: { ID: number; }) => role.ID === roleId);
+  }
+
+  isMainRole(roleId: number): boolean {
+    const assignedRole = this.AssignedRoleRights.find((role: { ID: number; }) => role.ID === roleId);
+    return assignedRole ? assignedRole.IsMainRole : false;
+  }
+
+  onCheckboxChange(row: any): void {
+    // If unchecked, unset as the main role
+    if (!row.Marked) {
+      row.IsMainRole = false;
+    }
+
+  }
+  onRadioChange(row: any): void {
+    if (row.Marked) {
+      // Unset other rows as main role
+      this.RoleMasterList.forEach((r: any) => r.IsMainRole = false); row.IsMainRole = true;
+    }
+  }
+
+  async SaveData_AssignRole() {
+    try {
+      debugger
+      var editChild = this.RoleMasterList.filter((x: { Marked: boolean; }) => x.Marked == true);
+      var isMainRole = this.RoleMasterList.filter((x: { IsMainRole: boolean; }) => x.IsMainRole == true);
+
+      if(editChild.length == 0){
+        this.toastr.error("Please Marked At least One Role")
+        return
+      }
+
+      if(isMainRole.length == 0){
+        this.toastr.error("Please Marked At least One Main Role")
+        return
+      }
+
+      editChild.forEach((x: any) => {
+        x.UserID = this.request.UserID,
+        x.SSOID = this.request.SSOID,
+        x.ModifiedBy = this.sSOLoginDataModel.UserID,
+        x.DepartmentID = this.sSOLoginDataModel.DepartmentID
+        x.InstituteID = this.sSOLoginDataModel.InstituteID
+      });
+      
+      await this.assignRoleRightsService.SaveAssignedRole_UserWise(editChild)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message)
+            // await this.GetUserMasterList();
+            this.CloseModalPopup();
+          }
+          else {
+            this.toastr.error(data.ErrorMessage)
+          }
+
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+  }
+
 }

@@ -433,6 +433,11 @@
                   <i class="ti ti-eye" *ngIf="row.ProfileStatusID == 247"></i>
                 </a>
 
+                <a href="javascript:void(0);" title="Assign Role Rights" 
+                  (click)="ViewandUpdate(MyModel_Action, row)">
+                  <i class="ti ti-playlist-add"></i>
+                </a>
+
               </div>
             </td>
           </tr>
@@ -1443,3 +1448,73 @@
 </ng-template>
 
 <app-view-staff-profile-modal #Modal_StaffDetailsViewModal></app-view-staff-profile-modal>
+
+<ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Assign Role</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+
+          <div class="overflow-auto mt-3">
+            <table class="table table-border w-full" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th width="80px" align="left">Sr. No.</th>
+                  <th align="left">                  
+                    <input type="checkbox" id="checkboxSeletedAll" class="checkboxSize" [checked]="allSelected"
+                           (change)="toggleAllCheckboxes($event)">
+                    All
+                  </th>
+                  <th align="left">Role Name</th>
+                  <th align="left">
+                    Is Main
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of RoleMasterList; let idx = index;">
+                  <td>{{ idx + 1 }}</td>
+                  <td align="left">
+
+                    <input type="checkbox"
+                           (change)="toggleCheckbox(row)" [(ngModel)]="row.Marked">
+                  </td>
+                  <td>
+                    {{ row.Name }}
+                  </td>
+                  <td align="left">
+
+                    <input type="radio"
+                           id="radio_{{idx+1}}"
+                           [checked]="row.IsMainRole"
+                           [disabled]="!row.Marked"
+                           name="radiocheck"
+                           (change)="onRadioChange(row)">
+                  </td>
+                 
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div class="text-center">
+              <button type="button"
+                      class="btn bg-info text-white mt-6"
+                      (click)="SaveData_AssignRole()"
+                      >
+                Submit
+              </button>
+              <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetCheck()">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
