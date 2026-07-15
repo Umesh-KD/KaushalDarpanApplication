@@ -385,7 +385,7 @@ export class AllExaminerReportComponent {
       await this.TheoryMarksService.GetTheoryAbsentReportData(request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.TheoryMarksAbsentReportData = data.Data;
-        this.exportToExcel();
+        this.exportToPDF();
       })
     } catch (error) {
       console.error(error);
@@ -416,6 +416,69 @@ export class AllExaminerReportComponent {
       .replace(/[:.]/g, '-')}.xlsx`;
 
     XLSX.writeFile(wb, fileName);
+  }
+
+  exportToPDF() {
+
+    const doc = new jsPDF('l', 'mm', 'a4');
+
+    // Heading
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      'Theory Marks Absent Report Group Code Wise',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+
+    const body = this.TheoryMarksAbsentReportData.map((row: any, index: number) => [
+      index + 1,
+      row.CCCode || '',
+      row.CenterCode || '',
+      row.GroupCode || '',
+      row.RollNo || '',
+      row.SubjectCode || '',
+      row.ObtainedTheory || ''
+    ]);
+
+    autoTable(doc, {
+      startY: 18,
+
+      head: [[
+        'Sr. No.',
+        'CCCode',
+        'Center Code',
+        'Group Code',
+        'Roll No',
+        'Subject Code',
+        'Obtained Theory'
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 7,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      }
+    });
+
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+
+    doc.save(`theory_marks_absent_report_groupcodewise_${timestamp}.pdf`);
   }
 }
 
