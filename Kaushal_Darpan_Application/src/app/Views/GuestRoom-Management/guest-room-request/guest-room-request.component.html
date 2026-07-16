@@ -19,13 +19,13 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Department
-          </label>
-          <select class="form-select" [(ngModel)]="searchRequest.DepartmentID">
-            <option value="1">BTER</option>
-          </select>
-        </div> -->
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+          Department
+        </label>
+        <select class="form-select" [(ngModel)]="searchRequest.DepartmentID">
+          <option value="1">BTER</option>
+        </select>
+      </div> -->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Status
@@ -41,8 +41,8 @@
             Form Date: <span class="StarMarking">*</span>
           </label>
           <input type="date" class="form-input" id="FromDate" name="FromDate"
-              [(ngModel)]="searchRequest.FromDate" [min]="todayDate">
-          
+                 [(ngModel)]="searchRequest.FromDate" [min]="todayDate">
+
         </div>
 
         <div>
@@ -50,8 +50,8 @@
             To Date: <span class="StarMarking">*</span>
           </label>
           <input type="date" class="form-input" id="ToDate" name="ToDate"
-              [(ngModel)]="searchRequest.ToDate" [min]="searchRequest.FromDate">
-          
+                 [(ngModel)]="searchRequest.ToDate" [min]="searchRequest.FromDate">
+
         </div>
 
         <div>
@@ -103,6 +103,7 @@
             <th class="text-left">Status</th>
             <th class="text-left">Payment Status</th>
             <th class="text-left">Remark</th>
+            <th class="text-left">Document</th>
             <th class="text-center" style="width:220px">Action</th>
           </tr>
         </thead>
@@ -111,13 +112,16 @@
             <td align="left">{{idx+1}}</td>
             <td align="left">
               <!-- <span class="block fw-600">{{item.RequestName}} - ({{item.RoleNameEnglish}})</span>
-              <span class="block">Department - {{item.DepartmentName}}</span>
-              <span class="block">College - {{item.InstituteName}}</span> -->
+            <span class="block">Department - {{item.DepartmentName}}</span>
+            <span class="block">College - {{item.InstituteName}}</span> -->
+              y:
 
               <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <span style="white-space: nowrap;">{{item.RequestName}} - ({{item.RoleNameEnglish}})
+                <span style="white-space: nowrap;">
+                  {{item.RequestName}} - ({{item.RoleNameEnglish}})
                 </span><br>
-                <span style="white-space: nowrap;"><b>Dpartment </b> - {{item.DepartmentName}}
+                <span style="white-space: nowrap;">
+                  <b>Dpartment </b> - {{item.DepartmentName}}
                 </span><br>
                 <span style="white-space: nowrap;">
                   <b>College</b> - {{item.InstituteName}}
@@ -135,23 +139,25 @@
             </td>
             <td align="left">
               <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-                <span style="white-space: nowrap;"><b>Employee ID:</b> 
+                <span style="white-space: nowrap;">
+                  <b>Employee ID:</b>
                   <a [href]="appsettingConfig.StaticFileRootPathURL + '/' + item.EmplDCardPhoto"
-                    class="text-info" target="_blank"> {{item.Dis_EmpIDCardPhoto}}</a>
-                </span>
-                <span style="white-space: nowrap;"><b>Purpose Doc:</b>
-                  <a [href]="appsettingConfig.StaticFileRootPathURL + '/' + item.PurposeDocPhoto"
-                    class="text-info" target="_blank"> {{item.Dis_PurposeDocPhoto}}</a>
+                     class="text-info" target="_blank"> {{item.Dis_EmpIDCardPhoto}}</a>
                 </span>
                 <span style="white-space: nowrap;">
-                  <b>Valid Photo ID:</b> 
+                  <b>Purpose Doc:</b>
+                  <a [href]="appsettingConfig.StaticFileRootPathURL + '/' + item.PurposeDocPhoto"
+                     class="text-info" target="_blank"> {{item.Dis_PurposeDocPhoto}}</a>
+                </span>
+                <span style="white-space: nowrap;">
+                  <b>Valid Photo ID:</b>
                   <a [href]="appsettingConfig.StaticFileRootPathURL + '/' + item.IDProofPhoto"
-                    class="text-info" target="_blank"> {{item.Dis_IDProofPhoto}}</a>
+                     class="text-info" target="_blank"> {{item.Dis_IDProofPhoto}}</a>
                 </span>
               </div>
             </td>
             <!-- <td align="left"><a title="View Employee" href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.EmplDCardPhoto}}" target="_blank">{{item.EmpID}}</a> </td> -->
-            
+
             <td align="left">{{item.FromDate}} {{item.FromTime}}</td>
             <td align="left">{{item.ToDate}} {{item.ToTime}}</td>
             <td align="left">{{item.GuestHouseName}}</td>
@@ -163,6 +169,13 @@
             <td align="left">{{item.StatusName}}</td>
             <td align="left">{{item.PaymentStatus_str}}</td>
             <td align="left">{{item.Remark}}</td>
+            <td>
+              <button type="button" class="btn btn-sm bg-primary text-white mt-2"
+                      *ngIf="item.Status === 219"
+                      (click)="DownloadFresherApprenticeshipReport(item)">
+                <i class="ti ti-download"></i> Download Slip
+              </button>
+            </td>
             <td align="center">
               <div class="d-flex flex-column gap-2">
                 <button type="button"

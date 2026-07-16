@@ -2095,6 +2095,13 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetGuestHouseSlip(searchRequest: any) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetGuestHouseSlip`, body, this.headersOptions)
+      .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
   
 }
 
