@@ -498,8 +498,12 @@ export class ItiCollegeReportComponent {
       await this.GetCollegeDetails(this.request.CollegeID)
 
     }
-
-
+    await this.GetAnnouncementTypeList();
+    for (let year = this.currentYear + 10; year >= 1900; year--) {
+      this.years.push(year);
+    }
+    this.request.AnnoucementType = -1;
+    this.request.Esttablishment_Year = 0;
     if (this.ApplicationID > 0) {
       await this.GetById(this.ApplicationID)
       if (this.sSOLoginDataModel.RoleID == 20 && this.TypeID != 1 && this.request.StatusID==1) {
@@ -517,12 +521,8 @@ export class ItiCollegeReportComponent {
     await this.GetDocumentPlan()
     await this.GetInstituteCategoryList()
     /*    await this.GetOrderList()*/
-    await this.GetAnnouncementTypeList();
-    for (let year = this.currentYear + 10; year >= 1900; year--) {
-      this.years.push(year);
-    }
-    this.request.AnnoucementType = -1;
-    this.request.Esttablishment_Year = 0;
+
+
   }
 
   get _ReportForm() { return this.ReportForm.controls; }
