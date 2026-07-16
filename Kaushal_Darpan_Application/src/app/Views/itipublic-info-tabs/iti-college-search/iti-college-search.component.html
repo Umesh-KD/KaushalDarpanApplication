@@ -247,11 +247,11 @@
             <td>{{row.District}}</td>
 
             <td>
-              <div class="flex align-center justify-center actionBtns">
+              <div class="flex align-items-center justify-content-center actionBtns" style="gap: 10px;">
                 <button type="button" (click)="GetById(row.CollegeId)" class="btn btn-info text-white gap-2">View</button>
                 <!--<a  href="javascript:void(0);" title="View" (click)="onCheckData(row)"><i class="ti ti-eye"></i></a>-->
-                <a href="javascript:void(0)" class="btn btn-info  text-white" (click)="EditData(MyModel_EdiDetails,row)" title="View">
-                  <i class="ti ti-eye"></i>
+                <a href="javascript:void(0)" class="btn btn-info  text-white" (click)="EditData(MyModel_EdiDetails,row)" title="Trade List">
+                  <i class="ti ti-list"></i>
                 </a>
               </div>
             </td>
@@ -987,32 +987,32 @@
         <button class="btn bg-info text-white" (click)="CloseModal1()"><i class="ti ti-x"></i></button>
       </div>
       <div class="card-body">
-        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-info-subtle">
           <b class="text-1xl-5">Trade List</b>
         </div>
         <table mat-table [dataSource]="dataSource1" class="mat-elevation-z8" style="width: 100%;">
           <ng-container matColumnDef="SNo">
-            <th mat-header-cell *matHeaderCellDef>#</th>
+            <th mat-header-cell *matHeaderCellDef class="text-start">S. No.</th>
             <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
           </ng-container>
           <ng-container matColumnDef="TradeName">
-            <th mat-header-cell *matHeaderCellDef> Trade Name </th>
+            <th mat-header-cell *matHeaderCellDef class="text-start"> Trade Name </th>
             <td mat-cell *matCellDef="let element"> {{element.TradeName}} </td>
           </ng-container>
           <ng-container matColumnDef="TradeType">
-            <th mat-header-cell *matHeaderCellDef> Trade Type </th>
+            <th mat-header-cell *matHeaderCellDef class="text-start"> Trade Type </th>
             <td mat-cell *matCellDef="let element"> {{element.TradeType}} </td>
           </ng-container>
           <ng-container matColumnDef="TradeScheme">
-            <th mat-header-cell *matHeaderCellDef> Trade Scheme </th>
+            <th mat-header-cell *matHeaderCellDef class="text-start"> Trade Scheme </th>
             <td mat-cell *matCellDef="let element"> {{element.TradeScheme}} </td>
           </ng-container>
           <ng-container matColumnDef="DurationYear">
-            <th mat-header-cell *matHeaderCellDef> DurationYear </th>
+            <th mat-header-cell *matHeaderCellDef class="text-start"> DurationYear </th>
             <td mat-cell *matCellDef="let element"> {{element.DurationYear }} </td>
           </ng-container>
           <ng-container matColumnDef="Fee">
-            <th mat-header-cell *matHeaderCellDef> Fee </th>
+            <th mat-header-cell *matHeaderCellDef class="text-start"> Fee </th>
             <td mat-cell *matCellDef="let element"> {{element.Fee }} </td>
           </ng-container>
           <!--<ng-container matColumnDef="actions">
