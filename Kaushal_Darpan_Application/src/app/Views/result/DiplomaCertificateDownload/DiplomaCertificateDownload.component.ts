@@ -75,7 +75,7 @@ export class DiplomaCertificateDownloadComponent {
       SemesterID: ['0', [Validators.required, notDefaultValueValidator('0')]],
       IsBridge: ['-1'],
       ResultTypeID: ['0', [Validators.required, notDefaultValueValidator('0')]],
-      IsRevised: ['-1', [Validators.required, notDefaultValueValidator('-1')]],
+      //IsRevised: ['-1', [Validators.required, notDefaultValueValidator('-1')]],
       RollNo: ['', Validators.required],
       EndTermID: [this.sSOLoginDataModel.EndTermID, [Validators.required, notDefaultValueValidator('0')]],
       SchemeID:['']
@@ -393,17 +393,17 @@ export class DiplomaCertificateDownloadComponent {
   refreshValidationOfRollNoOnly(isVaidateRollNoOnly: boolean) {
     //debugger
     // clear
-    this.downLoadFG.get('IsRevised')?.clearValidators();
+    //this.downLoadFG.get('IsRevised')?.clearValidators();
     this.downLoadFG.get('RollNo')?.clearValidators();
     // set
     if (isVaidateRollNoOnly) {
       this.downLoadFG.get('RollNo')?.setValidators(Validators.required);
     }
-    else {
-      this.downLoadFG.get('IsRevised')?.setValidators([Validators.required, notDefaultValueValidator('-1')]);
-    }
+    //else {
+    //  this.downLoadFG.get('IsRevised')?.setValidators([Validators.required, notDefaultValueValidator('-1')]);
+    //}
     // update
-    this.downLoadFG.get('IsRevised')?.updateValueAndValidity();
+    //this.downLoadFG.get('IsRevised')?.updateValueAndValidity();
     this.downLoadFG.get('RollNo')?.updateValueAndValidity();
   }
 }
