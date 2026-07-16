@@ -141,7 +141,6 @@ export class DocumentDetailsFormTabComponent implements OnInit {
   filteredDocumentDetails(groupNo: number): any[] {
 
     if (groupNo == 2) {
-      if (!this.filteredDocuments.length) {
         let filtered = this.documentDetails.filter((x) => x.GroupNo == groupNo);
         
         if (this.PersonalDetailsData.IsTSP !=true) {
@@ -200,13 +199,8 @@ export class DocumentDetailsFormTabComponent implements OnInit {
         if (this.PersonalDetailsData.CategoryB != 14) {
           filtered = filtered.filter((x: any) => x.ColumnName != "CategoryB_14")
         }
-     
+      this.filteredDocuments = filtered
 
-        setTimeout(() => {
-          this.filteredDocuments = filtered;
-        }, 100);
-
-      }
       return this.filteredDocuments;
 
      

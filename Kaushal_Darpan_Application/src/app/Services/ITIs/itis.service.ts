@@ -199,6 +199,15 @@ export class ITIsService {
       ).toPromise();
   }
 
+  public async ITISearchCollegeTrade(request: ITICollegeSearchModel) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/ITISearchCollegeTrade`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async PolotechnincSearchCollege(request: bterCollegeSearchModel) {
     var body = JSON.stringify(request);
 
