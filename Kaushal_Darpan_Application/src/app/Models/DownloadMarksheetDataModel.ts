@@ -27,6 +27,7 @@ export class DownloadMarksheetSearchModel {
   public SessionName?: string = ''
   public SRNO?: string = ''
   public DOB?: string = ''
+  public SchemeID?:number=0
 }
 
 

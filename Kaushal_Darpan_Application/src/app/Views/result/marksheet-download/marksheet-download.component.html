@@ -90,6 +90,17 @@
             </div>
           </div>
 
+          <div >
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
+            <select class="form-select" id="SchemeID" formControlName="SchemeID" [(ngModel)]="searchRequest.SchemeID">
+              <option value="0">--All--</option>
+              <option value="1347">Old</option>
+              <option value="1348">New</option>
+            </select>
+          </div>
+          <div *ngIf="isSubmitted && downLoadFG.get('SchemeID')?.hasError('defaultValue')" class="text-danger">
+            This field is required!
+          </div>
 
         </div>
         <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">

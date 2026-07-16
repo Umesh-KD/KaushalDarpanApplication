@@ -24,6 +24,7 @@ import { EmitraPaymentService } from '../../../Services/EmitraPayment/emitra-pay
 import { ApplyDuplicateDocService } from '../../../Services/ApplyDuplicateDoc/ApplyDuplicateDoc.service';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 import { ApplicationMessageDataModel } from '../../../Models/ApplicationMessageDataModel';
+import { ReportService } from '../../../Services/Report/report.service';
 
 @Component({
   selector: 'app-guest-room-request',
@@ -70,6 +71,8 @@ export class GuestRoomRequestComponent {
     'SNo', 'RequestName', 'RoleNameEnglish', 'DepartmentName', 'InstituteName',
     'EmplDCardPhoto', 'FromDate', 'FromTime', 'ToDate', 'ToTime', 'StatusName','Remark', 'Action'
   ];
+  public SetfileName: string = '';
+
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -108,6 +111,7 @@ export class GuestRoomRequestComponent {
     private sMSMailService: SMSMailService,
     private emitraPaymentService: EmitraPaymentService,
     private applyDuplicateDocService: ApplyDuplicateDocService,
+    private reportService: ReportService
   ) { }
 
 
@@ -1002,5 +1006,54 @@ export class GuestRoomRequestComponent {
       SSOID: ''
     });
     this.isSubmit = false;
+  }
+
+
+  downloadBase64PDF(base64: string, filename: string) {
+    const byteCharacters = atob(base64);
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
+  }
+
+  async DownloadFresherApprenticeshipReport(item : any) {
+    try {
+      debugger
+      this.SetfileName = 'GetGuestHouseSlip_'
+      let obj = {
+        GuestHouseID: 0,
+        UserID: 0,
+        StaffID: 0,
+        Action: 'GetGuestHouseSlip',
+        GuestReqID: item.GuestReqID
+        
+      };
+      const data: any = await this.reportService.GetGuestHouseSlip(obj);
+      const response = JSON.parse(JSON.stringify(data));
+      if (response.State === EnumStatus.Success) {
+        if (response.Data && response.Data.length > 0) {
+          this.downloadBase64PDF(response.Data, this.SetfileName + '.pdf');
+        } else {
+          this.toastr.warning('No data available to generate PDF.');
+        }
+
+      } else {
+        this.toastr.error(response.Message);
+      }
+
+    } catch (error) {
+      console.error(error);
+      this.toastr.error('Something went wrong.');
+    }
   }
 }
