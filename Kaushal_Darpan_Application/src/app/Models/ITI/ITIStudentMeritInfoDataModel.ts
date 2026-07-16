@@ -49,6 +49,9 @@ export class ITICollegeSearchModel
     public DistrictId: number = 0
     public PageNumber: number = 0;
     public PageSize: number = 0;
+    public InstituteID?: number = 0;
+    public TradeID?: number = 0;
+    public Action?: string = '';
   
   
 }

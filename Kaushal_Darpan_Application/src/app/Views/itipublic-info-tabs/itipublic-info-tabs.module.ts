@@ -25,7 +25,10 @@ import { DownloadApplicationFormComponent } from './download-application-form/do
 //import { UpwardMomentITIComponent } from '../Emitra/upward-moment-iti/upward-moment-iti.component';
 
 //import { ItiAdmissionComponent } from '../Emitra/iti-application/iti-application.component';
-
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { ItiTradeSearchComponent } from './iti-trade-search/iti-trade-search.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +40,8 @@ import { DownloadApplicationFormComponent } from './download-application-form/do
     ItiGeneralInstructionsComponent,
     ItiCollegeSearchComponent,
     ItiVacantSeatDirectAdmissionComponent,
-    DownloadApplicationFormComponent
+    DownloadApplicationFormComponent,
+    ItiTradeSearchComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +49,10 @@ import { DownloadApplicationFormComponent } from './download-application-form/do
     LoaderModule,
     FormsModule,
     ReactiveFormsModule,
-    TableSearchFilterModule, OTPModalModule
+    TableSearchFilterModule, OTPModalModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   exports: [ITIPublicInfoTabsComponent]
 })
