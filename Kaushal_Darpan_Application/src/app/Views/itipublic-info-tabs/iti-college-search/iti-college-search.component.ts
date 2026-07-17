@@ -119,6 +119,9 @@ export class ItiCollegeSearchComponent {
   public totalRecord1: number = 0;
 
 
+  @ViewChild('paginator1') paginator1!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  dataSource1!: MatTableDataSource<any>;
   displayedColumns1: string[] = [
     'SNo',
     'TradeName',
@@ -128,9 +131,7 @@ export class ItiCollegeSearchComponent {
     'Fee'
   ];
   modalRef1: NgbModalRef | null = null;
-  dataSource1!: MatTableDataSource<any>;
-  @ViewChild('paginator1') paginator1!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+
   constructor(private loaderService: LoaderService, private commonservice: CommonFunctionService,
     private studentService: StudentService, private modalService: NgbModal, private toastrService: ToastrService, private documentDetailsService: DocumentDetailsService,
     private emitraPaymentService: EmitraPaymentService,

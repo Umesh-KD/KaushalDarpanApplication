@@ -308,6 +308,7 @@ export class DocumentDetailsService {
   }
 
   HasRequiredDocument(item: any[]): boolean {
+    debugger
     const rd = item.filter(x => x.IsMandatory == true && (x.FileName == null || x.FileName == '' || x.FileName == ' '))
     if (rd?.length > 0) {
       let r = rd.map(x => x.DisplayColumnNameEn)?.join(", ");
