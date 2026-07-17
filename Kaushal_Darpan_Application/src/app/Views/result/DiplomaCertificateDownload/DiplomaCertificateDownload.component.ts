@@ -76,9 +76,9 @@ export class DiplomaCertificateDownloadComponent {
       IsBridge: ['-1'],
       ResultTypeID: ['0', [Validators.required, notDefaultValueValidator('0')]],
       //IsRevised: ['-1', [Validators.required, notDefaultValueValidator('-1')]],
-      RollNo: ['', Validators.required],
+      EnrollmentNo: ['', Validators.required],
       EndTermID: [this.sSOLoginDataModel.EndTermID, [Validators.required, notDefaultValueValidator('0')]],
-      SchemeID:['']
+      SchemeID: ['']
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -124,7 +124,7 @@ export class DiplomaCertificateDownloadComponent {
   async getAllData() {
     //debugger
     // refresh
-    this.refreshValidationOfRollNoOnly((this.searchRequest.RollNo ?? 0) > 0 ? true : false);
+    this.refreshValidationOfEnrollmentNoOnly(parseInt(this.searchRequest.EnrollmentNo ?? '0') > 0 ? true : false);
     //
     this.isSubmitted = true;
     if (this.downLoadFG.invalid) {
@@ -137,6 +137,7 @@ export class DiplomaCertificateDownloadComponent {
       this.searchRequest.FianancialYearID = this.searchRequest.FianancialYearID;
       this.searchRequest.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID;
 
       // get
       await this.marksheetDownloadService.GetStudentsDiplomaCertificate(this.searchRequest)
@@ -171,7 +172,7 @@ export class DiplomaCertificateDownloadComponent {
       const url = window.URL.createObjectURL(blob);
       downloadLink.href = url;
       // downloadLink.download = this.generateFileName('pdf', DownloadfileName);
-      downloadLink.download = FileName || 'Marksheet.pdf'
+      downloadLink.download = FileName || 'FinalDiplomaCertificate.pdf'
       downloadLink.click();
       window.URL.revokeObjectURL(url);
     });
@@ -375,14 +376,14 @@ export class DiplomaCertificateDownloadComponent {
   }
 
   downloadFile_existing(row: any) {
-    const url = `${this.appsettingConfig.StaticFileRootPathURL}/Students/BTER/FinalDiplomaCertificate/${row.MarksheetFilePath}`;
+    const url = `${this.appsettingConfig.StaticFileRootPathURL}/Students/BTER/FinalDiploma/${row.FileName}`;
 
     fetch(url)
       .then(response => response.blob())
       .then(blob => {
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
-        link.download = row.MarksheetFile || 'FinalDiplomaCertificate.pdf'; // Use stored filename
+        link.download = row.Dis_FileName || 'FinalDiplomaCertificate.pdf'; // Use stored filename
         link.click();
         // Clean up
         window.URL.revokeObjectURL(link.href);
@@ -390,20 +391,20 @@ export class DiplomaCertificateDownloadComponent {
       .catch(() => console.error('Download failed. Check CORS settings on the server.'));
   }
 
-  refreshValidationOfRollNoOnly(isVaidateRollNoOnly: boolean) {
+  refreshValidationOfEnrollmentNoOnly(isVaidateEnrollmentNoOnly: boolean) {
     //debugger
     // clear
     //this.downLoadFG.get('IsRevised')?.clearValidators();
-    this.downLoadFG.get('RollNo')?.clearValidators();
+    this.downLoadFG.get('EnrollmentNo')?.clearValidators();
     // set
-    if (isVaidateRollNoOnly) {
-      this.downLoadFG.get('RollNo')?.setValidators(Validators.required);
+    if (isVaidateEnrollmentNoOnly) {
+      this.downLoadFG.get('EnrollmentNo')?.setValidators(Validators.required);
     }
     //else {
     //  this.downLoadFG.get('IsRevised')?.setValidators([Validators.required, notDefaultValueValidator('-1')]);
     //}
     // update
     //this.downLoadFG.get('IsRevised')?.updateValueAndValidity();
-    this.downLoadFG.get('RollNo')?.updateValueAndValidity();
+    this.downLoadFG.get('EnrollmentNo')?.updateValueAndValidity();
   }
 }
