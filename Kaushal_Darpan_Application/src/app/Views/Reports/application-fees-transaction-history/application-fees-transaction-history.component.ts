@@ -101,7 +101,8 @@ export class ApplicationFeesTransactionHistoryComponent {
   }
   async CheckPaymentSataus(request: any) {
     try {
-      let obj: TransactionStatusDataModel = {
+      let obj: TransactionStatusDataModel =
+      {
         TransactionID: request.TransactionId,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         PRN: request.PRN,
@@ -112,9 +113,12 @@ export class ApplicationFeesTransactionHistoryComponent {
         SubOrderID: "",
         CreatedBy: this.sSOLoginDataModel.UserID,
         SSOID: this.sSOLoginDataModel.SSOID,
-        ExamStudentStatus: 0
+        ExamStudentStatus: 0,
+        IsEmitra: request.IsEmitra
         // ExamStudentStatus: request.TransctionStatus
       }
+
+
       await this.emitraPaymentService.EmitraApplicationVerifyPaymentStatus(obj)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
