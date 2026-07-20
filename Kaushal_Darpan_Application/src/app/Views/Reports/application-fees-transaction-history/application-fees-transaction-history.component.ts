@@ -99,8 +99,10 @@ export class ApplicationFeesTransactionHistoryComponent {
 
     this.isAllSelected();
   }
-  async CheckPaymentSataus(request: any) {
-    try {
+  async CheckPaymentSataus(request: any)
+  {
+    try
+    {
       let obj: TransactionStatusDataModel =
       {
         TransactionID: request.TransactionId,
