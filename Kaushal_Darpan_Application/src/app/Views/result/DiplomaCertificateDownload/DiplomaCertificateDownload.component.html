@@ -38,7 +38,7 @@
             </select>
           </div>
 
-          <div>
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Revised
             </label>
@@ -51,7 +51,8 @@
             <div *ngIf="isSubmitted && downLoadFG.get('IsRevised')?.hasError('defaultValue')" class="text-danger">
               This field is required!
             </div>
-          </div>
+          </div>-->
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Bridge
@@ -107,15 +108,15 @@
         <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Roll Number
+              Enrollment Number
             </label>
             <input type="text"
                    class="form-input"
-                   [(ngModel)]="searchRequest.RollNo"
+                   [(ngModel)]="searchRequest.EnrollmentNo"
                    placeholder="Enter Roll Number"
-                   name="RollNo" formControlName="RollNo" />
+                   name="EnrollmentNo" formControlName="EnrollmentNo" />
 
-            <div *ngIf="isSubmitted && downLoadFG.get('RollNo')?.hasError('required')" class="text-danger">
+            <div *ngIf="isSubmitted && downLoadFG.get('EnrollmentNo')?.hasError('required')" class="text-danger">
               This field is required!
             </div>
           </div>
@@ -167,6 +168,7 @@
             <th class="text-left">Sr No.</th>
             <th class="text-left">Student Name</th>
             <th class="text-left">Father Name</th>
+            <th class="text-left">Enrollment Number</th>
             <th class="text-left">Roll Number</th>
             <th class="text-left">Stream</th>
             <th class="text-left">Action</th>
@@ -177,11 +179,12 @@
             <td align="left">{{(startInTableIndex+1)+idx}}</td>
             <td align="left">{{row.StudentName}}</td>
             <td align="left">{{row.FatherName}}</td>
+            <td align="left">{{row.EnrollmentNo}}</td>
             <td align="left">{{row.RollNo}}</td>
             <td align="left">{{row.StreamName}}</td>
             <td align="left">
               <a class="btn bg-info btn-sm text-white" style="cursor: pointer;"
-                 *ngIf="row.MarksheetFile != ''"
+                 *ngIf="row.Dis_FileName != ''"
                  (click)="downloadFile_existing(row)">
                 <i class="ti ti-download"></i> Download Diploma Certificate
               </a>

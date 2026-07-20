@@ -7,7 +7,7 @@
         </div>
       </div>
     </div>
-  </div> 
+  </div>
 </div>
 
 <div class="card" id="Tabs5">
@@ -49,149 +49,149 @@
       </div>
       <label style="color:red">{{ValidationMessage}}</label>
       <!--<div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
-      <label class="form-label">Sub Division</label>
-      <select [ngModelOptions]="{standalone: true}" class="form-select" id="SubDivisionId" [(ngModel)]="request.SubDivisionId">
-        <option value="0">--Select--</option>
-        <option *ngFor="let item of SubDivisionMasterList" [value]="item.ID">{{item.Name}}</option>
-      </select>
+        <label class="form-label">Sub Division</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="SubDivisionId" [(ngModel)]="request.SubDivisionId">
+          <option value="0">--Select--</option>
+          <option *ngFor="let item of SubDivisionMasterList" [value]="item.ID">{{item.Name}}</option>
+        </select>
 
-    </div>
+      </div>
 
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
-      <label class="form-label">Tehsil</label>
-      <select [ngModelOptions]="{standalone: true}" class="form-select" id="TehsilId" [(ngModel)]="request.TehsilId" (change)="GetGramPanchayatSamiti()">
-        <option value="0">--Select--</option>
-        <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
-      </select>
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Tehsil</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="TehsilId" [(ngModel)]="request.TehsilId" (change)="GetGramPanchayatSamiti()">
+          <option value="0">--Select--</option>
+          <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
+        </select>
 
-    </div>
+      </div>
 
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
-      <label class="form-label">Urban/Rural:</label>
-      <select [ngModelOptions]="{standalone: true}" class="form-select" id="UrbanRural" [(ngModel)]="request.UrbanRural">
-        <option value="0">Select Urban/Rural</option>
-        <option *ngFor="let item of ResidenceList" value="{{item.ID}}">{{item.Name}}</option>
-      </select>
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Urban/Rural:</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="UrbanRural" [(ngModel)]="request.UrbanRural">
+          <option value="0">Select Urban/Rural</option>
+          <option *ngFor="let item of ResidenceList" value="{{item.ID}}">{{item.Name}}</option>
+        </select>
 
-    </div>
-
-
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
-      <label class="form-label" for="PanchayatSamiti">Panchayat Samiti:</label>
-      <select [ngModelOptions]="{standalone: true}" class="form-select" id="PanchayatSamiti"
-              [(ngModel)]="request.PanchayatsamityId">
-        <option value="0">--Select--</option>
-        <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
-      </select>
-
-    </div>
+      </div>
 
 
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
-      <label class="form-label" for="GramPanchayatSamiti">Gram Panchayat:</label>
-      <select [ngModelOptions]="{standalone: true}" class="form-select" id="GramPanchayatSamiti"
-              [(ngModel)]="request.GrampanchayatId" (change)="villageMaster()">
-        <option value="0">--Select--</option>
-        <option *ngFor="let item of GramPanchayatList" [value]="item.ID">{{item.Name}}</option>
-      </select>
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
+        <label class="form-label" for="PanchayatSamiti">Panchayat Samiti:</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="PanchayatSamiti"
+                [(ngModel)]="request.PanchayatsamityId">
+          <option value="0">--Select--</option>
+          <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
+        </select>
 
-    </div>
+      </div>
 
 
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
+        <label class="form-label" for="GramPanchayatSamiti">Gram Panchayat:</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="GramPanchayatSamiti"
+                [(ngModel)]="request.GrampanchayatId" (change)="villageMaster()">
+          <option value="0">--Select--</option>
+          <option *ngFor="let item of GramPanchayatList" [value]="item.ID">{{item.Name}}</option>
+        </select>
 
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
-      <label class="form-label" for="village">Village:</label>
-      <select [ngModelOptions]="{standalone: true}" class="form-select" id="village"
-              [(ngModel)]="request.VillageId">
-        <option value="0">--Select--</option>
-        <option *ngFor="let item of VillageMasterList" [value]="item.ID">{{item.Name}}</option>
-      </select>
-
-    </div>
+      </div>
 
 
 
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
+        <label class="form-label" for="village">Village:</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="village"
+                [(ngModel)]="request.VillageId">
+          <option value="0">--Select--</option>
+          <option *ngFor="let item of VillageMasterList" [value]="item.ID">{{item.Name}}</option>
+        </select>
 
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
-      <label class="form-label">Administrative Body:</label>
-      <select [ngModelOptions]="{standalone: true}" class="form-select" id="Administrative" [(ngModel)]="request.AdministrativeId">
-        <option value="0">Select Administrative Body</option>
-        <option value="1">Cantonment Board</option>
-        <option value="2">Nagar Nigam</option>
-        <option value="3">Nagar Palika</option>
-        <option value="4">Nagar Parishad</option>
-      </select>
+      </div>
 
-    </div>
 
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 1 && request.UrbanRural==75">
-      <label class="form-label" for="CantonmentBoard">CantonmentBoard Name:</label>
-      <input  class="form-control" type="text" id="CantonmentBoard"
-             placeholder="Enter CantonmentBoard Name" [(ngModel)]="request.CantonmentBoardName">
 
-    </div>
 
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 2 && request.UrbanRural==75">
-      <label class="form-label" for="NagarNigam">Nagar Nigam Name:</label>
-      <input  class="form-control" type="text" id="NagarNigam"
-             placeholder="Enter NagarNigam Name" [(ngModel)]="request.NagarNigamName">
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
+        <label class="form-label">Administrative Body:</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="Administrative" [(ngModel)]="request.AdministrativeId">
+          <option value="0">Select Administrative Body</option>
+          <option value="1">Cantonment Board</option>
+          <option value="2">Nagar Nigam</option>
+          <option value="3">Nagar Palika</option>
+          <option value="4">Nagar Parishad</option>
+        </select>
 
-    </div>
+      </div>
 
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 3 && request.UrbanRural==75">
-      <label class="form-label" for="NagarPalika">Nagar Palika Name:</label>
-      <input  class="form-control" type="text" id="NagarPalika"
-             placeholder="Enter NagarPalika Name" [(ngModel)]="request.NagarPalikaName">
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 1 && request.UrbanRural==75">
+        <label class="form-label" for="CantonmentBoard">CantonmentBoard Name:</label>
+        <input  class="form-control" type="text" id="CantonmentBoard"
+               placeholder="Enter CantonmentBoard Name" [(ngModel)]="request.CantonmentBoardName">
 
-    </div>
+      </div>
 
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 4 && request.UrbanRural==75">
-      <label class="form-label" for="NagarParishad">Nagar Parishad Name:</label>
-      <input  class="form-control" type="text" id="NagarParishad"
-             placeholder="Enter NagarParishad Name" [(ngModel)]="request.NagarParishadName">
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 2 && request.UrbanRural==75">
+        <label class="form-label" for="NagarNigam">Nagar Nigam Name:</label>
+        <input  class="form-control" type="text" id="NagarNigam"
+               placeholder="Enter NagarNigam Name" [(ngModel)]="request.NagarNigamName">
 
-    </div>
+      </div>
 
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
-      <label class="form-label">City:</label>
-      <select [ngModelOptions]="{standalone: true}" class="form-select" id="CityID" [(ngModel)]="request.CityID">
-        <option value="0">--Select--</option>
-        <option *ngFor="let item of CityMasterDDLList" [value]="item.ID">{{item.Name}}</option>
-      </select>
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 3 && request.UrbanRural==75">
+        <label class="form-label" for="NagarPalika">Nagar Palika Name:</label>
+        <input  class="form-control" type="text" id="NagarPalika"
+               placeholder="Enter NagarPalika Name" [(ngModel)]="request.NagarPalikaName">
 
-    </div>
+      </div>
 
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
-      <label class="form-label" for="Ward">Ward number:</label>
-      <input  class="form-control" type="text" id="Ward" placeholder="Enter Ward"
-             [(ngModel)]="request.Ward">
-    </div>
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 4 && request.UrbanRural==75">
+        <label class="form-label" for="NagarParishad">Nagar Parishad Name:</label>
+        <input  class="form-control" type="text" id="NagarParishad"
+               placeholder="Enter NagarParishad Name" [(ngModel)]="request.NagarParishadName">
 
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
-      <label class="form-label">Parliament Area:</label>
-      <select [ngModelOptions]="{standalone: true}" class="form-select" id="ParliamentId"
-              [(ngModel)]="request.ParliamentId">
-        <option value="0">--Select--</option>
-        <option *ngFor="let item of ParliamentMasterList" [value]="item.ID">
-          {{item.Name}}
-        </option>
-      </select>
-    </div>
+      </div>
 
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
-      <label class="form-label">Assembly Area:</label>
-      <select [ngModelOptions]="{standalone: true}" class="form-select" id="AssemblyId" [(ngModel)]="request.AssemblyId">
-        <option value="0">--Select--</option>
-        <option *ngFor="let item of AssemblyMasterList" [value]="item.ID">{{item.Name}}</option>
-      </select>
-    </div>
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
+        <label class="form-label">City:</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="CityID" [(ngModel)]="request.CityID">
+          <option value="0">--Select--</option>
+          <option *ngFor="let item of CityMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+        </select>
 
-    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
-      <label class="form-label" for="InstitutePincode">Pincode:</label>
-      <input  class="form-control" type="text" id="pincode" placeholder="Enter Pincode"
-             (keypress)="numberOnly($event)" [(ngModel)]="request.Pincode">
+      </div>
 
-    </div>-->
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
+        <label class="form-label" for="Ward">Ward number:</label>
+        <input  class="form-control" type="text" id="Ward" placeholder="Enter Ward"
+               [(ngModel)]="request.Ward">
+      </div>
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Parliament Area:</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="ParliamentId"
+                [(ngModel)]="request.ParliamentId">
+          <option value="0">--Select--</option>
+          <option *ngFor="let item of ParliamentMasterList" [value]="item.ID">
+            {{item.Name}}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Assembly Area:</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="AssemblyId" [(ngModel)]="request.AssemblyId">
+          <option value="0">--Select--</option>
+          <option *ngFor="let item of AssemblyMasterList" [value]="item.ID">{{item.Name}}</option>
+        </select>
+      </div>
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label" for="InstitutePincode">Pincode:</label>
+        <input  class="form-control" type="text" id="pincode" placeholder="Enter Pincode"
+               (keypress)="numberOnly($event)" [(ngModel)]="request.Pincode">
+
+      </div>-->
 
 
 
@@ -221,8 +221,8 @@
       <div class="">
       </div>
       <!--<div class="">
-      <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
-    </div>-->
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+      </div>-->
     </div>
 
     <!--{{paginatedInTableData|json}}-->
@@ -247,10 +247,12 @@
             <td>{{row.District}}</td>
 
             <td>
-              <div class="flex align-center justify-center actionBtns">
-                <button type="button" (click)="GetById(row.CollegeId)" class="btn btn-info text-white">View</button>
+              <div class="flex align-items-center justify-content-center actionBtns" style="gap: 10px;">
+                <button type="button" (click)="GetById(row.CollegeId)" class="btn btn-info text-white gap-2">View</button>
                 <!--<a  href="javascript:void(0);" title="View" (click)="onCheckData(row)"><i class="ti ti-eye"></i></a>-->
-
+                <a href="javascript:void(0)" class="btn btn-info  text-white" (click)="EditData(MyModel_EdiDetails,row)" title="Trade List">
+                  <i class="ti ti-list"></i>
+                </a>
               </div>
             </td>
           </tr>
@@ -259,29 +261,19 @@
     </div>
 
     <div *ngIf="isVisibleList" class="p-3 pe-0 paginationBox d-flex align-items-center justify-content-end">
-     
-        <span class="block pe-2">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
-        <div class="pagination pagination-sm bg-white">
-          <button class="page-link text-dark" (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
-          <button class="page-link text-dark" (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
-          <input class="page-link text-dark" type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
-                 [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
-          <span class="text-nowrap text-dark page-link">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
-          <button class="page-link text-dark" (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
-          <button class="page-link text-dark" (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
-        </div>
-      
+      <span class="block pe-2">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="pagination pagination-sm bg-white">
+        <button class="page-link text-dark" (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button class="page-link text-dark" (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input class="page-link text-dark" type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap text-dark page-link">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button class="page-link text-dark" (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button class="page-link text-dark" (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
     </div>
 
-
-
-  
-
-
     <!--DetailsSection-->
-
-
-
 
     <div *ngIf="isVisibleSection" class="card">
       <div class="card-body">
@@ -410,24 +402,24 @@
 
 
             <!--<div *ngIf="requestPlaning.InstituteManagementId==5">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Registration Document  </label>
-            <div class="flex fileUploader">
-              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                     id="RegFileName" type="file" (change)="onFilechange($event,'RegFileName')" />
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Registration Document  </label>
+              <div class="flex fileUploader">
+                <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="RegFileName" type="file" (change)="onFilechange($event,'RegFileName')" />
 
-              <label for="RegFileName">
-                <span>Choose File</span>
-                {{ requestPlaning.RegDisFileName === '' ? 'No File Chosen' : requestPlaning.RegDisFileName }}
-              </label>
-              <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.RegFileName}}"
-                   *ngIf="this.requestPlaning.RegFileName  !=''"
-                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                <label for="RegFileName">
+                  <span>Choose File</span>
+                  {{ requestPlaning.RegDisFileName === '' ? 'No File Chosen' : requestPlaning.RegDisFileName }}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.RegFileName}}"
+                     *ngIf="this.requestPlaning.RegFileName  !=''"
+                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+                </div>
 
               </div>
-
-            </div>
-          </div>-->
+            </div>-->
 
           </div>
 
@@ -472,31 +464,31 @@
 
 
           <!--<div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1   ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 ">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ID Proof </label>
-          <div class="flex fileUploader">
-            <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                   id="IDFileName" type="file" (change)="onFilechange($event,'IDFileName')" />
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ID Proof </label>
+            <div class="flex fileUploader">
+              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="IDFileName" type="file" (change)="onFilechange($event,'IDFileName')" />
 
-            <label for="IDFileName">
-              <span>Choose File</span>
-              {{ member.IDdis_Filename === '' ? 'No File Chosen' : member.IDdis_Filename }}
-            </label>
-            <div class="flex">
-              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + member.IDFileName}}"
-                 *ngIf="this.member.IDFileName  !=''"
-                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              <label for="IDFileName">
+                <span>Choose File</span>
+                {{ member.IDdis_Filename === '' ? 'No File Chosen' : member.IDdis_Filename }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + member.IDFileName}}"
+                   *ngIf="this.member.IDFileName  !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+              </div>
 
             </div>
-
-          </div>
-        </div>-->
+          </div>-->
           <!--<div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1   ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1  " class="pt-30">
-          <button (click)="AddChoice()" type="button" class="btn bg-primary text-white">
-            <i class="ti ti-plus"></i> Add
-            More
-          </button>
+            <button (click)="AddChoice()" type="button" class="btn bg-primary text-white">
+              <i class="ti ti-plus"></i> Add
+              More
+            </button>
 
-        </div>-->
+          </div>-->
           <!--<div *ngIf="this.Type!=1"></div>-->
 
           <div class="col-lg-4 col-md-6">
@@ -514,24 +506,24 @@
 
 
           <!--<div class="mt-4">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Upload Document </label>
-          <div class="flex fileUploader">
-            <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                   id="MemberIdProofName" type="file" (change)="onFilechange($event,'MemberIdProofName')" />
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Upload Document </label>
+            <div class="flex fileUploader">
+              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="MemberIdProofName" type="file" (change)="onFilechange($event,'MemberIdProofName')" />
 
-            <label for="MemberIdProofName">
-              <span>Choose File</span>
-              {{ requestPlaning.MemberIdDisProofName === '' ? 'No File Chosen' : requestPlaning.MemberIdDisProofName }}
-            </label>
-            <div class="flex">
-              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.MemberIdProofName}}"
-                 *ngIf="this.requestPlaning.MemberIdProofName  !=''"
-                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              <label for="MemberIdProofName">
+                <span>Choose File</span>
+                {{ requestPlaning.MemberIdDisProofName === '' ? 'No File Chosen' : requestPlaning.MemberIdDisProofName }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.MemberIdProofName}}"
+                   *ngIf="this.requestPlaning.MemberIdProofName  !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+              </div>
 
             </div>
-
-          </div>
-        </div>-->
+          </div>-->
 
 
         </div>
@@ -540,7 +532,7 @@
 
 
 
-        
+
 
 
 
@@ -610,24 +602,24 @@
           </div>
 
           <!--<div class="">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> {{ requestPlaning.OwnerShipID == 1 ? 'Rented' : 'Owned Property' }}Document (Lease deed)  </label>
-          <div class="flex fileUploader">
-            <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                   id="AgreementFileName" type="file" (change)="onFilechange($event,'AgreementFileName')" />
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> {{ requestPlaning.OwnerShipID == 1 ? 'Rented' : 'Owned Property' }}Document (Lease deed)  </label>
+            <div class="flex fileUploader">
+              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="AgreementFileName" type="file" (change)="onFilechange($event,'AgreementFileName')" />
 
-            <label for="AgreementFileName">
-              <span>Choose File</span>
-              {{ requestPlaning.AgreementDisFileName === '' ? 'No File Chosen' : requestPlaning.AgreementDisFileName }}
-            </label>
-            <div class="flex">
-              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.AgreementFileName}}"
-                 *ngIf="this.requestPlaning.AgreementFileName  !=''"
-                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              <label for="AgreementFileName">
+                <span>Choose File</span>
+                {{ requestPlaning.AgreementDisFileName === '' ? 'No File Chosen' : requestPlaning.AgreementDisFileName }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.AgreementFileName}}"
+                   *ngIf="this.requestPlaning.AgreementFileName  !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+              </div>
 
             </div>
-
-          </div>
-        </div>-->
+          </div>-->
 
 
 
@@ -765,48 +757,48 @@
 
 
           <!--<label for="CantonmentBoard">CantonmentBoard Name:</label>
-          <input class="form-input" type="text" id="CantonmentBoard"
-                 placeholder="Enter CantonmentBoard Name" [(ngModel)]="requestPlaning.CantonmentBoardName">
-          <div *ngIf="isSubmitted && instituteForm.get('CantonmentBoard').errors" class="text-danger">
-            <p *ngIf="instituteForm.get('CantonmentBoard').errors.required">
-              <i aria-hidden="true"></i>This field is
-              required.
-            </p>
-          </div>
-        </div>-->
+            <input class="form-input" type="text" id="CantonmentBoard"
+                   placeholder="Enter CantonmentBoard Name" [(ngModel)]="requestPlaning.CantonmentBoardName">
+            <div *ngIf="isSubmitted && instituteForm.get('CantonmentBoard').errors" class="text-danger">
+              <p *ngIf="instituteForm.get('CantonmentBoard').errors.required">
+                <i aria-hidden="true"></i>This field is
+                required.
+              </p>
+            </div>
+          </div>-->
           <!--<div *ngIf="requestPlaning.AdministrativeId == 2 && requestPlaning.UrbanRural==75">
-          <label for="NagarNigam">Nagar Nigam Name:</label>
-          <input class="form-input" type="text" id="NagarNigam"
-                 placeholder="Enter NagarNigam Name" [(ngModel)]="requestPlaning.NagarNigamName">
-          <div *ngIf="isSubmitted && instituteForm.get('NagarNigam').errors" class="text-danger">
-            <p *ngIf="instituteForm.get('NagarNigam').errors.required">
-              <i aria-hidden="true"></i>This field is
-              required.
-            </p>
-          </div>
-        </div>-->
+            <label for="NagarNigam">Nagar Nigam Name:</label>
+            <input class="form-input" type="text" id="NagarNigam"
+                   placeholder="Enter NagarNigam Name" [(ngModel)]="requestPlaning.NagarNigamName">
+            <div *ngIf="isSubmitted && instituteForm.get('NagarNigam').errors" class="text-danger">
+              <p *ngIf="instituteForm.get('NagarNigam').errors.required">
+                <i aria-hidden="true"></i>This field is
+                required.
+              </p>
+            </div>
+          </div>-->
           <!--<div *ngIf="requestPlaning.AdministrativeId == 3 && requestPlaning.UrbanRural==75">
-          <label for="NagarPalika">Nagar Palika Name:</label>
-          <input class="form-input" type="text" id="NagarPalika"
-                 placeholder="Enter NagarPalika Name" [(ngModel)]="requestPlaning.NagarPalikaName">
-          <div *ngIf="isSubmitted && instituteForm.get('NagarPalika').errors" class="text-danger">
-            <p *ngIf="instituteForm.get('NagarPalika').errors.required">
-              <i aria-hidden="true"></i>This field is
-              required.
-            </p>
-          </div>
-        </div>-->
+            <label for="NagarPalika">Nagar Palika Name:</label>
+            <input class="form-input" type="text" id="NagarPalika"
+                   placeholder="Enter NagarPalika Name" [(ngModel)]="requestPlaning.NagarPalikaName">
+            <div *ngIf="isSubmitted && instituteForm.get('NagarPalika').errors" class="text-danger">
+              <p *ngIf="instituteForm.get('NagarPalika').errors.required">
+                <i aria-hidden="true"></i>This field is
+                required.
+              </p>
+            </div>
+          </div>-->
           <!--<div *ngIf="requestPlaning.AdministrativeId == 4 && requestPlaning.UrbanRural==75">
-          <label for="NagarParishad">Nagar Parishad Name:</label>
-          <input class="form-input" type="text" id="NagarParishad"
-                 placeholder="Enter NagarParishad Name" [(ngModel)]="requestPlaning.NagarParishadName">
-          <div *ngIf="isSubmitted && instituteForm.get('NagarParishad').errors" class="text-danger">
-            <p *ngIf="instituteForm.get('NagarParishad').errors.required">
-              <i aria-hidden="true"></i>This field is
-              required.
-            </p>
-          </div>
-        </div>-->
+            <label for="NagarParishad">Nagar Parishad Name:</label>
+            <input class="form-input" type="text" id="NagarParishad"
+                   placeholder="Enter NagarParishad Name" [(ngModel)]="requestPlaning.NagarParishadName">
+            <div *ngIf="isSubmitted && instituteForm.get('NagarParishad').errors" class="text-danger">
+              <p *ngIf="instituteForm.get('NagarParishad').errors.required">
+                <i aria-hidden="true"></i>This field is
+                required.
+              </p>
+            </div>
+          </div>-->
 
 
           <div class="col-lg-4 col-md-6">
@@ -831,24 +823,24 @@
           </div>
 
           <!--<div class="">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Lat/Long* (along with college gate photo)  </label>
-          <div class="flex fileUploader">
-            <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                   id="LatLongFileName" type="file" (change)="onFilechange($event,'LatLongFileName')" />
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Lat/Long* (along with college gate photo)  </label>
+            <div class="flex fileUploader">
+              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="LatLongFileName" type="file" (change)="onFilechange($event,'LatLongFileName')" />
 
-            <label for="LatLongFileName">
-              <span>Choose File</span>
-              {{ requestPlaning.LatLongDisFileName === '' ? 'No File Chosen' : requestPlaning.LatLongDisFileName }}
-            </label>
-            <div class="flex">
-              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.LatLongFileName}}"
-                 *ngIf="this.requestPlaning.LatLongFileName  !=''"
-                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              <label for="LatLongFileName">
+                <span>Choose File</span>
+                {{ requestPlaning.LatLongDisFileName === '' ? 'No File Chosen' : requestPlaning.LatLongDisFileName }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.LatLongFileName}}"
+                   *ngIf="this.requestPlaning.LatLongFileName  !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+              </div>
 
             </div>
-
-          </div>
-        </div>-->
+          </div>-->
 
           <div class="col-lg-4 col-md-6">
             <label class="form-label" for="Ward">Latitude:</label>
@@ -862,188 +854,198 @@
             <label class="form-label" for="Ward">Longitude:</label>
             <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
                    [(ngModel)]="requestPlaning.Longitude">
-
-
-
           </div>
-
-
-
-
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-3 p-2  mt-4 bg-info-subtle">
           <b class="text-1xl-5"><i class="ti ti-plus"></i>Contact Details</b>
         </div>
         <div class="row gy-3">
-
-
           <div class="col-lg-4 col-md-6">
             <label for="ApplicationId" class="form-label">Contact No:</label>
             <input disabled (keypress)="numberOnly($event)" type="text" class="form-input form-control" id="ApplicationId" maxlength="10" [(ngModel)]="requestPlaning.ContactNo">
-
           </div>
-
-
           <div class="col-lg-4 col-md-6">
             <label class="form-label" for="Ward">Email:</label>
             <input disabled class="form-input form-control" type="text" id="Ward"
                    [(ngModel)]="requestPlaning.Email">
-
           </div>
-
           <div class="col-lg-4 col-md-6">
             <label class="form-label" for="Ward">Alternate Email:</label>
             <input disabled class="form-input form-control" type="text" id="Ward"
-                   [(ngModel)]="requestPlaning.AlternateEmail">
-
+                  [(ngModel)]="requestPlaning.AlternateEmail">
           </div>
-
           <div class="col-lg-4 col-md-6">
             <label class="form-label" for="Ward">Website:</label>
             <input disabled class="form-input form-control" type="text" id="Ward"
                    [(ngModel)]="requestPlaning.Website">
-
           </div>
-
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-3  mt-4 p-2  mt-4 bg-info-subtle">
           <b class="text-1xl-5"><i class="ti ti-plus"></i>Electrical load details</b>
         </div>
         <div class="row gy-3">
-
-
           <div class="col-lg-4 col-md-6">
             <label class="form-label" for="Ward">Consumer Name:</label>
             <input disabled class="form-input form-control" type="text" id="Ward"
                    [(ngModel)]="requestPlaning.ConsumerName">
-
           </div>
-
           <div class="col-lg-4 col-md-6">
             <label class="form-label" for="Ward">K No:</label>
             <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
                    [(ngModel)]="requestPlaning.KNo">
-
           </div>
-
           <div class="col-lg-4 col-md-6">
             <label class="form-label">Connection Type:</label>
             <select disabled class="form-select" id="Administrative" [(ngModel)]="requestPlaning.ConnectionType">
               <!--<option value="0">Select Connection Type</option>-->
               <option value="1">Domestic</option>
               <option value="2">Commercial</option>
-
             </select>
-
           </div>
-
           <div class="col-lg-4 col-md-6">
             <label class="form-label" for="Ward">Sanction load (KW):</label>
             <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
                    [(ngModel)]="requestPlaning.SanctionLoad" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-
           </div>
-
           <div class="col-lg-4 col-md-6">
             <label class="form-label" for="Ward">Contract Demand:</label>
             <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
                    [(ngModel)]="requestPlaning.ContractDemand" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-
           </div>
-
           <div class="col-lg-4 col-md-6">
             <label class="form-label" for="Ward">Name Of DISCOM:</label>
             <select disabled class="form-select" id="UrbanRural" [(ngModel)]="requestPlaning.DISCOM">
               <!--<option value="0">--Select--</option>-->
               <option *ngFor="let item of DISCOM" value="{{item.ID}}">{{item.Name}}</option>
             </select>
-
           </div>
-
           <div class="col-lg-4 col-md-6">
             <label class="form-label" for="Ward">Sub-Division Office:</label>
             <input disabled class="form-input form-control" type="text" id="Ward"
                    [(ngModel)]="requestPlaning.SubDivOffice">
-
           </div>
-
-
-
           <!--<div class="">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Upload Last Month Bill  </label>
-          <div class="flex fileUploader">
-            <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                   id="Bill_Filename" type="file" (change)="onFilechange($event,'Bill_Filename')" />
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Upload Last Month Bill  </label>
+            <div class="flex fileUploader">
+              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="Bill_Filename" type="file" (change)="onFilechange($event,'Bill_Filename')" />
 
-            <label for="Bill_Filename">
-              <span>Choose File</span>
-              {{ requestPlaning.Bill_DisFilename === '' ? 'No File Chosen' : requestPlaning.Bill_DisFilename }}
-            </label>
-            <div class="flex">
-              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.Bill_Filename}}"
-                 *ngIf="this.requestPlaning.Bill_Filename  !=''"
-                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              <label for="Bill_Filename">
+                <span>Choose File</span>
+                {{ requestPlaning.Bill_DisFilename === '' ? 'No File Chosen' : requestPlaning.Bill_DisFilename }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.Bill_Filename}}"
+                   *ngIf="this.requestPlaning.Bill_Filename  !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+              </div>
 
             </div>
-
-          </div>
-        </div>-->
-
-
-
-
-
+          </div>-->
         </div>
-
-
         <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="d-flex justify-content-between align-items-center mb-3 p-2 bg-info-subtle  mt-4 hide-in-pdf">
           <b class="text-1xl-5"><i class="ti ti-plus"></i>Affiliation Details </b>
         </div>
-
         <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="row gy-3 hide-in-pdf">
           <div class="col-lg-4 col-md-6">
             <label for="ApplicationId" class="form-label">Order No</label>
             <input disabled type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="addmore.OrderNo">
-
           </div>
-
-
           <div class="col-lg-4 col-md-6">
             <label for="ApplicationId" class="form-label">Order Date</label>
             <input disabled type="text" class="form-input form-control" id="ApplicationId" [value]="addmore.OrderDate | date:'dd-MM-yyyy'">
-
           </div>
-
           <div class="col-lg-4 col-md-6">
             <label for="ApplicationId" class="form-label">With Effect From:</label>
             <input disabled type="text" class="form-input form-control" id="ApplicationId" [value]="addmore.EffectFrom | date:'dd-MM-yyyy'">
-
           </div>
-
           <div class="col-lg-4 col-md-6">
             <label for="ApplicationId" class="form-label">Page No (as per affiliation order):</label>
             <input disabled (keypress)="numberOnly($event)" type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="addmore.PageNo">
-
           </div>
           <div class="col-lg-4 col-md-6">
             <label for="ApplicationId" class="form-label">Serial No (as per affiliation order):</label>
             <input disabled (keypress)="numberOnly($event)" type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="addmore.SerialNo">
-
           </div>
-
-
-
-
         </div>
-
-
-
-
       </div>
-
-
     </div>
   </div>
+</div>
+
+
+
+<ng-template #MyModel_EdiDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;College Search</b>
+        <button class="btn bg-info text-white" (click)="CloseModal1()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-info-subtle">
+          <b class="text-1xl-5">Trade List</b>
+        </div>
+        <table mat-table [dataSource]="dataSource1" class="mat-elevation-z8" style="width: 100%;">
+          <ng-container matColumnDef="SNo">
+            <th mat-header-cell *matHeaderCellDef class="text-start">S. No.</th>
+            <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="TradeName">
+            <th mat-header-cell *matHeaderCellDef class="text-start"> Trade Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.TradeName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="TradeType">
+            <th mat-header-cell *matHeaderCellDef class="text-start"> Trade Type </th>
+            <td mat-cell *matCellDef="let element"> {{element.TradeType}} </td>
+          </ng-container>
+          <ng-container matColumnDef="TradeScheme">
+            <th mat-header-cell *matHeaderCellDef class="text-start"> Trade Scheme </th>
+            <td mat-cell *matCellDef="let element"> {{element.TradeScheme}} </td>
+          </ng-container>
+          <ng-container matColumnDef="DurationYear">
+            <th mat-header-cell *matHeaderCellDef class="text-start"> DurationYear </th>
+            <td mat-cell *matCellDef="let element"> {{element.DurationYear }} </td>
+          </ng-container>
+          <ng-container matColumnDef="Fee">
+            <th mat-header-cell *matHeaderCellDef class="text-start"> Fee </th>
+            <td mat-cell *matCellDef="let element"> {{element.Fee }} </td>
+          </ng-container>
+          <!--<ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0)" (click)="EditBranchSectionData(MyModel_EditBranchSectionData,element)"
+                   title="View"><i class="ti ti-eye"></i> </a>
+
+                <a href="javascript:void(0);" (click)="AddStaffData(MyModel_EdiDetailsStaff,element)"
+                   class="btn bg-info btn-sm text-white">
+                  <i class="ti ti-user"></i>
+                </a>
+              </div>
+            </td>
+          </ng-container>-->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+        </table>
+
+        <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord1 == 0">
+          No Record Found
+        </div>
+        <mat-paginator #paginator1 [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+        <!--<div class="text-center flex items-center justify-center" style="margin-top:50px">
+          <button type="button" id="btnSave" (click)="SaveData_EditDetails()"
+                  class="btn bg-info text-white">
+            <i class="ti ti-device-floppy"></i> Submit
+          </button>
+          <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button>
+        </div>-->
+      </div>
+    </div>
+
   </div>
+</ng-template>

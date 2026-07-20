@@ -1,0 +1,164 @@
+
+<div class="tab-content bg-white p-2 rounded border" id="myTabContent" style="display:none">
+  <div class="tab-pane fade show active" id="GeneralInstructions-tab-pane" role="tabpanel" aria-labelledby="GeneralInstructions-tab" tabindex="0">
+    <div class="row">
+      <div class="col-lg-12 mb-4 mt-2 text-center">
+        <div class="col-md-12">
+          <h3>Coming Soon....</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="Tabs5">
+  <div class="p-5">
+    <div class="card bg-light mb-4">
+      <div class="card-body text-center">
+        <h3 class="m-0">आईटीआई ट्रेड खोज (ITI Trade Search) </h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Search.</label>
+        <input type="text" class="form-control" placeholder="Search Code/Name.."
+               [(ngModel)]="request.SearchText">
+      </div>
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3 mt-4">
+        <button type="button" class="btn btn-info text-white" (click)="onSearchClick()"><i class="ti ti-search"></i>Search</button>
+        <button type="button" (click)="onResetClick()" class="btn btn-danger mx-1"><i class="ti ti-refresh"></i>Reset</button>
+      </div>
+    </div>
+
+
+    <div *ngIf="isVisibleList" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-info-subtle mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
+    </div>
+    <div *ngIf="isVisibleList" class="row">
+      <div class="col-4">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <!--<div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+      </div>-->
+    </div>
+
+    <!--{{paginatedInTableData|json}}-->
+    <div *ngIf="isVisibleList" class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th width="80px" align="left">Sr. No.</th>
+            <th class="text-left">Trade Name</th>
+            <th class="text-left">Trade Type</th>
+            <th class="text-left">Trade Code</th>
+            <th class="text-left">DurationYear</th>
+            <th align="center" width="200">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.TradeName}}</td>
+            <td>{{row.TradeType}}</td>
+            <td>{{row.TradeCode}}</td>
+            <td>{{row.DurationYear}}</td>
+
+            <td>
+              <div class="flex align-center justify-center actionBtns">
+                <button type="button" (click)="EditData(MyModel_EdiDetails,row)" class="btn btn-info text-white gap-2">View</button>
+                <!--<a href="javascript:void(0)" class="btn btn-info  text-white" (click)="EditData(MyModel_EdiDetails,row)" title="View">
+                  <i class="ti ti-eye"></i>
+                </a>-->
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="isVisibleList" class="p-3 pe-0 paginationBox d-flex align-items-center justify-content-end">
+      <span class="block pe-2">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="pagination pagination-sm bg-white">
+        <button class="page-link text-dark" (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button class="page-link text-dark" (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input class="page-link text-dark" type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap text-dark page-link">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button class="page-link text-dark" (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button class="page-link text-dark" (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+
+    <!--DetailsSection-->
+   
+  </div>
+</div>
+
+
+
+
+<ng-template #MyModel_EdiDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Trade Search</b>
+        <button class="btn bg-info text-white" (click)="CloseModal1()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-info-subtle">
+          <b class="text-1xl-5">College List</b>
+        </div>
+        <table mat-table [dataSource]="dataSource1" class="mat-elevation-z8" style="width: 100%;">
+          <ng-container matColumnDef="SNo">
+            <th mat-header-cell *matHeaderCellDef class="text-start">S. No.</th>
+            <td mat-cell *matCellDef="let row; let i = index" >{{ i + 1 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="Name">
+            <th mat-header-cell *matHeaderCellDef class="text-start"> College Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.Name}} </td>
+          </ng-container>         
+          <!--<ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0)" (click)="EditBranchSectionData(MyModel_EditBranchSectionData,element)"
+                   title="View"><i class="ti ti-eye"></i> </a>
+                <a href="javascript:void(0);" (click)="AddStaffData(MyModel_EdiDetailsStaff,element)"
+                   class="btn bg-info btn-sm text-white">
+                  <i class="ti ti-user"></i>
+                </a>
+              </div>
+
+            </td>
+          </ng-container>-->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+        </table>
+        <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord1 == 0">
+          No Record Found
+        </div>
+        <mat-paginator #paginator1 [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons ></mat-paginator>
+        <!--<div class="text-center flex items-center justify-center" style="margin-top:50px">
+          <button type="button" id="btnSave" (click)="SaveData_EditDetails()"
+                  class="btn bg-info text-white">
+            <i class="ti ti-device-floppy"></i> Submit
+          </button>
+          <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button>
+        </div>-->
+      </div>
+    </div>
+
+  </div>
+</ng-template>

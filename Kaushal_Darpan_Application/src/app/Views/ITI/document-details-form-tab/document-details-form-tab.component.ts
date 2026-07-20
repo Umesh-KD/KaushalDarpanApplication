@@ -41,7 +41,7 @@ export class DocumentDetailsFormTabComponent implements OnInit {
   public documentDetails: DocumentDetailsModel[] = []
   groupedDocs: any = [];
   docsForUpload: any = [];
-  _EnumRole = EnumRole
+  _EnumRole = EnumRole;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -85,7 +85,7 @@ export class DocumentDetailsFormTabComponent implements OnInit {
       // }
       
    
-
+      debugger
       if (this.documentDetailsService.HasRequiredDocument(this.documentDetails)) {
         return;
       }
@@ -140,7 +140,8 @@ export class DocumentDetailsFormTabComponent implements OnInit {
   filteredDocuments: any[] = [];
   filteredDocumentDetails(groupNo: number): any[] {
 
-    if (groupNo == 2) {
+    if (groupNo == 2)
+    {
         let filtered = this.documentDetails.filter((x) => x.GroupNo == groupNo);
         
         if (this.PersonalDetailsData.IsTSP !=true) {
@@ -199,12 +200,16 @@ export class DocumentDetailsFormTabComponent implements OnInit {
         if (this.PersonalDetailsData.CategoryB != 14) {
           filtered = filtered.filter((x: any) => x.ColumnName != "CategoryB_14")
         }
-      this.filteredDocuments = filtered
+        this.filteredDocuments = filtered
+
+      const filteredDocuments1 = this.filteredDocuments.filter((e) => e.DocumentMasterID != 20)
+      filteredDocuments1.forEach(e => e.IsMandatory = 1)
 
       return this.filteredDocuments;
 
-     
-    } else {
+    }
+    else {
+
       return this.documentDetails.filter((x) => x.GroupNo == groupNo);
     }    
   }

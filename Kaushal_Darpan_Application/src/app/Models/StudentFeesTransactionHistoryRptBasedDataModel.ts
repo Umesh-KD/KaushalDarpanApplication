@@ -33,22 +33,41 @@ export class StudentFeesTransactionHistorySearchmodel extends RequestBaseModel{
 }
 
 export class GetApplicationFeesTransactionSearchModel extends RequestBaseModel{
-  public AcademicYearID : number = 0;
-  public TransactionType : number = 2;
-  public CourseType : number = 0;
-  public PageNumber : number = 1;
-  public PageSize : number = 1000;
-  public TransctionStatus : string = '';
-  public TransactionId : number = 0;
-  public ApplicationID : string = '';
-  public TransactionNo : string = '';
-  public StudentName : string = '';
-  public MobileNo : string = '';
-  public AadharNo : string = '';
-  public DOB : string = '';
-  public FeeFor : string = '';
-  public TransctionDate : string = '';
-  public PRN : string = '';
+  //public AcademicYearID? : number = 0;
+  //public TransactionType? : number = 2;
+  //public CourseType? : number = 0;
+  //public PageNumber : number = 1;
+  //public PageSize : number = 1000;
+  //public TransctionStatus? : string = '';
+  //public TransactionId? : number = 0;
+  //public ApplicationID? : string = '';
+  //public TransactionNo? : string = '';
+  //public StudentName? : string = '';
+  //public MobileNo? : string = '';
+  //public AadharNo? : string = '';
+  //public DOB? : string = '';
+  //public FeeFor? : string = '';
+  //public TransctionDate? : string = '';
+  //public PRN?: string = '';
+
+  public AcademicYearID: number | null = null;
+  public TransactionType: number = 2;
+  public CourseType: number = 0;
+  public PageNumber: number = 1;
+  public PageSize: number = 1000;
+  public TransctionStatus: string | null = null;
+  public TransactionId: number = 0;
+  public ApplicationID: string | null = null;
+  public TransactionNo: string | null = null;
+  public StudentName: string | null = null;
+  public MobileNo: string | null = null;
+  public AadharNo: string | null = null;
+  public DOB: string | null = null;
+  public FeeFor: string | null = null;
+  public TransctionDate: string | null = null;
+  public PRN: string | null = null;
+
+
 
 }
 

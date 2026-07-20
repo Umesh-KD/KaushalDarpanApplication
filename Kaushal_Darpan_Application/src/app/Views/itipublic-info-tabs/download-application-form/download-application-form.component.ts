@@ -140,7 +140,9 @@ export class DownloadApplicationFormComponent {
     this.searchRequest.DOB='';
 
   // Reset any submission flags
-  this.isSubmitted = false;
+    this.isSubmitted = false;
+
+    this.StudentDetailsModelList = [];
 }
 
 

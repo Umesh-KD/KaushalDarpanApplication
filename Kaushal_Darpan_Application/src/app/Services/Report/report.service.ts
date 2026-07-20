@@ -2102,6 +2102,13 @@ export class ReportService {
       .pipe(catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetITI_FinalReport(searchRequest: any) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetITI_FinalReport`, body, this.headersOptions)
+      .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
   
 }
 

@@ -30,17 +30,17 @@ import { MatSort } from '@angular/material/sort';
 
 
 @Component({
-  selector: 'app-iti-college-search',
-  templateUrl: './iti-college-search.component.html',
+  selector: 'app-iti-trade-search',
+  templateUrl: './iti-trade-search.component.html',
   //imports: [
   //  MatTableModule,
   //  MatPaginatorModule,
   //  // ...your other imports
   //],
-  styleUrl: './iti-college-search.component.css',
+  styleUrl: './iti-trade-search.component.css',
   standalone: false
 })
-export class ItiCollegeSearchComponent {
+export class ItiTradeSearchComponent {
   public Message: string = '';
   public ErrorMessage: string = '';
   public State: any = false;
@@ -111,27 +111,27 @@ export class ItiCollegeSearchComponent {
   public ValidationMessage: string = '';
   public _enumrole = EnumRole;
   public Type: number = 0;
-  public isVisibleSection: boolean = false;
-  public isVisibleList: boolean = false;
+  public isVisibleList: boolean = true;
   public DISCOM: any = [];
   public oldDistrictID: number = 0;
   public oldeditDistrictID: number = 0;
   public totalRecord1: number = 0;
 
 
-  @ViewChild('paginator1') paginator1!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  dataSource1!: MatTableDataSource<any>;
   displayedColumns1: string[] = [
     'SNo',
-    'TradeName',
-    'TradeType',
-    'TradeScheme',
-    'DurationYear',
-    'Fee'
+    'Name'
+    //,'CodeAndName'    
   ];
   modalRef1: NgbModalRef | null = null;
-
+  dataSource1!: MatTableDataSource<any>;
+  @ViewChild('paginator1') paginator1!: MatPaginator;
+  // @ViewChild('paginator1') set paginator1(mp: MatPaginator) {
+  //  debugger
+  //  console.log('paginator1 setter called with:', mp);
+  //  if (mp) this.dataSource1.paginator = mp;
+  // }
+  @ViewChild(MatSort) sort!: MatSort;
   constructor(private loaderService: LoaderService, private commonservice: CommonFunctionService,
     private studentService: StudentService, private modalService: NgbModal, private toastrService: ToastrService, private documentDetailsService: DocumentDetailsService,
     private emitraPaymentService: EmitraPaymentService,
@@ -142,14 +142,12 @@ export class ItiCollegeSearchComponent {
 
   ) { }
 
-  async ngOnInit() {
-    
+  async ngOnInit() {    
     this.ValidationMessage = "";
     this.searchItiCollegeForm = this.formBuilder.group({
       //txtApplicationNo: ['', Validators.required],
       //DOB: ['', Validators.required],
      /* DivisionId:['']*/
-
     })
 
     
@@ -170,7 +168,7 @@ export class ItiCollegeSearchComponent {
 
     /*await this.GetPanchayatSamiti('')*/
 
-
+    await this.GetList();
 
 
 
@@ -354,36 +352,25 @@ export class ItiCollegeSearchComponent {
     const selectedDistrictID = this.request.DistrictId;
     this.filteredTehsils = this.TehsilMasterList.filter((tehsil: any) => tehsil.ID == selectedDistrictID);
   }
-  BackSide() {
-
-    this.isVisibleSection = false;
-    this.isVisibleList = true;
-
-  }
-
-  onResetClick() {
+ 
+ async onResetClick() {
     this.request.DistrictId = 0;
     this.request.DivisionId = 0;
     this.request.SearchText = "";
-    this.isVisibleSection = false;
-    this.isVisibleList = false;
+    //this.isVisibleList = false;
     this.ValidationMessage = "";
-    this.ddlDistrict();
- 
+    //this.ddlDistrict();
+    await this.GetList();
   }
 
   async GetById(ID: number) {
     try {
-      
-      this.isVisibleSection = true;
       this.isVisibleList = false;
       this.requestPlaning.ItiAffiliationList = []
       this.requestPlaning.ItiMembersModel = []
       this.loaderService.requestStarted();
       const data: any = await this.ApplicationService.Get_ITIsPlanningData_ByID(ID);
       const parsedData = JSON.parse(JSON.stringify(data));
-      
-
 
       if (parsedData['Data'] != null) {
         this.requestPlaning = parsedData['Data'];
@@ -732,21 +719,20 @@ export class ItiCollegeSearchComponent {
 
   async onSearchClick() {
    
-    if (
-      this.request.SearchText == "" &&
-      this.request.DivisionId == 0 &&
-      this.request.DistrictId == 0
-    ) {
+    //if (
+    //  this.request.SearchText == "" &&
+    //  this.request.DivisionId == 0 &&
+    //  this.request.DistrictId == 0
+    //) {
       
-      this.ValidationMessage = "Please enter Search Text or select Division or District.";
-      this.ITICollegeSearchList = [];
-      this.paginatedInTableData = [];
-      return;
+    //  this.ValidationMessage = "Please enter Search Text or select Division or District.";
+    //  this.ITICollegeSearchList = [];
+    //  this.paginatedInTableData = [];
+    //  return;
       
-    }
+    //}
     this.ValidationMessage = "";
     await this.GetList();
-    this.isVisibleSection = false;
     this.isVisibleList = true;
   }
 
@@ -771,13 +757,23 @@ export class ItiCollegeSearchComponent {
 
 
 
+//await this.ApplicationService.ItiSearchCollege(this.request)
+//  .then((data: any) => {
+//    data = JSON.parse(JSON.stringify(data));
+//    this.ITICollegeSearchList = data['Data'];
+//    this.loadInTable();
+//    console.log(this.ITICollegeSearchList, "ITICollegeSearchList")
+//  }, error => console.error(error));
+
+
 
 
   async GetList() {
     try {
-      
+      debugger
+      this.request.Action = '_getTradeData';
       this.loaderService.requestStarted();
-      await this.ApplicationService.ItiSearchCollege(this.request)
+      await this.ApplicationService.ITISearchCollegeTrade(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.ITICollegeSearchList = data['Data'];
@@ -1025,6 +1021,7 @@ export class ItiCollegeSearchComponent {
   //-----------------------------------TRADE SECTION START-----------------------------------------------
 
   ngAfterViewInit() {
+    debugger
     if (this.dataSource1) this.dataSource1.paginator = this.paginator1;
   }
 
@@ -1055,7 +1052,7 @@ export class ItiCollegeSearchComponent {
 
   async EditData(content: any, rowData?: any) {
     this.isSubmitted = true;
-   debugger
+    debugger
     // Open only once, store reference
     this.modalRef1 = this.modalService.open(content, {
       size: 'xl',
@@ -1073,7 +1070,7 @@ export class ItiCollegeSearchComponent {
       }
     );
     if (rowData != null && rowData != undefined) {
-      if (rowData.CollegeId != null) {
+      if (rowData.TradeId != null) {
         //let obj = {
         //  Action: "GET_BY_ID",
         //  DepartmentID: this.sSOLoginDataModel.DepartmentID,
@@ -1083,9 +1080,9 @@ export class ItiCollegeSearchComponent {
         //  SemesterID: rowData.SemesterID
         //}
 
-        this.requestTrade.InstituteID = rowData.CollegeId;
-        this.requestTrade.Action = '_getTradebyCollege';
-
+        //this.requestTrade.InstituteID = rowData.CollegeId;
+        this.requestTrade.Action = '_getCollegeoByTrade';
+        this.requestTrade.TradeID = rowData.TradeId;
 
         //await this.ApplicationService.ItiSearchCollege(this.request)
         //  .then((data: any) => {
@@ -1111,6 +1108,10 @@ export class ItiCollegeSearchComponent {
       }
     }
   }
+
+
+
+ 
 
 
 }
