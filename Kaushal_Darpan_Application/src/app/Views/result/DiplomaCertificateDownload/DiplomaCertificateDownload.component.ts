@@ -124,7 +124,7 @@ export class DiplomaCertificateDownloadComponent {
   async getAllData() {
     //debugger
     // refresh
-    this.refreshValidationOfEnrollmentNoOnly(parseInt(this.searchRequest.EnrollmentNo ?? '0') > 0 ? true : false);
+    this.refreshValidationOfEnrollmentNoOnly((this.searchRequest.EnrollmentNo ?? '') != '' ? true : false);
     //
     this.isSubmitted = true;
     if (this.downLoadFG.invalid) {

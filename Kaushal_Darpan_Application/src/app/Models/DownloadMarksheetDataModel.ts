@@ -83,6 +83,7 @@ export class DiplomaCertificateDownloadSearchModel extends RequestBaseModel {
   public EnrollmentNo: string = '';
   public StudentName: string = '';
   public ResultDate: string = '';
+  public PublishDate: string = '';
   public IsLocked: boolean = false;
   public DiplomaPrintingDate: string = '';
   public IsRevisedIssueDate: string = '';
