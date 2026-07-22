@@ -13,7 +13,7 @@
       <marquee onMouseOver="this.stop()" onMouseOut="this.start()">
         <div class="d-flex align-items-center">
           <div *ngFor="let item of NewsList">
-            <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.docFile}}" target="_blank" class="text-white d-flex align-items-center d-block me-3 border-right-1">
+            <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.DocFile}}" target="_blank" class="text-white d-flex align-items-center d-block me-3 border-right-1">
               <span class="text-white me-2 d-block fw-600"><i class="fa fa-calendar"></i>&nbsp;{{item.CreateDates}} - {{item.DeptNames}}</span> :  {{item.Title}}
             </a>
           </div>
