@@ -65,7 +65,7 @@
 
       <!--document-->
       <div *ngFor="let item of filteredDocumentDetails(2);">
-        <label for="{{item.ColumnName}}" class="text-gray-800 text-sm font-medium inline-block mb-2">{{item.DisplayColumnNameEn}}</label><br/>
+        <label for="{{item.ColumnName}}" class="text-gray-800 text-sm font-medium inline-block mb-2">{{item.DisplayColumnNameEn}}  <span class="StarMarking" *ngIf="item.IsMandatory">*</span></label><br/>
         <p>{{item.DisplayColumnNameHi}}</p>
 
         <div class="flex fileUploader">

@@ -99,9 +99,12 @@ export class ApplicationFeesTransactionHistoryComponent {
 
     this.isAllSelected();
   }
-  async CheckPaymentSataus(request: any) {
-    try {
-      let obj: TransactionStatusDataModel = {
+  async CheckPaymentSataus(request: any)
+  {
+    try
+    {
+      let obj: TransactionStatusDataModel =
+      {
         TransactionID: request.TransactionId,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         PRN: request.PRN,
@@ -112,9 +115,12 @@ export class ApplicationFeesTransactionHistoryComponent {
         SubOrderID: "",
         CreatedBy: this.sSOLoginDataModel.UserID,
         SSOID: this.sSOLoginDataModel.SSOID,
-        ExamStudentStatus: 0
+        ExamStudentStatus: 0,
+        IsEmitra: request.IsEmitra
         // ExamStudentStatus: request.TransctionStatus
       }
+
+
       await this.emitraPaymentService.EmitraApplicationVerifyPaymentStatus(obj)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -173,14 +179,25 @@ export class ApplicationFeesTransactionHistoryComponent {
 
   async GetApplicationFeesTransaction() {
     try {
+      debugger
       this.loaderService.requestStarted();
+
+      
+
+      if (this.searchRequest.TransactionId == undefined || this.searchRequest.TransactionId == null) {
+        this.searchRequest.TransactionId = 0;
+      }
+      debugger
       await this.StudentFeesTransactionHistoryRptService.GetApplicationFeesTransaction(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          this.StudentFeesTransactionHistoryList = data['Data'];
+ /*         this.StudentFeesTransactionHistoryList = data['Data'];*/
+          this.StudentFeesTransactionHistoryList = Array.isArray(data['Data'])
+            ? data['Data']
+            : [];
 
           //table feature load
           this.loadInTable();
