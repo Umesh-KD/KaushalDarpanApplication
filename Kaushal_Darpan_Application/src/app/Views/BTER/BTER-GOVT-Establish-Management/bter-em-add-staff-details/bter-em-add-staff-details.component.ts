@@ -100,7 +100,6 @@ export class BterEMAddStaffDetailsComponent {
 
   async ngOnInit() {
 
-
     this.StaffMasterFormGroup = this.formBuilder.group({
       InstituteID: [{ value: 0, disabled: true }],
       BranchID: [0,],
@@ -110,12 +109,14 @@ export class BterEMAddStaffDetailsComponent {
 
       Name: ['', [Validators.required]],
       DateOfBirth: ['', [Validators.required]],
-      DateOfFirstAppointment: ['', [Validators.required]],
-      DateOfAppointment: ['', [Validators.required]],
+      // DateOfFirstAppointment: ['', [Validators.required]],
+      // DateOfAppointment: ['', [Validators.required]],
       DepartmentJoiningDate: ['', [Validators.required]],
       DateOfJoining: ['', [Validators.required]],
+      Mailpersonal: ['', [Validators.required]],
 
       MobileNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
+      WhatsAppNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
       SSOID: ['', [Validators.required]],
       EmployeeID: ['',[Validators.required]],
 
@@ -595,21 +596,22 @@ export class BterEMAddStaffDetailsComponent {
   }
 
   async GetInstituteMaster() {
-    // const officeList = [
-    //   { InstituteID: 10001, InstituteName: 'DTE', OfficeTypeID: 17 },
-    //   { InstituteID: 10002, InstituteName: 'BTER', OfficeTypeID: 18 },
-    //   { InstituteID: 10003, InstituteName: 'TTC', OfficeTypeID: 19 }
-    // ];
-
-    this.commonMasterService.InstituteMaster(
-      this.sSOLoginDataModel.DepartmentID,
-      this.sSOLoginDataModel.Eng_NonEng,
-      this.sSOLoginDataModel.EndTermID
-    ).then((response: any) => {
-      const instituteList = Array.isArray(response?.Data) ? response.Data : [];
-      this.InstituteMasterDDLList = Array.isArray(response?.Data) ? response.Data : [];
-      // this.InstituteMasterDDLList = officeList.concat(instituteList);
-    });
+    try {
+      const request: any = {};
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      request.EndTermId = this.sSOLoginDataModel.EndTermID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.ManagementTypeID = 1; // static passing because we are using this only for govt. institute
+      request.Action = "GetInstituteMasterDDL_BTER_EM";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.InstituteMasterDDLList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
   }
 
 

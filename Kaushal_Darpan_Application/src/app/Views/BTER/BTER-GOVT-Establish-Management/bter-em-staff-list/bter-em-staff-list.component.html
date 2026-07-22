@@ -154,25 +154,27 @@
                   *ngIf="row.RoleID != _EnumRole.GuestHouseAdmin && 
                           row.RoleID != _EnumRole.GuestHouseIncharge && 
                           row.RoleID != _EnumRole.GuestRoomWarden &&
-                          row.ProfileStatusID != 0 &&
-                          row.ProfileStatusID != 288 && sSOLoginDataModel.UserID != row.StaffUserID">
-                  <i [class]="row.ProfileStatusID == 247 ? 'ti ti-eye' : 'ti ti-check' "></i>
+                          row.ProfileStatusID != _EnumEMProfileStatus.Pending &&
+                          row.ProfileStatusID != _EnumEMProfileStatus.Completed && sSOLoginDataModel.UserID != row.StaffUserID">
+                  <i [class]="row.ProfileStatusID == _EnumEMProfileStatus.Approve ? 'ti ti-eye' : 'ti ti-check' "></i>
                 </a>
 
                 <a  href="javascript:void(0);" id="btnDelete" title="Unlock Profile" 
-                  *ngIf="row.ProfileStatusID == 289 && sSOLoginDataModel.UserID != row.StaffUserID"                  
+                  *ngIf="(row.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit || row.ProfileStatusID == _EnumEMProfileStatus.Approve) 
+                          && sSOLoginDataModel.UserID != row.StaffUserID"                  
                   (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)">
                   <i class="ti ti-lock-open"></i>
                 </a>
 
                 <a href="javascript:void(0);"
                    *ngIf="(row.RoleID == _EnumRole.GuestHouseAdmin || row.RoleID == _EnumRole.GuestHouseIncharge || row.RoleID == _EnumRole.GuestRoomWarden)
-                            && !(row.ProfileStatusID == 0
-                            || row.ProfileStatusID == 288
-                            || row.ProfileStatusID == 429) && sSOLoginDataModel.UserID != row.StaffUserID"
-                   [title]="row.ProfileStatusID == 247 ? 'View' : 'View & Approve'"
+                            && !(row.ProfileStatusID == _EnumEMProfileStatus.Pending
+                            || row.ProfileStatusID == _EnumEMProfileStatus.Completed
+                            || row.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit
+                            || row.ProfileStatusID == _EnumEMProfileStatus.Revert) && sSOLoginDataModel.UserID != row.StaffUserID"
+                   [title]="row.ProfileStatusID == _EnumEMProfileStatus.Approve ? 'View' : 'View & Approve'"
                    (click)="openModal_ApproveStaffProfileGuestHouse(Modal_ApproveStaffProfileGuestHouse, row.StaffUserID, row.SSOID, true,row.RoleID)">
-                  <i [class]="row.ProfileStatusID == 247 ? 'ti ti-eye' : 'ti ti-check' "></i>
+                  <i [class]="row.ProfileStatusID == _EnumEMProfileStatus.Approve ? 'ti ti-eye' : 'ti ti-check' "></i>
                 </a>
                 
                 <a href="javascript:void(0);" title="Add Update Guest House" 

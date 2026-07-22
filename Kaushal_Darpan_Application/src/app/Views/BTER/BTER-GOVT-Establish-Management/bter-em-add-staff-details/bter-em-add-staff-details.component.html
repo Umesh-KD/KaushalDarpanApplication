@@ -1,10 +1,10 @@
 <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Details</h4>
-    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a routerLink="/Dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
-      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Add Details</a>
-    </div>
+  <h4 class="text-slate-900 text-lg font-medium mb-2">Add Details</h4>
+  <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+    <a routerLink="/Dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+    <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+    <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Add Details</a>
+  </div>
 </div>
 
 <div class="card">
@@ -14,7 +14,9 @@
 
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute & Branch Details</b>
-        <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, userID)"><span class="me-2">Status History</span><i class="ti ti-list"></i></a>               
+        <a href="javascript:void(0);" title="User Profile Status History"
+          (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, userID)"><span class="me-2">Status
+            History</span><i class="ti ti-list"></i></a>
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
@@ -22,7 +24,8 @@
         <!--{{request.OfficeID}}
   {{request.IsNodal|json}}-->
         <div *ngIf="this.IsGuestHouse != true">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span
+              class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="request.OfficeID" formControlName="Office">
             <option value="0">--Select--</option>
             <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
@@ -39,18 +42,19 @@
         <div *ngIf="request.IsNodal==true">
           <br />
           <label for="IsNodal" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            <input type="checkbox" id="IsNodal" name="IsNodal"
-                   formControlName="IsNodal" [(ngModel)]="request.IsNodal"> Add as Principal
+            <input type="checkbox" id="IsNodal" name="IsNodal" formControlName="IsNodal" [(ngModel)]="request.IsNodal">
+            Add as Principal
           </label>
         </div>
 
 
         <div *ngIf="request.OfficeID == 17 && request.IsNodal == true">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name  </label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name </label>
           <select class="form-select " name="InstituteID" id="InstituteID" formControlName="InstituteID"
-                  [(ngModel)]="request.InstituteID" (change)="getStreamMasterData()">
+            [(ngModel)]="request.InstituteID" (change)="getStreamMasterData()">
             <option value="0">Choose Option</option>
-            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}
+            </option>
           </select>
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.InstituteID.errors" class="text-danger">
@@ -62,7 +66,7 @@
         </div>
         <!--{{DesignationMasterDDLList|json}}
   {{request.StaffTypeID|json}}-->
-        
+
         <!-- <div *ngIf="IsHideShow">
           <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch as per Current Designation<span class="StarMarking">*</span></label>
           <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
@@ -78,9 +82,10 @@
         </div> -->
 
         <div *ngIf="this.IsGuestHouse != true">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation as per Service Book <span class="StarMarking">*</span> </label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation as per Service Book <span
+              class="StarMarking">*</span> </label>
           <select class="form-select " name="DesignationID" id="DesignationID" formControlName="DesignationID"
-                  [(ngModel)]="request.DesignationID">
+            [(ngModel)]="request.DesignationID">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of DesignationMasterDDLList" [value]="item.ID">{{item.Name}}</option>
 
@@ -94,8 +99,8 @@
 
         <div *ngIf="IsHideShow">
           <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Branch as per Service Book</label>
-          <select class="form-select" name="ServiceBookBranchID" id="ServiceBookBranchID" formControlName="ServiceBookBranchID"
-                  [(ngModel)]="request.ServiceBookBranchID">
+          <select class="form-select" name="ServiceBookBranchID" id="ServiceBookBranchID"
+            formControlName="ServiceBookBranchID" [(ngModel)]="request.ServiceBookBranchID">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID">{{item.StreamName}}</option>
           </select>
@@ -114,9 +119,10 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name of Employee<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name of Employee<span
+              class="StarMarking">*</span></label>
           <input autocomplete="off" type="text" class="form-input" placeholder="Enter Full Name" name="Name" id="Name"
-                 formControlName="Name" [(ngModel)]="request.Name" />
+            formControlName="Name" [(ngModel)]="request.Name" />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.Name.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.Name.errors.required">
@@ -126,9 +132,9 @@
         </div>
 
         <div>
-          <label for="ddlGender" class="text-gray-800 text-sm font-medium inline-block mb-1">Gender <span class="StarMarking">*</span></label>
-          <select class="form-select" id="Gender" name="Gender" [(ngModel)]="request.Gender"
-                  formControlName="Gender">
+          <label for="ddlGender" class="text-gray-800 text-sm font-medium inline-block mb-1">Gender <span
+              class="StarMarking">*</span></label>
+          <select class="form-select" id="Gender" name="Gender" [(ngModel)]="request.Gender" formControlName="Gender">
             <option value="0">Choose Option</option>
             <option *ngFor="let row of GenderList" [value]="row.ID">{{row.Name}}</option>
           </select>
@@ -140,9 +146,11 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth <span
+              class="StarMarking">*</span></label>
           <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfBirth" id="DateOfBirth"
-                 formControlName="DateOfBirth" [(ngModel)]="request.DateOfBirth" (click)="openDatePicker($event)" [max]="this.today"/>
+            formControlName="DateOfBirth" [(ngModel)]="request.DateOfBirth" (click)="openDatePicker($event)"
+            [max]="this.today" />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfBirth.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DateOfBirth.errors.required">
@@ -151,25 +159,28 @@
           </div>
         </div>
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of first appointment as a govt employee <span class="StarMarking">*</span></label>
-          <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfFirstAppointment" id="DateOfFirstAppointment"
-                 formControlName="DateOfFirstAppointment" [(ngModel)]="request.DateOfFirstAppointment" (click)="openDatePicker($event)"
-                 [min]="request.DateOfBirth" [max]="this.today" />
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of first appointment as a govt
+            employee <span class="StarMarking">*</span></label>
+          <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfFirstAppointment"
+            id="DateOfFirstAppointment" formControlName="DateOfFirstAppointment"
+            [(ngModel)]="request.DateOfFirstAppointment" (click)="openDatePicker($event)" [min]="request.DateOfBirth"
+            [max]="this.today" />
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfFirstAppointment.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DateOfFirstAppointment.errors.required">
               <i aria-hidden="true"></i>This field is required .!
             </p>
           </div>
-        </div>
-        
-        <!--{{request.DepartmentJoiningDate|json}}
-        {{request.DateOfAppointment|json}}-->
-        <div *ngIf=" this.IsOterFacultyTech == false" >
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Joining in Department<span class="StarMarking">*</span></label>
-          <input autocomplete="off" class="form-input" type="date" name="DepartmentJoiningDate" id="DepartmentJoiningDate"
-                 formControlName="DepartmentJoiningDate" [(ngModel)]="request.DepartmentJoiningDate" (change)="calExperience()" 
-                 [min]="request.DateOfFirstAppointment" [max]="this.today"/> <!--(click)="openDatePicker($event)"-->
+        </div> -->
+
+      
+        <div *ngIf=" this.IsOterFacultyTech == false">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">First joining in the DTE Department as govt employee<span
+              class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input" type="date" name="DepartmentJoiningDate"
+            id="DepartmentJoiningDate" formControlName="DepartmentJoiningDate"
+            [(ngModel)]="request.DepartmentJoiningDate" (change)="calExperience()"
+            [max]="this.today" /> <!--(click)="openDatePicker($event)"-->
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DepartmentJoiningDate.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DepartmentJoiningDate.errors.required">
@@ -180,25 +191,26 @@
 
 
 
-        <div>
-          <!--<label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Regular Appointment<span class="StarMarking">*</span></label>-->
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Appointment  as a regular  govt. Employee<span class="StarMarking">*</span></label>
-          <input autocomplete="off" class="form-input" type="date" name="DateOfAppointment" id="DateOfAppointment" [min]="request.DateOfJoining"
-                 formControlName="DateOfAppointment" [(ngModel)]="request.DateOfAppointment" (click)="openDatePicker($event)" 
-                 [min]="request.DateOfFirstAppointment" [max]="this.today"/>
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Appointment as a regular govt.
+            Employee<span class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input" type="date" name="DateOfAppointment" id="DateOfAppointment"
+            [min]="request.DateOfJoining" formControlName="DateOfAppointment" [(ngModel)]="request.DateOfAppointment"
+            (click)="openDatePicker($event)" [max]="this.today" />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfAppointment.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DateOfAppointment.errors.required">
               <i aria-hidden="true"></i>This field is required .!
             </p>
           </div>
-        </div>
+        </div> -->
 
-        <div *ngIf=" this.IsOterFacultyTech == false"> 
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Joining in the Current Institute<span class="StarMarking">*</span></label>
+        <div *ngIf=" this.IsOterFacultyTech == false">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Joining in the Current
+            Institute<span class="StarMarking">*</span></label>
           <input class="form-input" type="date" name="DateOfJoining" id="DateOfJoining" [max]="request.DateOfRetirement"
-                 formControlName="DateOfJoining" [(ngModel)]="request.DateOfJoining" (click)="openDatePicker($event)" 
-                 [min]="request.DateOfFirstAppointment" [max]="this.today"/>
+            formControlName="DateOfJoining" [(ngModel)]="request.DateOfJoining" (click)="openDatePicker($event)"
+            [min]="request.DepartmentJoiningDate" [max]="this.today" />
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfJoining.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DateOfJoining.errors.required">
               <i aria-hidden="true"></i>This field is required .!
@@ -207,9 +219,10 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No <span class="StarMarking">*</span></label>
-          <input autocomplete="off" class="form-input" placeholder="Enter Mobile Number" name="MobileNumber" id="MobileNumber"
-                 formControlName="MobileNumber" [(ngModel)]="request.MobileNumber" maxlength="10" />
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No <span
+              class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input" placeholder="Enter Mobile Number" name="MobileNumber"
+            id="MobileNumber" formControlName="MobileNumber" [(ngModel)]="request.MobileNumber" maxlength="10" />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.MobileNumber.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.MobileNumber.errors.required">
@@ -219,9 +232,23 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID <span class="StarMarking">*</span> </label>
-          <input autocomplete="off" class="form-input " placeholder="Enter SSO ID" value="12dfgdf" name="SSOID" id="SSOID"
-                 formControlName="SSOID" [(ngModel)]="request.SSOID" readonly />
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">WhatsApp No <span
+              class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input" placeholder="Enter WhatsApp Number" name="WhatsAppNumber"
+            id="WhatsAppNumber" formControlName="WhatsAppNumber" [(ngModel)]="request.WhatsAppNumber" maxlength="10" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.WhatsAppNumber.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.WhatsAppNumber.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID <span class="StarMarking">*</span>
+          </label>
+          <input autocomplete="off" class="form-input " placeholder="Enter SSO ID" value="12dfgdf" name="SSOID"
+            id="SSOID" formControlName="SSOID" [(ngModel)]="request.SSOID" readonly />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.SSOID.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.SSOID.errors.required">
@@ -231,29 +258,45 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Employee ID <span class="StarMarking">*</span></label>
-          <input autocomplete="off" class="form-input " placeholder="Enter Employee ID" value="12dfgdf" name="EmployeeID" id="EmployeeID"
-                 formControlName="EmployeeID" [(ngModel)]="request.EmployeeID" />
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Employee ID <span
+              class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input " placeholder="Enter Employee ID" value="12dfgdf"
+            name="EmployeeID" id="EmployeeID" formControlName="EmployeeID" [(ngModel)]="request.EmployeeID" />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.EmployeeID.errors" class="text-danger">
-      <p *ngIf="_StaffMasterFormGroup.EmployeeID.errors.required">
-        <i aria-hidden="true"></i>This field is required .!
-      </p>
-    </div>
+            <p *ngIf="_StaffMasterFormGroup.EmployeeID.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Email<span
+              class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input " placeholder="Enter Employee ID" value="12dfgdf"
+            name="EmployeeID" id="Mailpersonal" formControlName="Mailpersonal" [(ngModel)]="request.Mailpersonal" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.Mailpersonal.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.Mailpersonal.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
         </div>
 
       </div>
 
-      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3" *ngIf=" this.IsOterFacultyTech == false">
+      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3"
+        *ngIf=" this.IsOterFacultyTech == false">
         <b class="text-1xl-5"><i class="ti ti-plus"></i> Employment Details</b>
       </div>
 
-      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3" >
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
 
         <div *ngIf=" this.IsOterFacultyTech == false">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Current Designation <span class="StarMarking">*</span> </label>
-          <select class="form-select " name="CurrentDesignationID" id="CurrentDesignationID" formControlName="CurrentDesignationID"
-                  [(ngModel)]="request.CurrentDesignationID">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Current Designation <span
+              class="StarMarking">*</span> </label>
+          <select class="form-select " name="CurrentDesignationID" id="CurrentDesignationID"
+            formControlName="CurrentDesignationID" [(ngModel)]="request.CurrentDesignationID">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of DesignationMasterDDLList" [value]="item.ID">{{item.Name}}</option>
 
@@ -266,9 +309,10 @@
         </div>
 
         <div *ngIf="IsHideShow">
-          <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch as per Current Designation<span class="StarMarking">*</span></label>
+          <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch as per Current
+            Designation<span class="StarMarking">*</span></label>
           <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
-                  [(ngModel)]="request.BranchID">
+            [(ngModel)]="request.BranchID">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID">{{item.StreamName}}</option>
           </select>
@@ -287,7 +331,8 @@
             <span class="StarMarking">*</span>
           </label>
           <input class="form-input" placeholder="Year Of Experience" name="Experience" id="Experience"
-                 formControlName="Experience" [(ngModel)]="request.Experience" maxlength="2" (keypress)="validateNumber($event)" />
+            formControlName="Experience" [(ngModel)]="request.Experience" maxlength="2"
+            (keypress)="validateNumber($event)" />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.Experience.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.Experience.errors.required">
@@ -297,11 +342,13 @@
         </div>
 
         <div *ngIf=" this.IsOterFacultyTech == false">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Qualification as per Service Book at the time of joining <span class="StarMarking">*</span> </label>
-          <select class="form-select " name="QualificationAtJoining" id="QualificationAtJoining" formControlName="QualificationAtJoining"
-                  [(ngModel)]="request.QualificationAtJoining">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Qualification as per Service Book at the
+            time of joining <span class="StarMarking">*</span> </label>
+          <select class="form-select " name="QualificationAtJoining" id="QualificationAtJoining"
+            formControlName="QualificationAtJoining" [(ngModel)]="request.QualificationAtJoining">
             <option [value]="0">Choose Option</option>
-            <option *ngFor="let item of EmployeeQualificationDDLList" [value]="item.QualificationID">{{item.QualificationName}}</option>
+            <option *ngFor="let item of EmployeeQualificationDDLList" [value]="item.QualificationID">
+              {{item.QualificationName}}</option>
           </select>
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.QualificationAtJoining.errors" class="text-danger">
             <p *ngIf="!_StaffMasterFormGroup.QualificationAtJoining.errors.DropdownValidators">
@@ -309,7 +356,7 @@
             </p>
           </div>
         </div>
-       
+
         <!-- <div *ngIf=" this.IsOterFacultyTech == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification as per Service Book at the time of joining<span class="StarMarking">*</span></label>
           <input class="form-input" placeholder="Qualification At Joining" name="QualificationAtJoining" id="QualificationAtJoining"
@@ -322,11 +369,13 @@
         </div> -->
 
         <div *ngIf=" this.IsOterFacultyTech == false">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Qualifications as per Service Book gained after joining <span class="StarMarking">*</span> </label>
-          <select class="form-select " name="QualificationAfterJoining" id="QualificationAfterJoining" formControlName="QualificationAfterJoining"
-                  [(ngModel)]="request.QualificationAfterJoining">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Qualifications as per Service Book gained
+            after joining <span class="StarMarking">*</span> </label>
+          <select class="form-select " name="QualificationAfterJoining" id="QualificationAfterJoining"
+            formControlName="QualificationAfterJoining" [(ngModel)]="request.QualificationAfterJoining">
             <option value="0">Choose Option</option>
-            <option *ngFor="let item of EmployeeQualificationDDLList" [value]="item.QualificationID">{{item.QualificationName}}</option>
+            <option *ngFor="let item of EmployeeQualificationDDLList" [value]="item.QualificationID">
+              {{item.QualificationName}}</option>
 
           </select>
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.QualificationAfterJoining.errors" class="text-danger">
@@ -352,27 +401,30 @@
         <div *ngIf=" this.IsOterFacultyTech == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Retirement</label>
           <input autocomplete="off" class="form-input" type="date" name="DateOfRetirement" id="DateOfRetirement"
-                 formControlName="DateOfRetirement" [(ngModel)]="request.DateOfRetirement" />
+            formControlName="DateOfRetirement" [(ngModel)]="request.DateOfRetirement" />
         </div>
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark (If any) </label>
-          <textarea autocomplete="off" class="form-input " placeholder="Please Enter The Remark" value="12dfgdf" name="SSOId" id="Remark"
-                    formControlName="Remark" [(ngModel)]="request.Remark">
+          <textarea autocomplete="off" class="form-input " placeholder="Please Enter The Remark" value="12dfgdf"
+            name="SSOId" id="Remark" formControlName="Remark" [(ngModel)]="request.Remark">
           </textarea>
         </div>
 
       </div>
       <!-- *ngIf="sSOLoginDataModel.RoleID== _EnumRole.Teacher || sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal" -->
-      <div  class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3" *ngIf="sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal">
+      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3"
+        *ngIf="sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Staff Subjects</b>
       </div>
-      <form [formGroup]="AddsubjectFormGroup" *ngIf="sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal">
+      <form [formGroup]="AddsubjectFormGroup"
+        *ngIf="sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Type<span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Type<span
+                class="StarMarking">*</span></label>
             <select class="form-select " name="SubjectID" id="ddlStreamType" formControlName="ddlStreamType"
-                    [(ngModel)]="Addrequest.StreamTypeID" (change)="getStreamMasterData()">
+              [(ngModel)]="Addrequest.StreamTypeID" (change)="getStreamMasterData()">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of StreamTypeList" [value]="item.StreamTypeID">{{item.StreamType}}</option>
             </select>
@@ -384,9 +436,10 @@
             </div>
           </div>
           <div>
-            <label class=" text-gray-800 text-sm font-medium inline-block mb-1">Branch<span class="StarMarking">*</span></label>
+            <label class=" text-gray-800 text-sm font-medium inline-block mb-1">Branch<span
+                class="StarMarking">*</span></label>
             <select class="form-select" name="CourseID" id="ddlCourse" formControlName="ddlCourse"
-                    [(ngModel)]="Addrequest.BranchID" (change)="GetSubjectMasterDDL()">
+              [(ngModel)]="Addrequest.BranchID" (change)="GetSubjectMasterDDL()">
               <option value="0">Choose Option</option>
 
               <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID">
@@ -403,9 +456,10 @@
             </div>
           </div>
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Type<span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Type<span
+                class="StarMarking">*</span></label>
             <select class="form-select " name="SubjectID" id="ddlExamType" formControlName="ddlExamType"
-                    [(ngModel)]="Addrequest.ExamTypeID" (change)="SemesterMaster()">
+              [(ngModel)]="Addrequest.ExamTypeID" (change)="SemesterMaster()">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of ExamTypeList" [value]="item.ID">{{item.Name}}</option>
             </select>
@@ -417,9 +471,10 @@
             </div>
           </div>
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester<span class="StarMarking">*</span></label>
-            <select class="form-select " name="SubjectID" id="ddlSubjectID" formControlName="ddlSemesterID" (change)="GetSubjectMasterDDL()"
-                    [(ngModel)]="Addrequest.SemesterID">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester<span
+                class="StarMarking">*</span></label>
+            <select class="form-select " name="SubjectID" id="ddlSubjectID" formControlName="ddlSemesterID"
+              (change)="GetSubjectMasterDDL()" [(ngModel)]="Addrequest.SemesterID">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of SemesterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
             </select>
@@ -432,9 +487,10 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject<span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject<span
+                class="StarMarking">*</span></label>
             <select class="form-select " name="SubjectID" id="ddlSubjectID" formControlName="ddlSubjectID"
-                    [(ngModel)]="Addrequest.SubjectID">
+              [(ngModel)]="Addrequest.SubjectID">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of SubjectMasterDDL" [value]="item.ID">{{item.Name}}</option>
             </select>
@@ -450,8 +506,8 @@
 
           <div class="flex flex-col justify-end mb-4">
             <label class="me-2 ">
-              <input type="checkbox" value="" id="Box8THForm" (click)="checkoptional()"
-                     [checked]="IsOptional" [(ngModel)]="Addrequest.IsOptional" formControlName="IsOptional" />
+              <input type="checkbox" value="" id="Box8THForm" (click)="checkoptional()" [checked]="IsOptional"
+                [(ngModel)]="Addrequest.IsOptional" formControlName="IsOptional" />
               IsOptional
             </label>
           </div>
@@ -466,12 +522,16 @@
         </div>
       </form>
 
-      <div *ngIf="staffDetailsFormData.StaffSubjectListModel.length>0 && sSOLoginDataModel.RoleID== _EnumRole.Teacher || sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light" >
+      <div
+        *ngIf="staffDetailsFormData.StaffSubjectListModel.length>0 && sSOLoginDataModel.RoleID== _EnumRole.Teacher || sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal"
+        class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
         <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
         <b class="text-1xl-5">Staff Subject List </b>
       </div>
-     
-      <div *ngIf="staffDetailsFormData.StaffSubjectListModel.length>0 && sSOLoginDataModel.RoleID== _EnumRole.Teacher || sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal " class="overflow-auto">
+
+      <div
+        *ngIf="staffDetailsFormData.StaffSubjectListModel.length>0 && sSOLoginDataModel.RoleID== _EnumRole.Teacher || sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal "
+        class="overflow-auto">
         <table class="w-full table-border" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 
@@ -510,11 +570,11 @@
 
 
       <!-- service history details  -->
-      <div  class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3" >
+      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Service History</b>
       </div>
       <form [formGroup]="AddServiceistoryFormGroup">
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3"> 
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
           <!-- <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Joining <span class="StarMarking">*</span></label>
             <input autocomplete="off" type="date" class="form-input" placeholder="" name="JoiningDate" id="JoiningDate"
@@ -527,8 +587,10 @@
           </div> -->
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Department<span class="StarMarking">*</span></label>
-            <select class="form-select" [(ngModel)]="serviceReq.OfficeID" formControlName="OfficeID" (change)="GetDesignationData_ServiceHistory()">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Department<span
+                class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="serviceReq.OfficeID" formControlName="OfficeID"
+              (change)="GetDesignationData_ServiceHistory()">
               <option value="0">--Select--</option>
               <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
             </select>
@@ -541,12 +603,14 @@
           </div>
 
           <div *ngIf="serviceReq.OfficeID==21">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name<span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name<span
+                class="StarMarking">*</span></label>
             <select class="form-select " name="InstituteID" id="InstituteID" formControlName="InstituteID"
-                    [(ngModel)]="serviceReq.InstituteID" (change)="getStreamMasterData()">
+              [(ngModel)]="serviceReq.InstituteID" (change)="getStreamMasterData()">
               <option value="0">Choose Option</option>
-              <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-            </select> 
+              <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}
+              </option>
+            </select>
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.InstituteID.errors" class="text-danger">
               <p *ngIf="!_AddServiceistoryFormGroup.InstituteID.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This field is
@@ -556,10 +620,11 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">From Date<span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">From Date<span
+                class="StarMarking">*</span></label>
             <input autocomplete="off" type="date" class="form-input" placeholder="" name="FromDate" id="FromDate"
-                  formControlName="FromDate" [(ngModel)]="serviceReq.FromDate" (click)="openDatePicker($event)" (change)="onDateChange()"
-                  [max]="this.today" />
+              formControlName="FromDate" [(ngModel)]="serviceReq.FromDate" (click)="openDatePicker($event)"
+              (change)="onDateChange()" [max]="this.today" />
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.FromDate.errors" class="text-danger">
               <p *ngIf="_AddServiceistoryFormGroup.FromDate.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
@@ -568,10 +633,11 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Date<span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Date<span
+                class="StarMarking">*</span></label>
             <input autocomplete="off" type="date" class="form-input" placeholder="" name="ToDate" id="ToDate"
-                  formControlName="ToDate" [(ngModel)]="serviceReq.ToDate" (click)="openDatePicker($event)" (change)="onDateChange()" 
-                  [max]="this.today"/>
+              formControlName="ToDate" [(ngModel)]="serviceReq.ToDate" (click)="openDatePicker($event)"
+              (change)="onDateChange()" [max]="this.today" />
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.ToDate.errors" class="text-danger">
               <p *ngIf="_AddServiceistoryFormGroup.ToDate.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
@@ -580,11 +646,13 @@
           </div>
 
           <div *ngIf=" this.IsOterFacultyTech == false">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation<span class="StarMarking">*</span> </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation<span
+                class="StarMarking">*</span> </label>
             <select class="form-select " name="DesignationID" id="DesignationID" formControlName="DesignationID"
-                    [(ngModel)]="serviceReq.DesignationID">
+              [(ngModel)]="serviceReq.DesignationID">
               <option value="0">Choose Option</option>
-              <option *ngFor="let item of DesignationMasterDDLList_ServiceHistory" [value]="item.ID">{{item.Name}}</option>   
+              <option *ngFor="let item of DesignationMasterDDLList_ServiceHistory" [value]="item.ID">{{item.Name}}
+              </option>
             </select>
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.DesignationID.errors" class="text-danger">
               <p *ngIf="!_AddServiceistoryFormGroup.DesignationID.errors.DropdownValidators">
@@ -594,12 +662,14 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification<span class="StarMarking">*</span> </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification<span
+                class="StarMarking">*</span> </label>
 
             <select class="form-select " name="QualificationID" id="QualificationID" formControlName="QualificationID"
-                  [(ngModel)]="serviceReq.QualificationID">
+              [(ngModel)]="serviceReq.QualificationID">
               <option value="0">Choose Option</option>
-              <option *ngFor="let item of EmployeeQualificationDDLList" [value]="item.QualificationID">{{item.QualificationName}}</option>
+              <option *ngFor="let item of EmployeeQualificationDDLList" [value]="item.QualificationID">
+                {{item.QualificationName}}</option>
             </select>
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.QualificationID.errors" class="text-danger">
               <p *ngIf="!_AddServiceistoryFormGroup.QualificationID.errors.required">
@@ -609,29 +679,31 @@
           </div>
 
           <!-- upload documnet  -->
-          <div >
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                   for="fileStudentPhoto">Upload Document</label>
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="fileStudentPhoto">Upload
+              Document</label>
             <div class="flex fileUploader">
-              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                     id="fileStudentPhoto" type="file" (change)="onDocchange($event,'Service')">
+              <input
+                class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                id="fileStudentPhoto" type="file" (change)="onDocchange($event,'Service')">
               <label for="fileStudentPhoto">
                 <span>Choose File</span>
                 {{serviceReq.DisUploadDoc === '' ? 'No File Choosen' : serviceReq.DisUploadDoc}}
               </label>
               <div class="flex">
                 <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + serviceReq.UploadDoc}}"
-                   *ngIf="this.serviceReq.UploadDoc!='' " class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  *ngIf="this.serviceReq.UploadDoc!='' " class="btn bg-primary text-white m-0" target="_blank"><i
+                    class="ti ti-eye"></i></a>
               </div>
             </div>
           </div>
-          
+
 
           <!-- (click)="checkTransfer($event)" -->
           <div class="flex flex-col justify-end mb-4">
             <label class="me-2 ">
-              <input type="checkbox" value="" id="Box8THForm" (click)="checkTransfer($event)"
-                     [checked]="IsTransfer" [(ngModel)]="serviceReq.IsTransfer" formControlName="IsTransfer" />
+              <input type="checkbox" value="" id="Box8THForm" (click)="checkTransfer($event)" [checked]="IsTransfer"
+                [(ngModel)]="serviceReq.IsTransfer" formControlName="IsTransfer" />
               Transfer
             </label>
           </div>
@@ -653,8 +725,10 @@
             </div>
           </div> -->
           <div *ngIf="serviceReq.IsTransfer">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Department<span class="StarMarking">*</span></label>
-            <select class="form-select" [(ngModel)]="serviceReq.TransferToOfficeID" formControlName="TransferToOfficeID">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Department<span
+                class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="serviceReq.TransferToOfficeID"
+              formControlName="TransferToOfficeID">
               <option value="0">--Select--</option>
               <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
             </select>
@@ -668,11 +742,13 @@
 
           <div *ngIf="serviceReq.IsTransfer && serviceReq.TransferToOfficeID==21 ">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Institute</label>
-            <select class="form-select " name="TransferToInstituteID" id="TransferToInstituteID" formControlName="TransferToInstituteID"
-                    [(ngModel)]="serviceReq.TransferToInstituteID" (change)="getStreamMasterData()">
+            <select class="form-select " name="TransferToInstituteID" id="TransferToInstituteID"
+              formControlName="TransferToInstituteID" [(ngModel)]="serviceReq.TransferToInstituteID"
+              (change)="getStreamMasterData()">
               <option value="0">Choose Option</option>
-              <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-            </select> 
+              <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}
+              </option>
+            </select>
             <!-- <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.InstituteID.errors" class="text-danger">
               <p *ngIf="!_AddServiceistoryFormGroup.InstituteID.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This field is
@@ -697,9 +773,11 @@
 
 
           <div *ngIf="serviceReq.IsTransfer">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Transfer<span class="StarMarking">*</span></label>
-            <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfTransfer" id="DateOfTransfer"
-                  formControlName="DateOfTransfer" [(ngModel)]="serviceReq.DateOfTransfer" (click)="openDatePicker($event)"  (change)="onTransferDateChange()" />
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Transfer<span
+                class="StarMarking">*</span></label>
+            <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfTransfer"
+              id="DateOfTransfer" formControlName="DateOfTransfer" [(ngModel)]="serviceReq.DateOfTransfer"
+              (click)="openDatePicker($event)" (change)="onTransferDateChange()" />
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.DateOfTransfer.errors" class="text-danger">
               <p *ngIf="_AddServiceistoryFormGroup.DateOfTransfer.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
@@ -709,20 +787,23 @@
 
           <div class="flex flex-col justify-end mb-4">
             <label class="me-2 ">
-              <input type="checkbox" value="" id="Box8THForm" (click)="checkPromotion($event)"
-                     [checked]="IsPromotion" [(ngModel)]="serviceReq.IsPromotion" formControlName="IsPromotion" />
+              <input type="checkbox" value="" id="Box8THForm" (click)="checkPromotion($event)" [checked]="IsPromotion"
+                [(ngModel)]="serviceReq.IsPromotion" formControlName="IsPromotion" />
               Promotion
             </label>
           </div>
 
           <div *ngIf="serviceReq.IsPromotion">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Designation<span class="StarMarking">*</span> </label>
-            <select class="form-select " name="ToDesignationIDPromotion" id="ToDesignationIDPromotion" formControlName="ToDesignationIDPromotion"
-                    [(ngModel)]="serviceReq.ToDesignationIDPromotion">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Designation<span
+                class="StarMarking">*</span> </label>
+            <select class="form-select " name="ToDesignationIDPromotion" id="ToDesignationIDPromotion"
+              formControlName="ToDesignationIDPromotion" [(ngModel)]="serviceReq.ToDesignationIDPromotion">
               <option value="0">Choose Option</option>
-              <option *ngFor="let item of DesignationMasterDDLList_ServiceHistory" [value]="item.ID">{{item.Name}}</option>   
+              <option *ngFor="let item of DesignationMasterDDLList_ServiceHistory" [value]="item.ID">{{item.Name}}
+              </option>
             </select>
-            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.ToDesignationIDPromotion.errors" class="text-danger">
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.ToDesignationIDPromotion.errors"
+              class="text-danger">
               <p *ngIf="!_AddServiceistoryFormGroup.ToDesignationIDPromotion.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This field is required .!
               </p>
@@ -730,9 +811,11 @@
           </div>
 
           <div *ngIf="serviceReq.IsPromotion">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Promotion<span class="StarMarking">*</span></label>
-            <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfpromotion" id="DateOfpromotion"
-                  formControlName="DateOfpromotion" [(ngModel)]="serviceReq.DateOfpromotion" (click)="openDatePicker($event)" (change)="onPromotionDateChange()" />
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Promotion<span
+                class="StarMarking">*</span></label>
+            <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfpromotion"
+              id="DateOfpromotion" formControlName="DateOfpromotion" [(ngModel)]="serviceReq.DateOfpromotion"
+              (click)="openDatePicker($event)" (change)="onPromotionDateChange()" />
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.DateOfpromotion.errors" class="text-danger">
               <p *ngIf="_AddServiceistoryFormGroup.DateOfpromotion.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
@@ -741,14 +824,15 @@
           </div>
         </div>
 
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3"> 
-           <!-- upload documnet  -->
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+          <!-- upload documnet  -->
           <div *ngIf="serviceReq.IsTransfer">
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  for="fileTransferDoc">Transfer's Document</label>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="fileTransferDoc">Transfer's
+              Document</label>
             <div class="flex fileUploader">
-              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                    id="fileTransferDoc" type="file" (change)="onDocchange($event,'Transfer')">
+              <input
+                class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                id="fileTransferDoc" type="file" (change)="onDocchange($event,'Transfer')">
               <label for="fileTransferDoc">
                 <span>Choose File</span>
                 <!-- {{serviceReq.DisUploadDoc === '' ? 'No File Choosen' : serviceReq.DisUploadDoc}} -->
@@ -766,35 +850,31 @@
             </div>
             <ul class="mt-3 border rounded-lg divide-y bg-white">
               <li *ngFor="let doc of serviceReq.TransferDocuments; let i = index"
-                  class="flex justify-between items-center px-3 py-2">          
+                class="flex justify-between items-center px-3 py-2">
                 <span class="text-sm text-gray-700">
                   {{i+1}}. {{doc.DisUploadDoc}}
-                </span>            
-                <div class="flex gap-2">           
-                  <a
-                    href="{{appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc}}"
-                    class="btn bg-primary text-white"
-                    target="_blank">
+                </span>
+                <div class="flex gap-2">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc}}"
+                    class="btn bg-primary text-white" target="_blank">
                     <i class="ti ti-eye"></i>
-                  </a>            
-                  <button
-                    type="button"
-                    class="btn bg-danger text-white"
-                    (click)="removeTransferDoc(i)">
+                  </a>
+                  <button type="button" class="btn bg-danger text-white" (click)="removeTransferDoc(i)">
                     <i class="ti ti-trash"></i>
-                  </button>           
-                </div>           
-              </li>          
+                  </button>
+                </div>
+              </li>
             </ul>
           </div>
 
           <!-- upload documnet  -->
           <div *ngIf="serviceReq.IsPromotion">
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  for="filePromotionDoc">Promotion's Document</label>
+              for="filePromotionDoc">Promotion's Document</label>
             <div class="flex fileUploader">
-              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                    id="filePromotionDoc" type="file" (change)="onDocchange($event,'Promotion')">
+              <input
+                class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                id="filePromotionDoc" type="file" (change)="onDocchange($event,'Promotion')">
               <label for="filePromotionDoc">
                 <span>Choose File</span>
                 <!-- {{serviceReq.DisUploadDoc === '' ? 'No File Choosen' : serviceReq.DisUploadDoc}} -->
@@ -812,44 +892,40 @@
             </div>
             <ul class="mt-3 border rounded-lg divide-y bg-white">
               <li *ngFor="let doc of serviceReq.PromotionDocuments; let i = index"
-                  class="flex justify-between items-center px-3 py-2">          
+                class="flex justify-between items-center px-3 py-2">
                 <span class="text-sm text-gray-700">
                   {{i+1}}. {{doc.DisUploadDoc}}
-                </span>            
-                <div class="flex gap-2">           
-                  <a
-                    href="{{appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc}}"
-                    class="btn bg-primary text-white"
-                    target="_blank">
+                </span>
+                <div class="flex gap-2">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc}}"
+                    class="btn bg-primary text-white" target="_blank">
                     <i class="ti ti-eye"></i>
-                  </a>            
-                  <button
-                    type="button"
-                    class="btn bg-danger text-white"
-                    (click)="removePromotionDoc(i)">
+                  </a>
+                  <button type="button" class="btn bg-danger text-white" (click)="removePromotionDoc(i)">
                     <i class="ti ti-trash"></i>
-                  </button>           
-                </div>           
-              </li>          
+                  </button>
+                </div>
+              </li>
             </ul>
           </div>
         </div>
 
-        
+
         <div class="pt-30 mb-3">
           <button type="button" class="btn bg-primary text-white" (click)="AddAnotherServiceHistory()">
             <i class="ti ti-plus"></i> Add More
           </button>
           <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
         </div>
-        
+
       </form>
-      
-      <div *ngIf="serviceHistoryList.length>0" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light" >
+
+      <div *ngIf="serviceHistoryList.length>0"
+        class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
         <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
         <b class="text-1xl-5">Service History List</b>
       </div>
-     
+
       <div *ngIf="serviceHistoryList.length>0" class="overflow-auto">
         <table class="w-full table-border" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
@@ -864,7 +940,7 @@
               <th>Qualification</th>
               <th>Service Document</th>
               <th>Transfer</th>
-              <th>Promotion</th>     
+              <th>Promotion</th>
               <!-- <th>Transfer</th>
               <th>Transfer Date</th>
               <th>Promotion</th> 
@@ -892,13 +968,11 @@
               <td>{{row.DesignationName}}</td>
               <td>{{row.Qualification}}</td>
               <td class="text-center">
-                <a *ngIf="row.UploadDoc"
-                   href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.UploadDoc}}"
-                   target="_blank"
-                   class="btn bg-primary text-white">
-                   <i class="ti ti-eye"></i>
+                <a *ngIf="row.UploadDoc" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.UploadDoc}}"
+                  target="_blank" class="btn bg-primary text-white">
+                  <i class="ti ti-eye"></i>
                 </a>
-                <span *ngIf="!row.UploadDoc" class="text-gray-400">N/A</span>           
+                <span *ngIf="!row.UploadDoc" class="text-gray-400">N/A</span>
               </td>
 
               <!-- Transfer -->
@@ -917,9 +991,7 @@
                   <div *ngIf="row.TransferDocuments?.length>0">
                     Docs:
                     <span *ngFor="let doc of row.TransferDocuments">
-                      <a
-                        href="{{appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc}}"
-                        target="_blank"
+                      <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc}}" target="_blank"
                         class="text-white  btn bg-primary ">
                         <i class="ti ti-eye"></i>
                       </a>
@@ -931,7 +1003,7 @@
                 </ng-template>
               </td>
 
-                <!-- Promotion -->
+              <!-- Promotion -->
               <td>
                 <span *ngIf="row.IsPromotion; else noPromotion">
                   <b class="text-green-600">Taken</b>
@@ -944,9 +1016,7 @@
                   <div *ngIf="row.PromotionDocuments?.length>0">
                     Docs:
                     <span *ngFor="let doc of row.PromotionDocuments">
-                      <a
-                        href="{{appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc}}"
-                        target="_blank"
+                      <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc}}" target="_blank"
                         class="text-white ml-1 btn bg-primary">
                         <i class="ti ti-eye"></i>
                       </a>
@@ -960,7 +1030,8 @@
 
 
               <td class="text-center">
-                <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteServiceHistory(idx)">
+                <button class="btn bg-danger text-white" type="button" title="Delete"
+                  (click)="deleteServiceHistory(idx)">
                   <i class="ti ti-trash"></i>
                 </button>
               </td>
@@ -973,10 +1044,12 @@
     </form>
     <div class="flex justify-center flex-wrap items-centermt-3">
       <div>
-        <button *ngIf="[0, 288, 249].includes(request.ProfileStatusID)" class="btn bg-success text-white mt-3" type="button" (click)="SaveData()">
+        <button *ngIf="[0, 288, 249].includes(request.ProfileStatusID)" class="btn bg-success text-white mt-3"
+          type="button" (click)="SaveData()">
           Complete
         </button>
-        <button *ngIf="request.ProfileStatusID == 288" class="btn bg-success text-white mt-3" type="button" (click)="LockSubmitSaveData()">
+        <button *ngIf="request.ProfileStatusID == 288" class="btn bg-success text-white mt-3" type="button"
+          (click)="LockSubmitSaveData()">
           Lock & Submit
         </button>
         <!-- <button class="btn bg-danger text-white mt-3" type="button" (click)="CancelData()">Cancel</button> -->
@@ -994,7 +1067,8 @@
     <div class="card">
       <div class="card-header flex justify-between items-center">
 
-        <button class="btn bg-info text-white" (click)="CloseModalProfileStatuslist()" type="button"><i class="ti ti-x"></i></button>
+        <button class="btn bg-info text-white" (click)="CloseModalProfileStatuslist()" type="button"><i
+            class="ti ti-x"></i></button>
       </div>
 
 
@@ -1002,7 +1076,7 @@
       <div class="card-body">
 
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-          <b class="text-1xl-5"><i class="ti ti-list"></i>User Profile Status  History</b>
+          <b class="text-1xl-5"><i class="ti ti-list"></i>User Profile Status History</b>
           <div class="flex justify-end flex-wrap items-center">
             <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a>-->
             <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in PDF</a> -->

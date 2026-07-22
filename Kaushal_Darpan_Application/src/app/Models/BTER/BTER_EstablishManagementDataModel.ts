@@ -162,6 +162,7 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public DepartmentJoiningDate: string = ''
   public DateOfRetirement: string = ''
   public MobileNumber: string = ''
+  public WhatsAppNumber?: string = ''
   public SSOID: string = ''
   public EmployeeID: string = ''
   public CurrentDesignationID: string = ''
@@ -169,6 +170,7 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public QualificationAtJoining: string = ''
   public QualificationAfterJoining: string = ''
   public Remark: string = ''
+  public Mailpersonal: string = '';
 
   public ProfileStatusID?: number = 0
   public IsNodal: boolean = false
