@@ -27,10 +27,21 @@
           <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College: <span class="StarMarking">*</span></label>
-              <select class="form-select" formControlName="ddlCollege" [(ngModel)]="request.CollegeID">
+              <!-- <select class="form-select" formControlName="ddlCollege" [(ngModel)]="request.CollegeID">
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of ItiCollegesListAll" value="{{item.Id}}">{{item.Name}}</option>
-              </select>
+              </select> -->
+
+               <ng-select formControlName="ddlCollege" [(ngModel)]="request.CollegeID">
+                <ng-option [value]="0">Choose Option</ng-option>
+                <ng-container>
+                  <ng-option *ngFor="let item of ItiCollegesListAll" [value]="item.Id">
+                    {{item.Name}}
+                  </ng-option>
+                </ng-container>          
+                <!-- <option *ngFor="let item of ItiCollegesListAll" value="{{item.Id}}">{{item.Name}}</option> -->
+              </ng-select>
+
               <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlCollege.errors" class="text-danger">
                 <p *ngIf="!_SeatIntakeFormGroup.ddlCollege.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This field is required .!

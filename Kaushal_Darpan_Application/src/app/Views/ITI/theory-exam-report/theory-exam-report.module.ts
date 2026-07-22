@@ -5,6 +5,7 @@ import { TheoryExamReportRoutingModule } from './theory-exam-report-routing.modu
 import { TheoryExamReportComponent } from './theory-exam-report.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.modu
     TheoryExamReportRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    TableSearchFilterModule
+    TableSearchFilterModule,
+    NgSelectModule
   ]
 })
 export class TheoryExamReportModule { }

@@ -5,6 +5,7 @@ import { AddSeatIntakesMasterRoutingModule } from './add-seat-intakes-master-rou
 import { AddSeatIntakesMasterComponent } from './add-seat-intakes-master.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../../../Shared/loader/loader.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { LoaderModule } from '../../../Shared/loader/loader.module';
     AddSeatIntakesMasterRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    LoaderModule
+    LoaderModule,
+    NgSelectModule
   ]
 })
 export class AddSeatIntakesMasterModule { }

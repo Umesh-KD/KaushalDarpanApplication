@@ -78,6 +78,10 @@ export class TheoryMarksSearchModel extends RequestBaseModel {
   public isUFM?: number = 0;
   public IsReval?: number = 0;
   public Ispresent?:number =-1;
+
+  public ExaminerStatus?: number = -1;
+  public MarkObtained?: number = -1;
+  
 }
 
 

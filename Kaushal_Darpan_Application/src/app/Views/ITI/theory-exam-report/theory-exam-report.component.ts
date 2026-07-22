@@ -132,9 +132,7 @@ export class TheoryExamReportComponent {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
 
-
       // this.searchRequest.IsConfirmed = this.IsConfirmed = true;
-
       // //group code id
       // if (this.IsCountShow == false) {
       //   this.searchRequest.ExaminerCode = this.examinerCodeLoginModel.ExaminerCode
@@ -319,6 +317,7 @@ export class TheoryExamReportComponent {
       'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'StudentExamPaperID', 'rowclass', "FileName","JobCardImage"
     ];
 
+    const currentDate = new Date().toLocaleDateString('en-GB'); // dd/MM/yyyy
     const filteredData = this.TheoryMarksRptDataList.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
@@ -326,6 +325,9 @@ export class TheoryExamReportComponent {
           filteredItem[key] = item[key];
         }
       });
+        // Add new column
+    filteredItem['Export Date'] = currentDate;
+
       return filteredItem;
     });
 

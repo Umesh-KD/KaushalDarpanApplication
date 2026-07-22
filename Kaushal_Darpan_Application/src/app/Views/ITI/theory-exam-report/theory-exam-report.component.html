@@ -41,11 +41,21 @@
         <div>
 
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
-          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID" (change)="GetItiTrade()">
+          <!-- <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID" (change)="GetItiTrade()">
             <option value="0">--All--</option>
             <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-          </select>
+          </select> -->
+          <ng-select id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID" (change)="GetItiTrade()">
+            <ng-option [value]="0">--All--</ng-option>
+            <ng-container >
+              <ng-option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">
+                {{item.InstituteName}}
+              </ng-option>
+            </ng-container>
+            <!-- <ng-option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</ng-option> -->
+          </ng-select>
         </div>
+
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Year:</label>
@@ -60,25 +70,22 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Attendance Status:</label>
-          <select class="form-select" id="StudentExamAttendance" [(ngModel)]="searchRequest.Ispresent">
-            <option value="-1">--All--</option>
-            <option [value]="1">Present</option>
-            <option [value]="0">
-              Absent
-            </option>
-          </select>
-        </div>
-
-        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Trade:<span class="StarMarking"></span>
           </label>
-          <select class="form-select" id="ddlBranch"
+          <!-- <select class="form-select" id="ddlBranch"
                   [(ngModel)]="searchRequest.StreamID">
             <option value="0">--All--</option>
             <option *ngFor="let item of Branchlist" [value]="item?.ID">{{item.Name}}</option>
-          </select>
+          </select> -->
+          <ng-select id="ddlBranch"
+                  [(ngModel)]="searchRequest.StreamID">
+            <ng-option [value]="0">--All--</ng-option>
+            <ng-container >
+              <ng-option *ngFor="let item of Branchlist" [value]="item?.ID">{{item.Name}}</ng-option>
+            </ng-container>
+            <!-- <ng-option *ngFor="let item of Branchlist" [value]="item?.ID">{{item.Name}}</ng-option> -->
+          </ng-select>
         </div>
 
 
@@ -112,14 +119,51 @@
           <input class="form-input" placeholder="Student Roll No" type="text" id="txtStudentRollNo" [(ngModel)]="searchRequest.RollNo">
         </div>
 
+        
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Attendance Status:</label>
+          <select class="form-select" id="StudentExamAttendance" [(ngModel)]="searchRequest.Ispresent">
+            <option value="-1">--All--</option>
+            <option [value]="1">Present</option>
+            <option [value]="0">
+              Absent
+            </option>
+          </select>
+        </div>
+
+        <div >
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Examiner Status <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="ExaminerStatus" [(ngModel)]="searchRequest.ExaminerStatus">
+            <option  value="-1">All</option>
+            <option  value="1">Assigned</option>
+            <option  value="0">Not assigned</option>
+            <!-- <option *ngFor="let item of SubjectMasterDDLList" [value]="item.ID">{{item.ID}} {{item.Name}}</option> -->
+          </select>
+        </div>
+
+        <div >
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            MarkObtained Status <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="MarkObtained" [(ngModel)]="searchRequest.MarkObtained">
+            <option  value="-1">All</option>
+            <option  value="1">Marks Obtained</option>
+            <option  value="0">Marks Not Obtained</option>
+            <!-- <option *ngFor="let item of SubjectMasterDDLList" [value]="item.ID">{{item.ID}} {{item.Name}}</option> -->
+          </select>
+        </div>
+
         <!-- <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Marks Entered: </label>
-    <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
-      <option value="0">--All--</option>
-      <option value="1">Marks Pending</option>
-      <option value="2">Marks Entered</option>
-    </select>
-  </div> -->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Marks Entered: </label>
+          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
+            <option value="0">--All--</option>
+            <option value="1">Marks Pending</option>
+            <option value="2">Marks Entered</option>
+          </select>
+        </div> -->
+
       </div>
       <div class="flex justify-center">
         <button type="button" class="btn bg-info text-white mt-6" (click)="GetTheoryMarksDetailList()">Search</button>
