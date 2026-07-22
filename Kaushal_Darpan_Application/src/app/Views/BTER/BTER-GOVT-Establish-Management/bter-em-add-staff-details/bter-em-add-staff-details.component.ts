@@ -14,6 +14,8 @@ import { StaffDetailsDataModel, StaffSubjectList } from '../../../../Models/Staf
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppsettingService } from '../../../../Common/appsetting.service';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { DocumentDetailsService } from '../../../../Common/document-details';
 
 @Component({
   selector: 'app-bter-em-add-staff-details',
@@ -50,6 +52,7 @@ export class BterEMAddStaffDetailsComponent {
   public ExamTypeList: any = [];
   public SemesterList: any = [];
   public SubjectMasterDDL: any = [];
+  public DistrictMasterDDL: any = [];
   public ShowAllSemester: number = 0;
 
   public State: number = 0;
@@ -84,7 +87,8 @@ export class BterEMAddStaffDetailsComponent {
   public IsSubjectlistTech: boolean = false
   public IsOterFacultyTech: boolean = false
   public today: string='';
-  public IsGuestHouse: boolean = false
+  public IsGuestHouse: boolean = false;
+  public IsNotAcquired: boolean = true;
 
 
   constructor(
@@ -96,6 +100,7 @@ export class BterEMAddStaffDetailsComponent {
     private toastr: ToastrService,
     private modalService: NgbModal,
     private router: Router,
+    private documentDetailsService: DocumentDetailsService,
   ) {}
 
   async ngOnInit() {
@@ -130,7 +135,12 @@ export class BterEMAddStaffDetailsComponent {
 
       DateOfRetirement: [{ value: '', disabled: true }],
       Remark: [''],
+      QualificationAcquiringDate: [''],
       IsNodal: [{ value: false, disabled: true }],
+      IsServingADHOC: ['', [Validators.required]],
+      DateofJoiningADHOC: [''],
+      IsProbationCompleted: ['', [Validators.required]],
+      ProbationCompletionDate: [''],
       
     });
 
@@ -328,8 +338,29 @@ export class BterEMAddStaffDetailsComponent {
         data = JSON.parse(JSON.stringify(data));
         console.log(data['Data']);
         this.StreamTypeList = data['Data'];
-        console.log(this.StateMasterList);
       }, error => console.error(error));
+
+    await this.commonMasterService.GetStateMaster()
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        console.log(data['Data']);
+        this.StateMasterList = data['Data'];
+      }, error => console.error(error));
+  }
+
+  async DistrictMaster_StateIDWise() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.DistrictMaster_StateIDWise(this.request.StateID || 0).then((data: any) =>
+      {
+        data = JSON.parse(JSON.stringify(data));
+        this.DistrictMasterDDL = data.Data;
+      }, error => console.error(error));
+      
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
   }
 
   async getStreamMasterData() {
@@ -479,6 +510,7 @@ export class BterEMAddStaffDetailsComponent {
         data = JSON.parse(JSON.stringify(data));
         if(data.State == EnumStatus.Success) {
           this.request = data.Data[0];
+          this.onChangeQualificationAfterJoining();
           console.log(this.request.DateOfBirth);
           console.log(this.StaffMasterFormGroup.get('DateOfBirth')?.value);
           /*this.staffDetailsFormData.StaffSubjectListModel = request.*/
@@ -1340,6 +1372,56 @@ export class BterEMAddStaffDetailsComponent {
         return;
       }
     }
+  }
+
+  onChangeQualificationAfterJoining() {
+    this.IsNotAcquired =
+      this.EmployeeQualificationDDLList.find(
+        (item: any) => item.QualificationID == this.request.QualificationAfterJoining
+      )?.QualificationName === 'Not Acquired';
+  }
+
+  async UploadDocument(event: any, FileName: any) {
+    try { 
+      let uploadModel: UploadFileModel = {
+        FileName: FileName ?? "",
+        FileExtention: "",
+        MinFileSize: "20kb",
+        MaxFileSize: "2mb",
+        FolderName:"BTER_Establishment/AcquiredQualificationAfterJoining",    
+      }
+      debugger
+      await this.documentDetailsService.UploadDocument(event, uploadModel)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          
+          if (data.State == EnumStatus.Success) {
+            if(FileName == "AcquiringQualificationCertificate"){
+              this.request.AcquiringQualificationCertificate = data.Data[0].FileName;
+              this.request.Dis_AcquiringQualificationCertificate = data.Data[0].Dis_FileName;
+            }
+            else if(FileName == "CompetentAuthorityOrder"){
+              this.request.CompetentAuthorityOrder = data.Data[0].FileName;
+              this.request.Dis_CompetentAuthorityOrder = data.Data[0].Dis_FileName;
+            }
+          } else if (data.State == EnumStatus.Error) {
+            this.toastr.error(data.ErrorMessage)
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  onChangeIsServingADHOC(value: boolean) {
+    this.request.IsServingADHOC = value;
+  }
+  onChangeIsProbationCompleted(value: boolean) {
+    this.request.IsProbationCompleted = value;
   }
 
 }

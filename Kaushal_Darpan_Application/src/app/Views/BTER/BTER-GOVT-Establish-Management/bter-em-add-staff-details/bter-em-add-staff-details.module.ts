@@ -9,6 +9,7 @@ import { StudentStatusHistoryModule } from '../../../Student/student-status-hist
 
 import { BterEMAddStaffDetailsComponent } from './bter-em-add-staff-details.component';
 import { BterEMAddStaffDetailsRoutingModule } from './bter-em-add-staff-details-routing.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { BterEMAddStaffDetailsRoutingModule } from './bter-em-add-staff-details-
     CommonModule, 
     LoaderModule, 
     TableSearchFilterModule,
-    StudentStatusHistoryModule
+    StudentStatusHistoryModule,
+    NgSelectModule,
   ]
 })
 export class BterEMAddStaffDetailsModule { }

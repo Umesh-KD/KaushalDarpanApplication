@@ -582,7 +582,7 @@ export class DteAddItemsMasterComponent {
           FileName: FileName ?? "",
           FileExtention: "",
           MinFileSize: "20kb",
-          MaxFileSize: "50mb",
+          MaxFileSize: "2mb",
           FolderName:"StockRegisterBillUpload",
      
         }

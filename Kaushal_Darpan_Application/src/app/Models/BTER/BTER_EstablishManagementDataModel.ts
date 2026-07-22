@@ -170,7 +170,21 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public QualificationAtJoining: string = ''
   public QualificationAfterJoining: string = ''
   public Remark: string = ''
+
   public Mailpersonal: string = '';
+  public QualificationAcquiringDate: string = '';
+  public AcquiringQualificationCertificate: string = '';
+  public Dis_AcquiringQualificationCertificate: string = '';
+  public CompetentAuthorityOrder: string = '';
+  public Dis_CompetentAuthorityOrder: string = '';
+  public IsServingADHOC: boolean = false;
+  public DateofJoiningADHOC: string = '';
+  public IsProbationCompleted: boolean = false;
+  public ProbationCompletionDate: string = '';  
+  public StateID ?: number = 0;
+  public DistrictID ?: number = 0;
+  public Pincode ?: string = '';
+  public Address ?: string = '';
 
   public ProfileStatusID?: number = 0
   public IsNodal: boolean = false
