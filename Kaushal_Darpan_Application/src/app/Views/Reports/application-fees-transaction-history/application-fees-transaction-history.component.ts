@@ -87,7 +87,11 @@ export class ApplicationFeesTransactionHistoryComponent {
         PRN: item.PRN,
         PaidAmount: item.PaidAmount,
         subsidyserviceid: item.subsidyserviceid,
-        DepartmentID: item.DepartmentID
+        DepartmentID: item.DepartmentID,
+        CreatedBy: this.sSOLoginDataModel.UserID,
+        SSOID: this.sSOLoginDataModel.SSOID,
+        ExamStudentStatus: 0,
+        IsEmitra: item?.IsEmitra
       }));
 
     console.log(this.selectedItems);
@@ -357,7 +361,11 @@ export class ApplicationFeesTransactionHistoryComponent {
           SubOrderID: "",
           CreatedBy: this.sSOLoginDataModel.UserID,
           SSOID: this.sSOLoginDataModel.SSOID,
-          ExamStudentStatus: 0
+          ExamStudentStatus: 0,
+          IsEmitra: item.IsEmitra
+
+
+
         };
         await this.emitraPaymentService.EmitraApplicationVerifyPaymentStatus(obj)
           .then(async (data: any) => {

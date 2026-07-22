@@ -325,6 +325,7 @@ export class AppointITIExaminerComponent {
 
   async getStaffForExaminerData() {
     try {
+      debugger
       this.StaffForExaminerList = []
      /* this.searchRequest.CommonSubjectYesNo = this.CommonSubjectYesNo;*/
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
