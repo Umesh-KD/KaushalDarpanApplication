@@ -252,22 +252,23 @@ export class BTEREMStaffListComponent {
   }
 
 
-  GetInstituteMaster() {
-    //const officeList = [
-    //  { InstituteID: 10001, InstituteName: 'DTE', OfficeTypeID: 17 },
-    //  { InstituteID: 10002, InstituteName: 'BTER', OfficeTypeID: 18 },
-    //  { InstituteID: 10003, InstituteName: 'TTC', OfficeTypeID: 19 }
-    //];
-
-    this.commonMasterService.InstituteMaster(
-      this.sSOLoginDataModel.DepartmentID,
-      this.sSOLoginDataModel.Eng_NonEng,
-      this.sSOLoginDataModel.EndTermID
-    ).then((response: any) => {
-      const instituteList = Array.isArray(response?.Data) ? response.Data : [];
-      this.InstituteMasterDDL = instituteList;
-      //this.InstituteMasterDDL = officeList.concat(instituteList);
-    });
+  async GetInstituteMaster() {
+    try {
+      const request: any = {};
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      request.EndTermId = this.sSOLoginDataModel.EndTermID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.ManagementTypeID = 1; // static passing because we are using this only for govt. institute
+      request.Action = "GetInstituteMasterDDL_BTER_EM";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.InstituteMasterDDL = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async GetStaffTypeData() {
@@ -875,17 +876,20 @@ export class BTEREMStaffListComponent {
   }
   async getInstituteMasterList() {
     try {
-      this.loaderService.requestStarted();
-      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+      const request: any = {};
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      request.EndTermId = this.sSOLoginDataModel.EndTermID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.ManagementTypeID = 1; // static passing because we are using this only for govt. institute
+      request.Action = "GetInstituteMasterDDL_BTER_EM";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.InstituteMasterDDLList = data.Data;
+        this.InstituteMasterDDLList = data['Data'];
       })
     } catch (error) {
       console.error(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 

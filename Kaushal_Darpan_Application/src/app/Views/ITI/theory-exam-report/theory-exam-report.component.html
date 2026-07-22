@@ -30,14 +30,14 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Group code</label>
-          <select class="form-select" id="GroupID" [(ngModel)]="searchRequest.GroupCodeID">
-            <option value="0">--All--</option>
-            <option *ngFor="let item of GroupMasterDDLList" [value]="item.ID">{{item.Name}}</option>
-          </select>
-        </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Group code</label>
+    <select class="form-select" id="GroupID" [(ngModel)]="searchRequest.GroupCodeID">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of GroupMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+  </div> -->
         <!--<div *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon
-        || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng">-->
+  || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng">-->
         <div>
 
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
@@ -54,11 +54,19 @@
             <!--<option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>-->
             <option [value]="1">1st Year</option>
             <option [value]="2">
-              2nd Year<
+              2nd Year
             </option>
+          </select>
+        </div>
 
-            r<
-
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Attendance Status:</label>
+          <select class="form-select" id="StudentExamAttendance" [(ngModel)]="searchRequest.Ispresent">
+            <option value="-1">--All--</option>
+            <option [value]="1">Present</option>
+            <option [value]="0">
+              Absent
+            </option>
           </select>
         </div>
 
@@ -96,27 +104,22 @@
             <option *ngIf="this.sSOLoginDataModel.Eng_NonEng==2" value="Paper-II">Paper-II Employablility Skills</option>
             <option *ngIf="this.sSOLoginDataModel.Eng_NonEng==2" value="Paper-III">Paper-III Workshop Calculation & Science</option>
             <option *ngIf="this.sSOLoginDataModel.Eng_NonEng==2" value="Paper-IV">Paper-IV Engineering Drawing</option>
-
-
-
             <!-- <option *ngFor="let item of SubjectMasterDDLList" [value]="item.ID">{{item.ID}} {{item.Name}}</option> -->
           </select>
-
         </div>
-
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperRollNo">Trainee Roll No.: </label>
           <input class="form-input" placeholder="Student Roll No" type="text" id="txtStudentRollNo" [(ngModel)]="searchRequest.RollNo">
         </div>
 
         <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Marks Entered: </label>
-          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
-            <option value="0">--All--</option>
-            <option value="1">Marks Pending</option>
-            <option value="2">Marks Entered</option>
-          </select>
-        </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Marks Entered: </label>
+    <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
+      <option value="0">--All--</option>
+      <option value="1">Marks Pending</option>
+      <option value="2">Marks Entered</option>
+    </select>
+  </div> -->
       </div>
       <div class="flex justify-center">
         <button type="button" class="btn bg-info text-white mt-6" (click)="GetTheoryMarksDetailList()">Search</button>

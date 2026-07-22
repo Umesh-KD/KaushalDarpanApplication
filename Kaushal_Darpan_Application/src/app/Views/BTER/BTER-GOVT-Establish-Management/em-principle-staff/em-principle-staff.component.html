@@ -381,7 +381,7 @@
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
                 <a href="javascript:void(0);" id="btnDelete" title="Delete" 
-                  *ngIf="row.ProfileStatusID == 0 && sSOLoginDataModel.UserID != row.StaffUserID"  
+                  *ngIf="row.ProfileStatusID == _EnumEMProfileStatus.Pending && sSOLoginDataModel.UserID != row.StaffUserID"  
                   (click)="btnDelete_OnClick(row.StaffUserID)">
                   <i class="ti ti-trash"></i>
                 </a>
@@ -395,17 +395,18 @@
                 <a href="javascript:void(0);" title="Approve Profile"
                   *ngIf="row.RoleID != _EnumRole.GuestFaculty && 
                           row.RoleID != _EnumRole.ShikshaSambal && 
-                          row.ProfileStatusID != 247 &&
-                          row.ProfileStatusID != 249 &&
-                          row.ProfileStatusID != 288 &&
-                          row.ProfileStatusID != 0 && sSOLoginDataModel.UserID != row.StaffUserID"
+                          row.ProfileStatusID != _EnumEMProfileStatus.Approve &&
+                          row.ProfileStatusID != _EnumEMProfileStatus.Revert &&
+                          row.ProfileStatusID != _EnumEMProfileStatus.Completed &&
+                          row.ProfileStatusID != _EnumEMProfileStatus.Pending && sSOLoginDataModel.UserID != row.StaffUserID"
 
                   (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, false)">
                   <i class="ti ti-check"></i>
                 </a>
 
                 <a href="javascript:void(0);" id="btnDelete" title="Unlock Profile"
-                  *ngIf="row.ProfileStatusID == 289 && sSOLoginDataModel.UserID != row.StaffUserID" 
+                  *ngIf="(row.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit || row.ProfileStatusID == _EnumEMProfileStatus.Approve)
+                        && sSOLoginDataModel.UserID != row.StaffUserID" 
                   (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)">
                   <i class="ti ti-lock-open"></i>
                 </a>
@@ -423,14 +424,15 @@
 
                 <a href="javascript:void(0);" title="View"
                   *ngIf="(row.RoleID == _EnumRole.GuestFaculty || row.RoleID == _EnumRole.ShikshaSambal) 
-                        && !(row.ProfileStatusID == 0|| row.ProfileStatusID == 288 || row.ProfileStatusID == 429) 
+                        && !(row.ProfileStatusID == _EnumEMProfileStatus.Pending 
+                            || row.ProfileStatusID == _EnumEMProfileStatus.Completed || row.ProfileStatusID ==  _EnumEMProfileStatus.Revert) 
                         && sSOLoginDataModel.UserID != row.StaffUserID"  
                   (click)="openModal_ApproveStaffProfileOterFaculty(Modal_ApproveStaffProfileOterFaculty, row.StaffUserID, row.SSOID, true)">
-                  <i class="ti ti-check" *ngIf="(row.ProfileStatusID != 247 ||
-                                                row.ProfileStatusID != 249 ||
-                                                row.ProfileStatusID != 288 ||
-                                                row.ProfileStatusID != 0) "></i>
-                  <i class="ti ti-eye" *ngIf="row.ProfileStatusID == 247"></i>
+                  <i class="ti ti-check" *ngIf="(row.ProfileStatusID != _EnumEMProfileStatus.Approve ||
+                                                row.ProfileStatusID !=  _EnumEMProfileStatus.Revert ||
+                                                row.ProfileStatusID != _EnumEMProfileStatus.Completed ||
+                                                row.ProfileStatusID != _EnumEMProfileStatus.Pending ) "></i>
+                  <i class="ti ti-eye" *ngIf="row.ProfileStatusID == _EnumEMProfileStatus.Approve"></i>
                 </a>
 
                 <a href="javascript:void(0);" title="Assign Role Rights" 
