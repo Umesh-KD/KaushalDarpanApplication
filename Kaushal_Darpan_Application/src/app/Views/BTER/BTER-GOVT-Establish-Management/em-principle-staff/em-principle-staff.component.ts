@@ -84,6 +84,7 @@ export class EMPrincipleStaffComponent {
   _ITIGovtEM_EnumStaffLevelChild = ITIGovtEM_EnumStaffLevelChild;
   _ITIGovtEM_EnumStaffType = ITIGovtEM_EnumStaffType;
   _BTERGovtEM_EnumStaffType = BTERGovtEM_EnumStaffType;
+  _EnumEMProfileStatus = EnumEMProfileStatus;
 
   public State: number = 0;
   public Message: string = '';
@@ -715,17 +716,20 @@ async GetTechnicianDll() {
 
   async getInstituteMasterList() {
     try {
-      this.loaderService.requestStarted();
-      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+      const request: any = {};
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      request.EndTermId = this.sSOLoginDataModel.EndTermID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.ManagementTypeID = 1; // static passing because we are using this only for govt. institute
+      request.Action = "GetInstituteMasterDDL_BTER_EM";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.InstituteMasterDDLList = data.Data;
+        this.InstituteMasterDDLList = data['Data'];
       })
     } catch (error) {
       console.error(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
