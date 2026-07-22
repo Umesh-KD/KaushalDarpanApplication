@@ -111,7 +111,6 @@ export class ItiTradeSearchComponent {
   public ValidationMessage: string = '';
   public _enumrole = EnumRole;
   public Type: number = 0;
-  public isVisibleSection: boolean = false;
   public isVisibleList: boolean = true;
   public DISCOM: any = [];
   public oldDistrictID: number = 0;
@@ -127,6 +126,11 @@ export class ItiTradeSearchComponent {
   modalRef1: NgbModalRef | null = null;
   dataSource1!: MatTableDataSource<any>;
   @ViewChild('paginator1') paginator1!: MatPaginator;
+  // @ViewChild('paginator1') set paginator1(mp: MatPaginator) {
+  //  debugger
+  //  console.log('paginator1 setter called with:', mp);
+  //  if (mp) this.dataSource1.paginator = mp;
+  // }
   @ViewChild(MatSort) sort!: MatSort;
   constructor(private loaderService: LoaderService, private commonservice: CommonFunctionService,
     private studentService: StudentService, private modalService: NgbModal, private toastrService: ToastrService, private documentDetailsService: DocumentDetailsService,
@@ -138,14 +142,12 @@ export class ItiTradeSearchComponent {
 
   ) { }
 
-  async ngOnInit() {
-    
+  async ngOnInit() {    
     this.ValidationMessage = "";
     this.searchItiCollegeForm = this.formBuilder.group({
       //txtApplicationNo: ['', Validators.required],
       //DOB: ['', Validators.required],
      /* DivisionId:['']*/
-
     })
 
     
@@ -350,18 +352,11 @@ export class ItiTradeSearchComponent {
     const selectedDistrictID = this.request.DistrictId;
     this.filteredTehsils = this.TehsilMasterList.filter((tehsil: any) => tehsil.ID == selectedDistrictID);
   }
-  BackSide() {
-
-    this.isVisibleSection = false;
-    this.isVisibleList = true;
-
-  }
-
+ 
  async onResetClick() {
     this.request.DistrictId = 0;
     this.request.DivisionId = 0;
     this.request.SearchText = "";
-    this.isVisibleSection = false;
     //this.isVisibleList = false;
     this.ValidationMessage = "";
     //this.ddlDistrict();
@@ -370,8 +365,6 @@ export class ItiTradeSearchComponent {
 
   async GetById(ID: number) {
     try {
-      
-      this.isVisibleSection = true;
       this.isVisibleList = false;
       this.requestPlaning.ItiAffiliationList = []
       this.requestPlaning.ItiMembersModel = []
@@ -740,7 +733,6 @@ export class ItiTradeSearchComponent {
     //}
     this.ValidationMessage = "";
     await this.GetList();
-    this.isVisibleSection = false;
     this.isVisibleList = true;
   }
 
@@ -1029,6 +1021,7 @@ export class ItiTradeSearchComponent {
   //-----------------------------------TRADE SECTION START-----------------------------------------------
 
   ngAfterViewInit() {
+    debugger
     if (this.dataSource1) this.dataSource1.paginator = this.paginator1;
   }
 
