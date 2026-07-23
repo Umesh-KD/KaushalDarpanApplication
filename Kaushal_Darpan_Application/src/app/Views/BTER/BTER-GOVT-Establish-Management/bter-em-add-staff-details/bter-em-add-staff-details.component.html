@@ -159,6 +159,72 @@
           </div>
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No <span
+              class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input" placeholder="Enter Mobile Number" name="MobileNumber"
+            id="MobileNumber" formControlName="MobileNumber" [(ngModel)]="request.MobileNumber" maxlength="10" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.MobileNumber.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.MobileNumber.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">WhatsApp No <span
+              class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input" placeholder="Enter WhatsApp Number" name="WhatsAppNumber"
+            id="WhatsAppNumber" formControlName="WhatsAppNumber" [(ngModel)]="request.WhatsAppNumber"maxlength="10" minlength="10"
+            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.WhatsAppNumber.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.WhatsAppNumber.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID <span class="StarMarking">*</span>
+          </label>
+          <input autocomplete="off" class="form-input " placeholder="Enter SSO ID" value="12dfgdf" name="SSOID"
+            id="SSOID" formControlName="SSOID" [(ngModel)]="request.SSOID" readonly />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.SSOID.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.SSOID.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Employee ID <span
+              class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input " placeholder="Enter Employee ID" value="12dfgdf"
+            name="EmployeeID" id="EmployeeID" formControlName="EmployeeID" [(ngModel)]="request.EmployeeID" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.EmployeeID.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.EmployeeID.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Email<span
+              class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input " placeholder="Enter Employee ID" value="12dfgdf"
+            name="EmployeeID" id="Mailpersonal" formControlName="Mailpersonal" [(ngModel)]="request.Mailpersonal" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.Mailpersonal.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.Mailpersonal.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
         <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of first appointment as a govt
             employee <span class="StarMarking">*</span></label>
@@ -208,7 +274,7 @@
         <div *ngIf=" this.IsOterFacultyTech == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Joining in the Current
             Institute<span class="StarMarking">*</span></label>
-          <input class="form-input" type="date" name="DateOfJoining" id="DateOfJoining" [max]="request.DateOfRetirement"
+          <input class="form-input" type="date" name="DateOfJoining" id="DateOfJoining"
             formControlName="DateOfJoining" [(ngModel)]="request.DateOfJoining" (click)="openDatePicker($event)"
             [min]="request.DepartmentJoiningDate" [max]="this.today" />
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfJoining.errors" class="text-danger">
@@ -219,65 +285,72 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No <span
-              class="StarMarking">*</span></label>
-          <input autocomplete="off" class="form-input" placeholder="Enter Mobile Number" name="MobileNumber"
-            id="MobileNumber" formControlName="MobileNumber" [(ngModel)]="request.MobileNumber" maxlength="10" />
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is served/serving ADHOC Y/N<span class="StarMarking">*</span></label>
 
-          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.MobileNumber.errors" class="text-danger">
-            <p *ngIf="_StaffMasterFormGroup.MobileNumber.errors.required">
+          <div class="flex gap-4">
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsServingADHOC" [value]="true" formControlName="IsServingADHOC"
+                      [(ngModel)]="request.IsServingADHOC" (change)="onChangeIsServingADHOC(true)" />
+              <span>Yes</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsServingADHOC" [value]="false" formControlName="IsServingADHOC"
+                      [(ngModel)]="request.IsServingADHOC" (change)="onChangeIsServingADHOC(false)" />
+              <span>No</span>
+            </label>
+          </div>
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.IsServingADHOC.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.IsServingADHOC.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf=" request.IsServingADHOC == true">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Joining as ADHOC <span class="StarMarking">*</span></label>
+          <input class="form-input" type="date" name="DateofJoiningADHOC" id="DateofJoiningADHOC"
+            formControlName="DateofJoiningADHOC" [(ngModel)]="request.DateofJoiningADHOC" (click)="openDatePicker($event)"
+            [min]="request.DepartmentJoiningDate" [max]="this.today" />
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateofJoiningADHOC.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.DateofJoiningADHOC.errors.required">
               <i aria-hidden="true"></i>This field is required .!
             </p>
           </div>
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">WhatsApp No <span
-              class="StarMarking">*</span></label>
-          <input autocomplete="off" class="form-input" placeholder="Enter WhatsApp Number" name="WhatsAppNumber"
-            id="WhatsAppNumber" formControlName="WhatsAppNumber" [(ngModel)]="request.WhatsAppNumber" maxlength="10" />
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is probation completed Y/N<span class="StarMarking">*</span></label>
 
-          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.WhatsAppNumber.errors" class="text-danger">
-            <p *ngIf="_StaffMasterFormGroup.WhatsAppNumber.errors.required">
+          <div class="flex gap-4">
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsProbationCompleted" [value]="true" formControlName="IsProbationCompleted"
+                      [(ngModel)]="request.IsProbationCompleted" (change)="onChangeIsProbationCompleted(true)" />
+              <span>Yes</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsProbationCompleted" [value]="false" formControlName="IsProbationCompleted"
+                      [(ngModel)]="request.IsProbationCompleted" (change)="onChangeIsProbationCompleted(false)" />
+              <span>No</span>
+            </label>
+          </div>
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.IsProbationCompleted.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.IsProbationCompleted.errors.required">
               <i aria-hidden="true"></i>This field is required .!
             </p>
           </div>
         </div>
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID <span class="StarMarking">*</span>
-          </label>
-          <input autocomplete="off" class="form-input " placeholder="Enter SSO ID" value="12dfgdf" name="SSOID"
-            id="SSOID" formControlName="SSOID" [(ngModel)]="request.SSOID" readonly />
-
-          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.SSOID.errors" class="text-danger">
-            <p *ngIf="_StaffMasterFormGroup.SSOID.errors.required">
-              <i aria-hidden="true"></i>This field is required .!
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Employee ID <span
-              class="StarMarking">*</span></label>
-          <input autocomplete="off" class="form-input " placeholder="Enter Employee ID" value="12dfgdf"
-            name="EmployeeID" id="EmployeeID" formControlName="EmployeeID" [(ngModel)]="request.EmployeeID" />
-
-          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.EmployeeID.errors" class="text-danger">
-            <p *ngIf="_StaffMasterFormGroup.EmployeeID.errors.required">
-              <i aria-hidden="true"></i>This field is required .!
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Email<span
-              class="StarMarking">*</span></label>
-          <input autocomplete="off" class="form-input " placeholder="Enter Employee ID" value="12dfgdf"
-            name="EmployeeID" id="Mailpersonal" formControlName="Mailpersonal" [(ngModel)]="request.Mailpersonal" />
-
-          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.Mailpersonal.errors" class="text-danger">
-            <p *ngIf="_StaffMasterFormGroup.Mailpersonal.errors.required">
+        <div *ngIf=" request.IsProbationCompleted == true">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Enter probation completion date <span class="StarMarking">*</span></label>
+          <input class="form-input" type="date" name="ProbationCompletionDate" id="ProbationCompletionDate"
+            formControlName="ProbationCompletionDate" [(ngModel)]="request.ProbationCompletionDate" (click)="openDatePicker($event)"
+            [min]="request.DepartmentJoiningDate" [max]="this.today" />
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.ProbationCompletionDate.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.ProbationCompletionDate.errors.required">
               <i aria-hidden="true"></i>This field is required .!
             </p>
           </div>
@@ -372,7 +445,8 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Qualifications as per Service Book gained
             after joining <span class="StarMarking">*</span> </label>
           <select class="form-select " name="QualificationAfterJoining" id="QualificationAfterJoining"
-            formControlName="QualificationAfterJoining" [(ngModel)]="request.QualificationAfterJoining">
+            formControlName="QualificationAfterJoining" [(ngModel)]="request.QualificationAfterJoining"
+            (change)="onChangeQualificationAfterJoining()">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of EmployeeQualificationDDLList" [value]="item.QualificationID">
               {{item.QualificationName}}</option>
@@ -382,6 +456,64 @@
             <p *ngIf="!_StaffMasterFormGroup.QualificationAfterJoining.errors.DropdownValidators">
               <i aria-hidden="true"></i>This field is required .!
             </p>
+          </div>
+        </div>
+
+        <div *ngIf="IsNotAcquired == false">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Date of acquiring the qualification <span class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input" type="date" name="QualificationAcquiringDate" id="QualificationAcquiringDate"
+            formControlName="QualificationAcquiringDate" [(ngModel)]="request.QualificationAcquiringDate" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.QualificationAcquiringDate.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.QualificationAcquiringDate.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="IsNotAcquired == false">
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                for="AcquiringQualificationCertificate">Upload Marksheet/Certificate for verification of acquiring qualification<span class="StarMarking">*</span></label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                  id="AcquiringQualificationCertificate" type="file"
+                  (change)="UploadDocument($event, 'AcquiringQualificationCertificate')">
+            <label for="AcquiringQualificationCertificate">
+              <span>Choose File</span>
+              {{ request.Dis_AcquiringQualificationCertificate == '' || request.Dis_AcquiringQualificationCertificate == undefined ? 'No File Choosen' : request.Dis_AcquiringQualificationCertificate }}
+            </label>
+            <div class="flex">
+              <a href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/AcquiredQualificationAfterJoining/' + request.AcquiringQualificationCertificate }}"
+                *ngIf="request.AcquiringQualificationCertificate!='' && request.AcquiringQualificationCertificate !=undefined" class="btn bg-primary text-white m-0" target="_blank">
+                <i class="ti ti-eye"></i>
+              </a>
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div *ngIf="IsNotAcquired == false">
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                for="CompetentAuthorityOrder">Upload order from competent authority to add qualification in the service book<span class="StarMarking">*</span></label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                  id="CompetentAuthorityOrder" type="file"
+                  (change)="UploadDocument($event, 'CompetentAuthorityOrder')">
+            <label for="CompetentAuthorityOrder">
+              <span>Choose File</span>
+              {{ request.Dis_CompetentAuthorityOrder == '' || request.Dis_CompetentAuthorityOrder == undefined ? 'No File Choosen' : request.Dis_CompetentAuthorityOrder }}
+            </label>
+            <div class="flex">
+              <a class="btn bg-primary text-white m-0" target="_blank"
+                *ngIf="request.CompetentAuthorityOrder !='' && request.CompetentAuthorityOrder != undefined" 
+                href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/AcquiredQualificationAfterJoining/' + request.CompetentAuthorityOrder }}">
+                <i class="ti ti-eye"></i>
+              </a>
+              <span class="text-danger text-sm" *ngIf="isFileError">
+                order from competent authority to add qualification in the service book Document Upload is required
+              </span>
+            </div>
           </div>
         </div>
 
@@ -412,6 +544,75 @@
         </div>
 
       </div>
+
+      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Address Details</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Address
+            <span class="StarMarking">*</span>
+          </label>
+          <textarea autocomplete="off" class="form-input " placeholder="Please Enter Address" 
+            name="SSOId" id="Address" formControlName="Address" [(ngModel)]="request.Address">
+          </textarea>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.Address.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.Address.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> State <span
+              class="StarMarking">*</span> </label>
+
+          <ng-select [(ngModel)]="request.StateID" [clearable]="false" formControlName="StateID" (change)="DistrictMaster_StateIDWise()">
+            <ng-option [value]="0">--Select--</ng-option>
+            <ng-container *ngFor="let item of StateMasterList">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.StateID.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.StateID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> District<span class="StarMarking">*</span></label>
+          <ng-select [(ngModel)]="request.DistrictID" [clearable]="false" formControlName="DistrictID">
+            <ng-option [value]="0">--Select--</ng-option>
+            <ng-container *ngFor="let item of DistrictMasterDDL">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DistrictID.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.DistrictID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Pincode  <span class="StarMarking">*</span>
+          </label>
+          <input class="form-input" placeholder="Enter Pincode" name="Pincode" id="Pincode"
+            formControlName="Pincode" [(ngModel)]="request.Pincode" maxlength="6"
+            (keypress)="validateNumber($event)" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.Pincode.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.Pincode.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+      </div>
+
       <!-- *ngIf="sSOLoginDataModel.RoleID== _EnumRole.Teacher || sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal" -->
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3"
         *ngIf="sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal">
@@ -1044,10 +1245,16 @@
     </form>
     <div class="flex justify-center flex-wrap items-centermt-3">
       <div>
-        <button *ngIf="[0, 288, 249].includes(request.ProfileStatusID)" class="btn bg-success text-white mt-3"
+        <button *ngIf="[0, 288, 249].includes(request.ProfileStatusID) && request.IsAdmin != 1" class="btn bg-success text-white mt-3"
           type="button" (click)="SaveData()">
-          Complete
+          Save as Draft
         </button>
+
+        <button *ngIf="request.IsAdmin == 1" class="btn bg-success text-white mt-3"
+          type="button" (click)="SaveData()">
+          Update Profile
+        </button>
+
         <button *ngIf="request.ProfileStatusID == 288" class="btn bg-success text-white mt-3" type="button"
           (click)="LockSubmitSaveData()">
           Lock & Submit

@@ -68,6 +68,28 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Is Serving/Served ADHOC:
+          </label>
+          <select class="form-select" id="IsServingADHOC" [(ngModel)]="searchRequest.IsServingADHOC">
+            <option value="-1">Choose Option</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Is Probation Completed:
+          </label>
+          <select class="form-select" id="IsProbationCompleted" [(ngModel)]="searchRequest.IsProbationCompleted">
+            <option value="-1">Choose Option</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Profile Status:
           </label>
           <select class="form-select" id="ProfileStatus" [(ngModel)]="searchRequest.ProfileStatus">

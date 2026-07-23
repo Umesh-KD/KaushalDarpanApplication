@@ -139,6 +139,15 @@
             </select>
           </div>
 
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Student Type</label>
+            <select class="form-select" id="filterEligibilityStatus" formControlName="studentType"
+                    [(ngModel)]="request.StudentTypeID">
+              <option value="0" selected>--All--</option>
+              <option value="1" selected>Regular</option>             
+              <option value="2" selected>Ex</option>             
+            </select>
+          </div>
 
             <div>
               <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>

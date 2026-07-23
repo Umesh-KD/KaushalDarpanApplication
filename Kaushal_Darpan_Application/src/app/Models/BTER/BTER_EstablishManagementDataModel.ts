@@ -19,7 +19,9 @@ export class BTER_EM_StaffListSearchModel {
   InstitutionManagementTypeID?: number = 0;
   InstituteID?: number = 0;
   ProfileStatus?: number = -1;
-  act?: string = ''
+  act?: string = '';
+  IsServingADHOC: number = -1;
+  IsProbationCompleted: number = -1;
 }
 
 export class BTER_EM_AddStaffDataModel extends RequestBaseModel {
@@ -162,7 +164,7 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public DepartmentJoiningDate: string = ''
   public DateOfRetirement: string = ''
   public MobileNumber: string = ''
-  public WhatsAppNumber?: string = ''
+  public WhatsAppNumber: string = ''
   public SSOID: string = ''
   public EmployeeID: string = ''
   public CurrentDesignationID: string = ''
@@ -170,7 +172,21 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public QualificationAtJoining: string = ''
   public QualificationAfterJoining: string = ''
   public Remark: string = ''
+
   public Mailpersonal: string = '';
+  public QualificationAcquiringDate: string = '';
+  public AcquiringQualificationCertificate: string = '';
+  public Dis_AcquiringQualificationCertificate: string = '';
+  public CompetentAuthorityOrder: string = '';
+  public Dis_CompetentAuthorityOrder: string = '';
+  public IsServingADHOC: boolean = false;
+  public DateofJoiningADHOC: string = '';
+  public IsProbationCompleted: boolean = false;
+  public ProbationCompletionDate: string = '';  
+  public StateID ?: number = 0;
+  public DistrictID ?: number = 0;
+  public Pincode ?: string = '';
+  public Address ?: string = '';
 
   public ProfileStatusID?: number = 0
   public IsNodal: boolean = false
@@ -185,6 +201,8 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public EduQualificationDetailsModel: Staff_EduQualificationDetailsModel[] = [];
   public bterStaffSubjectListModel: BterStaffSubjectList[] = [];
   public BterServiceHistoryListModel:BTER_EM_AddServiceHistoryDataModel[]=[];
+
+  public IsAdmin: number = 0;
 }
 
 
