@@ -199,7 +199,9 @@ export class StudentExaminationITIComponent
         ddlExamCategoryID: [''],
         txtStudentName: [''],
         txtMobileNo: [''],
-        ddlEligibilityStatus:['0']
+        ddlEligibilityStatus:['0'],
+        studentType:['-1']
+
       })
 
     this.OptionalSubjectFormGroup = this.formBuilder.group(
