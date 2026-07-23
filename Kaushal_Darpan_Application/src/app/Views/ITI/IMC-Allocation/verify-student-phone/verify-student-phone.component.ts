@@ -107,8 +107,8 @@ export class VerifyStudentPhoneComponent {
       this.searchRequest.ApplicationID = parseInt(this.ApplicationIdS);
       await this.GetDateConfig();
       await this.getAllDataList();
-      this.GetStudentDetailsList();
-      this.GetTradeListByCollege();
+    await  this.GetStudentDetailsList();
+    await  this.GetTradeListByCollege();
       this.DetailsBox = false;
       //this.TradeBox = true;
       this.isUpdate = true
@@ -133,13 +133,24 @@ export class VerifyStudentPhoneComponent {
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DateConfigSetting = data['Data'];
+
         if (this.DateConfigSetting[0]['IMC ALLOTMENT CATEGORY'] == 1) {
           this.AllotmentKey = 'IMC ALLOTMENT CATEGORY';
         }
         else if (this.DateConfigSetting[0]['IMC ALLOTMENT ALL'] == 1) {
           this.AllotmentKey = 'IMC ALLOTMENT ALL';
         }
-
+        else {
+          this.toastr.warning("Date is closed")
+          if (this.searchRequest.TradeLevel == 8) {
+            this.router.navigate(['/ITIIMCAllocationList8th', 8])
+          } else if (this.searchRequest.TradeLevel == 10) {
+            this.router.navigate(['/ITIIMCAllocationList10th', 10])
+          } else {
+            this.router.navigate(['/ITIIMCAllocationList112th', 12])
+          }
+         
+        }
 
         console.log(this.DateConfigSetting[0]['GENERATE MERIT']);
 
@@ -383,8 +394,8 @@ export class VerifyStudentPhoneComponent {
           this.DetailsBox = false;
           this.TradeBox = true;
           this.CloseModal();
-          this.GetStudentDetailsList();
-          this.GetTradeListByCollege();
+        await  this.GetStudentDetailsList();
+        await  this.GetTradeListByCollege();
 
         }
         catch (ex) {
