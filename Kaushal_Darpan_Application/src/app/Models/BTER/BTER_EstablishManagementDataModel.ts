@@ -199,6 +199,8 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public EduQualificationDetailsModel: Staff_EduQualificationDetailsModel[] = [];
   public bterStaffSubjectListModel: BterStaffSubjectList[] = [];
   public BterServiceHistoryListModel:BTER_EM_AddServiceHistoryDataModel[]=[];
+
+  public IsAdmin: number = 0;
 }
 
 

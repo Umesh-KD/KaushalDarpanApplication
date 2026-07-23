@@ -458,8 +458,8 @@
           </div>
         </div>
 
-        <div *ngIf=" this.IsNotAcquired == false">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Date of acquiring the qualification</label>
+        <div *ngIf="IsNotAcquired == false">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Date of acquiring the qualification <span class="StarMarking">*</span></label>
           <input autocomplete="off" class="form-input" type="date" name="QualificationAcquiringDate" id="QualificationAcquiringDate"
             formControlName="QualificationAcquiringDate" [(ngModel)]="request.QualificationAcquiringDate" />
 
@@ -470,7 +470,7 @@
           </div>
         </div>
 
-        <div *ngIf=" this.IsNotAcquired == false">
+        <div *ngIf="IsNotAcquired == false">
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 for="AcquiringQualificationCertificate">Upload Marksheet/Certificate for verification of acquiring qualification<span class="StarMarking">*</span></label>
           <div class="flex fileUploader">
@@ -492,7 +492,7 @@
           </div>
         </div>
 
-        <div *ngIf=" this.IsNotAcquired == false">
+        <div *ngIf="IsNotAcquired == false">
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 for="CompetentAuthorityOrder">Upload order from competent authority to add qualification in the service book<span class="StarMarking">*</span></label>
           <div class="flex fileUploader">
@@ -1244,10 +1244,16 @@
     </form>
     <div class="flex justify-center flex-wrap items-centermt-3">
       <div>
-        <button *ngIf="[0, 288, 249].includes(request.ProfileStatusID)" class="btn bg-success text-white mt-3"
+        <button *ngIf="[0, 288, 249].includes(request.ProfileStatusID) && request.IsAdmin != 1" class="btn bg-success text-white mt-3"
           type="button" (click)="SaveData()">
-          Complete
+          Save as Draft
         </button>
+
+        <button *ngIf="request.IsAdmin == 1" class="btn bg-success text-white mt-3"
+          type="button" (click)="SaveData()">
+          Update Profile
+        </button>
+
         <button *ngIf="request.ProfileStatusID == 288" class="btn bg-success text-white mt-3" type="button"
           (click)="LockSubmitSaveData()">
           Lock & Submit

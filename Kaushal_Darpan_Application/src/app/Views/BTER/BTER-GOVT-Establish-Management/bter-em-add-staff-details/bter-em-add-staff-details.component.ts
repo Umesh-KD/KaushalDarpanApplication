@@ -220,7 +220,7 @@ export class BterEMAddStaffDetailsComponent {
     if (this.sSOLoginDataModel.UserID > 0) {
       await this.GetPersonalDetailByUserID();
     }
-
+    await this.GetDesignationMasterDDL();
     await this.GetDesignationMasterData();
     
     const roleIDs = this.DesignationWiseBranchListRole.map((item: any) => item.RoleID);
@@ -434,28 +434,31 @@ export class BterEMAddStaffDetailsComponent {
       }, 200);
     }
   }
-
-  async GetDesignationMasterData() {
-    debugger;
-    try {
-      debugger;
-      if (this.sSOLoginDataModel.OfficeID == 18) {
-        var id = 1;
-      }
-      else {
-        id = 0;
-      }
-      this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationAndPostMaster(id).then((data: any) => {
+  
+  async GetDesignationMasterDDL() {
+  try {
+      const request: any = {};
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      request.EndTermId = this.sSOLoginDataModel.EndTermID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.Action = "GetDesignationMasterDDL_BTER_EM";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.DesignationMasterDDLList = data.Data;
+        this.DesignationMasterDDLList = data['Data'];
         this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.request.StaffTypeID);
         this.StaffMasterFormGroup.patchValue({
           CurrentDesignationID: this.request.CurrentDesignationID || '0'
         });
-        // console.log("DesignationMasterList", this.DesignationMasterDDLList);
-      }, error => console.error(error))
-
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async GetDesignationMasterData() {
+    debugger;
+    try {
       await this.commonMasterService.GetCommonMasterDDLByType('Gender')
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
