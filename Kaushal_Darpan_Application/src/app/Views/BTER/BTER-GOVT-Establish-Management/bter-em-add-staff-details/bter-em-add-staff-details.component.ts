@@ -121,7 +121,7 @@ export class BterEMAddStaffDetailsComponent {
       Mailpersonal: ['', [Validators.required]],
 
       MobileNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
-      WhatsAppNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
+      WhatsAppNumber: ['', [Validators.required]],
       SSOID: ['', [Validators.required]],
       EmployeeID: ['',[Validators.required]],
 

@@ -176,7 +176,8 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">WhatsApp No <span
               class="StarMarking">*</span></label>
           <input autocomplete="off" class="form-input" placeholder="Enter WhatsApp Number" name="WhatsAppNumber"
-            id="WhatsAppNumber" formControlName="WhatsAppNumber" [(ngModel)]="request.WhatsAppNumber" maxlength="10" />
+            id="WhatsAppNumber" formControlName="WhatsAppNumber" [(ngModel)]="request.WhatsAppNumber" maxlength="10" 
+            (keypress)="validateNumber($event) />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.WhatsAppNumber.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.WhatsAppNumber.errors.required">
