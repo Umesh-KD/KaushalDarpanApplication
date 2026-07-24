@@ -135,7 +135,8 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Year</label>
-          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterID" (change)="ddlStream_Change()">
+          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterID" (change)="getTradeList($event.target.value)">
+            <!-- (change)="ddlStream_Change()" -->
             <option value="0">--Select--</option>
             <option value="1">1st Year</option>
             <option value="2">2nd Year</option>
@@ -206,9 +207,6 @@
             <option *ngIf="this.sSOLoginDataModel.Eng_NonEng==2" value="Paper-II">Paper-II Employablility Skills</option>
             <option *ngIf="this.sSOLoginDataModel.Eng_NonEng==2" value="Paper-III">Paper-III Workshop Calculation & Science</option>
             <option *ngIf="this.sSOLoginDataModel.Eng_NonEng==2" value="Paper-IV">Paper-IV Engineering Drawing</option>
-
-
-
             <!-- <option *ngFor="let item of SubjectMasterDDLList" [value]="item.ID">{{item.ID}} {{item.Name}}</option> -->
           </select>
         </div>

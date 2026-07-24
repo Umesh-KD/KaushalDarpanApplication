@@ -121,7 +121,7 @@ export class BterEMAddStaffDetailsComponent {
       Mailpersonal: ['', [Validators.required]],
 
       MobileNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
-      WhatsAppNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
+      WhatsAppNumber: ['', [Validators.required]],
       SSOID: ['', [Validators.required]],
       EmployeeID: ['',[Validators.required]],
 
@@ -141,7 +141,10 @@ export class BterEMAddStaffDetailsComponent {
       DateofJoiningADHOC: [''],
       IsProbationCompleted: ['', [Validators.required]],
       ProbationCompletionDate: [''],
-      
+      StateID: ['', [DropdownValidators]],
+      DistrictID: ['', [DropdownValidators]],
+      Address: ['', [Validators.required]],
+      Pincode: ['', [Validators.required]],
     });
 
     this.AddsubjectFormGroup = this.formBuilder.group({
@@ -217,7 +220,7 @@ export class BterEMAddStaffDetailsComponent {
     if (this.sSOLoginDataModel.UserID > 0) {
       await this.GetPersonalDetailByUserID();
     }
-
+    await this.GetDesignationMasterDDL();
     await this.GetDesignationMasterData();
     
     const roleIDs = this.DesignationWiseBranchListRole.map((item: any) => item.RoleID);
@@ -431,28 +434,31 @@ export class BterEMAddStaffDetailsComponent {
       }, 200);
     }
   }
-
-  async GetDesignationMasterData() {
-    debugger;
-    try {
-      debugger;
-      if (this.sSOLoginDataModel.OfficeID == 18) {
-        var id = 1;
-      }
-      else {
-        id = 0;
-      }
-      this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationAndPostMaster(id).then((data: any) => {
+  
+  async GetDesignationMasterDDL() {
+  try {
+      const request: any = {};
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      request.EndTermId = this.sSOLoginDataModel.EndTermID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.Action = "GetDesignationMasterDDL_BTER_EM";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.DesignationMasterDDLList = data.Data;
+        this.DesignationMasterDDLList = data['Data'];
         this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.request.StaffTypeID);
         this.StaffMasterFormGroup.patchValue({
           CurrentDesignationID: this.request.CurrentDesignationID || '0'
         });
-        // console.log("DesignationMasterList", this.DesignationMasterDDLList);
-      }, error => console.error(error))
-
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async GetDesignationMasterData() {
+    debugger;
+    try {
       await this.commonMasterService.GetCommonMasterDDLByType('Gender')
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -511,6 +517,7 @@ export class BterEMAddStaffDetailsComponent {
         if(data.State == EnumStatus.Success) {
           this.request = data.Data[0];
           this.onChangeQualificationAfterJoining();
+          await this.DistrictMaster_StateIDWise();
           console.log(this.request.DateOfBirth);
           console.log(this.StaffMasterFormGroup.get('DateOfBirth')?.value);
           /*this.staffDetailsFormData.StaffSubjectListModel = request.*/
@@ -690,6 +697,7 @@ export class BterEMAddStaffDetailsComponent {
       return value;
     };
   }
+
   async SaveData() { 
     debugger
     this.isSubmitted = true;
@@ -714,6 +722,18 @@ export class BterEMAddStaffDetailsComponent {
       });
       this.StaffMasterFormGroup.markAllAsTouched();
       return;
+    }
+
+    if(!this.IsNotAcquired) {
+      if(this.request.AcquiringQualificationCertificate == undefined || this.request.AcquiringQualificationCertificate == "") {
+        this.toastr.warning('Please upload Marksheet/Certificate for verification of acquiring qualification !');
+        return;
+      }
+
+      if(this.request.CompetentAuthorityOrder == undefined || this.request.CompetentAuthorityOrder == "") {
+        this.toastr.warning('Please upload order from competent authority to add qualification in the service book !');
+        return;
+      }
     }
     // this.sSOLoginDataModel.RoleID === this._EnumRole.Teacher || 
     if (this.sSOLoginDataModel.RoleID === this._EnumRole.GuestFaculty || this.sSOLoginDataModel.RoleID === this._EnumRole.ShikshaSambal) {
@@ -1379,6 +1399,12 @@ export class BterEMAddStaffDetailsComponent {
       this.EmployeeQualificationDDLList.find(
         (item: any) => item.QualificationID == this.request.QualificationAfterJoining
       )?.QualificationName === 'Not Acquired';
+
+    if(!this.IsNotAcquired){
+      this.StaffMasterFormGroup.get('QualificationAcquiringDate')?.setValidators([Validators.required]);
+    } else {
+      this.StaffMasterFormGroup.get('QualificationAcquiringDate')?.clearValidators();
+    }
   }
 
   async UploadDocument(event: any, FileName: any) {
@@ -1419,9 +1445,23 @@ export class BterEMAddStaffDetailsComponent {
 
   onChangeIsServingADHOC(value: boolean) {
     this.request.IsServingADHOC = value;
+    if(this.request.IsServingADHOC){
+      this.StaffMasterFormGroup.get('DateofJoiningADHOC')?.setValidators([Validators.required]);
+    } else {
+      this.StaffMasterFormGroup.get('DateofJoiningADHOC')?.clearValidators();
+    }
+    this.StaffMasterFormGroup.get('DateofJoiningADHOC')?.updateValueAndValidity();
   }
   onChangeIsProbationCompleted(value: boolean) {
     this.request.IsProbationCompleted = value;
+
+    if(this.request.IsProbationCompleted) {
+      this.StaffMasterFormGroup.get('ProbationCompletionDate')?.setValidators([Validators.required]);
+    } else {
+      this.StaffMasterFormGroup.get('ProbationCompletionDate')?.clearValidators();
+    }
+
+    this.StaffMasterFormGroup.get('ProbationCompletionDate')?.updateValueAndValidity();
   }
 
 }

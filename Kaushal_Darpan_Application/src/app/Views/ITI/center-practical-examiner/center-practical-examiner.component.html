@@ -160,22 +160,22 @@
                   <mat-menu #menuAction="matMenu">
                     <!--First Semester-->
                     <!--<button *ngIf="sSOLoginDataModel.RoleID!=224" mat-menu-item
-                matTooltip="Download Practical Exam Report" (click)="OnDownloadReport(row.CenterID,row.SemesterID,row.UserID,row.Subject)">
-          <i class="ti ti-download"></i> Practical Exam Report
-        </button>-->
+                            matTooltip="Download Practical Exam Report" (click)="OnDownloadReport(row.CenterID,row.SemesterID,row.UserID,row.Subject)">
+                      <i class="ti ti-download"></i> Practical Exam Report
+                    </button>-->
                     <!-- Second Semester -->
-                    <button mat-menu-item
+                    <button mat-menu-item *ngIf="(sSOLoginDataModel.RoleID!=92 && sSOLoginDataModel.RoleID!=98) " 
                             (click)="OnDownloadAttendenceReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID,row.StreamID)"
                             matTooltip="Dowmload Practical Exam Attendence Report">
                       <i class="ti ti-download"></i> Practical Exam Attendence Report
                     </button>
 
-
-                    <!--<button *ngIf="sSOLoginDataModel.RoleID!=96 && sSOLoginDataModel.RoleID!=224 " mat-menu-item
-               (click)="OnDownloadMarkingReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID)"
-                matTooltip="Dowmload Practical Exam Marks Report">
-          <i class="ti ti-download"></i> Practical Exam Marks Report
-        </button>-->
+                    <!-- *ngIf="sSOLoginDataModel.RoleID!=96 && sSOLoginDataModel.RoleID!=224 " -->
+                    <button *ngIf="(sSOLoginDataModel.RoleID==92 || sSOLoginDataModel.RoleID==98) " mat-menu-item
+                          (click)="OnDownloadMarkingReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID)"
+                            matTooltip="Dowmload Practical Exam Marks Report">
+                      <i class="ti ti-download"></i> Practical Exam Marks Report
+                    </button>
                     <!-- Third Semester -->
                     <!--<button mat-menu-item matTooltip="Unlock Fee" (click)="UnlockFee(iti.Id,iti.FeePdf)">
           <i [ngClass]="iti.FeePdf == 1 ? 'ti ti-lock-open' : 'ti ti-lock'"></i>

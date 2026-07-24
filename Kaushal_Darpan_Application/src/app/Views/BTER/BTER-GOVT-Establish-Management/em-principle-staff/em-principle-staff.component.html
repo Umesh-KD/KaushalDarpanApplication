@@ -332,15 +332,13 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr. No.</th>
-            <th class="text-left">Staff Type</th>
-            <!--<th class="text-left">Name</th>-->
             <th class="text-left">SSO Id</th>
-            <th class="text-left">StaffLevel Type</th>
-            <th class="text-left">Staff Level Child Type</th>
-            <th class="text-left">Post</th>
-            <th class="text-left">Course</th>
-            <!-- <th class="text-left">Subject</th> -->
             <th class="text-left">Contact Details</th>
+            <th class="text-left">Staff Type</th>
+            <th class="text-left">Post</th>
+            <th class="text-left">Role</th>
+            <th class="text-left">Course/Branch</th>
+            <!-- <th class="text-left">Subject</th> -->
             <!-- <th class="text-left">Address Details</th> -->
             <th class="text-left">Profile Status</th>
             <th class="text-left">View Profile</th>
@@ -350,19 +348,17 @@
         <tbody>
           <tr *ngFor="let row of StaffMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
             <td>{{idx+1}}</td>
-            <td>{{row.StaffType}}</td>
-            <!--<td>{{row.Name}}</td>-->
             <td>{{row.SSOID}}</td>
-            <td> {{row.StaffLevelTypeName}} </td>
-            <td> {{row.StaffLevelChildName}}</td>
-            <td> {{row.DesignationName}}</td>
-            <td>{{row.Stream}}</td>
-            <!-- <td>{{row.Subject}}</td> -->
             <td>
               <p *ngIf="row.Name?.length>0"><i class="ti ti-user"></i> {{row.Name}}</p>
               <p *ngIf="row.MobileNumber?.length>0"><i class="ti ti-phone"></i> {{row.MobileNumber}}</p>
               <p *ngIf="row.Email?.length>0"><i class="ti ti-mail"></i> {{row.Email}}</p>
             </td>
+            <td>{{row.StaffType}}</td>
+            <td> {{row.DesignationName}}</td>
+            <td> {{row.Role}} </td>
+            <td>{{row.Stream}}</td>
+            <!-- <td>{{row.Subject}}</td> -->
             <!-- <td>
               <p *ngIf="row.Address?.length>0" style="max-width:350px">
                 {{row.Address}}, {{row.District}}, {{row.State}}, {{row.PinCode}}

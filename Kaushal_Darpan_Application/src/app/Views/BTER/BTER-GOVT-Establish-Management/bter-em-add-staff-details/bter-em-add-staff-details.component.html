@@ -176,7 +176,8 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">WhatsApp No <span
               class="StarMarking">*</span></label>
           <input autocomplete="off" class="form-input" placeholder="Enter WhatsApp Number" name="WhatsAppNumber"
-            id="WhatsAppNumber" formControlName="WhatsAppNumber" [(ngModel)]="request.WhatsAppNumber" maxlength="10" />
+            id="WhatsAppNumber" formControlName="WhatsAppNumber" [(ngModel)]="request.WhatsAppNumber"maxlength="10" minlength="10"
+            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.WhatsAppNumber.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.WhatsAppNumber.errors.required">
@@ -458,13 +459,19 @@
           </div>
         </div>
 
-        <div *ngIf=" this.IsNotAcquired == false">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Date of acquiring the qualification</label>
+        <div *ngIf="IsNotAcquired == false">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Date of acquiring the qualification <span class="StarMarking">*</span></label>
           <input autocomplete="off" class="form-input" type="date" name="QualificationAcquiringDate" id="QualificationAcquiringDate"
             formControlName="QualificationAcquiringDate" [(ngModel)]="request.QualificationAcquiringDate" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.QualificationAcquiringDate.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.QualificationAcquiringDate.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
         </div>
 
-        <div *ngIf=" this.IsNotAcquired == false">
+        <div *ngIf="IsNotAcquired == false">
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 for="AcquiringQualificationCertificate">Upload Marksheet/Certificate for verification of acquiring qualification<span class="StarMarking">*</span></label>
           <div class="flex fileUploader">
@@ -480,14 +487,13 @@
                 *ngIf="request.AcquiringQualificationCertificate!='' && request.AcquiringQualificationCertificate !=undefined" class="btn bg-primary text-white m-0" target="_blank">
                 <i class="ti ti-eye"></i>
               </a>
-              <span class="text-danger text-sm" *ngIf="isFileError">
-                Marksheet/Certificate for verification of acquiring qualification Document Upload is required
-              </span>
+              
             </div>
+            
           </div>
         </div>
 
-        <div *ngIf=" this.IsNotAcquired == false">
+        <div *ngIf="IsNotAcquired == false">
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 for="CompetentAuthorityOrder">Upload order from competent authority to add qualification in the service book<span class="StarMarking">*</span></label>
           <div class="flex fileUploader">
@@ -539,7 +545,7 @@
 
       </div>
 
-      <!-- <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
+      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
         <b class="text-1xl-5"><i class="ti ti-plus"></i> Address Details</b>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
@@ -563,10 +569,10 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> State <span
               class="StarMarking">*</span> </label>
 
-          <ng-select [(ngModel)]="request.StateID" [clearable]="false" formControlName="StateID">
+          <ng-select [(ngModel)]="request.StateID" [clearable]="false" formControlName="StateID" (change)="DistrictMaster_StateIDWise()">
             <ng-option [value]="0">--Select--</ng-option>
             <ng-container *ngFor="let item of StateMasterList">
-              <ng-option [value]="item.StateID">{{item.StateName}}</ng-option>
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
             </ng-container>
           </ng-select>
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.StateID.errors" class="text-danger">
@@ -578,13 +584,14 @@
 
         <div>
           <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> District<span class="StarMarking">*</span></label>
-          <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
-            [(ngModel)]="request.BranchID">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID">{{item.StreamName}}</option>
-          </select>
-          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.BranchID.errors" class="text-danger">
-            <p *ngIf="!_StaffMasterFormGroup.BranchID.errors.DropdownValidators">
+          <ng-select [(ngModel)]="request.DistrictID" [clearable]="false" formControlName="DistrictID">
+            <ng-option [value]="0">--Select--</ng-option>
+            <ng-container *ngFor="let item of DistrictMasterDDL">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DistrictID.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.DistrictID.errors.DropdownValidators">
               <i aria-hidden="true"></i>This field is required .!
             </p>
           </div>
@@ -593,18 +600,18 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Pincode  <span class="StarMarking">*</span>
           </label>
-          <input class="form-input" placeholder="Year Of Experience" name="Experience" id="Experience"
-            formControlName="Experience" [(ngModel)]="request.Experience" maxlength="2"
+          <input class="form-input" placeholder="Enter Pincode" name="Pincode" id="Pincode"
+            formControlName="Pincode" [(ngModel)]="request.Pincode" maxlength="6"
             (keypress)="validateNumber($event)" />
 
-          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.Experience.errors" class="text-danger">
-            <p *ngIf="_StaffMasterFormGroup.Experience.errors.required">
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.Pincode.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.Pincode.errors.required">
               <i aria-hidden="true"></i>This field is required .!
             </p>
           </div>
         </div>
 
-      </div> -->
+      </div>
 
       <!-- *ngIf="sSOLoginDataModel.RoleID== _EnumRole.Teacher || sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal" -->
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3"
@@ -1238,10 +1245,16 @@
     </form>
     <div class="flex justify-center flex-wrap items-centermt-3">
       <div>
-        <button *ngIf="[0, 288, 249].includes(request.ProfileStatusID)" class="btn bg-success text-white mt-3"
+        <button *ngIf="[0, 288, 249].includes(request.ProfileStatusID) && request.IsAdmin != 1" class="btn bg-success text-white mt-3"
           type="button" (click)="SaveData()">
-          Complete
+          Save as Draft
         </button>
+
+        <button *ngIf="request.IsAdmin == 1" class="btn bg-success text-white mt-3"
+          type="button" (click)="SaveData()">
+          Update Profile
+        </button>
+
         <button *ngIf="request.ProfileStatusID == 288" class="btn bg-success text-white mt-3" type="button"
           (click)="LockSubmitSaveData()">
           Lock & Submit
