@@ -263,8 +263,6 @@ export class UpdateStudentQualificationComponent implements OnInit {
     }
   }
 
-
-
     async GetStudentAdditionalQualiDataByID() {
     debugger
     try {

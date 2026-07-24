@@ -149,3 +149,14 @@ export class UFMLetterModel extends RequestBaseModel {
   public StudentExamID?: number = 0;
   public StudentExamPaperID?: number = 0;
 }
+
+export class StudentDiplomaandRWHReportModel {
+  public DepartmentID: number = 0;
+  public Eng_NonEng: number = 0;
+  public EndTermID: number = 0;
+  public SemesterID: number = 0;
+  public SchemeID: number = 0;
+  public  InstituteID?: number =0;
+  public  IsBridge?: number =0;
+  public EnrollmentNo?: string ='';
+}

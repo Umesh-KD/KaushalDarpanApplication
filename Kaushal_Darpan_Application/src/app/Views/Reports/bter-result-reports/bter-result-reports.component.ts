@@ -14,7 +14,7 @@ import { BterCertificateReportDataModel } from '../../../Models/BTER/BterCertifi
 import { MarksheetDownloadService } from '../../../Services/MarksheetDownload/marksheet-download.service';
 import { MarksheetLetterSearchModel } from '../../../Models/MarksheetLetterDataModel';
 import { CollegesWiseReportsModel } from '../../../Models/CollegesWiseReportsModel';
-import { ExamResultStudentStaticsModel, ExamWiseStreamPapersReportModelModel, GetSessionalFailStudentReport, StudentAllMarksReportModel } from '../../../Models/GenerateAdmitCardDataModel';
+import { ExamResultStudentStaticsModel, ExamWiseStreamPapersReportModelModel, GetSessionalFailStudentReport, StudentAllMarksReportModel, StudentDiplomaandRWHReportModel } from '../../../Models/GenerateAdmitCardDataModel';
 import { EndTermFinYearModel } from '../../../Models/CommonMasterDataModel';
 
 export interface requestData {
@@ -89,6 +89,8 @@ export class BterResultReportsComponent implements OnInit {
   public SubjectTheoryParcticalMarkStaticsList: ExamResultStudentStaticsModel[] = [];
   public ExamWiseStreamPapersrList: ExamWiseStreamPapersReportModelModel[] = [];
   public StudentAllMarksReport: StudentAllMarksReportModel[] = [];
+  public StudentEligibleForDiplomaReport: StudentDiplomaandRWHReportModel[] = [];
+  public RWHResultEligibleReport: StudentDiplomaandRWHReportModel[] = [];
 
   public endTermFinYear: EndTermFinYearModel[] = [];
   public _EnumResultType = EnumResultType;
@@ -158,6 +160,8 @@ export class BterResultReportsComponent implements OnInit {
       { ID: 16, Name: 'Result Sheet', URL: 'Result-Appeared-Passed-Statistics-Report' },
       { ID: 17, Name: 'Exam Wise Stream Papers Report', URL: 'ExamWise-Stream-Papers-Report' },
       { ID: 18, Name: 'Student All Marks Report', URL: 'Student-All-Marks-Report' },
+      { ID: 19, Name: 'Student Eligible for Diploma Report', URL: 'Student-Eligible-for-Diploma-Report' },
+      { ID: 20, Name: 'RWH Result Eligible Report', URL: 'RWH-Result-Eligible-Report' },
     ];
   }
 
@@ -210,7 +214,7 @@ export class BterResultReportsComponent implements OnInit {
   async GetAllData(): Promise<void> {
     this.ActionDynamic = this.filterModel.Action;
     this.ReportsListData = [];
-
+debugger
     try {
       let response: any = null;
 
@@ -271,8 +275,13 @@ export class BterResultReportsComponent implements OnInit {
           await this.GetExamWiseStreamPapersreport();
           break;
         case "Student-All-Marks-Report":
-
           await this.GetStudentAllMarksReport();
+          break;
+        case "Student-Eligible-for-Diploma-Report":
+          await this.GetStudentEligibleForDiplomaReport();
+          break;
+        case "RWH-Result-Eligible-Report":
+          await this.GetRWHResultEligibleReport();
           break;
         //case "Appeared-Passesd-Statistics":
         //  response = await this.reportService.AppearedPassedStatisticsReportDownload(this.filterModel);
@@ -787,6 +796,71 @@ export class BterResultReportsComponent implements OnInit {
     }
   }
 
+    async GetStudentEligibleForDiplomaReport() {
+    debugger;
+    let request: any = {
+      DepartmentID: this.ssoLoginUser.DepartmentID,
+      Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
+      EndTermID: this.ssoLoginUser.EndTermID,
+      SemesterID: this.filterModel.SemesterID,
+      SchemeID: this.filterModel.SchemeID,
+      InstituteID:this.ssoLoginUser.InstituteID,
+      EnrollmentNo:this.ssoLoginUser.EnrollmentNo,
+      IsBridge:-1
+    }
+    try {
+      await this.reportService.GetStudentEligibleForDiplomaReport(request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.StudentEligibleForDiplomaReport = data['Data'];
+            if(!this.StudentEligibleForDiplomaReport || this.StudentEligibleForDiplomaReport.length === 0){
+              this.toastrService.warning('No data available for Student Eligible for Diploma Report');
+            }
+            this.exportStudentEligibleForDiplomaReport();
+            //this.dataSource = new MatTableDataSource(this.ExamWiseStreamPapersrList);
+
+            console.log('Student Eligible for Diploma Report ===>', this.StudentEligibleForDiplomaReport)
+          }
+        }, (error: any) => console.error(error));
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+
+    async GetRWHResultEligibleReport() {
+    debugger;
+    let request: any = {
+      DepartmentID: this.ssoLoginUser.DepartmentID,
+      Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
+      EndTermID: this.ssoLoginUser.EndTermID,
+      SemesterID: this.filterModel.SemesterID,
+      SchemeID: this.filterModel.SchemeID,
+
+    }
+    try {
+      await this.reportService.GetRWHResultEligibleReport(request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.RWHResultEligibleReport = data['Data'];
+            if (!this.RWHResultEligibleReport || this.RWHResultEligibleReport.length === 0) {
+              this.toastrService.warning('No data available for RWH Result Eligible Report');
+            }
+            else{
+                this.exportToExcelRWHResultEligibleReport();
+            }
+
+            //this.dataSource = new MatTableDataSource(this.ExamWiseStreamPapersrList);
+
+            console.log('RWH Result Eligible Report ===>', this.RWHResultEligibleReport)
+          }
+        }, (error: any) => console.error(error));
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+
 
   // exportToExcelStudentAllMarksReport(): void {
 
@@ -880,4 +954,96 @@ export class BterResultReportsComponent implements OnInit {
       }
     }
   }
+
+    exportStudentEligibleForDiplomaReport(): void {
+    if (!this.StudentEligibleForDiplomaReport || this.StudentEligibleForDiplomaReport.length === 0) return;
+
+    // Fixed columns
+    // const fixedColumns = ['SrNo', 'RollNo', 'Institute', 'StudentName', 'Stream'];
+  // Columns to exclude from export
+  const excludeColumns = ['Id', 'CenterID', 'InstituteID']; // <-- put whatever keys you want to skip here
+
+    // Get dynamic subject columns from first row
+    const dynamicColumns = Object.keys(this.StudentEligibleForDiplomaReport[0])
+      .filter(key => !excludeColumns.includes(key));
+
+    // Final columns
+    const wantedColumns = ['SrNo', ...dynamicColumns];
+
+    const exportData = this.StudentEligibleForDiplomaReport.map((row: any, index: number) => {
+      const filteredRow: any = {};
+
+      wantedColumns.forEach(col => {
+        filteredRow[col] = col === 'SrNo' ? index + 1 : (row[col] ?? '');
+      });
+
+      return filteredRow;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    // Auto column width
+    const colWidths = wantedColumns.map(col => {
+      const maxLength = Math.max(
+        col.length,
+        ...exportData.map(row => row[col] ? row[col].toString().length : 0)
+      );
+      return { wch: maxLength + 2 };
+    });
+
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Student Eligible for Diploma');
+
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    XLSX.writeFile(wb, `Student_Eligible_for_Diploma_Report_${timestamp}.xlsx`);
+  }
+
+  exportToExcelRWHResultEligibleReport(): void {
+    if (!this.RWHResultEligibleReport || this.RWHResultEligibleReport.length === 0) return;
+
+    // Fixed columns
+    // const fixedColumns = ['SrNo', 'RollNo', 'Institute', 'StudentName', 'Stream'];
+  // Columns to exclude from export
+  const excludeColumns = ['Id', 'CenterID', 'InstituteID']; // <-- put whatever keys you want to skip here
+
+    // Get dynamic subject columns from first row
+    const dynamicColumns = Object.keys(this.RWHResultEligibleReport[0])
+      .filter(key => !excludeColumns.includes(key));
+
+    // Final columns
+    const wantedColumns = ['SrNo', ...dynamicColumns];
+
+    const exportData = this.RWHResultEligibleReport.map((row: any, index: number) => {
+      const filteredRow: any = {};
+
+      wantedColumns.forEach(col => {
+        filteredRow[col] = col === 'SrNo' ? index + 1 : (row[col] ?? '');
+      });
+
+      return filteredRow;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    // Auto column width
+    const colWidths = wantedColumns.map(col => {
+      const maxLength = Math.max(
+        col.length,
+        ...exportData.map(row => row[col] ? row[col].toString().length : 0)
+      );
+      return { wch: maxLength + 2 };
+    });
+
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Student Eligible for Diploma');
+
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    XLSX.writeFile(wb, `Student_Eligible_for_Diploma_Report_${timestamp}.xlsx`);
+  }
+
+  
 }

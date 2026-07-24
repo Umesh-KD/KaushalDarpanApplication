@@ -113,7 +113,6 @@
               <th class="text-left">Trade</th>
               <th class="text-left">Subject</th>
               <th class="text-left">Date</th>
-
               <th class="text-left">Action</th>
             </tr>
           </thead>
@@ -121,16 +120,11 @@
             <tr *ngFor="let row of AssignExaminerMasterList | tableSearchFilter: Table_SearchText; let idx = index;">
               <td class="text-center">{{ idx + 1 }}</td>
               <td>{{ row.CenterName }} </td>
-
               <td>{{ row.CCCode }} </td>
               <td>{{ row.UserName }}{{row.SSOID != null?' ('+row.SSOID+')':''}} </td>
               <td>
                 <!--If InstituteNames are available, show them-->
-
                 <span>{{ row.SemesterName}}</span>
-
-
-
               </td>
               <td>
                 {{row.StreamName}}
@@ -151,58 +145,81 @@
   </td>-->
 
               <td align="center">
-                <div class="flex">
+                <div style="display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:nowrap;">
+                  <div class="flex">
 
-                  <button class="dropdown mr-1" mat-raised-button [matMenuTriggerFor]="menuAction" style="width: 105px; padding: 5px;">
-                    ACTION <i class="ti ti-chevron-down"></i>
-                  </button>
-
-                  <mat-menu #menuAction="matMenu">
-                    <!--First Semester-->
-                    <!--<button *ngIf="sSOLoginDataModel.RoleID!=224" mat-menu-item
-                            matTooltip="Download Practical Exam Report" (click)="OnDownloadReport(row.CenterID,row.SemesterID,row.UserID,row.Subject)">
-                      <i class="ti ti-download"></i> Practical Exam Report
-                    </button>-->
-                    <!-- Second Semester -->
-                    <button mat-menu-item *ngIf="(sSOLoginDataModel.RoleID!=92 && sSOLoginDataModel.RoleID!=98) " 
-                            (click)="OnDownloadAttendenceReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID,row.StreamID)"
-                            matTooltip="Dowmload Practical Exam Attendence Report">
-                      <i class="ti ti-download"></i> Practical Exam Attendence Report
+                    <button *ngIf="(sSOLoginDataModel.RoleID!=_EnumRole.ITIAdmin_SCVT && sSOLoginDataModel.RoleID!=_EnumRole.ITIAdmin_NCVT) "  class="dropdown mr-1" mat-raised-button [matMenuTriggerFor]="menuAction" style="width: 105px; padding: 5px;">
+                      ACTION <i class="ti ti-chevron-down"></i>
                     </button>
 
-                    <!-- *ngIf="sSOLoginDataModel.RoleID!=96 && sSOLoginDataModel.RoleID!=224 " -->
-                    <button *ngIf="(sSOLoginDataModel.RoleID==92 || sSOLoginDataModel.RoleID==98) " mat-menu-item
-                          (click)="OnDownloadMarkingReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID)"
-                            matTooltip="Dowmload Practical Exam Marks Report">
-                      <i class="ti ti-download"></i> Practical Exam Marks Report
-                    </button>
-                    <!-- Third Semester -->
-                    <!--<button mat-menu-item matTooltip="Unlock Fee" (click)="UnlockFee(iti.Id,iti.FeePdf)">
-          <i [ngClass]="iti.FeePdf == 1 ? 'ti ti-lock-open' : 'ti ti-lock'"></i>
-          {{ iti.FeePdf == 1 ? 'Unlock Fee' : 'Lock Fee' }}
+                    <mat-menu #menuAction="matMenu" >
+                      <!--First Semester-->
+                      <!--<button *ngIf="sSOLoginDataModel.RoleID!=224" mat-menu-item
+                              matTooltip="Download Practical Exam Report" (click)="OnDownloadReport(row.CenterID,row.SemesterID,row.UserID,row.Subject)">
+                        <i class="ti ti-download"></i> Practical Exam Report
+                      </button>-->
+                      <!-- Second Semester -->
+                      <button mat-menu-item *ngIf="(sSOLoginDataModel.RoleID!=_EnumRole.ITi_PracticalExaminer && sSOLoginDataModel.RoleID!=98 && sSOLoginDataModel.RoleID!=_EnumRole.ITIAdmin_SCVT && sSOLoginDataModel.RoleID!=_EnumRole.ITIAdmin_NCVT) " 
+                              (click)="OnDownloadAttendenceReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID,row.StreamID)"
+                              matTooltip="Dowmload Practical Exam Attendence Report">
+                        <i class="ti ti-download"></i> Practical Exam Attendence Report
+                      </button>
 
-        </button>-->
-                    <!-- Fourth Semester -->
-                    <!--<button mat-menu-item (click)="DeleteDataById(iti.Id)"
-                matTooltip="Delete ITI">
-          <i class="ti ti-trash"></i> Delete
-        </button>-->
-                    <!-- Fifth Semester -->
-                    <!--<button mat-menu-item
-                matTooltip="NCVT Mis">
-          <i class="ti ti-download"></i> NCVT Mis
-        </button>-->
-                    <!-- Sixth Semester -->
-                    <!--<button mat-menu-item (click)="ViewandUpdate(MyModel_ViewTrades,iti.Id)"
-                matTooltip="View Trades">
-          <i class="ti ti-eye"></i> View Trades
-        </button>-->
-                  </mat-menu>
-                </div>
+                      <!-- *ngIf="sSOLoginDataModel.RoleID!=96 && sSOLoginDataModel.RoleID!=224 " -->
+                      <button *ngIf="(sSOLoginDataModel.RoleID==_EnumRole.ITi_PracticalExaminer || sSOLoginDataModel.RoleID==98) " mat-menu-item
+                            (click)="OnDownloadMarkingReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID)"
+                              matTooltip="Dowmload Practical Exam Marks Report">
+                        <i class="ti ti-download"></i> Practical Exam Marks Report
+                      </button>
 
+                      <button mat-menu-item *ngIf="(sSOLoginDataModel.RoleID==92 || sSOLoginDataModel.RoleID==98) "
+                        (click)="openModal(MyModel_Action,row)" 
+                        matTooltip="Upload Scaned Document" 
+                        style="margin-left: 5px;">
+                        <i class="ti ti-upload"></i>Upload Scaned Document
+                      </button>
+
+                      <!-- Third Semester -->
+                      <!--<button mat-menu-item matTooltip="Unlock Fee" (click)="UnlockFee(iti.Id,iti.FeePdf)">
+            <i [ngClass]="iti.FeePdf == 1 ? 'ti ti-lock-open' : 'ti ti-lock'"></i>
+            {{ iti.FeePdf == 1 ? 'Unlock Fee' : 'Lock Fee' }}
+          </button>-->
+                      <!-- Fourth Semester -->
+                      <!--<button mat-menu-item (click)="DeleteDataById(iti.Id)"
+                  matTooltip="Delete ITI">
+            <i class="ti ti-trash"></i> Delete
+          </button>-->
+                      <!-- Fifth Semester -->
+                      <!--<button mat-menu-item
+                  matTooltip="NCVT Mis">
+            <i class="ti ti-download"></i> NCVT Mis
+          </button>-->
+                      <!-- Sixth Semester -->
+                      <!--<button mat-menu-item (click)="ViewandUpdate(MyModel_ViewTrades,iti.Id)"
+                  matTooltip="View Trades">
+            <i class="ti ti-eye"></i> View Trades
+          </button>-->
+                    </mat-menu>
+                  </div>   
+
+
+                  <a *ngIf=" row.UploadedDocument  && row.UploadedDocument != null && (sSOLoginDataModel.RoleID==_EnumRole.ITIAdmin_SCVT || sSOLoginDataModel.RoleID==_EnumRole.ITIAdmin_NCVT)"  [href]="appsettingConfig.StaticFileRootPathURL + 'ITI/PracticalExaminer/' + row.UploadedDocument"
+                       class="upload-view-btn"
+                      target="_blank">
+                        <i class="ti ti-eye"></i>
+                  </a>              
+
+                  <!-- <button *ngIf="(sSOLoginDataModel.RoleID==92 || sSOLoginDataModel.RoleID==98) "
+                    class="upload-icon-btn"
+                    (click)="openModal(MyModel_Action,row)" 
+                    title="Upload document" 
+                    style="margin-left: 5px;">
+                    <i class="ti ti-upload"></i>
+                  </button> -->
+
+              </div>
+                
               </td>
-
-
             </tr>
           </tbody>
         </table>
@@ -210,3 +227,79 @@
     </div>
   </div>
 </div>
+
+
+
+<ng-template #MyModel_Action let-modal 
+class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content" style="max-width: 480px; margin: 0 auto; border-radius: 12px; overflow: hidden;">
+    <div class="card" style="margin: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+      <div class="card-header flex justify-between  items-center">
+        <b style="font-size: 16px; display: flex; align-items: center; gap: 8px;">
+          <i class="fa fa-plus" style="color: #6366f1;"></i>&nbsp;Upload Document
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+      <div class="card-body" style="padding: 24px; min-height: unset;">
+        
+        <div class="upload-field">
+          <label class="upload-label" for="fileStudentPhoto">Choose Document</label>
+          <div class="upload-box">
+            <input
+              class="upload-input"
+              id="filepanPhoto"
+              type="file"
+              (change)="UploadDocument($event)" />
+
+            <label for="filepanPhoto" class="upload-dropzone">
+              <i class="ti ti-cloud-upload upload-icon"></i>
+              <span class="upload-text">
+                {{ OtherDoc === '' ? 'Click to choose a file' : OtherDoc }}
+              </span>
+            </label>
+
+            <a *ngIf="OtherDoc !== ''"
+               href="{{appsettingConfig.StaticFileRootPathURL}}/ITI/PracticalExaminer/{{OtherDoc}}"
+               class="upload-view-btn"
+               target="_blank"
+               title="View uploaded file">
+              <i class="ti ti-eye"></i>
+            </a>
+          </div>
+
+          <button
+            class="submit-btn"
+            type="button"
+            [disabled]="OtherDoc === ''"
+            (click)="UpdatePracticalExaminerReport()">
+            <i class="ti ti-check"></i> Submit
+          </button>
+          
+        </div>
+
+        <!-- <div class="mb-8"> -->
+            <!-- upload document -->
+                <!-- <div>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  for="fileStudentPhoto">Upload Document</label>
+                  <div class="flex fileUploader">
+                    <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                          id="filepanPhoto" type="file" (change)="UploadDocument($event)" />
+                    <label for="filepanPhoto">                         
+                      <span>Choose File</span>
+                      {{ request.OtherDoc === '' ? 'No File Chosen' : request.OtherDoc }}
+                    </label>
+                    <div class="flex" *ngIf="request.OtherDoc !== ''">
+                      <a href="{{appsettingConfig.StaticFileRootPathURL}}/ITI/CenterExaminer//{{request.OtherDoc}}"
+                        class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                    </div>
+                  </div>
+                </div>           -->
+          <!-- <button class="btn bg-info text-white mt-6" type="button" (click)="MapInsitute()">Submit</button> -->
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+</ng-template>

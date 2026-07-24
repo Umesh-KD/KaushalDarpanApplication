@@ -1939,6 +1939,22 @@ export class ReportService {
       ).toPromise();
   }
 
+   public async GetStudentEligibleForDiplomaReport(request: StudentAllMarksReportModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/GetStudentEligibleForDiplomaReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+   public async GetRWHResultEligibleReport(request: StudentAllMarksReportModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/GetRWHResultEligibleReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetStudentRevalFeePaymentReceipt(TransactionId: any, StudentExamID: number = 0) {
     return await this.http.get(this.APIUrl + "/GetStudentRevalFeePaymentReceipt/" + TransactionId + "/" + StudentExamID, this.headersOptions)
       .pipe(
