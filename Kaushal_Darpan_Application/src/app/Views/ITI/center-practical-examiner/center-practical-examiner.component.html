@@ -203,10 +203,11 @@
                   </div>   
 
 
-                  <a *ngIf=" row.UploadedDocument  && row.UploadedDocument != null && (sSOLoginDataModel.RoleID==_EnumRole.ITIAdmin_SCVT || sSOLoginDataModel.RoleID==_EnumRole.ITIAdmin_NCVT)"  [href]="appsettingConfig.StaticFileRootPathURL + 'ITI/PracticalExaminer/' + row.UploadedDocument"
+                  <a *ngIf=" row.UploadedDocument  && row.UploadedDocument != null && (sSOLoginDataModel.RoleID==_EnumRole.ITIAdmin_SCVT || sSOLoginDataModel.RoleID==_EnumRole.ITIAdmin_NCVT)" 
+                   [href]="appsettingConfig.StaticFileRootPathURL + 'ITI/PracticalExaminer/' + row.UploadedDocument"
                        class="upload-view-btn"
                       target="_blank">
-                        <i class="ti ti-eye"></i>
+                        <i class="ti ti-download"></i>
                   </a>              
 
                   <!-- <button *ngIf="(sSOLoginDataModel.RoleID==92 || sSOLoginDataModel.RoleID==98) "
