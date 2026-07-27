@@ -343,7 +343,7 @@
           श्रेणी ए(Category
           A)(Gen/SC/ST/OBC/MBC) :<span class="StarMarking">*</span>
         </label>
-        <select class="form-select disabled" formControlName="ddlCategoryA" [(ngModel)]="request.CategoryA">
+        <select class="form-select " formControlName="ddlCategoryA" [(ngModel)]="request.CategoryA">
           <option value="0">--Select--</option>
           <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">
             {{item.CasteCategoryName}}

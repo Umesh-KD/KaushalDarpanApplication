@@ -121,7 +121,7 @@ export class PersonalDetailsTabComponent implements OnInit {
         ddlMaritial: ['', [DropdownValidators]],
         ddlReligion: ['', [DropdownValidators]],
         ddlNationality: ['', [DropdownValidators]],
-        ddlCategoryA: [{ value: '', disabled: true }],
+        ddlCategoryA: [ '', [DropdownValidators]],
         ddlCategoryB: ['', [DropdownValidators]],
         ddlCategoryc: ['', [DropdownValidators]],
         //ddlCategoryE: ['', [DropdownValidators]],
@@ -155,7 +155,12 @@ export class PersonalDetailsTabComponent implements OnInit {
     if (this.ApplicationID > 0) {
       this.searchRequest.ApplicationID = this.ApplicationID;
       this.request.ApplicationID = this.ApplicationID;
-      this.GetById()
+      await this.GetById()
+      if (this.request.IsPaymentSuccess == true) {
+        this.PersonalDetailForm.get('ddlCategoryA')?.enable();
+      } else {
+        this.PersonalDetailForm.get('ddlCategoryA')?.disable();
+      }
     }
 
 
