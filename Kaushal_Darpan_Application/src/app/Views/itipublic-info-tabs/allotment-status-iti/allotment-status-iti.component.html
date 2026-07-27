@@ -114,23 +114,33 @@
     </div>
 
 
-    <div class="flex mb-2 mt-2 items-center " *ngIf="AllotmentStatusList && AllotmentStatusList?.length > 0  ">
-      <button type="button" id="btnDownload1" (click)="DownloadAllotmentLetter(AllotmentStatusList[0].AllotmentId)"
+    <!--<div class="flex mb-2 mt-2 items-center " *ngIf="AllotmentStatusList && AllotmentStatusList?.TradeLevelId == 8  ">
+    <button type="button" id="btnDownload1" (click)="DownloadAllotmentLetter(AllotmentStatusList[0].AllotmentId)"
+            class="btn bg-info text-white me-2">
+      <i class="ti ti-download"></i> Download Allotment Letter 8th
+    </button>
+  </div>
+  <div class="flex mb-2 mt-2 items-center" *ngIf="AllotmentStatusList && AllotmentStatusList?.TradeLevelId == 10">
+    <button type="button" id="btnDownload1" (click)="DownloadAllotmentLetter(AllotmentStatusList[1].AllotmentId)"
+            class="btn bg-info text-white me-2">
+      <i class="ti ti-download"></i> Download Allotment Letter 10th
+    </button>
+  </div>-->
+
+    <div class="flex mb-2 mt-2 items-center" *ngIf="allotment8">
+      <button type="button"
+              (click)="DownloadAllotmentLetter(allotment8.AllotmentId)"
               class="btn bg-info text-white me-2">
         <i class="ti ti-download"></i> Download Allotment Letter 8th
       </button>
     </div>
-    <div class="flex mb-2 mt-2 items-center" *ngIf="AllotmentStatusList && AllotmentStatusList?.length > 1">
-      <button type="button" id="btnDownload1" (click)="DownloadAllotmentLetter(AllotmentStatusList[1].AllotmentId)"
+
+    <div class="flex mb-2 mt-2 items-center" *ngIf="allotment10">
+      <button type="button"
+              (click)="DownloadAllotmentLetter(allotment10.AllotmentId)"
               class="btn bg-info text-white me-2">
         <i class="ti ti-download"></i> Download Allotment Letter 10th
       </button>
-
-      <!--<button type="button" id="btnDownload2" (click)="GetAllotmentFeeReceipt(AllotmentStatusList[0].AllotmentId)"
-            class="btn bg-info text-white me-2">
-      <i class="ti ti-download"></i> Download Allotment Fee Receipt
-    </button>-->
-
     </div>
 
 
