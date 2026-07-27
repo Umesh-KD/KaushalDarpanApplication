@@ -195,6 +195,14 @@ export class ItiAssignExaminerService {
   }
 
 
+
+   public async UpdatePracticalExaminerReport(request: any) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/UpdatePracticalExaminerReport', request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 
 
