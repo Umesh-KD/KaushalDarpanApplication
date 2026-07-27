@@ -167,7 +167,7 @@
 
                       <!-- *ngIf="sSOLoginDataModel.RoleID!=96 && sSOLoginDataModel.RoleID!=224 " -->
                       <button *ngIf="(sSOLoginDataModel.RoleID==_EnumRole.ITi_PracticalExaminer || sSOLoginDataModel.RoleID==98) " mat-menu-item
-                            (click)="OnDownloadMarkingReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID)"
+                            (click)="OnDownloadMarkingReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID,row.StreamID)"
                               matTooltip="Dowmload Practical Exam Marks Report">
                         <i class="ti ti-download"></i> Practical Exam Marks Report
                       </button>
