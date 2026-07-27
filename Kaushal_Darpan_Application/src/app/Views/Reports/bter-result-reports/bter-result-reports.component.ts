@@ -819,7 +819,6 @@ debugger
             }
             this.exportStudentEligibleForDiplomaReport();
             //this.dataSource = new MatTableDataSource(this.ExamWiseStreamPapersrList);
-
             console.log('Student Eligible for Diploma Report ===>', this.StudentEligibleForDiplomaReport)
           }
         }, (error: any) => console.error(error));

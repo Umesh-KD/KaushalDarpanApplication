@@ -286,8 +286,8 @@ export class CenterPracticalExaminerComponent {
   }
 
 
-  async OnDownloadMarkingReport(CenterID: number, SemesterID: number, ExaminerID: number, Subject: string, InstituteID: number = 0) {
-
+  async OnDownloadMarkingReport(CenterID: number, SemesterID: number, ExaminerID: number, Subject: string, InstituteID: number = 0,StreamID:number=0) {
+debugger
     this.Reportsearchmodel.DepartmentID = EnumDepartment.ITI;
     this.Reportsearchmodel.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.Reportsearchmodel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
@@ -296,6 +296,7 @@ export class CenterPracticalExaminerComponent {
     this.Reportsearchmodel.UserID = ExaminerID
     this.Reportsearchmodel.CenterID = CenterID
     this.Reportsearchmodel.SemesterID = SemesterID
+    this.Reportsearchmodel.StreamID = StreamID
     this.Reportsearchmodel.SubjectCode = Subject
     if (this.sSOLoginDataModel.RoleID == 97) {
       this.Reportsearchmodel.Eng_NonEng = 1

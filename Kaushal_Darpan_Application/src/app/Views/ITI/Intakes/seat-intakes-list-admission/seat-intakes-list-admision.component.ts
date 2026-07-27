@@ -78,7 +78,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
         //ddlDistrict: [''],
         ddlCollegeType: [''],
         ddlInstitutionCategory: [''],
-        //ddlTrade: [''],
+        ddlTrade: [''],
         //txtShift: [''],
         ddlLastSession: [''],
         //ddlRemark: [''],
@@ -344,6 +344,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
     try {
       this.loaderService.requestStarted();
       this.searchRequest.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
+
       await this.ItiSeatIntakeService.GetAllDataAdmissionList(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -626,12 +627,18 @@ export class SeatIntakesListAdmissionComponent implements OnInit
     {
       msg = 'Are you sure you want to change status of </br>' + `<b>${item.CollegeName}</b>`;
     }
-
+debugger
    this.Swal2.ConfirmationWithOrderDetails(
   msg,
   async (formData: any) => {
     try {
 
+      if(formData.OrderDate==null || formData.OrderDate==undefined || formData.OrderDate=='' ||
+         formData.OrderNo==null || formData.OrderNo==undefined || formData.OrderNo==''
+        || formData.Remark==null || formData.Remark==undefined || formData.Remark==''){
+        this.toastr.error("Please fill all the required fields.");
+        return;
+      }
       const request = {
         SeatIntakeID: seatIntakeID,
         CollegeID: item.CollegeID,

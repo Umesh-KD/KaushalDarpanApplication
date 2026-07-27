@@ -167,7 +167,7 @@
 
                       <!-- *ngIf="sSOLoginDataModel.RoleID!=96 && sSOLoginDataModel.RoleID!=224 " -->
                       <button *ngIf="(sSOLoginDataModel.RoleID==_EnumRole.ITi_PracticalExaminer || sSOLoginDataModel.RoleID==98) " mat-menu-item
-                            (click)="OnDownloadMarkingReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID)"
+                            (click)="OnDownloadMarkingReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID,row.StreamID)"
                               matTooltip="Dowmload Practical Exam Marks Report">
                         <i class="ti ti-download"></i> Practical Exam Marks Report
                       </button>
@@ -203,10 +203,11 @@
                   </div>   
 
 
-                  <a *ngIf=" row.UploadedDocument  && row.UploadedDocument != null && (sSOLoginDataModel.RoleID==_EnumRole.ITIAdmin_SCVT || sSOLoginDataModel.RoleID==_EnumRole.ITIAdmin_NCVT)"  [href]="appsettingConfig.StaticFileRootPathURL + 'ITI/PracticalExaminer/' + row.UploadedDocument"
+                  <a *ngIf=" row.UploadedDocument  && row.UploadedDocument != null && (sSOLoginDataModel.RoleID==_EnumRole.ITIAdmin_SCVT || sSOLoginDataModel.RoleID==_EnumRole.ITIAdmin_NCVT)" 
+                   [href]="appsettingConfig.StaticFileRootPathURL + 'ITI/PracticalExaminer/' + row.UploadedDocument"
                        class="upload-view-btn"
                       target="_blank">
-                        <i class="ti ti-eye"></i>
+                        <i class="ti ti-download"></i>
                   </a>              
 
                   <!-- <button *ngIf="(sSOLoginDataModel.RoleID==92 || sSOLoginDataModel.RoleID==98) "
