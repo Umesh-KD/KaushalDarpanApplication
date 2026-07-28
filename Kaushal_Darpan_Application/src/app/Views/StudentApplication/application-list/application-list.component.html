@@ -175,10 +175,16 @@
                  [queryParams]="{ AppID: row.encryptedApplicationID }"
                  class="btn bg-info text-white btn-sm"> Edit Qualification Details</a>
 
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 && isITIAddmissionOpen && row.DirectAdmissionType==1 "
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess == 1 && QualAdmissionMapKey "
                  [routerLink]="'/EditQualification'"
                  [queryParams]="{ AppID: row.encryptedApplicationID }"
                  class="btn bg-info text-white btn-sm"> Edit Qualification Details</a>
+
+
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess == 1 && editformkey "
+                (click)="openOTP(row)"
+               
+                 class="btn bg-info text-white btn-sm">Unlock Form</a>
 
 
               <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionPrivateMapKey==1 && row.DirectAdmissionType==9 && row.IsFinalSubmit !== 2"
@@ -353,3 +359,4 @@
   </ng-template>
 
   <app-student-status-history></app-student-status-history>
+  <app-otpmodal #otpModal></app-otpmodal>

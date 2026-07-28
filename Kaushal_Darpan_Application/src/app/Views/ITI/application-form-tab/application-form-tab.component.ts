@@ -63,16 +63,21 @@ export class ApplicationFormTabComponent implements OnInit {
   async ngOnInit()
   {
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetITIDateDataList();
+
     console.log("SSOLoginDataModel",this.SSOLoginDataModel)
-    this.ApplicationID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0")) 
+    this.ApplicationID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
+    await this.GetPersonalDetailsById()
+    if (this.PersonalDetailsData.IsFinalSubmit != 1) {
+       await this.GetITIDateDataList();
+    }
+   
     if (!this.ApplicationID)
     {
       window.open(`/StudentJanAadharDetail`, "_self");
     }
 
 
-    await this.GetPersonalDetailsById()
+
     await this.GetActiveTabList();
 
 
