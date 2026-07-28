@@ -27,6 +27,7 @@ import { MatSelectChange } from '@angular/material/select';
 export class AppointITIExaminerComponent {
   public HRManagerID: number = 0;
   public SemesterMasterDDLList: any[] = [];
+  public StreamMasterList: any[] = [];
   public filterSemesterMasterDDLList: any[] = [];
   public StreamMasterDDLList: any[] = [];
   public GroupMasterDDLList: any[] = [];
@@ -347,11 +348,8 @@ export class AppointITIExaminerComponent {
       this.searchRequest.selectedTrade =
         this.selectedTrade?.length ? this.selectedTrade.join(',') : '';
       await this.examinerservice.GetTeacherForExaminer(this.searchRequest).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        
+        data = JSON.parse(JSON.stringify(data));        
         this.StaffForExaminerList = data.Data;
-
-        
         console.log("this.StaffForExaminerList", this.StaffForExaminerList)
       })
     } catch (error) {
@@ -708,5 +706,16 @@ export class AppointITIExaminerComponent {
       this.isAllSelected2 = false;
       this.selectedTrade = value;
     }
+  }
+
+    getTradeList(semesterid: number)
+  {
+debugger
+    this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, 0, 0, semesterid)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StreamMasterList = data['Data'];
+      }, (error: any) => console.error(error));
+
   }
 }

@@ -28,7 +28,10 @@ export class ITIPracticalExaminerSearchFilters {
   public FinancialYearID: number = 0
   public Eng_NonEng: number = 0
   public DepartmentID: number = 0
-
+  public ExaminerID?: number = 0
+  public TimeTableID?: number = 0
+  public StreamID?: number = 0
+  public OtherDoc?: string =''
 
 }
 

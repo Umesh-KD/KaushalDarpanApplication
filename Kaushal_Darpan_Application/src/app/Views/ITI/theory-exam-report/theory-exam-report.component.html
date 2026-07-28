@@ -45,7 +45,7 @@
             <option value="0">--All--</option>
             <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
           </select> -->
-          <ng-select id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID" (change)="GetItiTrade()">
+          <ng-select id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID" >
             <ng-option [value]="0">--All--</ng-option>
             <ng-container >
               <ng-option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">

@@ -314,6 +314,7 @@ export class PersonalDetailsDatamodel {
   public PH10thTradeList: string = ''
   public Apaarid: string = ''
 public DirectAdmissionType :number=0;
+  public IsPaymentSuccess :boolean=false;
 
 }
 
@@ -396,5 +397,6 @@ export class PersonalDetailsDatamodell {
   public FatherOccupation: string = ''
   public OfficeAddress: string = ''
    public DirectAdmissionType :number=0;
+  public IsPaymentSuccess :boolean=false;
 
 }

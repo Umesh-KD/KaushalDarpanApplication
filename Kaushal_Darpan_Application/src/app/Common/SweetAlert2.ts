@@ -202,7 +202,7 @@ public async ConfirmationWithOrderDetails(
 
     <div style="flex:1;">
       <label style="font-weight:600;">
-        Order No 
+        Order No <span class="StarMarking">*</span>
       </label>
       <input
         id="OrderNo"
@@ -222,7 +222,7 @@ public async ConfirmationWithOrderDetails(
 
     <div style="flex:1;">
       <label style="font-weight:600;">
-        Order Date 
+        Order Date <span class="StarMarking">*</span>
       </label>
       <input
         id="OrderDate"
@@ -245,7 +245,7 @@ public async ConfirmationWithOrderDetails(
   <!-- Remark -->
   <div>
     <label style="font-weight:600;">
-      Remark 
+      Remark <span class="StarMarking">*</span>
     </label>
     <textarea
       id="Remark"

@@ -1296,7 +1296,7 @@ const routes: Routes = [
       { path: 'PracticalExaminerRelieving', loadChildren: () => import('./Views/ITI/practical-examiner-relieving/practical-examiner-relieving.module').then(m => m.PracticalExaminerRelievingModule), title: 'Practical Examiner Relieving' },
       { path: 'FlyingSquadReport', loadChildren: () => import('./Views/ITI/flying-squad-report/flying-squad-report.module').then(m => m.FlyingSquadReportModule), title: 'Flying Squad Report' },
       { path: 'ObserverReport', loadChildren: () => import('./Views/ITI/observer-report/observer-report.module').then(m => m.ObserverReportModule), title: 'Observer Report' },
-      { path: 'CenterPracticalExaminer', loadChildren: () => import('./Views/ITI/center-practical-examiner/center-practical-examiner.module').then(m => m.CenterPracticalExaminerModule) },
+      { path: 'CenterPracticalExaminer', loadChildren: () => import('./Views/ITI/center-practical-examiner/center-practical-examiner.module').then(m => m.CenterPracticalExaminerModule) },      
       { path: 'college-list/:type/:status', loadChildren: () => import('./Views/BTER/college-list/college-list.module').then(m => m.CollegeListModule), title: 'College List' },
 
       { path: 'CenterExamCoordinator', loadChildren: () => import('./Views/ITI/center-exam-coordinator/center-exam-coordinator.module').then(m => m.CenterExamCoordinatorModule), title: 'Center Exam Coordinator' },

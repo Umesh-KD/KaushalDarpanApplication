@@ -102,8 +102,11 @@ export class RevaluationStudentComponent {
           await this.GetDateDataList();
           this.switchSection('studentDetails');
         }
-        else {
-          this.toastr.error('No Record Found.');
+        else if (data.State == EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.Message);
+          console.log(data.ErrorMessage);
         }
 
       });

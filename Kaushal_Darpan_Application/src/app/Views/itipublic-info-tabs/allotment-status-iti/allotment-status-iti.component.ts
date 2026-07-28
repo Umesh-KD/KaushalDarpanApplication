@@ -437,5 +437,13 @@ export class AllotmentStatusITIComponent {
 
   }
 
+  get allotment8() {
+    return this.AllotmentStatusList?.find((x:any )=> x.TradeLevelId == 8);
+  }
+
+  get allotment10() {
+    return this.AllotmentStatusList?.find((x: any) => x.TradeLevelId == 10);
+  }
+
 
 }

@@ -17,11 +17,13 @@ import { ITICenterAllocationtDataModels } from '../../../Models/ITI/ITICenterAll
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 import { ItiAssignExaminerService } from '../../../Services/ITIAssignExaminer/iti-assign-examiner.service';
-import { ItiAssignExaminerSearchModel } from '../../../Models/ITI/AssignExaminerDataModel';
+import { ItiAssignExaminerSearchModel, ITIPracticalExaminerSearchFilters } from '../../../Models/ITI/AssignExaminerDataModel';
 import { ReportService } from '../../../Services/Report/report.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
 import { BlankReportModel } from '../../../Models/ExamMasterDataModel';
+import { UploadFileModel } from '../../../Models/UploadFileModel';
+import { DocumentDetailsService } from '../../../Common/document-details';
 
 @Component({
   selector: 'app-center-practical-examiner',
@@ -39,9 +41,6 @@ export class CenterPracticalExaminerComponent {
   public requestSSoApi = new CommonVerifierApiDataModel();
   public Reportsearchmodel = new BlankReportModel()
   toastr = inject(ToastrService);
-  reportservice = inject(ReportService);
-  loaderService = inject(LoaderService);
-  modalService = inject(NgbModal);
   http = inject(HttpClient);
   appsettingConfig = inject(AppsettingService);
   @ViewChild('content') content: ElementRef | any;
@@ -57,6 +56,7 @@ export class CenterPracticalExaminerComponent {
   AssignExaminerMasterList: any[] = [];
   BackupCenterMasterList: any[] = [];
   searchRequest = new ItiAssignExaminerSearchModel();
+  UploadRequest = new ITIPracticalExaminerSearchFilters();
   public CourseType: number = 0
   modalReference: NgbModalRef | undefined;
   searchByCenterCode: string = '';
@@ -64,13 +64,20 @@ export class CenterPracticalExaminerComponent {
   request = new ITIAssignPracticaLExaminer();
   sSOLoginDataModel = new SSOLoginDataModel();
 
+  public OtherDoc: string = '';
+
   SelectCenterMaster: any;
   GetStatusCenterSuperintendentData: any; UserID: number = 0;
   Status: number = 0
   PublishFileName: string = ''
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
   constructor(...args: unknown[]);
-  constructor() { }
+  constructor(
+    private documentDetailsService: DocumentDetailsService,     
+    private reportservice: ReportService,     
+    private loaderService: LoaderService,     
+    private modalService: NgbModal
+  ) { }
   _EnumRole = EnumRole;
   async ngOnInit() {
 
@@ -102,6 +109,7 @@ export class CenterPracticalExaminerComponent {
       this.loaderService.requestStarted();
       await this.assignexaminerservice.GetCenterPracticalexaminer(this.searchRequest)
         .then((data: any) => {
+          debugger
           data = JSON.parse(JSON.stringify(data));
           this.AssignExaminerMasterList = data['Data'];
           this.BackupCenterMasterList = [...this.AssignExaminerMasterList];
@@ -278,8 +286,8 @@ export class CenterPracticalExaminerComponent {
   }
 
 
-  async OnDownloadMarkingReport(CenterID: number, SemesterID: number, ExaminerID: number, Subject: string, InstituteID: number = 0) {
-
+  async OnDownloadMarkingReport(CenterID: number, SemesterID: number, ExaminerID: number, Subject: string, InstituteID: number = 0,StreamID:number=0) {
+debugger
     this.Reportsearchmodel.DepartmentID = EnumDepartment.ITI;
     this.Reportsearchmodel.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.Reportsearchmodel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
@@ -288,10 +296,10 @@ export class CenterPracticalExaminerComponent {
     this.Reportsearchmodel.UserID = ExaminerID
     this.Reportsearchmodel.CenterID = CenterID
     this.Reportsearchmodel.SemesterID = SemesterID
+    this.Reportsearchmodel.StreamID = StreamID
     this.Reportsearchmodel.SubjectCode = Subject
     if (this.sSOLoginDataModel.RoleID == 97) {
       this.Reportsearchmodel.Eng_NonEng = 1
-
       this.Reportsearchmodel.InstituteID = InstituteID
     }
     try {
@@ -299,10 +307,7 @@ export class CenterPracticalExaminerComponent {
       await this.reportservice.PracticalExamMarkingReport(this.Reportsearchmodel)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-
-
           console.log(data['Data'])
-
           this.DownloadFile(data['Data'], 'file download',2)
 
           //this.Status = data['Data'][0]['Status']
@@ -341,12 +346,8 @@ export class CenterPracticalExaminerComponent {
       await this.reportservice.PracticalExamReport(this.Reportsearchmodel)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-
-
           console.log(data['Data'])
-
           this.DownloadFile(data['Data'], 'file download', 2)
-
           //this.Status = data['Data'][0]['Status']
           //this.PublishFileName = data['Data'][0]['FileName']
         }, error => console.error(error));
@@ -361,5 +362,90 @@ export class CenterPracticalExaminerComponent {
 
   }
 
+
+  async openModal(content: any, row: any) {
+    debugger
+    console.log(row)
+    this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+    
+    this.UploadRequest.CenterID = row.CenterID;
+    this.UploadRequest.ExaminerID = row.ExaminerID;
+    this.UploadRequest.TimeTableID = row.TimeTableID;
+    this.UploadRequest.InstituteID = row.InstituteID;
+    this.UploadRequest.StreamID = row.StreamID;
+    this.UploadRequest.SemesterID = row.SemesterID;
+    this.UploadRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+  }
+
+  CloseModalPopup() {
+    this.modalService.dismissAll();
+  }
+
+    async UploadDocument(event: any) {
+      try {
+        //upload model        
+         let uploadModel = new UploadFileModel();
+        //uploadModel.FileExtention = item.FileExtention ?? "";
+        //uploadModel.MinFileSize = item.MinFileSize ?? "";
+       // uploadModel.MaxFileSize = item.MaxFileSize ?? "";
+        uploadModel.FolderName = "ITI/PracticalExaminer/";        
+        //call
+        debugger
+        await this.documentDetailsService.UploadDocument(event, uploadModel)
+          .then( (data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            debugger
+            if (this.State == EnumStatus.Success) {          
+              this.OtherDoc=data.Data[0].FileName;   
+              // await this.UpdatePracticalExaminerReport(this.OtherDoc); 
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+    }
+  
+    async UpdatePracticalExaminerReport(){            
+      this.UploadRequest.UserID = this.sSOLoginDataModel.UserID;
+      this.UploadRequest.OtherDoc = this.OtherDoc;
+      try {
+        this.loaderService.requestStarted();
+        await this.assignexaminerservice.UpdatePracticalExaminerReport(this.UploadRequest)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+           if (this.State == EnumStatus.Success) {           
+            this.modalService.dismissAll();            
+            this.GetAssignexaminer();
+            this.toastr.success(this.Message);
+          }
+          else if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.ErrorMessage)
+          }
+          }, error => console.error(error));
+      } catch (Ex) {
+        console.log(Ex);
+      } finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
 
 }
