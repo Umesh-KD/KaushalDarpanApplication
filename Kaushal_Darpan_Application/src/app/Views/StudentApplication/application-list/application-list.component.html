@@ -175,7 +175,7 @@
                  [queryParams]="{ AppID: row.encryptedApplicationID }"
                  class="btn bg-info text-white btn-sm"> Edit Qualification Details</a>
 
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 && isITIAddmissionOpen && row.DirectAdmissionType==0 "
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 && isITIAddmissionOpen && row.DirectAdmissionType==1 "
                  [routerLink]="'/EditQualification'"
                  [queryParams]="{ AppID: row.encryptedApplicationID }"
                  class="btn bg-info text-white btn-sm"> Edit Qualification Details</a>
