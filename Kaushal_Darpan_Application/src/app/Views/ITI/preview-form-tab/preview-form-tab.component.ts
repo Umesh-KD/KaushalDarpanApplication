@@ -253,6 +253,7 @@ export class PreviewFormTabComponent implements OnInit {
                /* this.GetById();*/
                 //this.toastr.success(this.Message)
 
+
                 this.SavePreview(content, this.request.ApplicationID)
 
 
@@ -341,7 +342,10 @@ export class PreviewFormTabComponent implements OnInit {
     }, 200);
   }
 
-  async PayApplicationFees() {
+  async PayApplicationFees()
+  {
+
+
 
     this.Swal2.Confirmation("Are you sure you want to Submit & Make Payment?", async (result: any) =>
     {
