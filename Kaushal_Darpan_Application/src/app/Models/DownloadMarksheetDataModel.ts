@@ -102,3 +102,8 @@ export class DiplomaCertificateDownloadSearchModel extends RequestBaseModel {
   public Division: string = '';
   public CourseDuration: string = '';
 }
+
+export class ResultGenerationListDataModel {
+  public EndTermID: number = 0
+  public Eng_NonEng: number = 0
+}

@@ -14,161 +14,143 @@
 <!-- Page Title End -->
 <div class="card">
   <div class="card-body p-5">
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5">Generate {{url }} result</b></div>
-    <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 mb-8">
-      <div [formGroup]="resultGenerateForm" class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3 mb-8">
-        <div>
-          <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Generate Semester Result </label>
-          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester">
-            <option value="all">--Choose Semester--</option>
-            <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme </label>
-          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="SchemeID">
-            <option value="all">-- Choose Scheme --</option>
-            <option value="1347">Old Semester Scheme</option>
-            <option value="1348">New Semester Scheme</option>
-          </select>
-        </div>
-        <!--<div *ngIf="MapKeyEng == 1">
-          <button type="button" class="btn  text-white mt-6 {{ isGenerateResult ? 'bg-info' : 'bg-success' }}" (click)="SubmitGenerateResultData()">{{ isGenerateResult ? 'Generate Result' : 'Publish' }}</button>
-        </div>-->
-        <div>
-          <button type="button" class="btn  text-white mt-6 {{ isGenerateResult ? 'bg-info' : 'bg-success' }}" (click)="SubmitGenerateResultData()">{{ isGenerateResult ? 'Generate Result' : 'Publish' }}</button>
-        </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5">Generate result</b></div>
+    <div [formGroup]="resultGenerateForm" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+      <div>
+        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Generate Semester Result </label>
+        <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester">
+          <option value="all">--Choose Semester--</option>
+          <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+        </select>
       </div>
+
+      <div>
+        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme </label>
+        <select class="form-select ng-pristine ng-valid ng-touched" formControlName="SchemeID">
+          <option value="all">-- Choose Scheme --</option>
+          <option value="1347">Old Semester Scheme</option>
+          <option value="1348">New Semester Scheme</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Result Type </label>
+        <select class="form-select ng-pristine ng-valid ng-touched" formControlName="ResultTypeID">
+          <option value="0">-- Choose Result Type --</option>
+          <option *ngFor="let item of ResultTypeList" [value]="item.ID">{{item.Name}}</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">End Term </label>
+        <select class="form-select ng-pristine ng-valid ng-touched" formControlName="EndTermID">
+          <option value="0">-- Choose End Term --</option>
+          <option *ngFor="let item of FinancialYear" [value]="item.EndTermID">{{item.EndTermName}}</option>
+        </select>
+      </div>
+
+      <!--<div *ngIf="MapKeyEng == 1">
+        <button type="button" class="btn  text-white mt-6 {{ isGenerateResult ? 'bg-info' : 'bg-success' }}" (click)="SubmitGenerateResultData()">{{ isGenerateResult ? 'Generate Result' : 'Publish' }}</button>
+      </div>-->
+      
+    </div>
+    <div class="flex justify-center flex-wrap items-center">
+      <button type="button" class="btn  text-white mt-6 {{ isGenerateResult ? 'bg-info' : 'bg-success' }}"
+        (click)="generateStudentResult()">
+        <!-- {{ isGenerateResult ? 'Generate Result' : 'Publish' }} -->
+          Generate Result
+      </button>
     </div>
    
-    @if(viewAdminDashboardList.length > 0){
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
-
-    <div [formGroup]="filterForm" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
-      <div class="Search">
-        <div class="form-group row">
-          <label for="searchTerm" class="text-gray-800 text-sm font-medium inline-block mb-1">Search</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-input ng-pristine ng-valid ng-touched" formControlName="searchTerm" placeholder="Search...">
-          </div>
-        </div>
-      </div>
-
-      <!--<div>
-      <label for="selectedInstitute" class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>
-      <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedInstitute">
-        <option value="all">--All--</option>
-        <option *ngFor="let item of InstituteMasterList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-      </select>
-    </div>
-
     <div>
-      <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
-      <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester">
-        <option value="all">--All--</option>
-        <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterName">{{item.SemesterName}}</option>
-      </select>
-    </div>-->
-      <div>
-        <button type="button" class="btn bg-info text-white mt-6" (click)="applyFilter(filterForm.value)">Search</button>
-        <button type="button" class="btn bg-danger text-white mt-6" (click)="resetForm()"><i class="ti ti-refresh"></i> Reset</button>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Generated Result List</b>
       </div>
-    </div>
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <div class="flex justify-end flex-wrap items-center" *ngIf="sSOLoginDataModel">
-        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
-          <i class="ti ti-download"></i> Export Execl
-        </a>
-      </div>
-    </div>
 
-    <div class="table-responsive">
-      <!-- result.component.html -->
-     
 
-      <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
-        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-          <!-- SrNo Column -->
-          <ng-container matColumnDef="SrNo">
-            <th mat-header-cell *matHeaderCellDef> Sr. No. </th>
-            <td mat-cell *matCellDef="let element; let i = index">
-              {{ i + startInTableIndex }}
-            </td>
-          </ng-container>
-
-          <!-- StudentName Column -->
-          <ng-container matColumnDef="StudentName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Student Name</th>
-            <td mat-cell *matCellDef="let element">{{ element.StudentName }}</td>
-          </ng-container>
-
-          <!-- FatherName Column -->
-          <ng-container matColumnDef="FatherName">
-            <th mat-header-cell *matHeaderCellDef>Father Name</th>
-            <td mat-cell *matCellDef="let element">{{ element.FatherName }}</td>
-          </ng-container>
-
-          <!-- RollNo Column -->
-          <ng-container matColumnDef="RollNo">
-            <th mat-header-cell *matHeaderCellDef>Roll No</th>
-            <td mat-cell *matCellDef="let element">{{ element.RollNo }}</td>
-          </ng-container>
-
-          <!-- EnrollmentNo Column -->
-          <ng-container matColumnDef="EnrollmentNo">
-            <th mat-header-cell *matHeaderCellDef>Enrollment No</th>
-            <td mat-cell *matCellDef="let element">{{ element.EnrollmentNo }}</td>
-          </ng-container>
-
-          <!-- Division Column -->
-          <!--<ng-container matColumnDef="Division">
-            <th mat-header-cell *matHeaderCellDef>Division</th>
-            <td mat-cell *matCellDef="let element">{{ element.Division }}</td>
-          </ng-container>-->
-
-          <!-- Percentage Column -->
-          <!--<ng-container matColumnDef="Percentage">
-            <th mat-header-cell *matHeaderCellDef>Percentage</th>
-            <td mat-cell *matCellDef="let element">{{ element.Percentage }}</td>
-          </ng-container>-->
-
-          <!-- Result Column -->
-          <ng-container matColumnDef="Result">
-            <th mat-header-cell *matHeaderCellDef>Result</th>
-            <td mat-cell *matCellDef="let element">{{ element.Result }}</td>
-          </ng-container>
-
-          <!-- Action Column -->
-          <ng-container matColumnDef="Action">
-            <th mat-header-cell *matHeaderCellDef>Action</th>
-            <td mat-cell *matCellDef="let element">
-              <!-- Example: a button to view details -->
-              <button class="btn bg-success btn-sm text-white" (click)="DownloadMarksheet(element.StudentId,element.SemesterId)">
-                Download
-              </button>
-            </td>
-          </ng-container>
-
-          <!-- Header and Row Declarations -->
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-        <div class="overflow-x-auto">
-          <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
-            No Record Found
-          </div>
-
-          <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
-                         [length]="totalRecords" (page)="onPaginationChange($event)">
-          </mat-paginator>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+        <div>
+          <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Generate Semester Result </label>
+          <select class="form-select ng-pristine ng-valid ng-touched" 
+            [(ngModel)]="searchReq.EndTermID"
+            (change)="GetGeneratedResultDetails()">
+            <option value="0">--Choose End Term--</option>
+            <option *ngFor="let item of FinancialYear" [value]="item.EndTermID">{{item.EndTermName}}</option>
+          </select>
         </div>
-      </cdk-virtual-scroll-viewport>
+      </div>
 
+      <div class="overflow-auto mt-3" *ngIf="GeneratedResultDetailsList?.length > 0">
+        <table class="table table-border w-full" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th width="80px" align="left">Sr. No.</th>
+              <th align="left">Semester</th>
+              <th align="left">End Term</th> 
+              <th align="left">Result Type</th>
+              <th align="left">Scheme</th>
+              <th align="left">Result Generation Date & Time</th>
+              <th align="left">Student Count</th>
+              <th align="left">Department Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of GeneratedResultDetailsList; let idx=index;">
+              <td>{{idx+1}}</td>
+              <td>{{row.SemesterName}}</td>
+              <td>{{row.EndTermName}}</td>
+              <td>{{row.ResultType}}</td>
+              <td>{{row.SchemeName}}</td>          
+              <td>{{row.ResultGenerationDate}}</td>          
+              <td>{{row.StudentCount}}</td>          
+              <td>
+                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <button type="button" class="btn  text-white mt-6 bg-success"
+                    (click)="openPublishResultModal(Modal_PublishResult, row)">
+                      Publish Result
+                  </button>
+
+                  <button type="button" class="btn  text-white mt-6 bg-info"
+                    (click)="unpublishResult()">
+                      Unpublish Result
+                  </button>
+                </div>                  
+              </td>          
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-
-    }
-
   </div>
 </div>
+
+<ng-template #Modal_PublishResult let-modal>
+  <div class="modal-content " >
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Add/Remove Guest House</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup_PublishResult()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body" style="min-height: 300px; max-height: 90vh; overflow-y: auto;">
+
+        <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-1=2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div >
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Result Declaration Date<span class="StarMarking">*</span></label>
+            <input type="date"
+              class="form-input"
+              name="ResultDeclarationDate" 
+              placeholder="Enter Result Declaration Date"
+              [(ngModel)]="ResultDeclarationDate"/>
+          </div>
+          
+        </div>
+      
+      </div>
+      <div class="card-footer text-center">
+        <button class="btn bg-success text-white mt-6" id="btnSave" type="button" (click)="SaveStaffGuestHouse()">Update</button>
+      </div>
+    </div> 
+  </div>
+
+</ng-template>

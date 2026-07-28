@@ -1002,6 +1002,7 @@ export class BTEREMStaffListComponent {
     }
   }
 
+  
   WorkAccordingonSalaryDrawnChange(value: boolean) {
     debugger;
     /*this.approveRequest.IsSalaryDrawnFromSamePost = value;*/
