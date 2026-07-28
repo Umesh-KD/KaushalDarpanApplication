@@ -16,8 +16,10 @@ import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
-import { DownloadMarksheetSearchModel } from '../../../Models/DownloadMarksheetDataModel';
+import { DownloadMarksheetSearchModel, ResultGenerationListDataModel } from '../../../Models/DownloadMarksheetDataModel';
 import { MenuService } from '../../../Services/Menu/menu.service';
+import { MarksheetDownloadService } from '../../../Services/MarksheetDownload/marksheet-download.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({ 
   selector: 'app-result',
@@ -33,22 +35,7 @@ export class ResultComponent implements OnInit {
   MapKeyEng: number = 0;
   isGenerateResult: boolean = true; 
   viewAdminDashboardList: StudentExamDetails[] = [];
-  displayedColumns: string[] = [
-    'SrNo',
-    'StudentName',
-    'FatherName',
-    'RollNo',
-    'EnrollmentNo',   
-    'Result',
-    'Action'
-  ];
-  dataSource: MatTableDataSource<StudentExamDetails> = new MatTableDataSource();
-  totalRecords: number = 0;
-  pageSize: number = 10;
-  currentPage: number = 1;
-  totalPages: number = 0;
-  startInTableIndex: number = 1;
-  endInTableIndex: number = 10;
+  public searchReq = new ResultGenerationListDataModel();
   sSOLoginDataModel: any;
   url: any;
   instituteId: any;
@@ -57,7 +44,11 @@ export class ResultComponent implements OnInit {
   lstAcedmicYear: any = [];
   SemesterMasterList: any = [];
   SemesterReMasterList: any = [];
+  public ResultTypeList: any = [];
+  public FinancialYear: any = [];
+  public GeneratedResultDetailsList: any = [];
   Table_SearchText: string = '';
+  modalReference: NgbModalRef | undefined;
   public searchRequest = new DownloadMarksheetSearchModel();
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -76,7 +67,9 @@ export class ResultComponent implements OnInit {
     private toastrService: ToastrService,
     private appsettingConfig: AppsettingService,
     private http: HttpClient,
-    private menuService: MenuService
+    private menuService: MenuService,
+    private marksheetDownloadService: MarksheetDownloadService,
+    private modalService: NgbModal,
   ) {
     // Get user data from localStorage
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -95,16 +88,47 @@ export class ResultComponent implements OnInit {
       searchTerm: [''],
     });
     this.resultGenerateForm = this.fb.group({
-      selectedSemester: ['all'],
-      SchemeID: ['all'],
+      selectedSemester: ['0'],
+      SchemeID: ['0'],
+      ResultTypeID: ['0'],
+      EndTermID: ['0'],
     });
     this.resultReGenerateForm = this.fb.group({
       selectedSemester: ['all'],
     });
-    
 
+    await this.GetDateConfig();
+    await this.GetResultTypeList();
+    await this.GetResultEndTermDDLList();
     // Optionally, you can call GetAllData() here if you want data loaded on init.
     // this.GetAllData();
+  }
+
+  async GetResultTypeList() {
+    try {
+      await this.commonMasterService.GetExamResultType()
+        .then((data: any) => {
+          this.ResultTypeList = data['Data'] || [];
+        }, error => console.error(error));
+    } catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  async GetResultEndTermDDLList() {
+    this.loaderService.requestStarted();
+    try {
+      const data: any = await this.marksheetDownloadService.GetResultEndTermDDLList();
+      const parsedData = JSON.parse(JSON.stringify(data)); // Not ideal, see note below
+      this.FinancialYear = parsedData['Data'];
+
+    } catch (error) {
+      console.error('Error in GetFinancialYear:', error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 
   //date Setting
@@ -127,98 +151,41 @@ export class ResultComponent implements OnInit {
       }, (error: any) => console.error(error));
   }
 
-  async SubmitGenerateResultData() {
+  async generateStudentResult() {
     try {
-      
-      // Check which form has a selected semester other than "all"
-      if (this.resultGenerateForm.value.selectedSemester !== "all") {
-        this.isGenerateResult = false; 
-        const ssoLoginUser = JSON.parse(localStorage.getItem('SSOLoginUser') || '{}');
-        const requestData: any = {
-          EndTermID: ssoLoginUser.EndTermID,
-          DepartmentID: ssoLoginUser.DepartmentID,
-          Eng_NonEng: ssoLoginUser.Eng_NonEng,
-          UserID: ssoLoginUser.UserID,
-          RoleID: ssoLoginUser.RoleID,
-          SemesterID: this.resultGenerateForm.value.selectedSemester,
-          ResultType: this.url,
-          SchemeID: this.resultGenerateForm.value.SchemeID
-        };
+      const requestData: any = {
+        EndTermID: this.resultGenerateForm.value.EndTermID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        UserID: this.sSOLoginDataModel.UserID,
+        RoleID: this.sSOLoginDataModel.RoleID,
+        SemesterID: this.resultGenerateForm.value.selectedSemester,
+        ResultType: this.url,
+        SchemeID: this.resultGenerateForm.value.SchemeID,
+        ResultTypeID: this.resultGenerateForm.value.ResultTypeID
+      };
 
-        if(requestData.SemesterID == 'all' || requestData.SchemeID == 'all'){
-          this.toastr.warning("Please select Scheme");
-          return;
-        }
+      await this.resultService.GetStudentResults(requestData)
+        .then(async (data: any) => {
+          if (data.State === EnumStatus.Success) {
+            
 
-        await this.resultService.GetStudentResults(requestData)
-          .then((data: any) => {
-            if (data['State'] === 1 || data['State'] === 3) {
-              this.viewAdminDashboardList = data['Data'];
-              this.totalRecords = this.viewAdminDashboardList.length;
-              this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-              this.currentPage = 1; // Reset pagination
-              this.updateTable();
-              // Subscribe to filter changes
-              this.filterForm.valueChanges.subscribe((values) => {
-                this.applyFilter(values);
-              });
-            }
-            if (data['State'] === 2) {
-              this.toastr.error("Something went wrong");
-            }
-          }, (error: any) => console.error(error));
-      } else if (this.resultReGenerateForm.value.selectedSemester !== "all") {
-        const ssoLoginUser = JSON.parse(localStorage.getItem('SSOLoginUser') || '{}');
-        const requestData: any = {
-          EndTermID: ssoLoginUser.EndTermID,
-          DepartmentID: ssoLoginUser.DepartmentID,
-          Eng_NonEng: ssoLoginUser.Eng_NonEng,
-          UserID: ssoLoginUser.UserID,
-          RoleID: ssoLoginUser.RoleID,
-          SemesterID: this.resultReGenerateForm.value.selectedSemester,
-          ResultType: this.url
-        };
 
-        await this.resultService.GetStudentResults(requestData)
-          .then((data: any) => {
-            if (data['State'] === 1 || data['State'] === 3) {
-              this.viewAdminDashboardList = data['Data'];
-              this.totalRecords = this.viewAdminDashboardList.length;
-              this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-              this.currentPage = 1;
-              this.updateTable();
-              this.filterForm.valueChanges.subscribe((values) => {
-                this.applyFilter(values);
-              });
-            }
-            if (data['State'] === 2) {
-              this.toastr.error("Something went wrong");
-            }
-          }, (error: any) => console.error(error));
-      } else {
-        this.toastr.warning("Please select Semester");
-      }
-    } catch (ex) {
-      console.error(ex);
+            
+          } else if (data.State === EnumStatus.Warning) {
+            this.toastr.warning(data.ErrorMessage);
+          } else {
+            this.toastr.error(data.ErrorMessage);
+          }
+        }, (error: any) => console.error(error));
+    } catch (error) {
+      console.error(error);
     }
+    
   }
 
+
   loadMasterData(): void {
-    // Load Institute master data
-    this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
-      .then((data: any) => {
-        this.InstituteMasterList = data['Data'];
-      }, (error: any) => console.error(error));
-
-    this.menuService.GetAcedmicYearList()
-      .then((AcedmicYear: any) => {
-        AcedmicYear = JSON.parse(JSON.stringify(AcedmicYear));
-        let lstAcedmicYearData = AcedmicYear['Data'];
-        this.lstAcedmicYear = lstAcedmicYearData.filter((x: { EndTermID: any; }) => x.EndTermID == this.sSOLoginDataModel.EndTermID);
-
-        //this.loaderService.requestEnded();
-      }, error => console.error(error));
-
     // Load Semester master data for generate   
     this.commonMasterService.SemesterGenerateMaster()
       .then((data: any) => {
@@ -243,119 +210,32 @@ export class ResultComponent implements OnInit {
       }, (error: any) => console.error(error));
   }
 
-  exportToExcel(): void {
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.viewAdminDashboardList);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'CollegesWiseReports.xlsx');
-  }
-
-  onPaginationChange(event: PageEvent): void {
-    this.pageSize = event.pageSize;
-    this.currentPage = event.pageIndex + 1;
-    this.updateTable();
-  }
-
-  applyFilter(values: any): void {
-    const { searchTerm } = values;
-    // Filter based on student name (adjust as needed)
-    const filteredData = this.viewAdminDashboardList.filter(item => {
-      return item.StudentName.toLowerCase().includes(searchTerm.toLowerCase());
-    });
-    this.totalRecords = filteredData.length;
-    this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-    this.currentPage = 1; // Optionally reset pagination when filtering
-    this.updateTable(filteredData);
-  }
-
-  updateTable(filteredData: StudentExamDetails[] = this.viewAdminDashboardList): void {
-    const startIndex = (this.currentPage - 1) * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
-    this.dataSource.data = filteredData.slice(startIndex, endIndex);
-    this.updatePaginationIndexes();
-    // If needed, force table update:
-    // this.dataSource._updateChangeSubscription();
-  }
-
-  updatePaginationIndexes(): void {
-    this.startInTableIndex = (this.currentPage - 1) * this.pageSize + 1;
-    this.endInTableIndex = Math.min(this.currentPage * this.pageSize, this.totalRecords);
-  }
-
-  resetForm(): void {
-    this.filterForm.reset({ searchTerm: '' });
-    this.applyFilter(this.filterForm.value);
-  }
-
-  //async DownloadMarksheet(request: any) {
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.reportService.DownloadMarksheet(request)
-  //      .then((data: any) => {
-  //        if (data.State == EnumStatus.Success) {
-  //          this.DownloadFile(data.Data, 'file download');
-  //        } else {
-  //          this.toastrService.error(data.ErrorMessage);
-  //        }
-  //      }, (error: any) => console.error(error));
-  //  } catch (ex) {
-  //    console.error(ex);
-  //  } finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
-
-  DownloadFile(FileName: string, DownloadfileName: any): void {
-    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;
-    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
-      const downloadLink = document.createElement('a');
-      const url = window.URL.createObjectURL(blob);
-      downloadLink.href = url;
-      downloadLink.download = this.generateFileName('pdf');
-      downloadLink.click();
-      window.URL.revokeObjectURL(url);
-    });
-  }
-
-  generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
-    return `file_${timestamp}.${extension}`;
-  }
-
-  async DownloadMarksheet(StudentID: any, SemesterID: any) {
+  async GetGeneratedResultDetails() {
     try {
-      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.searchRequest.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
-      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
-      this.searchRequest.StudentID = StudentID;
-      this.searchRequest.SemesterID = SemesterID;
-      console.log(JSON.stringify(this.searchRequest), 'SearchRequestData')
-      const requestArray = [this.searchRequest];
-      this.loaderService.requestStarted();
+      this.searchReq.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      await this.resultService.GetGeneratedResultDetails(this.searchReq).then(async(data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.GeneratedResultDetailsList = data.Data;
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-      await this.reportService.DownloadMarksheet(this.searchRequest)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          console.log(data, "Data");
-          if (data.State == EnumStatus.Success) {
-            this.DownloadFile(data.Data, 'file download');
-          }
-          else {
-            this.toastr.error(data.ErrorMessage)
-            //    data.ErrorMessage
-          }
-        }, (error: any) => console.error(error)
-        );
-    }
-    catch (ex) {
-      console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }  
+  async openPublishResultModal(content: any, row: any) {
+
+    const request: any = {};
+    request.UserID = row.StaffUserID;
+    request.SSOID = row.SSOID;
+
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });
+  }
+
+  async unpublishResult() {
+
+  }
+
+  CloseModalPopup_PublishResult() {
+    this.modalService.dismissAll();
+  }
 }

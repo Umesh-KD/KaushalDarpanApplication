@@ -138,7 +138,7 @@ export class PreviewFormTabComponent implements OnInit {
   }
 
   async GetById() {
-
+    
     this.Options10thLevel = []
     //this.Options12thLevel = []
     //this.Options8thLevel = []
@@ -215,9 +215,9 @@ export class PreviewFormTabComponent implements OnInit {
 
   async SaveFinalSubmit(content: any)
   {
+   
     this.isSubmitted = true
     this.UserID = this.sSOLoginDataModel.UserID
-
 
     if (!this.IsTermAndCondition) {
       this.toastr.error("Please read terms carefully before proceeding.")
@@ -233,14 +233,11 @@ export class PreviewFormTabComponent implements OnInit {
       return;
     }
 
-
-
     try
     {
-    
           this.isSubmitted = true;
           this.loaderService.requestStarted();
-
+debugger
           await this.ItiApplicationFormService.FinalSubmit(this.request.ApplicationID, this.Status = EnumApplicationFromStatus.FinalSave)
             .then((data: any) => {
               data = JSON.parse(JSON.stringify(data));
@@ -253,8 +250,17 @@ export class PreviewFormTabComponent implements OnInit {
                /* this.GetById();*/
                 //this.toastr.success(this.Message)
 
-                this.SavePreview(content, this.request.ApplicationID)
+              if(this.request.IsFinalPay == true ) {
+                this.router.navigate(['/Itipreviewform'], {
+                    queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
+                  });
+              }
+              else
+              {
+                this.SavePreview(content, this.request.ApplicationID);
+              }
 
+                
 
                 //if (this.Status == EnumApplicationFromStatus.FinalSave) {
                 //    this.router.navigate(['/Itipreviewform'], {
