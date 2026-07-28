@@ -139,7 +139,7 @@ export class EmitraFeeTransactionHistoryComponent {
         IsEmitra: request.IsEmitra
         // ExamStudentStatus: request.TransctionStatus
       }
-      debugger
+
       await this.emitraPaymentService.GetTransactionStatus(obj)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -160,6 +160,71 @@ export class EmitraFeeTransactionHistoryComponent {
             this.toastr.error(this.Message)
           }
         })
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  async CheckPaymentSatausbulk() {
+    try {
+
+      if (this.selectedItems.length > 0) {
+      try {
+        for (const item of this.selectedItems) {
+          let obj: TransactionStatusDataModel = {
+            TransactionID: item.TransactionId,
+            DepartmentID: item.DepartmentID,
+            PRN: item.PRN,
+            ServiceID: item.subsidyserviceid,
+            ApplicationID: item.ApplicationID?.toString() ?? "",
+            AMOUNT: item.PaidAmount,
+            RPPTXNID: "",
+            SubOrderID: "",
+            CreatedBy: this.sSOLoginDataModel.UserID,
+            SSOID: this.sSOLoginDataModel.SSOID,
+            ExamStudentStatus: 0,
+            IsEmitra: item.IsEmitra
+          };
+          await this.emitraPaymentService.GetTransactionStatus(obj)
+            .then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              this.State = data['State'];
+              this.Message = data['SuccessMessage'];
+              this.ErrorMessage = data['ErrorMessage'];
+
+              if (data.State == EnumStatus.Success) {
+                if (data.Data?.STATUS?.toUpperCase() === 'SUCCESS') {
+                  if (data.Data?.PRN) {
+                    this.toastr.success(`Fee Paid Successfully for PRN: ${data.Data.PRN}`);
+                   
+                  }
+                } else {
+                  this.toastr.error(this.Message);
+                }
+              } else {
+                this.toastr.error(this.ErrorMessage);
+              }
+            })
+
+            .catch(err => {
+              console.error('Payment check failed for one item:', err);
+              this.toastr.error('Payment check failed for one item');
+            });
+        }
+
+        this.selectedItems = [];
+        await this.getStudentFeesTransactionHistoryList(); // Refresh after each successful payment
+
+      } catch (ex) {
+        console.error('Unexpected error:', ex);
+      } 
+    } else {
+      this.toastr.error('Please select at least one item.');
+    } 
+
     }
     catch (ex) { console.log(ex) }
     finally {
@@ -430,7 +495,8 @@ export class EmitraFeeTransactionHistoryComponent {
     }
     else
     {
-      this.CheckBterStatus();
+      // this.CheckBterStatus();
+      this.CheckPaymentSatausbulk();
     }
   }
 
@@ -481,7 +547,7 @@ export class EmitraFeeTransactionHistoryComponent {
         }
 
         this.selectedItems = [];
-        await this.getStudentFeesTransactionHistoryList(); // Refresh after each successful payment
+        await this.getStudentFeesTransactionHistoryList(); // Refresh after successful payment
 
       } catch (ex) {
         console.error('Unexpected error:', ex);

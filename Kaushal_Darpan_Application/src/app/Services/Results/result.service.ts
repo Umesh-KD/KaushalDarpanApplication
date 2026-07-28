@@ -39,9 +39,12 @@ export class ResultService
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
-
-
+  public async GetGeneratedResultDetails(data: any){
+    return await this.http.post(this.APIUrl + "/GetGeneratedResultDetails/", data, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
  
 }
 
