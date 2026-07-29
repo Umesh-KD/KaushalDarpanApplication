@@ -23,7 +23,7 @@
 <div class="card">
   <div class="card-body p-5"> 
 
-    <div class="mb-8">
+    <div *ngIf="sSOLoginDataModel.RoleID!=_EnumRole.Student" class="mb-8">
 
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-map"></i> Search Application  </b>
@@ -94,8 +94,6 @@
                 @if(row.DepartmentID==1) {
                 {{ row.CourseTypeName }}
                 }
-
-
 
               </td>
               <td>{{ row.StudentName }}</td>
