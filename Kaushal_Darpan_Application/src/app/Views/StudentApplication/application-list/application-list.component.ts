@@ -828,7 +828,7 @@ export class ApplicationListComponent {
     //  return
     //}
     debugger
-    this.childComponent1.MobileNo = 8334874706//row.MobileNo
+    this.childComponent1.MobileNo = row.MobileNo
     // await for open model
     await this.childComponent1.OpenOTPPopup();
     // await OTP verification
