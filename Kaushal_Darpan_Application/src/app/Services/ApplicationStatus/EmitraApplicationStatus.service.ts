@@ -86,5 +86,11 @@ export class ApplicationStatusService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async unlockadmissionform(ID: any) {
 
+    return await this.http.post(`${this.APIUrl}/unlockadmissionform/${ID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
