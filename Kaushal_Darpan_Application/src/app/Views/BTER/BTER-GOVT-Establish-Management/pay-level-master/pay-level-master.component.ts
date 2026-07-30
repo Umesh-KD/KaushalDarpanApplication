@@ -26,6 +26,7 @@ export class PayLevelMasterComponent {
 
   modalReference: NgbModalRef | undefined;
   public isSubmitted: boolean = false
+  public Table_SearchText: string = "";
 
   constructor(
     private modalService: NgbModal,
@@ -42,6 +43,7 @@ export class PayLevelMasterComponent {
     })
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetPayLevelMasterData();
   }
 
   get _PayLevelMasterForm() { return this.PayLevelMasterForm.controls; }
@@ -50,19 +52,19 @@ export class PayLevelMasterComponent {
     if(id > 0) {
       await this.GetPayLevelMasterData_ByID(id);
     }
-    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });    
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });    
   }
 
   async GetPayLevelMasterData_ByID(id: number) {
     try {
       const request = new PayLevelMasterDataModel();
       request.PayLevelID = id;
-      request.Action = 'GetDataByID';
+      request.Action = 'GetData_ByID';
 
       await this.payLevelMasterService.GetPayLevelMasterData(request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
-          this.PayLevelMasterForm.patchValue(data.Data[0]);
+          this.request = data.Data[0];
         }
       })  
     } catch (error) {
@@ -72,6 +74,7 @@ export class PayLevelMasterComponent {
 
   CloseModalPopup() {
     this.modalService.dismissAll();
+    this.request = new PayLevelMasterDataModel();
   }
 
   async GetPayLevelMasterData() {

@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/module.d-CnjH8Dlt';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, catchError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
