@@ -28,6 +28,7 @@ import { ItiApplicationSearchmodel } from '../../../Models/ItiApplicationPreview
 import { ItiApplicationService } from '../../../Services/ItiApplication/iti-application.service';
 import { ItiApplicationFormService } from '../../../Services/ItiApplicationForm/iti-application-form.service';
 import { ITI_DirectAdmissionApplyDataModel } from '../../../Models/ITIFormDataModel';
+import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 
 @Component({
   selector: 'app-application-list',
@@ -51,6 +52,7 @@ export class ApplicationListComponent {
   encryptedRows: any[] = [];
   public OTP: string = '';
   public GeneratedOTP: string = '';
+  @ViewChild('otpModal') childComponent1!: OTPModalComponent;
   public MobileNo: string = '';
   sSOLoginDataModel = new SSOLoginDataModel();
   public StudentDetailsModelList: EmitraApplicationstatusModel[] = []
@@ -77,8 +79,11 @@ export class ApplicationListComponent {
   public applyRequest = new ITI_DirectAdmissionApplyDataModel();
   DirectAdmissionApplicationID: number = 0
   public DateConfigSetting_Direct: any = [];
+  public DateConfigSetting_Qual: any = [];
   DirectAdmissionMapKey: number = 0;
+  QualAdmissionMapKey: number = 0;
   DirectAdmissionPrivateMapKey: number = 0;
+  editformkey: number = 0;
   public IsAlloted:boolean=false
   constructor(
     private loaderService: LoaderService, 
@@ -108,7 +113,7 @@ export class ApplicationListComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
+    this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID    
     this.searchRequest.ssoId = this.sSOLoginDataModel.SSOID
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.courseTypeList = this.commonservice.ConvertEnumToList(EnumCourseType1);
@@ -116,7 +121,9 @@ export class ApplicationListComponent {
     await this.GetPrivateAdmissionDateConfig();
     await this.GetITIDateDataList()
     await this.GetAllDataActionWise()
+    await this.GetQualificationedit()
     this.checkJailCollege();
+    this.Geteditformdetails();
 
   }
   ngOnDestroy(): void {
@@ -194,10 +201,10 @@ export class ApplicationListComponent {
     this.GetAllDataActionWise()
   }
   async GetAllDataActionWise() {
-    this.isShowGrid = true;
-    
-
+    this.isShowGrid = true;    
     this.StudentDetailsModelList = [];
+    this.encryptedRows = [];
+
     if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.BTER)
     {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
@@ -718,7 +725,13 @@ export class ApplicationListComponent {
       queryParams: { AppID: this.encryptionService.encryptData(row.ApplicationID) }
     });
   }
+  async redirectToAdmissionApplicationForm(row: any) {
+    debugger
 
+    this.route.navigate(['/ApplicationFormTab'], {
+      queryParams: { AppID: this.encryptionService.encryptData(row.ApplicationID) }
+    });
+  }
 
   async GetDirectAdmissionDateConfig() {
 
@@ -737,6 +750,48 @@ export class ApplicationListComponent {
         // this.DirectAdmissionMapKey = 1
         this.DirectAdmissionMapKey = this.DateConfigSetting_Direct['DIRECT ADDMISSSION'];        
         console.log(this.DirectAdmissionMapKey)
+      }, (error: any) => console.error(error)
+      );
+  }
+
+  async GetQualificationedit() {
+
+    var data = {
+      DepartmentID: EnumDepartment.ITI,
+      CourseTypeId: this.sSOLoginDataModel.Eng_NonEng,
+      AcademicYearID: 30,
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      Key: "Edit Qualification",
+      SSOID: this.sSOLoginDataModel.SSOID
+    }
+    await this.commonservice.GetDateConfigSetting(data)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.DateConfigSetting_Qual = data['Data'][0];
+        // this.DirectAdmissionMapKey = 1
+        this.QualAdmissionMapKey = this.DateConfigSetting_Qual['Edit Qualification'];
+        console.log(this.QualAdmissionMapKey)
+      }, (error: any) => console.error(error)
+      );
+  }
+
+  async Geteditformdetails() {
+
+    var data = {
+      DepartmentID: EnumDepartment.ITI,
+      CourseTypeId: this.sSOLoginDataModel.Eng_NonEng,
+      AcademicYearID: 30,
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      Key: "EDIT FORMS",
+      SSOID: this.sSOLoginDataModel.SSOID
+    }
+    await this.commonservice.GetDateConfigSetting(data)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+   
+        // this.DirectAdmissionMapKey = 1
+        this.editformkey = data['Data'][0]['EDIT FORMS'];
+        console.log(this.QualAdmissionMapKey)
       }, (error: any) => console.error(error)
       );
   }
@@ -763,5 +818,72 @@ export class ApplicationListComponent {
       }, (error: any) => console.error(error)
       );
   }
+  async openOTP(row:any) {    
+    //if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.TradeSanctionList.length < 1 ) {
+    //    this.toastr.warning("Please Add Trade sanction Details")
+    //    return
+    //}
+    //if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.MetpSanctionList.length < 1) {
+    //  this.toastr.warning("Please Add METP sanction Details")
+    //  return
+    //}
+    debugger
+    this.childComponent1.MobileNo = row.MobileNo
+    // await for open model
+    await this.childComponent1.OpenOTPPopup();
+    // await OTP verification
+    await this.childComponent1.waitForVerification();
+    await this.btnupdate_OnClick(row.ApplicationID)
+    //this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+    //this.childComponent.OpenOTPPopup();
+    //this.childComponent.onVerified.subscribe(() => {
+    //  //this.PublishTimeTable();
+    //  this.SaveData();
+    //})
+  }
+
+  async btnupdate_OnClick(ID: number) {
+
+    this.Swal2.Confirmation("Are you sure you want to unlock this?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          try {
+            //Show Loading
+            this.loaderService.requestStarted();
+
+            await this.studentService.unlockadmissionform(ID,this.sSOLoginDataModel.SSOID)
+              .then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                console.log(data);
+                this.State = data['State'];
+                this.Message = data['Message'];
+                this.ErrorMessage = data['ErrorMessage'];
+                if (this.State = EnumStatus.Success) {
+                  this.toastr.success("Unlock Successfully")
+                  //reload
+                  this.CloseModal()
+                  this.route.navigate(['/ApplicationFormTab'], {
+                    queryParams: { AppID: this.encryptionService.encryptData(ID) }
+                  });
+                }
+                else {
+                  this.toastr.error(this.ErrorMessage)
+                }
+              }, (error: any) => console.error(error)
+              );
+          }
+          catch (ex) {
+            console.log(ex);
+          }
+          finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200);
+          }
+        }
+      });
+  }
+
 
 }

@@ -89,8 +89,19 @@
         <div>
           <label class="">
             Allotment: <span class="StarMarking"></span>
-          </label>
-          <select class="form-select" id="actionid" name="actionid" [(ngModel)]="searchRequest.action" (change)="changeListType()">
+          </label>          
+          <ng-select  id="actionid" name="actionid" [(ngModel)]="searchRequest.action" (change)="changeListType()">
+            <ng-option [value]="''" selected>--Select--</ng-option>
+            <ng-option value="MERIT_LIST">Merit List</ng-option>
+            <ng-option value="OPTION_FORM">Option Form</ng-option>
+            <ng-option value="ALLOTMENT_LIST">Allotment List</ng-option>
+            <ng-option value="NOT_ALLOTED_LIST">Not Allotted List</ng-option>
+            <ng-option value="SEAT_METRIX_BEFORE">Seat Matrix Before Allotment</ng-option>
+            <ng-option value="SEAT_METRIX_AFTER">Seat Matrix After Allotment</ng-option>
+            <ng-option value="CUT_OFF">Cut Off</ng-option>
+            <ng-option value="COLLEGE_ALLOTMENT_COUNT">College Allotment Count</ng-option>
+          </ng-select>
+          <!-- <select class="form-select" id="actionid" name="actionid" [(ngModel)]="searchRequest.action" (change)="changeListType()">
             <option value=''>--Select--</option>
             <option value="MERIT_LIST">Merit List</option>
             <option value="OPTION_FORM">Option Form</option>
@@ -100,27 +111,35 @@
             <option value="SEAT_METRIX_AFTER">Seat Matrix After Allotment</option>
             <option value="CUT_OFF">Cut Off</option>
             <option value="COLLEGE_ALLOTMENT_COUNT">College Allotment Count</option>
-          </select>
+          </select> -->
         </div>
 
         <div>
           <label class="">
             College: <span class="StarMarking"></span>
           </label>
-          <select class="form-select" [(ngModel)]="searchRequestData.CollegeID" (change)="getITITrade()">
+          <ng-select [(ngModel)]="searchRequestData.CollegeID" (change)="getITITrade()">
+            <ng-option [value]="0">Choose Option</ng-option>
+            <ng-option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</ng-option>
+          </ng-select>
+          <!-- <select class="form-select" [(ngModel)]="searchRequestData.CollegeID" (change)="getITITrade()">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</option>
-          </select>
+          </select> -->
         </div>
 
         <div>
           <label class="">
             Trade: <span class="StarMarking"></span>
           </label>
-          <select class="form-select" [(ngModel)]="searchRequestData.TradeID">
+          <ng-select [(ngModel)]="searchRequestData.TradeID">
+            <ng-option [value]="0">Choose Option</ng-option>
+            <ng-option *ngFor="let item of ListITITrade" [value]="item.ID">{{item.Name}}</ng-option>
+          </ng-select>
+          <!-- <select class="form-select" [(ngModel)]="searchRequestData.TradeID">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of ListITITrade" [value]="item.ID">{{item.Name}}</option>
-          </select>
+          </select> -->
         </div>
 
         <div>
@@ -132,7 +151,18 @@
             <option *ngFor="let item of ListITITradeScheme" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
-
+        
+        <!-- <div>
+          <label class="">
+            Student Category: <span class="StarMarking"></span>
+          </label>          
+          <ng-select class="mt-1" id="StudentCategory" name="StudentCategory" [(ngModel)]="searchRequest.StudentCategory">
+            <ng-option [value]="0" selected>--Select--</ng-option>
+            <ng-option value="1">Student Category1</ng-option>
+            <ng-option value="2">student Category2</ng-option>
+          </ng-select>
+        </div> -->
+        
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search</label>
           <input type="text" class="form-input" placeholder="Search..." (change)="ShowAllotmentDataList(1)" [(ngModel)]="FilterType">

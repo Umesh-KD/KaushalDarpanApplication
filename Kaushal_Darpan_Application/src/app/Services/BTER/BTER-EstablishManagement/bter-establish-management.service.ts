@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_AddStaffDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffListSearchModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, BTERGovtEMStaffMasterDataModel, BTERGovtEMStaff_ServiceDetailsOfPersonalModel, Bter_RequestUpdateStatus, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, BTER_Govt_EM_ServiceDeleteModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel, BTER_DesignationWiseBranchDataModel, BTERExtraOrdinaryLeavesForStaffModel, OfficeVacancyModel, StaffDetailsServicePreviewDataModel, StaffTrainingDetailDataModel, OfficeVacancySearchModel, StaffGuestHouseSearchModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_AddStaffDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffListSearchModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, BTERGovtEMStaffMasterDataModel, BTERGovtEMStaff_ServiceDetailsOfPersonalModel, Bter_RequestUpdateStatus, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, BTER_Govt_EM_ServiceDeleteModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel, BTER_DesignationWiseBranchDataModel, BTERExtraOrdinaryLeavesForStaffModel, OfficeVacancyModel, StaffDetailsServicePreviewDataModel, StaffTrainingDetailDataModel, OfficeVacancySearchModel, StaffGuestHouseSearchModel, StaffQualificationDataModel, StaffCareerAdvancementDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { HODDashboardSearchModel, RequestUpdateStatus } from '../../../Models/ITIGovtEMStaffMasterDataModel';
 
 
@@ -428,4 +428,47 @@ export class BTEREstablishManagementService {
       ).toPromise();
   }
 
+  public async SaveStaffQualificationData(searchRequest: StaffQualificationDataModel) {
+    var body = JSON.stringify(searchRequest);    
+    return await this.http.post(`${this.APIUrl}/SaveStaffQualificationData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async GetStaffQualificationData(searchRequest: StaffQualificationDataModel) {
+    var body = JSON.stringify(searchRequest);    
+    return await this.http.post(`${this.APIUrl}/GetStaffQualificationData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async DeleteStaffQualification_ByID(searchRequest: StaffQualificationDataModel) {
+    var body = JSON.stringify(searchRequest);    
+    return await this.http.post(`${this.APIUrl}/DeleteStaffQualification_ByID`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  
+  public async SaveStaffCareerAdvancementData(searchRequest: StaffCareerAdvancementDataModel) {
+    var body = JSON.stringify(searchRequest);    
+    return await this.http.post(`${this.APIUrl}/SaveStaffCareerAdvancementData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async GetStaffCareerAdvancementSchemeData(searchRequest: StaffCareerAdvancementDataModel) {
+    var body = JSON.stringify(searchRequest);    
+    return await this.http.post(`${this.APIUrl}/GetStaffCareerAdvancementSchemeData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async DeleteStaffCareerAdvancementScheme_ByID(searchRequest: StaffCareerAdvancementDataModel) {
+    var body = JSON.stringify(searchRequest);    
+    return await this.http.post(`${this.APIUrl}/DeleteStaffCareerAdvancementScheme_ByID`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

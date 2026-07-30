@@ -277,6 +277,7 @@ export class StaffDetailsServicePreviewDataModel {
   public Experience?: string = ''
   public QualificationAtJoining?: string = ''
   public QualificationAfterJoining?: string = ''
+  public QualificationAcquiringDate?: string = ''
   public DateOfRetirement?: string = ''
   public PhysicalDisability_str?: string = ''
   public SportsQuota_str?: string = ''
@@ -290,6 +291,17 @@ export class StaffDetailsServicePreviewDataModel {
   // service history 
   public ServiceHistoryList:BTER_EM_AddServiceHistoryDataModel[]=[]
   public TrainingDetailsList: StaffTrainingDetailDataModel[] = []
+
+  public Address?: string = ''
+  public State?: string = ''
+  public District?: string = ''
+  public Pincode?: string = ''
+  public IsServingADHOC_str?: string = ''
+  public IsProbationCompleted_str?: string = ''
+  public IsProbationCompleted?: boolean = false
+  public ProbationCompletionDate?: string = ''
+  public WhatsAppNumber?: string = ''
+  public Email?: string = ''
 }
 
 
@@ -886,8 +898,6 @@ export class TransferSystemGeneratorDataModel {
 
 }
 
-
-
 export class BTERStaffManualRequestModel {
   
   public EmployeeDesignation: string = '';
@@ -920,4 +930,30 @@ export class BTERStaffManualRequestModel {
   public EngNonEngID: number = 0;
   public To_EngNonEngID: number = 0;
 
+}
+
+export class StaffQualificationDataModel {
+  public StaffID: number = 0;
+  public UserID: number = 0;
+  public StaffQualificationID: number = 0;
+  public IsQualificationObtainedDuringService: string = '';
+  public QualificationAcquredDate: string = '';
+  public ObtainedDivision: string = '';
+  public Specialization: string = '';
+  public AcquiringQualificationCertificate: string = '';
+  public Dis_AcquiringQualificationCertificate: string = '';
+  public CompetentAuthorityOrder: string = '';
+  public Dis_CompetentAuthorityOrder: string = '';
+}
+
+export class StaffCareerAdvancementDataModel {
+  public StaffID: number = 0;
+  public UserID: number = 0;
+  public StaffCASID: number = 0;
+  public PayLevelTypeID: number = 0;
+  public PayLevelID: number = 0;
+  public DateOfImplementation: string = '';
+  public OrderNo: string = '';
+  public OrderDate: string = '';
+  public Action: string = '';
 }

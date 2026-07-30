@@ -356,7 +356,9 @@ export enum EnumConfigurationType {
   DIRECT_ADDMISSSION_PRIVATE =171,
   Reval_Date = 172,
   Revaluation_Fee = 15,
-  Common_Subject_Master = 174
+  Common_Subject_Master = 174,
+  Edit_Qualification = 177,
+  Edit_Forms=176
 }
 
 export enum EnumDepartment {

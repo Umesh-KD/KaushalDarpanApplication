@@ -6,6 +6,7 @@ import { ApplicationListComponent } from './application-list.component';
 import { LoaderModule } from '../../Shared/loader/loader.module';
 import { StudentStatusHistoryModule} from '../../Student/student-status-history/student-status-history.module';
 import { FormsModule } from '@angular/forms';
+import { OTPModalModule } from '../../otpmodal/otpmodal.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { FormsModule } from '@angular/forms';
     ApplicationListRoutingModule,
     LoaderModule,
     StudentStatusHistoryModule,
-    FormsModule
+    FormsModule,
+    OTPModalModule
   ]
 
 })

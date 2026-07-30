@@ -7,6 +7,7 @@ import { LoaderModule } from '../../Shared/loader/loader.module';
 import { AllotmentComponent } from './allotment.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OTPModalModule } from '../../otpmodal/otpmodal.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -18,7 +19,7 @@ import { OTPModalModule } from '../../otpmodal/otpmodal.module';
     AllotmentRoutingModule, FormsModule,
     ReactiveFormsModule,
     LoaderModule,
-    TableSearchFilterModule, OTPModalModule
+    TableSearchFilterModule, OTPModalModule,NgSelectModule
   ]
 })
 export class AllotmentModule { }
