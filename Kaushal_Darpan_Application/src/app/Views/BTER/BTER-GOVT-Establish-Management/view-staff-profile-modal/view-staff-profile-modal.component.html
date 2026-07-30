@@ -293,6 +293,65 @@
 
         <!-- ================= Address DetailsEND ================= -->
 
+        <!-- ================= Qualification Details ================= -->
+        <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-gray-100 rounded mt-3">
+          <b class="text-lg">
+            <i class="ti ti-plus"></i> Qualification Details
+          </b>
+        </div>
+
+        <div *ngIf="StaffQualificationList?.length > 0" class="overflow-auto">
+
+          <table class="w-full table-border text-sm">
+            <thead class="bg-gray-200">
+              <tr>
+                <th>S.No</th>
+                <th>Qualification acqure before/after the service period?</th>
+                <th>Qualification</th>
+                <th>Date of acquiring the qualification</th>
+                <th>Division obtained </th>
+                <th>Specialization</th>
+                <th>Acquiring qualification certificate</th>
+                <th>Competent authority order to add qualification in the service book</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let row of StaffQualificationList; let i=index">
+
+                <td class="text-center">{{idx+1}}</td>
+                <td class="text-center">{{row.QualificationObtainedDuringService}}</td>
+                <td class="text-center">{{row.QualificationName}}</td>
+                <td class="text-center">{{row.QualificationAcquredDate}}</td>
+                <td class="text-center">{{row.ObtainedDivision}}</td>
+                <td class="text-center">{{row.Specialization}}</td>
+                <td class="text-center">
+                  <a target="_blank" 
+                    href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/AcquiredQualificationAfterJoining/' + row.AcquiringQualificationCertificate }}">
+                    {{row.Dis_AcquiringQualificationCertificate}}
+                  </a>
+                </td>
+                <td class="text-center">
+                  <a target="_blank" 
+                    href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/AcquiredQualificationAfterJoining/' + row.CompetentAuthorityOrder }}">
+                    {{row.Dis_CompetentAuthorityOrder}}
+                  </a>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+
+        <div *ngIf="StaffQualificationList?.length == 0"
+             class="text-center text-gray-500 py-4">
+          Qualification Details Not Available
+        </div>
+
+        <!-- ================= Qualification Details END ================= -->
+
         <!-- ================= Service History ================= -->
         <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-gray-100 rounded">
           <b class="text-lg">
@@ -435,6 +494,56 @@
              class="text-center text-gray-500 py-4">
           No Training Details Available
         </div>
+
+        <!-- ================= Career Advancement Scheme Details ================= -->
+        <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-gray-100 rounded mt-3">
+          <b class="text-lg">
+            <i class="ti ti-plus"></i> Career Advancement Scheme Details
+          </b>
+        </div>
+
+        <div *ngIf="StaffCareerAdvancementSchemeData?.length > 0" class="overflow-auto">
+
+          <table class="w-full table-border text-sm">
+            <thead class="bg-gray-200">
+              <tr>
+                <th>S.No</th>
+                <th>Pay level</th>
+                <th>Date of implementation</th>
+                <th>Order No.</th>
+                <th>Order Date</th>
+                <th>Document</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let row of StaffCareerAdvancementSchemeData; let i=index">
+
+                <td class="text-center">{{idx+1}}</td>
+                <td class="text-center">{{row.PayLevel}}</td>
+                <td class="text-center">{{row.DateOfImplementation}}</td>
+                <td class="text-center">{{row.OrderNo}}</td>
+                <td class="text-center">{{row.OrderDate}}</td>
+                <td class="text-center">
+                  <a target="_blank" 
+                    href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/CareerAdvancementSchemeDocument/' + row.CASDocument }}">
+                    {{row.Dis_CASDocument}}
+                  </a>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+
+        <div *ngIf="StaffCareerAdvancementSchemeData?.length == 0"
+             class="text-center text-gray-500 py-4">
+          Career Advancement Scheme Details Not Available
+        </div>
+
+        <!-- ================= Career Advancement Scheme Details END ================= -->
 
       </div>
     </div>

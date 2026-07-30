@@ -1533,13 +1533,7 @@ export class BterEMAddStaffDetailsComponent {
         if (data.State == EnumStatus.Success) {
           this.StaffQualificationList = data.Data;
 
-        } else if(data.State == EnumStatus.Warning) {
-          this.toastr.warning(data.Message);
-          this.StaffQualificationList = [];
-        } else {
-          this.toastr.error(data.ErrorMessage);
-          this.StaffQualificationList = [];
-        }
+        } 
       })
     } catch (error) {
       console.error(error);
@@ -1613,11 +1607,6 @@ export class BterEMAddStaffDetailsComponent {
         if (data.State == EnumStatus.Success) {
           this.StaffCareerAdvancementSchemeData = data.Data;
 
-        } else if(data.State == EnumStatus.Warning) {
-          this.StaffCareerAdvancementSchemeData = [];
-        } else {
-          this.toastr.error(data.ErrorMessage);
-          this.StaffCareerAdvancementSchemeData = [];
         }
       })
     } catch (error) {
