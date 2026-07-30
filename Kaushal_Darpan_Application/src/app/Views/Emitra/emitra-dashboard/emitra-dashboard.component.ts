@@ -18,6 +18,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { EnumEmitraService, EnumRole, EnumUserType } from '../../../Common/GlobalConstants';
+import { EditApplicationFormComponent } from '../edit-application-form/edit-application-form.component';
 
 //import { BTERAllotmentStatusComponent } from '../../BTER/bter-allotment-status/bter-allotment-status.component';
 
@@ -60,6 +61,9 @@ export class EmitraDashboardComponent implements OnInit {
     this.tabs =
       [
       { TabName: 'Apply Online', TabNameHI: '  ऑनलाइन आवेदन   करें ', TabIcon: 'ti ti-license', component: ApplyNowComponent, ServiceID: EnumEmitraService.ITIEmitraFormService, DepartmentID: 1 },
+
+   
+
       { TabName: 'Apply Online', TabNameHI: '  ऑनलाइन आवेदन   करें ', TabIcon: 'ti ti-license', component: ApplyNowComponent, ServiceID: EnumEmitraService.BTER_DeplomaENG_Emitra_AppplicationFeeService, DepartmentID: 1 },
       { TabName: 'Apply Online', TabNameHI: '  ऑनलाइन आवेदन   करें ', TabIcon: 'ti ti-license', component: ApplyNowComponent, ServiceID: EnumEmitraService.BTER_DeplomaNonENG_Emitra_AppplicationFeeService, DepartmentID: 1 },
       { TabName: 'Apply Online', TabNameHI: '  ऑनलाइन आवेदन   करें ', TabIcon: 'ti ti-license', component: ApplyNowComponent, ServiceID: EnumEmitraService.BTER_DeplomaLateral_2ENG_Emitra_AppplicationFeeService, DepartmentID: 1 },
@@ -92,8 +96,12 @@ export class EmitraDashboardComponent implements OnInit {
       { TabName: 'Student Reval Exam fee (engineering)', TabNameHI: 'छात्र पुनर्मूल्यांकन परीक्षा शुल्क (इंजीनियरिंग)', TabIcon: 'ti ti-exchange', component: RevaluationComponent, ServiceID: EnumEmitraService.BTER_RevalFees_ENG, DepartmentID: 1 },
       { TabName: 'Student Reval Exam fee (non. engineering)', TabNameHI: 'छात्र पुनर्मूल्यांकन परीक्षा शुल्क (गैर इंजीनियरिंग)', TabIcon: 'ti ti-exchange', component: RevaluationComponent, ServiceID: EnumEmitraService.BTER_RevalFees_NonENG, DepartmentID: 1 },
 
+      {
+        TabName: 'Edit Application', TabNameHI: 'आवेदन में बदलाव करें ', TabIcon: 'ti ti-pencil', component: EditApplicationFormComponent, ServiceID: EnumEmitraService.EditITIApplication, DepartmentID: 1
+      },
 
-    ] as { TabName: string; TabNameHI: string; TabIcon: string; component: Type<any>, ServiceID: number, DepartmentID: number }[];
+
+      ] as { TabName: string; TabNameHI: string; TabIcon: string; component: Type<any>, ServiceID: number, DepartmentID: number }[];
 
 
     //BTER_DeplomaENG_AllotmentFeeService = 2526,
@@ -114,15 +122,19 @@ export class EmitraDashboardComponent implements OnInit {
 
   public ChangeDepartment(DepartmentID: number = 1)
   {
-    this.selectedTabIndex = 0
-    this.LoadTabs();
+
+
+
+      this.selectedTabIndex = 0
+      this.LoadTabs();
+
+      if (Number(this.sSOLoginDataModel?.ServiceID) > 0) {
+        this.tabs = this.tabs.filter((f: any) => f.ServiceID == this.sSOLoginDataModel.ServiceID);
+      }
+      this.loadComponent(this.selectedTabIndex);
+      this.cdr.detectChanges();
     
-    if (Number( this.sSOLoginDataModel?.ServiceID) >0)
-    {
-      this.tabs = this.tabs.filter((f: any) => f.ServiceID == this.sSOLoginDataModel.ServiceID);
-    }
-    this.loadComponent(this.selectedTabIndex);
-    this.cdr.detectChanges();
+
   }
 
   async ngOnInit()
