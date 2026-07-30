@@ -16,26 +16,19 @@
               <th class="text-left">Sr. No.</th>
               <th class="text-left">Department Name</th>
               <th class="text-center">Link</th>
-
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>1</td>
               <td>INDUSTRIAL TRAINING INSTITUTE(ITI)</td>
-
               <td class="text-center">
-
-                <a 
-                    [routerLink]="['/ApplicationList']"
-                   class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">ApplicationList </a>
-                
+                <!-- <a [routerLink]="'/ApplicationList'" class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">ApplicationList </a>                 -->
+                <a (click)="goToApplicationList()" class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">ApplicationList </a>                
               </td>
-            </tr>
-           
+            </tr>           
           </tbody>
         </table>
-
       </div>
     </div>
   </div>

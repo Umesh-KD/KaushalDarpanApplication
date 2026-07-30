@@ -71,7 +71,7 @@ export class EmitraDashboardComponent implements OnInit {
       { TabName: 'Apply Online', TabNameHI: '  ऑनलाइन आवेदन   करें ', TabIcon: 'ti ti-license', component: ApplyNowComponent, ServiceID: EnumEmitraService.BTER_DegreeNonENG_Emitra_AppplicationFeeService, DepartmentID: 1 },
 
 
-      { TabName: 'Fill ITI Exam Fees', TabNameHI: 'आईटीआई परीक्षा फीस भरें', TabIcon: 'ti ti-license', component: StudentEmitraITIFeePaymentComponent, DepartmentID: 2, ServiceID: EnumEmitraService.ITIExamFees },
+      { TabName: 'Fill ITI Exam Fees', TabNameHI: 'आईटीआई परीक्षा फीस भरें', TabIcon: 'ti ti-license', component: StudentEmitraITIFeePaymentComponent, ServiceID: EnumEmitraService.ITIExamFees , DepartmentID: 2},
       { TabName: 'FILL Fee using challan', TabNameHI: 'चालान के माध्यम से शुल्क भरें', TabIcon: 'ti ti-exchange', component: FeePaidByChallanComponent, ServiceID: EnumEmitraService.ITiApplicationFee, DepartmentID: 1 },
 
       { TabName: 'FILL Fee using challan', TabNameHI: 'चालान के माध्यम से शुल्क भरें', TabIcon: 'ti ti-exchange', component: FeePaidByChallanComponent, ServiceID: EnumEmitraService.BTER_DeplomaENG_AppplicationFeeService, DepartmentID: 1 },
@@ -122,16 +122,13 @@ export class EmitraDashboardComponent implements OnInit {
 
   public ChangeDepartment(DepartmentID: number = 1)
   {
-
-
-
       this.selectedTabIndex = 0
       this.LoadTabs();
 
       if (Number(this.sSOLoginDataModel?.ServiceID) > 0) {
         this.tabs = this.tabs.filter((f: any) => f.ServiceID == this.sSOLoginDataModel.ServiceID);
       }
-      this.loadComponent(this.selectedTabIndex);
+      // this.loadComponent(this.selectedTabIndex);
       this.cdr.detectChanges();
     
 
@@ -183,34 +180,12 @@ export class EmitraDashboardComponent implements OnInit {
   }
 
   // Dynamically loads the selected component
-  //public loadComponent(index: number): void
-  //{
-  //  const component = this.tabs[index].component;
-  //  const factory = this.resolver.resolveComponentFactory(component);
-  //  this.tabContent?.clear();
-
-  //  const componentRef = this.tabContent.createComponent(factory);
-
-  //  (componentRef.instance as any).tabChange?.subscribe((targetIndex: number) => {
-  //    this.selectTab(targetIndex);
-  //  });
-  //}
-
-
-  public loadComponent(index: number): void {
-
-   
-      const component = this.tabs[index].component;
-
-      console.log('Component:', component);
-
-      if (!component) {
-        console.error('Component is undefined');
-        return;
-      }
-
-      const factory = this.resolver.resolveComponentFactory(component);
-      this.tabContent.clear();
+  public loadComponent(index: number): void
+  {
+    debugger
+    const component = this.tabs[index].component;
+    const factory = this.resolver.resolveComponentFactory(component);
+    this.tabContent?.clear();
 
       const componentRef = this.tabContent.createComponent(factory);
 
