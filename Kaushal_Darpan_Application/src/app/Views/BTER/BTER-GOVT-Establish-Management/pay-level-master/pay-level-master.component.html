@@ -1,0 +1,130 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Pay Level Master</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0)" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0)" class="text-sm font-medium text-slate-700" aria-current="page">Pay Level Master</a>
+      <div >
+      </div>
+    </div>   
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-map"></i> Enter Search Criteria</b>
+      <button 
+          class="btn bg-info text-white" 
+          type="button"
+          (click)="ViewandUpdate(Modal_addPayLevel)">Add Pay Level
+      </button>
+    </div>
+    <!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By name</label>
+        <input class="form-input" type="text" id="Name" [(ngModel)]="searchRequest.HeadName" placeholder="Name">
+      </div>
+
+      <div>
+        <button 
+            class="btn bg-info text-white mt-6 me-1" 
+            type="submit" 
+            (click)="GetBudgetHeadMasterData_EM()">
+            <i class="ti ti-search"></i>Search
+        </button>
+        <button 
+            class="btn bg-warning text-white mt-6 me-1" 
+            type="submit" 
+            (click)="onResetSearch()">
+            <i class="ti ti-search"></i>Reset
+        </button>
+      </div>
+    </div> -->
+  </div>
+
+  <div class="card-body p-5" style="min-height:400px;" >
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> List</b>
+        <div class="flex justify-end flex-wrap items-center">
+        </div>
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" >
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <!-- <input class="form-input" placeholder="Search..."/> -->
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr No</th>
+            <th class="text-left">Pay Level</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of PayLevelMasterData; let idx=index;">
+
+            <td align="left">{{idx+1}}</td>
+            <td>{{item.PayLevel}}</td>
+            <td align="left">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important"> 
+                 <a href="javascript:void(0);" (click)="ViewandUpdate(Modal_addPayLevel,item.PayLevelID)"   title="Edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" title="Delete" (click)="onClickDelete(item.PayLevelID)"><i class="ti ti-trash"></i></a>
+                
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+  </div>
+</div>
+
+<ng-template #Modal_addPayLevel let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>  Add BGT Head</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="PayLevelMasterForm" (ngSubmit)="SavePayLevelMasterData()">
+          <div class="mb-8">
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+              
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Pay Level</label>
+                <input type="text" class="form-input" placeholder="Enter Pay Level"
+                  formControlName="PayLevel"  [(ngModel)]="request.PayLevel">
+              </div>
+            </div>
+          </div>
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div class="text-center">
+              <button type="submit" class="btn bg-info text-white mt-6" >Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>
