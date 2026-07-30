@@ -936,6 +936,7 @@ export class StaffQualificationDataModel {
   public StaffID: number = 0;
   public UserID: number = 0;
   public StaffQualificationID: number = 0;
+  public QualificationID: number = 0;
   public IsQualificationObtainedDuringService: string = '';
   public QualificationAcquredDate: string = '';
   public ObtainedDivision: string = '';
@@ -956,4 +957,6 @@ export class StaffCareerAdvancementDataModel {
   public OrderNo: string = '';
   public OrderDate: string = '';
   public Action: string = '';
+  public CASDocument: string = '';
+  public Dis_CASDocument: string = '';
 }

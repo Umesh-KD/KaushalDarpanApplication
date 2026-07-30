@@ -95,8 +95,8 @@ export class BterEMAddStaffDetailsComponent {
   public today: string='';
   public IsGuestHouse: boolean = false;
   public IsNotAcquired: boolean = true;
-  public isQualificationSubmitted: boolean = true;
-  public isCASSubmitted: boolean = true;
+  public isQualificationSubmitted: boolean = false;
+  public isCASSubmitted: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -164,19 +164,20 @@ export class BterEMAddStaffDetailsComponent {
     });
 
     this.QualificationFormGroup = this.formBuilder.group({
-      IsQualificationObtainedDuringService: [''],
-      QualificationAcquredDate: [''],
-      ObtainedDivision: [''],
-      Specialization: [''],
+      IsQualificationObtainedDuringService: ['', [Validators.required]],
+      QualificationAcquredDate: ['', [Validators.required]],
+      ObtainedDivision: ['', [Validators.required]],
+      Specialization: ['', [Validators.required]],
+      QualificationID: ['', [DropdownValidators]],
       AcquiringQualificationCertificate: [''],
       CompetentAuthorityOrder: [''],
     });
 
     this.CareerAdvancementSchemeFormGroup = this.formBuilder.group({
-      PayLevelID: [''],
-      DateOfImplementation: [''],
-      OrderNo: [''],
-      OrderDate: [''],
+      PayLevelID: ['', [DropdownValidators]],
+      DateOfImplementation: ['', [Validators.required]],
+      OrderNo: ['', [Validators.required]],
+      OrderDate: ['', [Validators.required]],
     });
 
     this.AddServiceistoryFormGroup = this.formBuilder.group({
@@ -1408,14 +1409,21 @@ export class BterEMAddStaffDetailsComponent {
 
   async UploadDocument(event: any, FileName: any) {
     try { 
+      var FolderName: string = '';
+      if(FileName="CASDocument"){
+        FolderName = "BTER_Establishment/CareerAdvancementSchemeDocument";
+      } else{
+        FolderName = "BTER_Establishment/AcquiredQualificationAfterJoining"
+      }
+
       let uploadModel: UploadFileModel = {
         FileName: FileName ?? "",
         FileExtention: "",
         MinFileSize: "20kb",
         MaxFileSize: "2mb",
-        FolderName:"BTER_Establishment/AcquiredQualificationAfterJoining",    
+        FolderName:FolderName,    
       }
-      debugger
+      
       await this.documentDetailsService.UploadDocument(event, uploadModel)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -1428,6 +1436,10 @@ export class BterEMAddStaffDetailsComponent {
             else if(FileName == "CompetentAuthorityOrder"){
               this.qualificationReq.CompetentAuthorityOrder = data.Data[0].FileName;
               this.qualificationReq.Dis_CompetentAuthorityOrder = data.Data[0].Dis_FileName;
+            }
+            else if(FileName == "CASDocument"){
+              this.reqCAS.CASDocument = data.Data[0].FileName;
+              this.reqCAS.Dis_CASDocument = data.Data[0].Dis_FileName;
             }
           } else if (data.State == EnumStatus.Error) {
             this.toastr.error(data.ErrorMessage)
@@ -1469,6 +1481,23 @@ export class BterEMAddStaffDetailsComponent {
 
   async AddQualification() {
     try {
+      this.isQualificationSubmitted = true;
+      if(this.QualificationFormGroup.invalid){
+        this.toastr.error("Please enter required fields in qualification section.");
+        return;
+      }
+
+      if(this.qualificationReq.IsQualificationObtainedDuringService == "After" &&
+        this.qualificationReq.AcquiringQualificationCertificate == "") {
+          this.toastr.error("Please upload certificate of acquiring qualification");
+          return;
+      }
+
+      if(this.qualificationReq.IsQualificationObtainedDuringService == "After" &&
+        this.qualificationReq.CompetentAuthorityOrder == "") {
+          this.toastr.error("Please upload competent authority order");
+          return;
+      }
 
       this.qualificationReq.UserID = this.sSOLoginDataModel.UserID;
       this.qualificationReq.StaffID = this.sSOLoginDataModel.StaffID;
@@ -1480,7 +1509,7 @@ export class BterEMAddStaffDetailsComponent {
           this.toastr.success(data.Message);
           await this.getStaffQualificationData();
           this.qualificationReq = new StaffQualificationDataModel();
-
+          this.isQualificationSubmitted = false;
         } else if(data.State == EnumStatus.Warning) {
           // this.toastr.warning(data.Message);
         } else {
@@ -1542,6 +1571,15 @@ export class BterEMAddStaffDetailsComponent {
 
   async SaveStaffCareerAdvancementData() {
     try {
+      this.isCASSubmitted = true;
+      if(this.CareerAdvancementSchemeFormGroup.invalid){
+        this.toastr.error("Please enter required fields in career advancement section.");
+        return;
+      }
+      // if(this.reqCAS.CASDocument == "") {
+      //   this.toastr.error("Please upload Career Advancement Scheme document");
+      //   return;
+      // }
       this.reqCAS.UserID = this.sSOLoginDataModel.UserID;
       this.reqCAS.StaffID = this.sSOLoginDataModel.StaffID;
 
@@ -1551,7 +1589,7 @@ export class BterEMAddStaffDetailsComponent {
           this.toastr.success(data.Message);
           await this.GetStaffCareerAdvancementSchemeData();
           this.reqCAS = new StaffCareerAdvancementDataModel();
-
+          this.isCASSubmitted = false;
         } else if(data.State == EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {

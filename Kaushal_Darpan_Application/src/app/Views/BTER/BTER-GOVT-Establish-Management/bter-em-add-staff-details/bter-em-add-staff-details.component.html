@@ -538,7 +538,22 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of acquiring the qualification</label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification<span class="StarMarking">*</span> </label>
+            <select class="form-select " name="QualificationID" id="QualificationID" formControlName="QualificationID"
+              [(ngModel)]="qualificationReq.QualificationID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of EmployeeQualificationDDLList" [value]="item.QualificationID">
+                {{item.QualificationName}}</option>
+            </select>
+            <div *ngIf="isQualificationSubmitted && _QualificationFormGroup.QualificationID.errors" class="text-danger">
+              <p *ngIf="!_QualificationFormGroup.QualificationID.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of acquiring the qualification<span class="StarMarking">*</span></label>
             <input autocomplete="off" class="form-input" type="date" name="QualificationAcquredDate" id="QualificationAcquredDate"
               formControlName="QualificationAcquredDate" [(ngModel)]="qualificationReq.QualificationAcquredDate" />
 
@@ -550,7 +565,7 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Division obtained </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Division obtained<span class="StarMarking">*</span> </label>
             <input autocomplete="off" class="form-input" type="text" name="ObtainedDivision" id="ObtainedDivision"
               formControlName="ObtainedDivision" [(ngModel)]="qualificationReq.ObtainedDivision" />
 
@@ -562,7 +577,7 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Specialization </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Specialization<span class="StarMarking">*</span> </label>
             <input autocomplete="off" class="form-input" type="text" name="Specialization" id="Specialization"
               formControlName="Specialization" [(ngModel)]="qualificationReq.Specialization" />
 
@@ -638,6 +653,7 @@
             <tr>
               <th>S.No</th>
               <th>Qualification acqure before/after the service period?</th>
+              <th>Qualification</th>
               <th>Date of acquiring the qualification</th>
               <th>Division obtained </th>
               <th>Specialization</th>
@@ -652,6 +668,7 @@
             <tr *ngFor="let row of StaffQualificationList; let idx = index">
               <td class="text-center">{{idx+1}}</td>
               <td class="text-center">{{row.QualificationObtainedDuringService}}</td>
+              <td class="text-center">{{row.QualificationName}}</td>
               <td class="text-center">{{row.QualificationAcquredDate}}</td>
               <td class="text-center">{{row.ObtainedDivision}}</td>
               <td class="text-center">{{row.Specialization}}</td>
@@ -1297,23 +1314,23 @@
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Pay Level </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Pay Level<span class="StarMarking">*</span> </label>
             <select class="form-select " name="PayLevelID" id="PayLevelID" formControlName="PayLevelID"
               [(ngModel)]="reqCAS.PayLevelID">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of PayLevelDDLList" [value]="item.PayLevelID">{{item.PayLevel}}</option>
               
             </select>
-            <div *ngIf="isSubmitted&&_CareerAdvancementSchemeFormGroup.PayLevelID.errors" class="text-danger">
+            <div *ngIf="isCASSubmitted && _CareerAdvancementSchemeFormGroup.PayLevelID.errors" class="text-danger">
               <p *ngIf="!_CareerAdvancementSchemeFormGroup.PayLevelID.errors.DropdownValidators">
-                <i aria-hidden="true"></i>This field is
-                required .!
+                <i aria-hidden="true"></i>This
+                field is required .!
               </p>
             </div>
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date Of Implementation</label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date Of Implementation<span class="StarMarking">*</span></label>
             <input autocomplete="off" class="form-input" type="date" name="DateOfImplementation" id="DateOfImplementation"
               formControlName="DateOfImplementation" [(ngModel)]="reqCAS.DateOfImplementation" />
 
@@ -1325,7 +1342,7 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order No</label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order No<span class="StarMarking">*</span></label>
             <input autocomplete="off" class="form-input" type="text" name="OrderNo" id="OrderNo"
               formControlName="OrderNo" [(ngModel)]="reqCAS.OrderNo" />
 
@@ -1337,7 +1354,7 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Date</label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Date<span class="StarMarking">*</span></label>
             <input autocomplete="off" class="form-input" type="date" name="OrderDate" id="OrderDate"
               formControlName="OrderDate" [(ngModel)]="reqCAS.OrderDate" />
 
@@ -1345,6 +1362,31 @@
               <p *ngIf="_CareerAdvancementSchemeFormGroup.OrderDate.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
               </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              for="CASDocument">Upload Career Advancement Scheme Document<span class="StarMarking">*</span></label>
+            <div class="flex fileUploader">
+              <input
+                class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                id="CASDocument" type="file" (change)="UploadDocument($event, 'CASDocument')">
+              <label for="CASDocument">
+                <span>Choose File</span>
+                {{ reqCAS.Dis_CASDocument == '' || reqCAS.Dis_CASDocument == undefined ? 'No
+                File Choosen' : reqCAS.Dis_CASDocument }}
+              </label>
+              <div class="flex">
+                <a class="btn bg-primary text-white m-0" target="_blank"
+                  *ngIf="reqCAS.CASDocument !='' && reqCAS.CASDocument != undefined"
+                  href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/CareerAdvancementSchemeDocument/' + reqCAS.CASDocument }}">
+                  <i class="ti ti-eye"></i>
+                </a>
+                <span class="text-danger text-sm" *ngIf="isFileError">
+                  order from competent authority to add qualification in the service book Document Upload is required
+                </span>
+              </div>
             </div>
           </div>
 
@@ -1367,6 +1409,7 @@
               <th>Date of implementation</th>
               <th>Order No.</th>
               <th>Order Date</th>
+              <th>Document</th>
               <th>Action</th>
             </tr>
 
@@ -1379,6 +1422,12 @@
               <td class="text-center">{{row.DateOfImplementation}}</td>
               <td class="text-center">{{row.OrderNo}}</td>
               <td class="text-center">{{row.OrderDate}}</td>
+              <td class="text-center">
+                <a target="_blank" 
+                  href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/CareerAdvancementSchemeDocument/' + row.CASDocument }}">
+                  {{row.Dis_CASDocument}}
+                </a>
+              </td>
               <td class="text-center">
                 <button class="btn bg-danger text-white" type="button" title="Delete" 
                   (click)="DeleteStaffCareerAdvancementScheme_ByID(row)">
