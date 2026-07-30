@@ -139,7 +139,7 @@ export class EmitraDashboardComponent implements OnInit {
 
   async ngOnInit()
   {
-    
+    debugger;
     if (this.cookieService.get("KDEmitraKiosk") != null && this.cookieService.get("KDEmitraKiosk") != '')
     {
       this.sSOLoginDataModel.RoleID = EnumRole.Emitra;
@@ -183,16 +183,41 @@ export class EmitraDashboardComponent implements OnInit {
   }
 
   // Dynamically loads the selected component
-  public loadComponent(index: number): void
-  {
-    const component = this.tabs[index].component;
-    const factory = this.resolver.resolveComponentFactory(component);
-    this.tabContent?.clear();
+  //public loadComponent(index: number): void
+  //{
+  //  const component = this.tabs[index].component;
+  //  const factory = this.resolver.resolveComponentFactory(component);
+  //  this.tabContent?.clear();
 
-    const componentRef = this.tabContent.createComponent(factory);
+  //  const componentRef = this.tabContent.createComponent(factory);
 
-    (componentRef.instance as any).tabChange?.subscribe((targetIndex: number) => {
-      this.selectTab(targetIndex);
-    });
-  }
+  //  (componentRef.instance as any).tabChange?.subscribe((targetIndex: number) => {
+  //    this.selectTab(targetIndex);
+  //  });
+  //}
+
+
+  public loadComponent(index: number): void {
+
+   
+      const component = this.tabs[index].component;
+
+      console.log('Component:', component);
+
+      if (!component) {
+        console.error('Component is undefined');
+        return;
+      }
+
+      const factory = this.resolver.resolveComponentFactory(component);
+      this.tabContent.clear();
+
+      const componentRef = this.tabContent.createComponent(factory);
+
+      (componentRef.instance as any).tabChange?.subscribe((targetIndex: number) => {
+        this.selectTab(targetIndex);
+      });
+    }
+
+  
 }
