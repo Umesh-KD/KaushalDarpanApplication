@@ -100,7 +100,7 @@ export class EmitraDashboardComponent implements OnInit {
         TabName: 'Edit Application', TabNameHI: 'आवेदन में बदलाव करें ', TabIcon: 'ti ti-pencil', component: EditApplicationFormComponent, ServiceID: EnumEmitraService.EditITIApplication, DepartmentID: 1
       },
 
-
+/*      EditApplicationFormComponent*/
       ] as { TabName: string; TabNameHI: string; TabIcon: string; component: Type<any>, ServiceID: number, DepartmentID: number }[];
 
 
