@@ -50,11 +50,19 @@ export class ExamNodalMappingComponent {
   }
 
   async GetAllData() {
+    var IsApprentship=0
+    if (this.sSOLoginDataModel.RoleID == 212) {
+      IsApprentship = 1
+    } else {
+      IsApprentship = 0
+    }
 
     let obj = {
       AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
       EndTermID: this.sSOLoginDataModel.EndTermID,
-      DistrictID: this.searchRequest.DistrictID
+      DistrictID: this.searchRequest.DistrictID,
+      IsApprentship: IsApprentship
+     
     }
     try {
       this.loaderService.requestStarted();
@@ -139,7 +147,12 @@ export class ExamNodalMappingComponent {
   async SaveAllData(row:any) {
     try {
       this.loaderService.requestStarted();
-
+      var IsApprentship = 0
+      if (this.sSOLoginDataModel.RoleID == 212) {
+        IsApprentship = 1
+      } else {
+        IsApprentship = 0
+      }
       let obj = {
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
@@ -149,7 +162,8 @@ export class ExamNodalMappingComponent {
         UserName: row.UserName,
         MobileNumber: row.MobileNumber,
         Email: row.Email,
-        ModifyBy: this.sSOLoginDataModel.UserID
+        ModifyBy: this.sSOLoginDataModel.UserID,
+        IsApprentship: IsApprentship
       }
 
 
@@ -197,51 +211,51 @@ export class ExamNodalMappingComponent {
   }
 
 
-  async DeleteAllData() {
-    //try {
-    //  this.loaderService.requestStarted();
+  //async DeleteAllData() {
+  //  try {
+  //    this.loaderService.requestStarted();
 
-    //  this.CollegeMasterList.forEach(x => {
-    //    x.ModifyBy = this.sSOLoginDataModel.UserID;
-    //  });
-    //  console.log(this.CollegeMasterList);
+  //    this.CollegeMasterList.forEach(x => {
+  //      x.ModifyBy = this.sSOLoginDataModel.UserID;
+  //    });
+  //    console.log(this.CollegeMasterList);
 
-    //  this.swat.Confirmation("Are you sure you want to Delete this ?",
-    //    async (result: any) => {
-    //      if (result.isConfirmed) {
+  //    this.swat.Confirmation("Are you sure you want to Delete this ?",
+  //      async (result: any) => {
+  //        if (result.isConfirmed) {
 
-    //        //save
-    //        await this.createTpoService.DeleteAllData(this.CollegeMasterList)
-    //          .then(async (data: any) => {
-    //            this.State = data['State'];
-    //            this.Message = data['Message'];
-    //            this.ErrorMessage = data['ErrorMessage'];
-    //            if (this.State === EnumStatus.Success) {
-    //              this.toastr.success(this.Message);
-    //              await this.GetAllData();
-    //            } else {
-    //              this.toastr.error(this.ErrorMessage);
-    //            }
+  //          //save
+  //          await this.createTpoService.DeleteAllData(this.CollegeMasterList)
+  //            .then(async (data: any) => {
+  //              this.State = data['State'];
+  //              this.Message = data['Message'];
+  //              this.ErrorMessage = data['ErrorMessage'];
+  //              if (this.State === EnumStatus.Success) {
+  //                this.toastr.success(this.Message);
+  //                await this.GetAllData();
+  //              } else {
+  //                this.toastr.error(this.ErrorMessage);
+  //              }
 
 
-    //          })
+  //            })
 
-    //          .catch((error: any) => {
-    //            console.error(error);
-    //            this.toastr.error('Failed to create Tpo!');
-    //          });
-    //      }
-    //    })
-    //}
-    //catch (ex) {
-    //  console.log(ex);
-    //}
-    //finally {
-    //  setTimeout(() => {
-    //    this.loaderService.requestEnded();
-    //  }, 200);
-    //}
-  }
+  //            .catch((error: any) => {
+  //              console.error(error);
+  //              this.toastr.error('Failed to create Tpo!');
+  //            });
+  //        }
+  //      })
+  //  }
+  //  catch (ex) {
+  //    console.log(ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
 
 
   async SSOIDGetSomeDetails(row:any): Promise<any> {
