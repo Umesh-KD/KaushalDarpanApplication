@@ -202,7 +202,7 @@ export class fresherRegistrationReportListComponent {
   }
 
 
-  EditData(id: number,flag:number) {
+  EditData(id: number,flag:number=0) {
     debugger;
     sessionStorage.setItem('fresherRegistrationReportPKID', id.toString());
     sessionStorage.setItem('flag', flag.toString());
