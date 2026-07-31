@@ -113,7 +113,7 @@ export class ApplicationListComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
+    this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID    
     this.searchRequest.ssoId = this.sSOLoginDataModel.SSOID
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.courseTypeList = this.commonservice.ConvertEnumToList(EnumCourseType1);
@@ -201,10 +201,10 @@ export class ApplicationListComponent {
     this.GetAllDataActionWise()
   }
   async GetAllDataActionWise() {
-    this.isShowGrid = true;
-    
-
+    this.isShowGrid = true;    
     this.StudentDetailsModelList = [];
+    this.encryptedRows = [];
+
     if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.BTER)
     {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
@@ -818,11 +818,7 @@ export class ApplicationListComponent {
       }, (error: any) => console.error(error)
       );
   }
-  async openOTP(row:any) {
-    
-
-
-
+  async openOTP(row:any) {    
     //if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.TradeSanctionList.length < 1 ) {
     //    this.toastr.warning("Please Add Trade sanction Details")
     //    return
@@ -837,14 +833,9 @@ export class ApplicationListComponent {
     await this.childComponent1.OpenOTPPopup();
     // await OTP verification
     await this.childComponent1.waitForVerification();
-
     await this.btnupdate_OnClick(row.ApplicationID)
-
-
-
     //this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     //this.childComponent.OpenOTPPopup();
-
     //this.childComponent.onVerified.subscribe(() => {
     //  //this.PublishTimeTable();
     //  this.SaveData();
@@ -861,15 +852,13 @@ export class ApplicationListComponent {
             //Show Loading
             this.loaderService.requestStarted();
 
-            await this.studentService.unlockadmissionform(ID)
+            await this.studentService.unlockadmissionform(ID,this.sSOLoginDataModel.SSOID)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));
                 console.log(data);
-
                 this.State = data['State'];
                 this.Message = data['Message'];
                 this.ErrorMessage = data['ErrorMessage'];
-
                 if (this.State = EnumStatus.Success) {
                   this.toastr.success("Unlock Successfully")
                   //reload
@@ -877,12 +866,10 @@ export class ApplicationListComponent {
                   this.route.navigate(['/ApplicationFormTab'], {
                     queryParams: { AppID: this.encryptionService.encryptData(ID) }
                   });
-
                 }
                 else {
                   this.toastr.error(this.ErrorMessage)
                 }
-
               }, (error: any) => console.error(error)
               );
           }

@@ -22,6 +22,9 @@ export class ViewStaffProfileModalComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public staffDetailsServicePreview = new StaffDetailsServicePreviewDataModel();
 
+  public StaffQualificationList: any = [];
+  public StaffCareerAdvancementSchemeData: any = [];
+
   private modalRef: any;
   @ViewChild('Modal_StaffDetailsViewModal') Modal_StaffDetailsViewModal: any;
   closeResult: string | undefined;
@@ -53,6 +56,8 @@ export class ViewStaffProfileModalComponent {
 
   async StaffDetailsPreview_Service(StaffID:number,ID: number) {
     try {
+      await this.getStaffQualificationData(StaffID, ID)
+      await this.GetStaffCareerAdvancementSchemeData(StaffID, ID)
       // Ensure object exists
       if (!this.staffDetailsServicePreview) {
         this.staffDetailsServicePreview = new StaffDetailsServicePreviewDataModel();
@@ -106,6 +111,44 @@ export class ViewStaffProfileModalComponent {
     this.staffDetailsServicePreview = new StaffDetailsServicePreviewDataModel();
     if (this.modalRef) {
       this.modalRef.close(); 
+    }
+  }
+
+  async getStaffQualificationData(StaffID:number,UserID: number) {
+    try {
+      const request: any = {};
+      request.UserID = UserID;
+      request.StaffID = StaffID;
+      request.Action = "GetAllData";
+
+      await this.bterEstablishManagementService.GetStaffQualificationData(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.StaffQualificationList = data.Data;
+
+        } 
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async GetStaffCareerAdvancementSchemeData(StaffID: number, UserID: number) {
+    try {
+      const request: any = {};
+      request.UserID = UserID;
+      request.StaffID = StaffID;
+      request.Action = "GetAllData";
+
+      await this.bterEstablishManagementService.GetStaffCareerAdvancementSchemeData(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.StaffCareerAdvancementSchemeData = data.Data;
+
+        } 
+      })
+    } catch (error) {
+      console.error(error);
     }
   }
 }

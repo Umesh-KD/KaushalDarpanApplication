@@ -347,7 +347,10 @@ debugger
     }, 200);
   }
 
-  async PayApplicationFees() {
+  async PayApplicationFees()
+  {
+
+
 
     this.Swal2.Confirmation("Are you sure you want to Submit & Make Payment?", async (result: any) =>
     {

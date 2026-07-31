@@ -649,7 +649,9 @@ export enum EnumEmitraService {
   BTER_ExamFees_NonENG = 7350,
 
   BTER_RevalFees_ENG = 7810,
-  BTER_RevalFees_NonENG = 7830
+  BTER_RevalFees_NonENG = 7830,
+
+  EditITIApplication=16251
 
 }
 

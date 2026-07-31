@@ -191,7 +191,8 @@ export class PreviewFormComponent {
     try {
       this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
         // Check if the user confirmed the action
-        if (result.isConfirmed) {
+        if (result.isConfirmed)
+        {
           this.isSubmitted = true;
           this.loaderService.requestStarted();
           

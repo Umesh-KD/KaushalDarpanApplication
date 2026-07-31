@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { EnumEMProfileStatus, EnumDepartment, EnumStatus, GlobalConstants, EnumRole } from '../../../../Common/GlobalConstants';
-import { BTER_DesignationWiseBranchDataModel, BTER_EM_AddServiceHistoryDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_DocumentServiceHistoryDataModel, BTER_EM_GetPersonalDetailByUserID, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, Bter_RequestUpdateStatus, BTERGovtEMStaff_ServiceDetailsOfPersonalModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_DesignationWiseBranchDataModel, BTER_EM_AddServiceHistoryDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_DocumentServiceHistoryDataModel, BTER_EM_GetPersonalDetailByUserID, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, Bter_RequestUpdateStatus, BTERGovtEMStaff_ServiceDetailsOfPersonalModel, StaffCareerAdvancementDataModel, StaffQualificationDataModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -25,19 +25,27 @@ import { DocumentDetailsService } from '../../../../Common/document-details';
 })
 export class BterEMAddStaffDetailsComponent {
   StaffMasterFormGroup!: FormGroup;
-  isSubmitted: boolean = false;
   public AddsubjectFormGroup!: FormGroup;
+  public QualificationFormGroup!: FormGroup;
   public AddServiceistoryFormGroup!:FormGroup;
+  public CareerAdvancementSchemeFormGroup!:FormGroup;
+
   public request = new BTER_EM_AddStaffDetailsDataModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public StreamSearch = new StreamDDL_InstituteWiseModel()
   public requestUser = new BTER_EM_GetPersonalDetailByUserID();
   public serviceReq=new BTER_EM_AddServiceHistoryDataModel();
   public finalSubmitRequest = new Bter_RequestUpdateStatus();
+  public Addrequest = new StaffSubjectList();
+  staffDetailsFormData = new StaffDetailsDataModel();
+  _DesignationWiseBranchDataModel = new BTER_DesignationWiseBranchDataModel();
+  public searchRequestUserProfileStatus = new Bter_Govt_EM_UserRequestHistoryListSearchDataModel();
+  public requestSSoApi = new CommonVerifierApiDataModel();
+  public qualificationReq = new StaffQualificationDataModel();
+  public reqCAS = new StaffCareerAdvancementDataModel();
+
   AddedServiceList: BTERGovtEMStaff_ServiceDetailsOfPersonalModel[] = [];
   AddedServiceListAdded: BTERGovtEMStaff_ServiceDetailsOfPersonalModel[] = [];
-  public Addrequest = new StaffSubjectList();
-  public userID:number=0;
   public InstituteMasterDDLList: any = [];
   public instituteList:any=[];
   public DesignationMasterDDLList: any = [];
@@ -53,35 +61,33 @@ export class BterEMAddStaffDetailsComponent {
   public SemesterList: any = [];
   public SubjectMasterDDL: any = [];
   public DistrictMasterDDL: any = [];
-  public ShowAllSemester: number = 0;
-
-  public State: number = 0;
-  public Message: string = '';
-  public ErrorMessage: string = '';
-  
-  public StateMasterList: IStateMasterDataModel[] = [];
-  public _EnumEMProfileStatus = EnumEMProfileStatus;
-  public _EnumRole = EnumRole;
-  public isAddrequest: boolean = false;
-  public isAddServiceReq:boolean=false;
   public AddedChoices: StaffSubjectList[] = [];
   public DesignationWiseBranchListRole: any [] = [];
   public DesignationWiseBranchList: any [] = [];
   public serviceHistoryList: any[] = [];
-  staffDetailsFormData = new StaffDetailsDataModel();
-  _DesignationWiseBranchDataModel = new BTER_DesignationWiseBranchDataModel();
-
-  
-  public searchRequestUserProfileStatus = new Bter_Govt_EM_UserRequestHistoryListSearchDataModel();
   public UserProfileStatusHistoryList: any = [];
-  modalReference: NgbModalRef | undefined;
+  public StateMasterList: IStateMasterDataModel[] = [];
+  public StaffQualificationList: any = [];
+  public StaffCareerAdvancementSchemeData: any = [];
+  public PayLevelDDLList: any = [];
 
+  public _EnumEMProfileStatus = EnumEMProfileStatus;
+
+  isSubmitted: boolean = false;
+  public ShowAllSemester: number = 0;
+  public userID:number=0;
+  public State: number = 0;
+  public Message: string = '';
+  public ErrorMessage: string = '';
+  public _EnumRole = EnumRole;
+  public isAddrequest: boolean = false;
+  public isAddServiceReq:boolean=false;
+  modalReference: NgbModalRef | undefined;
   public IsOptional: boolean = false
   public IsTransfer:boolean=false
   public IsPromotion:boolean=false
   _enumDepartment = EnumDepartment
   public ExamTypeHeading = '';
-  public requestSSoApi = new CommonVerifierApiDataModel();
   public GetGenderID: number = 0;
   public IsHideShow: boolean = false
   public IsSubjectlistTech: boolean = false
@@ -89,7 +95,8 @@ export class BterEMAddStaffDetailsComponent {
   public today: string='';
   public IsGuestHouse: boolean = false;
   public IsNotAcquired: boolean = true;
-
+  public isQualificationSubmitted: boolean = false;
+  public isCASSubmitted: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -130,12 +137,12 @@ export class BterEMAddStaffDetailsComponent {
 
       Experience: ['', [Validators.required]],
 
-      QualificationAtJoining: ['', [Validators.required]],
-      QualificationAfterJoining: ['', [Validators.required]],
+      // QualificationAtJoining: ['', [Validators.required]],
+      // QualificationAfterJoining: ['', [Validators.required]],
 
       DateOfRetirement: [{ value: '', disabled: true }],
       Remark: [''],
-      QualificationAcquiringDate: [''],
+      // QualificationAcquiringDate: [''],
       IsNodal: [{ value: false, disabled: true }],
       IsServingADHOC: ['', [Validators.required]],
       DateofJoiningADHOC: [''],
@@ -154,31 +161,24 @@ export class BterEMAddStaffDetailsComponent {
       ddlExamType: ['', [DropdownValidators]],
       ddlStreamType: ['', [DropdownValidators]],
       IsOptional: [''],
+    });
 
-      // ITICourse: ['', [DropdownValidators]],
-      // ITISubjectID: ['', [DropdownValidators]],
-      // ITISemesterID: ['', [DropdownValidators]],
-      // ITIExamType: ['', [DropdownValidators]],
-      // ITIStreamType: ['', [DropdownValidators]],
-    })
+    this.QualificationFormGroup = this.formBuilder.group({
+      IsQualificationObtainedDuringService: ['', [Validators.required]],
+      QualificationAcquredDate: ['', [Validators.required]],
+      ObtainedDivision: ['', [Validators.required]],
+      Specialization: ['', [Validators.required]],
+      QualificationID: ['', [DropdownValidators]],
+      AcquiringQualificationCertificate: [''],
+      CompetentAuthorityOrder: [''],
+    });
 
-    // this.AddServiceistoryFormGroup=this.formBuilder.group({
-    //   JoiningDate: ['', [Validators.required]],
-    //   OfficeID: [0],
-    //   InstituteID: [0],
-    //   FromDate: ['', [Validators.required]],
-    //   ToDate: ['', [Validators.required]],
-    //   DesignationID: [0, [DropdownValidators]],
-    //   Qualification:['',Validators.required],
-    //   IsTransfer:[''],
-    //   IsPromotion:[''],
-    //   DateOfTransfer:[''],
-
-    //   TransferToInstituteID:[0],
-    //   TransferFromInstituteID:[0],
-    //   TransferFromOfficeID:[0],
-    //   TransferToOfficeID:[0]
-    // })
+    this.CareerAdvancementSchemeFormGroup = this.formBuilder.group({
+      PayLevelID: ['', [DropdownValidators]],
+      DateOfImplementation: ['', [Validators.required]],
+      OrderNo: ['', [Validators.required]],
+      OrderDate: ['', [Validators.required]],
+    });
 
     this.AddServiceistoryFormGroup = this.formBuilder.group({
       // JoiningDate: ['', Validators.required],
@@ -189,7 +189,7 @@ export class BterEMAddStaffDetailsComponent {
       ToDate: ['', Validators.required],
     
       DesignationID: [0, DropdownValidators],
-      QualificationID: [0, DropdownValidators],    
+      // QualificationID: [0, DropdownValidators],    
       // Transfer
       IsTransfer: [false],
       DateOfTransfer: [''],
@@ -216,6 +216,7 @@ export class BterEMAddStaffDetailsComponent {
     await this.GetOfficeList();
     await this.getStreamMasterData();
     await this.GetManageDDl();
+    await this.GetPayLevelDDL();
 
     if (this.sSOLoginDataModel.UserID > 0) {
       await this.GetPersonalDetailByUserID();
@@ -293,18 +294,15 @@ export class BterEMAddStaffDetailsComponent {
 
 
     }
-
-    await this.setTodayDate();
-
-
-   
+    await this.setTodayDate();   
     await this.SSOIDGetSomeDetails(this.sSOLoginDataModel.SSOID);
   }
 
   get _AddsubjectFormGroup() { return this.AddsubjectFormGroup.controls; }
   get _StaffMasterFormGroup() { return this.StaffMasterFormGroup.controls; }
   get _AddServiceistoryFormGroup(){return this.AddServiceistoryFormGroup.controls;}
-
+  get _QualificationFormGroup(){return this.QualificationFormGroup.controls;}
+  get _CareerAdvancementSchemeFormGroup(){return this.CareerAdvancementSchemeFormGroup.controls;}
 
   async GetLoadData(){
     try {
@@ -436,25 +434,25 @@ export class BterEMAddStaffDetailsComponent {
   }
   
   async GetDesignationMasterDDL() {
-  try {
-      const request: any = {};
-      request.RoleID = this.sSOLoginDataModel.RoleID;
-      request.UserID = this.sSOLoginDataModel.UserID;
-      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-      request.EndTermId = this.sSOLoginDataModel.EndTermID;
-      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      request.Action = "GetDesignationMasterDDL_BTER_EM";
-      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.DesignationMasterDDLList = data['Data'];
-        this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.request.StaffTypeID);
-        this.StaffMasterFormGroup.patchValue({
-          CurrentDesignationID: this.request.CurrentDesignationID || '0'
-        });
-      })
-    } catch (error) {
-      console.error(error);
-    }
+    try {
+        const request: any = {};
+        request.RoleID = this.sSOLoginDataModel.RoleID;
+        request.UserID = this.sSOLoginDataModel.UserID;
+        request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+        request.EndTermId = this.sSOLoginDataModel.EndTermID;
+        request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+        request.Action = "GetDesignationMasterDDL_BTER_EM";
+        await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DesignationMasterDDLList = data['Data'];
+          this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.request.StaffTypeID);
+          this.StaffMasterFormGroup.patchValue({
+            CurrentDesignationID: this.request.CurrentDesignationID || '0'
+          });
+        })
+      } catch (error) {
+        console.error(error);
+      }
   }
   async GetDesignationMasterData() {
     debugger;
@@ -522,6 +520,8 @@ export class BterEMAddStaffDetailsComponent {
           console.log(this.StaffMasterFormGroup.get('DateOfBirth')?.value);
           /*this.staffDetailsFormData.StaffSubjectListModel = request.*/
           console.log("GetPersonalDetailByUserID", this.request);
+          await this.getStaffQualificationData();
+          await this.GetStaffCareerAdvancementSchemeData();
            
           //if (this.request.DepartmentJoiningDate != '' || this.request.DepartmentJoiningDate != null) {
           //  const isoDate = this.request.DepartmentJoiningDate;
@@ -1409,26 +1409,37 @@ export class BterEMAddStaffDetailsComponent {
 
   async UploadDocument(event: any, FileName: any) {
     try { 
+      var FolderName: string = '';
+      if(FileName="CASDocument"){
+        FolderName = "BTER_Establishment/CareerAdvancementSchemeDocument";
+      } else{
+        FolderName = "BTER_Establishment/AcquiredQualificationAfterJoining"
+      }
+
       let uploadModel: UploadFileModel = {
         FileName: FileName ?? "",
         FileExtention: "",
         MinFileSize: "20kb",
         MaxFileSize: "2mb",
-        FolderName:"BTER_Establishment/AcquiredQualificationAfterJoining",    
+        FolderName:FolderName,    
       }
-      debugger
+      
       await this.documentDetailsService.UploadDocument(event, uploadModel)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           
           if (data.State == EnumStatus.Success) {
             if(FileName == "AcquiringQualificationCertificate"){
-              this.request.AcquiringQualificationCertificate = data.Data[0].FileName;
-              this.request.Dis_AcquiringQualificationCertificate = data.Data[0].Dis_FileName;
+              this.qualificationReq.AcquiringQualificationCertificate = data.Data[0].FileName;
+              this.qualificationReq.Dis_AcquiringQualificationCertificate = data.Data[0].Dis_FileName;
             }
             else if(FileName == "CompetentAuthorityOrder"){
-              this.request.CompetentAuthorityOrder = data.Data[0].FileName;
-              this.request.Dis_CompetentAuthorityOrder = data.Data[0].Dis_FileName;
+              this.qualificationReq.CompetentAuthorityOrder = data.Data[0].FileName;
+              this.qualificationReq.Dis_CompetentAuthorityOrder = data.Data[0].Dis_FileName;
+            }
+            else if(FileName == "CASDocument"){
+              this.reqCAS.CASDocument = data.Data[0].FileName;
+              this.reqCAS.Dis_CASDocument = data.Data[0].Dis_FileName;
             }
           } else if (data.State == EnumStatus.Error) {
             this.toastr.error(data.ErrorMessage)
@@ -1464,6 +1475,186 @@ export class BterEMAddStaffDetailsComponent {
     this.StaffMasterFormGroup.get('ProbationCompletionDate')?.updateValueAndValidity();
   }
 
+  onChangeIsQualificationObtainedDuringService(value: string) {
+    this.qualificationReq.IsQualificationObtainedDuringService = value;
+  }
+
+  async AddQualification() {
+    try {
+      this.isQualificationSubmitted = true;
+      if(this.QualificationFormGroup.invalid){
+        this.toastr.error("Please enter required fields in qualification section.");
+        return;
+      }
+
+      if(this.qualificationReq.IsQualificationObtainedDuringService == "After" &&
+        this.qualificationReq.AcquiringQualificationCertificate == "") {
+          this.toastr.error("Please upload certificate of acquiring qualification");
+          return;
+      }
+
+      if(this.qualificationReq.IsQualificationObtainedDuringService == "After" &&
+        this.qualificationReq.CompetentAuthorityOrder == "") {
+          this.toastr.error("Please upload competent authority order");
+          return;
+      }
+
+      this.qualificationReq.UserID = this.sSOLoginDataModel.UserID;
+      this.qualificationReq.StaffID = this.sSOLoginDataModel.StaffID;
+
+      await this.bterEstablishManagementService.SaveStaffQualificationData(this.qualificationReq)
+      .then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          await this.getStaffQualificationData();
+          this.qualificationReq = new StaffQualificationDataModel();
+          this.isQualificationSubmitted = false;
+        } else if(data.State == EnumStatus.Warning) {
+          // this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getStaffQualificationData() {
+    try {
+      const request: any = {};
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.StaffID = this.sSOLoginDataModel.StaffID;
+      request.Action = "GetAllData";
+
+      await this.bterEstablishManagementService.GetStaffQualificationData(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.StaffQualificationList = data.Data;
+
+        } 
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async deleteQualificationRow(row: any) {
+    try {
+      const request: any = {};
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.StaffID = this.sSOLoginDataModel.StaffID;
+      request.StaffQualificationID = row.StaffQualificationID;
+
+      await this.bterEstablishManagementService.DeleteStaffQualification_ByID(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          await this.getStaffQualificationData();
+        } else if(data.State == EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async SaveStaffCareerAdvancementData() {
+    try {
+      this.isCASSubmitted = true;
+      if(this.CareerAdvancementSchemeFormGroup.invalid){
+        this.toastr.error("Please enter required fields in career advancement section.");
+        return;
+      }
+      // if(this.reqCAS.CASDocument == "") {
+      //   this.toastr.error("Please upload Career Advancement Scheme document");
+      //   return;
+      // }
+      this.reqCAS.UserID = this.sSOLoginDataModel.UserID;
+      this.reqCAS.StaffID = this.sSOLoginDataModel.StaffID;
+
+      await this.bterEstablishManagementService.SaveStaffCareerAdvancementData(this.reqCAS).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          await this.GetStaffCareerAdvancementSchemeData();
+          this.reqCAS = new StaffCareerAdvancementDataModel();
+          this.isCASSubmitted = false;
+        } else if(data.State == EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async GetStaffCareerAdvancementSchemeData() {
+    try {
+      const request: any = {};
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.StaffID = this.sSOLoginDataModel.StaffID;
+      request.Action = "GetAllData";
+
+      await this.bterEstablishManagementService.GetStaffCareerAdvancementSchemeData(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.StaffCareerAdvancementSchemeData = data.Data;
+
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async DeleteStaffCareerAdvancementScheme_ByID (row: any) {
+    try {
+      const request: any = {};
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.StaffID = this.sSOLoginDataModel.StaffID;
+      request.StaffCASID = row.StaffCASID;
+
+      await this.bterEstablishManagementService.DeleteStaffCareerAdvancementScheme_ByID(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          await this.GetStaffCareerAdvancementSchemeData();
+
+        } else if(data.State == EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async GetPayLevelDDL() {
+    try {
+        const request: any = {};
+        request.RoleID = this.sSOLoginDataModel.RoleID;
+        request.UserID = this.sSOLoginDataModel.UserID;
+        request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+        request.EndTermId = this.sSOLoginDataModel.EndTermID;
+        request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+        request.Action = "GetPayLevelDDL";
+        await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PayLevelDDLList = data['Data'];
+        })
+      } catch (error) {
+        console.error(error);
+      }
+  }
 }
 
 
