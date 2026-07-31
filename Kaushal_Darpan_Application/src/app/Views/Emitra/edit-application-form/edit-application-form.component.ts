@@ -12,7 +12,6 @@ export class EditApplicationFormComponent {
 
   constructor(private router: Router) {}
 
-
   goToApplicationList() {
   this.router.navigate(['/ApplicationList']);
 }

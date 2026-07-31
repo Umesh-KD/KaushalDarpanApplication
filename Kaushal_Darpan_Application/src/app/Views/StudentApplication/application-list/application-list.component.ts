@@ -818,7 +818,7 @@ export class ApplicationListComponent {
       }, (error: any) => console.error(error)
       );
   }
-  async openOTP(row:any) {    
+  async openOTP(row:any,type:number) {    
     //if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.TradeSanctionList.length < 1 ) {
     //    this.toastr.warning("Please Add Trade sanction Details")
     //    return
@@ -833,7 +833,14 @@ export class ApplicationListComponent {
     await this.childComponent1.OpenOTPPopup();
     // await OTP verification
     await this.childComponent1.waitForVerification();
-    await this.btnupdate_OnClick(row.ApplicationID)
+    if(type==1)
+    {
+      await this.btnEditQualification_OnClick(row)
+    }
+    else if(type==2)
+    {
+      await this.btnupdate_OnClick(row.ApplicationID)
+    }
     //this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     //this.childComponent.OpenOTPPopup();
     //this.childComponent.onVerified.subscribe(() => {
@@ -843,7 +850,6 @@ export class ApplicationListComponent {
   }
 
   async btnupdate_OnClick(ID: number) {
-
     this.Swal2.Confirmation("Are you sure you want to unlock this?",
       async (result: any) => {
         //confirmed
@@ -885,5 +891,33 @@ export class ApplicationListComponent {
       });
   }
 
+ async btnEditQualification_OnClick(row: any) {
+    this.Swal2.Confirmation("Are you sure you want to unlock this?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          try {
+            //Show Loading
+           // this.loaderService.requestStarted();
+            await this.redirectToEditQualification(row);
+          }
+          catch (ex) {
+            console.log(ex);
+          }
+          finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200);
+          }
+        }
+      });
+  }
+
+    async redirectToEditQualification(row: any) {
+    debugger    
+    this.route.navigate(['/EditQualification'],{
+      queryParams: { AppID: row.encryptedApplicationID }
+    });
+  }
 
 }

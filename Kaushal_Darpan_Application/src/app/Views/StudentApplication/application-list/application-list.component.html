@@ -168,19 +168,27 @@
                  [queryParams]="{ AppID: row.encryptedApplicationID }"
                  class="btn bg-info text-white btn-sm mt-1"> View</a>
 
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 && DirectAdmissionMapKey==1 && row.DirectAdmissionType==1 "
+              <!-- <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 && DirectAdmissionMapKey==1 && row.DirectAdmissionType==1 "
                  [routerLink]="'/EditQualification'"
                  [queryParams]="{ AppID: row.encryptedApplicationID }"
-                 class="btn bg-info text-white btn-sm mt-1"> Edit Qualification</a>
+                 class="btn bg-info text-white btn-sm mt-1"> Edit Qualification</a> -->
+
+              <!-- <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess == 1 && QualAdmissionMapKey "
+                 [routerLink]="'/EditQualification'"
+                 [queryParams]="{ AppID: row.encryptedApplicationID }"
+                 class="btn bg-info text-white btn-sm mt-1"> Edit Qualification</a>                  -->
+
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 && DirectAdmissionMapKey==1 && row.DirectAdmissionType==1 "
+                (click)="openOTP(row,1)"     
+                class="btn bg-info text-white btn-sm mt-1"> Edit Qualification</a>
 
               <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess == 1 && QualAdmissionMapKey "
-                 [routerLink]="'/EditQualification'"
-                 [queryParams]="{ AppID: row.encryptedApplicationID }"
+                 (click)="openOTP(row,1)"     
                  class="btn bg-info text-white btn-sm mt-1"> Edit Qualification</a>
 
 
               <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess == 1 && editformkey "
-                (click)="openOTP(row)"               
+                (click)="openOTP(row,2)"               
                  class="btn bg-info text-white btn-sm mt-1">Unlock Form</a>
 
               <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionPrivateMapKey==1 && row.DirectAdmissionType==9 && row.IsFinalSubmit !== 2"
