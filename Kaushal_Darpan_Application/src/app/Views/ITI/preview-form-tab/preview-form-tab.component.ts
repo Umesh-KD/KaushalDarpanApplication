@@ -154,6 +154,7 @@ export class PreviewFormTabComponent implements OnInit {
           
           this.request.ApplicationID = data['Data']['ApplicationID']
           if (data['Data'] != null) {
+            debugger
             this.request = data['Data']
             this.request.OptionalViewDatas = data['Data']['OptionsViewData']
              
@@ -699,7 +700,7 @@ debugger
               this.isITIAddmissionOpen = false;
             }
           } else {
-            var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.Admission && x.DepartmentID == deptID }).length
+            var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && (x.TypeID == EnumConfigurationType.Admission || x.TypeID==EnumConfigurationType.Edit_Forms) && x.DepartmentID == deptID }).length
             if (lnth <= 0) {
               this.toastr.warning("Date for ITI Admission is Closed or Not Open");
               this.isITIAddmissionOpen = false;
