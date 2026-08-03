@@ -22,6 +22,12 @@ export class BTER_EM_StaffListSearchModel {
   act?: string = '';
   IsServingADHOC: number = -1;
   IsProbationCompleted: number = -1;
+  DesignationID: number = 0;
+  QualificationID: number = 0;
+  PayLevelID: number = 0;
+  QualificationIDbe: number = 0;
+  QualificationIDaf: number = 0;
+  DateOfImplementation: string = '';
 }
 
 export class BTER_EM_AddStaffDataModel extends RequestBaseModel {
@@ -737,6 +743,9 @@ export class OfficeVacancySearchModel {
   public PostSanctionedID: number = 0;
   public BugetHeadTypeID?:number=0;
   public BranchID?:number=0;
+  public UserID?:number=0;
+  public RoleID?:number=0;
+  public SSOID?:string='';
 }
 
 export class StaffTrainingDetailDataModel {

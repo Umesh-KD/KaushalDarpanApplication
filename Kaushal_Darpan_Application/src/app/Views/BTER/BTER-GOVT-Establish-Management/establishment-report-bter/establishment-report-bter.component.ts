@@ -35,6 +35,10 @@ export class EstablishmentReportBTERComponent {
   public StaffTypeList: any = [];
   public InstituteMasterList: any = [];
   public StaffProfileStatusList: any = [];
+  public DesignationMasterDDLList: any = [];
+  public StreamMasterDDLList: any[] = [];
+  public EmployeeQualificationDDLList:any=[];
+  public PayLevelDDLList:any=[];
 
   public Table_SearchText: string = '';
   public act: string = '';
@@ -71,7 +75,12 @@ export class EstablishmentReportBTERComponent {
     await this.GetDDLMasterData();
     await this.GetStaffProfileStatusList();
     await this.getInstituteDataList();
+    await this.GetDesignationData();
+    await this.getStreamMasterList();
+    await this.GetQualificationMasterData();
+    await this.GetPayLevelDDL();
     await this.BTER_EM_GetStaffList();
+
   }
 
   async BTER_EM_GetStaffList() {
@@ -282,7 +291,68 @@ export class EstablishmentReportBTERComponent {
     doc.save('Employee_List.pdf');
   }
 
+  async GetDesignationData() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.DesignationMasterDDLList = data.Data;
+        if(this.searchRequest.StaffTypeID>0) {
+          this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((x: any) => x.TypeID == this.searchRequest.StaffTypeID);
+        } else {
+          this.DesignationMasterDDLList = data.Data;
+        }
+      }, error => console.error(error))
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
+  async onChange_StaffType() {
+    await this.GetDesignationData();
+  }
+
+  async getStreamMasterList() {
+    try {
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, 0).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StreamMasterDDLList = data.Data;
+      })
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  async GetQualificationMasterData() {
+    try {
+      await this.commonMasterService.GetEmployeeQualificationDDL().then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.EmployeeQualificationDDLList = data.Data;
+        }, error => console.error(error))
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  async GetPayLevelDDL() {
+    try {
+        const request: any = {};
+        request.RoleID = this.sSOLoginDataModel.RoleID;
+        request.UserID = this.sSOLoginDataModel.UserID;
+        request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+        request.EndTermId = this.sSOLoginDataModel.EndTermID;
+        request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+        request.Action = "GetPayLevelDDL";
+        await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PayLevelDDLList = data['Data'];
+        })
+      } catch (error) {
+        console.error(error);
+      }
+  }
 
 
 

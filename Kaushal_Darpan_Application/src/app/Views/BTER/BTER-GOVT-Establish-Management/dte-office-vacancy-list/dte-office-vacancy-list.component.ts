@@ -35,7 +35,8 @@ export class DTEOfficeVacancyListComponent {
   public BugetHeadList: any = [];
   public totalSanctionedPost: number = 0;
   public totalVacantPost: number = 0;
-  public totalWorkingPost: number = 0;
+  public totalWorkingPost: number = 0;  
+  public IsEdit: boolean = false;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -112,17 +113,18 @@ export class DTEOfficeVacancyListComponent {
       this.loaderService.requestStarted();
       this.SearchData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.SearchData.EndTermID = this.sSOLoginDataModel.EndTermID;
-      console.log(this.SearchData.StaffTypeID);
-      console.log(this.SearchData.OfficeID);
+      this.SearchData.SSOID = this.sSOLoginDataModel.SSOID;
+      this.SearchData.UserID = this.sSOLoginDataModel.UserID;
+      this.SearchData.RoleID = this.sSOLoginDataModel.RoleID;
+
       await this.BTER_EstablishManagementService.OfficeVacancyList(this.SearchData)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.OfficeVacancyList = data['Data'];
-
+          this.IsEdit = this.OfficeVacancyList[0].IsEdit;
           this.totalSanctionedPost = this.OfficeVacancyList.reduce((acc, cur) => acc + cur.TotalSeatID, 0);
           this.totalVacantPost = this.OfficeVacancyList.reduce((acc, cur) => acc + cur.RemainingSeatID, 0);
           this.totalWorkingPost = this.OfficeVacancyList.reduce((acc, cur) => acc + cur.PostedSeat, 0);
-
           this.loadInTable();
          
         }, error => console.error(error));
