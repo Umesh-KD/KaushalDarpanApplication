@@ -112,8 +112,8 @@
             <th>Vacant Post</th>
             <th>Order Details</th>
             <th>Comments</th>
-            <th>Active/Inactive</th>
-            <th>Actions</th>
+            <th  *ngIf="IsEdit">Active/Inactive</th>
+            <th  *ngIf="IsEdit">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -130,7 +130,7 @@
             <td>{{ leave.PostedSeat }}</td>
             <td>{{ leave.RemainingSeatID }}</td>
             <td>
-              <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;" *ngIf="IsEdit">
+              <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
                 <span style="white-space: nowrap;"><b>Order No:</b> {{leave.OrderNumber}}</span>
                 <span style="white-space: nowrap;"><b>Order Date:</b> {{leave.OrderDate}}</span>
                 <span style="white-space: nowrap;">
@@ -141,7 +141,7 @@
               </div>
             </td>
             <td>{{ leave.Comments }}</td>
-            <td>
+            <td  *ngIf="IsEdit">
               <label class="switch">
                 <input type="checkbox"
                        [checked]="leave.ActiveStatus"
@@ -149,7 +149,7 @@
                 <span class="slider round"></span>
               </label>
             </td>
-            <td class="row-line-btn">
+            <td class="row-line-btn"  *ngIf="IsEdit">
               <button class="btn bg-info text-white" 
                 *ngIf="!IsView" 
                 [routerLink]="['/add-dte-office-vacancy']"
