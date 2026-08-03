@@ -184,7 +184,7 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async InstituteMaster(DepartmentID: number = 0, Eng_NonEng: number = 0, EndTermId: number = 0,ManagementTypeID:number=0) {
+  public async InstituteMaster(DepartmentID: number = 0, Eng_NonEng: number = 0, EndTermId: number = 0, ManagementTypeID: number = 0) {
 
     return await this.http.get(this.APIUrl + '/InstituteMaster/' + DepartmentID + '/' + Eng_NonEng + '/' + EndTermId + '/' + ManagementTypeID, this.headersOptions)
       .pipe(
@@ -243,7 +243,7 @@ export class CommonFunctionService {
 
 
   public async StreamMaster_streamType(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0, action: string = "") {
-      
+
     return await this.http.get(this.APIUrl + '/StreamMaster_streamType/' + DepartmentID + '/' + StreamType + '/' + EndTermId + '/' + action, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -280,7 +280,7 @@ export class CommonFunctionService {
   }
 
 
-  public async StaffAttendence(SSOID: string = '', StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0, RoleID:number=0) {
+  public async StaffAttendence(SSOID: string = '', StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0, RoleID: number = 0) {
 
     return await this.http.get(this.APIUrl + '/StaffAttendence/' + SSOID + '/' + StreamType + '/' + EndTermId + '/' + InstituteID + '/' + RoleID, this.headersOptions)
       .pipe(
@@ -309,7 +309,7 @@ export class CommonFunctionService {
   }
 
 
-  public async StreamMasterHOD(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, SemesterID: number = 0, InstituteId: number = 0, SchemeID: number=0) {
+  public async StreamMasterHOD(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, SemesterID: number = 0, InstituteId: number = 0, SchemeID: number = 0) {
 
     return await this.http.get(this.APIUrl + '/StreamMasterHOD/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + SemesterID + '/' + InstituteId + '/' + SchemeID, this.headersOptions)
       .pipe(
@@ -548,7 +548,7 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async GetExamName(Eng_NonEng:number=0) {
+  public async GetExamName(Eng_NonEng: number = 0) {
 
     return await this.http.get(this.APIUrl + '/GetExamName/' + Eng_NonEng, this.headersOptions)
       .pipe(
@@ -674,7 +674,7 @@ export class CommonFunctionService {
   public async UploadBTERDocument(file: any, model: UploadBTERFileModel | null = null) {
     //formdata
 
-      
+
 
     const formData = new FormData();
     formData.append("file", file);
@@ -746,7 +746,7 @@ export class CommonFunctionService {
 
 
   //end document
-  public async GetCommonMasterDDLByType(type: string='') {
+  public async GetCommonMasterDDLByType(type: string = '') {
 
     return await this.http.get(`${this.APIUrl}/GetCommonMasterDDLByType/${type}`, this.headersOptions)
       .pipe(
@@ -892,7 +892,7 @@ export class CommonFunctionService {
 
 
   public async getStudBasicDetailsEnrollmentWise(EnrollmentNo: string, DepartmentID: number) {
-      
+
     return await this.http.post(`${this.APIUrl}/getStudBasicDetailsEnrollmentWise/${EnrollmentNo}/${DepartmentID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -2188,7 +2188,7 @@ export class CommonFunctionService {
       .toPromise();
   }
 
-  public async GetStudentAttandanceTimeDDL(StaffID: number, SubjectID: number, StreamID: number = 0, SectionID: number = 0, DayID:number=0) {
+  public async GetStudentAttandanceTimeDDL(StaffID: number, SubjectID: number, StreamID: number = 0, SectionID: number = 0, DayID: number = 0) {
 
     return await this.http.get(`${this.APIUrl}/GetStudentAttandanceTimeDDL/${StaffID}/${SubjectID}/${StreamID}/${SectionID}/${DayID}`, this.headersOptions)
       .pipe(
@@ -2400,7 +2400,7 @@ export class CommonFunctionService {
   }
 
   public async GetEventCommonMaster(type: string) {
-      
+
     return await this.http.get(this.APIUrl + `/EventCommonMaster?type=${type}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -2408,7 +2408,7 @@ export class CommonFunctionService {
   }
 
   public async GetEventTypes() {
-      ;
+    ;
     return await this.http.get(
       this.APIUrl + `/GetEventTypes`,
       this.headersOptions
@@ -2420,7 +2420,7 @@ export class CommonFunctionService {
   }
 
   public async InsertEventCommonMaster(data: any) {
-      ;
+    ;
     return await this.http.post(
       this.APIUrl + `/InsertEventCommonMaster`,
       data,
@@ -2507,15 +2507,15 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async GetUserManualByRoleId(model:any) {
+  public async GetUserManualByRoleId(model: any) {
     const body = JSON.stringify(model);
     debugger
-  return await this.http
-  .post(`${this.APIUrl}/GetUserManualByRoleId`,body, this.headersOptions)
-    .pipe(
-      catchError(this.handleErrorObservable)
-    )
-    .toPromise();
+    return await this.http
+      .post(`${this.APIUrl}/GetUserManualByRoleId`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      )
+      .toPromise();
   }
   async SaveOrderCategory(request: OrderCategoryMasterModel) {
     return await this.http.post(
@@ -2560,54 +2560,72 @@ export class CommonFunctionService {
       .toPromise();
   }
 
-    public async InsertUserManual(model: any) {
-        const body = JSON.stringify(model);
-        return await this.http.post(`${this.APIUrl}/InsertUserManual`, body, this.headersOptions)
-            .pipe(
-                catchError(this.handleErrorObservable)
-            ).toPromise();
-    }
-
-      public async UpdateUserManual(model: any) {
-        const body = JSON.stringify(model);
-        return await this.http.post(`${this.APIUrl}/UpdateUserManual`, body, this.headersOptions)
-            .pipe(
-                catchError(this.handleErrorObservable)
-            ).toPromise();
-    }
-
-    public async DeleteUserManual(model: any) {
-        const body = JSON.stringify(model);
-        return await this.http.post(`${this.APIUrl}/DeleteUserManual`, body, this.headersOptions)
-            .pipe(
-                catchError(this.handleErrorObservable)
-            ).toPromise();
-    }
-
-  public async GetEndTermVisibilitySettings(endTermID: number) {
-  return await this.http.get(
-    `${this.APIUrl}/GetEndTermVisibilitySettings/${endTermID}`
-  )
-    .pipe(catchError(this.handleErrorObservable))
-    .toPromise();
-}
-
-async UpdateContentVisibilitySettings(request: any) {
-  return await this.http.post(
-    `${this.APIUrl}/UpdateContentVisibilitySettings`,
-    request,
-    this.headersOptions
-  )
-    .pipe(catchError(this.handleErrorObservable))
-    .toPromise();
-  }
-
-  public async ExcelOperationCommon(MasterCode: string, DepartmentID: number = 0,RoleID:number=0, CourseType: number = 0) {
-
-    return await this.http.get(this.APIUrl + '/ExcelOperationCommon/' + MasterCode + '/' + DepartmentID + '/' + RoleID + '/' + CourseType , this.headersOptions)
+  public async InsertUserManual(model: any) {
+    const body = JSON.stringify(model);
+    return await this.http.post(`${this.APIUrl}/InsertUserManual`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async UpdateUserManual(model: any) {
+    const body = JSON.stringify(model);
+    return await this.http.post(`${this.APIUrl}/UpdateUserManual`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DeleteUserManual(model: any) {
+    const body = JSON.stringify(model);
+    return await this.http.post(`${this.APIUrl}/DeleteUserManual`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetEndTermVisibilitySettings(endTermID: number) {
+    return await this.http.get(
+      `${this.APIUrl}/GetEndTermVisibilitySettings/${endTermID}`
+    )
+      .pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+  }
+
+  async UpdateContentVisibilitySettings(request: any) {
+    return await this.http.post(
+      `${this.APIUrl}/UpdateContentVisibilitySettings`,
+      request,
+      this.headersOptions
+    )
+      .pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+  }
+
+  public async ExcelOperationCommon(MasterCode: string, DepartmentID: number = 0, RoleID: number = 0, CourseType: number = 0) {
+
+    return await this.http.get(this.APIUrl + '/ExcelOperationCommon/' + MasterCode + '/' + DepartmentID + '/' + RoleID + '/' + CourseType, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  // signal-r
+  public async GetDashboardCountSignalR(url: string) {
+    return await this.http.get(url, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  async SaveDashboardCountSignalR(url: string) {
+    return await this.http.post(
+      url,
+      null,
+      this.headersOptions
+    )
+      .pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+  }
+
 }
 
