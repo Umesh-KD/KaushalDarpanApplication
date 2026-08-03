@@ -218,6 +218,7 @@ export class BTER_EM_AddServiceHistoryDataModel extends RequestBaseModel {
   public FromDate:string=''
   public ToDate:string=''
   public DesignationID: number = 0
+  public ServiceBranchID: number = 0
   public QualificationID: number = 0
   public DesignationName?:string=''
   public Qualification:string=''
@@ -237,12 +238,15 @@ export class BTER_EM_AddServiceHistoryDataModel extends RequestBaseModel {
   public TransferToOfficeID: number=0
   public TransferToOfficeName:string=''
   public DateOfTransfer:string=''
+  public ServiceBranchName:string=''
 
   // Promotion
   public IsPromotion:boolean=false;
   public ToDesignationIDPromotion: number = 0;
   public ToDesignationName: number = 0;
   public DateOfpromotion: string='';
+  public ToBranchNamePromotion: string='';
+  public ToBranchIDPromotion: number = 0;
 
    // Multiple Documents
    public TransferDocuments: BTER_EM_DocumentServiceHistoryDataModel[] = []

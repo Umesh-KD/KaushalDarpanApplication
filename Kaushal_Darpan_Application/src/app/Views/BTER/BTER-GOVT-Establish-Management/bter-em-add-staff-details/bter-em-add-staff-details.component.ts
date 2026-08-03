@@ -97,6 +97,8 @@ export class BterEMAddStaffDetailsComponent {
   public IsNotAcquired: boolean = true;
   public isQualificationSubmitted: boolean = false;
   public isCASSubmitted: boolean = false;
+  public showServiceBranch: boolean = false;
+  public showServiceToBranch: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -189,6 +191,7 @@ export class BterEMAddStaffDetailsComponent {
       ToDate: ['', Validators.required],
     
       DesignationID: [0, DropdownValidators],
+      ServiceBranchID: [0],
       // QualificationID: [0, DropdownValidators],    
       // Transfer
       IsTransfer: [false],
@@ -202,6 +205,7 @@ export class BterEMAddStaffDetailsComponent {
       // Promotion
       IsPromotion: [false],
       ToDesignationIDPromotion: [0],
+      ToBranchIDPromotion: [0],
       DateOfpromotion: ['']
     });
 
@@ -979,6 +983,9 @@ export class BterEMAddStaffDetailsComponent {
       const promotionDesignation = this.DesignationMasterDDLList_ServiceHistory.find((x: any) => x.ID == formValue.ToDesignationIDPromotion);
       const Qualification = this.EmployeeQualificationDDLList.find((x: any) => x.QualificationID == formValue.QualificationID)?.QualificationName;
       
+      const ServiceBranchName = this.CourseMasterDDL.find((x: any) => x.StreamID == this.serviceReq.ServiceBranchID)?.StreamName;
+      const ToBranchNamePromotion = this.CourseMasterDDL.find((x: any) => x.StreamID == this.serviceReq.ToBranchIDPromotion)?.StreamName;
+
       if(this.serviceReq.InstituteID!=0){
         this.serviceReq.InstituteName=this.InstituteMasterDDLList.filter((x:any)=>x.InstituteID==this.serviceReq.InstituteID)[0]['InstituteName'];
       }
@@ -1000,6 +1007,8 @@ export class BterEMAddStaffDetailsComponent {
         FromDate: formValue.FromDate,
         ToDate: formValue.ToDate,
         DesignationID: formValue.DesignationID,
+        ServiceBranchID: formValue.ServiceBranchID,
+        ServiceBranchName: ServiceBranchName,
         QualificationID: formValue.QualificationID,
         Qualification: Qualification,
         DesignationName:this.serviceReq.DesignationName,
@@ -1028,6 +1037,8 @@ export class BterEMAddStaffDetailsComponent {
         ToDesignationIDPromotion: formValue.ToDesignationIDPromotion,
         ToDesignationName: this.serviceReq.ToDesignationName,
         DateOfpromotion: formValue.DateOfpromotion,
+        ToBranchIDPromotion: formValue.ToBranchIDPromotion,
+        ToBranchNamePromotion: ToBranchNamePromotion,
 
         // Promotion Documents (Multiple)
         PromotionDocuments: [...this.serviceReq.PromotionDocuments]
@@ -1654,6 +1665,30 @@ export class BterEMAddStaffDetailsComponent {
       } catch (error) {
         console.error(error);
       }
+  }
+
+  async onChange_ServiceDesignation() {
+    const Designation_StaffType = this.DesignationMasterDDLList_ServiceHistory.find((x: any) => x.ID == this.serviceReq.DesignationID)?.TypeID;
+    if(Designation_StaffType == 30) {
+      this.showServiceBranch = true;
+      this.AddServiceistoryFormGroup.get('ServiceBranchID')?.addValidators([DropdownValidators]);
+    } else {
+      this.showServiceBranch = false;
+      this.AddServiceistoryFormGroup.get('ServiceBranchID')?.clearValidators();
+    }
+    this.AddServiceistoryFormGroup.get('ServiceBranchID')?.updateValueAndValidity();
+  }
+
+  async onChange_SearviceToDesignation() {
+    const Designation_StaffType = this.DesignationMasterDDLList_ServiceHistory.find((x: any) => x.ID == this.serviceReq.ToDesignationIDPromotion)?.TypeID;
+    if(Designation_StaffType == 30) {
+      this.showServiceToBranch = true;
+      this.AddServiceistoryFormGroup.get('ToBranchIDPromotion')?.addValidators([DropdownValidators]);
+    } else {
+      this.showServiceToBranch = false;
+      this.AddServiceistoryFormGroup.get('ToBranchIDPromotion')?.clearValidators();
+    }
+    this.AddServiceistoryFormGroup.get('ToBranchIDPromotion')?.updateValueAndValidity();
   }
 }
 
