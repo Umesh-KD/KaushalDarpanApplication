@@ -10,7 +10,7 @@ import { throwError } from 'rxjs';
 })
 
 export class DashboardSignalrService {
-  readonly RootPathURL = this.appsettingConfig.RootPathURL + "api/api/";
+  readonly APIUrl = this.appsettingConfig.apiURL + "api/";
 
   readonly headersOptions: any;
   private hubConnection!: signalR.HubConnection;
@@ -38,7 +38,7 @@ export class DashboardSignalrService {
     }
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${this.RootPathURL}SignalRHub`)
+      .withUrl(`${this.APIUrl}SignalRHub`)
       .withAutomaticReconnect()
       .build();
 
