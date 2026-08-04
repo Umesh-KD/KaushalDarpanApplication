@@ -22,6 +22,7 @@ import { MarksheetDownloadService } from '../../../Services/MarksheetDownload/ma
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
+import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 
 @Component({ 
   selector: 'app-result',
@@ -34,6 +35,7 @@ export class ResultComponent implements OnInit {
   public DateConfigSetting: any = [];
   MapKeyEng: number = 0;
   isGenerateResult: boolean = true; 
+  isSubmitted: boolean = false; 
   viewAdminDashboardList: StudentExamDetails[] = [];
   public searchReq = new ResultGenerationListDataModel();
   public publishReq = new Publish_Unpublish_BTER_ResultDataModel();
@@ -90,10 +92,10 @@ export class ResultComponent implements OnInit {
       searchTerm: [''],
     });
     this.resultGenerateForm = this.fb.group({
-      selectedSemester: ['0'],
-      SchemeID: ['0'],
-      ResultTypeID: ['0'],
-      EndTermID: ['0'],
+      selectedSemester: ['0',[DropdownValidators]],
+      SchemeID: ['0',[DropdownValidators]],
+      ResultTypeID: ['0',[DropdownValidators]],
+      EndTermID: ['0',[DropdownValidators]],
     });
     this.resultReGenerateForm = this.fb.group({
       selectedSemester: ['all'],
@@ -105,6 +107,8 @@ export class ResultComponent implements OnInit {
     // Optionally, you can call GetAllData() here if you want data loaded on init.
     // this.GetAllData();
   }
+
+  get _resultGenerateForm() { return this.resultGenerateForm.controls; }
 
   async GetResultTypeList() {
     try {
@@ -154,6 +158,12 @@ export class ResultComponent implements OnInit {
   }
 
   async generateStudentResult() {
+
+    this.isSubmitted = true;
+    if(this.resultGenerateForm.invalid){
+      this.toastr.error("Please select all mandatory fields.");
+      return;
+    }
     try {
       const requestData: any = {
         EndTermID: this.resultGenerateForm.value.EndTermID,
@@ -169,8 +179,7 @@ export class ResultComponent implements OnInit {
 
       await this.resultService.GetStudentResults(requestData)
         .then(async (data: any) => {
-          if (data.State === EnumStatus.Success) {
-            
+          if (data.State === EnumStatus.Success) {          
 
 
             
@@ -240,6 +249,17 @@ export class ResultComponent implements OnInit {
   }
 
   async onPublishResult() {
+
+    if(
+      this.publishReq.ResultDeclarationDate == null 
+      || this.publishReq.ResultPublishDate == null 
+      || this.publishReq.ResultDeclarationDate == "" 
+      || this.publishReq.ResultPublishDate == ""
+    ){
+      this.toastr.error("Please select all mandatory fields.");
+      return;
+    }
+
     this.childComponent_publish.MobileNo = this.sSOLoginDataModel.Mobileno
 
     // await for open model

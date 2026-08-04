@@ -122,4 +122,5 @@ export class Publish_Unpublish_BTER_ResultDataModel {
   public ResultTypeID: number = 0
   public Key: string = ''
   public ResultDeclarationDate: string = ''
+  public ResultPublishDate: string = ''
 }

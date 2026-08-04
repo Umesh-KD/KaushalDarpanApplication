@@ -17,36 +17,64 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5">Generate result</b></div>
     <div [formGroup]="resultGenerateForm" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
       <div>
-        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Generate Semester Result </label>
+        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Generate Semester Result <span
+                class="StarMarking">*</span></label>
         <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester">
           <option value="all">--Choose Semester--</option>
           <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
         </select>
+
+        <div *ngIf="isSubmitted && _resultGenerateForm.selectedSemester.errors" class="text-danger">
+          <p *ngIf="!_resultGenerateForm.selectedSemester.errors.DropdownValidators">
+            <i aria-hidden="true"></i>This field is required .!
+          </p>
+        </div>
       </div>
 
       <div>
-        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme </label>
+        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme <span
+                class="StarMarking">*</span></label>
         <select class="form-select ng-pristine ng-valid ng-touched" formControlName="SchemeID">
           <option value="all">-- Choose Scheme --</option>
           <option value="1347">Old Semester Scheme</option>
           <option value="1348">New Semester Scheme</option>
         </select>
+
+        <div *ngIf="isSubmitted && _resultGenerateForm.SchemeID.errors" class="text-danger">
+          <p *ngIf="!_resultGenerateForm.SchemeID.errors.DropdownValidators">
+            <i aria-hidden="true"></i>This field is required .!
+          </p>
+        </div>
       </div>
 
       <div>
-        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Result Type </label>
+        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Result Type <span
+                class="StarMarking">*</span></label>
         <select class="form-select ng-pristine ng-valid ng-touched" formControlName="ResultTypeID">
           <option value="0">-- Choose Result Type --</option>
           <option *ngFor="let item of ResultTypeList" [value]="item.ID">{{item.Name}}</option>
         </select>
+
+        <div *ngIf="isSubmitted && _resultGenerateForm.ResultTypeID.errors" class="text-danger">
+          <p *ngIf="!_resultGenerateForm.ResultTypeID.errors.DropdownValidators">
+            <i aria-hidden="true"></i>This field is required .!
+          </p>
+        </div>
       </div>
 
       <div>
-        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">End Term </label>
+        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">End Term <span
+                class="StarMarking">*</span></label>
         <select class="form-select ng-pristine ng-valid ng-touched" formControlName="EndTermID">
           <option value="0">-- Choose End Term --</option>
           <option *ngFor="let item of FinancialYear" [value]="item.EndTermID">{{item.EndTermName}}</option>
         </select>
+
+        <div *ngIf="isSubmitted && _resultGenerateForm.EndTermID.errors" class="text-danger">
+          <p *ngIf="!_resultGenerateForm.EndTermID.errors.DropdownValidators">
+            <i aria-hidden="true"></i>This field is required .!
+          </p>
+        </div>
       </div>
 
       <!--<div *ngIf="MapKeyEng == 1">
@@ -142,6 +170,14 @@
               name="ResultDeclarationDate" 
               placeholder="Enter Result Declaration Date"
               [(ngModel)]="publishReq.ResultDeclarationDate"/>
+          </div>  
+          <div >
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Result Publish Date<span class="StarMarking">*</span></label>
+            <input type="date"
+              class="form-input"
+              name="ResultPublishDate" 
+              placeholder="Enter Result Publish Date"
+              [(ngModel)]="publishReq.ResultPublishDate"/>
           </div>          
         </div>
       
