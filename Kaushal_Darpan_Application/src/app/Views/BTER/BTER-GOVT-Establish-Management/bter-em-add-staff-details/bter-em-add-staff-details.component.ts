@@ -1419,9 +1419,10 @@ export class BterEMAddStaffDetailsComponent {
   }
 
   async UploadDocument(event: any, FileName: any) {
+    debugger
     try { 
       var FolderName: string = '';
-      if(FileName="CASDocument"){
+      if(FileName=="CASDocument"){
         FolderName = "BTER_Establishment/CareerAdvancementSchemeDocument";
       } else{
         FolderName = "BTER_Establishment/AcquiredQualificationAfterJoining"
