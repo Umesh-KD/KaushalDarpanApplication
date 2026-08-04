@@ -1263,8 +1263,8 @@
                   N/A
                 </span>
               </td>
-              <td>{{row.FromDate | date:'dd-mm-yyyy'}}</td>
-              <td>{{row.ToDate | date:'dd-mm-yyyy'}}</td>
+              <td>{{row.FromDate | date:'dd-MM-yyyy'}}</td>
+              <td>{{row.ToDate | date:'dd-MM-yyyy'}}</td>
               <td>{{row.DesignationName}}</td>
               <td>{{row.ServiceBranchName}}</td>
               <td class="text-center">
@@ -1283,7 +1283,7 @@
                     To Dept: {{row.TransferToOfficeName}}
                   </div>
                   <div class="text-sm">
-                    Tansfer Date: {{row.DateOfTransfer | date:'dd-mm-yyyy'}}
+                    Tansfer Date: {{row.DateOfTransfer | date:'dd-MM-yyyy'}}
                   </div>
                   <div class="text-sm" *ngIf="row.TransferToInstituteID">
                     To Institute: {{row.TransferToInstituteName}}
@@ -1314,7 +1314,7 @@
                     Branch: {{row.ToBranchNamePromotion}}
                   </div>
                   <div class="text-sm">
-                    Date: {{row.DateOfpromotion | date:'dd-mm-yyyy'}}
+                    Date: {{row.DateOfpromotion | date:'dd-MM-yyyy'}}
                   </div>
                   <div *ngIf="row.PromotionDocuments?.length>0">
                     Docs:
