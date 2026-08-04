@@ -111,7 +111,7 @@
                   </button>
 
                   <button type="button" class="btn  text-white mt-6 bg-info"
-                    (click)="unpublishResult()">
+                    (click)="onUnpublishResult(row)">
                       Unpublish Result
                   </button>
                 </div>                  
@@ -128,7 +128,7 @@
   <div class="modal-content " >
     <div class="card">
       <div class="card-header flex justify-between items-center">
-        <b class="text-1xl-5"><i class="ti ti-list"></i>Add/Remove Guest House</b>
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Publish Result</b>
         <button class="btn bg-info text-white" (click)="CloseModalPopup_PublishResult()" type="button"><i class="ti ti-x"></i></button>
       </div>
 
@@ -141,16 +141,18 @@
               class="form-input"
               name="ResultDeclarationDate" 
               placeholder="Enter Result Declaration Date"
-              [(ngModel)]="ResultDeclarationDate"/>
-          </div>
-          
+              [(ngModel)]="publishReq.ResultDeclarationDate"/>
+          </div>          
         </div>
       
       </div>
       <div class="card-footer text-center">
-        <button class="btn bg-success text-white mt-6" id="btnSave" type="button" (click)="SaveStaffGuestHouse()">Update</button>
+        <button class="btn bg-success text-white mt-6" id="btnSave" type="button" (click)="onPublishResult()">Publish</button>
       </div>
     </div> 
   </div>
 
 </ng-template>
+
+<app-otpmodal #otpModal_publishResult></app-otpmodal>
+<app-otpmodal #otpModal_unpublishResult></app-otpmodal>

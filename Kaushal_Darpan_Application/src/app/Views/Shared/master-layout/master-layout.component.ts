@@ -300,8 +300,8 @@ export class MasterLayoutComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
-          this.ISEligiblecollegeRemark = data['Data'][0]['ISEligiblecollegeRemark'];
-          this.ISEligiblecollege = data['Data'][0]['ISEligiblecollege'];
+          this.ISEligiblecollegeRemark = data['Data'][0]?.ISEligiblecollegeRemark;
+          this.ISEligiblecollege = data['Data'][0]?.ISEligiblecollege;
 
 
         }, (error: any) => console.error(error)

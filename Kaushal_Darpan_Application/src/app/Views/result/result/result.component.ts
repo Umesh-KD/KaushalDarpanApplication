@@ -16,10 +16,12 @@ import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
-import { DownloadMarksheetSearchModel, ResultGenerationListDataModel } from '../../../Models/DownloadMarksheetDataModel';
+import { DownloadMarksheetSearchModel, Publish_Unpublish_BTER_ResultDataModel, ResultGenerationListDataModel } from '../../../Models/DownloadMarksheetDataModel';
 import { MenuService } from '../../../Services/Menu/menu.service';
 import { MarksheetDownloadService } from '../../../Services/MarksheetDownload/marksheet-download.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
+import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 
 @Component({ 
   selector: 'app-result',
@@ -28,14 +30,13 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
   standalone: false
 })
 export class ResultComponent implements OnInit {
-  Message: string = '';
-  ErrorMessage: string = '';
   State: boolean = false;
   public DateConfigSetting: any = [];
   MapKeyEng: number = 0;
   isGenerateResult: boolean = true; 
   viewAdminDashboardList: StudentExamDetails[] = [];
   public searchReq = new ResultGenerationListDataModel();
+  public publishReq = new Publish_Unpublish_BTER_ResultDataModel();
   sSOLoginDataModel: any;
   url: any;
   instituteId: any;
@@ -51,10 +52,13 @@ export class ResultComponent implements OnInit {
   modalReference: NgbModalRef | undefined;
   public searchRequest = new DownloadMarksheetSearchModel();
 
-  @ViewChild(MatSort) sort!: MatSort;
+  // @ViewChild(MatSort) sort!: MatSort;
   filterForm!: FormGroup;
   resultGenerateForm!: FormGroup;
   resultReGenerateForm!: FormGroup;
+
+  @ViewChild('otpModal_publishResult') childComponent_publish!: OTPModalComponent;
+  @ViewChild('otpModal_unpublishResult') childComponent_unpublish!: OTPModalComponent;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -62,20 +66,18 @@ export class ResultComponent implements OnInit {
     private toastr: ToastrService,
     private commonMasterService: CommonFunctionService,
     private loaderService: LoaderService,
-    private reportService: ReportService,
     private fb: FormBuilder,
     private toastrService: ToastrService,
-    private appsettingConfig: AppsettingService,
-    private http: HttpClient,
-    private menuService: MenuService,
+
     private marksheetDownloadService: MarksheetDownloadService,
     private modalService: NgbModal,
+    private Swal2: SweetAlert2,
   ) {
     // Get user data from localStorage
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
   }
 
-  async ngOnInit(): Promise<void> {
+  async ngOnInit() {
     // Get URL parameter
     this.activatedRoute.paramMap.subscribe((params) => {
       this.url = params.get('url');
@@ -191,10 +193,9 @@ export class ResultComponent implements OnInit {
       .then((data: any) => {
         let SemesterMaster: any = data['Data'];
         this.SemesterMasterList = SemesterMaster;
-        
 
         setTimeout(() => {
-          if (SemesterMaster && this.lstAcedmicYear[0].TermName == "Nov") {
+          if (SemesterMaster && this.lstAcedmicYear[0]?.TermName == "Nov") {
             this.SemesterMasterList = SemesterMaster.filter((x: { SemesterID: number }) => {
               return x.SemesterID % 2 !== 0 || x.SemesterID == 6; // Filter out odd SemesterIDs
             });
@@ -224,18 +225,86 @@ export class ResultComponent implements OnInit {
 
   async openPublishResultModal(content: any, row: any) {
 
-    const request: any = {};
-    request.UserID = row.StaffUserID;
-    request.SSOID = row.SSOID;
+    this.publishReq.SchemeID = row.SchemeId;
+    this.publishReq.ResultTypeID = row.ResultTypeID;
+    this.publishReq.EndTermID = row.EndTermID;
+    this.publishReq.Eng_NonEng = row.Eng_NonEng;
+    this.publishReq.SemesterID = row.SemesterID;
 
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });
   }
 
-  async unpublishResult() {
-
-  }
-
   CloseModalPopup_PublishResult() {
     this.modalService.dismissAll();
+    this.publishReq = new Publish_Unpublish_BTER_ResultDataModel();
+  }
+
+  async onPublishResult() {
+    this.childComponent_publish.MobileNo = this.sSOLoginDataModel.Mobileno
+
+    // await for open model
+    await this.childComponent_publish.OpenOTPPopup();
+
+    // await OTP verification
+    await this.childComponent_publish.waitForVerification();
+    
+    await this.Publish_BTER_Result();
+  }
+
+  async Publish_BTER_Result() {
+    try {
+      this.publishReq.Key = "P";
+      this.publishReq.ModifyBy = this.sSOLoginDataModel.UserID
+
+      await this.resultService.Publish_Unpublish_BTER_Result(this.publishReq).then(async(data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.toastr.success(data.Message);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async onUnpublishResult(row: any) {
+    this.Swal2.Confirmation(`Are you sure you want to unpublish result !`,
+    async (result: any) => {
+      
+      if (result.isConfirmed) {
+        this.childComponent_unpublish.MobileNo = this.sSOLoginDataModel.Mobileno
+
+        // await for open model
+        await this.childComponent_unpublish.OpenOTPPopup();
+
+        // await OTP verification
+        await this.childComponent_unpublish.waitForVerification();
+        
+        await this.Unpublish_BTER_Result(row);
+      }
+    })
+  }
+
+  async Unpublish_BTER_Result(row: any) {
+    try {
+      const request: any = {} 
+      request.Key = "U";
+      request.ModifyBy = this.sSOLoginDataModel.UserID
+
+      request.SchemeID = row.SchemeId;
+      request.ResultTypeID = row.ResultTypeID;
+      request.EndTermID = row.EndTermID;
+      request.Eng_NonEng = row.Eng_NonEng;
+      request.SemesterID = row.SemesterID;
+
+      await this.resultService.Publish_Unpublish_BTER_Result(request).then(async(data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.toastr.success(data.Message);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

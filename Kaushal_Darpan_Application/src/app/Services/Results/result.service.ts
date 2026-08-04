@@ -10,6 +10,7 @@ import { DataPagingListModel } from '../../Models/DataPagingListModel';
 import { DownloadnRollNoModel } from '../../Models/GenerateRollDataModels';
 import { ItiApplicationSearchmodel } from '../../Models/ItiApplicationPreviewDataModel';
 import { BterSearchmodel } from '../../Models/ApplicationFormDataModel';
+import { Publish_Unpublish_BTER_ResultDataModel } from '../../Models/DownloadMarksheetDataModel';
 @Injectable({
   providedIn: 'root'
 })
@@ -41,6 +42,13 @@ export class ResultService
   }
   public async GetGeneratedResultDetails(data: any){
     return await this.http.post(this.APIUrl + "/GetGeneratedResultDetails/", data, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async Publish_Unpublish_BTER_Result(data: Publish_Unpublish_BTER_ResultDataModel){
+    return await this.http.post(this.APIUrl + "/Publish_Unpublish_BTER_Result/", data, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

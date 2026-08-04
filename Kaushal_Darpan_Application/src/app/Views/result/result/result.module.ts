@@ -6,29 +6,20 @@ import { ResultComponent } from './result.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MaterialModule } from '../../../material.module';
 import { LoaderModule } from '../../Shared/loader/loader.module';
-
-const routes: Routes = [
-  {
-    path: '',
-    pathMatch: 'full',
-    component: ResultComponent
-  },
-  {
-    path: ':url',
-    component: ResultComponent
-  }
-];
+import { OTPModalModule } from '../../otpmodal/otpmodal.module';
+import { ResultRoutingModule } from './result-routing.module';
 
 @NgModule({
   declarations: [ResultComponent],
   imports: [
     CommonModule,
+    ResultRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     LoaderModule,
-    RouterModule.forChild(routes),
     ScrollingModule,
-    MaterialModule
+    MaterialModule,
+    OTPModalModule,
   ]
 })
 export class ResultModule { }
