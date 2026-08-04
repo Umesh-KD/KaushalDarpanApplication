@@ -370,6 +370,7 @@
                 <th>From</th>
                 <th>To</th>
                 <th>Designation</th>
+                <th>Branch</th>
                 <th>Movement</th>
                 <th>Documents</th>
               </tr>
@@ -385,7 +386,7 @@
                 <td>{{row.FromDate | date:'yyyy-MM-dd'}}</td>
                 <td>{{row.ToDate | date:'yyyy-MM-dd'}}</td>
                 <td>{{row.DesignationName}}</td>
-
+                <td>{{row.ServiceBranchName}}</td>
                 <td>
 
                   <div *ngIf="row.IsTransfer">
@@ -400,6 +401,7 @@
                   <div *ngIf="row.IsPromotion" class="mt-1">
                     <b class="text-green-600">Promotion</b>
                     <div>{{row.ToDesignationNamePromotion}}</div>
+                    <div>{{row.ToBranchNamePromotion}}</div>
                     <div class="text-xs">
                       {{row.DateOfpromotion | date:'yyyy-MM-dd'}}
                     </div>
