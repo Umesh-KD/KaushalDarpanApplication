@@ -52,7 +52,7 @@ export class DashboardSignalrService {
 
   public RefreshDashboardCount(callback: any) {
     this.hubConnection.off("DashboardCountRefresh");
-    this.hubConnection.on("DashboardCountRefresh", (data) => {
+    this.hubConnection.on("DashboardCountRefresh", (data:any) => {
       callback(data);
     });
   }
