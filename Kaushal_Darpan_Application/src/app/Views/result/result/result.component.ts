@@ -36,6 +36,7 @@ export class ResultComponent implements OnInit {
   MapKeyEng: number = 0;
   isGenerateResult: boolean = true; 
   isSubmitted: boolean = false; 
+  isWithOTP: boolean = false; 
   viewAdminDashboardList: StudentExamDetails[] = [];
   public searchReq = new ResultGenerationListDataModel();
   public publishReq = new Publish_Unpublish_BTER_ResultDataModel();
@@ -232,7 +233,7 @@ export class ResultComponent implements OnInit {
     }
   }
 
-  async openPublishResultModal(content: any, row: any) {
+  async openPublishResultModal(content: any, row: any, isWithOTP: boolean = false) {
 
     this.publishReq.SchemeID = row.SchemeId;
     this.publishReq.ResultTypeID = row.ResultTypeID;
@@ -240,6 +241,7 @@ export class ResultComponent implements OnInit {
     this.publishReq.Eng_NonEng = row.Eng_NonEng;
     this.publishReq.SemesterID = row.SemesterID;
 
+    this.isWithOTP = isWithOTP;
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });
   }
 
@@ -249,7 +251,6 @@ export class ResultComponent implements OnInit {
   }
 
   async onPublishResult() {
-
     if(
       this.publishReq.ResultDeclarationDate == null 
       || this.publishReq.ResultPublishDate == null 
@@ -260,15 +261,21 @@ export class ResultComponent implements OnInit {
       return;
     }
 
-    this.childComponent_publish.MobileNo = this.sSOLoginDataModel.Mobileno
+    if(this.isWithOTP){
+      this.childComponent_publish.MobileNo = this.sSOLoginDataModel.Mobileno
 
-    // await for open model
-    await this.childComponent_publish.OpenOTPPopup();
+      // await for open model
+      await this.childComponent_publish.OpenOTPPopup();
 
-    // await OTP verification
-    await this.childComponent_publish.waitForVerification();
+      // await OTP verification
+      await this.childComponent_publish.waitForVerification();
+      
+      await this.Publish_BTER_Result();
+    } 
     
-    await this.Publish_BTER_Result();
+    else {
+      await this.Publish_BTER_Result();
+    }
   }
 
   async Publish_BTER_Result() {

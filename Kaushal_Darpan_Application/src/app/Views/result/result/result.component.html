@@ -1,13 +1,11 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Student's {{url}} result</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Generate/Publish Student Result</h4>
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Results</a>
-      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Student's {{url}} result</a>
+      <a routerLink="/result" class="text-sm font-medium text-slate-700" aria-current="page">Generate/Publish Student Result</a>
     </div>
   </div>
 </div>
@@ -17,10 +15,10 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5">Generate result</b></div>
     <div [formGroup]="resultGenerateForm" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
       <div>
-        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Generate Semester Result <span
+        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester <span
                 class="StarMarking">*</span></label>
         <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester">
-          <option value="all">--Choose Semester--</option>
+          <option value="0">--Choose Semester--</option>
           <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
         </select>
 
@@ -35,7 +33,7 @@
         <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme <span
                 class="StarMarking">*</span></label>
         <select class="form-select ng-pristine ng-valid ng-touched" formControlName="SchemeID">
-          <option value="all">-- Choose Scheme --</option>
+          <option value="0">-- Choose Scheme --</option>
           <option value="1347">Old Semester Scheme</option>
           <option value="1348">New Semester Scheme</option>
         </select>
@@ -98,7 +96,7 @@
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
         <div>
-          <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Generate Semester Result </label>
+          <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Generated Result End Term </label>
           <select class="form-select ng-pristine ng-valid ng-touched" 
             [(ngModel)]="searchReq.EndTermID"
             (change)="GetGeneratedResultDetails()">
@@ -112,14 +110,14 @@
         <table class="table table-border w-full" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
-              <th width="80px" align="left">Sr. No.</th>
+              <th align="left">Sr. No.</th>
               <th align="left">Semester</th>
               <th align="left">End Term</th> 
               <th align="left">Result Type</th>
               <th align="left">Scheme</th>
               <th align="left">Result Generation Date & Time</th>
               <th align="left">Student Count</th>
-              <th align="left">Department Name</th>
+              <th align="center">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -134,11 +132,19 @@
               <td>
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                   <button type="button" class="btn  text-white mt-6 bg-success"
-                    (click)="openPublishResultModal(Modal_PublishResult, row)">
-                      Publish Result
+                    *ngIf="row.IsResultPublished == 0"
+                    (click)="openPublishResultModal(Modal_PublishResult, row, 1)">
+                      Publish Result With OTP
+                  </button>
+
+                  <button type="button" class="btn  text-white mt-6 bg-success"
+                    *ngIf="row.IsResultPublished == 0"
+                    (click)="openPublishResultModal(Modal_PublishResult, row, 0)">
+                      Publish Result Without OTP
                   </button>
 
                   <button type="button" class="btn  text-white mt-6 bg-info"
+                    *ngIf="row.IsResultPublished == 1"
                     (click)="onUnpublishResult(row)">
                       Unpublish Result
                   </button>
@@ -160,7 +166,7 @@
         <button class="btn bg-info text-white" (click)="CloseModalPopup_PublishResult()" type="button"><i class="ti ti-x"></i></button>
       </div>
 
-      <div class="card-body" style="min-height: 300px; max-height: 90vh; overflow-y: auto;">
+      <div class="card-body">
 
         <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-1=2 md:grid-cols-2 grid-cols-1 gap-3">
           <div >
