@@ -191,10 +191,6 @@ export class EmitraFeeTransactionHistoryComponent {
             await this.emitraPaymentService.GetTransactionStatus(obj)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));
-                this.State = data['State'];
-                this.Message = data['SuccessMessage'];
-                this.ErrorMessage = data['ErrorMessage'];
-
                 if (data.State == EnumStatus.Success) {
                   if (data.Data?.STATUS?.toUpperCase() === 'SUCCESS') {
                     if (data.Data?.PRN) {
@@ -202,14 +198,15 @@ export class EmitraFeeTransactionHistoryComponent {
 
                     }
                   } else {
-                    this.toastr.error(this.Message);
+                    this.toastr.error(data.Message);
                   }
                 } 
-                else if (data.State == EnumStatus.Error) {
-                  this.toastr.error(this.Message);
+                else if(data.State == EnumStatus.Warning){
+                  this.toastr.warning(data.Message);
                 } else {
-                  this.toastr.error(this.Message);
+                  this.toastr.error(data.Message);
                 }
+                
               })
 
               .catch(err => {
