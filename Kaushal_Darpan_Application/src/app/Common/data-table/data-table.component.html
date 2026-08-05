@@ -1,0 +1,304 @@
+<p>data-table works!</p>
+<div class="datatable-container">
+
+    <!-- Search -->
+
+    <div class="row mb-3" *ngIf="normalizedConfig.showSearch">
+
+        <div class="col-md-4">
+
+            <mat-form-field appearance="outline" class="w-100">
+
+                <mat-label>Search</mat-label>
+
+                <input
+                    matInput
+                    placeholder="Search..."
+                    (keyup)="applyFilter($event)">
+
+            </mat-form-field>
+
+        </div>
+
+    </div>
+
+    <div
+        *ngIf="loading"
+        class="datatable-loader">
+
+        <mat-spinner diameter="40"></mat-spinner>
+
+    </div>
+    <!-- Table -->
+
+    <div class="table-responsive mat-elevation-z2">
+
+        <table
+            mat-table
+            [dataSource]="dataSource"
+            matSort
+            class="w-100">
+
+            <!-- Dynamic Columns -->
+
+            <ng-container [matColumnDef]="TABLE_CONSTANTS.SERIAL_COLUMN">
+
+                <th mat-header-cell *matHeaderCellDef
+                    style="width:70px;text-align:center">
+
+                    Sr. No.
+
+                </th>
+
+                <td mat-cell *matCellDef="let row; let i=index"
+                    style="text-align:center">
+
+                    {{getSerialNumber(i)}}
+
+                </td>
+
+            </ng-container>
+
+            <ng-container
+                *ngFor="let column of normalizedColumns"
+                [matColumnDef]="column.dataField">
+
+                <!-- Header -->
+
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    [style.width]="getColumnWidth(column)"
+                    [style.text-align]="getTextAlign(column)"
+                    [sticky]="column.sticky"
+                    [mat-sort-header]="isSortable(column)?column.dataField:null">
+
+                   {{getDisplayField(column)}}
+
+                </th>
+
+                <!-- Cell -->
+
+                <td
+                    mat-cell
+                    *matCellDef="let row; let i=index"
+                    [style.text-align]="getTextAlign(column)"
+                    (click)="rowClicked(row)">
+
+                    <ng-container [ngSwitch]="getColumnType(column)">
+
+                        <!-- TEXT -->
+
+                        <span *ngSwitchCase="'text'"
+                            [title]="row[column.dataField]">
+
+                            <!-- {{ getDisplayValue(column,row) }} -->
+                                {{getCellValue(column,row)}}
+
+                        </span>
+
+                        <!-- NUMBER -->
+
+                        <span *ngSwitchCase="'number'">
+
+                            <!-- {{row[column.field]}} -->
+                               {{getCellValue(column,row)}}
+
+                        </span>
+
+                        <!-- DATE -->
+
+                        <span *ngSwitchCase="'date'">
+
+                            {{ row[column.dataField] | date:(column.format || 'dd-MM-yyyy') }}
+
+                        </span>
+
+                        <!-- BOOLEAN -->
+
+                        <span *ngSwitchCase="'boolean'">
+
+                            <mat-icon>
+
+                                {{ getBooleanIcon(row[column.dataField]) }}
+
+                            </mat-icon>
+
+                        </span>
+
+                        <!-- LINK -->
+
+                        <a
+                            *ngSwitchCase="'link'"
+                            [href]="row[column.dataField]"
+                            target="_blank">
+
+                            <!-- {{row[column.field]}} -->
+                             {{getCellValue(column,row)}}
+
+                        </a>
+
+                        <!-- IMGAGE -->
+                        <img
+                            *ngSwitchCase="'image'"
+                            [src]="getImage(row[column.dataField])"
+                            class="table-image">
+
+                        <div *ngSwitchCase="'image'" class="table-image-wrapper">
+
+                            <img
+
+                                class="table-image"
+
+                                [src]="getImage(column, row)"
+
+                                [style.width.px]="column.imageConfig?.width"
+
+                                [style.height.px]="column.imageConfig?.height"
+
+                                [ngClass]="{
+
+                                    'img-circle': column.imageConfig?.borderRadius === 'circle',
+
+                                    'img-rounded': column.imageConfig?.borderRadius === 'rounded',
+
+                                    'img-square': column.imageConfig?.borderRadius === 'square',
+
+                                    'zoom-enabled': column.imageConfig?.hoverZoom
+
+                                }"
+
+                                (error)="setDefaultImage($event,column)">
+
+                        </div>                            
+
+                        <!-- BADGE -->
+
+                        <span
+                            *ngSwitchCase="'badge'"
+                            class="status-badge"
+                            [ngClass]="getStatus(row[column.dataField])?.cssClass">
+
+                            <i
+                                *ngIf="getStatus(row[column.dataField])?.icon"
+                                [class]="getStatus(row[column.dataField])?.icon">
+                            </i>
+
+                            {{getStatus(row[column.dataField])?.text
+                            ||row[column.dataField]}}
+
+                        </span>
+
+                        <!-- DEFAULT -->
+
+                        <span *ngSwitchDefault>
+
+                            {{row[column.dataField]}}
+
+                        </span>
+
+                    </ng-container>
+
+                </td>
+
+            </ng-container>
+
+            <ng-container [matColumnDef]="TABLE_CONSTANTS.ACTION_COLUMN">
+
+                <th mat-header-cell *matHeaderCellDef>
+
+                    Action
+
+                </th>
+
+                <td mat-cell *matCellDef="let row">
+
+                    <div class="actionBtns">
+
+                        <ng-container *ngFor="let action of normalizedConfig.actions">
+
+                            <!-- Router Action -->
+
+                            <a
+                                *ngIf="action.type === 'router' && isVisible(action,row)"
+                                [routerLink]="getRouterLink(action,row)"
+                                [queryParams]="getQueryParams(action,row)"
+                                [title]="getTooltip(action,row)"
+                                [class]="getCssClass(action,row)">
+
+                                <i [class]="action.icon"></i>
+
+                            </a>
+
+                            <!-- Button Action -->
+
+                            <button
+                                *ngIf="action.type === 'button' && isVisible(action,row)"
+                                type="button"
+                                [disabled]="isDisabled(action,row)"
+                                [title]="getTooltip(action,row)"
+                                [class]="getCssClass(action,row)"
+                                (click)="buttonClick(action,row)">
+                                <i [class]="action.icon"></i>
+
+                            </button>
+
+                        </ng-container>
+
+                    </div>
+
+                </td>
+
+            </ng-container>
+
+            <!-- Header -->
+
+            <tr
+                mat-header-row
+                *matHeaderRowDef="displayedColumns">
+
+            </tr>
+
+            <!-- Row -->
+
+            <tr
+                mat-row
+                *matRowDef="let row; columns: displayedColumns;">
+
+            </tr>
+
+            <!-- No Data -->
+
+            <tr
+                class="mat-row"
+                *matNoDataRow>
+
+                <td
+                    class="mat-cell text-center"
+                    [attr.colspan]="displayedColumns.length">
+
+                    {{normalizedConfig.noDataMessage || 'No Records Found'}}
+
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+    <!-- Pagination -->
+
+    <mat-paginator
+
+        *ngIf="normalizedConfig.showPagination"
+
+        [pageSize]="normalizedConfig.pageSize || 10"
+
+        [pageSizeOptions]="normalizedConfig.pageSizeOptions || [10,20,50,100]"
+
+        showFirstLastButtons>
+
+    </mat-paginator>
+
+</div>
