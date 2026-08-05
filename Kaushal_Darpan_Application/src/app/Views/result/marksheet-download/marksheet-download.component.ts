@@ -16,6 +16,7 @@ import { EnumCourseType, EnumDepartment, EnumResultType, EnumStatus, GlobalConst
 import { SSOLoginService } from '../../../Services/SSOLogin/ssologin.service';
 import { MenuService } from '../../../Services/Menu/menu.service';
 import { notDefaultValueValidator } from '../../../Services/CustomValidators/custom-validators.service';
+import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
 @Component({
   selector: 'app-marksheet-download',
   templateUrl: './marksheet-download.component.html',
@@ -66,6 +67,7 @@ export class MarksheetDownloadComponent {
     private reportService: ReportService,
     private http: HttpClient,
     private menuService: MenuService,
+    private commonFunctionHelper: CommonFunctionHelper,
   ) {
   }
 
@@ -78,7 +80,7 @@ export class MarksheetDownloadComponent {
       IsRevised: ['-1', [Validators.required, notDefaultValueValidator('-1')]],
       RollNo: ['', Validators.required],
       EndTermID: [this.sSOLoginDataModel.EndTermID, [Validators.required, notDefaultValueValidator('0')]],
-      SchemeID: ['0', [Validators.required, notDefaultValueValidator('0')]],
+      SchemeID: ['0'],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -124,7 +126,7 @@ export class MarksheetDownloadComponent {
   async getAllData() {
     //debugger
     // refresh
-    this.refreshValidationOfRollNoOnly((this.searchRequest.RollNo ?? 0) > 0 ? true : false);
+    this.refreshValidationOfRollNoOnly((this.commonFunctionHelper.isNullOrWhiteSpace(this.searchRequest.RollNo?.toString())) ? true : false);
     //
     this.isSubmitted = true;
     if (this.downLoadFG.invalid) {
@@ -397,7 +399,7 @@ export class MarksheetDownloadComponent {
     this.downLoadFG.get('RollNo')?.clearValidators();
     // set
     if (isVaidateRollNoOnly) {
-      this.downLoadFG.get('RollNo')?.setValidators(Validators.required);
+      this.downLoadFG.get('RollNo')?.setValidators([Validators.required]);
     }
     else {
       this.downLoadFG.get('IsRevised')?.setValidators([Validators.required, notDefaultValueValidator('-1')]);
