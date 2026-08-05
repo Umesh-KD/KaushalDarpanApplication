@@ -204,8 +204,9 @@ export class EmitraFeeTransactionHistoryComponent {
                   } else {
                     this.toastr.error(this.Message);
                   }
-                } else if (data.State == EnumStatus.Error) {
-                  this.toastr.error(this.ErrorMessage);
+                } 
+                else if (data.State == EnumStatus.Error) {
+                  this.toastr.error(this.Message);
                 } else {
                   this.toastr.error(this.Message);
                 }
