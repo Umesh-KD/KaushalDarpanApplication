@@ -94,7 +94,6 @@ export class BterEMAddStaffDetailsComponent {
   public IsOterFacultyTech: boolean = false
   public today: string='';
   public IsGuestHouse: boolean = false;
-  public IsNotAcquired: boolean = true;
   public isQualificationSubmitted: boolean = false;
   public isCASSubmitted: boolean = false;
   public showServiceBranch: boolean = false;
@@ -518,7 +517,6 @@ export class BterEMAddStaffDetailsComponent {
         data = JSON.parse(JSON.stringify(data));
         if(data.State == EnumStatus.Success) {
           this.request = data.Data[0];
-          this.onChangeQualificationAfterJoining();
           await this.DistrictMaster_StateIDWise();
           console.log(this.request.DateOfBirth);
           console.log(this.StaffMasterFormGroup.get('DateOfBirth')?.value);
@@ -526,24 +524,8 @@ export class BterEMAddStaffDetailsComponent {
           console.log("GetPersonalDetailByUserID", this.request);
           await this.getStaffQualificationData();
           await this.GetStaffCareerAdvancementSchemeData();
-           
-          //if (this.request.DepartmentJoiningDate != '' || this.request.DepartmentJoiningDate != null) {
-          //  const isoDate = this.request.DepartmentJoiningDate;
-          //  const dateObj = new Date(isoDate);
 
-          //  const day = String(dateObj.getDate()).padStart(2, '0');
-          //  const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // months are zero-indexed
-          //  const year = dateObj.getFullYear();
-
-          //  const formattedDate = `${day}-${month}-${year}`;
-          //  this.request.DepartmentJoiningDate = formattedDate;
-          //}
-         
-
-          //this.StaffMasterFormGroup.get('InstituteID')?.setValue(this.request.InstituteID);
-        }
-
-        
+        }       
         
       }, error => console.error(error))
 
@@ -726,18 +708,6 @@ export class BterEMAddStaffDetailsComponent {
       });
       this.StaffMasterFormGroup.markAllAsTouched();
       return;
-    }
-
-    if(!this.IsNotAcquired) {
-      if(this.request.AcquiringQualificationCertificate == undefined || this.request.AcquiringQualificationCertificate == "") {
-        this.toastr.warning('Please upload Marksheet/Certificate for verification of acquiring qualification !');
-        return;
-      }
-
-      if(this.request.CompetentAuthorityOrder == undefined || this.request.CompetentAuthorityOrder == "") {
-        this.toastr.warning('Please upload order from competent authority to add qualification in the service book !');
-        return;
-      }
     }
     // this.sSOLoginDataModel.RoleID === this._EnumRole.Teacher || 
     if (this.sSOLoginDataModel.RoleID === this._EnumRole.GuestFaculty || this.sSOLoginDataModel.RoleID === this._EnumRole.ShikshaSambal) {
@@ -1402,19 +1372,6 @@ export class BterEMAddStaffDetailsComponent {
         this.serviceReq.DateOfpromotion='';
         return;
       }
-    }
-  }
-
-  onChangeQualificationAfterJoining() {
-    this.IsNotAcquired =
-      this.EmployeeQualificationDDLList.find(
-        (item: any) => item.QualificationID == this.request.QualificationAfterJoining
-      )?.QualificationName === 'Not Acquired';
-
-    if(!this.IsNotAcquired){
-      this.StaffMasterFormGroup.get('QualificationAcquiringDate')?.setValidators([Validators.required]);
-    } else {
-      this.StaffMasterFormGroup.get('QualificationAcquiringDate')?.clearValidators();
     }
   }
 
