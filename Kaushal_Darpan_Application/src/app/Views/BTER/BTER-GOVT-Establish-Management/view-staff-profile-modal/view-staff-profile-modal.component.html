@@ -306,11 +306,12 @@
             <thead class="bg-gray-200">
               <tr>
                 <th>S.No</th>
-                <th>Qualification acqure before/after the service period?</th>
+                <th>Qualification during the service period?</th>
                 <th>Qualification</th>
                 <th>Date of acquiring the qualification</th>
                 <th>Division obtained </th>
                 <th>Specialization</th>
+                <th>Pre Qualification Certificate</th>
                 <th>Acquiring qualification certificate</th>
                 <th>Competent authority order to add qualification in the service book</th>
               </tr>
@@ -326,6 +327,12 @@
                 <td class="text-center">{{row.QualificationAcquredDate}}</td>
                 <td class="text-center">{{row.ObtainedDivision}}</td>
                 <td class="text-center">{{row.Specialization}}</td>
+                <td class="text-center">
+                  <a target="_blank" 
+                    href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/AcquiredQualificationAfterJoining/' + row.PreQualificationCertificate }}">
+                    {{row.Dis_PreQualificationCertificate}}
+                  </a>
+                </td>
                 <td class="text-center">
                   <a target="_blank" 
                     href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/AcquiredQualificationAfterJoining/' + row.AcquiringQualificationCertificate }}">

@@ -958,6 +958,8 @@ export class StaffQualificationDataModel {
   public Dis_AcquiringQualificationCertificate: string = '';
   public CompetentAuthorityOrder: string = '';
   public Dis_CompetentAuthorityOrder: string = '';
+  public PreQualificationCertificate: string = '';
+  public Dis_PreQualificationCertificate: string = '';
 }
 
 export class StaffCareerAdvancementDataModel {

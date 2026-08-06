@@ -684,37 +684,40 @@ export class BterEMAddStaffDetailsComponent {
     };
   }
 
-  async SaveData() { 
+  async SaveData(isSaveDraft: boolean = false) {
     debugger
-    this.isSubmitted = true;
-    if (this.StaffMasterFormGroup.invalid) {
-      Object.keys(this.StaffMasterFormGroup.controls).forEach(key => {
-        const control = this.StaffMasterFormGroup.get(key);
-        if (control && control.invalid) {
-          console.error(`Field '${key}' is invalid.`);
 
-          if (control.errors) {
-            Object.keys(control.errors).forEach(errorKey => {
-              // Safely stringify the error value to avoid issues
-              const errorValue = control.errors![errorKey];
-              const errorMessage = (typeof errorValue === 'string')
-                ? errorValue
-                : JSON.stringify(errorValue, this.getCircularReplacer());
+    if(!isSaveDraft){
+      this.isSubmitted = true;
+      if (this.StaffMasterFormGroup.invalid) {
+        Object.keys(this.StaffMasterFormGroup.controls).forEach(key => {
+          const control = this.StaffMasterFormGroup.get(key);
+          if (control && control.invalid) {
+            console.error(`Field '${key}' is invalid.`);
 
-              /*console.error(`  Error: ${errorKey} - ${errorMessage}`);*/
-            });
+            if (control.errors) {
+              Object.keys(control.errors).forEach(errorKey => {
+                // Safely stringify the error value to avoid issues
+                const errorValue = control.errors![errorKey];
+                const errorMessage = (typeof errorValue === 'string')
+                  ? errorValue
+                  : JSON.stringify(errorValue, this.getCircularReplacer());
+
+                /*console.error(`  Error: ${errorKey} - ${errorMessage}`);*/
+              });
+            }
           }
-        }
-      });
-      this.StaffMasterFormGroup.markAllAsTouched();
-      return;
-    }
-    // this.sSOLoginDataModel.RoleID === this._EnumRole.Teacher || 
-    if (this.sSOLoginDataModel.RoleID === this._EnumRole.GuestFaculty || this.sSOLoginDataModel.RoleID === this._EnumRole.ShikshaSambal) {
-      const hasSubjects = this.staffDetailsFormData.StaffSubjectListModel?.length > 0;
-      if (!hasSubjects) {
-        this.toastr.warning('Please enter subject details for the teacher !');
+        });
+        this.StaffMasterFormGroup.markAllAsTouched();
         return;
+      }
+      // this.sSOLoginDataModel.RoleID === this._EnumRole.Teacher || 
+      if (this.sSOLoginDataModel.RoleID === this._EnumRole.GuestFaculty || this.sSOLoginDataModel.RoleID === this._EnumRole.ShikshaSambal) {
+        const hasSubjects = this.staffDetailsFormData.StaffSubjectListModel?.length > 0;
+        if (!hasSubjects) {
+          this.toastr.warning('Please enter subject details for the teacher !');
+          return;
+        }
       }
     }
 
@@ -735,6 +738,7 @@ export class BterEMAddStaffDetailsComponent {
           this.toastr.success(data.Message);
           if (this.sSOLoginDataModel.UserID > 0) {
             await this.GetPersonalDetailByUserID();
+            this.isSubmitted = false;
           }
         } else {
           this.toastr.error(data.ErrorMessage);
@@ -787,6 +791,40 @@ export class BterEMAddStaffDetailsComponent {
 
 
   async LockSubmitSaveData() {
+    debugger
+    this.isSubmitted = true;
+    if (this.StaffMasterFormGroup.invalid) {
+      Object.keys(this.StaffMasterFormGroup.controls).forEach(key => {
+        const control = this.StaffMasterFormGroup.get(key);
+        if (control && control.invalid) {
+          console.error(`Field '${key}' is invalid.`);
+
+          if (control.errors) {
+            Object.keys(control.errors).forEach(errorKey => {
+              // Safely stringify the error value to avoid issues
+              const errorValue = control.errors![errorKey];
+              const errorMessage = (typeof errorValue === 'string')
+                ? errorValue
+                : JSON.stringify(errorValue, this.getCircularReplacer());
+
+              /*console.error(`  Error: ${errorKey} - ${errorMessage}`);*/
+            });
+          }
+        }
+      });
+      this.StaffMasterFormGroup.markAllAsTouched();
+      this.toastr.error("Please enter required fields.");
+      return;
+    }
+    // this.sSOLoginDataModel.RoleID === this._EnumRole.Teacher || 
+    if (this.sSOLoginDataModel.RoleID === this._EnumRole.GuestFaculty || this.sSOLoginDataModel.RoleID === this._EnumRole.ShikshaSambal) {
+      const hasSubjects = this.staffDetailsFormData.StaffSubjectListModel?.length > 0;
+      if (!hasSubjects) {
+        this.toastr.warning('Please enter subject details for the teacher !');
+        return;
+      }
+    }
+
     this.finalSubmitRequest.CreatedBy = this.sSOLoginDataModel.UserID;
     this.finalSubmitRequest.ID = this.sSOLoginDataModel.StaffID;
     try {
@@ -1081,7 +1119,6 @@ export class BterEMAddStaffDetailsComponent {
       for(let i=0;i<files.length;i++){
         this.file=files[i];
         if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png' || this.file.type=='application/pdf') {
-          //size validation
           if (this.file.size > 2000000) {
             this.toastr.error('Select less then 2MB File')
             return
@@ -1378,6 +1415,17 @@ export class BterEMAddStaffDetailsComponent {
   async UploadDocument(event: any, FileName: any) {
     debugger
     try { 
+      const file = event.target.files[0];
+      if (file.type == 'image/jpeg' || file.type == 'image/jpg' || file.type == 'image/png' || file.type=='application/pdf') {
+        if (file.size > 2000000) {
+          this.toastr.error('Select less then 2MB File')
+          return
+        }
+      } else {
+        this.toastr.error('Select Only jpeg/jpg/png/pdf file')
+        return
+      }
+
       var FolderName: string = '';
       if(FileName=="CASDocument"){
         FolderName = "BTER_Establishment/CareerAdvancementSchemeDocument";
@@ -1409,6 +1457,10 @@ export class BterEMAddStaffDetailsComponent {
             else if(FileName == "CASDocument"){
               this.reqCAS.CASDocument = data.Data[0].FileName;
               this.reqCAS.Dis_CASDocument = data.Data[0].Dis_FileName;
+            } 
+            else if(FileName == "PreQualificationCertificate"){
+              this.qualificationReq.PreQualificationCertificate = data.Data[0].FileName;
+              this.qualificationReq.Dis_PreQualificationCertificate = data.Data[0].Dis_FileName;
             }
           } else if (data.State == EnumStatus.Error) {
             this.toastr.error(data.ErrorMessage)
@@ -1456,16 +1508,35 @@ export class BterEMAddStaffDetailsComponent {
         return;
       }
 
+      //  check file validations
       if(this.qualificationReq.IsQualificationObtainedDuringService == "After" &&
         this.qualificationReq.AcquiringQualificationCertificate == "") {
           this.toastr.error("Please upload certificate of acquiring qualification");
           return;
-      }
+      } 
 
       if(this.qualificationReq.IsQualificationObtainedDuringService == "After" &&
         this.qualificationReq.CompetentAuthorityOrder == "") {
           this.toastr.error("Please upload competent authority order");
           return;
+      }
+
+      if(this.qualificationReq.IsQualificationObtainedDuringService == "Before" &&
+        this.qualificationReq.PreQualificationCertificate == "") {
+          this.toastr.error("Please upload marksheet/degree");
+          return;
+      }
+
+      // reset files in form values
+      if(this.qualificationReq.IsQualificationObtainedDuringService != "After"){
+        this.qualificationReq.AcquiringQualificationCertificate == ""
+        this.qualificationReq.Dis_AcquiringQualificationCertificate == ""
+
+        this.qualificationReq.CompetentAuthorityOrder == ""
+        this.qualificationReq.Dis_CompetentAuthorityOrder == ""
+      } else {
+        this.qualificationReq.PreQualificationCertificate == ""
+        this.qualificationReq.Dis_PreQualificationCertificate == ""
       }
 
       this.qualificationReq.UserID = this.sSOLoginDataModel.UserID;
