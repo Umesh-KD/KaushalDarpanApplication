@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^19.1.5",
     "@angular/router": "^19.1.5",
     "@angular/service-worker": "^19.1.5",
+    "@microsoft/signalr": "^10.0.0",
     "@ng-bootstrap/ng-bootstrap": "^18.0.0",
     "@ng-idle/core": "^15.0.0",
     "@ng-idle/keepalive": "^16.0.0",

@@ -129,4 +129,6 @@ export class CommonFunctionHelper {
     URL.revokeObjectURL(blobUrl);
   }
 
+  public isNullOrWhiteSpace = (value?: string | null) =>
+    value == null || value.trim() == "";
 }

@@ -21,9 +21,6 @@ import { EnumStatus } from '../../Common/GlobalConstants';
 })
 export class DesignationMasterComponent implements OnInit {
   DesignationMasterFormGroup!: FormGroup;
-  public State: number = -1;
-  public Message: any = [];
-  public ErrorMessage: any = [];
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public DesignationMasterList: any = [];
@@ -74,7 +71,8 @@ export class DesignationMasterComponent implements OnInit {
       txtDesignationNameHindi: ['', Validators.required],
       txtDesignationNameShort: ['', Validators.required],
       IsActive: ['true'],
-      StaffTypeID: ['', [DropdownValidators]],
+      StaffTypeID: [0, [DropdownValidators]],
+      Gaz_NonGaz: [0, [DropdownValidators]],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -116,8 +114,8 @@ export class DesignationMasterComponent implements OnInit {
       await this.designationMasterService.SaveData(this.request)
       
         .then((data: any) => {
-          if (data.State = EnumStatus.Success) {
-            this.toastr.success(this.Message)
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message)
             this.ResetControl();
             this.GetDesignationMasterList()
           }
@@ -171,14 +169,11 @@ export class DesignationMasterComponent implements OnInit {
             this.loaderService.requestStarted();
             await this.designationMasterService.DeleteDataByID(DesignationID, this.sSOLoginDataModel.UserID)
               .then(async (data: any) => {
-                this.State = data['State'];
-                this.Message = data['Message'];
-                this.ErrorMessage = data['ErrorMessage'];
-                if (this.State == EnumStatus.Success) {
-                  this.toastr.success(this.Message);
+                if (data.State == EnumStatus.Success) {
+                  this.toastr.success(data.Message);
                   await this.GetDesignationMasterList();
                 } else {
-                  this.toastr.error(this.ErrorMessage);
+                  this.toastr.error(data.ErrorMessage);
                 }
               });
           } catch (ex) {

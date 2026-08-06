@@ -37,21 +37,54 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type:</label>
-          <select class="form-select" id="ddlStaffTypeID" [(ngModel)]="searchRequest.StaffTypeID">
+          <select class="form-select" id="ddlStaffTypeID" [(ngModel)]="searchRequest.StaffTypeID" 
+            (change)="onChange_StaffType()">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Designation</label>
+          <ng-select [(ngModel)]="searchRequest.DesignationID"
+                      [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of DesignationMasterDDLList;">
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+              </ng-container>
+          </ng-select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Branch</label>
+          <ng-select [(ngModel)]="searchRequest.BranchID"
+                      [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of StreamMasterDDLList;">
+                <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
+              </ng-container>
+          </ng-select>
+        </div>
+
         <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Institution Type:
-          </label>
-          <select class="form-select" id="ddlInstitutionType" [(ngModel)]="searchRequest.InstitutionManagementTypeID">
-            <option [value]="0">Choose Option</option>
-            <option [value]="1">Government</option>
-            <option [value]="2">Private</option>
-          </select>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Qualification</label>
+          <ng-select [(ngModel)]="searchRequest.QualificationID"
+                      [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of EmployeeQualificationDDLList;">
+                <ng-option [value]="item.QualificationID">{{item.QualificationName}}</ng-option>
+              </ng-container>
+          </ng-select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Pay Level</label>
+          <ng-select [(ngModel)]="searchRequest.PayLevelID"
+                      [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of PayLevelDDLList;">
+                <ng-option [value]="item.PayLevelID">{{item.PayLevel}}</ng-option>
+              </ng-container>
+          </ng-select>
         </div> -->
 
         <div *ngIf="searchRequest.OfficeID == 21">
@@ -97,6 +130,46 @@
             <option *ngFor="let item of StaffProfileStatusList" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Qualification before service period</label>
+          <ng-select [(ngModel)]="searchRequest.QualificationIDbe"
+                      [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of EmployeeQualificationDDLList;">
+                <ng-option [value]="item.QualificationID">{{item.QualificationName}}</ng-option>
+              </ng-container>
+          </ng-select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Qualification after service period</label>
+          <ng-select [(ngModel)]="searchRequest.QualificationIDaf"
+                      [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of EmployeeQualificationDDLList;">
+                <ng-option [value]="item.QualificationID">{{item.QualificationName}}</ng-option>
+              </ng-container>
+          </ng-select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Pay Level</label>
+          <ng-select [(ngModel)]="searchRequest.PayLevelID"
+                      [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of PayLevelDDLList;">
+                <ng-option [value]="item.PayLevelID">{{item.PayLevel}}</ng-option>
+              </ng-container>
+          </ng-select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date Of Implementation of Pay Level</label>
+          <input autocomplete="off" class="form-input" type="date" name="DateOfImplementation" id="DateOfImplementation"
+            [(ngModel)]="searchRequest.DateOfImplementation" />
+        </div>
+
 
       </div>
       <div class="flex justify-center">

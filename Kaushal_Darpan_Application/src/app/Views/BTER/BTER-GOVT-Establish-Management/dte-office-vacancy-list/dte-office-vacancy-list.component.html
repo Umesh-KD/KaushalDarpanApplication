@@ -14,7 +14,7 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <a [routerLink]="['/add-dte-office-vacancy']" class="btn bg-info btn-sm text-white"> Add New Post</a>
+        <a [routerLink]="['/add-dte-office-vacancy']" class="btn bg-info btn-sm text-white" *ngIf="IsEdit"> Add New Post</a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
@@ -112,8 +112,8 @@
             <th>Vacant Post</th>
             <th>Order Details</th>
             <th>Comments</th>
-            <th>Active/Inactive</th>
-            <th>Actions</th>
+            <th  *ngIf="IsEdit">Active/Inactive</th>
+            <th  *ngIf="IsEdit">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -141,7 +141,7 @@
               </div>
             </td>
             <td>{{ leave.Comments }}</td>
-            <td>
+            <td  *ngIf="IsEdit">
               <label class="switch">
                 <input type="checkbox"
                        [checked]="leave.ActiveStatus"
@@ -149,7 +149,7 @@
                 <span class="slider round"></span>
               </label>
             </td>
-            <td class="row-line-btn">
+            <td class="row-line-btn"  *ngIf="IsEdit">
               <button class="btn bg-info text-white" 
                 *ngIf="!IsView" 
                 [routerLink]="['/add-dte-office-vacancy']"

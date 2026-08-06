@@ -502,14 +502,15 @@
       </div>
 
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3"
-        *ngIf="request.ProfileStatusID != _EnumEMProfileStatus.Approve">
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Qualification Details</b>
       </div>
-      <form [formGroup]="QualificationFormGroup" *ngIf="request.ProfileStatusID != _EnumEMProfileStatus.Approve">
+      <form [formGroup]="QualificationFormGroup" 
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-2">Qualification served during the service period?<span
+            <label class="text-gray-800 text-sm font-medium inline-block mb-2">Qualification during the service period?<span
                 class="StarMarking">*</span></label>
 
             <div class="flex gap-4">
@@ -588,6 +589,29 @@
             </div>
           </div>
 
+          <div *ngIf="qualificationReq.IsQualificationObtainedDuringService == 'Before'">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              for="PreQualificationCertificate">Upload marksheet/degree <span class="StarMarking">*</span></label>
+            <div class="flex fileUploader">
+              <input
+                class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                id="PreQualificationCertificate" type="file"
+                (change)="UploadDocument($event, 'PreQualificationCertificate')">
+              <label for="PreQualificationCertificate">
+                <span>Choose File</span>
+                {{ qualificationReq.Dis_PreQualificationCertificate == '' || qualificationReq.Dis_PreQualificationCertificate ==
+                undefined ? 'No File Choosen' : qualificationReq.Dis_PreQualificationCertificate }}
+              </label>
+              <div class="flex">
+                <a href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/AcquiredQualificationAfterJoining/' + qualificationReq.PreQualificationCertificate }}"
+                  *ngIf="qualificationReq.PreQualificationCertificate!='' && qualificationReq.PreQualificationCertificate !=undefined"
+                  class="btn bg-primary text-white m-0" target="_blank">
+                  <i class="ti ti-eye"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
           <div *ngIf="qualificationReq.IsQualificationObtainedDuringService == 'After'">
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               for="AcquiringQualificationCertificate">Upload Marksheet/Certificate for verification of acquiring
@@ -645,18 +669,19 @@
         </div>
       </form>
       <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light mt-3">
-        <b class="text-1xl-5">Staff Qualification List </b>
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Staff Qualification List </b>
       </div>
       <div class="overflow-auto">
         <table class="w-full table-border" cellpadding="5" *ngIf="StaffQualificationList?.length > 0">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
             <tr>
               <th>S.No</th>
-              <th>Qualification acqure before/after the service period?</th>
+              <th>Qualification during the service period?</th>
               <th>Qualification</th>
               <th>Date of acquiring the qualification</th>
               <th>Division obtained </th>
               <th>Specialization</th>
+              <th>Pre Qualification Certificate</th>
               <th>Acquiring qualification certificate</th>
               <th>Competent authority order to add qualification in the service book</th>
               <th>Action</th>
@@ -672,6 +697,12 @@
               <td class="text-center">{{row.QualificationAcquredDate}}</td>
               <td class="text-center">{{row.ObtainedDivision}}</td>
               <td class="text-center">{{row.Specialization}}</td>
+              <td class="text-center">
+                <a target="_blank" 
+                  href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/AcquiredQualificationAfterJoining/' + row.PreQualificationCertificate }}">
+                  {{row.Dis_PreQualificationCertificate}}
+                </a>
+              </td>
               <td class="text-center">
                 <a target="_blank" 
                   href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/AcquiredQualificationAfterJoining/' + row.AcquiringQualificationCertificate }}">
@@ -859,7 +890,7 @@
         *ngIf="staffDetailsFormData.StaffSubjectListModel.length>0 && sSOLoginDataModel.RoleID== _EnumRole.Teacher || sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal"
         class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
         <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
-        <b class="text-1xl-5">Staff Subject List </b>
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Staff Subject List </b>
       </div>
 
       <div
@@ -903,10 +934,12 @@
 
 
       <!-- service history details  -->
-      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
+      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3"
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Service History</b>
       </div>
-      <form [formGroup]="AddServiceistoryFormGroup">
+      <form [formGroup]="AddServiceistoryFormGroup"
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <div>
@@ -972,13 +1005,29 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation<span
                 class="StarMarking">*</span> </label>
             <select class="form-select " name="DesignationID" id="DesignationID" formControlName="DesignationID"
-              [(ngModel)]="serviceReq.DesignationID">
+              [(ngModel)]="serviceReq.DesignationID" (change)="onChange_ServiceDesignation()">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of DesignationMasterDDLList_ServiceHistory" [value]="item.ID">{{item.Name}}
               </option>
             </select>
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.DesignationID.errors" class="text-danger">
               <p *ngIf="!_AddServiceistoryFormGroup.DesignationID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf=" this.IsOterFacultyTech == false && showServiceBranch">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch<span
+                class="StarMarking">*</span> </label>
+            <select class="form-select " name="ServiceBranchID" id="ServiceBranchID" formControlName="ServiceBranchID"
+              [(ngModel)]="serviceReq.ServiceBranchID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID">{{item.StreamName}}
+              </option>
+            </select>
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.ServiceBranchID.errors" class="text-danger">
+              <p *ngIf="!_AddServiceistoryFormGroup.ServiceBranchID.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This field is required .!
               </p>
             </div>
@@ -1083,7 +1132,8 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Designation<span
                 class="StarMarking">*</span> </label>
             <select class="form-select " name="ToDesignationIDPromotion" id="ToDesignationIDPromotion"
-              formControlName="ToDesignationIDPromotion" [(ngModel)]="serviceReq.ToDesignationIDPromotion">
+              formControlName="ToDesignationIDPromotion" [(ngModel)]="serviceReq.ToDesignationIDPromotion"
+              (change)="onChange_SearviceToDesignation()">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of DesignationMasterDDLList_ServiceHistory" [value]="item.ID">{{item.Name}}
               </option>
@@ -1091,6 +1141,22 @@
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.ToDesignationIDPromotion.errors"
               class="text-danger">
               <p *ngIf="!_AddServiceistoryFormGroup.ToDesignationIDPromotion.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf="serviceReq.IsPromotion && showServiceToBranch">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> To Branch<span
+                class="StarMarking">*</span> </label>
+            <select class="form-select " name="ToBranchIDPromotion" id="ToBranchIDPromotion" formControlName="ToBranchIDPromotion"
+              [(ngModel)]="serviceReq.ToBranchIDPromotion">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID">{{item.StreamName}}
+              </option>
+            </select>
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.ToBranchIDPromotion.errors" class="text-danger">
+              <p *ngIf="!_AddServiceistoryFormGroup.ToBranchIDPromotion.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This field is required .!
               </p>
             </div>
@@ -1178,22 +1244,22 @@
         </div>
 
 
-        <div class="pt-30 mb-3">
+        <div class="pt-30 mb-3 flex justify-center flex-wrap items-center">
           <button type="button" class="btn bg-primary text-white" (click)="AddAnotherServiceHistory()">
-            <i class="ti ti-plus"></i> Add More
+             Add More Service History
           </button>
         </div>
 
       </form>
 
-      <div *ngIf="serviceHistoryList.length>0"
+      <div
         class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
         <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
-        <b class="text-1xl-5">Service History List</b>
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Service History List</b>
       </div>
 
-      <div *ngIf="serviceHistoryList.length>0" class="overflow-auto">
-        <table class="w-full table-border" cellpadding="5">
+      <div class="overflow-auto">
+        <table class="w-full table-border" cellpadding="5" *ngIf="serviceHistoryList?.length>0">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
             <tr>
               <th>S.No</th>
@@ -1203,6 +1269,7 @@
               <th>From Date</th>
               <th>To Date</th>
               <th>Designation</th>
+              <th>Branch</th>
               <!-- <th>Qualification</th> -->
               <th>Service Document</th>
               <th>Transfer</th>
@@ -1229,10 +1296,10 @@
                   N/A
                 </span>
               </td>
-              <td>{{row.FromDate | date:'dd-mm-yyyy'}}</td>
-              <td>{{row.ToDate | date:'dd-mm-yyyy'}}</td>
+              <td>{{row.FromDate | date:'dd-MM-yyyy'}}</td>
+              <td>{{row.ToDate | date:'dd-MM-yyyy'}}</td>
               <td>{{row.DesignationName}}</td>
-              <!-- <td>{{row.Qualification}}</td> -->
+              <td>{{row.ServiceBranchName}}</td>
               <td class="text-center">
                 <a *ngIf="row.UploadDoc" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.UploadDoc}}"
                   target="_blank" class="btn bg-primary text-white">
@@ -1249,7 +1316,7 @@
                     To Dept: {{row.TransferToOfficeName}}
                   </div>
                   <div class="text-sm">
-                    Tansfer Date: {{row.DateOfTransfer | date:'dd-mm-yyyy'}}
+                    Tansfer Date: {{row.DateOfTransfer | date:'dd-MM-yyyy'}}
                   </div>
                   <div class="text-sm" *ngIf="row.TransferToInstituteID">
                     To Institute: {{row.TransferToInstituteName}}
@@ -1276,8 +1343,11 @@
                   <div class="text-sm mt-1">
                     Designation: {{row.ToDesignationName}}
                   </div>
+                  <div class="text-sm mt-1">
+                    Branch: {{row.ToBranchNamePromotion}}
+                  </div>
                   <div class="text-sm">
-                    Date: {{row.DateOfpromotion | date:'dd-mm-yyyy'}}
+                    Date: {{row.DateOfpromotion | date:'dd-MM-yyyy'}}
                   </div>
                   <div *ngIf="row.PromotionDocuments?.length>0">
                     Docs:
@@ -1304,13 +1374,18 @@
             </tr>
           </tbody>
         </table>
+        <div *ngIf="serviceHistoryList?.length == 0"
+              class="text-center text-gray-500 py-4">
+          Service history data not available
+        </div>
       </div>
 
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3" 
-        *ngIf="request.ProfileStatusID != _EnumEMProfileStatus.Approve">
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Staff Career Advancement Scheme Details</b>
       </div>
-      <form [formGroup]="CareerAdvancementSchemeFormGroup" *ngIf="request.ProfileStatusID != _EnumEMProfileStatus.Approve">
+      <form [formGroup]="CareerAdvancementSchemeFormGroup" 
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <div>
@@ -1398,7 +1473,7 @@
         </div>
       </form>
       <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light mt-3">
-        <b class="text-1xl-5">Staff Career Advancement Scheme List </b>
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Staff Career Advancement Scheme List </b>
       </div>
       <div class="overflow-auto">
         <table class="w-full table-border" cellpadding="5" *ngIf="StaffCareerAdvancementSchemeData?.length > 0">
@@ -1448,11 +1523,11 @@
     <div class="flex justify-center flex-wrap items-centermt-3">
       <div>
         <button *ngIf="[0, 288, 249].includes(request.ProfileStatusID) && request.IsAdmin != 1"
-          class="btn bg-success text-white mt-3" type="button" (click)="SaveData()">
+          class="btn bg-success text-white mt-3" type="button" (click)="SaveData(1)">
           Save as Draft
         </button>
 
-        <button *ngIf="request.IsAdmin == 1" class="btn bg-success text-white mt-3" type="button" (click)="SaveData()">
+        <button *ngIf="request.IsAdmin == 1" class="btn bg-success text-white mt-3" type="button" (click)="SaveData(0)">
           Update Profile
         </button>
 

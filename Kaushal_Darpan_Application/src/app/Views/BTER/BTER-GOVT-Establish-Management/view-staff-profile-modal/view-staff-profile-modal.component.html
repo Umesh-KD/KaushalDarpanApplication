@@ -306,11 +306,12 @@
             <thead class="bg-gray-200">
               <tr>
                 <th>S.No</th>
-                <th>Qualification acqure before/after the service period?</th>
+                <th>Qualification during the service period?</th>
                 <th>Qualification</th>
                 <th>Date of acquiring the qualification</th>
                 <th>Division obtained </th>
                 <th>Specialization</th>
+                <th>Pre Qualification Certificate</th>
                 <th>Acquiring qualification certificate</th>
                 <th>Competent authority order to add qualification in the service book</th>
               </tr>
@@ -320,12 +321,18 @@
 
               <tr *ngFor="let row of StaffQualificationList; let i=index">
 
-                <td class="text-center">{{idx+1}}</td>
+                <td class="text-center">{{i+1}}</td>
                 <td class="text-center">{{row.QualificationObtainedDuringService}}</td>
                 <td class="text-center">{{row.QualificationName}}</td>
                 <td class="text-center">{{row.QualificationAcquredDate}}</td>
                 <td class="text-center">{{row.ObtainedDivision}}</td>
                 <td class="text-center">{{row.Specialization}}</td>
+                <td class="text-center">
+                  <a target="_blank" 
+                    href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/AcquiredQualificationAfterJoining/' + row.PreQualificationCertificate }}">
+                    {{row.Dis_PreQualificationCertificate}}
+                  </a>
+                </td>
                 <td class="text-center">
                   <a target="_blank" 
                     href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/AcquiredQualificationAfterJoining/' + row.AcquiringQualificationCertificate }}">
@@ -370,6 +377,7 @@
                 <th>From</th>
                 <th>To</th>
                 <th>Designation</th>
+                <th>Branch</th>
                 <th>Movement</th>
                 <th>Documents</th>
               </tr>
@@ -385,7 +393,7 @@
                 <td>{{row.FromDate | date:'yyyy-MM-dd'}}</td>
                 <td>{{row.ToDate | date:'yyyy-MM-dd'}}</td>
                 <td>{{row.DesignationName}}</td>
-
+                <td>{{row.ServiceBranchName}}</td>
                 <td>
 
                   <div *ngIf="row.IsTransfer">
@@ -400,6 +408,7 @@
                   <div *ngIf="row.IsPromotion" class="mt-1">
                     <b class="text-green-600">Promotion</b>
                     <div>{{row.ToDesignationNamePromotion}}</div>
+                    <div>{{row.ToBranchNamePromotion}}</div>
                     <div class="text-xs">
                       {{row.DateOfpromotion | date:'yyyy-MM-dd'}}
                     </div>
@@ -520,7 +529,7 @@
 
               <tr *ngFor="let row of StaffCareerAdvancementSchemeData; let i=index">
 
-                <td class="text-center">{{idx+1}}</td>
+                <td class="text-center">{{i+1}}</td>
                 <td class="text-center">{{row.PayLevel}}</td>
                 <td class="text-center">{{row.DateOfImplementation}}</td>
                 <td class="text-center">{{row.OrderNo}}</td>
