@@ -438,11 +438,12 @@ export class AllotmentStatusITIComponent {
   }
 
   get allotment8() {
-    return this.AllotmentStatusList?.find((x:any )=> x.TradeLevelId == 8);
+    return this.AllotmentStatusList?.find((x: any) => x.TradeLevelId == 8 && x.AllotmentId!=0);
   }
 
-  get allotment10() {
-    return this.AllotmentStatusList?.find((x: any) => x.TradeLevelId == 10);
+  get allotment10()
+  {
+    return this.AllotmentStatusList?.find((x: any) => x.TradeLevelId == 10 && x.AllotmentId != 0);
   }
 
 
