@@ -156,11 +156,11 @@ export class PersonalDetailsTabComponent implements OnInit {
       this.searchRequest.ApplicationID = this.ApplicationID;
       this.request.ApplicationID = this.ApplicationID;
       await this.GetById()
-      if (this.request.IsPaymentSuccess == true) {
-        this.PersonalDetailForm.get('ddlCategoryA')?.enable();
-      } else {
-        this.PersonalDetailForm.get('ddlCategoryA')?.disable();
-      }
+      // if (this.request.IsPaymentSuccess == true) {
+      //   this.PersonalDetailForm.get('ddlCategoryA')?.enable();
+      // } else {
+      //   this.PersonalDetailForm.get('ddlCategoryA')?.disable();
+      // }
     }
 
 
