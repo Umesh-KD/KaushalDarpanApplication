@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
+import { EnumGrievanceStaus, EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { SeatSearchModel, SeatMetrixModel } from '../../Models/SeatMatrixDataModel';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
@@ -25,9 +25,7 @@ import { AppsettingService } from '../../Common/appsetting.service';
 
 
 export class GrievanceListComponent implements OnInit {
-  State: any;
-  Message: any;
-  ErrorMessage: any;
+
   public Table_SearchText: string = "";
   GrievanceFormGroup!: FormGroup;
   public isLoading: boolean = false;
@@ -53,6 +51,7 @@ export class GrievanceListComponent implements OnInit {
   public ReplyBox: boolean = false;
   public isDepartmentDisabled: boolean = false;
   public Remark: string = '';
+  _EnumGrievanceStaus = EnumGrievanceStaus;
 
   public SearchRequest = new GrivienceSearchModel();
   @ViewChild('modal_Grivience') modal_Grivience: any;
@@ -75,7 +74,7 @@ export class GrievanceListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    
     this.GrievanceFormGroup = this.formBuilder.group({
         ddlCategoryID: ['', []],
         ddlDepartmentID: ['', []],
@@ -85,10 +84,10 @@ export class GrievanceListComponent implements OnInit {
         ddlAllotmentId: ['', []],
         ddlStatusID: ['', []]
       })
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.loadDropdownData('FinancialYears');
     this.loadDropdownData('AllotmentType');
 
-    await this.GetMaterData();
     //this.ShowSeatMetrix();
     this.GetDDl_StatusForGrivience();
 
@@ -113,33 +112,19 @@ export class GrievanceListComponent implements OnInit {
   // Load data for dropdown based on MasterCode
 
   loadDropdownData(MasterCode: string): void {
-
     this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
-
       switch (MasterCode) {
-
         case 'QueryFor':
-
           this.DepartmentList = data['Data'];
-
           break;
-
         case 'Grievance Category':
-
           this.CategoryList = data['Data'];
-
           console.log(this.CategoryList, "CategoryList")
-
           break;
-
         default:
-
           break;
-
       }
-
     });
-
   }
 
   async setDepartmentId() {
@@ -192,7 +177,6 @@ export class GrievanceListComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.GrivienceList = data['Data'];
-          console.log(this.GrivienceList,'RemarkData');
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -209,20 +193,17 @@ export class GrievanceListComponent implements OnInit {
 
   async openGriviencePopup(content: any, item: any) {
     
-    
-    /*    this.IsShowViewStudent = true;*/
     this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    //if (MenuId > 0) {
-    //  await this.GetMenuMaster(MenuId)
-    //}
+
+    debugger
     this.Responserequest = item;
 
-    if (item.StatusID == 206) {
-      this.Responserequest.StatusID = 222;
+    if (item.StatusID == EnumGrievanceStaus.Resolved) {
+      this.Responserequest.StatusID = EnumGrievanceStaus.Re_Open;
     }
     else {
       this.Responserequest.StatusID = 0;
@@ -289,10 +270,6 @@ export class GrievanceListComponent implements OnInit {
             this.toastr.error('Select less then 2MB File')
             return
           }
-          //if (this.file.size < 100000) {
-          //  this.toastr.error('Select more then 100kb File')
-          //  return
-          //}
         }
         else {// type validation
           this.toastr.error('Select Only jpeg/jpg/png file')
@@ -305,29 +282,19 @@ export class GrievanceListComponent implements OnInit {
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
 
-            this.State = data['State'];
-            this.Message = data['Message'];
-            this.ErrorMessage = data['ErrorMessage'];
-
-            if (this.State == EnumStatus.Success) {
+            if (data.State == EnumStatus.Success) {
               if (Type == "Photo") {
-                //this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
                 this.Responserequest.ResponseFileAttachment = data['Data'][0]["FileName"];
                 this.Responserequest.DisResponseFileName = data['Data'][0]["Dis_FileName"];
 
               }
-              //else if (Type == "Sign") {
-              //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
-              //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
-              //}
-              /*              item.FilePath = data['Data'][0]["FilePath"];*/
               event.target.value = null;
             }
-            if (this.State == EnumStatus.Error) {
-              this.toastr.error(this.ErrorMessage)
+            if (data.State == EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage)
             }
-            else if (this.State == EnumStatus.Warning) {
-              this.toastr.warning(this.ErrorMessage)
+            else if (data.State == EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage)
             }
           });
       }
@@ -358,18 +325,15 @@ export class GrievanceListComponent implements OnInit {
 
     try {
       await this._GrievanceService.GrivienceResponseSaveData(this.Responserequest)
-        .then((data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          if (this.State = EnumStatus.Success) {
-            this.toastr.success(this.Message)
+        .then(async (data: any) => {
+          if (data.State = EnumStatus.Success) {
+            this.toastr.success(data.Message)
             this.CloseModal();
             this.GrivienceList;
-            //this.ShowSeatMetrix();
+            await this.GetMaterData();
           }
           else {
-            this.toastr.error(this.ErrorMessage)
+            this.toastr.error(data.ErrorMessage)
           }
         })
     }
@@ -394,24 +358,17 @@ export class GrievanceListComponent implements OnInit {
 
 
   async GetResponseData() {
-    //this.isSubmitted = true;
     try {
       this.loaderService.requestStarted();
       this.SearchRequest.GrivienceID = this.Responserequest.GrivienceID;
       await this._GrievanceService.GetResponseData(this.SearchRequest)
         .then((data: any) => {
           this.ResponseList = data['Data'];
-          console.log(this.ResponseList,'ListData')
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          if (this.State = EnumStatus.Success) {
-            this.toastr.success(this.Message)
+          if (data.State = EnumStatus.Success) {
             this.ResetControl();
-            //this.ShowSeatMetrix();
           }
           else {
-            this.toastr.error(this.ErrorMessage)
+            this.toastr.error(data.ErrorMessage)
           }
         })
     }
