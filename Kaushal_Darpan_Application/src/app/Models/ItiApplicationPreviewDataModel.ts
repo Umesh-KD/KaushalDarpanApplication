@@ -50,6 +50,7 @@ export class PreviewApplicationModel
   public OptionalViewDatas: OptionalViewData[] = [];
   public PendingDataModel: PendingDataModel[] = [];
   public DocumentDetailList: DocumentDetailsModel[] = [];
+  public EmitraTransactionsDataModelList: any[] = [];
   public IsFinalPay: boolean = false
 
   public TransactionID: number = 0;
