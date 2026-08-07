@@ -35,6 +35,15 @@
         </div>
 
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gazetted/Non-Gazetted<span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="searchRequest.Gaz_NonGaz">
+            <option value="0">Choose Option</option>
+            <option value="1">Gazetted</option>
+            <option value="2">Non-Gazetted</option>                  
+          </select>
+        </div>
+
+        <div>
           <button 
               class="btn bg-info text-white mt-6 me-1" 
               type="submit" 
@@ -83,6 +92,7 @@
             <th width="80px" align="left">Sr. No.</th>
 
             <th align="left">Designation Type</th>
+            <th align="left">Gazetted/Non-Gazetted</th>
             <th align="left">Designation Name (English)</th>
             <th align="left">Designation Name (Hindi)</th>
             <th align="left">Designation Name (Short)</th>
@@ -94,6 +104,7 @@
           <tr *ngFor="let row of paginatedInTableData; let idx = index;">
             <td>{{(startInTableIndex+1)+idx}}</td>
             <td>{{row.StaffType_str}}</td>
+            <td>{{row.Gaz_NonGaz_str}}</td>
             <td>{{row.DesignationNameEnglish}}</td>
             <td>{{row.DesignationNameHindi}}</td>
             <td>{{row.DesignationNameShort}}</td>
@@ -159,6 +170,20 @@
                   <p *ngIf="!form?.StaffTypeID?.errors?.DropdownValidators">
                     <i aria-hidden="true"></i>This
                     field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gazetted/Non-Gazetted<span class="StarMarking">*</span></label>
+                <select class="form-select" formControlName="Gaz_NonGaz" [(ngModel)]="request.Gaz_NonGaz">
+                  <option value="0">Choose Option</option>
+                  <option value="1">Gazetted</option>
+                  <option value="2">Non-Gazetted</option>                  
+                </select>
+                <div *ngIf="isSubmitted && form?.Gaz_NonGaz?.errors" class="text-danger">
+                  <p *ngIf="!form?.Gaz_NonGaz?.errors?.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required .!
                   </p>
                 </div>
               </div>

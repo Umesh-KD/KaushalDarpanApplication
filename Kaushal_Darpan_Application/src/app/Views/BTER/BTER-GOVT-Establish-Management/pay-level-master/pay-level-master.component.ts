@@ -128,7 +128,7 @@ export class PayLevelMasterComponent {
             if (data.State == EnumStatus.Success) {
               this.toastr.success(data.Message);
               this.CloseModalPopup();
-              this.ngOnInit();
+              await this.GetPayLevelMasterData();
             } else {
               this.toastr.error(data.ErrorMessage)
             }

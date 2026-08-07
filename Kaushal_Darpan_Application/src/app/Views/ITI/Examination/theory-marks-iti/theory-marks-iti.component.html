@@ -69,7 +69,8 @@
 
              <!-- [disabled]="isFinalsubmit ||row.IsPresentTheory == 0" -->
             <td align="center">
-              <input [disabled]="isFinalsubmit ||row.IsPresentTheory == 0" type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked"
+              <!-- "row.Isshowdropdown==0 && (isFinalsubmit ||row.IsPresentTheory == 0 )" -->
+              <input [disabled]="row.Isshowdropdown==0 && (isFinalsubmit ||row.IsPresentTheory == 0 )" type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked"
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
             </td>
             <td align="left">{{idx+1}}</td>

@@ -22,6 +22,12 @@ export class BTER_EM_StaffListSearchModel {
   act?: string = '';
   IsServingADHOC: number = -1;
   IsProbationCompleted: number = -1;
+  DesignationID: number = 0;
+  QualificationID: number = 0;
+  PayLevelID: number = 0;
+  QualificationIDbe: number = 0;
+  QualificationIDaf: number = 0;
+  DateOfImplementation: string = '';
 }
 
 export class BTER_EM_AddStaffDataModel extends RequestBaseModel {
@@ -218,6 +224,7 @@ export class BTER_EM_AddServiceHistoryDataModel extends RequestBaseModel {
   public FromDate:string=''
   public ToDate:string=''
   public DesignationID: number = 0
+  public ServiceBranchID: number = 0
   public QualificationID: number = 0
   public DesignationName?:string=''
   public Qualification:string=''
@@ -237,12 +244,15 @@ export class BTER_EM_AddServiceHistoryDataModel extends RequestBaseModel {
   public TransferToOfficeID: number=0
   public TransferToOfficeName:string=''
   public DateOfTransfer:string=''
+  public ServiceBranchName:string=''
 
   // Promotion
   public IsPromotion:boolean=false;
   public ToDesignationIDPromotion: number = 0;
   public ToDesignationName: number = 0;
   public DateOfpromotion: string='';
+  public ToBranchNamePromotion: string='';
+  public ToBranchIDPromotion: number = 0;
 
    // Multiple Documents
    public TransferDocuments: BTER_EM_DocumentServiceHistoryDataModel[] = []
@@ -733,6 +743,9 @@ export class OfficeVacancySearchModel {
   public PostSanctionedID: number = 0;
   public BugetHeadTypeID?:number=0;
   public BranchID?:number=0;
+  public UserID?:number=0;
+  public RoleID?:number=0;
+  public SSOID?:string='';
 }
 
 export class StaffTrainingDetailDataModel {
@@ -945,6 +958,8 @@ export class StaffQualificationDataModel {
   public Dis_AcquiringQualificationCertificate: string = '';
   public CompetentAuthorityOrder: string = '';
   public Dis_CompetentAuthorityOrder: string = '';
+  public PreQualificationCertificate: string = '';
+  public Dis_PreQualificationCertificate: string = '';
 }
 
 export class StaffCareerAdvancementDataModel {
