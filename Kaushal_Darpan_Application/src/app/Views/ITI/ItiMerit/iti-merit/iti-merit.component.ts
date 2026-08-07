@@ -52,7 +52,7 @@ export class ItiMeritComponent implements OnInit {
   public DateConfigSetting: any = [];
   public MeritMaster = [
 /*    { Id: 1, Name: "First Allotment Provisional Merit ", GenerateKey: "GENERATE FIRST PROVISIONAL MERIT", PublishKey: "PUBLISH FIRST PROVISIONAL MERIT" },*/
-    { Id: 2, Name: "First Allotment Final Merit", GenerateKey: "GENERATE FIRST FINAL MERIT", PublishKey: "PUBLISH FINAL MERIT" },
+    { Id: 4, Name: "First Allotment Final Merit", GenerateKey: "GENERATE FIRST FINAL MERIT", PublishKey: "PUBLISH FINAL MERIT" },
     /* { Id: 3, Name: "Second Allotment Provisional Merit", GenerateKey: "GENERATE SECOND PROVISIONAL MERIT", PublishKey: "PUBLISH SECOND PROVISIONAL MERIT" },*/
     /* { Id: 4, Name: "Second Allotment Final Merit", GenerateKey: "GENERATE SECOND FINAL MERIT", PublishKey: "PUBLISH SECOND FINAL MERIT" }*/
   ]

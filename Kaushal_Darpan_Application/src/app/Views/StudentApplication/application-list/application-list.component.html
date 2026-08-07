@@ -187,7 +187,7 @@
                  class="btn bg-info text-white btn-sm mt-1"> Edit Qualification</a>
 
 
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess == 1 && editformkey "
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess == 1 && editformkey && row.AllotmentStatus==0"
                 (click)="openOTP(row,2)"               
                  class="btn bg-info text-white btn-sm mt-1">Unlock Form</a>
 
