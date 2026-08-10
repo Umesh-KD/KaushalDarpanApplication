@@ -137,7 +137,10 @@
 
               <td>
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                  <a href="javascript:void(0)" (click)="openGriviencePopup(modal_Grivience,item)" title="View Response/Trail"><i class="ti ti-eye"></i></a>
+                  <a href="javascript:void(0)" title="View Response/Trail"
+                     (click)="openGriviencePopup(modal_Grivience ,item)">
+                     <i class="ti ti-eye"></i>
+                  </a>
                   <!--<a href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.ResponseFileAttachment}}" *ngIf="item.ResponseFileAttachment != 1" target="_blank" title="Attachment File"><i class="ti ti-paperclip"></i></a>-->
                   <!--<a href="javascript:void(0)" data-hs-overlay="#ViewTrail" title="Trail"><i class="ti ti-list"></i></a>-->
                 </div>
@@ -177,7 +180,6 @@
                 </select>
               </div>
 
-
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1"
                        for="fileStudentPhoto">
@@ -188,11 +190,14 @@
                          id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
                   <label for="fileStudentPhoto">
                     <span>Choose File</span>
-                    {{Responserequest.DisResponseFileName === '' ? 'No File Choosen' : Responserequest.DisResponseFileName}}
+                    {{Responserequest.DisResponseFileName == '' ? 'No File Choosen' : Responserequest.DisResponseFileName}}
                   </label>
                   <div class="flex">
-                    <a href="{{request.DisResponseFileName}}" *ngIf="this.Responserequest.ResponseFileAttachment !=''"
-                       class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                    <a class="btn bg-primary text-white m-0" target="_blank"
+                      *ngIf="Responserequest.ResponseFileAttachment !=''"
+                      href="{{this.appsettingConfig.StaticFileRootPathURL + Responserequest.ResponseFileAttachment}}">
+                      <i class="ti ti-eye"></i>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -227,11 +232,21 @@
                   <td>
                     <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                       <!--<a href="javascript:void(0)" title="Attachment File" ><i class="ti ti-paperclip"></i></a>-->
-                      <a href="javascript:void(0)" (click)="IsReplyBox()" *ngIf="item.IsReply != 1" title="Reply"><i class="ti ti-arrow-back-up"></i></a>
-                      <a href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.ResponseFileAttachment}}" *ngIf="item.ResponseFileAttachment != 1" target="_blank" role="button" title="Response Attachment File">
+                      <a href="javascript:void(0)" title="Reply"
+                        (click)="IsReplyBox()" 
+                        *ngIf="item.IsReply != 1">
+                        <i class="ti ti-arrow-back-up"></i>
+                      </a>
+                      
+                      <a target="_blank" role="button" title="Response Attachment File"
+                        href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.ResponseFile}}" 
+                        *ngIf="item.ResponseFile != ''">
                         <i class="ti ti-eye"></i>
                       </a>
-                      <a href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.FileAttachment}}" *ngIf="item.FileAttachment != 1" target="_blank" role="button" title="Issue/Suggestion Attachment File">
+
+                      <a target="_blank" role="button" title="Issue/Suggestion Attachment File"
+                        href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.RequestFile}}" 
+                        *ngIf="item.RequestFile != ''">
                         <i class="ti ti-paperclip"></i>
                       </a>
                     </div>

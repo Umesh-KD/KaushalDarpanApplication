@@ -68,12 +68,13 @@
                 <th
                     mat-header-cell
                     *matHeaderCellDef
-                    [style.width]="getColumnWidth(column)"
-                    [style.text-align]="getTextAlign(column)"
+                    [style.width]="column.width"
+                    [style.text-align]="column.align"
                     [sticky]="column.sticky"
-                    [mat-sort-header]="isSortable(column)?column.dataField:null">
+                    [mat-sort-header]="column.sortable?column.dataField:null">
 
-                   {{getDisplayField(column)}}
+                   <!-- {{getDisplayField(column)}} -->
+                    {{column.displayField}}
 
                 </th>
 
@@ -82,10 +83,10 @@
                 <td
                     mat-cell
                     *matCellDef="let row; let i=index"
-                    [style.text-align]="getTextAlign(column)"
+                    [style.text-align]="column.align"
                     (click)="rowClicked(row)">
 
-                    <ng-container [ngSwitch]="getColumnType(column)">
+                    <ng-container [ngSwitch]="column.type">
 
                         <!-- TEXT -->
 
@@ -139,10 +140,6 @@
                         </a>
 
                         <!-- IMGAGE -->
-                        <img
-                            *ngSwitchCase="'image'"
-                            [src]="getImage(row[column.dataField])"
-                            class="table-image">
 
                         <div *ngSwitchCase="'image'" class="table-image-wrapper">
 

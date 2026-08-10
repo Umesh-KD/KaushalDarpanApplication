@@ -1011,3 +1011,11 @@ export enum EnumGuestHouseAllotmentStatus {
   Reserved = 3,
   Unreserved = 4,
 }
+
+export enum EnumGrievanceStaus {
+  Pending = 205	,
+  Resolved  = 206,	 
+  More_Information  = 207,	 
+  Under_Process  = 208,	
+  Re_Open  = 222,	
+}

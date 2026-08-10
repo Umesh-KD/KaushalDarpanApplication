@@ -47,7 +47,8 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Department <span class="StarMarking">*</span>
               </label>
-              <select class="form-select" [(ngModel)]="request.DepartmentID" formControlName="ddlDepartmentID" (change)="GetMasterSubDDL()"  [disabled]="true">
+              <select class="form-select" [(ngModel)]="request.DepartmentID" formControlName="ddlDepartmentID"
+                (change)="GetMasterSubDDL()" [disabled]="true">
                 <option value="0" selected>--Choose Option--</option>
                 <option *ngFor="let item of DepartmentList" value="{{item.ID}}">{{item.Name}}</option>
               </select>
@@ -77,11 +78,9 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Application/Enrollment No.
               </label>
-              <input type="text" class="form-input" maxlength="12" placeholder="Enter Application/Enrollment No." formControlName="textApplicationNo" [(ngModel)]="request.ApplicationNo">
+              <input type="text" class="form-input" maxlength="20" placeholder="Enter Application/Enrollment No."
+                formControlName="textApplicationNo" [(ngModel)]="request.ApplicationNo">
             </div>
-
-
-
           </div>
 
           <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-2">
@@ -89,7 +88,8 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Subject <small>(Related to Complaint)</small><span class="StarMarking">*</span>
               </label>
-              <input type="text" class="form-input  form-control" formControlName="SubjectRelated" [(ngModel)]="request.SubjectRelatedToComplain">
+              <input type="text" class="form-input  form-control" formControlName="SubjectRelated"
+                [(ngModel)]="request.SubjectRelatedToComplain">
 
               <div *ngIf="isSubmitted&&form.SubjectRelated.errors" class="text-danger">
                 <p *ngIf="!form.SubjectRelated.errors.DropdownValidators">
@@ -101,31 +101,33 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Remark<span class="StarMarking">*</span>
               </label>
-              <textarea class="form-input" placeholder="Enter Remark" formControlName="Remark" [(ngModel)]="request.Remark"></textarea>
+              <textarea class="form-input" placeholder="Enter Remark" formControlName="Remark"
+                [(ngModel)]="request.Remark"></textarea>
               <div *ngIf="isSubmitted&&form.Remark.errors" class="text-danger">
                 <p *ngIf="!form.Remark.errors.DropdownValidators">
                   <i aria-hidden="true"></i>Remark field is required.!
                 </p>
               </div>
             </div>
-            
+
           </div>
           <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-2">
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"
-                     for="fileStudentPhoto">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="fileStudentPhoto">
                 Attachment :
               </label>
               <div class="flex fileUploader">
-                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                       id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+                <input
+                  class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                  id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
                 <label for="fileStudentPhoto">
                   <span>Choose File</span>
                   {{request.DisAttachmentFileName === '' ? 'No File Choosen' : request.DisAttachmentFileName}}
                 </label>
                 <div class="flex">
-                  <a href="{{request.DisAttachmentFileName}}" *ngIf="this.request.FileAttachment !=''"
-                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <a href="{{ appsettingConfig.StaticFileRootPathURL + request.FileAttachment }}"
+                    *ngIf="this.request.FileAttachment !=''" class="btn bg-primary text-white m-0" target="_blank"><i
+                      class="ti ti-eye"></i></a>
                 </div>
               </div>
             </div>
@@ -182,7 +184,9 @@
               <td align="left">{{item.DepartmentName}}</td>
               <td align="left">{{item.Module}}</td>
               <td align="left">{{item.ApplicationNo}}</td>
-              <td align="left"><b>{{item.SubjectRelatedToComplain}}</b><p class="italic">{{item.Remark}}</p></td>
+              <td align="left"><b>{{item.SubjectRelatedToComplain}}</b>
+                <p class="italic">{{item.Remark}}</p>
+              </td>
 
               <td align="left">{{item.Status}}</td>
               <td align="left">{{item.RTS}}</td>
@@ -191,11 +195,23 @@
 
               <td>
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                  <a href="javascript:void(0)" (click)="openGriviencePopup(modal_Grivience,item)" title="View Response/Trail"><i class="ti ti-eye"></i></a>
+                  <a href="javascript:void(0)" title="View Response/Trail"
+                    (click)="openGriviencePopup(modal_Grivience,item)">
+                    <i class="ti ti-eye"></i>
+                  </a>
+
                   <!--<a href="javascript:void(0)" title="Attachment File"><i class="ti ti-paperclip"></i></a>
   <a href="javascript:void(0)" data-hs-overlay="#ViewTrail" title="Trail"><i class="ti ti-list"></i></a>-->
-                  <a *ngIf="item.StatusID==206" href="javascript:void(0)" (click)="openGriviencePopup(modal_Grivience,item)" title="Re-open"><i class="ti ti-rotate"></i></a>
-                  <a href="javascript:void(0);" *ngIf="item.StatusID === 205 && item.ReopenGrivience !== 1" title="Delete" (click)="DeleteById(item.GrivienceID)">
+
+                  <a href="javascript:void(0)" title="Re-open" 
+                    *ngIf="item.StatusID==_EnumGrievanceStaus.Resolved"
+                    (click)="openGriviencePopup(modal_Grivience,item)">
+                    <i class="ti ti-rotate"></i>
+                  </a>
+
+                  <a href="javascript:void(0);" title="Delete"
+                    *ngIf="item.StatusID === _EnumGrievanceStaus.Pending && item.ReopenGrivience !== 1"
+                    (click)="DeleteById(item.GrivienceID)">
                     <i class="ti ti-trash"></i>
                   </a>
                 </div>
@@ -217,33 +233,36 @@
 
 
 
-<ng-template #modal_Grivience let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+<ng-template #modal_Grivience let-modal
+  class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between items-center">
-        <b>Complain No - {{Responserequest.ComplainNo}}</b> <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+        <b>Complain No - {{Responserequest.ComplainNo}}</b> <button class="btn bg-info text-white"
+          (click)="CloseModal()"><i class="ti ti-x"></i></button>
       </div>
 
       <div class="card-body">
         <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
 
-          <div *ngIf="ReplyBox != false">
+          <div *ngIf="ReplyBox">
             <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mb-3">
               <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1"
-                       for="fileStudentPhoto">
-                  Attachment 
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="fileStudentPhoto">
+                  Attachment
                 </label>
                 <div class="flex fileUploader">
-                  <input class="form-input"
-                         id="fileStudentPhotoNew" type="file" (change)="onFilechangePop($event,'Photo')">
-                  <label for="fileStudentPhotoNew">
+                  <input class="form-input" id="requestReopenPhoto" type="file"
+                    (change)="onFilechange($event,'requestReopenPhoto')">
+                  <label for="requestReopenPhoto">
                     <span>Choose File</span>
-                    {{requestReopen.DisAttachmentFileName === '' ? 'No File Choosen' : requestReopen.DisAttachmentFileName}}
+                    {{requestReopen.DisAttachmentFileName === '' ? 'No File Choosen' :
+                    requestReopen.DisAttachmentFileName}}
                   </label>
                   <div class="flex">
-                    <a href="{{requestReopen.DisAttachmentFileName}}" *ngIf="this.requestReopen.DisAttachmentFileName !=''"
-                       class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                    <a href="{{ appsettingConfig.StaticFileRootPathURL + requestReopen.FileAttachment }}"
+                      *ngIf="this.requestReopen.DisAttachmentFileName !=''" class="btn bg-primary text-white m-0"
+                      target="_blank"><i class="ti ti-eye"></i></a>
                   </div>
                 </div>
               </div>
@@ -277,24 +296,27 @@
                   </td>
                   <td>
                     <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                      <!--<a href="javascript:void(0)" title="Attachment File" ><i class="ti ti-paperclip"></i></a>-->
-                      <a *ngIf="item.StatusID==207 && item.IsReply != 1" href="javascript:void(0)" (click)="IsReplyBox()"  title="Reply"><i class="ti ti-arrow-back-up"></i></a>
-                      
-                      <a href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.ResponseFileAttachment}}" *ngIf="item.ResponseFileAttachment != 1" target="_blank" role="button" title="Response Attachment File">
+                      <a href="javascript:void(0)" (click)="IsReplyBox()" title="Reply"
+                        *ngIf="item.StatusID==_EnumGrievanceStaus.More_Information && item.IsReply != 1">
+                        <i class="ti ti-arrow-back-up"></i>
+                      </a>
+
+                      <a target="_blank" role="button" title="Response Attachment File"
+                        href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.ResponseFile}}"
+                        *ngIf="item.ResponseFile != ''">
                         <i class="ti ti-eye"></i>
                       </a>
-                      <a href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.FileAttachment}}" *ngIf="item.FileAttachment != 1" target="_blank" role="button" title="Issue/Suggestion Attachment File">
+                      <a target="_blank" role="button" title="Issue/Suggestion Attachment File"
+                        href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.RequestFile}}"
+                        *ngIf="item.RequestFile != ''">
                         <i class="ti ti-paperclip"></i>
                       </a>
                     </div>
                   </td>
                 </tr>
               </tbody>
-
             </table>
           </div>
-
-
         </div>
       </div>
     </div>

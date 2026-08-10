@@ -6,7 +6,7 @@ import { TableAction } from './DatatableModels/table-action.model';
 import { TableConfig } from './DatatableModels/table-config.model';
 import { TableColumn } from './DatatableModels/table-column.model';
 import { TableConstants } from './DatatableModels/table.constant';
-import { DEFAULT_TABLE_CONFIG } from './DatatableModels/table.default';
+import { DEFAULT_COLUMN, DEFAULT_IMAGE_CONFIG, DEFAULT_TABLE_CONFIG } from './DatatableModels/table.default';
 
 
 @Component({
@@ -116,7 +116,7 @@ ngOnChanges(changes: SimpleChanges): void {
 
 private normalizeColumns(): void {
 
-    if (!this.config?.columns?.length) {
+    if (!this.normalizedConfig?.columns?.length) {
 
         this.normalizedColumns = [];
 
@@ -126,75 +126,54 @@ private normalizeColumns(): void {
 
     this.normalizedColumns = this.normalizedConfig.columns.map(column => {
 
-        // String column
+        // -------------------------
+        // String Column
+        // -------------------------
         if (typeof column === 'string') {
 
             return {
+
+                ...DEFAULT_COLUMN,
+
                 dataField: column,
+
                 displayField: this.splitCamelCase(column),
-                type: 'text',
-                sortable: true,
-                align: 'left',
-                width: 'auto',
-                hidden: false,
-                sticky: false,
-                ellipsis: false
+
+                imageConfig: {
+                    ...DEFAULT_IMAGE_CONFIG
+                }
+
             } as TableColumn;
 
         }
 
-        // Object column
+        // -------------------------
+        // Object Column
+        // -------------------------
+
         return {
+
+            ...DEFAULT_COLUMN,
 
             ...column,
 
-            // dataField: column.dataField,
-
-            displayField: column.displayField ?? this.splitCamelCase(column.dataField),
-
-            type: column.type || 'text',
-
-            sortable: column.sortable ?? true,
-
-            align: column.align ?? 'left',
-
-            width: column.width ?? 'auto',
-
-            hidden: column.hidden ?? false,
-
-            sticky: column.sticky ?? false,
-
-            format: column.format,
-
-            ellipsis: column.ellipsis ?? false,
-
-            maxLength: column.maxLength,
-
-            formatter: column.formatter,
+            displayField:
+                column.displayField ??
+                this.splitCamelCase(column.dataField),
 
             imageConfig: {
 
-                width: 40,
-
-                height: 40,
-
-                borderRadius: 'circle',
-
-                hoverZoom: true,
-
-                defaultImage: 'assets/images/no-image.png',
+                ...DEFAULT_IMAGE_CONFIG,
 
                 ...column.imageConfig
 
             }
 
-        };
+        } as TableColumn;
 
     });
 
-    
 }
-
 private normalizeConfig(): void {
 
     this.normalizedConfig = {
@@ -423,11 +402,24 @@ getDisplayValue(column: TableColumn, row: any): string {
 //#region Image
 getImage(column: TableColumn, row: any): string {
 
+    if (column.imageConfig?.resolver) {
+
+        return column.imageConfig.resolver(row);
+
+    }
+
     const image = row[column.dataField];
 
     if (!image) {
 
-        return column.imageConfig?.defaultImage ?? 'assets/images/no-image.png';
+        return column.imageConfig?.defaultImage
+            ?? DEFAULT_IMAGE_CONFIG.defaultImage!;
+
+    }
+
+    if (image.startsWith('http://') || image.startsWith('https://')) {
+
+        return image;
 
     }
 

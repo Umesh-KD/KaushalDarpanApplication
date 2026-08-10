@@ -106,20 +106,67 @@ tableConfig: TableConfig = {
 
         type: 'image',
 
-        imageConfig: {
+        // imageConfig: {
 
-            // basePath: environment.imageUrl + '/CompanyLogo/',
-            // basePath: this.appsettingConfig.StaticFileRootPathURL + '/' + CompanyPhoto+'/',
+        //     // basePath: environment.imageUrl + '/CompanyLogo/',
+        //     basePath: this.appsettingConfig.StaticFileRootPathURL + '/',
 
-            width: 40,
+        //     width: 40,
 
-            height: 40,
+        //     height: 40,
 
-            borderRadius: 'circle'
+        //     borderRadius: 'circle'
 
-        }
+        // }
 
     },
+
+    
+    // //------------- Example 1 for image field --------Local Asset--------
+
+  //  {
+  //       dataField: 'Photo',
+  //       type: 'image'
+  //   },
+
+  
+    // //------------- Example 2 for image field --------Server Upload Folder--------
+
+    // {
+    //     dataField: 'Photo',
+
+    //     type: 'image',
+
+    //     imageConfig: {
+
+    //         basePath: 'https://localhost:5001/uploads/'
+
+    //     }
+    // },
+
+
+    // //------------- Example 3 for image field ------Dynamic Resolver----------
+
+    // {
+    //     dataField: 'Photo',
+
+    //     type: 'image',
+
+    //     imageConfig: {
+
+    //         resolver: (row) => {
+
+    //             return row.IsStudent
+    //                 ? '/student/' + row.Photo
+    //                 : '/staff/' + row.Photo;
+
+    //         }
+
+    //     }
+    // },
+
+
+    
     {
       dataField: 'Name',
       displayField: 'Company Name',
