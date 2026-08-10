@@ -106,18 +106,18 @@ tableConfig: TableConfig = {
 
         type: 'image',
 
-        // imageConfig: {
+        imageConfig: {
 
-        //     // basePath: environment.imageUrl + '/CompanyLogo/',
-        //     basePath: this.appsettingConfig.StaticFileRootPathURL + '/',
+            // basePath: environment.imageUrl + '/CompanyLogo/',
+            basePath: this.appsettingConfig.StaticFileRootPathURL ,
 
-        //     width: 40,
+            width: 40,
 
-        //     height: 40,
+            height: 40,
 
-        //     borderRadius: 'circle'
+            borderRadius: 'circle'
 
-        // }
+        }
 
     },
 

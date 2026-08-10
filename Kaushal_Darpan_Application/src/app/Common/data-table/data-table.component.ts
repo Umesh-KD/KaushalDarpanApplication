@@ -403,35 +403,58 @@ getDisplayValue(column: TableColumn, row: any): string {
 getImage(column: TableColumn, row: any): string {
 
     if (column.imageConfig?.resolver) {
-
         return column.imageConfig.resolver(row);
-
     }
 
     const image = row[column.dataField];
 
     if (!image) {
-
         return column.imageConfig?.defaultImage
             ?? DEFAULT_IMAGE_CONFIG.defaultImage!;
-
     }
 
-    if (image.startsWith('http://') || image.startsWith('https://')) {
-
+      // Already a complete URL
+    if (/^https?:\/\//i.test(image)) {
         return image;
-
     }
 
-    if (column.imageConfig?.basePath) {
+      // Build URL using basePath
+    const basePath = column.imageConfig?.basePath ?? '';
 
-        return column.imageConfig.basePath + image;
-
+    if (basePath) {
+        const cleanBasePath = basePath.replace(/\/$/, '');
+        const cleanImage = image.replace(/^\//, '');
+        return `${cleanBasePath}/${cleanImage}`;
     }
 
     return image;
 
 }
+
+
+// getImage(column: TableColumn, row: any): string {
+
+//     const image = row[column.dataField];
+
+//     console.log('Image Name:', image);
+
+//     if (!image) {
+//         return column.imageConfig?.defaultImage ?? DEFAULT_IMAGE_CONFIG.defaultImage!;
+//     }
+
+//        // Already a complete URL
+//     if (/^https?:\/\//i.test(image)) {
+//         return image;
+//     }
+
+//     const basePath = column.imageConfig?.basePath ?? '';
+
+//     const finalUrl = `${basePath.replace(/\/$/, '')}/${image.replace(/^\//, '')}`;
+
+//     console.log('Final URL:', finalUrl);
+
+//     return finalUrl;
+// }
 
 setDefaultImage(event: any, column: TableColumn): void {
 
@@ -539,6 +562,20 @@ getDisplayField(column: TableColumn): string {
 
 }
 
+
+movePreview(event: MouseEvent): void {
+
+    const preview = (event.target as HTMLElement)
+        .parentElement
+        ?.querySelector('.table-image-preview') as HTMLElement;
+
+    if (!preview) {
+        return;
+    }
+
+    preview.style.left = `${event.clientX + 20}px`;
+    preview.style.top = `${event.clientY - 100}px`;
+}
 
 
 }
