@@ -24,19 +24,120 @@
               <a href="javascript:void(0);" class="btn bg-info text-white btn-sm"><i class="ti ti-download"></i>Export ITIs</a>
           </div>-->
         </div>
+
         <form [formGroup]="GrievanceFormGroup">
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-6">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                SSOID
+              </label>
+              <input type="text" class="form-input" placeholder="Enter SSOID"
+                formControlName="SSOID" [(ngModel)]="request.SSOID">
+            </div>
+            <div *ngIf="sSOLoginDataModel.RoleID != _EnumRole.Student">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Employee ID
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Employee ID"
+                formControlName="EmployeeID" [(ngModel)]="request.EmployeeID">
+            </div>
+            <div *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Student">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Application/Enrollment No.
+              </label>
+              <input type="text" class="form-input" maxlength="20" placeholder="Enter Application/Enrollment No."
+                formControlName="textApplicationNo" [(ngModel)]="request.ApplicationNo">
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Email
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Email"
+                formControlName="Email" [(ngModel)]="request.Email">
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Mobile No
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Mobile No"
+                formControlName="MobileNo" [(ngModel)]="request.MobileNo">
+            </div>
+          </div>  
+
           <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Category <span class="StarMarking">*</span>
               </label>
-              <select class="form-select" [(ngModel)]="request.CategoryID" formControlName="ddlCategoryID">
+              <select class="form-select" 
+                [(ngModel)]="request.CategoryID" 
+                formControlName="ddlCategoryID"
+                (change)="onChangeCategory()">
                 <option value="0" selected>--Choose Option--</option>
-                <option *ngFor="let item of CategoryList" value="{{item.ID}}">{{item.Name}}</option>
+                <option *ngFor="let item of CategoryList" value="{{item.CodeID}}">{{item.Name}}</option>
               </select>
               <div *ngIf="isSubmitted&&form.ddlCategoryID.errors" class="text-danger">
                 <p *ngIf="!form.ddlCategoryID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>Category field is required
+                  .!
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="request.CategoryID == _EnumGrievanceCategory.Other">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Name of Category
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Category Name"
+                formControlName="CategoryName" [(ngModel)]="request.CategoryName">
+              <div *ngIf="isSubmitted && form.CategoryName.errors" class="text-danger">
+                <p *ngIf="form.CategoryName.errors.required">
+                  <i aria-hidden="true"></i>Category field is required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Type of Issue <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" [(ngModel)]="request.IssueTypeID" formControlName="IssueTypeID">
+                <option value="0" selected>--Choose Option--</option>
+                <option *ngFor="let item of IssueTypeList" value="{{item.IssueTypeID}}">{{item.IssueTypeName}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&form.IssueTypeID.errors" class="text-danger">
+                <p *ngIf="!form.IssueTypeID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>Category field is required
+                  .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Name of Issue Type
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Issue Type"
+                formControlName="IssueTypeName" [(ngModel)]="request.IssueTypeName">
+              <div *ngIf="isSubmitted && form.IssueTypeName.errors" class="text-danger">
+                <p *ngIf="form.IssueTypeName.errors.required">
+                  <i aria-hidden="true"></i>Category field is required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Fee For<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" [(ngModel)]="request.FeeForID" formControlName="FeeForID">
+                <option value="0" selected>--Choose Option--</option>
+                <option *ngFor="let item of FeeForTypeList" value="{{item.CodeID}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&form.FeeForID.errors" class="text-danger">
+                <p *ngIf="!form.FeeForID.errors.DropdownValidators">
                   <i aria-hidden="true"></i>Category field is required
                   .!
                 </p>
@@ -48,7 +149,7 @@
                 Department <span class="StarMarking">*</span>
               </label>
               <select class="form-select" [(ngModel)]="request.DepartmentID" formControlName="ddlDepartmentID"
-                (change)="GetMasterSubDDL()" [disabled]="true">
+                (change)="GetMasterSubDDL()">
                 <option value="0" selected>--Choose Option--</option>
                 <option *ngFor="let item of DepartmentList" value="{{item.ID}}">{{item.Name}}</option>
               </select>
@@ -73,23 +174,15 @@
                 </p>
               </div>
             </div>
-
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Application/Enrollment No.
-              </label>
-              <input type="text" class="form-input" maxlength="20" placeholder="Enter Application/Enrollment No."
-                formControlName="textApplicationNo" [(ngModel)]="request.ApplicationNo">
-            </div>
           </div>
 
-          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-2">
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Subject <small>(Related to Complaint)</small><span class="StarMarking">*</span>
               </label>
-              <input type="text" class="form-input  form-control" formControlName="SubjectRelated"
-                [(ngModel)]="request.SubjectRelatedToComplain">
+              <textarea class="form-input" placeholder="Enter Subject" formControlName="SubjectRelated"
+                [(ngModel)]="request.SubjectRelatedToComplain" rows="4"></textarea>
 
               <div *ngIf="isSubmitted&&form.SubjectRelated.errors" class="text-danger">
                 <p *ngIf="!form.SubjectRelated.errors.DropdownValidators">
@@ -102,7 +195,7 @@
                 Remark<span class="StarMarking">*</span>
               </label>
               <textarea class="form-input" placeholder="Enter Remark" formControlName="Remark"
-                [(ngModel)]="request.Remark"></textarea>
+                [(ngModel)]="request.Remark" rows="4"></textarea>
               <div *ngIf="isSubmitted&&form.Remark.errors" class="text-danger">
                 <p *ngIf="!form.Remark.errors.DropdownValidators">
                   <i aria-hidden="true"></i>Remark field is required.!
@@ -110,8 +203,6 @@
               </div>
             </div>
 
-          </div>
-          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-2">
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="fileStudentPhoto">
                 Attachment :
@@ -131,10 +222,11 @@
                 </div>
               </div>
             </div>
-            <div>
-              <button type="button" class="btn bg-info mt-6 text-white" (click)="SaveData()">Submit</button>
-              <button type="button" class="btn bg-danger mt-6 text-white" (click)="ResetControl()">Cancel</button>
-            </div>
+
+          </div>
+          <div class="flex justify-center items-center">
+            <button type="button" class="btn bg-info mt-6 text-white" (click)="SaveData()">Submit</button>
+            <button type="button" class="btn bg-danger mt-6 text-white" (click)="ResetControl()">Cancel</button>
           </div>
         </form>
 

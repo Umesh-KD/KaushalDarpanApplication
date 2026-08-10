@@ -151,9 +151,9 @@
 
                 <a href="javascript:void(0);" [title]="row.ProfileStatusID == 247 ? 'View' : 'View & Approve'"
                   (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)"
-                  *ngIf="row.RoleID != _EnumRole.GuestHouseAdmin && 
-                          row.RoleID != _EnumRole.GuestHouseIncharge && 
-                          row.RoleID != _EnumRole.GuestRoomWarden &&
+                  *ngIf="!row.RoleID.split(',').includes(_EnumRole.GuestHouseAdmin.toString()) && 
+                          !row.RoleID.split(',').includes(_EnumRole.GuestHouseIncharge.toString()) && 
+                          !row.RoleID.split(',').includes(_EnumRole.GuestRoomWarden.toString()) &&
                           row.ProfileStatusID != _EnumEMProfileStatus.Pending &&
                           row.ProfileStatusID != _EnumEMProfileStatus.Completed && sSOLoginDataModel.UserID != row.StaffUserID">
                   <i [class]="row.ProfileStatusID == _EnumEMProfileStatus.Approve ? 'ti ti-eye' : 'ti ti-check' "></i>
@@ -167,7 +167,9 @@
                 </a>
 
                 <a href="javascript:void(0);"
-                   *ngIf="(row.RoleID == _EnumRole.GuestHouseAdmin || row.RoleID == _EnumRole.GuestHouseIncharge || row.RoleID == _EnumRole.GuestRoomWarden)
+                   *ngIf="(row.RoleID.split(',').includes(_EnumRole.GuestHouseAdmin.toString()) || 
+                            row.RoleID.split(',').includes(_EnumRole.GuestHouseIncharge.toString()) || 
+                            row.RoleID.split(',').includes(_EnumRole.GuestRoomWarden.toString()))
                             && !(row.ProfileStatusID == _EnumEMProfileStatus.Pending
                             || row.ProfileStatusID == _EnumEMProfileStatus.Completed
                             || row.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit
@@ -178,7 +180,9 @@
                 </a>
                 
                 <a href="javascript:void(0);" title="Add Update Guest House" 
-                  *ngIf="(row.RoleID == _EnumRole.GuestHouseAdmin || row.RoleID == _EnumRole.GuestHouseIncharge || row.RoleID == _EnumRole.GuestRoomWarden) &&
+                  *ngIf="(row.RoleID.split(',').includes(_EnumRole.GuestHouseAdmin.toString()) || 
+                          row.RoleID.split(',').includes(_EnumRole.GuestHouseIncharge.toString()) || 
+                          row.RoleID.split(',').includes(_EnumRole.GuestRoomWarden.toString()) ) &&
                         ((sSOLoginDataModel.RoleID == _EnumRole.JD_TTC && row.OfficeID == _EnumOffice.TTC_LRDC) || 
                           (sSOLoginDataModel.RoleID == _EnumRole.Admin && row.OfficeID == _EnumOffice.BTER) || 
                           (sSOLoginDataModel.RoleID == _EnumRole.DTE && (row.OfficeID == _EnumOffice.DTE || row.OfficeID == _EnumOffice.COLLEGE)))" 

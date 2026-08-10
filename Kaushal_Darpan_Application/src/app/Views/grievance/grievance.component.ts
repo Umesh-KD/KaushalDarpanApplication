@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { EnumGrievanceStaus, EnumStatus } from '../../Common/GlobalConstants';
+import { EnumGrievanceCategory, EnumGrievanceStaus, EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { SeatSearchModel, SeatMetrixModel } from '../../Models/SeatMatrixDataModel';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
@@ -28,24 +28,33 @@ import { DocumentDetailsService } from '../../Common/document-details';
 export class GrievanceComponent implements OnInit {
   public Table_SearchText: string = "";
   GrievanceFormGroup!: FormGroup;
-  public isLoading: boolean = false;
-  public isSubmitted: boolean = false;
-  closeResult: string | undefined;
+  PersonalDetailsFormGroup!: FormGroup;
+
   public request = new GrievanceDataModel();
   public requestReopen = new GrivienceReopenModelsDataModel();
   public searchRequest = new GrivienceSearchModel();
-  selectedOption: any = 0;
-  //public ShowSeatMetrixList: SeatMetrixModel[] = [];
+  public sSOLoginDataModel = new SSOLoginDataModel();
+  public Responserequest = new GrivienceResponseDataModel();
+
+  _EnumGrievanceStaus = EnumGrievanceStaus;
+  _EnumRole = EnumRole;
+  _EnumGrievanceCategory = EnumGrievanceCategory;
+
   public DepartmentList: any = [];
   public CategoryList: any = [];
   public SubMasterList: any = [];
   public ShowGrievanceList: any = [];
   public ResponseList: any = [];
-  public sSOLoginDataModel = new SSOLoginDataModel();
-  public Responserequest = new GrivienceResponseDataModel();
+  public FeeForTypeList: any = [];
+  public IssueTypeList: any = [];
+
+  public isLoading: boolean = false;
+  public isSubmitted: boolean = false;
+  closeResult: string | undefined;
+  selectedOption: any = 0;
   public ReplyBox: boolean = false;
   public Remark: string = '';
-  _EnumGrievanceStaus = EnumGrievanceStaus;
+
   constructor(private fb: FormBuilder,
     private commonMasterService: CommonFunctionService,
     private seatMatrixService: SeatMatrixService,
@@ -63,7 +72,6 @@ export class GrievanceComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GrievanceFormGroup = this.formBuilder.group(
       {
         ddlCategoryID: ['', [DropdownValidators]],
@@ -71,10 +79,20 @@ export class GrievanceComponent implements OnInit {
         ddlModuleID: ['', [DropdownValidators]],
         SubjectRelated: ['', Validators.required],
         Remark: ['', Validators.required],
-        textApplicationNo: [''],
-        //ApplicationNo: [''],
-        //fileStudentPhoto: [''],
+
+        EmployeeID: [{value:'',disabled:true},],
+        SSOID: [{value:'',disabled:true},],
+        Email: ['', Validators.required],
+        Mobile: ['', Validators.required],
+        ApplicationNo: [{value:'',disabled:true},],
+        
+        CategoryName: ['', Validators.required],
+        IssueTypeName: ['', Validators.required],
+        IssueTypeID: ['', [DropdownValidators]],
+        FeeForID: ['', [DropdownValidators]],
       })
+
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.loadDropdownData('QueryFor');
     this.loadDropdownData('Grievance Category');
     this.ShowAllData();
@@ -99,7 +117,7 @@ export class GrievanceComponent implements OnInit {
     });
   }
   async setDepartmentId() {
-    this.GrievanceFormGroup.get('ddlDepartmentID')?.disable();
+    // this.GrievanceFormGroup.get('ddlDepartmentID')?.disable();
     if (this.sSOLoginDataModel.DepartmentID === 1) {
       this.request.DepartmentID = 89;
       this.GetMasterSubDDL();
@@ -433,6 +451,46 @@ export class GrievanceComponent implements OnInit {
         this.isLoading = false;
 
       }, 200);
+    }
+  }
+
+  async GetFeeForTypeDDL() {
+    try {
+      const request: any = {};
+      request.Action = "GetFeeForDDL";
+      request.Role = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+
+      await this.grievanceService.GetGrievanceCommonDDL(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.FeeForTypeList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async GetIssueTypeDDL() {
+    try {
+      const request: any = {};
+      request.Action = "GetIssueTypeDDL";
+      request.Role = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.CategoryID = this.request.CategoryID;
+
+      await this.grievanceService.GetGrievanceCommonDDL(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.IssueTypeList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async onChangeCategory() {
+    if(this.request.CategoryID > 0 && this.request.CategoryID != EnumGrievanceCategory.Other) {
+      await this.GetIssueTypeDDL();      
     }
   }
 

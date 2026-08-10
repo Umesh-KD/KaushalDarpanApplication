@@ -1019,3 +1019,11 @@ export enum EnumGrievanceStaus {
   Under_Process  = 208,	
   Re_Open  = 222,	
 }
+
+export enum EnumGrievanceCategory {
+  Technical_Issue =	1,
+  Suggestions	= 2,
+  Operational_Issue =	3,
+  Transactional_Payment_Issue =	4,
+  Other	= 5,
+}

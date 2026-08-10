@@ -4,7 +4,6 @@ export class GrievanceDataModel {
   public CategoryID: number = 0;
   public DepartmentID: number = 0;
   public ModuleID: number = 0;
-  public ApplicationNo: string = '';
   public SubjectRelatedToComplain: string = '';
   public FileAttachment: string = '';
   public DisAttachmentFileName: string = '';
@@ -16,6 +15,17 @@ export class GrievanceDataModel {
   public ModifyBy: number = 0;  // Default value of 0
   public CreatedBy: number = 0;  // Default value of 0
   public RoleID: number = 0;
+
+  public SSOID?: string = '';
+  public EmployeeID?: string = '';
+  public ApplicationNo?: string = '';
+  public Email?: string = '';
+  public MobileNo?: string = '';
+
+  public CategoryName?: string = '';
+  public IssueTypeName?: string = '';
+  public IssueTypeID: number = 0;
+  public FeeForID: number = 0;
 }
 
 export class GrivienceReopenModelsDataModel {
@@ -54,5 +64,3 @@ export class GrivienceResponseDataModel {
   public DeleteStatus: boolean = false;
 
 }											
-
-
