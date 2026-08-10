@@ -1,4 +1,5 @@
-import { ImageColumnConfig } from "./image-column-config.model";
+
+import { TableImageConfig } from "./table-image.model";
 
 export type ColumnType =
   | 'serial'
@@ -70,6 +71,19 @@ export interface TableColumn {
 
   formatter?: (value:any,row:any)=>any;
 
-  imageConfig?: ImageColumnConfig;
+  imageConfig?: TableImageConfig;
+
+
+  // -------------------------------
+    // Runtime Properties
+    // -------------------------------
+
+    visible?: boolean;
+
+    order?: number;
+
+    fixed?: boolean;
+
+    lockVisibility?: boolean;
 
 }

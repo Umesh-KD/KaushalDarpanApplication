@@ -6,7 +6,7 @@ import { TableAction } from './DatatableModels/table-action.model';
 import { TableConfig } from './DatatableModels/table-config.model';
 import { TableColumn } from './DatatableModels/table-column.model';
 import { TableConstants } from './DatatableModels/table.constant';
-import { DEFAULT_TABLE_CONFIG } from './DatatableModels/table.default';
+import { DEFAULT_COLUMN, DEFAULT_IMAGE_CONFIG, DEFAULT_TABLE_CONFIG } from './DatatableModels/table.default';
 
 
 @Component({
@@ -74,7 +74,8 @@ ngOnChanges(changes: SimpleChanges): void {
 
     this.normalizeColumns();
 
-    this.loadColumns();
+    // this.loadColumns();
+    this.refreshDisplayedColumns();
 
   }
 
@@ -116,7 +117,7 @@ ngOnChanges(changes: SimpleChanges): void {
 
 private normalizeColumns(): void {
 
-    if (!this.config?.columns?.length) {
+    if (!this.normalizedConfig?.columns?.length) {
 
         this.normalizedColumns = [];
 
@@ -124,77 +125,72 @@ private normalizeColumns(): void {
 
     }
 
-    this.normalizedColumns = this.normalizedConfig.columns.map(column => {
+    this.normalizedColumns = this.normalizedConfig.columns.map((column,index) => {
 
-        // String column
+        // -------------------------
+        // String Column
+        // -------------------------
         if (typeof column === 'string') {
 
             return {
+
+                ...DEFAULT_COLUMN,
+
                 dataField: column,
+
                 displayField: this.splitCamelCase(column),
-                type: 'text',
-                sortable: true,
-                align: 'left',
-                width: 'auto',
-                hidden: false,
-                sticky: false,
-                ellipsis: false
+
+                visible: true,
+
+                order: index,
+
+                fixed: false,
+
+                imageConfig: {
+                    ...DEFAULT_IMAGE_CONFIG
+                }
+
             } as TableColumn;
 
         }
 
-        // Object column
+        // -------------------------
+        // Object Column
+        // -------------------------
+
         return {
+
+            ...DEFAULT_COLUMN,
 
             ...column,
 
-            // dataField: column.dataField,
+            displayField:
+                column.displayField ??
+                this.splitCamelCase(column.dataField),
 
-            displayField: column.displayField ?? this.splitCamelCase(column.dataField),
+                  // Runtime Properties
+            visible: column.visible ?? !column.hidden,
 
-            type: column.type || 'text',
+            order: column.order ?? index,
 
-            sortable: column.sortable ?? true,
-
-            align: column.align ?? 'left',
-
-            width: column.width ?? 'auto',
-
-            hidden: column.hidden ?? false,
-
-            sticky: column.sticky ?? false,
-
-            format: column.format,
-
-            ellipsis: column.ellipsis ?? false,
-
-            maxLength: column.maxLength,
-
-            formatter: column.formatter,
+            fixed: column.fixed ?? false,
 
             imageConfig: {
 
-                width: 40,
-
-                height: 40,
-
-                borderRadius: 'circle',
-
-                hoverZoom: true,
-
-                defaultImage: 'assets/images/no-image.png',
+                ...DEFAULT_IMAGE_CONFIG,
 
                 ...column.imageConfig
 
             }
 
-        };
+        } as TableColumn;
 
     });
 
-    
-}
+     // Sort according to order
+    this.normalizedColumns.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
+}
 private normalizeConfig(): void {
 
     this.normalizedConfig = {
@@ -423,23 +419,59 @@ getDisplayValue(column: TableColumn, row: any): string {
 //#region Image
 getImage(column: TableColumn, row: any): string {
 
+    if (column.imageConfig?.resolver) {
+        return column.imageConfig.resolver(row);
+    }
+
     const image = row[column.dataField];
 
     if (!image) {
-
-        return column.imageConfig?.defaultImage ?? 'assets/images/no-image.png';
-
+        return column.imageConfig?.defaultImage
+            ?? DEFAULT_IMAGE_CONFIG.defaultImage!;
     }
 
-    if (column.imageConfig?.basePath) {
+      // Already a complete URL
+    if (/^https?:\/\//i.test(image)) {
+        return image;
+    }
 
-        return column.imageConfig.basePath + image;
+      // Build URL using basePath
+    const basePath = column.imageConfig?.basePath ?? '';
 
+    if (basePath) {
+        const cleanBasePath = basePath.replace(/\/$/, '');
+        const cleanImage = image.replace(/^\//, '');
+        return `${cleanBasePath}/${cleanImage}`;
     }
 
     return image;
 
 }
+
+
+// getImage(column: TableColumn, row: any): string {
+
+//     const image = row[column.dataField];
+
+//     console.log('Image Name:', image);
+
+//     if (!image) {
+//         return column.imageConfig?.defaultImage ?? DEFAULT_IMAGE_CONFIG.defaultImage!;
+//     }
+
+//        // Already a complete URL
+//     if (/^https?:\/\//i.test(image)) {
+//         return image;
+//     }
+
+//     const basePath = column.imageConfig?.basePath ?? '';
+
+//     const finalUrl = `${basePath.replace(/\/$/, '')}/${image.replace(/^\//, '')}`;
+
+//     console.log('Final URL:', finalUrl);
+
+//     return finalUrl;
+// }
 
 setDefaultImage(event: any, column: TableColumn): void {
 
@@ -548,5 +580,91 @@ getDisplayField(column: TableColumn): string {
 }
 
 
+movePreview(event: MouseEvent): void {
+
+    const preview = (event.target as HTMLElement)
+        .parentElement
+        ?.querySelector('.table-image-preview') as HTMLElement;
+
+    if (!preview) {
+        return;
+    }
+
+    preview.style.left = `${event.clientX + 20}px`;
+    preview.style.top = `${event.clientY - 100}px`;
+}
+
+
+private refreshDisplayedColumns(): void {
+
+    this.displayedColumns = [];
+
+    // Serial Column
+    if (this.normalizedConfig.showSerialNo) {
+
+        this.displayedColumns.push(this.TABLE_CONSTANTS.SERIAL_COLUMN);
+
+    }
+
+    // Dynamic Columns
+    this.displayedColumns.push(
+
+        ...this.normalizedColumns
+            .filter(column => column.visible)
+            .map(column => column.dataField)
+
+    );
+
+    // Action Column
+    if (this.normalizedConfig.actions?.length) {
+
+        this.displayedColumns.push(this.TABLE_CONSTANTS.ACTION_COLUMN);
+
+    }
+
+}
+
+toggleAllColumns(checked: boolean): void {
+
+    this.normalizedColumns.forEach(column => {
+
+        if (!column.lockVisibility) {
+
+            column.visible = checked;
+        }
+    });
+
+    this.refreshDisplayedColumns();
+
+}
+columnChanged(column: TableColumn): void {
+
+    console.log(column.dataField, column.visible);
+
+    this.refreshDisplayedColumns();
+
+}
+
+isAllSelected(): boolean {
+
+    return this.normalizedColumns
+
+        .filter(x => !x.lockVisibility)
+
+        .every(x => x.visible);
+
+}
+
+resetColumns(): void {
+
+    this.normalizedColumns.forEach(column => {
+
+        column.visible = true;
+
+    });
+
+    this.refreshDisplayedColumns();
+
+}
 
 }
