@@ -84,7 +84,7 @@ export class ITIPublicInfoTabsComponent implements OnInit {
     this.tabs.push({ TabName: 'Apply for ITI Admission', TabNameHI: 'प्रवेश हेतु आवेदन करें', TabIcon: 'ti ti-license', component: ItiAdmissionComponent, DepartmentID: 1, CourseTypeId: 1, Enable: false, HasLink: false });
     this.tabs.push({ TabName: 'Know Your Merit', TabNameHI: 'मेरिट क्रमांक जानें', TabIcon: 'ti ti-license', component: KnowMeritITIComponent, DepartmentID: 2, HasLink: false });
     this.tabs.push({ TabName: 'Allotment Status', TabNameHI: 'आवंटन स्थिति', TabIcon: 'ti ti-exchange', component: AllotmentStatusITIComponent, DepartmentID: 2, HasLink: false });
-/*    this.tabs.push({ TabName: 'Upward Movement', TabNameHI: 'अपवर्ड मोमेंट', TabIcon: 'ti ti-exchange', component: UpwardMomentITIComponent, DepartmentID: 2, HasLink: false });*/
+    this.tabs.push({ TabName: 'Upward Movement', TabNameHI: 'अपवर्ड मोमेंट', TabIcon: 'ti ti-exchange', component: UpwardMomentITIComponent, DepartmentID: 2, HasLink: false });
     this.tabs.push({ TabName: 'ITI College Search', TabNameHI: 'आईटीआई कॉलेज खोज', TabIcon: 'ti ti-license', component: ItiCollegeSearchComponent, DepartmentID: 2, HasLink: false });   
     this.tabs.push({ TabName: 'Vacant Seat For Direct Admission', TabNameHI: 'डायरेक्ट एडमिशन हेतु रिक्त सीट', TabIcon: 'ti ti-license', component: ItiVacantSeatDirectAdmissionComponent, DepartmentID: 2, HasLink: false });
     this.tabs.push({ TabName: 'Download Application Form', TabNameHI: 'आवेदन पत्र डाउनलोड करें', TabIcon: 'ti ti-license', component: DownloadApplicationFormComponent, DepartmentID: 2, HasLink: false });
