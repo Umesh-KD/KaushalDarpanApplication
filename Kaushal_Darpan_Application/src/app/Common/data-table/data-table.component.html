@@ -148,10 +148,11 @@
                                 class="table-image"
 
                                 [src]="getImage(column, row)"
-
+                                (mousemove)="movePreview($event)"
                                 [style.width.px]="column.imageConfig?.width"
 
                                 [style.height.px]="column.imageConfig?.height"
+                                [style.object-fit]="column.imageConfig?.fit"
 
                                 [ngClass]="{
 
@@ -166,6 +167,14 @@
                                 }"
 
                                 (error)="setDefaultImage($event,column)">
+
+                                <div class="table-image-preview">
+
+                                    <img
+                                        [src]="getImage(column,row)"
+                                        (error)="setDefaultImage($event,column)">
+
+                                </div>
 
                         </div>                            
 
