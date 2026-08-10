@@ -105,11 +105,17 @@
                   <td align="left" style="width:20%">{{item.BranchName}}({{item.TradeScheme}})</td>
                   <td align="left" style="width:12.5%">{{item.AllotedCategory}}</td>
                   <td align="left" style="width:12.5%">{{item.AllotedPriority}} </td>
-                  <td align="center">
-                    <button class="btn bg-success text-white btn-sm" *ngIf="item.AllotmentStatus==4 && item.AllotedPriority>1"
+                  <td align="left">
+                    <button  class="btn bg-success text-white btn-sm" *ngIf="item.AllotmentStatus==4 && item.AllotedPriority>1 && item.IsUpword!=1"
                             (click)="openSubmitOTP(modal_UpwardMovement,item)" type="button">
                       Apply In Upward
                     </button>
+
+                    <button  class="btn bg-success text-white btn-sm" *ngIf="item.AllotmentStatus==4 && item.AllotedPriority>1 && item.IsUpword==1"
+                           type="button">
+                      Already Applied
+                    </button>
+
                   </td>
                 </tr>
               </tbody>
