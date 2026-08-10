@@ -22,6 +22,8 @@ export const DEFAULT_TABLE_CONFIG: Partial<TableConfig> = {
 
     noDataMessage: "No Records Found",
 
+    showColumnCustomizer: true,
+
     actions: []
 
 };

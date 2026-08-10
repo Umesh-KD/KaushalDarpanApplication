@@ -37,320 +37,46 @@ export class DynamicTableMasterComponent implements OnInit {
 
 tableConfig: TableConfig = {
 
-  // serverSide: true,
-
-  showSerialNo: true,
-
-  showSearch: true,
-
-  showPagination: true,
-
-  pageSize: 10,
-
-  pageSizeOptions: [10, 20, 50, 100],
-
-  noDataMessage: 'No Company Found',
-
-  // ----------Example1 for columns-------------Mixed Table---------------
-
-//   columns: [
-
-//     'Name',
-
-//     'Website',
-
-//     'Address'
-
-// ]
-
-
-  // ----------Example2 for columns-------------Mixed Table---------------
-  
-
-//   columns: [
-//     'Name',
-//     'Website',
-//     {
-//         dataField: 'Status',
-//         type: 'badge'
-//     },
-//     {
-//         dataField: 'CreatedDate',
-//         type: 'date'
-//     }
-// ]
-
-  // ----------Example3 for columns-------------Fully Customized---------------
-
-//   columns: [
-
-//     {
-//         dataField: 'Name',
-//         width: '250px',
-//         formatter: (value) => value.toUpperCase()
-//     },
-
-//     {
-//         dataField: 'Website',
-//         type: 'link'
-//     }
-
-// ]
-
-// ------------Example 4 for Column-----------------------------
-
   columns: [
-
     {
         dataField: 'CompanyPhoto',
-
         type: 'image',
-
         imageConfig: {
-
-            // basePath: environment.imageUrl + '/CompanyLogo/',
             basePath: this.appsettingConfig.StaticFileRootPathURL ,
-
             width: 40,
-
             height: 40,
-
             borderRadius: 'circle'
-
         }
-
     },
-
-    
-    // //------------- Example 1 for image field --------Local Asset--------
-
-  //  {
-  //       dataField: 'Photo',
-  //       type: 'image'
-  //   },
-
-  
-    // //------------- Example 2 for image field --------Server Upload Folder--------
-
-    // {
-    //     dataField: 'Photo',
-
-    //     type: 'image',
-
-    //     imageConfig: {
-
-    //         basePath: 'https://localhost:5001/uploads/'
-
-    //     }
-    // },
-
-
-    // //------------- Example 3 for image field ------Dynamic Resolver----------
-
-    // {
-    //     dataField: 'Photo',
-
-    //     type: 'image',
-
-    //     imageConfig: {
-
-    //         resolver: (row) => {
-
-    //             return row.IsStudent
-    //                 ? '/student/' + row.Photo
-    //                 : '/staff/' + row.Photo;
-
-    //         }
-
-    //     }
-    // },
-
-
-    
     {
       dataField: 'Name',
-      displayField: 'Company Name',
-      // type: 'text',
-      // sortable: true,
-      // width: '80px',
-      // align: 'center',
-      // formatter:(value,row)=>{
-      //   return value + ' (' + row.ID + ')';  //FORMATER EXAMPLE: company name + ID
-      // }
-      //ellipsis:true,
-     // maxLength:40      
+      // displayField: 'Company Name',    
     },
 
     {
       dataField: 'Website',
-      displayField: 'Website',
-      // type: 'link',
-      // sortable: true
+      // displayField: 'Website'
     },
 
     {
       dataField: 'Address',
-      displayField: 'Address',
-      // type: 'text'
+      // displayField: 'Address'
     },
 
     {
       dataField: 'Status',
-      displayField: 'Status',
+      // displayField: 'Status',
       type: 'badge',
       // align: 'center'
     },
-
+    {
+      dataField: 'Priority',
+      // displayField: 'Status',
+      type: 'badge',
+      // align: 'center'
+    },
   ],
 
-  badgeConfig: [
-    {
-      value:'Approved',
-      cssClass:'approved',
-      icon:'ti ti-circle-check',
-      text:'Approveddd'
-    },
-
-
-    {
-      value: 'Pending',
-      cssClass: 'pending',
-      icon:'ti ti-clock'
-    },
-
-    {
-      value: 'Rejected',
-      cssClass: 'rejected',
-      icon:'ti ti-close'
-    }
-
-  ],
-
-  actions: [
-
-    {
-
-      action:'edit',
-      label:'Edit',
-      icon:'ti ti-pencil',
-      type: ActionType.Router,
-      visible:(row)=>row.Status=='Pending',
-      disabled:(row)=>row.IsLocked,
-      cssClass:(row)=>{
-          return row.Status=='Rejected'
-          ?'text-danger'
-          :'text-primary';
-      },
-      tooltip:(row)=>{
-          return row.Status=='Rejected'
-          ?'Cannot Edit'
-          :'Edit';
-
-      },
-      routerLink: (row) => {
-        return '/AddCompany';
-      },
-      queryParams: (row) => {
-        return {
-          CompanyID: row.ID,
-          key: 2
-        };
-
-      },
-
-    },
-
-    {
-      action: 'delete',
-
-      label: 'Delete',
-
-      icon: 'ti ti-trash',
-
-      type: ActionType.Button,
-
-      visible: row => row.Status === 'Pending'
-
-    },
-
-    {
-      action: 'view',
-
-      label: 'View',
-
-      icon: 'ti ti-eye',
-
-      type: ActionType.Router,
-
-      //----------------------------------------- Example 1 routerlink-queryparam-------------------------------------------------------
-      // routerLink: row => {
-      //     switch(row.Status){
-      //         case 'Pending':
-      //             return '/Student/Edit';
-      //         case 'Approved':
-      //             return '/Student/View';
-      //         case 'Rejected':
-      //             return '/Student/History';
-      //         default:
-      //             return '/Student';
-      //     }
-      // },
-
-          // Example 1
-    // queryParams: row => ({
-    //     CompanyID: row.ID,
-    //     key: row.Status === 'Approved' ? 1 : 2,
-    //     flag: row.Status === 'Approved'
-    // }),
-
-
-      // ---------------------------------------Example2: another example for router link and query params--------------------------------
-      // routerLink: (row) => {
-
-      //   if (row.Status === 'Approved') {
-      //     return '/ViewCompany';
-      //   }
-
-      //   return '/AddCompany';
-
-      // },
-
-
-    // Example2:
-    //   queryParams: (row) => {
-    //   if (row.Status === 'Approved') {
-    //     return {
-    //       CompanyID: row.ID,
-    //       flag: 1
-    //     };
-    //   }
-    //   return {
-    //     CompanyID: row.ID,
-    //     key: 2
-    //   };
-
-    // },
-
-    // ----------------------------------------Example 3: to use routerlink - queryparam--------------------------------------------------------------------
-
-     routerLink: (row) => {
-        return '/AddCompany';
-      },
-      queryParams: (row) => {
-        return {
-          CompanyID: row.ID,
-          key: 2,
-          flag:1
-        };
-
-      },
-
-
-      visible: row => row.Status === 'Approved'
-
-    }
-
-  ]
 
 };
 

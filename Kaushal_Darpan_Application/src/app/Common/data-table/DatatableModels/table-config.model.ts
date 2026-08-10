@@ -58,5 +58,6 @@ export interface TableConfig {
      */
     badgeConfig?: TableStatus[];
 
+    showColumnCustomizer?: boolean;
   
 }

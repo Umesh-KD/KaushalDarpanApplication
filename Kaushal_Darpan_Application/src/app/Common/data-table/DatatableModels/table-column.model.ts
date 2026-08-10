@@ -73,4 +73,17 @@ export interface TableColumn {
 
   imageConfig?: TableImageConfig;
 
+
+  // -------------------------------
+    // Runtime Properties
+    // -------------------------------
+
+    visible?: boolean;
+
+    order?: number;
+
+    fixed?: boolean;
+
+    lockVisibility?: boolean;
+
 }

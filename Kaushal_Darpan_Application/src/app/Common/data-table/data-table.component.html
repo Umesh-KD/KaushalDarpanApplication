@@ -1,6 +1,66 @@
 <p>data-table works!</p>
 <div class="datatable-container">
 
+    <!-- customizable column -->
+    <div class="datatable-toolbar"
+        *ngIf="normalizedConfig.showColumnCustomizer">
+
+        <button
+
+            mat-stroked-button
+
+            color="primary"
+
+            [matMenuTriggerFor]="columnMenu">
+
+            <mat-icon>view_column</mat-icon>
+
+            Columns
+
+        </button>
+
+    </div>
+
+    <mat-menu #columnMenu="matMenu">
+
+        <div class="column-menu">
+
+            <mat-checkbox
+
+                [checked]="isAllSelected()"
+
+                (click)="$event.stopPropagation()"
+
+                (change)="toggleAllColumns($event.checked)">
+
+                Select All
+
+            </mat-checkbox>
+
+            <mat-divider></mat-divider>
+
+            <div *ngFor="let column of normalizedColumns">
+
+                <mat-checkbox
+
+                    *ngIf="!column.lockVisibility"
+
+                    [(ngModel)]="column.visible"
+
+                    (click)="$event.stopPropagation()"
+
+                    (change)="refreshDisplayedColumns()">
+
+                    {{column.displayField}}
+
+                </mat-checkbox>
+
+            </div>
+
+        </div>
+
+    </mat-menu>
+    
     <!-- Search -->
 
     <div class="row mb-3" *ngIf="normalizedConfig.showSearch">
