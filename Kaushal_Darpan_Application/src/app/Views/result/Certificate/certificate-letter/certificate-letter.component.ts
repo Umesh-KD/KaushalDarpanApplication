@@ -11,8 +11,9 @@ import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { CertificateLetterDataModel, CertificateLetterSearchModel } from '../../../../Models/CertificateLetterDataModel';
 import { ReportService } from '../../../../Services/Report/report.service';
-import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumResultType, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { HttpClient } from '@angular/common/http';
+import { CommonFunctionHelper } from '../../../../Common/commonFunctionHelper';
 
 
 @Component({
@@ -23,18 +24,23 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CertificateLetterComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
-  public Table_SearchText: string = "";
-  public tbl_txtSearch: string = '';
-  public State: number = -1;
-  public Message: any = [];
-  public ErrorMessage: any = [];
-  public isLoading: boolean = false;
-  public isSubmitted: boolean = false;
   request = new CertificateLetterDataModel()
   public searchRequest = new CertificateLetterSearchModel();
+  
+  public _EnumResultType = EnumResultType;
+
   public InstituteList: any = [];
   public ResultTypeList: any = [];
   public ReportlList: CertificateLetterSearchModel[] = [];
+  public endTermFinYear: any = [];
+  public Message: any = [];
+  public ErrorMessage: any = [];
+
+  public Table_SearchText: string = "";
+  public tbl_txtSearch: string = '';
+  public State: number = -1;
+  public isLoading: boolean = false;
+  public isSubmitted: boolean = false;
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -44,17 +50,15 @@ export class CertificateLetterComponent {
     private reportService: ReportService,
     public appsettingConfig: AppsettingService,
     private http: HttpClient,
-    private Swal2: SweetAlert2) {
-  }
+    private Swal2: SweetAlert2,
+    public commonFunctionHelper: CommonFunctionHelper,
+  ) { }
 
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetInstituteListDDL();
     await this.GetExamTypeMasterDDL();
-    this.DownloadData();
-
-
   }
 
   async GetInstituteListDDL() {
@@ -77,27 +81,6 @@ export class CertificateLetterComponent {
       }, 200);
     }
   }
-
-  //async GetExamTypeMasterDDL() {
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.commonMasterService.GetCommonMasterData('ResultExamType')
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        this.ExamTypeList = data.Data;
-  //        console.log(this.ExamTypeList)
-  //      }, (error: any) => console.error(error))
-  //  }
-  //  catch (ex) {
-  //    console.log(ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
-
 
   async GetExamTypeMasterDDL() {
     try {
@@ -122,18 +105,37 @@ export class CertificateLetterComponent {
 
   async DownloadData() {
     this.ReportlList = [];
+
+    if ((this.searchRequest.InstituteID ?? 0) <= 0) {
+      this.toastr.error("Please select Institute!");
+      return;
+    }
+
+    if ((this.searchRequest.ExamTypeID ?? 0) <= 0) {
+      this.toastr.error("Please select Result Type!");
+      return;
+    }
+
+    if (
+      ((this.searchRequest.ExamTypeID ?? 0) == EnumResultType.RwhResult || 
+      (this.searchRequest.ExamTypeID ?? 0) == EnumResultType.RwhRevalEffected) && 
+      (this.searchRequest.EffectiveFromEndTermId ?? 0) <= 0
+    ) {
+      this.toastr.error("Please select Effective From!");
+      return;
+    }
+
     try {
       this.loaderService.requestStarted();
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.searchRequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng
-      //this.searchRequest.InstituteID = this.sSOLoginDataModel.Eng_NonEng
-      //this.searchRequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng
-      await this.reportService.GetReportsData(this.searchRequest)
+
+      await this.reportService.GetCertificateLetterReport_html(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State === EnumStatus.Success) {
-            this.DownloadFile(data.Data);
+            this.commonFunctionHelper.downloadBase64OfPdf(data.Data, 'certificate_letter.pdf');
           }
         }, (error: any) => console.error(error));
     } catch (ex) {
@@ -162,5 +164,20 @@ export class CertificateLetterComponent {
     return `file_${timestamp}.${extension}`;
   }
 
+  async GetEffectiveFinYear() {
+    this.searchRequest.EffectiveFromEndTermId = 0;
+    this.endTermFinYear = [];
+    if (this.searchRequest.ExamTypeID == this._EnumResultType.RwhResult || this.searchRequest.ExamTypeID == this._EnumResultType.RwhRevalEffected) {
+      try {
+        await this.commonMasterService.GetEffectiveFinYear()
+          .then((data: any) => {
+            this.endTermFinYear = data['Data'] || [];
+          }, (error: any) => console.error(error));
+      }
+      catch (Ex) {
+        console.error(Ex);
+      }
+    }
+  }
 
 }

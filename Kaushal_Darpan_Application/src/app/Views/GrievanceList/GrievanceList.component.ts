@@ -96,6 +96,10 @@ export class GrievanceListComponent implements OnInit {
     // await this.setDepartmentId();
     await this.GetGrievanceData();
     await this.GetStatusForGrivience();
+
+    if(this.sSOLoginDataModel.RoleID != EnumRole.DTE) {
+      await this.GetMasterSubDDL();
+    }    
     
     //await this.ShowAllData();
   }
@@ -144,7 +148,9 @@ export class GrievanceListComponent implements OnInit {
 
   async GetMasterSubDDL() {
     try {
+
       this.selectedOption = this.request.DepartmentID
+
       await this.commonMasterService.GetSubjectForCitizenSugg(this.selectedOption)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -157,6 +163,28 @@ export class GrievanceListComponent implements OnInit {
       console.log(ex);
     }
   }
+
+  // async GetMasterSubDDL() {
+  //   try {
+  //     const request: any = {};
+  //     request.Action = "ModuleListDDL";
+  //     request.Role = this.sSOLoginDataModel.RoleID;
+  //     request.UserID = this.sSOLoginDataModel.UserID;
+  //     if(this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
+  //       request.DepartmentID = this.request.DepartmentID;
+  //     } else {
+  //       request.DepartmentID = 0;
+  //     }
+      
+
+  //     await this._GrievanceService.GetGrievanceCommonDDL(request).then((data: any) => {
+  //       data = JSON.parse(JSON.stringify(data));
+  //       this.SubMasterList = data['Data'];
+  //     })
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
 
   async GetStatusForGrivience() {

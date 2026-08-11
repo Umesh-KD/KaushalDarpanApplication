@@ -171,6 +171,13 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async GetCertificateLetterReport_html(searchRequest: CertificateLetterSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetCertificateLetterReport_html`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
   public async GetGroupCenterMappingReportsData(data: any) {
     return await this.http.post(this.APIUrl + "/GetGroupCenterMappingReports/", data, this.headersOptions)
