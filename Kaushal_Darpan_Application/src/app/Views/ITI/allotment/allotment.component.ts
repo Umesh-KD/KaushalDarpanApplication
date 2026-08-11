@@ -208,7 +208,7 @@ export class AllotmentComponent implements OnInit {
       CourseTypeId: 1,
       AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
       EndTermId: this.sSOLoginDataModel.EndTermID,
-      Key: "FIRST ALLOTMENT GENERATE,FIRST ALLOTMENT PUBLISH,FIRST UPWARD GENERATE,FIRST UPWARD PUBLISH,SECOND ALLOTMENT GENERATE,SECOND ALLOTMENT PUBLISH"
+      Key: "FIRST ALLOTMENT GENERATE,FIRST ALLOTMENT PUBLISH,FIRST UPWARD GENERATE,FIRST UPWARD PUBLISH,SECOND ALLOTMENT GENERATE,SECOND ALLOTMENT PUBLISH,APPLY IN UPWARD"
     }
 
     await this.commonMasterService.GetDateConfigSetting(data)
@@ -799,8 +799,8 @@ export class AllotmentComponent implements OnInit {
       this.AllotmentGenerateKey = "FIRST ALLOTMENT GENERATE";
       this.AllotmentPublishKey = "FIRST ALLOTMENT PUBLISH";
     } else if (this.request.AllotmentId == 3) {
-      this.AllotmentGenerateKey = "FIRST UPWARD GENERATE";
-      this.AllotmentPublishKey = "FIRST UPWARD PUBLISH";
+      this.AllotmentGenerateKey = "APPLY IN UPWARD";
+      this.AllotmentPublishKey = "APPLY IN UPWARD";
     } else if (this.request.AllotmentId == 4) {
       this.AllotmentGenerateKey = "SECOND ALLOTMENT GENERATE";
       this.AllotmentPublishKey = "SECOND ALLOTMENT PUBLISH";
