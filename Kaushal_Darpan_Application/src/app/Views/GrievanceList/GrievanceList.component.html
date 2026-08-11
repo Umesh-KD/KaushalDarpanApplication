@@ -25,23 +25,22 @@
               Category
             </label>
             <select class="form-select" [(ngModel)]="request.CategoryID" formControlName="ddlCategoryID">
-              <option value="0" selected>--Choose Option--</option>
+              <option value="0" selected>--All--</option>
               <option *ngFor="let item of CategoryList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
 
           </div>
 
-          <div>
+          <div *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTE">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
 
               Department
             </label>
-            <select class="form-select disabled" 
+            <select class="form-select" 
               [(ngModel)]="request.DepartmentID" 
               formControlName="ddlDepartmentID" 
-              (change)="GetMasterSubDDL()" 
-              [disabled]="true">
-              <option value="0" selected>--Choose Option--</option>
+              (change)="GetMasterSubDDL()">
+              <option value="0" selected>--All--</option>
               <option *ngFor="let item of DepartmentList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
 
@@ -53,7 +52,7 @@
               Module
             </label>
             <select class="form-select" [(ngModel)]="request.ModuleID" formControlName="ddlModuleID">
-              <option value="0" selected>--Choose Option--</option>
+              <option value="0" selected>--All--</option>
               <option *ngFor="let item of SubMasterList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
 
@@ -64,7 +63,7 @@
               Status
             </label>
             <select class="form-select" [(ngModel)]="request.StatusID" formControlName="ddlStatusID">
-              <option value="0" selected="">--Choose Option--</option>
+              <option value="0" selected="">--All--</option>
               <option *ngFor="let item of StatusList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
           </div>
@@ -107,7 +106,7 @@
               <th class="text-left">Category</th>
               <th class="text-left">Department</th>
               <th class="text-left">Module</th>
-              <th class="text-left">Application/Enrollment No.</th>
+              <th class="text-left">Grievant Details</th>
               <th class="text-left">Subject/Remark</th>
               <th class="text-left">Status</th>
               <th class="text-left">Created Date</th>
@@ -119,11 +118,17 @@
             <tr *ngFor="let item of GrivienceList let idx=index;">
               <td>{{idx+1}}</td>
               <td align="left">{{item.ComplainNo}}</td>
-              <td align="left">{{item.GrivienceApplier}}</td>
+              <td align="left">{{item.GrievantRole}}</td>
               <td align="left">{{item.CategoryName}}</td>
               <td align="left">{{item.DepartmentName}}</td>
               <td align="left">{{item.Module}}</td>
-              <td align="left">{{item.ApplicationNo}}</td>
+              <td align="left">
+                <p *ngIf="item.UserName?.length>0"><i class="ti ti-user"></i> {{item.UserName }} ({{item.SSOID}})</p>
+                <p *ngIf="item.EnrollmentNo?.length>0 && item.IsStudent == 1"><i class="ti ti-list"></i> {{item.EnrollmentNo}}</p>
+                <p *ngIf="item.EmployeeID?.length>0 && item.IsStudent == 0"><i class="ti ti-list"></i> {{item.EmployeeID}}</p>
+                <p *ngIf="item.MobileNo?.length>0"><i class="ti ti-phone"></i> {{item.MobileNo}}</p>
+                <p *ngIf="item.Email?.length>0"><i class="ti ti-mail"></i> {{item.Email}}</p>
+              </td>
               <td align="left">
                 <b>{{item.SubjectRelatedToComplain}}</b>
                 <p class="italic">{{item.Remark}}</p>
@@ -132,8 +137,6 @@
               <td align="left">{{item.Status}}</td>
               <td align="left">{{item.RTS}}</td>
               <td align="left">{{item.ResolvedDate}}</td>
-
-
 
               <td>
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">

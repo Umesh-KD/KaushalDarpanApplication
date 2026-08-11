@@ -26,7 +26,7 @@
         </div>
 
         <form [formGroup]="GrievanceFormGroup">
-          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-6">
+          <!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-6">
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -63,7 +63,7 @@
               <input type="text" class="form-input" placeholder="Enter Mobile No"
                 formControlName="MobileNo" [(ngModel)]="request.MobileNo">
             </div>
-          </div>  
+          </div>   -->
 
           <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
@@ -115,7 +115,7 @@
               </div>
             </div>
 
-            <div>
+            <div *ngIf="request.IssueTypeID == 1">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Name of Issue Type
               </label>
@@ -128,7 +128,7 @@
               </div>
             </div>
 
-            <div>
+            <div *ngIf="this.request.CategoryID == _EnumGrievanceCategory.Transactional_Payment_Issue">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Fee For<span class="StarMarking">*</span>
               </label>
@@ -174,34 +174,6 @@
                 </p>
               </div>
             </div>
-          </div>
-
-          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Subject <small>(Related to Complaint)</small><span class="StarMarking">*</span>
-              </label>
-              <textarea class="form-input" placeholder="Enter Subject" formControlName="SubjectRelated"
-                [(ngModel)]="request.SubjectRelatedToComplain" rows="4"></textarea>
-
-              <div *ngIf="isSubmitted&&form.SubjectRelated.errors" class="text-danger">
-                <p *ngIf="!form.SubjectRelated.errors.DropdownValidators">
-                  <i aria-hidden="true"></i>Subject field is required.!
-                </p>
-              </div>
-            </div>
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Remark<span class="StarMarking">*</span>
-              </label>
-              <textarea class="form-input" placeholder="Enter Remark" formControlName="Remark"
-                [(ngModel)]="request.Remark" rows="4"></textarea>
-              <div *ngIf="isSubmitted&&form.Remark.errors" class="text-danger">
-                <p *ngIf="!form.Remark.errors.DropdownValidators">
-                  <i aria-hidden="true"></i>Remark field is required.!
-                </p>
-              </div>
-            </div>
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="fileStudentPhoto">
@@ -222,7 +194,34 @@
                 </div>
               </div>
             </div>
+          </div>
 
+          <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Subject <small>(Related to Complaint)</small><span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Subject" formControlName="SubjectRelated"
+                [(ngModel)]="request.SubjectRelatedToComplain" >
+
+              <div *ngIf="isSubmitted&&form.SubjectRelated.errors" class="text-danger">
+                <p *ngIf="!form.SubjectRelated.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>Subject field is required.!
+                </p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark<span class="StarMarking">*</span>
+              </label>
+              <textarea class="form-input" placeholder="Enter Remark" formControlName="Remark"
+                [(ngModel)]="request.Remark" rows="4"></textarea>
+              <div *ngIf="isSubmitted&&form.Remark.errors" class="text-danger">
+                <p *ngIf="!form.Remark.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>Remark field is required.!
+                </p>
+              </div>
+            </div>
           </div>
           <div class="flex justify-center items-center">
             <button type="button" class="btn bg-info mt-6 text-white" (click)="SaveData()">Submit</button>
@@ -260,7 +259,7 @@
               <th class="text-left">Category</th>
               <th class="text-left">Department</th>
               <th class="text-left">Module</th>
-              <th class="text-left">Application/Enrollment No.</th>
+              <th class="text-left">Grievant Details</th>
               <th class="text-left">Subject/Remark</th>
               <th class="text-left">Status</th>
               <th class="text-left">Created Date</th>
@@ -275,7 +274,13 @@
               <td align="left">{{item.CategoryName}}</td>
               <td align="left">{{item.DepartmentName}}</td>
               <td align="left">{{item.Module}}</td>
-              <td align="left">{{item.ApplicationNo}}</td>
+              <td align="left">
+                <p *ngIf="item.UserName?.length>0"><i class="ti ti-user"></i> {{item.UserName }} ({{item.SSOID}})</p>
+                <p *ngIf="item.EnrollmentNo?.length>0 && item.IsStudent == 1"><i class="ti ti-list"></i> {{item.EnrollmentNo}}</p>
+                <p *ngIf="item.EmployeeID?.length>0 && item.IsStudent == 0"><i class="ti ti-list"></i> {{item.EmployeeID}}</p>
+                <p *ngIf="item.MobileNo?.length>0"><i class="ti ti-phone"></i> {{item.MobileNo}}</p>
+                <p *ngIf="item.Email?.length>0"><i class="ti ti-mail"></i> {{item.Email}}</p>
+              </td>
               <td align="left"><b>{{item.SubjectRelatedToComplain}}</b>
                 <p class="italic">{{item.Remark}}</p>
               </td>

@@ -26,6 +26,9 @@ export class GrievanceDataModel {
   public IssueTypeName?: string = '';
   public IssueTypeID: number = 0;
   public FeeForID: number = 0;
+
+  public StudentID: number = 0;
+  public UserID: number = 0;
 }
 
 export class GrivienceReopenModelsDataModel {
@@ -45,7 +48,9 @@ export class GrivienceSearchModel {
   public CreatedBy: number=0
   public ModifyBy: number = 0
   public RoleID: number = 0;
-
+  public Action?: string = '';
+  public StudentID: number = 0;
+  public UserID: number = 0;
 }
 
 export class GrivienceResponseDataModel {
