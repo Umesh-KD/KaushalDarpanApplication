@@ -74,7 +74,8 @@ ngOnChanges(changes: SimpleChanges): void {
 
     this.normalizeColumns();
 
-    this.loadColumns();
+    // this.loadColumns();
+    this.refreshDisplayedColumns();
 
   }
 
@@ -124,7 +125,7 @@ private normalizeColumns(): void {
 
     }
 
-    this.normalizedColumns = this.normalizedConfig.columns.map(column => {
+    this.normalizedColumns = this.normalizedConfig.columns.map((column,index) => {
 
         // -------------------------
         // String Column
@@ -138,6 +139,12 @@ private normalizeColumns(): void {
                 dataField: column,
 
                 displayField: this.splitCamelCase(column),
+
+                visible: true,
+
+                order: index,
+
+                fixed: false,
 
                 imageConfig: {
                     ...DEFAULT_IMAGE_CONFIG
@@ -161,6 +168,13 @@ private normalizeColumns(): void {
                 column.displayField ??
                 this.splitCamelCase(column.dataField),
 
+                  // Runtime Properties
+            visible: column.visible ?? !column.hidden,
+
+            order: column.order ?? index,
+
+            fixed: column.fixed ?? false,
+
             imageConfig: {
 
                 ...DEFAULT_IMAGE_CONFIG,
@@ -172,6 +186,9 @@ private normalizeColumns(): void {
         } as TableColumn;
 
     });
+
+     // Sort according to order
+    this.normalizedColumns.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
 }
 private normalizeConfig(): void {
@@ -577,5 +594,77 @@ movePreview(event: MouseEvent): void {
     preview.style.top = `${event.clientY - 100}px`;
 }
 
+
+private refreshDisplayedColumns(): void {
+
+    this.displayedColumns = [];
+
+    // Serial Column
+    if (this.normalizedConfig.showSerialNo) {
+
+        this.displayedColumns.push(this.TABLE_CONSTANTS.SERIAL_COLUMN);
+
+    }
+
+    // Dynamic Columns
+    this.displayedColumns.push(
+
+        ...this.normalizedColumns
+            .filter(column => column.visible)
+            .map(column => column.dataField)
+
+    );
+
+    // Action Column
+    if (this.normalizedConfig.actions?.length) {
+
+        this.displayedColumns.push(this.TABLE_CONSTANTS.ACTION_COLUMN);
+
+    }
+
+}
+
+toggleAllColumns(checked: boolean): void {
+
+    this.normalizedColumns.forEach(column => {
+
+        if (!column.lockVisibility) {
+
+            column.visible = checked;
+        }
+    });
+
+    this.refreshDisplayedColumns();
+
+}
+columnChanged(column: TableColumn): void {
+
+    console.log(column.dataField, column.visible);
+
+    this.refreshDisplayedColumns();
+
+}
+
+isAllSelected(): boolean {
+
+    return this.normalizedColumns
+
+        .filter(x => !x.lockVisibility)
+
+        .every(x => x.visible);
+
+}
+
+resetColumns(): void {
+
+    this.normalizedColumns.forEach(column => {
+
+        column.visible = true;
+
+    });
+
+    this.refreshDisplayedColumns();
+
+}
 
 }

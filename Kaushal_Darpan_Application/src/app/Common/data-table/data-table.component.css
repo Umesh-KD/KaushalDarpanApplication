@@ -148,6 +148,8 @@ table {
     width: 100%;
 }
 
+/* Image hover at tooltip */
+
 .table-image-wrapper {
 
     position: relative;
@@ -233,5 +235,38 @@ table {
 .table-image-wrapper:hover .table-image-preview {
 
     display: block;
+
+}
+
+
+/* customizable column */
+
+.datatable-toolbar {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    margin-bottom: 10px;
+
+}
+
+.column-menu {
+
+    padding: 10px;
+
+    width: 250px;
+
+    max-height: 400px;
+
+    overflow: auto;
+
+}
+
+.column-menu mat-checkbox {
+
+    display: block;
+
+    margin-bottom: 8px;
 
 }

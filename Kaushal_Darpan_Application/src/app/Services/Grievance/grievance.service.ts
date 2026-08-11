@@ -91,7 +91,11 @@ export class GrievanceService {
       ).toPromise();
   }
 
-  
-
-
+  public async GetGrievanceCommonDDL(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetGrievanceCommonDDL`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

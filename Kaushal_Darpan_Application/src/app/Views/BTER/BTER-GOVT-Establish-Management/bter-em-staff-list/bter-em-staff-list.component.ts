@@ -1036,7 +1036,7 @@ export class BTEREMStaffListComponent {
   // this.StaffMasterFormGroupGuestHouse.controls['DesignationID'].setValidators([DropdownValidators]);
   // this.StaffMasterFormGroupGuestHouse.controls['DesignationID'].clearValidators();
 
-  async openModal_ApproveStaffProfileGuestHouse(content: any, StaffUserID: number, SSOID: any, type: boolean, RoleID: number) {
+  async openModal_ApproveStaffProfileGuestHouse(content: any, StaffUserID: number, SSOID: any, type: boolean, RoleID: string) {
     debugger
     this.IsView = type;
     await this.GetPersonalDetailByUserID(StaffUserID, SSOID);
@@ -1046,14 +1046,19 @@ export class BTEREMStaffListComponent {
     } else {
       this.isApprove = false;
     }
-   
-    if (RoleID == this._EnumRole.GuestHouseAdmin || RoleID == this._EnumRole.GuestHouseIncharge || RoleID == this._EnumRole.GuestRoomWarden) {
+
+    const roleIds = RoleID.split(',').map(x => Number(x.trim()));
+
+   // will recheck 
+    if (
+      roleIds.includes(this._EnumRole.GuestHouseAdmin)  || 
+      roleIds.includes(this._EnumRole.GuestHouseIncharge) || 
+      roleIds.includes(this._EnumRole.GuestRoomWarden)
+    ){
       this.StaffMasterFormGroupGuestHouse.controls['DesignationID'].setValidators([DropdownValidators]);
       this.StaffMasterFormGroupGuestHouse.controls['DesignationID'].clearValidators();
       this.StaffMasterFormGroupGuestHouse.controls['DesignationID'].updateValueAndValidity();
     }
-    
-
 
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });
   }
