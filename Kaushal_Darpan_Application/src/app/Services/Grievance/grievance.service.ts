@@ -33,15 +33,6 @@ export class GrievanceService {
     return throwError(error);
   }
 
-  //public async ShowSeatMetrix(searchRequest: SeatSearchModel) {
-  //  var body = JSON.stringify(searchRequest);
-  //  return await this.http.post(`${this.APIUrl}/GetShowSeatMetrix`, body, this.headersOptions)
-  //    .pipe(
-  //      catchError(this.handleErrorObservable)
-  //    ).toPromise();
-  //}
-
-
   public async SaveData(request: GrievanceDataModel) {
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/SaveData', request, this.headersOptions)
@@ -94,6 +85,14 @@ export class GrievanceService {
   public async GetGrievanceCommonDDL(searchRequest: any) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetGrievanceCommonDDL`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetGrievanceData(searchRequest: GrivienceSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetGrievanceData`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

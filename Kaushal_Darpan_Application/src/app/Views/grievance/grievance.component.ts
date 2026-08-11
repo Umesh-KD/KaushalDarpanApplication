@@ -80,23 +80,23 @@ export class GrievanceComponent implements OnInit {
         SubjectRelated: ['', Validators.required],
         Remark: ['', Validators.required],
 
-        EmployeeID: [{value:'',disabled:true},],
-        SSOID: [{value:'',disabled:true},],
-        Email: ['', Validators.required],
-        Mobile: ['', Validators.required],
-        ApplicationNo: [{value:'',disabled:true},],
-        
-        CategoryName: ['', Validators.required],
-        IssueTypeName: ['', Validators.required],
+        // EmployeeID: [{value:'',disabled:true},],
+        // SSOID: [{value:'',disabled:true},],
+        // Email: ['', Validators.required],
+        // Mobile: ['', Validators.required],
+        // ApplicationNo: [{value:'',disabled:true},],
+
+        CategoryName: ['',],
+        IssueTypeName: ['',],
         IssueTypeID: ['', [DropdownValidators]],
-        FeeForID: ['', [DropdownValidators]],
+        FeeForID: ['',],
       })
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.loadDropdownData('QueryFor');
     this.loadDropdownData('Grievance Category');
-    this.ShowAllData();
-    await this.setDepartmentId();
+    this.GetGrievanceData();
+    // await this.setDepartmentId();
   }
 
   get form() { return this.GrievanceFormGroup.controls; }
@@ -109,24 +109,24 @@ export class GrievanceComponent implements OnInit {
           break;
         case 'Grievance Category':
           this.CategoryList = data['Data'];
-          console.log(this.CategoryList,"CategoryList")
+          console.log(this.CategoryList, "CategoryList")
           break;
         default:
           break;
       }
     });
   }
-  async setDepartmentId() {
-    // this.GrievanceFormGroup.get('ddlDepartmentID')?.disable();
-    if (this.sSOLoginDataModel.DepartmentID === 1) {
-      this.request.DepartmentID = 89;
-      this.GetMasterSubDDL();
-    }
-    else {
-      this.request.DepartmentID = 88;
-      this.GetMasterSubDDL();
-    }
-  }
+  // async setDepartmentId() {
+  //   // this.GrievanceFormGroup.get('ddlDepartmentID')?.disable();
+  //   if (this.sSOLoginDataModel.DepartmentID === 1) {
+  //     this.request.DepartmentID = 89;
+  //     this.GetMasterSubDDL();
+  //   }
+  //   else {
+  //     this.request.DepartmentID = 88;
+  //     this.GetMasterSubDDL();
+  //   }
+  // }
   async GetMasterSubDDL() {
     try {
       this.selectedOption = this.request.DepartmentID
@@ -149,96 +149,96 @@ export class GrievanceComponent implements OnInit {
     }
   }
 
-  async ShowAllData() {
-    //this.isSubmitted = true;
-    //alert(this.sSOLoginDataModel.StudentID);
-    if (this.sSOLoginDataModel.StudentID > 0) {
-      this.searchRequest.CreatedBy = this.sSOLoginDataModel.StudentID;
-      this.searchRequest.RoleID = 0;
-    }
-    else {
-      this.searchRequest.CreatedBy = this.sSOLoginDataModel.UserID;
-      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-    }
+  async GetGrievanceData() {
     try {
-      this.loaderService.requestStarted();
-      //await this.grievanceService.GetAllData(this.searchRequest)
-      await this.grievanceService.GetAllData(this.searchRequest)
-        .then((data: any) => {
-          this.ShowGrievanceList = data['Data'];
-          console.log(this.ShowGrievanceList, "list")
-          if (data.State = EnumStatus.Success) {
-            //this.toastr.success(this.Message)
-            //this.ShowSeatMetrix();
-          }
-          else {
-            this.toastr.error(data.ErrorMessage)
-          }
-        })
-    }
-        catch (ex) { console.log(ex) }
-      finally {
-        setTimeout(() => {
-          this.loaderService.requestEnded();
-          this.isLoading = false;
 
-        }, 200);
+      if(this.sSOLoginDataModel.RoleID == EnumRole.Student) {
+        this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID
+        this.searchRequest.UserID = this.sSOLoginDataModel.UserID
+      } else {
+        this.searchRequest.UserID = this.sSOLoginDataModel.UserID
       }
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.searchRequest.Action = "GetData_OwnQuery";
+
+      await this.grievanceService.GetGrievanceData(this.searchRequest).then((data: any) => {
+        this.ShowGrievanceList = data['Data'];
+        console.log(this.ShowGrievanceList, "list")
+        if (data.State == EnumStatus.Success) {
+          this.ShowGrievanceList = data['Data'];
+        } else if(data.State == EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+          this.ShowGrievanceList = [];
+        }
+        else {
+          this.toastr.error(data.ErrorMessage)
+          this.ShowGrievanceList = [];
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async refreshValidations() {
+    if(this.request.CategoryID == EnumGrievanceCategory.Other) {
+      this.GrievanceFormGroup.get('CategoryName')?.setValidators([Validators.required]);
+    } else { 
+      this.GrievanceFormGroup.get('CategoryName')?.clearValidators();
+    }    
+
+    if(this.request.IssueTypeID == 1) {
+      this.GrievanceFormGroup.get('IssueTypeName')?.setValidators([Validators.required]);
+    } else {
+      this.GrievanceFormGroup.get('IssueTypeName')?.clearValidators();
+    }    
+
+    if(this.request.CategoryID == EnumGrievanceCategory.Transactional_Payment_Issue) {
+      this.GrievanceFormGroup.get('FeeForID')?.setValidators([DropdownValidators]);
+    } else {
+      this.GrievanceFormGroup.get('FeeForID')?.clearValidators();
     }
 
+    this.GrievanceFormGroup.get('FeeForID')?.updateValueAndValidity();
+    this.GrievanceFormGroup.get('IssueTypeName')?.updateValueAndValidity();
+    this.GrievanceFormGroup.get('CategoryName')?.updateValueAndValidity();
 
-      //    .then((data: any) => {
-      //      data = JSON.parse(JSON.stringify(data));
-      //      
-      //      if (data.State === EnumStatus.Success) {
-      //        this.ShowGrievanceList = data['Data'];
-      //        this.ResetControl();
-      //      } else {
-      //        this.toastr.error(data.ErrorMessage || 'Error fetching data.');
-      //      }
-      //    }, error => console.error(error));
-      //} catch (Ex) {
-      //  console.log(Ex);
-      //} finally {
-      //  setTimeout(() => {
-      //    this.loaderService.requestEnded();
-      //  }, 200);
-      //}
-    
+  }
 
   async SaveData() {
-    
-    //alert(this.request.ApplicationNo);
     debugger;
-    if (this.sSOLoginDataModel.StudentID > 0) {
-      this.request.CreatedBy = this.sSOLoginDataModel.StudentID;
-      this.request.ModifyBy = this.sSOLoginDataModel.StudentID;
-      this.request.RoleID = 0;
-    }
-    else {
-      this.request.CreatedBy = this.sSOLoginDataModel.UserID;
-      this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-      this.request.RoleID = this.sSOLoginDataModel.RoleID;
+    // make dashboards more attractive and user friendly for example Admin nodal dashboard is not good 
+
+    this.request.CreatedBy = this.sSOLoginDataModel.UserID;
+    this.request.ModifyBy = this.sSOLoginDataModel.UserID;
+
+    if(this.sSOLoginDataModel.RoleID == EnumRole.Student) {
+      this.request.StudentID = this.sSOLoginDataModel.StudentID
+    } else {
+      this.request.UserID = this.sSOLoginDataModel.UserID
     }
 
-    // if (this.request.ApplicationNo === "" || this.request.ApplicationNo === null || this.request.ApplicationNo === undefined) {
-    //   this.request.ApplicationNo = ""
-    // }
-    // else if (this.request.ApplicationNo !== "" || this.request.ApplicationNo !== null || this.request.ApplicationNo !== undefined) {
-    //   if (this.request.ApplicationNo.toString().length !== 12) {
-    //     this.toastr.error("Please Enter Correct Application/Enrollment No.");
-    //     return;
-    //   }
-    //   else {
-    //     this.request.ApplicationNo = ""
-    //   }
-    // }
-    
+    this.request.RoleID = this.sSOLoginDataModel.RoleID;
+
+    this.refreshValidations();
 
     this.isSubmitted = true;
     //Show Loading
 
     if (this.GrievanceFormGroup.invalid) {
+      this.toastr.error('Please fill required fields')
+
+    Object.keys(this.GrievanceFormGroup.controls).forEach(key => {
+        const control = this.GrievanceFormGroup.get(key);
+
+        if (control && control.invalid) {
+          // this.toastr.error(`Control ${key} is invalid`);
+          console.error(`Control ${key} is invalid`);
+          Object.keys(control.errors!).forEach(errorKey => {
+            // this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+          });
+        }
+      });
       return
     }
     this.loaderService.requestStarted();
@@ -250,7 +250,7 @@ export class GrievanceComponent implements OnInit {
             this.toastr.success(data.Message)
             //this.CloseModalPopup();
             //this.ShowSeatMetrix();
-            await this.ShowAllData();
+            await this.GetGrievanceData();
             this.ResetControl();
           }
           else {
@@ -273,7 +273,7 @@ export class GrievanceComponent implements OnInit {
     this.selectedOption = 0;
     this.request = new GrievanceDataModel();
     //this.GrievanceFormGroup.reset();
-    this.setDepartmentId();
+    // this.setDepartmentId();
     // Reset form values if necessary
     //this.CitizenSuggestionFormGroup.patchValue({});
   }
@@ -303,7 +303,7 @@ export class GrievanceComponent implements OnInit {
               if (Type == "Photo") {
                 this.request.FileAttachment = data['Data'][0]["FileName"];
                 this.request.DisAttachmentFileName = data['Data'][0]["Dis_FileName"];
-                
+
               }
               else if (Type == "requestReopenPhoto") {
                 this.requestReopen.FileAttachment = data['Data'][0]["FileName"];
@@ -329,7 +329,7 @@ export class GrievanceComponent implements OnInit {
   }
 
   async DeleteById(GrivienceID: number) {
-    
+
     this.Swal2.Confirmation("Do you want to delete?",
       async (result: any) => {
         //confirmed
@@ -344,7 +344,7 @@ export class GrievanceComponent implements OnInit {
 
                 if (data.State == EnumStatus.Success) {
                   this.toastr.success(data.Message)
-                  await this.ShowAllData();
+                  await this.GetGrievanceData();
                 }
                 else {
                   this.toastr.error(data.ErrorMessage)
@@ -377,7 +377,7 @@ export class GrievanceComponent implements OnInit {
     if (this.Responserequest.StatusID == EnumGrievanceStaus.Resolved) {
       this.ReplyBox = true;
     }
-    
+
   }
   private getDismissReason(reason: any): string {
 
@@ -423,8 +423,7 @@ export class GrievanceComponent implements OnInit {
   }
 
   async SaveReopenData() {
-    
-    //this.searchRequest.UserId = this.sSOLoginDataModel.UserID;
+
     this.isSubmitted = true;
     //Show Loading
     this.loaderService.requestStarted();
@@ -437,7 +436,7 @@ export class GrievanceComponent implements OnInit {
           if (data.State = EnumStatus.Success) {
             this.toastr.success(data.Message)
             this.CloseModal();
-            await this.ShowAllData();
+            await this.GetGrievanceData();
           }
           else {
             this.toastr.error(data.ErrorMessage)
@@ -489,8 +488,13 @@ export class GrievanceComponent implements OnInit {
   }
 
   async onChangeCategory() {
-    if(this.request.CategoryID > 0 && this.request.CategoryID != EnumGrievanceCategory.Other) {
-      await this.GetIssueTypeDDL();      
+    debugger
+    if (this.request.CategoryID > 0 && this.request.CategoryID != EnumGrievanceCategory.Other) {
+      await this.GetIssueTypeDDL();
+    }
+    
+    if (this.request.CategoryID == EnumGrievanceCategory.Transactional_Payment_Issue) {
+      await this.GetFeeForTypeDDL();
     }
   }
 

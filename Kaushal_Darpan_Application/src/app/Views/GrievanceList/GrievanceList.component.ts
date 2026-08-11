@@ -9,7 +9,6 @@ import { SeatSearchModel, SeatMetrixModel } from '../../Models/SeatMatrixDataMod
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
-import { SeatMatrixService } from '../../Services/ITISeatMatrix/seat-matrix.service';
 import { LoaderService } from '../../Services/Loader/loader.service';
 import { GrievanceDataModel, GrivienceResponseDataModel, GrivienceSearchModel } from '../../Models/GrievanceData/GrievanceDataModel';
 import { GrievanceService} from '../../Services/Grievance/grievance.service';
@@ -26,38 +25,39 @@ import { AppsettingService } from '../../Common/appsetting.service';
 
 export class GrievanceListComponent implements OnInit {
 
-  public Table_SearchText: string = "";
   GrievanceFormGroup!: FormGroup;
-  public isLoading: boolean = false;
-  public isSubmitted: boolean = false;
-  closeResult: string | undefined;
+  
+  public sSOLoginDataModel = new SSOLoginDataModel();
   public request = new GrievanceDataModel();
   public Responserequest = new GrivienceResponseDataModel();
-  //public ShowSeatMetrixList: SeatMetrixModel[] = [];
+  public SearchRequest = new GrivienceSearchModel();
+
   public FinancialYear: any = [];
   public AllotmentTypeList: any = [];
   public DepartmentList: any = [];
   public CategoryList: any = [];
   public SubMasterList: any = [];
   public ShowGrievanceList: any = [];
-  selectedOption: any = 0;
-  public sSOLoginDataModel = new SSOLoginDataModel();
-
   public GrivienceList: any[] = [];
-
   public StatusList: any = [];
   public ResponseList: any = [];
 
+  _EnumGrievanceStaus = EnumGrievanceStaus;
+  _EnumRole = EnumRole;
+
+  public Table_SearchText: string = "";
+  public isLoading: boolean = false;
+  public isSubmitted: boolean = false;
+  closeResult: string | undefined;
   public ReplyBox: boolean = false;
   public isDepartmentDisabled: boolean = false;
   public Remark: string = '';
-  _EnumGrievanceStaus = EnumGrievanceStaus;
+  selectedOption: any = 0;
 
-  public SearchRequest = new GrivienceSearchModel();
   @ViewChild('modal_Grivience') modal_Grivience: any;
+  
   constructor(private fb: FormBuilder,
     private commonMasterService: CommonFunctionService,
-    private seatMatrixService: SeatMatrixService,
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private formBuilder: FormBuilder,
@@ -93,8 +93,8 @@ export class GrievanceListComponent implements OnInit {
 
     this.loadDropdownData('QueryFor');
     this.loadDropdownData('Grievance Category');
-    await this.setDepartmentId();
-    await this.GetMaterData();
+    // await this.setDepartmentId();
+    await this.GetGrievanceData();
     await this.GetStatusForGrivience();
     
     //await this.ShowAllData();
@@ -127,20 +127,20 @@ export class GrievanceListComponent implements OnInit {
     });
   }
 
-  async setDepartmentId() {
-    this.GrievanceFormGroup.get('ddlDepartmentID')?.disable();
-    if (this.sSOLoginDataModel.DepartmentID === 1) {
-      this.request.DepartmentID = 89;
-      this.GetMasterSubDDL();
-    }
-    else {
-      if(this.sSOLoginDataModel.RoleID === EnumRole.DTETraing) {
-        this.request.DepartmentID = 88;
-      }
-      this.request.DepartmentID = 88;
-      this.GetMasterSubDDL();
-    }
-  }
+  // async setDepartmentId() {
+  //   // this.GrievanceFormGroup.get('ddlDepartmentID')?.disable();
+  //   if (this.sSOLoginDataModel.DepartmentID === 1) {
+  //     this.request.DepartmentID = 89;
+  //     this.GetMasterSubDDL();
+  //   }
+  //   else {
+  //     if(this.sSOLoginDataModel.RoleID === EnumRole.DTETraing) {
+  //       this.request.DepartmentID = 88;
+  //     }
+  //     this.request.DepartmentID = 88;
+  //     this.GetMasterSubDDL();
+  //   }
+  // }
 
   async GetMasterSubDDL() {
     try {
@@ -165,29 +165,60 @@ export class GrievanceListComponent implements OnInit {
     });
   }
 
-  async GetMaterData() {
+  // async GetMaterData() {
+  //   try {
+  //     this.loaderService.requestStarted();
+  //     this.SearchRequest.DepartmentID = this.request.DepartmentID;
+  //     this.SearchRequest.CategoryID = this.request.CategoryID;
+  //     this.SearchRequest.ModuleID = this.request.ModuleID;
+  //     this.SearchRequest.StatusID = this.request.StatusID;
+
+  //     await this._GrievanceService.GetAllData(this.SearchRequest)
+  //       .then((data: any) => {
+  //         data = JSON.parse(JSON.stringify(data));
+  //         this.GrivienceList = data['Data'];
+  //       }, error => console.error(error));
+  //   }
+  //   catch (Ex) {
+  //     console.log(Ex);
+  //   }
+  // }
+
+  async GetGrievanceData() {
     try {
-      this.loaderService.requestStarted();
       this.SearchRequest.DepartmentID = this.request.DepartmentID;
       this.SearchRequest.CategoryID = this.request.CategoryID;
       this.SearchRequest.ModuleID = this.request.ModuleID;
       this.SearchRequest.StatusID = this.request.StatusID;
-      this.SearchRequest.CreatedBy = 0;
-      await this._GrievanceService.GetAllData(this.SearchRequest)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
+      this.SearchRequest.Action = "GetAllData";
+
+      this.SearchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.SearchRequest.UserID = this.sSOLoginDataModel.UserID;
+
+      await this._GrievanceService.GetGrievanceData(this.SearchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State == EnumStatus.Success){
           this.GrivienceList = data['Data'];
-        }, error => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
+        } 
+        else if(data.State == EnumStatus.Warning){
+          this.toastr.warning(data.Message)
+          this.GrivienceList = [];
+        }
+        else {
+          this.toastr.error(data.ErrorMessage)
+          this.GrivienceList = [];
+        }
+        
+      })
+    } catch (error) {
+      console.error(error);
     }
   }
 
 
   async DataSearch() {
     
-    await this.GetMaterData()
+    await this.GetGrievanceData()
 
   }
 
@@ -330,7 +361,7 @@ export class GrievanceListComponent implements OnInit {
             this.toastr.success(data.Message)
             this.CloseModal();
             this.GrivienceList;
-            await this.GetMaterData();
+            await this.GetGrievanceData();
           }
           else {
             this.toastr.error(data.ErrorMessage)
@@ -351,7 +382,7 @@ export class GrievanceListComponent implements OnInit {
     this.isSubmitted = false;
     this.request = new GrievanceDataModel();
     this.GrievanceFormGroup.reset();
-    this.setDepartmentId();
+    // this.setDepartmentId();
     // Reset form values if necessary
     //this.CitizenSuggestionFormGroup.patchValue({});
   }
