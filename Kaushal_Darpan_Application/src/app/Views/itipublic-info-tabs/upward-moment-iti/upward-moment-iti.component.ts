@@ -49,7 +49,7 @@ export class UpwardMomentITIComponent {
   ) { }
   async ngOnInit() {
     this.sSoLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.request.UserID = this.sSoLoginDataModel.UserID;
+
     await this.GetPublicInfoStatus();
   }
 
@@ -82,6 +82,7 @@ export class UpwardMomentITIComponent {
     try {
       this.loaderService.requestStarted();
       console.log("this.request", this.request);
+      this.request.UserID=0
       await this.upwardMovementService.ITIUpwardMomentUpdate(this.request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
