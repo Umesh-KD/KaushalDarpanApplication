@@ -229,7 +229,7 @@ export class MigrationCertificateDownloadComponent {
       const url = window.URL.createObjectURL(blob);
       downloadLink.href = url;
       // downloadLink.download = this.generateFileName('pdf', DownloadfileName);
-      downloadLink.download = FileName || 'FinalDiplomaCertificate.pdf'
+      downloadLink.download = FileName || 'MigrationCertificate.pdf'
       downloadLink.click();
       window.URL.revokeObjectURL(url);
     });
@@ -373,6 +373,13 @@ export class MigrationCertificateDownloadComponent {
     const numberOfButtons = Math.ceil(totalStudents / chunkSize);
 
 
+    // for test ,comment afterward
+    this.buttonGroups.push({
+        label: `test`,
+        startIndex: 0,
+        endIndex: 1
+      });
+
     for (let i = 0; i < numberOfButtons; i++) {
       const startIndex = i * chunkSize;
       const endIndex = Math.min((i + 1) * chunkSize - 1, totalStudents - 1);
@@ -406,7 +413,7 @@ export class MigrationCertificateDownloadComponent {
         element.RoleID = this.sSOLoginDataModel.RoleID;
       });
       // make file and save
-      await this.reportService.StudentDiplomaCertificateDownloadChunk(StudentList)
+      await this.reportService.StudentMigrationCertificateDownloadChunk(StudentList)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data, "Data");
@@ -433,14 +440,14 @@ export class MigrationCertificateDownloadComponent {
   }
 
   downloadFile_existing(row: any) {
-    const url = `${this.appsettingConfig.StaticFileRootPathURL}/Students/BTER/FinalDiploma/${row.FileName}`;
+    const url = `${this.appsettingConfig.StaticFileRootPathURL}/Students/BTER/MigrationCertificate/${row.FileName}`;
 
     fetch(url)
       .then(response => response.blob())
       .then(blob => {
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
-        link.download = row.Dis_FileName || 'FinalDiplomaCertificate.pdf'; // Use stored filename
+        link.download = row.Dis_FileName || 'MigrationCertificate.pdf'; // Use stored filename
         link.click();
         // Clean up
         window.URL.revokeObjectURL(link.href);
