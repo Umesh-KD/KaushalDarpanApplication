@@ -48,7 +48,7 @@
         </div>
 
 
-        <div *ngIf="request.OfficeID == 17 && request.IsNodal == true">
+        <div *ngIf="request.OfficeID == 21">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name </label>
           <select class="form-select " name="InstituteID" id="InstituteID" formControlName="InstituteID"
             [(ngModel)]="request.InstituteID" (change)="getStreamMasterData()">
