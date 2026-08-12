@@ -48,9 +48,10 @@ export class UpwardMomentITIComponent {
     private allotmentStatusService: AllotmentStatusService
   ) { }
   async ngOnInit() {
+    await this.GetPublicInfoStatus();
     this.sSoLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-    await this.GetPublicInfoStatus();
+
   }
 
 
