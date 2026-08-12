@@ -439,14 +439,14 @@ export class ProvisionalDiplomaCertificateDownloadComponent {
   }
 
   downloadFile_existing(row: any) {
-    const url = `${this.appsettingConfig.StaticFileRootPathURL}/Students/BTER/FinalDiploma/${row.FileName}`;
+    const url = `${this.appsettingConfig.StaticFileRootPathURL}/Students/BTER/ProvisionalDiploma/${row.FileName}`;
 
     fetch(url)
       .then(response => response.blob())
       .then(blob => {
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
-        link.download = row.Dis_FileName || 'FinalDiplomaCertificate.pdf'; // Use stored filename
+        link.download = row.Dis_FileName || 'ProvisionalDiplomaCertificate.pdf'; // Use stored filename
         link.click();
         // Clean up
         window.URL.revokeObjectURL(link.href);
