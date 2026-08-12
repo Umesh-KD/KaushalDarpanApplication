@@ -1807,6 +1807,11 @@ const routes: Routes = [
       { path: 'campus-removal-report', loadChildren: () => import('./Views/ITI/ITIs/campus-removal-report/campus-removal-report.module').then(m => m.CampusRemovalReportModule), title: 'campus-removal-report' },
       { path: 'ResultReport', loadChildren: () => import('./Views/Reports/BterResultReport/BterResultReport.module').then(m => m.BterResultReportModule), title: 'Miscellaneous Report' },
       { path: 'diploma-certificate-download', loadChildren: () => import('./Views/result/DiplomaCertificateDownload/DiplomaCertificateDownload.module').then(m => m.DiplomaCertificateDownloadModule), title: 'Diploma Certificate Download' },
+      { path: 'provisional-diploma-certificate-download', loadChildren: () => import('./Views/result/ProvisionalDiplomaCertificateDownload/ProvisionalDiplomaCertificateDownload.module').then(m => m.ProvisionalDiplomaCertificateDownloadModule), title: 'Provisional Diploma Certificate Download' },
+      { path: 'migration-certificate-download', loadChildren: () => import('./Views/result/MigrationCertificateDownload/MigrationCertificateDownload.module').then(m => m.MigrationCertificateDownloadModule), title: 'Migration Diploma Certificate Download' },
+      
+      
+      
       { path: 'iti-finalreport', loadChildren: () => import('./Views/ITI/results/ITI-FinalReport/ITI-FinalReport.module').then(m => m.ITIFinalReportModule), title: 'iti-finalreport' },
       { path: 'SignalR-Dashboard', loadChildren: () => import('./Views/signal-r-dashboard/signal-r-dashboard.module').then(m => m.SignalRDashboardModule) },
     ]

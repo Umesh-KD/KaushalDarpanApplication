@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
-import { EnumEMProfileStatus, EnumDepartment, EnumStatus, GlobalConstants, EnumRole } from '../../../../Common/GlobalConstants';
+import { EnumEMProfileStatus, EnumDepartment, EnumStatus, GlobalConstants, EnumRole, EnumOffice } from '../../../../Common/GlobalConstants';
 import { BTER_DesignationWiseBranchDataModel, BTER_EM_AddServiceHistoryDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_DocumentServiceHistoryDataModel, BTER_EM_GetPersonalDetailByUserID, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, Bter_RequestUpdateStatus, BTERGovtEMStaff_ServiceDetailsOfPersonalModel, StaffCareerAdvancementDataModel, StaffQualificationDataModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
@@ -114,7 +114,7 @@ export class BterEMAddStaffDetailsComponent {
   async ngOnInit() {
 
     this.StaffMasterFormGroup = this.formBuilder.group({
-      InstituteID: [{ value: 0, disabled: true }],
+      InstituteID: [{ value: 0}],
       BranchID: [0,],
       DesignationID: [0, [DropdownValidators]],
       ServiceBookBranchID: [0,],
@@ -134,7 +134,7 @@ export class BterEMAddStaffDetailsComponent {
       EmployeeID: ['',[Validators.required]],
 
       CurrentDesignationID: ['', [DropdownValidators]],
-      Office: [{ value: 0, disabled: true }],
+      Office: [{ value: 0},  [DropdownValidators]],
 
       Experience: ['', [Validators.required]],
 
@@ -684,9 +684,19 @@ export class BterEMAddStaffDetailsComponent {
     };
   }
 
+  async refreshInstituteValidation() {
+    if(this.request.OfficeID == EnumOffice.COLLEGE){
+      this.StaffMasterFormGroup.get('InstituteID')?.setValidators([DropdownValidators]);
+    } else {
+      this.StaffMasterFormGroup.get('InstituteID')?.clearValidators();
+    }
+
+    this.StaffMasterFormGroup.get('InstituteID')?.updateValueAndValidity();
+  }
+
   async SaveData(isSaveDraft: boolean = false) {
     debugger
-
+    await  this.refreshInstituteValidation();
     if(!isSaveDraft){
       this.isSubmitted = true;
       if (this.StaffMasterFormGroup.invalid) {
@@ -724,7 +734,10 @@ export class BterEMAddStaffDetailsComponent {
     this.loaderService.requestStarted();
     this.request.StaffUserID = this.sSOLoginDataModel.UserID;
     this.request.bterStaffSubjectListModel = this.staffDetailsFormData.StaffSubjectListModel;
-    this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
+    if(this.request.InstituteID == 0){
+      this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
+    }
+    
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.request.EndTermID = this.sSOLoginDataModel.EndTermID;

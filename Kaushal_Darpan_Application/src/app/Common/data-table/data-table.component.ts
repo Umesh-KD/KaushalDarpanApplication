@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output ,OnChanges, AfterViewInit, ViewChild, SimpleChanges} from '@angular/core';
+import { Component, EventEmitter, Input, Output ,OnChanges, AfterViewInit, ViewChild, SimpleChanges, ElementRef, HostListener} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -50,10 +50,29 @@ export class DataTableComponent implements OnChanges, AfterViewInit {
   displayedColumns: string[] = [];
   filterText = '';
   normalizedColumns: TableColumn[] = [];
+
+  showColumnPanel = false;
+  columnSearch = '';
   //#endregion
 
-   constructor() { }
+   constructor(
+     private elementRef: ElementRef
+   ) { }
 
+   @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+
+      if (!this.showColumnPanel) {
+          return;
+      }
+
+      const clickedInside = this.elementRef.nativeElement.contains(event.target);
+
+      if (!clickedInside) {
+          this.showColumnPanel = false;
+      }
+
+  }
   async ngOnInit()  {
 
     this.dataSource.filterPredicate = (data: any, filter: string) => {
@@ -229,6 +248,11 @@ private loadColumns(): void {
 
 }
 
+get visibleColumns(): TableColumn[] {
+
+    return this.normalizedColumns.filter(c => c.visible);
+
+}
 
 //#region Search
 applyFilter(event: Event): void {
@@ -597,34 +621,31 @@ movePreview(event: MouseEvent): void {
 
 private refreshDisplayedColumns(): void {
 
-    this.displayedColumns = [];
+     const columns: string[] = [];
 
-    // Serial Column
     if (this.normalizedConfig.showSerialNo) {
-
-        this.displayedColumns.push(this.TABLE_CONSTANTS.SERIAL_COLUMN);
-
+        columns.push(this.TABLE_CONSTANTS.SERIAL_COLUMN);
     }
 
-    // Dynamic Columns
-    this.displayedColumns.push(
-
+    columns.push(
         ...this.normalizedColumns
-            .filter(column => column.visible)
-            .map(column => column.dataField)
-
+            .filter(x => x.visible)
+            .map(x => x.dataField)
     );
 
-    // Action Column
     if (this.normalizedConfig.actions?.length) {
-
-        this.displayedColumns.push(this.TABLE_CONSTANTS.ACTION_COLUMN);
-
+        columns.push(this.TABLE_CONSTANTS.ACTION_COLUMN);
     }
+
+    this.displayedColumns = [...columns];
+
+    console.log(this.displayedColumns);
 
 }
 
-toggleAllColumns(checked: boolean): void {
+toggleAllColumns(event: Event): void {
+
+   const checked = (event.target as HTMLInputElement).checked;
 
     this.normalizedColumns.forEach(column => {
 
@@ -637,13 +658,18 @@ toggleAllColumns(checked: boolean): void {
     this.refreshDisplayedColumns();
 
 }
-columnChanged(column: TableColumn): void {
+toggleColumn(column: TableColumn, event: Event): void {
 
-    console.log(column.dataField, column.visible);
+    const checked = (event.target as HTMLInputElement).checked;
+
+    column.visible = checked;
+
+    console.log(column.dataField, checked);
 
     this.refreshDisplayedColumns();
 
 }
+
 
 isAllSelected(): boolean {
 
@@ -664,6 +690,32 @@ resetColumns(): void {
     });
 
     this.refreshDisplayedColumns();
+
+}
+
+toggleColumnPanel(): void {
+    this.showColumnPanel = !this.showColumnPanel;
+}
+
+closeColumnPanel(): void {
+    this.showColumnPanel = false;
+}
+
+get filteredColumns(): TableColumn[] {
+
+    if (!this.columnSearch.trim()) {
+
+        return this.normalizedColumns;
+
+    }
+
+    return this.normalizedColumns.filter(x =>
+
+        x.displayField!
+            .toLowerCase()
+            .includes(this.columnSearch.toLowerCase())
+
+    );
 
 }
 

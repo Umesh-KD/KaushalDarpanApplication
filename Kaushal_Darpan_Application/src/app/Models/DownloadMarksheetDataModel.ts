@@ -101,6 +101,7 @@ export class DiplomaCertificateDownloadSearchModel extends RequestBaseModel {
   public FinalDiplomaTermName: string = '';
   public Division: string = '';
   public CourseDuration: string = '';
+  
 }
 
 export class ResultGenerationListDataModel {
@@ -123,4 +124,60 @@ export class Publish_Unpublish_BTER_ResultDataModel {
   public Key: string = ''
   public ResultDeclarationDate: string = ''
   public ResultPublishDate: string = ''
+}
+
+export class ProvisionalDiplomaCertificateDownloadSearchModel extends RequestBaseModel {
+  public ModifyBy: number = 0;
+  public SemesterID: number = 0;
+  public FinalDiplomaID: number = 0;
+  public InstituteID: number = 0;
+  public IsRevised: string = '';
+  public IsBridge: number = 0;
+  public ResultTypeID: number = 0;
+  public RollNo: string = '';
+  public StudentID: number = 0;
+  public Eng_NonEngID: number = 0;
+  public ExamTypeID: number = 0;
+  public RWHResultID: number = 0;
+  public AcademicYearID: number = 0;
+  public IPAddress: string = '';
+  public SessionName: string = '';
+  public Dis_FileName: string = ''; // Name
+  public FileName: string = ''; // With file path
+  public DOB: string = '';
+  public SRNO: string = '';
+
+  public IsReval: boolean = false;
+  public IsRWHResult: boolean = false;
+  public IsLateral: boolean = false;
+  public ReqId: number = 0;
+  public StudentTypeID: number = 0;
+
+  public RequestEndTerm: number = 0;
+
+  public FianancialYearID: number = 0;
+  public DocumentID: number = 0;
+  public EffectiveEndTermID: number = 0;
+  public EnrollmentNo: string = '';
+  public StudentName: string = '';
+  public ResultDate: string = '';
+  public PublishDate: string = '';
+  public IsLocked: boolean = false;
+  public DiplomaPrintingDate: string = '';
+  public IsRevisedIssueDate: string = '';
+  public ExamResultID: number = 0;
+  public RevisedId: number = 0;
+  public IsBlock: number = 0;
+  public IsDiploma: number = 0;
+  public IsDuplicate: boolean = false;
+  public DuplicateDiplomaId: number = 0;
+  public RequestId: number = 0;
+  public IsIssued: boolean = false;
+  public RegistrarSignFile: string = '';
+  public FatherName: string = '';
+  public StreamName: string = '';
+  public FinalDiplomaTermName: string = '';
+  public Division: string = '';
+  public CourseDuration: string = '';
+  public EffectiveFromEndTermId: number = 0; 
 }

@@ -1,0 +1,220 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Download Migration Certificate</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Download Migration Certificate</a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <form [formGroup]="downLoadFG">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        </div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+            <select class="form-select" [(ngModel)]="searchRequest.SemesterID" name="SemesterID" formControlName="SemesterID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
+            </select>
+
+            <div *ngIf="isSubmitted && downLoadFG.get('SemesterID')?.hasError('defaultValue')" class="text-danger">
+              This field is required!
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+            <select class="form-select" [(ngModel)]="searchRequest.InstituteID" name="InstituteID" formControlName="InstituteID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">{{item.InstituteName}}</option>
+            </select>
+          </div>
+
+          <!--<div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Revised
+            </label>
+            <select class="form-select" [(ngModel)]="searchRequest.IsRevised" name="IsRevised" formControlName="IsRevised">
+              <option value="-1">--Select--</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+
+            <div *ngIf="isSubmitted && downLoadFG.get('IsRevised')?.hasError('defaultValue')" class="text-danger">
+              This field is required!
+            </div>
+          </div>-->
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Bridge
+            </label>
+            <select class="form-select" [(ngModel)]="searchRequest.IsBridge" name="IsBridge" formControlName="IsBridge">
+              <option value="-1">--All--</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Result Type
+            </label>
+            <select class="form-select" [(ngModel)]="searchRequest.ResultTypeID" name="ResultTypeID" formControlName="ResultTypeID" (change)="GetEffectiveFinYear()">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of ResultTypeList" value="{{item.ID}}">{{item.Name}}</option>
+            </select>
+
+            <div *ngIf="isSubmitted && downLoadFG.get('ResultTypeID')?.hasError('defaultValue')" class="text-danger">
+              This field is required!
+            </div>
+          </div>
+
+          <div *ngIf="searchRequest.ResultTypeID==_EnumResultType.RwhResult || searchRequest.ResultTypeID==_EnumResultType.RwhRevalEffected">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Effective From</label>
+            <select class="form-select" [(ngModel)]="searchRequest.EffectiveFromEndTermId" name="EffectiveFromEndTermId">
+              <option [value]="0">--Select--</option>
+              <option *ngFor="let item of endTermFinYear" [value]="item.EndTermID">{{ item.EndTermName }}</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Academic Year</label>
+            <select [(ngModel)]="searchRequest.EndTermID" class="form-select" name="EndTermID" formControlName="EndTermID">
+              <option [ngValue]="0">--Select--</option>
+              <option *ngFor="let item of EndTermList; trackBy: trackByEndTerm" [ngValue]="item.ID">
+                {{ item.Name }}
+              </option>
+            </select>
+
+            <div *ngIf="isSubmitted && downLoadFG.get('EndTermID')?.hasError('defaultValue')" class="text-danger">
+              This field is required!
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
+            <select class="form-select" id="SchemeID" formControlName="SchemeID" [(ngModel)]="searchRequest.SchemeID">
+              <option value="0">--All--</option>
+              <option value="1347">Old</option>
+              <option value="1348">New</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">
+          <div class="flex justify-center flex-wrap items-center mb-3 p-3 py-2 text-center" style="background:#fffdce">
+            <b class="text-1xl-5">OR</b>
+          </div>
+        </div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Enrollment Number
+            </label>
+            <input type="text"
+                   class="form-input"
+                   [(ngModel)]="searchRequest.EnrollmentNo"
+                   placeholder="Enter Roll Number"
+                   name="EnrollmentNo" formControlName="EnrollmentNo" />
+
+            <div *ngIf="isSubmitted && downLoadFG.get('EnrollmentNo')?.hasError('required')" class="text-danger">
+              This field is required!
+            </div>
+          </div>
+          <div>
+            <button type="submit" class="btn bg-info text-white mt-6" id="searchButton" (click)="btn_SearchClick()">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" id="cancelButton">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <!-- <a *ngIf="StudentList.length > 0" href="javascript:void(0);" (click)="DownloadMarksheetBulk()" class="btn bg-info btn-sm text-white">
+        <i class="ti ti-download"></i> Download Marksheet Bulk
+      </a> -->
+    </div>
+    <div class="flex items-center justify-between flex-wrap gap-3">
+
+      <!-- Dropdown -->
+      <div>
+        <select id="ddlConter"
+                class="form-select couterDropDown"
+                [(ngModel)]="pageInTableSize"
+                (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+
+      <!-- Buttons -->
+      <div *ngIf="buttonGroups?.length > 0" class="flex flex-wrap gap-2">
+        <a *ngFor="let group of buttonGroups"
+           href="javascript:void(0);"
+           (click)="DownloadChunkDiplomaCertificate(group.startIndex, group.endIndex)"
+           class="btn bg-info btn-sm text-white whitespace-nowrap">
+          <i class="ti ti-download"></i>
+          Download Migration Certificate Chunk ({{ group.label }})
+        </a>
+      </div>
+
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr No.</th>
+            <th class="text-left">Student Name</th>
+            <th class="text-left">Father Name</th>
+            <th class="text-left">Enrollment Number</th>
+            <th class="text-left">Roll Number</th>
+            <th class="text-left">Stream</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData; let idx=index;">
+            <td align="left">{{(startInTableIndex+1)+idx}}</td>
+            <td align="left">{{row.StudentName}}</td>
+            <td align="left">{{row.FatherName}}</td>
+            <td align="left">{{row.EnrollmentNo}}</td>
+            <td align="left">{{row.RollNo}}</td>
+            <td align="left">{{row.StreamName}}</td>
+            <td align="left">
+              <a class="btn bg-info btn-sm text-white" style="cursor: pointer;"
+                 *ngIf="row.Dis_FileName != ''"
+                 (click)="downloadFile_existing(row)">
+                <i class="ti ti-download"></i> Download Migration Certificate
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+  </div>
+</div>
+
