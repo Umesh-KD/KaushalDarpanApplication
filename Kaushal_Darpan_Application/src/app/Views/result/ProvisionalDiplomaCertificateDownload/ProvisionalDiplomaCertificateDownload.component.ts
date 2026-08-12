@@ -213,7 +213,7 @@ export class ProvisionalDiplomaCertificateDownloadComponent {
       const url = window.URL.createObjectURL(blob);
       downloadLink.href = url;
       // downloadLink.download = this.generateFileName('pdf', DownloadfileName);
-      downloadLink.download = FileName || 'FinalDiplomaCertificate.pdf'
+      downloadLink.download = FileName || 'ProvisionalDiplomaCertificate.pdf'
       downloadLink.click();
       window.URL.revokeObjectURL(url);
     });
