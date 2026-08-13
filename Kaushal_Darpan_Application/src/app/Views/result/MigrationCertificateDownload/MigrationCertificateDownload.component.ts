@@ -77,7 +77,8 @@ export class MigrationCertificateDownloadComponent {
       InstituteID: ['', Validators.required],
       SemesterID: ['0', [Validators.required, notDefaultValueValidator('0')]],
       IsBridge: ['-1'],
-      ResultTypeID: ['0', [Validators.required, notDefaultValueValidator('0')]],
+      // ResultTypeID: ['0', [Validators.required, notDefaultValueValidator('0')]],
+      ResultTypeID: ['0'],
       //IsRevised: ['-1', [Validators.required, notDefaultValueValidator('-1')]],
       EnrollmentNo: ['', Validators.required],
       EndTermID: [this.sSOLoginDataModel.EndTermID, [Validators.required, notDefaultValueValidator('0')]],
@@ -397,7 +398,7 @@ export class MigrationCertificateDownloadComponent {
   }
 
   async DownloadChunkDiplomaCertificate(start: number, end: number) {
-    //debugger
+    debugger
 
     const StudentList: any[] = this.StudentList.slice(start, end + 1);
     try {
