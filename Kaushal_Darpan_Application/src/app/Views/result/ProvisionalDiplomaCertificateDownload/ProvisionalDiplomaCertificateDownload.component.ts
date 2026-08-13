@@ -81,7 +81,8 @@ export class ProvisionalDiplomaCertificateDownloadComponent {
       //IsRevised: ['-1', [Validators.required, notDefaultValueValidator('-1')]],
       EnrollmentNo: ['', Validators.required],
       EndTermID: [this.sSOLoginDataModel.EndTermID, [Validators.required, notDefaultValueValidator('0')]],
-      SchemeID: ['']
+      SchemeID: [''],
+      EffectiveFromEndTermId: ['0']
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -98,11 +99,11 @@ export class ProvisionalDiplomaCertificateDownloadComponent {
           data = JSON.parse(JSON.stringify(data));
           this.ResultTypeList = data['Data'];
           // exclude some ids
-          // this.ResultTypeList = this.ResultTypeList.filter((x: any) => ![
-          //   EnumResultType.RevaluationResult,
-          //   EnumResultType.Ufm,
-          //   EnumResultType.RwhRevalEffected
-          // ].includes(x.ID));
+          this.ResultTypeList = this.ResultTypeList.filter((x: any) => ![
+            // EnumResultType.RevaluationResult,
+            EnumResultType.Ufm
+            // ,EnumResultType.RwhRevalEffected
+          ].includes(x.ID));
         }, (error: any) => console.error(error)
         );
 
@@ -149,6 +150,7 @@ export class ProvisionalDiplomaCertificateDownloadComponent {
       //   return;
       // }
       // else 
+        debugger
         if (this.searchRequest.ResultTypeID == this._EnumResultType.RwhResult || this.searchRequest.ResultTypeID == this._EnumResultType.RwhRevalEffected) {
         if ((this.searchRequest.EffectiveFromEndTermId ?? 0) <= 0) {
           this.toastr.error("Please select Result Type Effective From!");
@@ -379,19 +381,20 @@ export class ProvisionalDiplomaCertificateDownloadComponent {
   }
 
   async DownloadChunkDiplomaCertificate(start: number, end: number) {
-    //debugger
+    debugger
 
     const StudentList: any[] = this.StudentList.slice(start, end + 1);
     try {
       const fullSession = this.FinYearList.find((x: any) => x.EndTermID == this.searchRequest.EndTermID)?.FinancialYearName;
-      const Session = fullSession ? fullSession.split('-')[0] : '';
+      // const Session = fullSession ? fullSession.split('-')[0] : '';
 
       StudentList.forEach((element: any) => {
         element.DepartmentID = this.sSOLoginDataModel.DepartmentID;
         element.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
         //element.EndTermID = this.sSOLoginDataModel.EndTermID;
         //element.EndTermID = this.searchRequest.EndTermID;
-        element.SessionName = Session;
+        // element.SessionName = Session;
+        element.SessionName = fullSession;
         element.ModifyBy = this.sSOLoginDataModel.UserID;
         element.RoleID = this.sSOLoginDataModel.RoleID;
       });
