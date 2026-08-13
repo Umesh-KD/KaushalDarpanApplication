@@ -98,9 +98,7 @@ export class MarksheetDownloadComponent {
           this.ResultTypeList = data['Data'];
           // exclude some ids
           this.ResultTypeList = this.ResultTypeList.filter((x: any) => ![
-            EnumResultType.RevaluationResult,
-            EnumResultType.Ufm,
-            EnumResultType.RwhRevalEffected
+            EnumResultType.Ufm
           ].includes(x.ID));
         }, (error: any) => console.error(error)
         );
