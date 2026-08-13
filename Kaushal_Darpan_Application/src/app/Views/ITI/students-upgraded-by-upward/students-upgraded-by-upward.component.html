@@ -137,6 +137,11 @@
             <th class="text-left">Shift                     </th>
             <th class="text-left">Unit                     </th>
             <th class="text-left">Status                     </th>
+            <th class="text-left">Upward College</th>
+            <th class="text-left">Upward Trade</th>
+            <th class="text-left">Upward Priority</th>
+
+
             <th class="text-left">Remark                   </th>
             <th style="width:125px;">Download  </th>           
           </tr>
@@ -159,6 +164,9 @@
             <td>{{item.Shift           }}</td>
             <td>{{item.Unit           }}</td>
             <td>{{item.JoiningStatus}}</td>
+            <td>{{item.upwordCollegeName}}</td>
+            <td>{{item.UpwordTradeName}}</td>
+            <td>{{item.UpwordPrority}}</td>
             <td>{{item.ReportingRemark}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important" *ngIf="item.IsUpgraded==0">
