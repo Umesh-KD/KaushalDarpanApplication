@@ -29,7 +29,8 @@ import { InternalSlidingService } from '../../../Services/ITIInternalSliding/int
   templateUrl: './students-upgraded-by-upward.component.html',
   styleUrl: './students-upgraded-by-upward.component.css'
 })
-export class StudentUpgradedByUpwardComponent {
+export class StudentUpgradedByUpwardComponent
+{
   public State: number = -1;
   groupForm!: FormGroup;
   public Message: any = [];
