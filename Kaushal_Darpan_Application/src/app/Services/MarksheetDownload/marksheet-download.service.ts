@@ -74,4 +74,29 @@ export class MarksheetDownloadService {
       ).toPromise();
   }
 
+
+
+
+
+
+
+
+  // ------------------provisional certificate download--------------------
+  public async GetStudentsProvisionalDiplomaCertificate(searchRequest: DiplomaCertificateDownloadSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetStudentsProvisionalDiplomaCertificate", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  // ----------------------Migration Certificate Download ------------------------------
+  public async GetStudentsMigrationDiplomaCertificate(searchRequest: DiplomaCertificateDownloadSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetStudentsMigrationDiplomaCertificate", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
-import { EnumEMProfileStatus, EnumDepartment, EnumStatus, GlobalConstants, EnumRole } from '../../../../Common/GlobalConstants';
+import { EnumEMProfileStatus, EnumDepartment, EnumStatus, GlobalConstants, EnumRole, EnumOffice } from '../../../../Common/GlobalConstants';
 import { BTER_DesignationWiseBranchDataModel, BTER_EM_AddServiceHistoryDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_DocumentServiceHistoryDataModel, BTER_EM_GetPersonalDetailByUserID, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, Bter_RequestUpdateStatus, BTERGovtEMStaff_ServiceDetailsOfPersonalModel, StaffCareerAdvancementDataModel, StaffQualificationDataModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
@@ -114,7 +114,7 @@ export class BterEMAddStaffDetailsComponent {
   async ngOnInit() {
 
     this.StaffMasterFormGroup = this.formBuilder.group({
-      InstituteID: [{ value: 0, disabled: true }],
+      InstituteID: [{ value: 0}],
       BranchID: [0,],
       DesignationID: [0, [DropdownValidators]],
       ServiceBookBranchID: [0,],
@@ -134,7 +134,7 @@ export class BterEMAddStaffDetailsComponent {
       EmployeeID: ['',[Validators.required]],
 
       CurrentDesignationID: ['', [DropdownValidators]],
-      Office: [{ value: 0, disabled: true }],
+      Office: [{ value: 0},  [DropdownValidators]],
 
       Experience: ['', [Validators.required]],
 
@@ -232,45 +232,58 @@ export class BterEMAddStaffDetailsComponent {
     /*&& item.StaffTypeID == this.request.StaffTypeID*/
     if (roleIDs.includes(this.sSOLoginDataModel.RoleID)) {
       this.IsHideShow = true;
-      this.StaffMasterFormGroup.controls['BranchID'].setValidators([DropdownValidators]);
-      this.StaffMasterFormGroup.controls['ServiceBookBranchID'].setValidators([DropdownValidators]);
+      this.StaffMasterFormGroup.controls['BranchID']?.setValidators([DropdownValidators]);
+      this.StaffMasterFormGroup.controls['ServiceBookBranchID']?.setValidators([DropdownValidators]);
     }
     else if (DesignationIDs.includes(this.request.DesignationID)) {
       this.IsHideShow = true;
       
-      this.StaffMasterFormGroup.controls['BranchID'].setValidators([DropdownValidators]);
-      this.StaffMasterFormGroup.controls['ServiceBookBranchID'].setValidators([DropdownValidators]);
+      this.StaffMasterFormGroup.controls['BranchID']?.setValidators([DropdownValidators]);
+      this.StaffMasterFormGroup.controls['ServiceBookBranchID']?.setValidators([DropdownValidators]);
     }
 
     else {
       this.IsHideShow = false;
-      this.StaffMasterFormGroup.controls['BranchID'].clearValidators();
-      this.StaffMasterFormGroup.controls['ServiceBookBranchID'].clearValidators();
+      this.StaffMasterFormGroup.controls['BranchID']?.clearValidators();
+      this.StaffMasterFormGroup.controls['ServiceBookBranchID']?.clearValidators();
     }
-    this.StaffMasterFormGroup.controls['BranchID'].updateValueAndValidity();
-    this.StaffMasterFormGroup.controls['ServiceBookBranchID'].updateValueAndValidity();
+    this.StaffMasterFormGroup.controls['BranchID']?.updateValueAndValidity();
+    this.StaffMasterFormGroup.controls['ServiceBookBranchID']?.updateValueAndValidity();
 
 
-    if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestFaculty || this.sSOLoginDataModel.RoleID == this._EnumRole.ShikshaSambal || this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseIncharge || this.sSOLoginDataModel.RoleID == this._EnumRole.GuestRoomWarden || this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin) {
+    if (
+      this.sSOLoginDataModel.RoleID == this._EnumRole.GuestFaculty || 
+      this.sSOLoginDataModel.RoleID == this._EnumRole.ShikshaSambal || 
+      this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseIncharge || 
+      this.sSOLoginDataModel.RoleID == this._EnumRole.GuestRoomWarden || 
+      this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin
+    ) {
       this.IsOterFacultyTech = true
 
-      this.StaffMasterFormGroup.controls['DepartmentJoiningDate'].clearValidators();
-      this.StaffMasterFormGroup.controls['DateOfJoining'].clearValidators();
-      this.StaffMasterFormGroup.controls['CurrentDesignationID'].clearValidators();
-      this.StaffMasterFormGroup.controls['Experience'].clearValidators();
-      this.StaffMasterFormGroup.controls['QualificationAtJoining'].clearValidators();
-      this.StaffMasterFormGroup.controls['QualificationAfterJoining'].clearValidators();
-      this.StaffMasterFormGroup.controls['DateOfRetirement'].clearValidators();
+      this.StaffMasterFormGroup.controls['DepartmentJoiningDate']?.clearValidators();
+      this.StaffMasterFormGroup.controls['DateOfJoining']?.clearValidators();
+      this.StaffMasterFormGroup.controls['CurrentDesignationID']?.clearValidators();
+      this.StaffMasterFormGroup.controls['Experience']?.clearValidators();
+      this.StaffMasterFormGroup.controls['QualificationAtJoining']?.clearValidators();
+      this.StaffMasterFormGroup.controls['QualificationAfterJoining']?.clearValidators();
+      this.StaffMasterFormGroup.controls['DateOfRetirement']?.clearValidators();
+      this.StaffMasterFormGroup.controls['DesignationID']?.clearValidators();
 
 
-      this.StaffMasterFormGroup.controls['DepartmentJoiningDate'].updateValueAndValidity();
-      this.StaffMasterFormGroup.controls['DateOfJoining'].updateValueAndValidity();
-      this.StaffMasterFormGroup.controls['CurrentDesignationID'].updateValueAndValidity();
-      this.StaffMasterFormGroup.controls['Experience'].updateValueAndValidity();
-      this.StaffMasterFormGroup.controls['QualificationAtJoining'].updateValueAndValidity();
-      this.StaffMasterFormGroup.controls['QualificationAfterJoining'].updateValueAndValidity();
-      this.StaffMasterFormGroup.controls['DateOfRetirement'].updateValueAndValidity();
+      this.StaffMasterFormGroup.controls['DepartmentJoiningDate']?.updateValueAndValidity();
+      this.StaffMasterFormGroup.controls['DateOfJoining']?.updateValueAndValidity();
+      this.StaffMasterFormGroup.controls['CurrentDesignationID']?.updateValueAndValidity();
+      this.StaffMasterFormGroup.controls['Experience']?.updateValueAndValidity();
+      this.StaffMasterFormGroup.controls['QualificationAtJoining']?.updateValueAndValidity();
+      this.StaffMasterFormGroup.controls['QualificationAfterJoining']?.updateValueAndValidity();
+      this.StaffMasterFormGroup.controls['DateOfRetirement']?.updateValueAndValidity();
+      this.StaffMasterFormGroup.controls['DesignationID']?.updateValueAndValidity();
 
+      this.AddServiceistoryFormGroup.controls['DesignationID']?.clearValidators();
+      this.AddServiceistoryFormGroup.controls['ServiceBranchID']?.clearValidators();
+
+      this.AddServiceistoryFormGroup.controls['DesignationID']?.updateValueAndValidity();
+      this.AddServiceistoryFormGroup.controls['ServiceBranchID']?.updateValueAndValidity();
 
       if (
         this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseIncharge ||
@@ -279,20 +292,20 @@ export class BterEMAddStaffDetailsComponent {
       ) {
         this.IsGuestHouse = true;
         this.IsHideShow = false;
-        this.StaffMasterFormGroup.controls['BranchID'].clearValidators();
-        this.StaffMasterFormGroup.controls['ServiceBookBranchID'].clearValidators();
-        this.StaffMasterFormGroup.controls['Office'].clearValidators();
-        this.StaffMasterFormGroup.controls['DesignationID'].clearValidators();
+        this.StaffMasterFormGroup.controls['BranchID']?.clearValidators();
+        this.StaffMasterFormGroup.controls['ServiceBookBranchID']?.clearValidators();
+        this.StaffMasterFormGroup.controls['Office']?.clearValidators();
+        this.StaffMasterFormGroup.controls['DesignationID']?.clearValidators();
 
-        this.StaffMasterFormGroup.controls['BranchID'].clearValidators();
-        this.StaffMasterFormGroup.controls['ServiceBookBranchID'].clearValidators();
-        this.StaffMasterFormGroup.controls['Office'].clearValidators();
-        this.StaffMasterFormGroup.controls['DesignationID'].clearValidators();
+        this.StaffMasterFormGroup.controls['BranchID']?.clearValidators();
+        this.StaffMasterFormGroup.controls['ServiceBookBranchID']?.clearValidators();
+        this.StaffMasterFormGroup.controls['Office']?.clearValidators();
+        this.StaffMasterFormGroup.controls['DesignationID']?.clearValidators();
 
-        this.StaffMasterFormGroup.controls['Office'].updateValueAndValidity();
-        this.StaffMasterFormGroup.controls['BranchID'].updateValueAndValidity();
-        this.StaffMasterFormGroup.controls['ServiceBookBranchID'].updateValueAndValidity();
-        this.StaffMasterFormGroup.controls['DesignationID'].updateValueAndValidity();
+        this.StaffMasterFormGroup.controls['Office']?.updateValueAndValidity();
+        this.StaffMasterFormGroup.controls['BranchID']?.updateValueAndValidity();
+        this.StaffMasterFormGroup.controls['ServiceBookBranchID']?.updateValueAndValidity();
+        this.StaffMasterFormGroup.controls['DesignationID']?.updateValueAndValidity();
       }
 
 
@@ -684,9 +697,19 @@ export class BterEMAddStaffDetailsComponent {
     };
   }
 
+  async refreshInstituteValidation() {
+    if(this.request.OfficeID == EnumOffice.COLLEGE){
+      this.StaffMasterFormGroup.get('InstituteID')?.setValidators([DropdownValidators]);
+    } else {
+      this.StaffMasterFormGroup.get('InstituteID')?.clearValidators();
+    }
+
+    this.StaffMasterFormGroup.get('InstituteID')?.updateValueAndValidity();
+  }
+
   async SaveData(isSaveDraft: boolean = false) {
     debugger
-
+    await  this.refreshInstituteValidation();
     if(!isSaveDraft){
       this.isSubmitted = true;
       if (this.StaffMasterFormGroup.invalid) {
@@ -724,7 +747,10 @@ export class BterEMAddStaffDetailsComponent {
     this.loaderService.requestStarted();
     this.request.StaffUserID = this.sSOLoginDataModel.UserID;
     this.request.bterStaffSubjectListModel = this.staffDetailsFormData.StaffSubjectListModel;
-    this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
+    if(this.request.InstituteID == 0){
+      this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
+    }
+    
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -953,6 +979,18 @@ export class BterEMAddStaffDetailsComponent {
     await this.refreshValidators();
     if (this.AddServiceistoryFormGroup.invalid) {
       /*this.OptionsFormGroup.markAllAsTouched();*/
+      this.toastr.error("Please enter required fields in service history section.");
+      Object.keys(this.AddServiceistoryFormGroup.controls).forEach(key => {
+          const control = this.AddServiceistoryFormGroup.get(key);
+
+          if (control && control.invalid) {
+            // this.toastr.error(`Control ${key} is invalid`);
+            console.error(`Control ${key} is invalid`);
+            Object.keys(control.errors!).forEach(errorKey => {
+              // this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+            });
+          }
+        });
       return;
     }
 
@@ -1077,34 +1115,34 @@ export class BterEMAddStaffDetailsComponent {
   async refreshValidators(){
     debugger
     if(this.serviceReq.OfficeID==21){
-        this.AddServiceistoryFormGroup.controls['InstituteID'].setValidators([DropdownValidators]);
+        this.AddServiceistoryFormGroup.controls['InstituteID']?.setValidators([DropdownValidators]);
     }
     else {
-      this.AddServiceistoryFormGroup.controls['InstituteID'].clearValidators();
+      this.AddServiceistoryFormGroup.controls['InstituteID']?.clearValidators();
     }
-    this.AddServiceistoryFormGroup.controls['InstituteID'].updateValueAndValidity();
+    this.AddServiceistoryFormGroup.controls['InstituteID']?.updateValueAndValidity();
 
     if(this.serviceReq.IsTransfer){
-      this.AddServiceistoryFormGroup.controls['TransferToOfficeID'].setValidators([DropdownValidators]);
-      this.AddServiceistoryFormGroup.controls['DateOfTransfer'].setValidators(Validators.required);
+      this.AddServiceistoryFormGroup.controls['TransferToOfficeID']?.setValidators([DropdownValidators]);
+      this.AddServiceistoryFormGroup.controls['DateOfTransfer']?.setValidators(Validators.required);
     }
     else{
-      this.AddServiceistoryFormGroup.controls['TransferToOfficeID'].clearValidators();
-      this.AddServiceistoryFormGroup.controls['DateOfTransfer'].clearValidators();
+      this.AddServiceistoryFormGroup.controls['TransferToOfficeID']?.clearValidators();
+      this.AddServiceistoryFormGroup.controls['DateOfTransfer']?.clearValidators();
     }
-    this.AddServiceistoryFormGroup.controls['TransferToOfficeID'].updateValueAndValidity();
-    this.AddServiceistoryFormGroup.controls['DateOfTransfer'].updateValueAndValidity();
+    this.AddServiceistoryFormGroup.controls['TransferToOfficeID']?.updateValueAndValidity();
+    this.AddServiceistoryFormGroup.controls['DateOfTransfer']?.updateValueAndValidity();
    
     if(this.serviceReq.IsPromotion){
-      this.AddServiceistoryFormGroup.controls['ToDesignationIDPromotion'].setValidators([DropdownValidators]);
-      this.AddServiceistoryFormGroup.controls['DateOfpromotion'].setValidators(Validators.required);
+      this.AddServiceistoryFormGroup.controls['ToDesignationIDPromotion']?.setValidators([DropdownValidators]);
+      this.AddServiceistoryFormGroup.controls['DateOfpromotion']?.setValidators(Validators.required);
     }
     else{
-      this.AddServiceistoryFormGroup.controls['ToDesignationIDPromotion'].clearValidators();
-      this.AddServiceistoryFormGroup.controls['DateOfpromotion'].clearValidators();
+      this.AddServiceistoryFormGroup.controls['ToDesignationIDPromotion']?.clearValidators();
+      this.AddServiceistoryFormGroup.controls['DateOfpromotion']?.clearValidators();
     }
-    this.AddServiceistoryFormGroup.controls['ToDesignationIDPromotion'].updateValueAndValidity();
-    this.AddServiceistoryFormGroup.controls['DateOfpromotion'].updateValueAndValidity();
+    this.AddServiceistoryFormGroup.controls['ToDesignationIDPromotion']?.updateValueAndValidity();
+    this.AddServiceistoryFormGroup.controls['DateOfpromotion']?.updateValueAndValidity();
 
   }
 

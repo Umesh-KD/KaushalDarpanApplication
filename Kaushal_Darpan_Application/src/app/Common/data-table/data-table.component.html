@@ -2,93 +2,150 @@
 <div class="datatable-container">
 
     <!-- customizable column -->
-    <div class="datatable-toolbar"
-        *ngIf="normalizedConfig.showColumnCustomizer">
+    <div class="datatable-toolbar">
 
-        <button
+        <div class="toolbar-search">
 
-            mat-stroked-button
+            <i class="ti ti-search search-icon"></i>
 
-            color="primary"
-
-            [matMenuTriggerFor]="columnMenu">
-
-            <mat-icon>view_column</mat-icon>
-
-            Columns
-
-        </button>
-
-    </div>
-
-    <mat-menu #columnMenu="matMenu">
-
-        <div class="column-menu">
-
-            <mat-checkbox
-
-                [checked]="isAllSelected()"
-
-                (click)="$event.stopPropagation()"
-
-                (change)="toggleAllColumns($event.checked)">
-
-                Select All
-
-            </mat-checkbox>
-
-            <mat-divider></mat-divider>
-
-            <div *ngFor="let column of normalizedColumns">
-
-                <mat-checkbox
-
-                    *ngIf="!column.lockVisibility"
-
-                    [(ngModel)]="column.visible"
-
-                    (click)="$event.stopPropagation()"
-
-                    (change)="refreshDisplayedColumns()">
-
-                    {{column.displayField}}
-
-                </mat-checkbox>
-
-            </div>
+            <input
+                type="text"
+                class="search-input"
+                placeholder="Search..."
+                (keyup)="applyFilter($event)">
 
         </div>
 
-    </mat-menu>
-    
-    <!-- Search -->
+        <div class="toolbar-actions">
 
-    <div class="row mb-3" *ngIf="normalizedConfig.showSearch">
+            <span class="record-count">
 
-        <div class="col-md-4">
+                {{dataSource.filteredData.length}} Records
 
-            <mat-form-field appearance="outline" class="w-100">
+            </span>
 
-                <mat-label>Search</mat-label>
+            <button
+                class="toolbar-btn"
+                (click)="toggleColumnPanel()">
 
-                <input
-                    matInput
-                    placeholder="Search..."
-                    (keyup)="applyFilter($event)">
+                <i class="ti ti-layout-columns"></i>
 
-            </mat-form-field>
+                Columns
+
+            </button>
+
+            <ng-content select="[datatable-actions]"></ng-content>
 
         </div>
 
     </div>
 
     <div
-        *ngIf="loading"
-        class="datatable-loader">
+        class="column-panel"
+        *ngIf="showColumnPanel"
+        [class.show]="showColumnPanel">
 
-        <mat-spinner diameter="40"></mat-spinner>
+        <div class="column-panel-header">
+
+            <span>
+
+                Column Customization
+
+            </span>
+
+            <button
+                type="button"
+                class="close-btn"
+                (click)="closeColumnPanel()">
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <div class="column-search">
+
+            <input
+
+                type="text"
+
+                class="form-control"
+
+                placeholder="Search Column"
+
+                [(ngModel)]="columnSearch">
+
+        </div>
+
+        <div class="column-list">
+
+            <!-- Select All -->
+
+            <div class="column-item">
+
+                <input
+                    id="chk-all"
+                    type="checkbox"
+                    [checked]="isAllSelected()"
+                    (change)="toggleAllColumns($event)">
+
+                <label for="chk-all">
+
+                    Select All
+
+                </label>
+
+            </div>
+
+            <hr>
+
+            <!-- Columns -->
+
+            <div
+                class="column-item"
+                *ngFor="let column of filteredColumns; let i = index">
+
+                <input
+
+                    [id]="'col_' + i"
+
+                    type="checkbox"
+
+                    [checked]="column.visible"
+
+                    [disabled]="column.lockVisibility"
+
+                    (change)="toggleColumn(column,$event)">
+
+                <label [for]="'col_' + i">
+
+                    {{column.displayField}}
+
+                </label>
+
+            </div>
+
+        </div>
+
+        <div class="column-footer">
+
+            <button
+
+                class="btn btn-sm btn-primary"
+
+                (click)="resetColumns()">
+
+                Reset
+
+            </button>
+
+        </div>
 
     </div>
+
+    
+
     <!-- Table -->
 
     <div class="table-responsive mat-elevation-z2">
@@ -120,7 +177,8 @@
             </ng-container>
 
             <ng-container
-                *ngFor="let column of normalizedColumns"
+                *ngFor="let column of visibleColumns"
+           
                 [matColumnDef]="column.dataField">
 
                 <!-- Header -->

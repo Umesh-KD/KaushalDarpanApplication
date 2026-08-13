@@ -13,8 +13,7 @@ export class CertificateLetterSearchModel {
   public InstituteID?: number=0;
   public SemesterID: number = 0;
   public ExamTypeID: number = 0;
-  
-
+  public EffectiveFromEndTermId: number = 0;
 }
 
 

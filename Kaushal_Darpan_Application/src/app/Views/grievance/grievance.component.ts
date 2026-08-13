@@ -228,17 +228,17 @@ export class GrievanceComponent implements OnInit {
     if (this.GrievanceFormGroup.invalid) {
       this.toastr.error('Please fill required fields')
 
-    Object.keys(this.GrievanceFormGroup.controls).forEach(key => {
-        const control = this.GrievanceFormGroup.get(key);
+      Object.keys(this.GrievanceFormGroup.controls).forEach(key => {
+          const control = this.GrievanceFormGroup.get(key);
 
-        if (control && control.invalid) {
-          // this.toastr.error(`Control ${key} is invalid`);
-          console.error(`Control ${key} is invalid`);
-          Object.keys(control.errors!).forEach(errorKey => {
-            // this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
-          });
-        }
-      });
+          if (control && control.invalid) {
+            // this.toastr.error(`Control ${key} is invalid`);
+            console.error(`Control ${key} is invalid`);
+            Object.keys(control.errors!).forEach(errorKey => {
+              // this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+            });
+          }
+        });
       return
     }
     this.loaderService.requestStarted();

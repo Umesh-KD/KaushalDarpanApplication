@@ -48,7 +48,7 @@
         </div>
 
 
-        <div *ngIf="request.OfficeID == 17 && request.IsNodal == true">
+        <div *ngIf="request.OfficeID == 21">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name </label>
           <select class="form-select " name="InstituteID" id="InstituteID" formControlName="InstituteID"
             [(ngModel)]="request.InstituteID" (change)="getStreamMasterData()">
@@ -242,7 +242,7 @@
 
         <div *ngIf=" this.IsOterFacultyTech == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> First joining in Technical eductaion
-             Department as govt employee<span class="StarMarking">*</span></label>
+            Department as govt employee<span class="StarMarking">*</span></label>
           <input autocomplete="off" class="form-input" type="date" name="DepartmentJoiningDate"
             id="DepartmentJoiningDate" formControlName="DepartmentJoiningDate"
             [(ngModel)]="request.DepartmentJoiningDate" (change)="calExperience()" [max]="this.today" />
@@ -416,7 +416,7 @@
           </div>
         </div>
 
-        
+
         <div *ngIf=" this.IsOterFacultyTech == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Retirement</label>
           <input autocomplete="off" class="form-input" type="date" name="DateOfRetirement" id="DateOfRetirement"
@@ -505,33 +505,34 @@
         *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Qualification Details</b>
       </div>
-      <form [formGroup]="QualificationFormGroup" 
+      <form [formGroup]="QualificationFormGroup"
         *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-2">Qualification during the service period?<span
-                class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-2">Qualification during the service
+              period?<span class="StarMarking">*</span></label>
 
             <div class="flex gap-4">
               <label class="flex items-center space-x-2">
-                <input type="radio" name="IsQualificationObtainedDuringService" [value]="'Before'" 
+                <input type="radio" name="IsQualificationObtainedDuringService" [value]="'Before'"
                   formControlName="IsQualificationObtainedDuringService"
-                  [(ngModel)]="qualificationReq.IsQualificationObtainedDuringService" 
+                  [(ngModel)]="qualificationReq.IsQualificationObtainedDuringService"
                   (change)="onChangeIsQualificationObtainedDuringService('Before')" />
                 <span>Before</span>
               </label>
 
               <label class="flex items-center space-x-2">
-                <input type="radio" name="IsQualificationObtainedDuringService" [value]="'After'" 
+                <input type="radio" name="IsQualificationObtainedDuringService" [value]="'After'"
                   formControlName="IsQualificationObtainedDuringService"
-                  [(ngModel)]="qualificationReq.IsQualificationObtainedDuringService" 
+                  [(ngModel)]="qualificationReq.IsQualificationObtainedDuringService"
                   (change)="onChangeIsQualificationObtainedDuringService('After')" />
                 <span>After</span>
               </label>
             </div>
 
-            <div *ngIf="isQualificationSubmitted && _QualificationFormGroup.IsQualificationObtainedDuringService.errors" class="text-danger">
+            <div *ngIf="isQualificationSubmitted && _QualificationFormGroup.IsQualificationObtainedDuringService.errors"
+              class="text-danger">
               <p *ngIf="_QualificationFormGroup.IsQualificationObtainedDuringService.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
               </p>
@@ -539,7 +540,8 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification<span class="StarMarking">*</span> </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification<span
+                class="StarMarking">*</span> </label>
             <select class="form-select " name="QualificationID" id="QualificationID" formControlName="QualificationID"
               [(ngModel)]="qualificationReq.QualificationID">
               <option value="0">Choose Option</option>
@@ -554,11 +556,14 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of acquiring the qualification<span class="StarMarking">*</span></label>
-            <input autocomplete="off" class="form-input" type="date" name="QualificationAcquredDate" id="QualificationAcquredDate"
-              formControlName="QualificationAcquredDate" [(ngModel)]="qualificationReq.QualificationAcquredDate" />
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of acquiring the qualification<span
+                class="StarMarking">*</span></label>
+            <input autocomplete="off" class="form-input" type="date" name="QualificationAcquredDate"
+              id="QualificationAcquredDate" formControlName="QualificationAcquredDate"
+              [(ngModel)]="qualificationReq.QualificationAcquredDate" />
 
-            <div *ngIf="isQualificationSubmitted && _QualificationFormGroup.QualificationAcquredDate.errors" class="text-danger">
+            <div *ngIf="isQualificationSubmitted && _QualificationFormGroup.QualificationAcquredDate.errors"
+              class="text-danger">
               <p *ngIf="_QualificationFormGroup.QualificationAcquredDate.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
               </p>
@@ -566,11 +571,13 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Division obtained<span class="StarMarking">*</span> </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Division obtained<span
+                class="StarMarking">*</span> </label>
             <input autocomplete="off" class="form-input" type="text" name="ObtainedDivision" id="ObtainedDivision"
               formControlName="ObtainedDivision" [(ngModel)]="qualificationReq.ObtainedDivision" />
 
-            <div *ngIf="isQualificationSubmitted && _QualificationFormGroup.ObtainedDivision.errors" class="text-danger">
+            <div *ngIf="isQualificationSubmitted && _QualificationFormGroup.ObtainedDivision.errors"
+              class="text-danger">
               <p *ngIf="_QualificationFormGroup.ObtainedDivision.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
               </p>
@@ -578,7 +585,8 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Specialization<span class="StarMarking">*</span> </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Specialization<span
+                class="StarMarking">*</span> </label>
             <input autocomplete="off" class="form-input" type="text" name="Specialization" id="Specialization"
               formControlName="Specialization" [(ngModel)]="qualificationReq.Specialization" />
 
@@ -599,7 +607,8 @@
                 (change)="UploadDocument($event, 'PreQualificationCertificate')">
               <label for="PreQualificationCertificate">
                 <span>Choose File</span>
-                {{ qualificationReq.Dis_PreQualificationCertificate == '' || qualificationReq.Dis_PreQualificationCertificate ==
+                {{ qualificationReq.Dis_PreQualificationCertificate == '' ||
+                qualificationReq.Dis_PreQualificationCertificate ==
                 undefined ? 'No File Choosen' : qualificationReq.Dis_PreQualificationCertificate }}
               </label>
               <div class="flex">
@@ -623,7 +632,8 @@
                 (change)="UploadDocument($event, 'AcquiringQualificationCertificate')">
               <label for="AcquiringQualificationCertificate">
                 <span>Choose File</span>
-                {{ qualificationReq.Dis_AcquiringQualificationCertificate == '' || qualificationReq.Dis_AcquiringQualificationCertificate ==
+                {{ qualificationReq.Dis_AcquiringQualificationCertificate == '' ||
+                qualificationReq.Dis_AcquiringQualificationCertificate ==
                 undefined ? 'No File Choosen' : qualificationReq.Dis_AcquiringQualificationCertificate }}
               </label>
               <div class="flex">
@@ -646,7 +656,8 @@
                 id="CompetentAuthorityOrder" type="file" (change)="UploadDocument($event, 'CompetentAuthorityOrder')">
               <label for="CompetentAuthorityOrder">
                 <span>Choose File</span>
-                {{ qualificationReq.Dis_CompetentAuthorityOrder == '' || qualificationReq.Dis_CompetentAuthorityOrder == undefined ? 'No
+                {{ qualificationReq.Dis_CompetentAuthorityOrder == '' || qualificationReq.Dis_CompetentAuthorityOrder ==
+                undefined ? 'No
                 File Choosen' : qualificationReq.Dis_CompetentAuthorityOrder }}
               </label>
               <div class="flex">
@@ -698,25 +709,25 @@
               <td class="text-center">{{row.ObtainedDivision}}</td>
               <td class="text-center">{{row.Specialization}}</td>
               <td class="text-center">
-                <a target="_blank" 
+                <a target="_blank"
                   href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/AcquiredQualificationAfterJoining/' + row.PreQualificationCertificate }}">
                   {{row.Dis_PreQualificationCertificate}}
                 </a>
               </td>
               <td class="text-center">
-                <a target="_blank" 
+                <a target="_blank"
                   href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/AcquiredQualificationAfterJoining/' + row.AcquiringQualificationCertificate }}">
                   {{row.Dis_AcquiringQualificationCertificate}}
                 </a>
               </td>
               <td class="text-center">
-                <a target="_blank" 
+                <a target="_blank"
                   href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/AcquiredQualificationAfterJoining/' + row.CompetentAuthorityOrder }}">
                   {{row.Dis_CompetentAuthorityOrder}}
                 </a>
               </td>
               <td class="text-center">
-                <button class="btn bg-danger text-white" type="button" title="Delete" 
+                <button class="btn bg-danger text-white" type="button" title="Delete"
                   (click)="deleteQualificationRow(row)">
                   <i class="ti ti-trash"></i>
                 </button>
@@ -724,8 +735,7 @@
             </tr>
           </tbody>
         </table>
-        <div *ngIf="StaffQualificationList?.length == 0"
-              class="text-center text-gray-500 py-4">
+        <div *ngIf="StaffQualificationList?.length == 0" class="text-center text-gray-500 py-4">
           Qualification data not available
         </div>
       </div>
@@ -1018,8 +1028,8 @@
           </div>
 
           <div *ngIf=" this.IsOterFacultyTech == false && showServiceBranch">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch<span
-                class="StarMarking">*</span> </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch<span class="StarMarking">*</span>
+            </label>
             <select class="form-select " name="ServiceBranchID" id="ServiceBranchID" formControlName="ServiceBranchID"
               [(ngModel)]="serviceReq.ServiceBranchID">
               <option value="0">Choose Option</option>
@@ -1149,8 +1159,8 @@
           <div *ngIf="serviceReq.IsPromotion && showServiceToBranch">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> To Branch<span
                 class="StarMarking">*</span> </label>
-            <select class="form-select " name="ToBranchIDPromotion" id="ToBranchIDPromotion" formControlName="ToBranchIDPromotion"
-              [(ngModel)]="serviceReq.ToBranchIDPromotion">
+            <select class="form-select " name="ToBranchIDPromotion" id="ToBranchIDPromotion"
+              formControlName="ToBranchIDPromotion" [(ngModel)]="serviceReq.ToBranchIDPromotion">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID">{{item.StreamName}}
               </option>
@@ -1167,7 +1177,7 @@
                 class="StarMarking">*</span></label>
             <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfpromotion"
               id="DateOfpromotion" formControlName="DateOfpromotion" [(ngModel)]="serviceReq.DateOfpromotion"
-              (click)="openDatePicker($event)"/>
+              (click)="openDatePicker($event)" />
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.DateOfpromotion.errors" class="text-danger">
               <p *ngIf="_AddServiceistoryFormGroup.DateOfpromotion.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
@@ -1246,14 +1256,13 @@
 
         <div class="pt-30 mb-3 flex justify-center flex-wrap items-center">
           <button type="button" class="btn bg-primary text-white" (click)="AddAnotherServiceHistory()">
-             Add More Service History
+            Add More Service History
           </button>
         </div>
 
       </form>
 
-      <div
-        class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
         <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
         <b class="text-1xl-5"><i class="ti ti-list"></i> Service History List</b>
       </div>
@@ -1374,27 +1383,27 @@
             </tr>
           </tbody>
         </table>
-        <div *ngIf="serviceHistoryList?.length == 0"
-              class="text-center text-gray-500 py-4">
+        <div *ngIf="serviceHistoryList?.length == 0" class="text-center text-gray-500 py-4">
           Service history data not available
         </div>
       </div>
 
-      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3" 
+      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3"
         *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Staff Career Advancement Scheme Details</b>
       </div>
-      <form [formGroup]="CareerAdvancementSchemeFormGroup" 
+      <form [formGroup]="CareerAdvancementSchemeFormGroup"
         *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Pay Level<span class="StarMarking">*</span> </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Pay Level<span
+                class="StarMarking">*</span> </label>
             <select class="form-select " name="PayLevelID" id="PayLevelID" formControlName="PayLevelID"
               [(ngModel)]="reqCAS.PayLevelID">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of PayLevelDDLList" [value]="item.PayLevelID">{{item.PayLevel}}</option>
-              
+
             </select>
             <div *ngIf="isCASSubmitted && _CareerAdvancementSchemeFormGroup.PayLevelID.errors" class="text-danger">
               <p *ngIf="!_CareerAdvancementSchemeFormGroup.PayLevelID.errors.DropdownValidators">
@@ -1405,11 +1414,14 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date Of Implementation<span class="StarMarking">*</span></label>
-            <input autocomplete="off" class="form-input" type="date" name="DateOfImplementation" id="DateOfImplementation"
-              formControlName="DateOfImplementation" [(ngModel)]="reqCAS.DateOfImplementation" />
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date Of Implementation<span
+                class="StarMarking">*</span></label>
+            <input autocomplete="off" class="form-input" type="date" name="DateOfImplementation"
+              id="DateOfImplementation" formControlName="DateOfImplementation"
+              [(ngModel)]="reqCAS.DateOfImplementation" />
 
-            <div *ngIf="isCASSubmitted && _CareerAdvancementSchemeFormGroup.DateOfImplementation.errors" class="text-danger">
+            <div *ngIf="isCASSubmitted && _CareerAdvancementSchemeFormGroup.DateOfImplementation.errors"
+              class="text-danger">
               <p *ngIf="_CareerAdvancementSchemeFormGroup.DateOfImplementation.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
               </p>
@@ -1417,7 +1429,8 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order No<span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order No<span
+                class="StarMarking">*</span></label>
             <input autocomplete="off" class="form-input" type="text" name="OrderNo" id="OrderNo"
               formControlName="OrderNo" [(ngModel)]="reqCAS.OrderNo" />
 
@@ -1429,7 +1442,8 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Date<span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Date<span
+                class="StarMarking">*</span></label>
             <input autocomplete="off" class="form-input" type="date" name="OrderDate" id="OrderDate"
               formControlName="OrderDate" [(ngModel)]="reqCAS.OrderDate" />
 
@@ -1441,8 +1455,8 @@
           </div>
 
           <div>
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              for="CASDocument">Upload Career Advancement Scheme Document<span class="StarMarking">*</span></label>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="CASDocument">Upload Career
+              Advancement Scheme Document<span class="StarMarking">*</span></label>
             <div class="flex fileUploader">
               <input
                 class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -1498,13 +1512,13 @@
               <td class="text-center">{{row.OrderNo}}</td>
               <td class="text-center">{{row.OrderDate}}</td>
               <td class="text-center">
-                <a target="_blank" 
+                <a target="_blank"
                   href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/CareerAdvancementSchemeDocument/' + row.CASDocument }}">
                   {{row.Dis_CASDocument}}
                 </a>
               </td>
               <td class="text-center">
-                <button class="btn bg-danger text-white" type="button" title="Delete" 
+                <button class="btn bg-danger text-white" type="button" title="Delete"
                   (click)="DeleteStaffCareerAdvancementScheme_ByID(row)">
                   <i class="ti ti-trash"></i>
                 </button>
@@ -1512,8 +1526,7 @@
             </tr>
           </tbody>
         </table>
-        <div *ngIf="StaffCareerAdvancementSchemeData?.length == 0"
-              class="text-center text-gray-500 py-4">
+        <div *ngIf="StaffCareerAdvancementSchemeData?.length == 0" class="text-center text-gray-500 py-4">
           Staff Career Advancement Scheme data not available
         </div>
       </div>
