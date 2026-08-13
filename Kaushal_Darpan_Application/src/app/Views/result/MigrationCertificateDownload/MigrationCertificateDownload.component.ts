@@ -81,7 +81,8 @@ export class MigrationCertificateDownloadComponent {
       //IsRevised: ['-1', [Validators.required, notDefaultValueValidator('-1')]],
       EnrollmentNo: ['', Validators.required],
       EndTermID: [this.sSOLoginDataModel.EndTermID, [Validators.required, notDefaultValueValidator('0')]],
-      SchemeID: ['']
+      SchemeID: [''],
+      EffectiveFromEndTermId: ['0']
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -98,11 +99,11 @@ export class MigrationCertificateDownloadComponent {
           data = JSON.parse(JSON.stringify(data));
           this.ResultTypeList = data['Data'];
           // exclude some ids
-          // this.ResultTypeList = this.ResultTypeList.filter((x: any) => ![
-          //   EnumResultType.RevaluationResult,
-          //   EnumResultType.Ufm,
-          //   EnumResultType.RwhRevalEffected
-          // ].includes(x.ID));
+          this.ResultTypeList = this.ResultTypeList.filter((x: any) => ![
+            // EnumResultType.RevaluationResult,
+            EnumResultType.Ufm,
+            // EnumResultType.RwhRevalEffected
+          ].includes(x.ID));
         }, (error: any) => console.error(error)
         );
 

@@ -241,13 +241,28 @@ export class PmnamMelaReportComponent {
   }
   async SaveData() {
     debugger
-    if (this.obj.PoliticalEstablishmentscontactedNo == '' || this.obj.PrivateEstablishmentscontactedNo == '' ||
-      this.obj.PoliticalEstablishmentspartNo == '' || this.obj.PrivateEstablishmentspartNo == '' ||
-      this.obj.CandidatespresentMaleNo == '' || this.obj.CandidatespresentFemaleNo == '' ||
-      this.obj.CandidatessselectedFemaleNo == '' || this.obj.CandidatessselectedMaleNo == '') {
+    if (
+      this.obj.PoliticalEstablishmentscontactedNo?.toString() == "" || 
+      this.obj.PrivateEstablishmentscontactedNo?.toString() == "" ||
+      this.obj.PoliticalEstablishmentspartNo?.toString() == "" || 
+      this.obj.PrivateEstablishmentspartNo?.toString() == "" ||
+      this.obj.CandidatespresentMaleNo?.toString() == "" || 
+      this.obj.CandidatespresentFemaleNo?.toString() == "" ||
+      this.obj.CandidatessselectedFemaleNo?.toString() == "" || 
+      this.obj.CandidatessselectedMaleNo?.toString() == ""
+    ) {
       this.toastr.warning("Please Enter All Required Fields !")
       return;
     }
+
+    Number(this.obj.PoliticalEstablishmentscontactedNo)
+    Number(this.obj.PrivateEstablishmentscontactedNo)
+    Number(this.obj.PoliticalEstablishmentspartNo)
+    Number(this.obj.PrivateEstablishmentspartNo)
+    Number(this.obj.CandidatespresentMaleNo)
+    Number(this.obj.CandidatespresentFemaleNo)
+    Number(this.obj.CandidatessselectedFemaleNo)
+    Number(this.obj.CandidatessselectedMaleNo)
     debugger;
     this.obj.EndTermID = this.ssoLoginDataModel.EndTermID;
     this.obj.DepartmentID = this.ssoLoginDataModel.DepartmentID;

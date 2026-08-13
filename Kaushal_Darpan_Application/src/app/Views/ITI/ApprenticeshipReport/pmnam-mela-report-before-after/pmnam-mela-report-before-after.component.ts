@@ -88,8 +88,14 @@ export class PMNAMMelaReportBeforeAfterComponent {
 
   async Submit() {
     debugger
-    if (this.EstablishmentsRegisterNoBefore == '' || this.NumberofSeatBefore == '' || this.NumberofEmployedStudentBefore == '' || this.EstablishmentsRegisterNoAfter == '' || this.NumberofSeatAfter == '' || this.NumberofEmployedStudentAfter == '')
-    {
+    if (
+      this.EstablishmentsRegisterNoBefore == "" || 
+      this.NumberofSeatBefore == "" || 
+      this.NumberofEmployedStudentBefore == "" || 
+      this.EstablishmentsRegisterNoAfter == "" || 
+      this.NumberofSeatAfter == "" || 
+      this.NumberofEmployedStudentAfter == ""
+    ) {
       this.toastr.warning("Please Enter All Required Fields !")
       return;
     }

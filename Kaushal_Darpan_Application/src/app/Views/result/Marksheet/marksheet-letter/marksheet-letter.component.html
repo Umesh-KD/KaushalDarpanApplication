@@ -25,7 +25,7 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Institute:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
           <select class="form-select" [(ngModel)]="searchRequest.InstituteID">
             <option value="0">Choose Option</option>
             <option *ngFor="let row of InstituteList" [value]="row.InstituteID">{{row.InstituteName}}</option>
@@ -33,7 +33,7 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Semester:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester:</label>
           <select class="form-select" [(ngModel)]="searchRequest.SemesterID">
             <option value="0">Choose Option</option>
             <option *ngFor="let row of SemesterMasterList" [value]="row.SemesterID">{{row.SemesterName}}</option>
@@ -41,7 +41,7 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Exam Type:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Result Type:</label>
           <select class="form-select" [(ngModel)]="searchRequest.ExamTypeID">
             <option value="0">Choose Option</option>
             <option *ngFor="let row of ExamTypeList" [value]="row.ID">{{row.Name}}</option>

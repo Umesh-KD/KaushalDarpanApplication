@@ -79,7 +79,7 @@
 
           <div *ngIf="searchRequest.ResultTypeID==_EnumResultType.RwhResult || searchRequest.ResultTypeID==_EnumResultType.RwhRevalEffected">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Effective From</label>
-            <select class="form-select" [(ngModel)]="searchRequest.EffectiveFromEndTermId" name="EffectiveFromEndTermId">
+            <select class="form-select" [(ngModel)]="searchRequest.EffectiveFromEndTermId" formControlName="EffectiveFromEndTermId" name="EffectiveFromEndTermId">
               <option [value]="0">--Select--</option>
               <option *ngFor="let item of endTermFinYear" [value]="item.EndTermID">{{ item.EndTermName }}</option>
             </select>
