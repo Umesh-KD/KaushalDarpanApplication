@@ -364,6 +364,7 @@
 
             @if(AllotmentKey=='IMC ALLOTMENT CATEGORY')
             {
+        
             <!--
   @if((StudentDetailsList[0].CasteCategoryNameEnglish == 'OBC' && item.IMC_OBC==0) || (StudentDetailsList[0].CasteCategoryNameEnglish == 'SC' && item.IMC_SC==0) || (StudentDetailsList[0].CasteCategoryNameEnglish == 'ST' && item.IMC_ST==0) || StudentDetailsList[0].CasteCategoryNameEnglish == 'GENERAL')
   {
@@ -392,6 +393,7 @@
             <!--<td *ngIf="item.GEN >(item.IMC_GEN + item.IMC_OBC +item.IMC_SC +item.IMC_ST)"><button type="button" class="btn bg-info btn-sm text-white" (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'IMC GEN', 'IMC_GEN')">{{item.IMC_GEN + item.IMC_OBC +item.IMC_SC +item.IMC_ST}} - IMC GEN Seat</button></td>
   <td *ngIf="item.GEN <(item.IMC_GEN + item.IMC_OBC +item.IMC_SC +item.IMC_ST)"><button type="button" class="btn bg-info btn-sm text-white" (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'IMC GEN', 'IMC_GEN')">{{item.GEN}} - IMC GEN Seat</button></td>
   <td *ngIf="item.IMC_GEN == 0"><span class="text-danger">Seat Not Available</span></td>-->
+            f=
 
 
 

@@ -33,10 +33,13 @@ export class MarksheetDownloadComponent {
   public downloadReq = new DownloadMarksheetSearchModel();
   public StudentList: any = []
   public StudentData: any[] = []
+  public endTermFinYear: any[] = []
   public State: any;
   public Message: any;
   public ErrorMessage: any;
   public CenterMasterList: any;
+
+  _EnumResultType=EnumResultType;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -81,6 +84,7 @@ export class MarksheetDownloadComponent {
       RollNo: ['', Validators.required],
       EndTermID: [this.sSOLoginDataModel.EndTermID, [Validators.required, notDefaultValueValidator('0')]],
       SchemeID: ['0'],
+      EffectiveFromEndTermId: [0,],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -98,9 +102,7 @@ export class MarksheetDownloadComponent {
           this.ResultTypeList = data['Data'];
           // exclude some ids
           this.ResultTypeList = this.ResultTypeList.filter((x: any) => ![
-            EnumResultType.RevaluationResult,
-            EnumResultType.Ufm,
-            EnumResultType.RwhRevalEffected
+            EnumResultType.Ufm
           ].includes(x.ID));
         }, (error: any) => console.error(error)
         );
@@ -407,5 +409,21 @@ export class MarksheetDownloadComponent {
     // update
     this.downLoadFG.get('IsRevised')?.updateValueAndValidity();
     this.downLoadFG.get('RollNo')?.updateValueAndValidity();
+  }
+
+  async GetEffectiveFinYear() {
+    this.searchRequest.EffectiveFromEndTermId = 0;
+    this.endTermFinYear = [];
+    if (this.searchRequest.ResultTypeID == this._EnumResultType.RwhResult || this.searchRequest.ResultTypeID == this._EnumResultType.RwhRevalEffected) {
+      try {
+        await this.commonFunctionService.GetEffectiveFinYear()
+          .then((data: any) => {
+            this.endTermFinYear = data['Data'] || [];
+          }, (error: any) => console.error(error));
+      }
+      catch (Ex) {
+        console.error(Ex);
+      }
+    }
   }
 }

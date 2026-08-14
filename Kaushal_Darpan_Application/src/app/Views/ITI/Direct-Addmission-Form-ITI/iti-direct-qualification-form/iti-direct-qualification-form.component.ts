@@ -150,8 +150,9 @@ export class ITIDirectQualificationFormComponent {
     if (this.ApplicationID > 0) {
       this.searchRequest.ApplicationID = this.ApplicationID;
       await this.GetPersonalDetailsById();
-      await this.GetById();
       await this.GetByIdQualification();
+      await this.GetById();
+
     }
     await this.GetMasterDDL()
   }
@@ -886,6 +887,7 @@ export class ITIDirectQualificationFormComponent {
   }
 
   async GetById() {
+    debugger
     this.isSubmitted = false;
 
     try {
@@ -971,6 +973,7 @@ export class ITIDirectQualificationFormComponent {
     this.AddedChoices12 = []
     try {
       this.loaderService.requestStarted();
+      debugger
       await this.ItiApplicationFormService.GetOptionDetailsbyID(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -978,7 +981,6 @@ export class ITIDirectQualificationFormComponent {
           this.AddedChoices = data['Data']
           console.log(this.AddedChoices, "addeddata")
           //this.formData.ApplicationID = data['Data'][0].ApplicationID;
-
           this.box8Checked = false;
           this.box10Checked = false;
 

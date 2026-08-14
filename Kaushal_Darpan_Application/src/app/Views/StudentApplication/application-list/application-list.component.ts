@@ -738,7 +738,7 @@ export class ApplicationListComponent {
     var data = {
       DepartmentID: EnumDepartment.ITI,
       CourseTypeId: this.sSOLoginDataModel.Eng_NonEng,
-      AcademicYearID:9 ,
+      AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
       EndTermID: this.sSOLoginDataModel.EndTermID,
       Key: "DIRECT ADDMISSSION",
       SSOID: this.sSOLoginDataModel.SSOID

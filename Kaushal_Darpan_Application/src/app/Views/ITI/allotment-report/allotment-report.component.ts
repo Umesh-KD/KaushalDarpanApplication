@@ -212,7 +212,7 @@ export class AllotmentReportComponent {
             const unwantedColumns = [
               'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
               'Id', 'Status', 'RemarkForStatus', 'FeePdf', 'RTS', 'TotalRecords', 'MeritMasterId', 'AcademicYearID',
-              'DepartmentId', 'PublishBy', 'PublishIP', 'Class'
+              'DepartmentId', 'PublishBy', 'PublishIP', 'Class','MobileNo'
             ];
             const filteredData = this.transactionData.map((item: { [x: string]: any; }) => {
               const filteredItem: any = {};

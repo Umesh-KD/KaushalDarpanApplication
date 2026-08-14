@@ -29,7 +29,8 @@ import { InternalSlidingService } from '../../../Services/ITIInternalSliding/int
   templateUrl: './students-upgraded-by-upward.component.html',
   styleUrl: './students-upgraded-by-upward.component.css'
 })
-export class StudentUpgradedByUpwardComponent {
+export class StudentUpgradedByUpwardComponent
+{
   public State: number = -1;
   groupForm!: FormGroup;
   public Message: any = [];
@@ -171,7 +172,8 @@ export class StudentUpgradedByUpwardComponent {
     } else {
       this.pageNo = i;
     }
-    try {
+    try
+    {
       this.loaderService.requestStarted();
       this.searchRequest.PageNumber = this.pageNo
       this.searchRequest.PageSize = this.pageSize

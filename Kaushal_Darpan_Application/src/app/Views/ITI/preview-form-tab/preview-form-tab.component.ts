@@ -639,12 +639,18 @@ export class PreviewFormTabComponent implements OnInit {
    // debugger
     let isPaymentVerified = false;
     const transactionsList: any[] = this.request.EmitraTransactionsDataModelList || [];
-    for (const txn of transactionsList) {
+    for (const txn of transactionsList) 
+      {
       this.transactionStatusDataModel.TransactionID = txn.TransactionId;
       this.transactionStatusDataModel.DepartmentID = EnumDepartment.ITI;
       this.transactionStatusDataModel.PRN = txn.PRN;
       this.transactionStatusDataModel.ServiceID = this.request.ServiceID;
       this.transactionStatusDataModel.ApplicationID = this.request.ApplicationID.toString();
+      this.transactionStatusDataModel.AMOUNT = txn.PaidAmount;
+      this.transactionStatusDataModel.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.transactionStatusDataModel.SSOID = this.sSOLoginDataModel.SSOID;
+      this.transactionStatusDataModel.IsEmitra = txn.IsEmitra;
+ 
 
       await this.emitraPaymentService.EmitraApplicationVerifyPaymentStatus(this.transactionStatusDataModel)
         .then(async (data: any) => {

@@ -10,7 +10,7 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { MarksheetLetterDataModel, MarksheetLetterSearchModel } from '../../../../Models/MarksheetLetterDataModel';
-import { EnumDepartment, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumDepartment, EnumResultType, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { MarksheetDownloadService } from '../../../../Services/MarksheetDownload/marksheet-download.service';
 import { HttpClient } from '@angular/common/http';
 
@@ -36,6 +36,9 @@ export class MarksheetLetterComponent {
   public SemesterMasterList: any = [];
   public ExamTypeList: any = [];
   public EndTermList: any = [];
+  public endTermFinYear: any = [];
+
+  _EnumResultType = EnumResultType
 
   constructor(
     private commonMasterService: CommonFunctionService, 
@@ -186,5 +189,21 @@ export class MarksheetLetterComponent {
   generateFileName(extension: string): string {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     return `file_${timestamp}.${extension}`;
+  }
+
+  async GetEffectiveFinYear() {
+    this.searchRequest.EffectiveFromEndTermId = 0;
+    this.endTermFinYear = [];
+    if (this.searchRequest.ExamTypeID == this._EnumResultType.RwhResult || this.searchRequest.ExamTypeID == this._EnumResultType.RwhRevalEffected) {
+      try {
+        await this.commonMasterService.GetEffectiveFinYear()
+          .then((data: any) => {
+            this.endTermFinYear = data['Data'] || [];
+          }, (error: any) => console.error(error));
+      }
+      catch (Ex) {
+        console.error(Ex);
+      }
+    }
   }
 }

@@ -153,7 +153,21 @@ export class IMCAllotmentReportComponent {
   }
 
   IMCAllotmentReportExportToExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.IMCAllotmentList);
+     const unwantedColumns = [
+      'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'GroupCode', 'InstituteID','MobileNo'
+    ];
+     const filteredData = this.IMCAllotmentList.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     const fileName = `IMCAllotmentReportList_Class.xlsx`;

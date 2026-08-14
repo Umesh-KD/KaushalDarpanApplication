@@ -66,7 +66,8 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Result Type
             </label>
-            <select class="form-select" [(ngModel)]="searchRequest.ResultTypeID" name="ResultTypeID" formControlName="ResultTypeID">
+            <select class="form-select" [(ngModel)]="searchRequest.ResultTypeID" name="ResultTypeID"
+               formControlName="ResultTypeID"  (change)="GetEffectiveFinYear()">
               <option value="0">--Select--</option>
               <option *ngFor="let item of ResultTypeList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
@@ -74,6 +75,15 @@
             <div *ngIf="isSubmitted && downLoadFG.get('ResultTypeID')?.hasError('defaultValue')" class="text-danger">
               This field is required!
             </div>
+          </div>
+
+          <div *ngIf="searchRequest.ResultTypeID==_EnumResultType.RwhResult || searchRequest.ResultTypeID==_EnumResultType.RwhRevalEffected">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Effective From</label>
+            <select class="form-select" [(ngModel)]="searchRequest.EffectiveFromEndTermId" name="EffectiveFromEndTermId"
+              formControlName="EffectiveFromEndTermId">
+              <option [value]="0">--- Select ---</option>
+              <option *ngFor="let item of endTermFinYear" [value]="item.EndTermID">{{ item.EndTermName }}</option>
+            </select>
           </div>
 
           <div>

@@ -152,9 +152,9 @@
               <a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.IsFinalSubmit !== 2" (click)="redirectApplication(row,2)"
                  class="btn bg-info text-white btn-sm"> Complete Application</a>
               <!--&& !IsAlloted-->
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionMapKey==1 && row.DirectAdmissionType!=1 && row.DirectAdmissionType!=9"
+              <!-- <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionMapKey==1 && row.DirectAdmissionType!=1 && row.DirectAdmissionType!=9"
                  (click)="applyForDirectAdmission(row)"
-                 class="btn bg-info text-white btn-sm"> Apply For Direct Admission</a>
+                 class="btn bg-info text-white btn-sm"> Apply For Direct Admission</a> -->
 
               <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionMapKey==1 && row.DirectAdmissionType==1 && row.IsFinalSubmit !== 2"
                  (click)="redirectToDirectAdmissionApplicationForm(row)"
