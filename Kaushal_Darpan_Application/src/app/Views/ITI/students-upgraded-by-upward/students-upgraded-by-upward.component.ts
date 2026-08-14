@@ -172,7 +172,8 @@ export class StudentUpgradedByUpwardComponent
     } else {
       this.pageNo = i;
     }
-    try {
+    try
+    {
       this.loaderService.requestStarted();
       this.searchRequest.PageNumber = this.pageNo
       this.searchRequest.PageSize = this.pageSize
