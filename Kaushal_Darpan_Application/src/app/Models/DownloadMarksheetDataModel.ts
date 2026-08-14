@@ -30,6 +30,7 @@ export class DownloadMarksheetSearchModel {
   public SRNO?: string = ''
   public DOB?: string = ''
   public SchemeID?:number=0
+  public EffectiveFromEndTermId?:number=0
 }
 
 

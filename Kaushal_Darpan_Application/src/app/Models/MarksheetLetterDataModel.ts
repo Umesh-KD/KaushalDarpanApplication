@@ -19,6 +19,7 @@ export class MarksheetLetterSearchModel {
   public EndTermID: number = 0;
   public AcademicYearID: number = 0;
   public Eng_NonEngID: number = 0;
+  public EffectiveFromEndTermId: number = 0;
   
 
 }

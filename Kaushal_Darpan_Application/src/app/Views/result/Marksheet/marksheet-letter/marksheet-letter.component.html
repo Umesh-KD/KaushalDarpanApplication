@@ -42,9 +42,17 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Result Type:</label>
-          <select class="form-select" [(ngModel)]="searchRequest.ExamTypeID">
+          <select class="form-select" [(ngModel)]="searchRequest.ExamTypeID"  (change)="GetEffectiveFinYear()">
             <option value="0">Choose Option</option>
             <option *ngFor="let row of ExamTypeList" [value]="row.ID">{{row.Name}}</option>
+          </select>
+        </div>
+
+        <div *ngIf="searchRequest.ExamTypeID==_EnumResultType.RwhResult || searchRequest.ExamTypeID==_EnumResultType.RwhRevalEffected">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Effective From</label>
+          <select class="form-select" [(ngModel)]="searchRequest.EffectiveFromEndTermId" name="EffectiveFromEndTermId">
+            <option [value]="0">--- Select ---</option>
+            <option *ngFor="let item of endTermFinYear" [value]="item.EndTermID">{{ item.EndTermName }}</option>
           </select>
         </div>
 
