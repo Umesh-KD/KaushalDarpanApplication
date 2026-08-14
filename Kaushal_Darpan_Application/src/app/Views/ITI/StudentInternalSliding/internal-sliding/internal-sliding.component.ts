@@ -120,9 +120,9 @@ export class InternalSlidingComponent implements OnInit {
       this.requestSeats.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
       this.requestSeats.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.requestSeats.Action = "SEAT_MATRIX_STATUS";
-      this.requestSeats.AllotmentMasterId = 6;
+      this.requestSeats.AllotmentMasterId =6;
       await this.SeatsDistributionsService.GetSeatMetrixData(this.requestSeats).then((data: any) => {
-
+        debugger
         //data = JSON.parse(JSON.stringify(data));
         if (data.Data[0].SeatMatrixStatus == true) {
           this.IsPublishSeatMetrix = true;
@@ -314,24 +314,21 @@ export class InternalSlidingComponent implements OnInit {
     this.loaderService.requestStarted();
     //setTimeout(() => {
     this.modalService.dismissAll();
-    this.loaderService.requestEnded();
+
+
     //window.location.reload();
     //}, 200);
   }
 
   openAllotOTP() {
-
     if (this.Request.InsID == 0) {
-      this.toastr.error('Please Select Trade to allot seat')
-      return
+      this.toastr.error('Please Select Trade to allot seat');
+      return;
     }
-
     if (this.Request.UnitID == 0) {
-      this.toastr.error('Please Select Shift/unit')
-      return
+      this.toastr.error('Please Select Shift/unit');
+      return;
     }
-
-
     const confirmationMessage = "Are you sure you want to Submit?";
     this.Swal2.Confirmation(confirmationMessage, async (result: any) => {
       if (result.isConfirmed) {
@@ -340,11 +337,12 @@ export class InternalSlidingComponent implements OnInit {
         this.childComponent.OpenOTPPopup();
         var th = this;
         this.toastr.success('OTP sent successfully to student mobile no');
-        this.childComponent.onVerified.subscribe(() => {
+
+        // capture the subscription itself, not the emitter
+        const otpSub = this.childComponent.onVerified.subscribe(() => {
           th.saveData('ALLOT');
-          this.childComponent.onVerified.unsubscribe();
+          otpSub.unsubscribe(); // unsubscribes only this listener
         });
-        
       }
     });
   }
@@ -372,8 +370,9 @@ export class InternalSlidingComponent implements OnInit {
               this.toastr.error(data.Data[0].MSG)
             } else {
               this.toastr.success(data.Data[0].MSG)
-              this.GetInternalSliding();
+           
               this.CloseModalPopup();
+              this.GetInternalSliding();
             }
             //this.GetInternalSliding();
             //this.CloseModalPopup();

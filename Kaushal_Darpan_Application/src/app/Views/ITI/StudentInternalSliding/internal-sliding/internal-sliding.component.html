@@ -108,16 +108,16 @@
                   <a href="javascript:void(0);" title="Change To Internal Sliding" (click)="OpenInternalsliding('ALLOT',MyModel_Action,item)" *ngIf="item.AllotmentMasterId!=6">
                     <i class="ti ti-pencil"></i>
                   </a>
-                  <a href="javascript:void(0);" title="Swap Trade" (click)="OpenInternalsliding('SWAP',MyModel_SwapAction,item)" *ngIf="item.AllotmentMasterId!=6">
+                  <!--<a href="javascript:void(0);" title="Swap Trade" (click)="OpenInternalsliding('SWAP',MyModel_SwapAction,item)" *ngIf="item.AllotmentMasterId!=6">
                     <i class="ti ti-transfer"></i>
-                  </a>
+                  </a>-->
 
                   <a href="javascript:void(0);" title="Revert Application" (click)="openRevertOTP(item)" *ngIf="item.AllotmentMasterId == 6 && item.SwappingId==0">
                     <i class="ti ti-arrow-back-up"></i>
                   </a>
-                  <a href="javascript:void(0);" title="Revert Application" (click)="openRevertSwapOTP(item)" *ngIf="item.AllotmentMasterId == 6 && item.SwappingId!=0">
+                  <!--<a href="javascript:void(0);" title="Revert Application" (click)="openRevertSwapOTP(item)" *ngIf="item.AllotmentMasterId == 6 && item.SwappingId!=0">
                     <i class="ti ti-arrow-back-up"></i>
-                  </a>
+                  </a>-->
 
                 </div>
 </td>
@@ -199,8 +199,8 @@
                       <tr>
                         <th width="80px" align="left">Sr. No.</th>
                         <th align="left">Trade Name</th>
-                        <th align="left">GEN</th>
-                        <!--<th align="left" *ngIf="Gender!='M'">GEN F</th>
+                        <th align="left">{{InternalSlidingList[0]?.SeatCategory}}</th>
+                        <!--<th align="left" *ngIf="CategoryId==1 &&  Gender!='M'">GEN F</th>
                         <th align="left" *ngIf="CategoryId==4">OBC</th>
                         <th align="left" *ngIf="CategoryId==4 && Gender!='M'">OBC F</th>
                         <th align="left" *ngIf="CategoryId==2">SC</th>
@@ -224,11 +224,11 @@
                     <tbody>
                       <tr *ngFor="let row of InternalSlidingList; let idx = index;">
                         <td>{{ idx + 1 }}</td>
-                        <td class="text-left">{{ row.Name }} </td>
+                        <td class="text-left">{{ row.Name }} ({{row.TradeScheme}}) </td>
                         <td class="text-left">
-                          <input type="radio" name="TradeID" [value]="row.ID" *ngIf="row.GEN > 0" (change)="GetDDLInternalSlidingUnitList(row.ID,'GEN',row.SeatMetrixId)">
-                          <label *ngIf="row.GEN > 0">Vacant Seats- {{ row.GEN }}</label>
-                          <label *ngIf="row.GEN == 0" style="color:red">Seat Not Available</label>
+                          <input type="radio" name="TradeID" [value]="row.ID" *ngIf="row.AllotedCategorySeats > 0" (change)="GetDDLInternalSlidingUnitList(row.ID,InternalSlidingList[0]?.SeatCategory,row.SeatMetrixId)">
+                          <label *ngIf="row.AllotedCategorySeats > 0">Vacant Seats- {{ row.AllotedCategorySeats }}</label>
+                          <label *ngIf="row.AllotedCategorySeats == 0" style="color:red">Seat Not Available</label>
                         </td>
                         <!--<td class="text-left" *ngIf="row.Gender!='M'">
                           <input *ngIf="row.GEN_F > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'GEN_F',row.SeatMetrixId)">

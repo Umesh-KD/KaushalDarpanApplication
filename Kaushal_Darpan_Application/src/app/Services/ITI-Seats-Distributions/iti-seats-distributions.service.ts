@@ -57,6 +57,15 @@ export class ITISeatsDistributionsService {
       ).toPromise();
   }
 
+  public async GetSeatMetrixDataInternalSliding(searchRequest: ITISeatsDistributionsDataModels) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetSeatMetrixDataInternalSliding`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async SaveSeatsDistributions(seatMetrix: ITISeatMetrixModel[]) {
     const body = JSON.stringify(seatMetrix);
     return this.http.post(`${this.APIUrl}/SaveSeatsDistributions`, body, this.headersOptions)
