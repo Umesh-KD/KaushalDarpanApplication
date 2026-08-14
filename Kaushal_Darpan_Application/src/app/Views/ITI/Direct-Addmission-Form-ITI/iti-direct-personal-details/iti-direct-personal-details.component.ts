@@ -691,16 +691,16 @@ export class ITIDirectPersonalDetailsComponent {
 
   async FillMemberDetails(){
     try {
-      this.request.StudentName = this.janaadharMemberDetails.nameEng;
-      this.request.StudentNameHindi = this.janaadharMemberDetails.nameHnd;
-      this.request.FatherName = this.janaadharMemberDetails.fnameEng;
-      this.request.FatherNameHindi = this.janaadharMemberDetails.fnameHnd;
-      this.request.MotherName = this.janaadharMemberDetails.mnameEng;
-      this.request.MotherNameHindi = this.janaadharMemberDetails.mnameHnd;
-      this.request.Gender = this.janaadharMemberDetails.gender;
-      this.request.MobileNumber = this.janaadharMemberDetails.mobile;
-      this.request.JanAadharMemberID = this.janaadharMemberDetails.janmemid;
-      this.request.JanAadharNo = this.janaadharMemberDetails.janaadhaarId;
+      this.request.StudentName = this.janaadharMemberDetails.nameEng??'';
+      this.request.StudentNameHindi = this.janaadharMemberDetails.nameHnd??'';
+      this.request.FatherName = this.janaadharMemberDetails.fnameEng??'';
+      this.request.FatherNameHindi = this.janaadharMemberDetails.fnameHnd??'';
+      this.request.MotherName = this.janaadharMemberDetails.mnameEng??'';
+      this.request.MotherNameHindi = this.janaadharMemberDetails.mnameHnd??'';
+      this.request.Gender = this.janaadharMemberDetails.gender??'';
+      this.request.MobileNumber = this.janaadharMemberDetails.mobile??'';
+      this.request.JanAadharMemberID = this.janaadharMemberDetails.janmemid??'';
+      this.request.JanAadharNo = this.janaadharMemberDetails.janaadhaarId??'';
       var result = this.CategoryAlist.find((f: any) => f.CasteCategoryName == this.janaadharMemberDetails.category)
       if (result != null || result != undefined) {
         this.request.CategoryA=     result.CasteCategoryID;

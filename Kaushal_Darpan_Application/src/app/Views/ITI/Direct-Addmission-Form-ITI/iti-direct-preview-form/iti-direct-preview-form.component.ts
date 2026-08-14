@@ -648,14 +648,23 @@ export class ITIDirectPreviewFormComponent {
   }
 
 
-  async CheckPaymentSataus() {
-    try {
-      this.transactionStatusDataModel.TransactionID = this.request.TransactionID;
+
+    async CheckPaymentSataus() {
+    try { 
+      let isPaymentVerified = false;
+          const transactionsList: any[] = this.request.EmitraTransactionsDataModelList || [];
+    for (const txn of transactionsList) 
+      {
+      this.transactionStatusDataModel.TransactionID = txn.TransactionId;
       this.transactionStatusDataModel.DepartmentID = EnumDepartment.ITI;
-      this.transactionStatusDataModel.PRN = this.request.PRN;
+      this.transactionStatusDataModel.PRN = txn.PRN;
       this.transactionStatusDataModel.ServiceID = this.request.ServiceID;
       this.transactionStatusDataModel.ApplicationID = this.request.ApplicationID.toString();
-
+	  this.transactionStatusDataModel.AMOUNT = txn.PaidAmount;
+      this.transactionStatusDataModel.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.transactionStatusDataModel.SSOID = this.sSOLoginDataModel.SSOID;
+      this.transactionStatusDataModel.IsEmitra = txn.IsEmitra;
+      
       await this.emitraPaymentService.EmitraApplicationVerifyPaymentStatus(this.transactionStatusDataModel)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -666,25 +675,70 @@ export class ITIDirectPreviewFormComponent {
             if (data.Data?.STATUS == 'SUCCESS' || data.Data?.STATUS == 'Success') {
               if (data.Data?.PRN) {
                 //this.router.navigate(['/ApplicationPaymentStatus'], { queryParams: { TransID: data.Data.PRN } });
-                window.open(`/ApplicationPaymentStatus?TransID=${data.Data.PRN}`, "_self")
+                isPaymentVerified = true;
+                window.open(`/ApplicationPaymentStatus?TransID=${data.Data.PRN}`, "_self");
+                 return; // stop once a successful match navigates away
               }
             }
             else {
-              this.toastr.error(this.Message)
+             isPaymentVerified = false;
+              //this.toastr.error(this.Message);
             }
           }
-          else {
-            this.toastr.error(this.ErrorMessage)
-          }
-        })
+         // else {
+        //    this.toastr.error(this.ErrorMessage);
+        //  }
+        });
     }
-    catch (ex) { console.log(ex) }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
+    
+      if(!isPaymentVerified){
+      this.toastr.error(this.ErrorMessage);
     }
-  }
+    } catch (error) {
+    console.error(error);
+    }
+    }
+
+  
+
+  // async CheckPaymentSataus() {
+  //   try {
+      
+  //     this.transactionStatusDataModel.TransactionID = this.request.TransactionID;
+  //     this.transactionStatusDataModel.DepartmentID = EnumDepartment.ITI;
+  //     this.transactionStatusDataModel.PRN = this.request.PRN;
+  //     this.transactionStatusDataModel.ServiceID = this.request.ServiceID;
+  //     this.transactionStatusDataModel.ApplicationID = this.request.ApplicationID.toString();
+
+  //     await this.emitraPaymentService.EmitraApplicationVerifyPaymentStatus(this.transactionStatusDataModel)
+  //       .then(async (data: any) => {
+  //         data = JSON.parse(JSON.stringify(data));
+  //         this.State = data['State'];
+  //         this.Message = data['SuccessMessage'];
+  //         this.ErrorMessage = data['ErrorMessage'];
+  //         if (data.State == EnumStatus.Success) {
+  //           if (data.Data?.STATUS == 'SUCCESS' || data.Data?.STATUS == 'Success') {
+  //             if (data.Data?.PRN) {
+  //               //this.router.navigate(['/ApplicationPaymentStatus'], { queryParams: { TransID: data.Data.PRN } });
+  //               window.open(`/ApplicationPaymentStatus?TransID=${data.Data.PRN}`, "_self")
+  //             }
+  //           }
+  //           else {
+  //             this.toastr.error(this.Message)
+  //           }
+  //         }
+  //         else {
+  //           this.toastr.error(this.ErrorMessage)
+  //         }
+  //       })
+  //   }
+  //   catch (ex) { console.log(ex) }
+  //   finally {
+  //     setTimeout(() => {
+  //       this.loaderService.requestEnded();
+  //     }, 200);
+  //   }
+  // }
 
 
 
