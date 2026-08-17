@@ -16,6 +16,7 @@ import { EnumCourseType, EnumDepartment, EnumResultType, EnumStatus, GlobalConst
 import { SSOLoginService } from '../../../Services/SSOLogin/ssologin.service';
 import { MenuService } from '../../../Services/Menu/menu.service';
 import { notDefaultValueValidator } from '../../../Services/CustomValidators/custom-validators.service';
+import { EndTermFinYearModel } from '../../../Models/CommonMasterDataModel';
 @Component({
   selector: 'app-DiplomaCertificateDownload',
   templateUrl: './DiplomaCertificateDownload.component.html',
@@ -53,6 +54,8 @@ export class DiplomaCertificateDownloadComponent {
   buttonGroups: any[] = [];
   downLoadFG!: FormGroup;
   public EndTermList: any = [];
+  public endTermFinYear: EndTermFinYearModel[] = [];
+  public _EnumResultType = EnumResultType;
 
   constructor(private commonFunctionService: CommonFunctionService,
     private marksheetDownloadService: MarksheetDownloadService,
@@ -113,6 +116,12 @@ export class DiplomaCertificateDownloadComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.SemesterMasterList = data['Data'];
+          if (this.sSOLoginDataModel.Eng_NonEng == 1) {
+            this.SemesterMasterList = this.SemesterMasterList.filter((x: any) => x.SemesterID === 6);
+          }
+          else if (this.sSOLoginDataModel.Eng_NonEng == 2) {
+            this.SemesterMasterList = this.SemesterMasterList.filter((x: any) => x.SemesterID === 4 || x.SemesterID === 6);
+          }
         }, (error: any) => console.error(error));
     }
     catch (ex) {
@@ -120,6 +129,21 @@ export class DiplomaCertificateDownloadComponent {
     }
   }
 
+  async GetEffectiveFinYear() {
+    this.searchRequest.EffectiveFromEndTermId = 0;
+    this.endTermFinYear = [];
+    if (this.searchRequest.ResultTypeID == this._EnumResultType.RwhResult || this.searchRequest.ResultTypeID == this._EnumResultType.RwhRevalEffected) {
+      try {
+        await this.commonFunctionService.GetEffectiveFinYear()
+          .then((data: any) => {
+            this.endTermFinYear = data['Data'] || [];
+          }, (error: any) => console.error(error));
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+    }
+  }
 
   async getAllData() {
     //debugger

@@ -102,7 +102,7 @@ export class DiplomaCertificateDownloadSearchModel extends RequestBaseModel {
   public FinalDiplomaTermName: string = '';
   public Division: string = '';
   public CourseDuration: string = '';
-  
+  public EffectiveFromEndTermId: number = 0;  
 }
 
 export class ResultGenerationListDataModel {

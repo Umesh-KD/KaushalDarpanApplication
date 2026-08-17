@@ -374,14 +374,7 @@ export class MigrationCertificateDownloadComponent {
 
     const numberOfButtons = Math.ceil(totalStudents / chunkSize);
 
-
-    // for test ,comment afterward
-    this.buttonGroups.push({
-        label: `test`,
-        startIndex: 0,
-        endIndex: 1
-      });
-
+    //
     for (let i = 0; i < numberOfButtons; i++) {
       const startIndex = i * chunkSize;
       const endIndex = Math.min((i + 1) * chunkSize - 1, totalStudents - 1);

@@ -19,6 +19,11 @@
           <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         </div>
         <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div class="col-span-full bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-3 rounded-md">
+            <span class="font-semibold">Note:</span>
+            For Main, RWH and RWH (Reval Effected) Result Type, only select 6 or 4(BC) semester.
+          </div>
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
             <select class="form-select" [(ngModel)]="searchRequest.SemesterID" name="SemesterID" formControlName="SemesterID">
@@ -67,7 +72,7 @@
               Result Type
             </label>
             <select class="form-select" [(ngModel)]="searchRequest.ResultTypeID" name="ResultTypeID"
-               formControlName="ResultTypeID"  (change)="GetEffectiveFinYear()">
+                    formControlName="ResultTypeID" (change)="GetEffectiveFinYear()">
               <option value="0">--Select--</option>
               <option *ngFor="let item of ResultTypeList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
@@ -80,7 +85,7 @@
           <div *ngIf="searchRequest.ResultTypeID==_EnumResultType.RwhResult || searchRequest.ResultTypeID==_EnumResultType.RwhRevalEffected">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Effective From</label>
             <select class="form-select" [(ngModel)]="searchRequest.EffectiveFromEndTermId" name="EffectiveFromEndTermId"
-              formControlName="EffectiveFromEndTermId">
+                    formControlName="EffectiveFromEndTermId">
               <option [value]="0">--- Select ---</option>
               <option *ngFor="let item of endTermFinYear" [value]="item.EndTermID">{{ item.EndTermName }}</option>
             </select>
@@ -100,7 +105,7 @@
             </div>
           </div>
 
-          <div >
+          <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
             <select class="form-select" id="SchemeID" formControlName="SchemeID" [(ngModel)]="searchRequest.SchemeID">
               <option value="0">--All--</option>
