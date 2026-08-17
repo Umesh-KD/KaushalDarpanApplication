@@ -654,6 +654,7 @@ export class ITIDirectStudentJanAadharDetailComponent {
 
   async SaveData() {
     try {
+      debugger
       this.isSubmitted = true;
       if (this.model.DepartmentID == EnumDepartment.BTER) {
         this.refereshDepartmentValidator(true)

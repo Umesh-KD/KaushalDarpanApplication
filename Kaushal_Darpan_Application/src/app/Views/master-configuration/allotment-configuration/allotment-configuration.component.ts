@@ -557,6 +557,7 @@ export class AllotmentConfigurationComponent implements OnInit, OnDestroy {
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.request.RoleID = this.sSOLoginDataModel.RoleID;
       this.request.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+      debugger
       await this.allotmentConfigurationService.GetAllData(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
