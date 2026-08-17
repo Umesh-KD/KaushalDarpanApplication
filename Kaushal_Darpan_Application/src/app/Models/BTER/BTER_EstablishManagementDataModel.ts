@@ -960,6 +960,7 @@ export class StaffQualificationDataModel {
   public Dis_CompetentAuthorityOrder: string = '';
   public PreQualificationCertificate: string = '';
   public Dis_PreQualificationCertificate: string = '';
+  public ObtainedDivisionID: number = 0;
 }
 
 export class StaffCareerAdvancementDataModel {
