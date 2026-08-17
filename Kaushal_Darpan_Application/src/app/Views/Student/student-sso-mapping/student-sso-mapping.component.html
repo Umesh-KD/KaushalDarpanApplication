@@ -159,21 +159,19 @@
         <div class="p-6">
           <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-8">
             <div>
-              <b>   नोट: जिसने ऑनलाइन फॉर्म भर दिया है और एडमिशन नहीं लिया है, उसे दोबारा फॉर्म भरने की आवश्यकता नहीं है। वह ऑफलाइन में आकर एडमिशन ले सकता है।</b>
-            </div>
-            <div>
               <h2 class="text-center text-4xl">Admission Apply For</h2>
             </div>
+
           </div>
           <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 gap-6 loginBox mt-8">
             <!--<a [routerLink]="'/StudentJanAadharDetail'" [queryParams]="{deptid:BTER}" (click)="CloseModal()" class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">BTER <i class="ti ti-chevron-right"></i></a>-->
             <!-- <a [routerLink]="'/dtepublicinfo'" *ngIf="ShowBTERApply" [queryParams]="{deptid:BTER,type:1}" (click)="CloseModal()" class="btn bg-info btn-lg text-white text-center text-3 xl py-4 c-pointer">Polytechnic <br /> Admission<i class="ti ti-chevron-right"></i></a> -->
-            <a *ngIf="MapKeyEng==1" [routerLink]="'/StudentJanAadharDetail'" [queryParams]="{deptid:ITI}" (click)="CloseModal()" 
-            class="btn bg-info btn-lg text-white text-center text-3 xl py-4 c-pointer">
-            ITI <br /> Admission<i class="ti ti-chevron-right"></i></a>
+            <a *ngIf="MapKeyEng==1" [routerLink]="'/StudentJanAadharDetail'" [queryParams]="{deptid:ITI}" (click)="CloseModal()"
+               class="btn bg-info btn-lg text-white text-center text-3 xl py-4 c-pointer">
+              ITI <br /> Admission<i class="ti ti-chevron-right"></i>
+            </a>
 
             <a (click)="Redirect(2,_EnumAdmissionType.DirectAdmissionITI)" *ngIf="DirectAdmissionMapKey==1"
-
                class="btn bg-info btn-lg text-white text-center py-4 c-pointer">
               ITI Direct Admission<i class="ti ti-chevron-right"></i>
             </a>
@@ -184,8 +182,15 @@
             </a>
 
 
+
+
+
             <!-- <a class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">DCE <i class="ti ti-chevron-right"></i></a> -->
           </div>
+          <div style="background-color: beige; padding: 12px;color: red;margin-top:15px;">
+            <b>   नोट: जिसने ऑनलाइन फॉर्म भर दिया है और एडमिशन नहीं लिया है, उसे दोबारा फॉर्म भरने की आवश्यकता नहीं है। वह ऑफलाइन में जाकर एडमिशन ले सकता है।</b>
+          </div>
+
         </div>
       </div>
     </div>
