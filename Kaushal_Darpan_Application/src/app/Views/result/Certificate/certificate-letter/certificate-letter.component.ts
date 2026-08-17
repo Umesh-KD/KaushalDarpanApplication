@@ -135,7 +135,8 @@ export class CertificateLetterComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State === EnumStatus.Success) {
-            this.commonFunctionHelper.downloadBase64OfPdf(data.Data, 'certificate_letter.pdf');
+            const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+            this.commonFunctionHelper.downloadBase64OfPdf(data.Data, `certificate_letter_${timestamp}.pdf`);
           }
         }, (error: any) => console.error(error));
     } catch (ex) {
