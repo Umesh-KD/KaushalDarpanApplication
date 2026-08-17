@@ -502,11 +502,15 @@
       </div>
 
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3"
-        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || 
+                request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit) || 
+                request.IsAdmin == 1">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Qualification Details</b>
       </div>
       <form [formGroup]="QualificationFormGroup"
-        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || 
+                request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit) || 
+                request.IsAdmin == 1">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <div>
@@ -703,7 +707,7 @@
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
             <tr>
               <th>S.No</th>
-              <th>Qualification during the service period?</th>
+              <th>Qualification Details (Before/After Joining)</th>
               <th>Qualification</th>
               <th>Date of acquiring the qualification</th>
               <th>Division obtained </th>
@@ -961,11 +965,15 @@
 
       <!-- service history details  -->
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3"
-        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || 
+                request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit) || 
+                request.IsAdmin == 1">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Service History</b>
       </div>
       <form [formGroup]="AddServiceistoryFormGroup"
-        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || 
+                request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit) || 
+                request.IsAdmin == 1">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <div>
@@ -1405,11 +1413,15 @@
       </div>
 
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3"
-        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || 
+                request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit) || 
+                request.IsAdmin == 1">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Staff Career Advancement Scheme Details</b>
       </div>
       <form [formGroup]="CareerAdvancementSchemeFormGroup"
-        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || 
+                request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit) || 
+                request.IsAdmin == 1 ">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <div>
