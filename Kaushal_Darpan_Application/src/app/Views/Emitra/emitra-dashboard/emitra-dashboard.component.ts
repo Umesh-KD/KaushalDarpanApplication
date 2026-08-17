@@ -61,7 +61,6 @@ export class EmitraDashboardComponent implements OnInit {
     this.tabs =
       [
       { TabName: 'Apply Online', TabNameHI: '  ऑनलाइन आवेदन   करें ', TabIcon: 'ti ti-license', component: ApplyNowComponent, ServiceID: EnumEmitraService.ITIEmitraFormService, DepartmentID: 1 },
-
    
 
       { TabName: 'Apply Online', TabNameHI: '  ऑनलाइन आवेदन   करें ', TabIcon: 'ti ti-license', component: ApplyNowComponent, ServiceID: EnumEmitraService.BTER_DeplomaENG_Emitra_AppplicationFeeService, DepartmentID: 1 },
