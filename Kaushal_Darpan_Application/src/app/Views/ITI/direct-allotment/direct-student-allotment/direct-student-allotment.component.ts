@@ -57,6 +57,7 @@ export class VerifyStudentAllotComponent {
   public StudentOptinalTradeList: any = [];
   public StudentDetailsList: any = [];
   public ShiftUnitList: any = [];
+  public GenderList: any = []
   public OTP: string = '';
   public GeneratedOTP: string = '';
   public MobileNo: string = '';
@@ -64,10 +65,13 @@ export class VerifyStudentAllotComponent {
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
   public NewMobileNo: string = '';
+  public NewAadharNo: string = '';
+  public Gender: number = 0;
   public DetailsBox: boolean = false;
   public ApplicationAlloted: boolean = true;
   public requestReporting = new AllotmentReportingModel()
   changeMobilerequest = new BTERIMCAllocationDataModel()
+  UpdateDetailsModelData = new BTERIMCAllocationDataModel()
 
   public TradeBox: boolean = false;
   public IsOBC: boolean = true;
@@ -137,11 +141,14 @@ export class VerifyStudentAllotComponent {
     this.routers.paramMap.subscribe(params => {
       this.ApplicationIdS = params.get('id')
     });
-    this.searchRequest.TradeLevel = parseInt(this.routers.snapshot.paramMap.get('TradeLevel'));
+    this.searchRequest.TradeLevel = parseInt(this.routers.snapshot.paramMap.get('TradeLevel')??'0',10);
+
+    // const tradeLevel = this.routers.snapshot.paramMap.get('TradeLevel');
+    // this.searchRequest.TradeLevel = tradeLevel ? parseInt(tradeLevel, 10) : 0;
+
     this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
 
-
-
+    await this.GetMasterData();
 
     if (this.ApplicationIdS)
     {
@@ -158,6 +165,31 @@ export class VerifyStudentAllotComponent {
     this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
   }
 
+
+    async GetMasterData() {
+      try {
+        this.loaderService.requestStarted();
+        debugger
+        await this.commonMasterService.GetCommonMasterData('Gender')
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.GenderList = data['Data'];
+            //this.GenderList = [{ "Name": "Female", "ID": "98" }, { "Name": "Transgender", "ID": "99" }];
+  
+          }, (error: any) => console.error(error)
+          );
+  
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+  
 
   //StatusUpdate(): string {
   //  if (this.StudentDetailsList.CasteCategoryNameEnglish == 'OBC')
@@ -234,9 +266,6 @@ export class VerifyStudentAllotComponent {
 
             this.StudentVerifyPhoneData = data['Data'].Table;
 
-
-
-
             this.request.MobileNo = data['Data'].Table[0].MobileNo;
             this.request.ApplicationID = data['Data'].Table[0].ApplicationID;
             this.request.TradeLevel = data['Data'].Table[0].ApplicationID;
@@ -249,7 +278,9 @@ export class VerifyStudentAllotComponent {
             //} else {
             //  this.ApplicationAlloted == true;
             //}
-
+            // debugger
+            // // bypass
+            // this.StudentVerifyPhoneData[0].ApplicationAllotedDir == 0
             if (this.StudentVerifyPhoneData[0].ApplicationAllotedDir == 1) {
               this.ApplicationAlloted = true;
               this.TradeBox = false;
@@ -261,7 +292,6 @@ export class VerifyStudentAllotComponent {
             const photoDoc = this.requestReporting.AllotmentDocumentModel.find((x: any) => x.ColumnName === 'StudentPhoto');
             this.studentPhoto = photoDoc ? photoDoc.FileName : "";
             this.studentPhotoFolder = photoDoc ? photoDoc.FolderName : "";
-
 
             //this.GetTradeListByCollege();
             // alert(this.request.MobileNo);
@@ -416,6 +446,55 @@ export class VerifyStudentAllotComponent {
     }
   }
 
+  async UpdateDetails()
+  {
+
+    debugger
+    if (this.NewAadharNo.length > 0 || this.NewMobileNo.length > 0 || this.UpdateDetailsModelData.Gender!=0)
+    {
+      if(this.NewMobileNo.length>0 ){
+        if (this.NewMobileNo.length !== 10) {
+          this.toastr.warning('Please Enter 10 Digits Mobile No');
+          return;
+        }
+      }
+      this.UpdateDetailsModelData.ApplicationID = this.request.ApplicationID;
+      this.UpdateDetailsModelData.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.UpdateDetailsModelData.ModifyBy = this.sSOLoginDataModel.UserID;
+      this.UpdateDetailsModelData.AadharNo = this.NewAadharNo;
+      this.UpdateDetailsModelData.MobileNo = this.NewMobileNo;
+
+      try {
+        this.loaderService.requestStarted();
+        await this.IMCManagementAllotmentService.UpdateAllotmentDetails(this.UpdateDetailsModelData)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State == EnumStatus.Success) {
+              this.toastr.success('Update Success');
+              setTimeout(() => {
+                location.reload();   // 🔄 reload page after success
+              }, 1000);
+            } else {
+              this.toastr.warning(data.Message);
+            }
+          }, (error: any) => console.error(error)
+          );
+      }
+      catch (ex) {
+        console.log(ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+    else {
+      this.toastr.warning('Please Enter Fields ');
+    }
+  }
+
+
   async VerifyOTP() {
     if (this.OTP.length > 0) {
       if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
@@ -502,7 +581,7 @@ export class VerifyStudentAllotComponent {
          this.totalGEN  = this.StudentOptinalTradeList.reduce((sum: any, x: any) => sum + (x.GEN || 0), 0);
          this.totalGENF = this.StudentOptinalTradeList.reduce((sum: any, x: any) => sum + (x.GEN_F || 0), 0);
          this.totalOBC  = this.StudentOptinalTradeList.reduce((sum: any, x: any) => sum + (x.OBC || 0), 0);
-         this.totalOBCF = this.StudentOptinalTradeList.reduce((sum: any, x: any) => sum + (x.OBCF || 0), 0);
+         this.totalOBCF = this.StudentOptinalTradeList.reduce((sum: any, x: any) => sum + (x.OBC_F || 0), 0);
          this.totalMBC  = this.StudentOptinalTradeList.reduce((sum: any, x: any) => sum + (x.MBC || 0), 0);
          this.totalMBCF = this.StudentOptinalTradeList.reduce((sum: any, x: any) => sum + (x.MBC_F || 0), 0);
          this.totalEWS  = this.StudentOptinalTradeList.reduce((sum: any, x: any) => sum + (x.EWS || 0), 0);
@@ -514,7 +593,7 @@ export class VerifyStudentAllotComponent {
          this.totalTSP  = this.StudentOptinalTradeList.reduce((sum: any, x: any) => sum + (x.TSP || 0), 0);
          this.totalTSPF = this.StudentOptinalTradeList.reduce((sum: any, x: any) => sum + (x.TSP_F || 0), 0);
          this.totalSAH  = this.StudentOptinalTradeList.reduce((sum: any, x: any) => sum + (x.SAH || 0), 0);
-         this.totalSAHF = this.StudentOptinalTradeList.reduce((sum: any, x: any) => sum + (x.SAH || 0), 0);
+         this.totalSAHF = this.StudentOptinalTradeList.reduce((sum: any, x: any) => sum + (x.SAH_F || 0), 0);
 
 
           // alert(this.request.MobileNo);
@@ -645,6 +724,8 @@ export class VerifyStudentAllotComponent {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
+
+
 
 
 
@@ -828,6 +909,7 @@ export class VerifyStudentAllotComponent {
 
   async GetDateConfig()
   {
+    debugger
     var data = {
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       //CourseTypeId: this.searchRequest.CourseTypeId,

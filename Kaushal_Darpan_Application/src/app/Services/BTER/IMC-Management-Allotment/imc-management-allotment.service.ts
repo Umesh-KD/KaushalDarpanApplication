@@ -69,6 +69,14 @@ export class IMCManagementAllotmentService {
       ).toPromise();
   }
 
+    public async UpdateAllotmentDetails(request: BTERIMCAllocationDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/UpdateAllotmentDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetBranchListByCollege(searchRequest: BTERIMCAllocationSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetBranchListByCollege`, body, this.headersOptions)
