@@ -302,7 +302,7 @@ export class EMPrincipleStaffComponent {
 
       this.loaderService.requestStarted();
       this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
-      await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then((data: any) => {
+      await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         console.log(data);
         let response = JSON.parse(JSON.stringify(data));
@@ -310,7 +310,7 @@ export class EMPrincipleStaffComponent {
 
           let parsedData = JSON.parse(response.Data); // parse string inside Data
           if (parsedData != null) {
-            // this.DuplicateCheck(this.requestSSoApi.SSOID);     commented by ramesh after discussion with Umesh sir
+            await this.DuplicateCheck(this.requestSSoApi.SSOID);    
             //this.formData.Displayname = parsedData.displayName
             this.isSSOVisible = true;
             this.formData.Displayname = parsedData.displayName;
@@ -404,17 +404,20 @@ export class EMPrincipleStaffComponent {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
 
-
           }
           else if (data.State == EnumStatus.Warning) {
 
-            const msg = `SSOID ${SSOID} is already mapped.To assign a new role, please use the Additional Role Mapping section.`;
-            this.toastr.warning(msg, '', { timeOut: 5000 });
+            const msg = `SSOID ${SSOID} is already mapped in system.</br> If you want to assign a new role, please Assign Role Rights Icon in list.`;
+            this.Swal2.Confirmation(`${msg}`, async (result: any) => {
+              this.formData.SSOID = '';
+              this.isSSOVisible = false;
+              this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.enable();
+            }, 'OK', false);
 
             
-            this.formData.SSOID = '';
-            this.isSSOVisible = false;
-            this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.enable();
+            // this.formData.SSOID = '';
+            // this.isSSOVisible = false;
+            // this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.enable();
           }
           else {
             this.toastr.error(data.ErrorMessage);
