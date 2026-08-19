@@ -742,7 +742,10 @@ resetColumns(): void {
 
     this.normalizedColumns.forEach(column => {
 
-        column.visible = true;
+        // column.visible = true;
+        column.visible=  !this.normalizedConfig.unwantedColumns?.includes(
+                column.dataField
+            );
 
     });
 
