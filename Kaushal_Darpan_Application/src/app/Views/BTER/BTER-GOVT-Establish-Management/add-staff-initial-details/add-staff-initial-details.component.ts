@@ -654,7 +654,7 @@ debugger
           
           }
           else if (data.State == EnumStatus.Warning) {
-            const msg = `SSOID ${SSOID} is already mapped in system.</br> If you want to assign a new role, please use the Additional Role Mapping section.`;
+            const msg = `SSOID ${SSOID} is already mapped in system.</br> If you want to assign a new role, please use the Assign Role Menu.`;
             this.sweetAlert2.Confirmation(`${msg}`, async (result: any) => {
               this.formData.SSOID = '';
               this.isSSOVisible = false;

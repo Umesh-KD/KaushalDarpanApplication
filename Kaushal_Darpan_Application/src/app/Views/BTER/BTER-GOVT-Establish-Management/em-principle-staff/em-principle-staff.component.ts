@@ -21,6 +21,7 @@ import { ViewStaffProfileModalComponent } from '../view-staff-profile-modal/view
 import { AssignRoleRightsService } from '../../../../Services/AssignRoleRights/assign-role-rights.service';
 import { UserMasterService } from '../../../../Services/UserMaster/user-master.service';
 import { AssignRoleRightsDataModel, UserMasterModel } from '../../../../Models/UserMasterDataModel';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-em-principle-staff',
@@ -1649,7 +1650,33 @@ async GetCategroyData() {
     await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
   }
 
-  async exportToExcel() {}
+  async exportToExcel() {
+
+    const unwantedColumns = [
+      'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo','LevelName','OfficeName','PostName','UserID','IsNodal','ProfileStatusID',
+      'StaffID','StaffUserID','DistrictName','uod_InstituteID','RoleID', 
+      'StaffTypeID', 'CourseID', 'SubjectID', 'DesignationID', 'HigherQualificationID', 'ProfilePhoto',
+      'Dis_ProfileName', 'AdharCardPhoto', 'AdharCardNumber', 'PanCardNumber', 'PanCardPhoto', 'Dis_AdharCardNumber', 
+      'Dis_PanCardNumber', 'StateID', 'DistrictID', 'Certificate', 'Dis_Certificate', 'SpecializationSubjectID',
+      'RTS', 'ExaminerStatus', 'InstituteID', 'IsDownloadCertificate', 'ABC', 'Status', 'BankAccountNo', 'IFSCCode',
+      'BankAccountName', 'BankName', 'UserCreatedBy', 'MainStaffUserID'
+    ];
+    const filteredData = this.StaffMasterList.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    const timestamp = new Date().getTime();
+    XLSX.writeFile(wb, `StaffListData_${timestamp}.xlsx`);
+  }
 
   async GetAssignedRole_USerWise(UserID: number) {
     try {
