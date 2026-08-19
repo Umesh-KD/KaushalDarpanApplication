@@ -36,7 +36,7 @@
     </div>
 
     <!-- Fully dynamic table: columns come straight from whatever the SP returns -->
-    <div class="overflow-x-auto mt-3">
+    <!-- <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto text-center" *ngIf="columns.length > 0; else noData">
         <thead>
           <tr>
@@ -52,6 +52,11 @@
       <ng-template #noData>
         <div class="text-center text-gray-500 py-4">No data available</div>
       </ng-template>
-    </div>
+    </div> -->
+
+        <app-data-table
+        [data]="data"
+        [config]="tableConfig" >
+    </app-data-table>
   </div>
 </div>

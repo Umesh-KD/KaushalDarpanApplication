@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ItiRptAdmissionSeatOfferedService } from '../../../Services/iti-rpt-admission-seat-offered/iti-rpt-admission-seat-offered.service';
 import { ReportService } from '../../../Services/Report/report.service';
 import * as XLSX from 'xlsx';
+import { TableConfig } from '../../../Common/data-table/DatatableModels/table-config.model';
 interface ReportFilters {
   AcedemicYearID: number;
   ShowTradeDuration: boolean;
@@ -30,6 +31,10 @@ export class AdmissionDynamicReportComponent {
     ShowManagementType: false,
     FilterByAllotmentType: false
   };
+
+
+
+
   private metaColumns = ['ShowManagementType', 'FilterByAllotmentType'];
 
 
@@ -38,6 +43,27 @@ export class AdmissionDynamicReportComponent {
   private pinnedColumnOrder = ['Level', 'Trade Duration', 'Trade Scheme'];
 
   constructor(private itiRptAdmissionSeatOfferedService: ReportService) { }
+
+
+  tableConfig: TableConfig = {
+
+   unwantedColumns: [
+
+        'ID',
+        'InstituteID',
+        'CreatedBy',
+        'CreatedDate',
+        'StateID'
+
+    ],
+
+  columns: [
+    {
+        dataField: 'CompanyPhoto',
+    }
+
+  ]
+};
 
   async ngOnInit() {
     await this.loadData();

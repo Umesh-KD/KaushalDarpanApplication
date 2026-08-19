@@ -7,6 +7,7 @@ import { routes } from '../../../routes';
 import { RouterModule } from '@angular/router';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DataTableModule } from '../../../Common/data-table/data-table.module';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     TableSearchFilterModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    DataTableModule
   ]
 })
 export class AdmissionDynamicReportModule { }
