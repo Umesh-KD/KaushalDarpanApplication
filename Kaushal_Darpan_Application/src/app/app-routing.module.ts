@@ -1814,7 +1814,9 @@ const routes: Routes = [
       { path: 'migration-certificate-download', loadChildren: () => import('./Views/result/MigrationCertificateDownload/MigrationCertificateDownload.module').then(m => m.MigrationCertificateDownloadModule), title: 'Migration Diploma Certificate Download' },
       
       
-      
+      { path: 'AdmissionDynamicReport', loadChildren: () => import('./Views/ITI/admission-dynamic-report/admission-dynamic-report.module').then(m => m.AdmissionDynamicReportModule) },
+
+
       { path: 'iti-finalreport', loadChildren: () => import('./Views/ITI/results/ITI-FinalReport/ITI-FinalReport.module').then(m => m.ITIFinalReportModule), title: 'iti-finalreport' },
       { path: 'SignalR-Dashboard', loadChildren: () => import('./Views/signal-r-dashboard/signal-r-dashboard.module').then(m => m.SignalRDashboardModule) },
     ]
@@ -1938,7 +1940,6 @@ const routes: Routes = [
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\ITI\EmployeeDashboard', loadChildren: () => import('./Views/ITI/employee-dashboard/employee-dashboard.module').then(m => m.EmployeeDashboardModule) },
-  
 
  
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },

@@ -2153,6 +2153,14 @@ export class ReportService {
   }
 
 
+  public async getITIDynamicReport(searchRequest: any) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/getITIDynamicReport`, body, this.headersOptions)
+      .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   
   
 }
