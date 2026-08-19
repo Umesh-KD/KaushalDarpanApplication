@@ -610,7 +610,19 @@ async GetTechnicianDll() {
     }
   }
 
+  async resetBranchValidators() {
+    const PostID = [76,78,80,81]
+    if(PostID.includes(Number(this.formData.PostID)) ){
+      this.AddStaffBasicDetailFromGroup.get('BranchID')?.clearValidators();
+    } else {
+      this.AddStaffBasicDetailFromGroup.get('BranchID')?.setValidators([DropdownValidators]);
+    }
+
+    this.AddStaffBasicDetailFromGroup.get('BranchID')?.updateValueAndValidity();
+  }
+
   async getBudgetHeadPostWise() {
+    await this.resetBranchValidators();
     try {
       const request: any = {};
       request.OfficeID = this.formData.OfficeID;
