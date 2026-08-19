@@ -3,6 +3,7 @@ import { ItiRptAdmissionSeatOfferedService } from '../../../Services/iti-rpt-adm
 import { ReportService } from '../../../Services/Report/report.service';
 import * as XLSX from 'xlsx';
 import { TableConfig } from '../../../Common/data-table/DatatableModels/table-config.model';
+import { TableColumn } from '../../../Common/data-table/DatatableModels/table-column.model';
 interface ReportFilters {
   AcedemicYearID: number;
   ShowTradeDuration: boolean;
@@ -22,7 +23,7 @@ export class AdmissionDynamicReportComponent {
   data: any[] = [];
   columns: string[] = [];
   isLoading = false;
-
+  excludedColumns: string[] = [];
   filters: ReportFilters = {
     AcedemicYearID: 30,
     ShowTradeDuration: false,
@@ -37,7 +38,14 @@ export class AdmissionDynamicReportComponent {
 
   private metaColumns = ['ShowManagementType', 'FilterByAllotmentType'];
 
-
+  private customColumnDefs: Partial<TableColumn>[] = [
+    {
+      dataField: 'Level',
+      type: 'badge'
+    }
+    // add more custom column configs here as needed, e.g.:
+    // { dataField: 'Trade Scheme', type: 'text', align: 'center' },
+  ];
   // Columns that should always appear first, in this order, if present in the response.
   // Everything else discovered on the response row is appended after these, in the order the SP returns them.
   private pinnedColumnOrder = ['Level', 'Trade Duration', 'Trade Scheme'];
@@ -46,24 +54,35 @@ export class AdmissionDynamicReportComponent {
 
 
   tableConfig: TableConfig = {
-
-   unwantedColumns: [
-
-        'ID',
-        'InstituteID',
-        'CreatedBy',
-        'CreatedDate',
-        'StateID'
-
-    ],
-
-  columns: [
-    {
-        dataField: 'CompanyPhoto',
-    }
-
-  ]
-};
+    unwantedColumns: [],
+    columns: [],
+    badgeConfig: [
+      {
+        value: 'All Levels',
+        cssClass: 'approved',
+        icon: 'ti ti-circle-check',
+        text: 'All Levels'
+      },
+      {
+        value: '8th Level',
+        cssClass: 'approved',
+        icon: 'ti ti-circle-check',
+        text: '8th Level'
+      },
+      {
+        value: '10th Level',
+        cssClass: 'rejected',
+        icon: 'ti ti-circle-check',
+        text: '10th Level'
+      },
+      {
+        value: '12th Level',
+        cssClass: 'pending',
+        icon: 'ti ti-clock',
+        text: '12th Level'
+      }
+    ]
+  };
 
   async ngOnInit() {
     await this.loadData();
@@ -169,16 +188,46 @@ export class AdmissionDynamicReportComponent {
   }
 
 
+  //private buildColumnList(rows: any[]): string[] {
+  //  if (!rows || rows.length === 0) return [];
+
+  //  const allKeys = Object.keys(rows[0]);
+
+  //  // Drop metadata/flag columns entirely
+  //  const dataKeys = allKeys.filter(k => !this.metaColumns.includes(k));
+
+  //  // Drop columns that are null/undefined across every row (SQL returns them
+  //  // as placeholders when the corresponding flag mode isn't active)
+  //  const populatedKeys = dataKeys.filter(key =>
+  //    rows.some(row => row[key] !== null && row[key] !== undefined)
+  //  );
+
+  //  const pinned = this.pinnedColumnOrder.filter(c => populatedKeys.includes(c));
+  //  const rest = populatedKeys.filter(c => !this.pinnedColumnOrder.includes(c));
+
+  //  return [...pinned, ...rest];
+  //}
+
+
   private buildColumnList(rows: any[]): string[] {
-    if (!rows || rows.length === 0) return [];
+    if (!rows || rows.length === 0) {
+      this.tableConfig = {
+        ...this.tableConfig,
+        unwantedColumns: [],
+        columns: []
+      };
+      return [];
+    }
 
     const allKeys = Object.keys(rows[0]);
 
-    // Drop metadata/flag columns entirely
+    const metaExcluded = allKeys.filter(k => this.metaColumns.includes(k));
     const dataKeys = allKeys.filter(k => !this.metaColumns.includes(k));
 
-    // Drop columns that are null/undefined across every row (SQL returns them
-    // as placeholders when the corresponding flag mode isn't active)
+    const emptyExcluded = dataKeys.filter(key =>
+      !rows.some(row => row[key] !== null && row[key] !== undefined)
+    );
+
     const populatedKeys = dataKeys.filter(key =>
       rows.some(row => row[key] !== null && row[key] !== undefined)
     );
@@ -186,6 +235,28 @@ export class AdmissionDynamicReportComponent {
     const pinned = this.pinnedColumnOrder.filter(c => populatedKeys.includes(c));
     const rest = populatedKeys.filter(c => !this.pinnedColumnOrder.includes(c));
 
-    return [...pinned, ...rest];
+    const orderedKeys = [...pinned, ...rest];
+
+    const excludedColumns = [...new Set([...metaExcluded, ...emptyExcluded])];
+
+    // Merge: use the custom column def if one exists for this field,
+    // otherwise fall back to a plain default column
+    const mergedColumns = orderedKeys.map(key => {
+      const custom = this.customColumnDefs.find(c => c.dataField === key);
+      return custom
+        ? { ...custom, dataField: key }
+        : { dataField: key };
+    });
+
+    this.tableConfig = {
+      ...this.tableConfig,
+      unwantedColumns: excludedColumns,
+      columns: mergedColumns
+    };
+
+    return orderedKeys;
   }
+
+
+
 }
