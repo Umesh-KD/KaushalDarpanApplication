@@ -18,7 +18,7 @@ export class BTERIMCAllocationDataModel {
 
   public AadharNo?: string = "";
   public Gender?: number = 0;
-
+  public CategoryID?: number = 0;
 
 }
 

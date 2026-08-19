@@ -35,6 +35,10 @@ export class AllotmentReportingModel {
   public AcademicYearID: number = 0;
   public ReportingStatus: number = 0;
   public ApplyUpward: boolean = false;
+
+
+  public AadharNo?: string = '';
+  public CasteCategoryID?: number = 0;
 }
 
 export class AllotmentDocumentModel {

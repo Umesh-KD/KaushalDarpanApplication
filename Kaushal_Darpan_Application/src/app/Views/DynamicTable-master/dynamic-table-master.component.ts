@@ -37,6 +37,16 @@ export class DynamicTableMasterComponent implements OnInit {
 
 tableConfig: TableConfig = {
 
+   unwantedColumns: [
+
+        'ID',
+        'InstituteID',
+        'CreatedBy',
+        'CreatedDate',
+        'StateID'
+
+    ],
+
   columns: [
     {
         dataField: 'CompanyPhoto',
@@ -48,37 +58,40 @@ tableConfig: TableConfig = {
             borderRadius: 'circle'
         }
     },
-    {
-      dataField: 'Name',
-      // displayField: 'Company Name',    
-    },
+    
+    // {
+    //   dataField: 'Name',
+    //   // displayField: 'Company Name',    
+    // },
 
-    {
-      dataField: 'Website',
-      // displayField: 'Website'
-    },
+    // {
+    //   dataField: 'Website',
+    //   // displayField: 'Website'
+    // },
 
-    {
-      dataField: 'Address',
-      // displayField: 'Address'
-    },
+    // {
+    //   dataField: 'Address',
+    //   // displayField: 'Address'
+    // },
 
-    {
-      dataField: 'Status',
-      // displayField: 'Status',
-      type: 'badge',
-      // align: 'center'
-    },
-    {
-      dataField: 'Priority',
-      // displayField: 'Status',
-      type: 'badge',
-      // align: 'center'
-    },
+    // {
+    //   dataField: 'Status',
+    //   // displayField: 'Status',
+    //   type: 'badge',
+    //   // align: 'center'
+    // },
+    // {
+    //   dataField: 'Priority',
+    //   // displayField: 'Status',
+    //   type: 'badge',
+    //   // align: 'center'
+    // },
   ],
 
 
+
 };
+
 
 // ----------------------------------------------------------dynamic table portion-----------------------------------------------------
 
@@ -121,6 +134,8 @@ tableConfig: TableConfig = {
       await this.companyMasterService.GetAllData(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.CompanyMasterList = data.Data;
+
+
         console.log(this.CompanyMasterList)
       }, (error: any) => console.error(error))
     }

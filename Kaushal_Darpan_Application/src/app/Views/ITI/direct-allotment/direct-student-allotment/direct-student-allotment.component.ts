@@ -58,6 +58,7 @@ export class VerifyStudentAllotComponent {
   public StudentDetailsList: any = [];
   public ShiftUnitList: any = [];
   public GenderList: any = []
+  public CategoryList:any=[];
   public OTP: string = '';
   public GeneratedOTP: string = '';
   public MobileNo: string = '';
@@ -134,14 +135,14 @@ export class VerifyStudentAllotComponent {
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-
+    this.searchRequest.TradeLevel = parseInt(this.routers.snapshot.paramMap.get('TradeLevel')??'0',10);
     await this.GetDateConfig();
 
 
     this.routers.paramMap.subscribe(params => {
       this.ApplicationIdS = params.get('id')
     });
-    this.searchRequest.TradeLevel = parseInt(this.routers.snapshot.paramMap.get('TradeLevel')??'0',10);
+
 
     // const tradeLevel = this.routers.snapshot.paramMap.get('TradeLevel');
     // this.searchRequest.TradeLevel = tradeLevel ? parseInt(tradeLevel, 10) : 0;
@@ -179,6 +180,12 @@ export class VerifyStudentAllotComponent {
           }, (error: any) => console.error(error)
           );
   
+        await this.commonMasterService.CasteCategoryA()
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.CategoryList = data['Data'];
+          }, (error: any) => console.error(error)
+          );
       }
       catch (Ex) {
         console.log(Ex);
@@ -272,6 +279,20 @@ export class VerifyStudentAllotComponent {
             this.requestReporting = data['Data'].Table[0];
             this.requestReporting.AllotmentDocumentModel = data['Data'].Table1;
             this.requestReporting.AllotmentDocumentModel.forEach(e => e.DocumentStatus = true)
+
+            this.UpdateDetailsModelData.MobileNo=this.requestReporting.MobileNo??"";
+            this.NewAadharNo=this.requestReporting.AadharNo??"";
+            this.UpdateDetailsModelData.CategoryID=Number(this.requestReporting.CasteCategoryID??0);
+            if(this.requestReporting.AllotedGender=='Female'){
+              this.UpdateDetailsModelData.Gender=98
+            }
+            else if(this.requestReporting.AllotedGender=='Male'){
+              this.UpdateDetailsModelData.Gender=97
+            }
+            else{
+              this.UpdateDetailsModelData.Gender=99
+            }
+            // this.UpdateDetailsModelData.Gender=Number(this.requestReporting.AllotedGender??0);
             //alert(this.StudentVerifyPhoneData[0].ApplicationVerified);
             //if (this.StudentVerifyPhoneData[0].ApplicationVerified !== 0) {
             //  this.ApplicationAlloted = false;
@@ -446,23 +467,48 @@ export class VerifyStudentAllotComponent {
     }
   }
 
+  openUpdateDetailsOTP() {
+    debugger
+    if (this.NewAadharNo.length > 0 || this.NewMobileNo.length > 0 || this.UpdateDetailsModelData.Gender!=0 || this.UpdateDetailsModelData.CategoryID!=0)
+      {
+        if(this.NewMobileNo.length>0 ){
+          if (this.NewMobileNo.length !== 10) {
+            this.toastr.warning('Please Enter 10 Digits Mobile No');
+            return;
+          }
+        }
+      this.childComponent.MobileNo = this.UpdateDetailsModelData.MobileNo;
+      this.CloseModal();
+      this.childComponent.OpenOTPPopup();
+      var th = this;
+      this.toastr.success('OTP sent successfully to student mobile no');
+      this.childComponent.onVerified.subscribe(() => {
+        th.UpdateDetails();
+      });
+    }
+    else {
+      this.toastr.warning('Please Enter Fields ');
+    }
+  }
+
+
   async UpdateDetails()
   {
 
     debugger
-    if (this.NewAadharNo.length > 0 || this.NewMobileNo.length > 0 || this.UpdateDetailsModelData.Gender!=0)
+    if (this.NewAadharNo.length > 0 || this.NewMobileNo.length > 0 || this.UpdateDetailsModelData.Gender!=0 || this.UpdateDetailsModelData.CategoryID!=0)
     {
-      if(this.NewMobileNo.length>0 ){
-        if (this.NewMobileNo.length !== 10) {
-          this.toastr.warning('Please Enter 10 Digits Mobile No');
-          return;
-        }
-      }
+      // if(this.NewMobileNo.length>0 ){
+      //   if (this.NewMobileNo.length !== 10) {
+      //     this.toastr.warning('Please Enter 10 Digits Mobile No');
+      //     return;
+      //   }
+      // }
       this.UpdateDetailsModelData.ApplicationID = this.request.ApplicationID;
       this.UpdateDetailsModelData.CreatedBy = this.sSOLoginDataModel.UserID;
       this.UpdateDetailsModelData.ModifyBy = this.sSOLoginDataModel.UserID;
       this.UpdateDetailsModelData.AadharNo = this.NewAadharNo;
-      this.UpdateDetailsModelData.MobileNo = this.NewMobileNo;
+      // this.UpdateDetailsModelData.MobileNo = this.NewMobileNo;
 
       try {
         this.loaderService.requestStarted();
@@ -613,14 +659,19 @@ export class VerifyStudentAllotComponent {
   }
 
 
-  async TradeWithAllot(content: any, CollegeTradeID: number, SeatMetrixId: number, AllotedCategory: string, SeatMetrixColumn: string) {
+  async TradeWithAllot(content: any, CollegeTradeID: number, SeatMetrixId: number, AllotedCategory: string, SeatMetrixColumn: string,TradeName:string='') {
     //alert(CollegeTradeID);
     //alert(AllotedCategory);
+    debugger;
+    this.request.ShiftUnit = 0;
     this.request.CollegeTradeID = CollegeTradeID;
     this.request.SeatMetrixId = SeatMetrixId;
     this.searchRequest.CollegeTradeID = CollegeTradeID;
     this.request.AllotedCategory = AllotedCategory;
     this.request.SeatMetrixColumn = SeatMetrixColumn;
+
+    this.request.TradeName = TradeName;
+
 
     try {
       this.loaderService.requestStarted();
@@ -666,10 +717,6 @@ export class VerifyStudentAllotComponent {
       this.request.TradeLevel = this.searchRequest.TradeLevel
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.request.DocumentList = this.requestReporting.AllotmentDocumentModel
-
-
-    
-
       await this.allotmentService.UpdateAllotments(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -739,6 +786,8 @@ export class VerifyStudentAllotComponent {
     }
   }
   CloseModal() {
+
+
 
     this.modalService.dismissAll();
   }
@@ -818,7 +867,8 @@ export class VerifyStudentAllotComponent {
     this.remarkheader = this.Isremarkshow;
   }
 
-  openSubmitOTP() {
+  openSubmitOTP()
+  {
     const filteredDocuments1 = this.requestReporting.AllotmentDocumentModel
     filteredDocuments1.forEach((e: any) => e.IsMandatory = 1)
 
@@ -929,16 +979,23 @@ export class VerifyStudentAllotComponent {
     );
 
 
-    if (this.isAdmission==0)
+    if ( this.isAdmission==0)
     {
 
-      this.Swal2.Confirmation("Reporting Date Is Closed", async (result: any) => {
-        if (result.isConfirmed) {
 
-          this.router.navigate([this.getRouterLink()]);
+      this.Swal2.showRedirectMessage('Reporting Date Is Closed',this.getRouterLink());
 
-        }
-      }, 'Ok', false);
+      // setTimeout(() => {
+      //   this.router.navigate([this.getRouterLink()]);
+      // }, 1000);
+
+      // this.Swal2.Confirmation("Reporting Date Is Closed", async (result: any) => {
+      //   if (result.isConfirmed) {
+
+      //     this.router.navigate([this.getRouterLink()]);
+
+      //   }
+      // }, 'Ok', false);
 
     }
 

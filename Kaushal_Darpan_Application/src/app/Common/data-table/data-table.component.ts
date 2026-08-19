@@ -91,21 +91,78 @@ ngOnChanges(changes: SimpleChanges): void {
 
     this.normalizeConfig();
 
-    this.normalizeColumns();
+    // this.normalizeColumns();
 
     // this.loadColumns();
-    this.refreshDisplayedColumns();
+    // this.refreshDisplayedColumns();
 
   }
 
   if (changes['data']) {
 
     this.dataSource.data = this.data ?? [];
+    this.generateColumnsFromData();
+    this.refreshDisplayedColumns();
 
   }
 
 }
 
+private generateColumnsFromData(): void {
+
+    if (!this.data?.length) {
+
+        this.normalizedColumns = [];
+
+        return;
+
+    }
+
+    const apiColumns = Object.keys(this.data[0]);
+
+    const configuredColumns =
+        (this.normalizedConfig.columns || [])
+            .filter(x => typeof x !== 'string') as TableColumn[];
+
+    this.normalizedColumns = apiColumns
+
+        .filter(field =>
+            !this.normalizedConfig.unwantedColumns?.includes(field)
+        )
+
+        .map(field => {
+
+            const customColumn = configuredColumns.find(
+                x => x.dataField === field
+            );
+
+            return {
+
+                ...DEFAULT_COLUMN,
+
+                dataField: field,
+
+                displayField:
+                    customColumn?.displayField ??
+                    this.splitCamelCase(field),
+
+                visible: !this.normalizedConfig.unwantedColumns?.includes(field),
+
+                imageConfig: {
+
+                    ...DEFAULT_IMAGE_CONFIG,
+
+                    ...customColumn?.imageConfig
+
+                },
+
+                ...customColumn
+
+            } as TableColumn;
+
+        });
+
+}
  ngAfterViewInit(): void {
 
     this.dataSource.paginator = this.paginator;
@@ -685,7 +742,10 @@ resetColumns(): void {
 
     this.normalizedColumns.forEach(column => {
 
-        column.visible = true;
+        // column.visible = true;
+        column.visible=  !this.normalizedConfig.unwantedColumns?.includes(
+                column.dataField
+            );
 
     });
 

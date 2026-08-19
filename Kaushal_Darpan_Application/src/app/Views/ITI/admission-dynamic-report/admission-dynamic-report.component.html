@@ -1,0 +1,62 @@
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> ITI RPT Admission Dynamic</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="downloadPDF()"><i class="ti ti-download"></i> Download Pdf</a>-->
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="downloadExcel()"><i class="ti ti-download"></i> Download Excel Sheet</a>
+      </div>
+    </div>
+
+    <!-- Filter flags sent to the SP -->
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+      <div class="flex items-center gap-2">
+
+
+        <input type="checkbox" id="chkAllot" [(ngModel)]="filters.FilterByAllotmentType" (change)="onFilterChange()" />
+        <label for="chkAllot" class="text-gray-800 text-sm font-medium">Split by Allotment Type</label>
+      </div>
+      <div class="flex items-center gap-2">
+        <input type="checkbox" id="chkTradeLevel" [(ngModel)]="filters.ShowTradeLevel" (change)="onFilterChange()" />
+        <label for="chkTradeLevel" class="text-gray-800 text-sm font-medium">Split by Trade Level</label>
+      </div>
+      <div class="flex items-center gap-2">
+        <input type="checkbox" id="chkTradeDuration" [(ngModel)]="filters.ShowTradeDuration" (change)="onFilterChange()" />
+        <label for="chkTradeDuration" class="text-gray-800 text-sm font-medium">Split by Trade Duration</label>
+      </div>
+      <div class="flex items-center gap-2">
+        <input type="checkbox" id="chkTradeScheme" [(ngModel)]="filters.ShowTradeScheme" (change)="onFilterChange()" />
+        <label for="chkTradeScheme" class="text-gray-800 text-sm font-medium">Split by Trade Scheme</label>
+      </div>
+      <div class="flex items-center gap-2">
+        <input type="checkbox" id="chkManagementType" [(ngModel)]="filters.ShowManagementType" (change)="onFilterChange()" />
+        <label for="chkManagementType" class="text-gray-800 text-sm font-medium">Split Govt / Pvt</label>
+      </div>
+    </div>
+
+    <!-- Fully dynamic table: columns come straight from whatever the SP returns -->
+    <!-- <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto text-center" *ngIf="columns.length > 0; else noData">
+        <thead>
+          <tr>
+            <th *ngFor="let col of columns">{{ col }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of data">
+            <td *ngFor="let col of columns">{{ row[col] }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #noData>
+        <div class="text-center text-gray-500 py-4">No data available</div>
+      </ng-template>
+    </div> -->
+
+        <app-data-table
+        [data]="data"
+        [config]="tableConfig" >
+    </app-data-table>
+  </div>
+</div>
