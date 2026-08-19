@@ -46,7 +46,12 @@ export interface TableConfig {
      * Columns
      */
     // columns: TableColumn[];
-    columns: Array<string | TableColumn>;
+    columns?: Array<string | TableColumn>;
+
+        /**
+     * Columns to hide completely
+     */
+    unwantedColumns?: string[];
 
     /**
      * Action Buttons

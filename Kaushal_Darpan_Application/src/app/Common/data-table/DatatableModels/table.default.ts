@@ -24,7 +24,13 @@ export const DEFAULT_TABLE_CONFIG: Partial<TableConfig> = {
 
     showColumnCustomizer: true,
 
-    actions: []
+    actions: [],
+
+    columns: [],
+
+    unwantedColumns: [],
+
+    badgeConfig: []
 
 };
 
@@ -61,6 +67,8 @@ export const DEFAULT_COLUMN: Partial<TableColumn> = {
     width: 'auto',
 
     hidden: false,
+
+    visible: true,   // MUST BE TRUE for visibility checkbox to work customizaed column dropdown
 
     sticky: false,
 
