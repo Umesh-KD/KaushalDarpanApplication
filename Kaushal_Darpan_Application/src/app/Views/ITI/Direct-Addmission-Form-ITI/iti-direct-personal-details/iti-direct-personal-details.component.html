@@ -69,7 +69,7 @@
           पिता का नाम (Father's
           Name):<span class="StarMarking">*</span>
         </label>
-        <input type="text" class="form-input disabled" disabled id="ApplicationId" value="Test Father Name"
+        <input type="text" class="form-input" disabled id="ApplicationId" value="Test Father Name"
                formControlName="txtFather" [(ngModel)]="request.FatherName" (change)="request.FatherName = filterString(request.FatherName)">
         <div *ngIf="isSubmitted && _PersonalDetailForm.txtFather.errors" class="text-danger">
           <p *ngIf="_PersonalDetailForm.txtFather.errors.required">
@@ -114,7 +114,7 @@
           माता का नाम (Mother's
           Name):<span class="StarMarking">*</span>
         </label>
-        <input type="text" class="form-input disabled" disabled id="txtMotherEngname" formControlName="txtMotherEngname"
+        <input type="text" class="form-input" disabled id="txtMotherEngname" formControlName="txtMotherEngname"
                [(ngModel)]="request.MotherName" (change)="request.MotherName = filterString(request.MotherName)">
         <div *ngIf="isSubmitted && _PersonalDetailForm.txtMotherEngname.errors" class="text-danger">
           <p *ngIf="_PersonalDetailForm.txtMotherEngname.errors.required">

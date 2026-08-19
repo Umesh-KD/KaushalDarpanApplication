@@ -70,6 +70,7 @@ export class BterEMAddStaffDetailsComponent {
   public StaffQualificationList: any = [];
   public StaffCareerAdvancementSchemeData: any = [];
   public PayLevelDDLList: any = [];
+  public QualificationDivisionList: any = [];
 
   public _EnumEMProfileStatus = EnumEMProfileStatus;
 
@@ -167,9 +168,9 @@ export class BterEMAddStaffDetailsComponent {
     this.QualificationFormGroup = this.formBuilder.group({
       IsQualificationObtainedDuringService: ['', [Validators.required]],
       QualificationAcquredDate: ['', [Validators.required]],
-      ObtainedDivision: ['', [Validators.required]],
       Specialization: ['', [Validators.required]],
       QualificationID: ['', [DropdownValidators]],
+      ObtainedDivisionID: ['', [DropdownValidators]],
       AcquiringQualificationCertificate: [''],
       CompetentAuthorityOrder: [''],
     });
@@ -213,7 +214,7 @@ export class BterEMAddStaffDetailsComponent {
    
     this.userID=this.sSOLoginDataModel.UserID;
 
-     
+    await this.GetQualificationDivisionDDL();
     await this.GetLoadData();
     await this.GetInstituteMaster();
     await this.GetOfficeList();
@@ -1756,6 +1757,24 @@ export class BterEMAddStaffDetailsComponent {
       this.AddServiceistoryFormGroup.get('ToBranchIDPromotion')?.clearValidators();
     }
     this.AddServiceistoryFormGroup.get('ToBranchIDPromotion')?.updateValueAndValidity();
+  }
+
+  async GetQualificationDivisionDDL() {
+    try {
+      const request: any = {};
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      request.EndTermId = this.sSOLoginDataModel.EndTermID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.Action = "QualificationDivisionDDL";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.QualificationDivisionList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 

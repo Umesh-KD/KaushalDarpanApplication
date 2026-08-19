@@ -158,7 +158,8 @@
 
               <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionMapKey==1 && row.DirectAdmissionType==1 && row.IsFinalSubmit !== 2"
                  (click)="redirectToDirectAdmissionApplicationForm(row)"
-                 class="btn bg-info text-white btn-sm"> Complete Direct Admission Form </a>
+                 title="Complete Direct Admission form"
+                 class="btn bg-info text-white btn-sm"> Complete  Form </a>
 
               <a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.IsFinalSubmit === 2 && !(row.IsPaymentSuccess == true && sSOLoginDataModel.RoleID == 3)" (click)="redirectApplication(row,2)"
                  class="btn bg-info text-white btn-sm mt-1"> View & Submit</a>
@@ -176,13 +177,14 @@
               <!-- <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess == 1 && QualAdmissionMapKey "
                  [routerLink]="'/EditQualification'"
                  [queryParams]="{ AppID: row.encryptedApplicationID }"
-                 class="btn bg-info text-white btn-sm mt-1"> Edit Qualification</a>                  -->
+                 class="btn bg-info text-white btn-sm mt-1"> Edit Qualification</a>            -->
 
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 && DirectAdmissionMapKey==1 && row.DirectAdmissionType==1 "
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 &&  row.DirectAdmissionType==1 && QualAdmissionMapKey "
                 (click)="openOTP(row,1)"     
                 class="btn bg-info text-white btn-sm mt-1"> Edit Qualification</a>
+                
 
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess == 1 && QualAdmissionMapKey "
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess == 1 && DirectAdmissionMapKey==0  && QualAdmissionMapKey "
                  (click)="openOTP(row,1)"     
                  class="btn bg-info text-white btn-sm mt-1"> Edit Qualification</a>
 

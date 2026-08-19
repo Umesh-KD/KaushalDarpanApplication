@@ -506,7 +506,8 @@ this.searchRequest.DepartmentID == EnumDepartment.ITI ? "_GetStudentForSsoMappin
       );
   }
 
-  async Redirect(key: number, AdmissionType: number=0) {
+  async Redirect(key: number, AdmissionType: number = 0) {
+    debugger;
     if (key == EnumDepartment.BTER) {
       this.CloseModal()
       

@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
 import { GuestRoomManagmentService } from '../../../../Services/GuestRoomManagment/GuestRoomManagment.service';
 import { GuestRoomSeatSearchModel } from '../../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-add-staff-initial-details',
@@ -67,7 +68,8 @@ export class AddStaffInitialDetailsComponent {
     private toastr: ToastrService,
     private router: Router,
     private bterEstablishManagementService: BTEREstablishManagementService,
-    private guestRoomManagmentService: GuestRoomManagmentService
+    private guestRoomManagmentService: GuestRoomManagmentService,
+    private sweetAlert2: SweetAlert2,
   ) {}
 
   async ngOnInit() {
@@ -568,14 +570,14 @@ debugger
 
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then((data: any) => {
+      await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         let response = JSON.parse(JSON.stringify(data));
         if (response?.Data) {
 
           let parsedData = JSON.parse(response.Data); // parse string inside Data
           if (parsedData != null) {
-            //this.DuplicateCheck(this.requestSSoApi.SSOID);
+            await this.DuplicateCheck(this.requestSSoApi.SSOID);
             //this.formData.Displayname = parsedData.displayName
             this.isSSOVisible = true;
             this.formData.Name = parsedData.displayName;
@@ -650,16 +652,21 @@ debugger
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
           
-           
           }
           else if (data.State == EnumStatus.Warning) {
+            const msg = `SSOID ${SSOID} is already mapped in system.</br> If you want to assign a new role, please use the Additional Role Mapping section.`;
+            this.sweetAlert2.Confirmation(`${msg}`, async (result: any) => {
+              this.formData.SSOID = '';
+              this.isSSOVisible = false;
+              this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.enable();
+            }, 'OK', false);
             
-            const msg = `SSOID ${SSOID} is already mapped.To assign a new role, please use the Additional Role Mapping section.`;
+            
            /* this.toastr.warning(msg);*/
-            this.toastr.warning(msg, '', { timeOut: 5000 });
-            this.formData.SSOID = '';
-            this.isSSOVisible = false;
-            this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.enable();
+            // this.toastr.warning(msg, '', { timeOut: 5000 });
+            // this.formData.SSOID = '';
+            // this.isSSOVisible = false;
+            // this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.enable();
           }
           else {
             this.toastr.error(data.ErrorMessage);

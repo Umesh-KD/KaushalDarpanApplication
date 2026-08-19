@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import Swal from 'sweetalert2';
+import  {Router} from '@angular/router';
 
 
 @Injectable({
@@ -8,6 +9,10 @@ import Swal from 'sweetalert2';
 
 export class SweetAlert2 {
 
+
+   constructor(
+      private Router: Router
+    ) { }
   public Confirmation(message: string, callBack: Function, confirmButtonText?: string, showCancelButton: boolean = true) {
     Swal.fire({
       //title: message,
@@ -101,7 +106,7 @@ export class SweetAlert2 {
 
   public WarningTimer(message: string) {
     Swal.fire({
-      position: "top-end",
+      position: "center",
       icon: "warning",
       //title: "Warning",
       html: message,
@@ -120,6 +125,19 @@ export class SweetAlert2 {
       timer: 1500
     });
   }
+
+  showRedirectMessage(message: string, route: string, timer: number = 3000) {
+   Swal.fire({
+    title: message,
+    icon: 'warning',
+    position: 'center',
+    timer: timer,
+    timerProgressBar: true,
+    showConfirmButton: false
+  }).then(() => {
+    this.Router.navigate([route]);
+  });
+}
 
   public ConfirmationWithSelect(message: string,callBack: Function,confirmButtonText?: string) {
     Swal.fire({

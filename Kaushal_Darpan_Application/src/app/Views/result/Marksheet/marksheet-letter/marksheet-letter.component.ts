@@ -13,6 +13,7 @@ import { MarksheetLetterDataModel, MarksheetLetterSearchModel } from '../../../.
 import { EnumDepartment, EnumResultType, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { MarksheetDownloadService } from '../../../../Services/MarksheetDownload/marksheet-download.service';
 import { HttpClient } from '@angular/common/http';
+import { CommonFunctionHelper } from '../../../../Common/commonFunctionHelper';
 
 @Component({
     selector: 'app-marksheet-letter',
@@ -49,6 +50,7 @@ export class MarksheetLetterComponent {
     private Swal2: SweetAlert2,
     public appsettingConfig: AppsettingService,
     private http: HttpClient,
+    private commonFunctionHelper: CommonFunctionHelper,
   ) { }
 
 
@@ -158,7 +160,8 @@ export class MarksheetLetterComponent {
       await this.marksheetDownloadService.DownloadMarksheetLetter(this.searchRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
-          this.DownloadFile(data.Data, 'file download');
+          const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+          this.commonFunctionHelper.downloadBase64OfPdf(data.Data, `certificate_letter_${timestamp}.pdf`);
         } else {
           this.toastr.error(data.ErrorMessage);
         }

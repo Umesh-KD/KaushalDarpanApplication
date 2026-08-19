@@ -502,16 +502,20 @@
       </div>
 
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3"
-        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || 
+                request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit) || 
+                request.IsAdmin == 1">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Qualification Details</b>
       </div>
       <form [formGroup]="QualificationFormGroup"
-        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || 
+                request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit) || 
+                request.IsAdmin == 1">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-2">Qualification during the service
-              period?<span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-2">
+              Add Qualification Details<span class="StarMarking">*</span></label>
 
             <div class="flex gap-4">
               <label class="flex items-center space-x-2">
@@ -519,7 +523,7 @@
                   formControlName="IsQualificationObtainedDuringService"
                   [(ngModel)]="qualificationReq.IsQualificationObtainedDuringService"
                   (change)="onChangeIsQualificationObtainedDuringService('Before')" />
-                <span>Before</span>
+                <span>Before Joining</span>
               </label>
 
               <label class="flex items-center space-x-2">
@@ -527,7 +531,7 @@
                   formControlName="IsQualificationObtainedDuringService"
                   [(ngModel)]="qualificationReq.IsQualificationObtainedDuringService"
                   (change)="onChangeIsQualificationObtainedDuringService('After')" />
-                <span>After</span>
+                <span>After Joining</span>
               </label>
             </div>
 
@@ -573,6 +577,22 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Division obtained<span
                 class="StarMarking">*</span> </label>
+            <select class="form-select " name="ObtainedDivisionID" id="ObtainedDivisionID" formControlName="ObtainedDivisionID"
+              [(ngModel)]="qualificationReq.ObtainedDivisionID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of QualificationDivisionList" [value]="item.CodeID">
+                {{item.Name}}</option>
+            </select>
+            <div *ngIf="isQualificationSubmitted && _QualificationFormGroup.ObtainedDivisionID.errors" class="text-danger">
+              <p *ngIf="!_QualificationFormGroup.ObtainedDivisionID.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <!-- <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Division obtained<span
+                class="StarMarking">*</span> </label>
             <input autocomplete="off" class="form-input" type="text" name="ObtainedDivision" id="ObtainedDivision"
               formControlName="ObtainedDivision" [(ngModel)]="qualificationReq.ObtainedDivision" />
 
@@ -582,7 +602,7 @@
                 <i aria-hidden="true"></i>This field is required .!
               </p>
             </div>
-          </div>
+          </div> -->
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Specialization<span
@@ -687,7 +707,7 @@
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
             <tr>
               <th>S.No</th>
-              <th>Qualification during the service period?</th>
+              <th>Qualification Details (Before/After Joining)</th>
               <th>Qualification</th>
               <th>Date of acquiring the qualification</th>
               <th>Division obtained </th>
@@ -945,11 +965,15 @@
 
       <!-- service history details  -->
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3"
-        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || 
+                request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit) || 
+                request.IsAdmin == 1">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Service History</b>
       </div>
       <form [formGroup]="AddServiceistoryFormGroup"
-        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || 
+                request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit) || 
+                request.IsAdmin == 1">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <div>
@@ -1118,7 +1142,7 @@
           </div>
 
           <div *ngIf="serviceReq.IsTransfer">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Transfer<span
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Transfer Order<span
                 class="StarMarking">*</span></label>
             <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfTransfer"
               id="DateOfTransfer" formControlName="DateOfTransfer" [(ngModel)]="serviceReq.DateOfTransfer"
@@ -1173,7 +1197,7 @@
           </div>
 
           <div *ngIf="serviceReq.IsPromotion">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Promotion<span
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Promotion Order<span
                 class="StarMarking">*</span></label>
             <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfpromotion"
               id="DateOfpromotion" formControlName="DateOfpromotion" [(ngModel)]="serviceReq.DateOfpromotion"
@@ -1389,11 +1413,15 @@
       </div>
 
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3"
-        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || 
+                request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit) || 
+                request.IsAdmin == 1">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Staff Career Advancement Scheme Details</b>
       </div>
       <form [formGroup]="CareerAdvancementSchemeFormGroup"
-        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit)">
+        *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || 
+                request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit) || 
+                request.IsAdmin == 1 ">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <div>
@@ -1540,7 +1568,7 @@
           Save as Draft
         </button>
 
-        <button *ngIf="request.IsAdmin == 1" class="btn bg-success text-white mt-3" type="button" (click)="SaveData(0)">
+        <button *ngIf="request.IsAdmin == 1" class="btn bg-success text-white mt-3" type="button" (click)="SaveData(1)">
           Update Profile
         </button>
 

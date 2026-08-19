@@ -19,6 +19,11 @@
           <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         </div>
         <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div class="col-span-full bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-3 rounded-md">
+            <span class="font-semibold">Note:</span>
+            For Main, RWH and RWH (Reval Effected) Result Type, only select 6 or 4(BC) semester.
+          </div>
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
             <select class="form-select" [(ngModel)]="searchRequest.SemesterID" name="SemesterID" formControlName="SemesterID">
@@ -39,19 +44,19 @@
           </div>
 
           <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Revised
-            </label>
-            <select class="form-select" [(ngModel)]="searchRequest.IsRevised" name="IsRevised" formControlName="IsRevised">
-              <option value="-1">--Select--</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Revised
+    </label>
+    <select class="form-select" [(ngModel)]="searchRequest.IsRevised" name="IsRevised" formControlName="IsRevised">
+      <option value="-1">--Select--</option>
+      <option value="1">Yes</option>
+      <option value="0">No</option>
+    </select>
 
-            <div *ngIf="isSubmitted && downLoadFG.get('IsRevised')?.hasError('defaultValue')" class="text-danger">
-              This field is required!
-            </div>
-          </div>-->
+    <div *ngIf="isSubmitted && downLoadFG.get('IsRevised')?.hasError('defaultValue')" class="text-danger">
+      This field is required!
+    </div>
+  </div>-->
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">

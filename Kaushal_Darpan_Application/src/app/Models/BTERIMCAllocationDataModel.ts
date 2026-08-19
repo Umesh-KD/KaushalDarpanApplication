@@ -16,6 +16,10 @@ export class BTERIMCAllocationDataModel {
   public CollegeTradeID: number = 0;
   public TradeLevel: number = 0;
 
+  public AadharNo?: string = "";
+  public Gender?: number = 0;
+  public CategoryID?: number = 0;
+
 }
 
 
