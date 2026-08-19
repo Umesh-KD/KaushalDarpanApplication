@@ -135,14 +135,14 @@ export class VerifyStudentAllotComponent {
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-
+    this.searchRequest.TradeLevel = parseInt(this.routers.snapshot.paramMap.get('TradeLevel')??'0',10);
     await this.GetDateConfig();
 
 
     this.routers.paramMap.subscribe(params => {
       this.ApplicationIdS = params.get('id')
     });
-    this.searchRequest.TradeLevel = parseInt(this.routers.snapshot.paramMap.get('TradeLevel')??'0',10);
+
 
     // const tradeLevel = this.routers.snapshot.paramMap.get('TradeLevel');
     // this.searchRequest.TradeLevel = tradeLevel ? parseInt(tradeLevel, 10) : 0;
@@ -971,16 +971,23 @@ export class VerifyStudentAllotComponent {
     );
 
 
-    if (this.isAdmission==0)
+    if ( this.isAdmission==0)
     {
 
-      this.Swal2.Confirmation("Reporting Date Is Closed", async (result: any) => {
-        if (result.isConfirmed) {
 
-          this.router.navigate([this.getRouterLink()]);
+      this.Swal2.showRedirectMessage('Reporting Date Is Closed',this.getRouterLink());
 
-        }
-      }, 'Ok', false);
+      // setTimeout(() => {
+      //   this.router.navigate([this.getRouterLink()]);
+      // }, 1000);
+
+      // this.Swal2.Confirmation("Reporting Date Is Closed", async (result: any) => {
+      //   if (result.isConfirmed) {
+
+      //     this.router.navigate([this.getRouterLink()]);
+
+      //   }
+      // }, 'Ok', false);
 
     }
 
