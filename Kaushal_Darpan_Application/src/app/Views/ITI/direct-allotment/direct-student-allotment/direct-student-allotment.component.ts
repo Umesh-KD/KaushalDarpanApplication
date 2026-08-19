@@ -659,14 +659,19 @@ export class VerifyStudentAllotComponent {
   }
 
 
-  async TradeWithAllot(content: any, CollegeTradeID: number, SeatMetrixId: number, AllotedCategory: string, SeatMetrixColumn: string) {
+  async TradeWithAllot(content: any, CollegeTradeID: number, SeatMetrixId: number, AllotedCategory: string, SeatMetrixColumn: string,TradeName:string='') {
     //alert(CollegeTradeID);
     //alert(AllotedCategory);
+    debugger;
+    this.request.ShiftUnit = 0;
     this.request.CollegeTradeID = CollegeTradeID;
     this.request.SeatMetrixId = SeatMetrixId;
     this.searchRequest.CollegeTradeID = CollegeTradeID;
     this.request.AllotedCategory = AllotedCategory;
     this.request.SeatMetrixColumn = SeatMetrixColumn;
+
+    this.request.TradeName = TradeName;
+
 
     try {
       this.loaderService.requestStarted();
@@ -782,6 +787,8 @@ export class VerifyStudentAllotComponent {
   }
   CloseModal() {
 
+
+
     this.modalService.dismissAll();
   }
 
@@ -860,7 +867,8 @@ export class VerifyStudentAllotComponent {
     this.remarkheader = this.Isremarkshow;
   }
 
-  openSubmitOTP() {
+  openSubmitOTP()
+  {
     const filteredDocuments1 = this.requestReporting.AllotmentDocumentModel
     filteredDocuments1.forEach((e: any) => e.IsMandatory = 1)
 
