@@ -601,7 +601,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
           <div class="mt-4">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter New Mobile No.</label>
-            <input type="text" (keypress)="numberOnly($event)" maxlength="10" class="form-input" [(ngModel)]="NewMobileNo" placeholder="Enter New Mobile Number">
+            <input type="text" (keypress)="numberOnly($event)" maxlength="10" class="form-input" [(ngModel)]="UpdateDetailsModelData.MobileNo" placeholder="Enter New Mobile Number">
           </div>
 
           <div class="mt-4">
@@ -620,10 +620,18 @@
               </select>            
         </div>
 
+        <div class="mt-4">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Cast Category </label>
+            <select class="form-select" id="PlacementCompanyID" name="CategoryID" [(ngModel)]="UpdateDetailsModelData.CategoryID" >
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of CategoryList" [value]="item.CasteCategoryID">{{item.CasteCategoryName}}</option>
+            </select>            
+        </div>
+
       </div>
 
       <div class="card-footer text-center flex items-center justify-center mt-3">
-        <button (click)="UpdateDetails()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Update Details</button>
+        <button (click)="openUpdateDetailsOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Update Details</button>
       </div>
     </div>
   </div>

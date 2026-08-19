@@ -58,6 +58,7 @@ export class VerifyStudentAllotComponent {
   public StudentDetailsList: any = [];
   public ShiftUnitList: any = [];
   public GenderList: any = []
+  public CategoryList:any=[];
   public OTP: string = '';
   public GeneratedOTP: string = '';
   public MobileNo: string = '';
@@ -179,6 +180,12 @@ export class VerifyStudentAllotComponent {
           }, (error: any) => console.error(error)
           );
   
+        await this.commonMasterService.CasteCategoryA()
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.CategoryList = data['Data'];
+          }, (error: any) => console.error(error)
+          );
       }
       catch (Ex) {
         console.log(Ex);
@@ -272,6 +279,20 @@ export class VerifyStudentAllotComponent {
             this.requestReporting = data['Data'].Table[0];
             this.requestReporting.AllotmentDocumentModel = data['Data'].Table1;
             this.requestReporting.AllotmentDocumentModel.forEach(e => e.DocumentStatus = true)
+
+            this.UpdateDetailsModelData.MobileNo=this.requestReporting.MobileNo??"";
+            this.NewAadharNo=this.requestReporting.AadharNo??"";
+            this.UpdateDetailsModelData.CategoryID=Number(this.requestReporting.CasteCategoryID??0);
+            if(this.requestReporting.AllotedGender=='Female'){
+              this.UpdateDetailsModelData.Gender=98
+            }
+            else if(this.requestReporting.AllotedGender=='Male'){
+              this.UpdateDetailsModelData.Gender=97
+            }
+            else{
+              this.UpdateDetailsModelData.Gender=99
+            }
+            // this.UpdateDetailsModelData.Gender=Number(this.requestReporting.AllotedGender??0);
             //alert(this.StudentVerifyPhoneData[0].ApplicationVerified);
             //if (this.StudentVerifyPhoneData[0].ApplicationVerified !== 0) {
             //  this.ApplicationAlloted = false;
@@ -446,23 +467,48 @@ export class VerifyStudentAllotComponent {
     }
   }
 
+  openUpdateDetailsOTP() {
+    debugger
+    if (this.NewAadharNo.length > 0 || this.NewMobileNo.length > 0 || this.UpdateDetailsModelData.Gender!=0 || this.UpdateDetailsModelData.CategoryID!=0)
+      {
+        if(this.NewMobileNo.length>0 ){
+          if (this.NewMobileNo.length !== 10) {
+            this.toastr.warning('Please Enter 10 Digits Mobile No');
+            return;
+          }
+        }
+      this.childComponent.MobileNo = this.UpdateDetailsModelData.MobileNo;
+      this.CloseModal();
+      this.childComponent.OpenOTPPopup();
+      var th = this;
+      this.toastr.success('OTP sent successfully to student mobile no');
+      this.childComponent.onVerified.subscribe(() => {
+        th.UpdateDetails();
+      });
+    }
+    else {
+      this.toastr.warning('Please Enter Fields ');
+    }
+  }
+
+
   async UpdateDetails()
   {
 
     debugger
-    if (this.NewAadharNo.length > 0 || this.NewMobileNo.length > 0 || this.UpdateDetailsModelData.Gender!=0)
+    if (this.NewAadharNo.length > 0 || this.NewMobileNo.length > 0 || this.UpdateDetailsModelData.Gender!=0 || this.UpdateDetailsModelData.CategoryID!=0)
     {
-      if(this.NewMobileNo.length>0 ){
-        if (this.NewMobileNo.length !== 10) {
-          this.toastr.warning('Please Enter 10 Digits Mobile No');
-          return;
-        }
-      }
+      // if(this.NewMobileNo.length>0 ){
+      //   if (this.NewMobileNo.length !== 10) {
+      //     this.toastr.warning('Please Enter 10 Digits Mobile No');
+      //     return;
+      //   }
+      // }
       this.UpdateDetailsModelData.ApplicationID = this.request.ApplicationID;
       this.UpdateDetailsModelData.CreatedBy = this.sSOLoginDataModel.UserID;
       this.UpdateDetailsModelData.ModifyBy = this.sSOLoginDataModel.UserID;
       this.UpdateDetailsModelData.AadharNo = this.NewAadharNo;
-      this.UpdateDetailsModelData.MobileNo = this.NewMobileNo;
+      // this.UpdateDetailsModelData.MobileNo = this.NewMobileNo;
 
       try {
         this.loaderService.requestStarted();
@@ -666,10 +712,6 @@ export class VerifyStudentAllotComponent {
       this.request.TradeLevel = this.searchRequest.TradeLevel
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.request.DocumentList = this.requestReporting.AllotmentDocumentModel
-
-
-    
-
       await this.allotmentService.UpdateAllotments(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
