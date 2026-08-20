@@ -50,6 +50,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit {
   displayedColumns: string[] = [];
   filterText = '';
   normalizedColumns: TableColumn[] = [];
+  private initialColumnState: Record<string, boolean> = {};
 
   showColumnPanel = false;
   columnSearch = '';
@@ -743,9 +744,11 @@ resetColumns(): void {
     this.normalizedColumns.forEach(column => {
 
         // column.visible = true;
-        column.visible=  !this.normalizedConfig.unwantedColumns?.includes(
-                column.dataField
-            );
+        // column.visible=  !this.normalizedConfig.unwantedColumns?.includes(
+        //         column.dataField
+        //     );
+        column.visible =
+          this.initialColumnState[column.dataField];
 
     });
 
@@ -769,10 +772,11 @@ get filteredColumns(): TableColumn[] {
 
     }
 
-    return this.normalizedColumns.filter(x =>
+    console.log("herehrheher",this.columnSearch);
 
-        x.displayField!
-            .toLowerCase()
+    return this.normalizedColumns.filter(x => !this.columnSearch ||
+        x.displayField
+            ?.toLowerCase()
             .includes(this.columnSearch.toLowerCase())
 
     );

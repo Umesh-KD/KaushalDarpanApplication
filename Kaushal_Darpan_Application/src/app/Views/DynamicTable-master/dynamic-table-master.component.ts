@@ -56,9 +56,11 @@ tableConfig: TableConfig = {
             width: 40,
             height: 40,
             borderRadius: 'circle'
-        }
+        },
+        visible: false,    //to show in list view
+        lockVisibility: true   // to lock in customize column dropdown
     },
-    
+
     // {
     //   dataField: 'Name',
     //   // displayField: 'Company Name',    
