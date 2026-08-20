@@ -87,7 +87,7 @@
             </div>
           </div>
 
-          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-6">
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
 
             <!-- <button type="button" class="btn bg-primary text-white mt-6" (click)="openModalChangeMobileNo(modal_ChangeMobileNo)">Change Mobile No.</button> -->
             <button type="button" class="btn bg-primary text-white mt-6" (click)="openModalChangeMobileNo(modal_EditDetails)"><i class="fa fa-pencil"></i> Edit Details</button>
@@ -539,7 +539,7 @@
     <div class="card">
       <div class="card-header flex justify-between  items-center">
         <b>
-          <i class="fa fa-plus"></i>&nbsp; Direct Allotment
+          <i class="fa fa-plus"></i>&nbsp; Direct Allotment To <b> {{requestReporting.StudentName}}</b>
         </b>
         <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
       </div>

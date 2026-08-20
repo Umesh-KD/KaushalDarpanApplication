@@ -19,19 +19,14 @@
         <div class="toolbar-actions">
 
             <span class="record-count">
-
                 {{dataSource.filteredData.length}} Records
-
             </span>
 
             <button
                 class="toolbar-btn"
                 (click)="toggleColumnPanel()">
-
                 <i class="ti ti-layout-columns"></i>
-
                 Columns
-
             </button>
 
             <ng-content select="[datatable-actions]"></ng-content>
@@ -48,18 +43,14 @@
         <div class="column-panel-header">
 
             <span>
-
                 Column Customization
-
             </span>
 
             <button
                 type="button"
                 class="close-btn"
                 (click)="closeColumnPanel()">
-
                 ✕
-
             </button>
 
         </div>

@@ -94,19 +94,17 @@
           <tr>
             <th width="80px" align="left">Sr. No.</th>
             <th align="left">SSO ID</th>
-            <th align="left">Name</th>
-            <th align="left">Mobile</th>
-            <th align="left">Email</th>
+            <th align="left">Staff Details</th>
             <!-- <th align="left">Level Name</th> -->
             <!--<th align="left">Office Name</th>-->
-            <th align="left">Department Name</th>
+            <th align="left">Department/Institute</th>
             <!--<th align="left">District Name</th>-->
             <th class="left">Staff Type</th>
-            <th class="left">Post Name</th>
+            <th class="left">Post </th>
             <th align="left">Role</th>
             <th align="left">Profile Status</th>
             <th align="left">Remark</th>
-            <th align="left">Is Nodal</th>
+            <!-- <th align="left">Is Nodal</th> -->
             <th class="text-left">View Profile</th>
             <th align="center" width="200">Action</th>
           </tr>
@@ -115,9 +113,11 @@
           <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
             <td>{{idx+1}}</td>
             <td>{{row.SSOID}}</td>
-            <td>{{row.Name}}</td>
-            <td>{{row.MobileNo}}</td>
-            <td>{{row.EmailID}}</td>
+            <td>
+              <p *ngIf="row.Name?.length>0"><i class="ti ti-user"></i> {{row.Name}}</p>
+              <p *ngIf="row.MobileNo?.length>0"><i class="ti ti-phone"></i> {{row.MobileNo}}</p>
+              <p *ngIf="row.EmailID?.length>0"><i class="ti ti-mail"></i> {{row.EmailID}}</p>
+            </td>
             <!-- <td>{{row.LevelName}}</td> -->
             <!--<td>{{row.OfficeName}}</td>-->
             <td>{{row.InstituteName}}</td>
@@ -127,7 +127,7 @@
             <td>{{row.RoleName}}</td>
             <td>{{row.ProfileStatus}}</td>
             <td>{{row.Remark}}</td>
-            <td>{{row.IsNodal}}</td>
+            <!-- <td>{{row.IsNodal}}</td> -->
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <!-- <a (click)="OnConfirm(Modal_StaffDetails,row.StaffID,row.UserID)" title="View Profile"><i class="ti ti-eye"></i></a> -->
