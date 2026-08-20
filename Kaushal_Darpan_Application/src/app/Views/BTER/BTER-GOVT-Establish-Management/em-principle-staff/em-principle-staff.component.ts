@@ -311,7 +311,7 @@ export class EMPrincipleStaffComponent {
 
           let parsedData = JSON.parse(response.Data); // parse string inside Data
           if (parsedData != null) {
-            await this.DuplicateCheck(this.requestSSoApi.SSOID);    
+            // await this.DuplicateCheck(this.requestSSoApi.SSOID);    
             //this.formData.Displayname = parsedData.displayName
             this.isSSOVisible = true;
             this.formData.Displayname = parsedData.displayName;
@@ -613,10 +613,15 @@ async GetTechnicianDll() {
 
   async resetBranchValidators() {
     const PostID = [76,78,80,81]
-    if(PostID.includes(Number(this.formData.PostID)) ){
-      this.AddStaffBasicDetailFromGroup.get('BranchID')?.clearValidators();
-    } else {
-      this.AddStaffBasicDetailFromGroup.get('BranchID')?.setValidators([DropdownValidators]);
+    if(
+      this.formData.StaffTypeID == this._BTERGovtEM_EnumStaffType.Teaching && 
+      this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.Lecturer
+    ){
+      if(PostID.includes(Number(this.formData.PostID)) ){
+        this.AddStaffBasicDetailFromGroup.get('BranchID')?.clearValidators();
+      } else {
+        this.AddStaffBasicDetailFromGroup.get('BranchID')?.setValidators([DropdownValidators]);
+      }
     }
 
     this.AddStaffBasicDetailFromGroup.get('BranchID')?.updateValueAndValidity();
@@ -823,6 +828,18 @@ async GetTechnicianDll() {
     try {
       this.isSubmitted = true;
       if (this.AddStaffBasicDetailFromGroup.invalid) {
+        Object.keys(this.AddStaffBasicDetailFromGroup.controls).forEach(key => {
+          const control = this.AddStaffBasicDetailFromGroup.get(key);
+
+          if (control && control.invalid) {
+            this.toastr.error(`Control ${key} is invalid`);
+            Object.keys(control.errors!).forEach(errorKey => {
+              this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+            });
+          }
+        });
+
+        this.toastr.error("Please fill all the required fields");
         return
       }    
 

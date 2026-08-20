@@ -232,4 +232,10 @@ export interface IMenu {
   "OnSelect": String;
   "ParentId": Number;
   "Priority": Number;
+
+  "U_Add": boolean;
+  "U_Delete": boolean;
+  "U_Update": boolean;
+  "U_View": boolean;
+  "U_Print": boolean;
 }

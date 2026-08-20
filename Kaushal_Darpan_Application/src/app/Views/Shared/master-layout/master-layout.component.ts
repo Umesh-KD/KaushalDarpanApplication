@@ -21,6 +21,7 @@ import { RequestBaseModel } from '../../../Models/RequestBaseModel';  // new add
 import { SSOLoginService } from '../../../Services/SSOLogin/ssologin.service';
 import { MenuFreezeService } from '../../../Services/menu-freeze/menu-freeze.service';
 import { ITIAdminDashboardServiceService } from '../../../Services/ITI-Admin-Dashboard-Service/iti-admin-dashboard-service.service';
+import { MenuPermissionService } from '../../../Services/MenuPermission/menu-permission.service';
 declare var window: any;
 
 
@@ -81,10 +82,27 @@ export class MasterLayoutComponent implements OnInit {
   public SessionTypeID: number = 0;    // new added 05082025
   public RequestBaseSearchModel = new RequestBaseModel();
   readonly APIUrl = this.appsettingConfig.apiURL + "SSO";
-  constructor(private breakpointObserver: BreakpointObserver, private el: ElementRef, @Inject(DOCUMENT) private document: Document, @Inject(PLATFORM_ID) private platformId: Object, private router: Router, private loaderService: LoaderService,
-    private sanitizer: DomSanitizer, location: PlatformLocation, private idle: Idle, private modalService: NgbModal, private commonFunctionService: CommonFunctionService,
-    private cookieService: CookieService, private menuService: MenuService, private http: HttpClient, private appsettingConfig: AppsettingService, private renderer: Renderer2,
-    private ssologin: SSOLoginService, private menuFreeze: MenuFreezeService, private ITIAdminDashboardService: ITIAdminDashboardServiceService
+  constructor(
+    private breakpointObserver: BreakpointObserver, 
+    private el: ElementRef, 
+    @Inject(DOCUMENT) private document: Document, 
+    @Inject(PLATFORM_ID) private platformId: Object, 
+    private router: Router, 
+    private loaderService: LoaderService,
+    private sanitizer: DomSanitizer, 
+    location: PlatformLocation,
+    private idle: Idle, 
+    private modalService: NgbModal, 
+    private commonFunctionService: CommonFunctionService,
+    private cookieService: CookieService, 
+    private menuService: MenuService, 
+    private http: HttpClient, 
+    private appsettingConfig: AppsettingService, 
+    private renderer: Renderer2,
+    private ssologin: SSOLoginService, 
+    private menuFreeze: MenuFreezeService, 
+    private ITIAdminDashboardService: ITIAdminDashboardServiceService,
+    private permissionService: MenuPermissionService,
 
   ) {
     location.onPopState(() => {
@@ -183,6 +201,7 @@ export class MasterLayoutComponent implements OnInit {
     );
     //
     this.reset();
+
     //
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -196,6 +215,7 @@ export class MasterLayoutComponent implements OnInit {
         await this.Logout();
       }
     }
+
     // set from session
     this.RoleID = this.sSOLoginDataModel.RoleID;
     this.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
@@ -730,9 +750,13 @@ export class MasterLayoutComponent implements OnInit {
           MenuData = JSON.parse(JSON.stringify(MenuData));
           this.filterMenuData = MenuData;
           localStorage.setItem('Menu', JSON.stringify(this.filterMenuData.Data));
+
           if (MenuData != null) {
             this.groupMenuItems(MenuData['Data']);
           }
+
+          // this.permissionService.setPermissions(this.filterMenuData);
+          
         }, error => console.error(error));
     }
 
