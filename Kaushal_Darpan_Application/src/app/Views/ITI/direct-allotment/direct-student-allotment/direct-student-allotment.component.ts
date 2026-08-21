@@ -880,14 +880,22 @@ export class VerifyStudentAllotComponent {
       return
     }
 
-    this.childComponent.MobileNo = this.requestReporting.MobileNo;
-    this.CloseModal();
-    this.childComponent.OpenOTPPopup();
-    var th = this;
-    this.toastr.success('OTP sent successfully to student mobile no');
-    this.childComponent.onVerified.subscribe(() => {
-      th.SaveTradeWithAllot();
-    });
+    const confirmationMessage = 'Do you want to proceed with reporting this application? ?'
+
+    this.Swal2.Confirmation(confirmationMessage, async (result: any) => {
+      if (result.isConfirmed) {
+      await  this.SaveTradeWithAllot()
+      }
+    })
+
+    ////this.childComponent.MobileNo = this.requestReporting.MobileNo;
+    ////this.CloseModal();
+    ////this.childComponent.OpenOTPPopup();
+    ////var th = this;
+    ////this.toastr.success('OTP sent successfully to student mobile no');
+    ////this.childComponent.onVerified.subscribe(() => {
+    ////  th.SaveTradeWithAllot();
+    ////});
   }
 
 
