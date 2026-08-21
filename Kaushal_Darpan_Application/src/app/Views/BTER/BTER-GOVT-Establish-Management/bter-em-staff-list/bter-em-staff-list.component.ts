@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffHostelListModel, BTER_EM_StaffListSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffDetailsServicePreviewDataModel, StaffGuestHouseSearchModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
-import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
+import { MenuDataModel, SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
@@ -14,13 +14,15 @@ import { DropdownValidators } from '../../../../Services/CustomValidators/custom
 import { RequestUpdateStatus } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
 import { UserRequestService } from '../../../../Services/UserRequest/user-request.service';
 import { __values } from 'tslib';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
 import { ViewStaffProfileModalComponent } from '../view-staff-profile-modal/view-staff-profile-modal.component';
 import { GuestRoomSeatSearchModel } from '../../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
 import { GuestRoomManagmentService } from '../../../../Services/GuestRoomManagment/GuestRoomManagment.service';
+import { MenuPermissionService } from '../../../../Services/MenuPermission/menu-permission.service';
+import { MenuPermission } from '../../../../Models/menu-permission.model';
 
 @Component({
   selector: 'app-bter-em-staff-list',
@@ -32,6 +34,9 @@ export class BTEREMStaffListComponent {
   public searchRequest = new BTER_EM_StaffListSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public deleteRequest = new BTER_EM_DeleteModel();
+
+  public menuDataModel: MenuDataModel[] = [];
+
   StaffMasterFormGroup!: FormGroup;
   StaffMasterFormGroupGuestHouse!: FormGroup;
   public StaffTypeList: any = [];
@@ -68,6 +73,8 @@ export class BTEREMStaffListComponent {
   public searchRequest1 = new GuestRoomSeatSearchModel();
   public guestHouseRequest = new StaffGuestHouseSearchModel();
   public guestHouseSaveRequest = new StaffGuestHouseSearchModel();
+  permissions?: MenuPermission;
+
   public StaffGuestHouseDetails: BTER_EM_StaffHostelListModel[] = []
   public UserProfileStatusHistoryList: any = [];
   public isApproveSubmitted: boolean = false;
@@ -95,6 +102,12 @@ export class BTEREMStaffListComponent {
   public isModalOpen: boolean = false;
   _EnumRole = EnumRole;
   _EnumOffice = EnumOffice;
+
+  public U_Add: boolean = false
+  public U_Delete : boolean = false
+  public U_Update: boolean = false
+  public U_View: boolean = false
+  public U_Print : boolean = false
   constructor(
     private loaderService: LoaderService,
     private bterEstablishManagementService: BTEREstablishManagementService,
@@ -107,6 +120,8 @@ export class BTEREMStaffListComponent {
     private userRequestService: UserRequestService,
     private activatedRoute: ActivatedRoute,
     private guestRoomManagmentService: GuestRoomManagmentService,
+    private permissionService: MenuPermissionService,
+    private router: Router,
   ) {}
 
   async ngOnInit() {
@@ -193,6 +208,11 @@ export class BTEREMStaffListComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
+    // set add, edit, update, delete, view permission 
+    this.menuDataModel = await JSON.parse(String(localStorage.getItem('Menu')));
+    await this.setUserMenuPermission();
+    // this.permissions = this.permissionService.getCurrentPermission();
+    // console.log( 'Current Permission:', this.permissions );
 
     let statusID = Number(this.activatedRoute.snapshot.queryParamMap.get("status")?.toString());
    
@@ -229,6 +249,46 @@ export class BTEREMStaffListComponent {
 
   get _StaffMasterFormGroup() { return this.StaffMasterFormGroup.controls }
   get _StaffMasterFormGroupGuestHouse() { return this.StaffMasterFormGroupGuestHouse.controls }
+
+  async setUserMenuPermission() {
+    debugger
+    const normalizeUrl = (url: string): string => {
+      return (url || '')
+        .trim()
+        .replace(/\\/g, '/')     // \ → /
+        .replace(/^\/+/, '')     // remove starting /
+        .replace(/\/+$/, '')     // remove ending /
+        .split('?')[0]
+        .split('#')[0]
+        .toLowerCase();
+    };
+
+    const currentUrl = normalizeUrl(this.router.url);
+
+    const currentMenu = this.menuDataModel.find((menu: any) => {
+      const menuUrl = normalizeUrl(menu.OnSelect);
+      if (!menuUrl) {
+        return false;
+      }
+      return currentUrl === menuUrl || currentUrl.startsWith(menuUrl + '/');
+    });
+
+    debugger;
+    if (currentMenu) {
+      this.U_Add = currentMenu.U_Add;
+      this.U_Delete = currentMenu.U_Delete;
+      this.U_Update = currentMenu.U_Update;
+      this.U_View = currentMenu.U_View;
+      this.U_Print = currentMenu.U_Print;
+
+    } else {
+      this.U_Add = false;
+      this.U_Delete = false;
+      this.U_Update = false;
+      this.U_View = false;
+      this.U_Print = false;
+    }
+  }
 
   async GetOfficeList() {
     try {
