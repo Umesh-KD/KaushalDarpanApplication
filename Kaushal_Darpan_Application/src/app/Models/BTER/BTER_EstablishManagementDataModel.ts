@@ -985,6 +985,7 @@ export class BTER_EM_RetirementProcessModel {
   public DepartmentID: number = 0;
   public RetirementID: number = 0;
   public ModifyBy: number = 0;
+  public ProfileStatus: number = 0;
   // public RetirementDate: string = '';
   // public RetirementOrderNo: string = '';
   public RetirementOrderDate: string = '';

@@ -801,7 +801,8 @@ export enum EnumEMProfileStatus {
   LockAndSubmit = 289,
   Approve = 247,
   Revert = 249,
-  Reject = 248
+  Reject = 248,
+  Retired=10387
 }
 
 export enum EnumPaperSetterStatus {

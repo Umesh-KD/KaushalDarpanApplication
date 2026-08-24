@@ -158,7 +158,8 @@
                           !row.RoleID.split(',').includes(_EnumRole.GuestHouseIncharge.toString()) && 
                           !row.RoleID.split(',').includes(_EnumRole.GuestRoomWarden.toString()) &&
                           row.ProfileStatusID != _EnumEMProfileStatus.Pending &&
-                          row.ProfileStatusID != _EnumEMProfileStatus.Completed && sSOLoginDataModel.UserID != row.StaffUserID">
+                          row.ProfileStatusID != _EnumEMProfileStatus.Completed && sSOLoginDataModel.UserID != row.StaffUserID 
+                          && row.ProfileStatusID != _EnumEMProfileStatus.Retired">
                   <i [class]="row.ProfileStatusID == _EnumEMProfileStatus.Approve ? 'ti ti-eye' : 'ti ti-check' "></i>
                 </a>
 
@@ -193,10 +194,10 @@
                 </a>
 
                 <!-- *ngIf="this.isApprove==1" -->
-                <!-- <a href="javascript:void(0);" title="Retirement Action" 
+                <a href="javascript:void(0);" title="Retirement Action" 
                   (click)="openModal_RetirementStaff(MyModel_RetirementAction, row)">
                   <i class="ti ti-device-floppy"></i>
-                </a> -->
+                </a>
 
               </div>
             </td>
