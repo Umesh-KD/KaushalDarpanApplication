@@ -437,7 +437,7 @@
                   <i class="ti ti-playlist-add"></i>
                 </a>
 
-                <a href="javascript:void(0);" title="Retirement Action" 
+                <a *ngIf="row.ProfileStatusID != _EnumEMProfileStatus.Retired" href="javascript:void(0);" title="Retirement Action" 
                   (click)="openModal_RetirementStaff(MyModel_RetirementAction, row)">
                   <i class="ti ti-device-floppy"></i>
                 </a>
