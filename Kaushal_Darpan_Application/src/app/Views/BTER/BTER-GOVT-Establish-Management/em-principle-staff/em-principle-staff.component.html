@@ -174,7 +174,7 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Salary Drawn Post <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost" (change)="getBudgetHeadPostWise()">
             <option value="0">--Select--</option>
             <option *ngFor="let item of SactionedPostList" [value]="item.ID">{{item.Name}}</option>
@@ -335,7 +335,7 @@
             <th class="text-left">SSO Id</th>
             <th class="text-left">Contact Details</th>
             <th class="text-left">Staff Type</th>
-            <th class="text-left">Post</th>
+            <th class="text-left">Salary Drawn Post</th>
             <th class="text-left">Role</th>
             <th class="text-left">Course/Branch</th>
             <!-- <th class="text-left">Subject</th> -->
