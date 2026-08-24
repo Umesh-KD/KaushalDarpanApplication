@@ -976,3 +976,21 @@ export class StaffCareerAdvancementDataModel {
   public CASDocument: string = '';
   public Dis_CASDocument: string = '';
 }
+
+
+// Retirement process model
+export class BTER_EM_RetirementProcessModel {
+  public StaffID: number = 0;
+  public StaffUserID: number = 0;
+  public DepartmentID: number = 0;
+  public RetirementID: number = 0;
+  public ModifyBy: number = 0;
+  // public RetirementDate: string = '';
+  // public RetirementOrderNo: string = '';
+  public RetirementOrderDate: string = '';
+  // public RetirementAction: string = '';
+  public RetirementDocument: string = '';
+  public Dis_RetirementDocument: string = '';
+  public RetirementRemarks: string = '';
+}
+
