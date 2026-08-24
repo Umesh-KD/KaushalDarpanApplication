@@ -10,6 +10,9 @@ export class ITIGenerateRollSearchModel extends RequestBaseModel {
   public ShowAll?: number = 0;
   public Status?: number = 0;
   public StudentTypeID?: number = 0;
+
+  public ActionName?: string = '';
+
 }
 
 
