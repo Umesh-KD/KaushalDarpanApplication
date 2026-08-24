@@ -110,6 +110,11 @@ export enum EnumRole {
   collegeNodel = 21,
   DTETraing = 16,
 
+  DIRECTOR = 275,
+  HO_DTE = 244,
+  HO_BTER = 272,
+  HO_TTC = 273,
+
   ITIPrincipal = 20,
   TITDTETraining = 22,
   ITI_Verifier = 23,

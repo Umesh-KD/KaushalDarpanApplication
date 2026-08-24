@@ -21,6 +21,7 @@ import { ViewStaffProfileModalComponent } from '../view-staff-profile-modal/view
 import { AssignRoleRightsService } from '../../../../Services/AssignRoleRights/assign-role-rights.service';
 import { UserMasterService } from '../../../../Services/UserMaster/user-master.service';
 import { AssignRoleRightsDataModel, UserMasterModel } from '../../../../Models/UserMasterDataModel';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-em-principle-staff',
@@ -310,7 +311,7 @@ export class EMPrincipleStaffComponent {
 
           let parsedData = JSON.parse(response.Data); // parse string inside Data
           if (parsedData != null) {
-            await this.DuplicateCheck(this.requestSSoApi.SSOID);    
+            // await this.DuplicateCheck(this.requestSSoApi.SSOID);    
             //this.formData.Displayname = parsedData.displayName
             this.isSSOVisible = true;
             this.formData.Displayname = parsedData.displayName;
@@ -612,10 +613,15 @@ async GetTechnicianDll() {
 
   async resetBranchValidators() {
     const PostID = [76,78,80,81]
-    if(PostID.includes(Number(this.formData.PostID)) ){
-      this.AddStaffBasicDetailFromGroup.get('BranchID')?.clearValidators();
-    } else {
-      this.AddStaffBasicDetailFromGroup.get('BranchID')?.setValidators([DropdownValidators]);
+    if(
+      this.formData.StaffTypeID == this._BTERGovtEM_EnumStaffType.Teaching && 
+      this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.Lecturer
+    ){
+      if(PostID.includes(Number(this.formData.PostID)) ){
+        this.AddStaffBasicDetailFromGroup.get('BranchID')?.clearValidators();
+      } else {
+        this.AddStaffBasicDetailFromGroup.get('BranchID')?.setValidators([DropdownValidators]);
+      }
     }
 
     this.AddStaffBasicDetailFromGroup.get('BranchID')?.updateValueAndValidity();
@@ -822,6 +828,18 @@ async GetTechnicianDll() {
     try {
       this.isSubmitted = true;
       if (this.AddStaffBasicDetailFromGroup.invalid) {
+        Object.keys(this.AddStaffBasicDetailFromGroup.controls).forEach(key => {
+          const control = this.AddStaffBasicDetailFromGroup.get(key);
+
+          if (control && control.invalid) {
+            this.toastr.error(`Control ${key} is invalid`);
+            Object.keys(control.errors!).forEach(errorKey => {
+              this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+            });
+          }
+        });
+
+        this.toastr.error("Please fill all the required fields");
         return
       }    
 
@@ -1649,7 +1667,33 @@ async GetCategroyData() {
     await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
   }
 
-  async exportToExcel() {}
+  async exportToExcel() {
+
+    const unwantedColumns = [
+      'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo','LevelName','OfficeName','PostName','UserID','IsNodal','ProfileStatusID',
+      'StaffID','StaffUserID','DistrictName','uod_InstituteID','RoleID', 
+      'StaffTypeID', 'CourseID', 'SubjectID', 'DesignationID', 'HigherQualificationID', 'ProfilePhoto',
+      'Dis_ProfileName', 'AdharCardPhoto', 'AdharCardNumber', 'PanCardNumber', 'PanCardPhoto', 'Dis_AdharCardNumber', 
+      'Dis_PanCardNumber', 'StateID', 'DistrictID', 'Certificate', 'Dis_Certificate', 'SpecializationSubjectID',
+      'RTS', 'ExaminerStatus', 'InstituteID', 'IsDownloadCertificate', 'ABC', 'Status', 'BankAccountNo', 'IFSCCode',
+      'BankAccountName', 'BankName', 'UserCreatedBy', 'MainStaffUserID'
+    ];
+    const filteredData = this.StaffMasterList.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    const timestamp = new Date().getTime();
+    XLSX.writeFile(wb, `StaffListData_${timestamp}.xlsx`);
+  }
 
   async GetAssignedRole_USerWise(UserID: number) {
     try {

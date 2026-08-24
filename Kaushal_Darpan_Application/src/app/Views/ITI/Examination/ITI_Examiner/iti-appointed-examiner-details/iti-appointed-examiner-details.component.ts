@@ -131,6 +131,7 @@ export class ItiAppointedExaminerDetailsComponent {
       debugger
   
       sessionStorage.setItem('SemesterID', this.selectedrow.SemesterID.toString());
+      sessionStorage.setItem('CenterID', this.selectedrow.CenterID.toString());
       sessionStorage.setItem('SubjectName', this.selectedrow.SubjectName);
 
       sessionStorage.setItem('ExaminerID', this.selectedrow.ExaminerID);

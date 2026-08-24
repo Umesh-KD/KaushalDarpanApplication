@@ -106,3 +106,24 @@ export class ItiPlanningSearchModel {
   public AnnoucementType:number=0
   public Esttablishment_Year: number = 0
 }
+
+export class MenuDataModel {
+  public GroupId: number = 0
+  public GroupId_Count: number = 0
+  public LevelNo: number = 0
+  public MenuId: number = 0
+  public ParentId: number = 0
+  public Priority: number = 0
+
+  public IDdd: string = ''
+  public Icon: string = ''
+  public MenuName: string = ''
+  public OnSelect: string = ''
+
+  public IsMobileMenu: boolean = false
+  public U_Add: boolean = false
+  public U_Delete: boolean = false
+  public U_Print: boolean = false
+  public U_Update: boolean = false
+  public U_View: boolean = false
+}

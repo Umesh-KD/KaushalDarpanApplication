@@ -468,7 +468,7 @@ export class AddStaffInitialDetailsComponent {
       request.Action = "GetSanctionedPost";
       await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.SactionedPostList = data['Data'];
+        this.SactionedPostList = data['Data'] || [];
       })
     } catch (error) {
       console.error(error);
@@ -574,10 +574,10 @@ debugger
         data = JSON.parse(JSON.stringify(data));
         let response = JSON.parse(JSON.stringify(data));
         if (response?.Data) {
-
+          debugger
           let parsedData = JSON.parse(response.Data); // parse string inside Data
           if (parsedData != null) {
-            await this.DuplicateCheck(this.requestSSoApi.SSOID);
+            // await this.DuplicateCheck(this.requestSSoApi.SSOID);
             //this.formData.Displayname = parsedData.displayName
             this.isSSOVisible = true;
             this.formData.Name = parsedData.displayName;
@@ -595,11 +595,6 @@ debugger
               this.AddStaffBasicDetailFromGroup.controls['ddlPost'].clearValidators();
              
               this.GetRoleMasterData();
-             
-
-              
-             
-
             } else {
               this.AddStaffBasicDetailFromGroup.controls['Office'].setValidators([DropdownValidators]);
               this.AddStaffBasicDetailFromGroup.controls['StaffType'].setValidators([DropdownValidators]);
@@ -654,7 +649,7 @@ debugger
           
           }
           else if (data.State == EnumStatus.Warning) {
-            const msg = `SSOID ${SSOID} is already mapped in system.</br> If you want to assign a new role, please use the Additional Role Mapping section.`;
+            const msg = `SSOID ${SSOID} is already mapped in system.</br> If you want to assign a new role, please use the Assign Role Menu.`;
             this.sweetAlert2.Confirmation(`${msg}`, async (result: any) => {
               this.formData.SSOID = '';
               this.isSSOVisible = false;
