@@ -394,7 +394,8 @@
                           row.ProfileStatusID != _EnumEMProfileStatus.Approve &&
                           row.ProfileStatusID != _EnumEMProfileStatus.Revert &&
                           row.ProfileStatusID != _EnumEMProfileStatus.Completed &&
-                          row.ProfileStatusID != _EnumEMProfileStatus.Pending && sSOLoginDataModel.UserID != row.StaffUserID"
+                          row.ProfileStatusID != _EnumEMProfileStatus.Pending && sSOLoginDataModel.UserID != row.StaffUserID && 
+                          row.ProfileStatusID != _EnumEMProfileStatus.Retired"
 
                   (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, false)">
                   <i class="ti ti-check"></i>
@@ -431,9 +432,14 @@
                   <i class="ti ti-eye" *ngIf="row.ProfileStatusID == _EnumEMProfileStatus.Approve"></i>
                 </a>
 
-                <a href="javascript:void(0);" title="Assign Role Rights" 
+                <a *ngIf="row.ProfileStatusID != _EnumEMProfileStatus.Retired" href="javascript:void(0);" title="Assign Role Rights" 
                   (click)="ViewandUpdate(MyModel_Action, row)">
                   <i class="ti ti-playlist-add"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="Retirement Action" 
+                  (click)="openModal_RetirementStaff(MyModel_RetirementAction, row)">
+                  <i class="ti ti-device-floppy"></i>
                 </a>
 
               </div>
@@ -1515,4 +1521,116 @@
       </div>
     </div>
   </div>
+</ng-template>
+
+
+<ng-template #MyModel_RetirementAction let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transBTERon-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+
+  <div class="modal-content">
+    <div class="card">
+
+      <div class="card-header flex justify-between items-center">
+        <b>
+          <i class="fa fa-user-clock"></i>
+          &nbsp; Retirement Action
+        </b>
+        <button
+          type="button"
+          class="btn bg-info text-white"
+          (click)="CloseModal_Retirement()"
+          title="Close">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+
+
+      <div class="card-body">
+        <div
+          class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Retirement Date
+              <span class="StarMarking">*</span>
+            </label>
+            <input
+              type="date"
+              class="form-input w-full"
+              [(ngModel)]="RetirementProcessModel.RetirementOrderDate">
+          </div>
+
+          <div>
+            <label
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              for="fileRetirementOrder">
+              Upload Retirement Order
+              <span class="StarMarking">*</span>
+            </label>
+            <div class="flex fileUploader">
+              <!-- File Input -->
+              <input
+                class="block form-input w-full text-sm text-gray-900
+                       border border-gray-300 rounded-lg cursor-pointer
+                       bg-gray-50 dark:text-gray-400
+                       focus:outline-none dark:bg-gray-700
+                       dark:border-gray-600
+                       dark:placeholder-gray-400"
+                id="fileRetirementOrder"
+                type="file"
+                (change)="onRetirementOrderChange($event, 'Retirement')"
+                accept=".pdf,.jpg,.jpeg,.png">
+              <!-- File Name -->
+              <label for="fileRetirementOrder">
+                <span>Choose File</span>
+                {{
+                  RetirementProcessModel.Dis_RetirementDocument === ''
+                    ? 'No File Choosen'
+                    : RetirementProcessModel.Dis_RetirementDocument
+                }}
+              </label>
+              <div class="flex">
+                 <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + RetirementProcessModel.RetirementDocument}}"
+                   *ngIf="RetirementProcessModel.RetirementDocument != ''" class="btn bg-primary text-white m-0" target="_blank" title="View Retirement Order">
+                  <i class="ti ti-eye"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <label
+            class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Remark
+            <span class="StarMarking">*</span>
+          </label>
+          <textarea
+            class="form-input w-full"
+            rows="3"
+            [(ngModel)]="RetirementProcessModel.RetirementRemarks"
+            placeholder="Enter retirement remark">
+          </textarea>
+        </div>
+        <div
+          class="flex justify-start flex-wrap items-center mb-3 p-3 py-2 mt-5 border-t border-gray-200">
+          <button
+            type="button"
+            class="btn bg-success btn-sm text-white" (click)="SaveRetirementAction()">
+            <i class="ti ti-device-floppy" ></i>
+            Save
+          </button>
+          <button
+            type="button"
+            class="btn bg-danger btn-sm text-white mr-2"
+            (click)="CloseModal_Retirement()">
+            <i class="ti ti-x"></i>
+            Cancel
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
 </ng-template>

@@ -177,7 +177,8 @@
                             && !(row.ProfileStatusID == _EnumEMProfileStatus.Pending
                             || row.ProfileStatusID == _EnumEMProfileStatus.Completed
                             || row.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit
-                            || row.ProfileStatusID == _EnumEMProfileStatus.Revert) && sSOLoginDataModel.UserID != row.StaffUserID"
+                            || row.ProfileStatusID == _EnumEMProfileStatus.Revert) && sSOLoginDataModel.UserID != row.StaffUserID
+                            && row.ProfileStatusID != _EnumEMProfileStatus.Retired"
                    [title]="row.ProfileStatusID == _EnumEMProfileStatus.Approve ? 'View' : 'View & Approve'"
                    (click)="openModal_ApproveStaffProfileGuestHouse(Modal_ApproveStaffProfileGuestHouse, row.StaffUserID, row.SSOID, true,row.RoleID)">
                   <i [class]="row.ProfileStatusID == _EnumEMProfileStatus.Approve ? 'ti ti-eye' : 'ti ti-check' "></i>
@@ -189,7 +190,8 @@
                           row.RoleID.split(',').includes(_EnumRole.GuestRoomWarden.toString()) ) &&
                         ((sSOLoginDataModel.RoleID == _EnumRole.JD_TTC && row.OfficeID == _EnumOffice.TTC_LRDC) || 
                           (sSOLoginDataModel.RoleID == _EnumRole.Admin && row.OfficeID == _EnumOffice.BTER) || 
-                          (sSOLoginDataModel.RoleID == _EnumRole.DTE && (row.OfficeID == _EnumOffice.DTE || row.OfficeID == _EnumOffice.COLLEGE)))" 
+                          (sSOLoginDataModel.RoleID == _EnumRole.DTE && (row.OfficeID == _EnumOffice.DTE || row.OfficeID == _EnumOffice.COLLEGE)))
+                          && row.ProfileStatusID != _EnumEMProfileStatus.Retired" 
                   (click)="onEditGuestHouse(Modal_GuestHouseEdit, row)"><i class="ti ti-pencil"></i>
                 </a>
 
@@ -1937,7 +1939,7 @@
         <button
           type="button"
           class="btn bg-info text-white"
-          (click)="CloseModal()"
+          (click)="CloseModal_Retirement()"
           title="Close">
           <i class="ti ti-x"></i>
         </button>
@@ -2019,11 +2021,10 @@
             <i class="ti ti-device-floppy" ></i>
             Save
           </button>
-
           <button
             type="button"
             class="btn bg-danger btn-sm text-white mr-2"
-            (click)="CloseModal()">
+            (click)="CloseModal_Retirement()">
             <i class="ti ti-x"></i>
             Cancel
           </button>

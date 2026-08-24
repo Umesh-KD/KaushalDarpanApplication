@@ -896,6 +896,15 @@ export class BTEREMStaffListComponent {
     this.RequestUpdateStatus.Remark = '';
     this.isSubmitted = false;
   }
+
+  CloseModal_Retirement() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.RetirementProcessModel.RetirementRemarks = '';
+    this.RetirementProcessModel.RetirementOrderDate = '';
+    this.RetirementProcessModel.RetirementDocument = '';
+  }
+
   async GetDesignationMasterData() {
     try {
       this.loaderService.requestStarted();
@@ -1249,7 +1258,8 @@ export class BTEREMStaffListComponent {
           data = JSON.parse(JSON.stringify(data));
           if(data.State == EnumStatus.Success) {
             this.toastr.success(data.Message);
-            await this.CloseModal_GuestHouseEdit();
+            await this.CloseModal_Retirement();
+            await this.BTER_EM_GetStaffList();
           } else if (data.state === EnumStatus.Warning) {
             this.toastr.warning(data.Message)
           } else {
