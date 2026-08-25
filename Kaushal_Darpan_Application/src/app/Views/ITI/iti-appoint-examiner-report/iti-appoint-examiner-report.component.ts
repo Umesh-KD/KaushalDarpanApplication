@@ -222,6 +222,45 @@ export class AppointexaminerreportComponent {
       });
   }
 
+
+
+  async downloadCenterWiseReportnew() {
+    debugger
+
+    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.searchRequest.sSOID = this.sSOLoginDataModel.SSOID;
+
+    await this.examinerservice.TeacherForExaminerReportDewnloadPdfNew(this.searchRequest)
+      .subscribe({
+        next: (blob: Blob) => {
+
+          const now = new Date();
+          const dateTime =
+            now.getFullYear().toString() +
+            ('0' + (now.getMonth() + 1)).slice(-2) +
+            ('0' + now.getDate()).slice(-2) + '_' +
+            ('0' + now.getHours()).slice(-2) +
+            ('0' + now.getMinutes()).slice(-2);
+
+          const fileName = `Teacher_For_Examiner_Report_${dateTime}.pdf`;
+
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+        },
+        error: (err) => {
+          console.error(err);
+          this.toastr.warning('Failed to download report');
+        }
+      });
+  }
+
+
   SaveExaminerUploadFileRequest(content: any) {
     debugger
     this.uploaddataFormGroup.reset();

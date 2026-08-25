@@ -237,6 +237,15 @@ export class ItiExaminerService {
       }
     );
   }
+  public TeacherForExaminerReportDewnloadPdfNew(payload: any) {
+    debugger
+    return this.http.post(`${this.APIUrl}/TeacherForExaminerReportDewnloadPdfNew/`,
+      payload,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
 
 
   public async ITIExaminerUploadFiles(request: ITIExaminerUploadFilesModel) {
