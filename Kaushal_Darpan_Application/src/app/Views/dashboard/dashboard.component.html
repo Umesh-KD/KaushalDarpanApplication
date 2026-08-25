@@ -28,7 +28,15 @@
 <!--<app-college-master *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Principal || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon"></app-college-master>-->
 <app-student-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Student"></app-student-dashboard>
 <app-copy-checker-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Examiner || this.sSOLoginDataModel.RoleID == _EnumRole.Examiner_NonEng"></app-copy-checker-dashboard>
-<app-dte-dashboard *ngIf="this.sSOLoginDataModel.RoleID ==_EnumRole.DTE || this.sSOLoginDataModel.RoleID ==_EnumRole.DTELateral || this.sSOLoginDataModel.RoleID ==_EnumRole.DTENON || this.sSOLoginDataModel.RoleID == 80 || this.sSOLoginDataModel.RoleID ==81"></app-dte-dashboard>
+<app-dte-dashboard 
+   *ngIf="this.sSOLoginDataModel.RoleID ==_EnumRole.DTE || 
+         this.sSOLoginDataModel.RoleID ==_EnumRole.DTELateral || 
+         this.sSOLoginDataModel.RoleID ==_EnumRole.DTENON || 
+         this.sSOLoginDataModel.RoleID == 80 || 
+         this.sSOLoginDataModel.RoleID ==81 ||
+         this.sSOLoginDataModel.RoleID ==_EnumRole.DIRECTOR ||
+         this.sSOLoginDataModel.RoleID ==_EnumRole.HO_DTE">
+</app-dte-dashboard>
 <app-emitra-dashboard *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.Emitra"></app-emitra-dashboard>
 <app-verifier-dashboard *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.BTERVerifier || this.sSOLoginDataModel.RoleID==_EnumRole.BTERVerifierDiplomaNonENG || this.sSOLoginDataModel.RoleID==_EnumRole.BTERVerifierDiplomaLaterl || this.sSOLoginDataModel.RoleID==_EnumRole.BTERVerifierDegreeNonEngg || this.sSOLoginDataModel.RoleID==_EnumRole.BTERVerifierDegreeLateral || this.sSOLoginDataModel.RoleID==_EnumRole.ITI_Verifier"></app-verifier-dashboard>
 <app-college-dashboard *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.collegeNodel"></app-college-dashboard>
