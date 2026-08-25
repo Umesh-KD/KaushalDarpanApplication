@@ -141,7 +141,7 @@
                      [queryParams]="{ StaffID: encodeURIComponent(encryptParameter(row.ExaminerID)) }">
                     <i class="ti ti-pencil"></i>
                   </a>
-                  <!--<a href="javascript:void(0)" title="Delete" (click)="btnDeleteOnClick(row.ExaminerID)"><i class="ti ti-trash"></i></a>-->
+                  <a href="javascript:void(0)" title="Delete" (click)="btnDeleteOnClick(row.ExaminerID)"><i class="ti ti-trash"></i></a>
                   <!--<a href="javascript:void(0)" title="Revert Application" (click)="btnRevertOnClick(row.ExaminerID)"><i class="ti ti-arrow-back-up-double"></i></a>-->
                   <a *ngIf="row.IsAllFinalSubmitted === 0 && row.AssignedCount > 0" (click)="RevertBundle(row.ExaminerID)" title="View">
                     <i class="ti ti-lock"></i>
