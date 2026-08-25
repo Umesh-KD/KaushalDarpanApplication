@@ -39,6 +39,7 @@ export class EstablishmentReportBTERComponent {
   public StreamMasterDDLList: any[] = [];
   public EmployeeQualificationDDLList:any=[];
   public PayLevelDDLList:any=[];
+  public InstituteMasterDDLList:any[]=[]
 
   public Table_SearchText: string = '';
   public act: string = '';
@@ -80,6 +81,7 @@ export class EstablishmentReportBTERComponent {
     await this.GetQualificationMasterData();
     await this.GetPayLevelDDL();
     await this.BTER_EM_GetStaffList();
+    await this.getInstituteMasterList();
 
   }
 
@@ -124,6 +126,20 @@ export class EstablishmentReportBTERComponent {
     this.searchRequest = new BTER_EM_StaffListSearchModel();
     await this.BTER_EM_GetStaffList();
   }
+
+  //   async GetBTER_BGT_BudgetType() {
+  //   try {
+  //       await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1,this.formData.BugetHeadTypeID)
+  //       .then((data: any) => {
+  //         data = JSON.parse(JSON.stringify(data));
+  //         this.BugetHeadList = data['Data'];
+  //       }, error => console.error(error));
+  //   }
+  //   catch (Ex) {
+  //     console.log(Ex);
+  //   }
+  // }
+
 
   async GetDDLMasterData() {
      ;  
@@ -291,6 +307,24 @@ export class EstablishmentReportBTERComponent {
     doc.save('Employee_List.pdf');
   }
 
+   async getInstituteMasterList() {
+    try {
+      const request: any = {};
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      request.EndTermId = this.sSOLoginDataModel.EndTermID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.ManagementTypeID = 1; // static passing because we are using this only for govt. institute
+      request.Action = "GetInstituteMasterDDL_BTER_EM";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.InstituteMasterDDLList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
   async GetDesignationData() {
     try {
       this.loaderService.requestStarted();

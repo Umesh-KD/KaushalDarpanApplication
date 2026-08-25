@@ -59,7 +59,7 @@
 
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==7">
+        <div *ngIf="sSOLoginDataModel.RoleID== _EnumRole.Principal || sSOLoginDataModel.RoleID== _EnumRole.PrincipalNon">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute Name <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="InstituteID">
             <option value="0">Choose Option</option>
@@ -335,8 +335,9 @@
             <th class="text-left">SSO Id</th>
             <th class="text-left">Contact Details</th>
             <th class="text-left">Staff Type</th>
+            <th class="text-left">Designation as per service book</th>
             <th class="text-left">Salary Drawn Post</th>
-            <th class="text-left">Role</th>
+            <th class="text-left">Role/Additional Role</th>
             <th class="text-left">Course/Branch</th>
             <!-- <th class="text-left">Subject</th> -->
             <!-- <th class="text-left">Address Details</th> -->
@@ -356,6 +357,7 @@
             </td>
             <td>{{row.StaffType}}</td>
             <td> {{row.DesignationName}}</td>
+            <td> {{row.SalaryDrownPost}}</td>
             <td> {{row.Role}} </td>
             <td>{{row.Stream}}</td>
             <!-- <td>{{row.Subject}}</td> -->
@@ -382,15 +384,18 @@
                   <i class="ti ti-trash"></i>
                 </a>
 
-                <a href="javascript:void(0);" title="View"
-                   *ngIf="row.RoleID != _EnumRole.GuestFaculty && row.RoleID != _EnumRole.ShikshaSambal && sSOLoginDataModel.UserID != row.StaffUserID"
-                   (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)">
+                <a href="javascript:void(0);" title="View" 
+                  *ngIf="!row.Role.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
+                          !row.Role.split(',').includes(_EnumRole.ShikshaSambal.toString()) &&
+                          sSOLoginDataModel.UserID != row.StaffUserID" 
+                  (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)">
                   <i class="ti ti-eye"></i>
                 </a>
 
                 <a href="javascript:void(0);" title="Approve Profile"
-                   *ngIf="row.RoleID != _EnumRole.GuestFaculty &&
-                          row.RoleID != _EnumRole.ShikshaSambal &&
+                  *ngIf="!row.Role.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
+                          !row.Role.split(',').includes(_EnumRole.ShikshaSambal.toString()) &&
+
                           row.ProfileStatusID != _EnumEMProfileStatus.Approve &&
                           row.ProfileStatusID != _EnumEMProfileStatus.Revert &&
                           row.ProfileStatusID != _EnumEMProfileStatus.Completed &&
@@ -412,18 +417,20 @@
                   <i class="ti ti-list"></i>
                 </a>
 
-                <a href="javascript:void(0);" title="Edit Hostel"
-                   *ngIf="row.RoleID == _EnumRole.HostelWarden"
-                   (click)="onEditHostel(Model_EditHostel, row)">
+                <a  href="javascript:void(0);" title="Edit Hostel" 
+                  *ngIf="row.Role.split(',').includes(_EnumRole.HostelWarden.toString())"
+                  (click)="onEditHostel(Model_EditHostel, row)">
                   <i class="ti ti-pencil"></i>
                 </a>
 
                 <a href="javascript:void(0);" title="View"
-                   *ngIf="(row.RoleID == _EnumRole.GuestFaculty || row.RoleID == _EnumRole.ShikshaSambal)
-                        && !(row.ProfileStatusID == _EnumEMProfileStatus.Pending
-                            || row.ProfileStatusID == _EnumEMProfileStatus.Completed || row.ProfileStatusID ==  _EnumEMProfileStatus.Revert)
-                        && sSOLoginDataModel.UserID != row.StaffUserID"
-                   (click)="openModal_ApproveStaffProfileOterFaculty(Modal_ApproveStaffProfileOterFaculty, row.StaffUserID, row.SSOID, true)">
+                  *ngIf="row.Role.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
+                        row.Role.split(',').includes(_EnumRole.ShikshaSambal.toString()) &&
+                        !(row.ProfileStatusID == _EnumEMProfileStatus.Pending ||
+                          row.ProfileStatusID == _EnumEMProfileStatus.Completed || 
+                          row.ProfileStatusID ==  _EnumEMProfileStatus.Revert) &&
+                        sSOLoginDataModel.UserID != row.StaffUserID"  
+                  (click)="openModal_ApproveStaffProfileOterFaculty(Modal_ApproveStaffProfileOterFaculty, row.StaffUserID, row.SSOID, true)">
                   <i class="ti ti-check" *ngIf="(row.ProfileStatusID != _EnumEMProfileStatus.Approve ||
                                                 row.ProfileStatusID !=  _EnumEMProfileStatus.Revert ||
                                                 row.ProfileStatusID != _EnumEMProfileStatus.Completed ||

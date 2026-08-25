@@ -28,6 +28,8 @@ export class BTER_EM_StaffListSearchModel {
   QualificationIDbe: number = 0;
   QualificationIDaf: number = 0;
   DateOfImplementation: string = '';
+  SalaryDrawnInstituteID?: number = 0;
+  BugetHeadID?:number=0;
 }
 
 export class BTER_EM_AddStaffDataModel extends RequestBaseModel {
