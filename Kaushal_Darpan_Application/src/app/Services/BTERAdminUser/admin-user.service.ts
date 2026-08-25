@@ -89,4 +89,15 @@ export class AdminUserService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async GetAllstaffBranch(searchRequest: AdminUserSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllstaffBranch`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 }

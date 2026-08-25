@@ -24,6 +24,8 @@ import { AssignRoleRightsDataModel, UserMasterModel } from '../../../../Models/U
 import * as XLSX from 'xlsx';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { AppsettingService } from '../../../../Common/appsetting.service';
+import { AdminUserService } from '../../../../Services/BTERAdminUser/admin-user.service';
+import { AdminUserSearchModel } from '../../../../Models/AdminUserDataModel';
 
 @Component({
   selector: 'app-em-principle-staff',
@@ -36,7 +38,7 @@ export class EMPrincipleStaffComponent {
   StaffMasterFormGroup!: FormGroup;
   StaffMasterFormGroupOterFaculty!: FormGroup;
   groupForm!: FormGroup;
-
+  hodbranchsearchrequest = new AdminUserSearchModel()
   public formData = new BTER_EM_AddStaffBasicDetailDataModel();
   public searchRequest = new BTER_EM_StaffMasterSearchModel();
   public requestSSoApi = new CommonVerifierApiDataModel();
@@ -55,6 +57,7 @@ export class EMPrincipleStaffComponent {
 
   public GuestHouseNameList: any = [];
   public UserProfileStatusHistoryList: any = [];
+  public Branchhodlist: any = [];
   _EnumRole = EnumRole;
   PostList: any[] = [];
   public StaffLevelList: any = [];
@@ -125,7 +128,8 @@ export class EMPrincipleStaffComponent {
     private guestRoomManagmentService: GuestRoomManagmentService,
     private assignRoleRightsService: AssignRoleRightsService,
     private UserMasterService: UserMasterService,
-    private appsettingConfig:AppsettingService,
+    private appsettingConfig: AppsettingService,
+    private adminUserService: AdminUserService,
   ) {}
 
   async ngOnInit() {
@@ -1971,4 +1975,45 @@ async GetCategroyData() {
     }
   }
 
+
+  async ViewAssignBranch(content:any,row:any) {
+    try {
+
+      //this.searchRequest.UserID = this.AddParent.UserID;
+      //this.searchRequest.UserAdditionID = this.AddParent.UserAdditionalID;
+      //this.searchRequest.Eng_NonEng = this.AddParent.CourseTypeID;
+      //this.searchRequest.InstituteID = this.AddParent.InstituteID;
+
+      //this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      //this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.Branchhodlist=[]
+        this.hodbranchsearchrequest.UserID= row.MainStaffUserID,
+          this.hodbranchsearchrequest.UserAdditionID = 0,
+          this.hodbranchsearchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng,
+        this.hodbranchsearchrequest.InstituteID= row.InstituteID,
+        this.hodbranchsearchrequest.RoleID=this.sSOLoginDataModel.RoleID,
+          this.hodbranchsearchrequest.DepartmentID= this.sSOLoginDataModel.DepartmentID
+     
+      this.loaderService.requestStarted();
+
+      await this.adminUserService.GetAllstaffBranch(this.hodbranchsearchrequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.Branchhodlist = data.Data;
+
+
+        }, (error: any) => console.error(error))
+
+      //console.log(StaffUserID, "modal");
+      this.modalReference = this.modalService.open(content, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 }
