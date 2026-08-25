@@ -170,6 +170,33 @@
             [(ngModel)]="searchRequest.DateOfImplementation" />
         </div>
 
+        <div >
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute from which Salary is drawn</label>
+            <select class="form-select " name="SalaryDrawnInstituteID" id="SalaryDrawnInstituteID"
+                    [(ngModel)]="searchRequest.SalaryDrawnInstituteID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            </select>
+        </div>
+        
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Type<span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="searchRequest.BugetHeadTypeID" >
+            <option value="0">--Select--</option>
+            <option value="1">Planned Budget</option>
+            <option value="2">Non-Planned Budget</option>
+          </select>
+        </div> -->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="searchRequest.BugetHeadID" >
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of BugetHeadList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+
 
       </div>
       <div class="flex justify-center">
