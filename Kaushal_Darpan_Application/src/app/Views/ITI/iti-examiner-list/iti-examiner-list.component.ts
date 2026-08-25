@@ -703,6 +703,7 @@ export class ItiExaminerListComponent implements OnInit {
     this.requestpdf.ExaminerID = item?.ExaminerID
     this.requestpdf.EndTermID = this.sSOLoginDataModel.EndTermID;
 
+
     await this.itiexaminerservice.TeacherForExaminerReportDewnloadPdf(this.requestpdf)
       .subscribe({
         next: (blob: Blob) => {
