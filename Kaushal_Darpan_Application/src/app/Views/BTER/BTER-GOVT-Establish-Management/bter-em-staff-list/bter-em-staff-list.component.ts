@@ -5,7 +5,7 @@ import { MenuDataModel, SSOLoginDataModel } from '../../../../Models/SSOLoginDat
 import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
-import { EnumEMProfileStatus, EnumOffice, EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumEMProfileStatus, EnumOffice, EnumRole, EnumStatus, EnumTransferStatus_ITI_EM } from '../../../../Common/GlobalConstants';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDataModel';
@@ -105,6 +105,7 @@ export class BTEREMStaffListComponent {
   public isModalOpen: boolean = false;
   _EnumRole = EnumRole;
   _EnumOffice = EnumOffice;
+
 
   public U_Add: boolean = false
   public U_Delete : boolean = false
@@ -895,6 +896,15 @@ export class BTEREMStaffListComponent {
     this.RequestUpdateStatus.Remark = '';
     this.isSubmitted = false;
   }
+
+  CloseModal_Retirement() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.RetirementProcessModel.RetirementRemarks = '';
+    this.RetirementProcessModel.RetirementOrderDate = '';
+    this.RetirementProcessModel.RetirementDocument = '';
+  }
+
   async GetDesignationMasterData() {
     try {
       this.loaderService.requestStarted();
@@ -1135,9 +1145,11 @@ export class BTEREMStaffListComponent {
     } else {
       this.isApprove = false;
     }
-    this.RetirementProcessModel.StaffUserID=row.UserID;
-    this.RetirementProcessModel.DepartmentID=row.DepartmentID      
-    this.RetirementProcessModel.StaffID=row.StaffID      
+    this.RetirementProcessModel.StaffUserID=row.StaffUserID;
+    this.RetirementProcessModel.DepartmentID=this.sSOLoginDataModel.DepartmentID
+    this.RetirementProcessModel.StaffID=row.StaffID  
+    this.RetirementProcessModel.ProfileStatus=this._EnumEMProfileStatus.Retired
+
     // this.RetirementProcessModel.StaffUserID=row.UserID   
 
    // will recheck 
@@ -1225,18 +1237,37 @@ export class BTEREMStaffListComponent {
   async SaveRetirementAction() {
     try {     
       debugger   
-      await this.bterEstablishManagementService.SaveRetirementAction(this.RetirementProcessModel)
+      if(this.RetirementProcessModel.RetirementRemarks == null || this.RetirementProcessModel.RetirementRemarks == undefined || this.RetirementProcessModel.RetirementRemarks == ""                
+      ) 
+      {
+        this.toastr.error("Please write Retirement Remarks");
+        return;
+      }
+      else if(this.RetirementProcessModel.RetirementOrderDate == null || this.RetirementProcessModel.RetirementOrderDate == undefined || this.RetirementProcessModel.RetirementOrderDate == "")
+      {
+        this.toastr.error("Please select Retirement Order date");
+        return;
+      }
+      else if(this.RetirementProcessModel.RetirementDocument == null || this.RetirementProcessModel.RetirementDocument == undefined || this.RetirementProcessModel.RetirementDocument == ""){
+        this.toastr.error("Please upload Retirement Order Document");
+        return
+      }
+      else{
+        await this.bterEstablishManagementService.SaveRetirementAction(this.RetirementProcessModel)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if(data.State == EnumStatus.Success) {
             this.toastr.success(data.Message);
-            await this.CloseModal_GuestHouseEdit();
+            await this.CloseModal_Retirement();
+            await this.BTER_EM_GetStaffList();
           } else if (data.state === EnumStatus.Warning) {
             this.toastr.warning(data.Message)
           } else {
             this.toastr.error(data.ErrorMessage)
           }
         }, (error: any) => console.error(error))
+      }
+      
     } catch (error) {
       console.error(error)
     }
