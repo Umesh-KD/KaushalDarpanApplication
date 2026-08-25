@@ -265,6 +265,7 @@
       <div class="flex">
 
         <button *ngIf="StaffForExaminerList.length!=0" type="button" class="btn bg-info text-white inline-block" (click)="SaveStudent()">Assign Student</button>
+        <button *ngIf="StaffForExaminerList.length!=0 && searchRequest.Status==1 " type="button" class="btn bg-danger text-white inline-block" (click)="DeleteStudent()">Remove Student</button>
       </div>
       <div>
         <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>

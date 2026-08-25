@@ -98,6 +98,18 @@ export class ItiExaminerService {
       ).toPromise();
   }
 
+
+
+  public async DeleteStudent(request: ItiAssignStudentExaminer[]) {
+    const body = JSON.stringify(request);
+
+    return this.http.post(`${this.APIUrl}/DeleteStudent`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
     public async GetItiExaminerDashboardTiles(request: ITI_ExaminerDashboardModel) {
         var body = JSON.stringify(request);
         return await this.http.post(`${this.APIUrl}/GetItiExaminerDashboardTiles`, body, this.headersOptions)
