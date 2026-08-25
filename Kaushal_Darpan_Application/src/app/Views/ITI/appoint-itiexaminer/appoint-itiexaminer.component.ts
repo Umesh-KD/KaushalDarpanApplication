@@ -656,6 +656,67 @@ export class AppointITIExaminerComponent {
     });
   }
 
+
+  async DeleteStudent() {
+    //validation    
+
+    const isSelected = this.StaffForExaminerList.some(x => x.selected);
+    if (!isSelected) {
+      this.toastr.error("Please select at least one STUDENT!");
+      return;
+    }
+    // confirm
+    this.Swal2.Confirmation("Are you sure you want to remove this students?", async (result: any) => {
+      //confirmed
+      if (result.isConfirmed) {
+        try {
+          this.isSubmitted = true;
+          // Filter out only the selected students
+          const selectedStudents = this.StaffForExaminerList.filter(x => x.selected);
+          selectedStudents.forEach(e => {
+            e.ExaminerID = this.ExaminerID;
+            e.EndTermID = this.sSOLoginDataModel.EndTermID;
+            e.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+            e.UserID = this.sSOLoginDataModel.UserID;
+
+            if (this.searchRequest.SubjectType == 1) {
+              e.IsPractical = false;
+              e.IsTheory = true;
+            } else if (this.searchRequest.SubjectType == 2) {
+              e.IsPractical = true;
+              e.IsTheory = false;
+            }
+          });
+
+          // Call service to save student exam status
+          await this.examinerservice.DeleteStudent(selectedStudents)
+            .then(async (data: any) => {
+              this.State = data['State'];
+              this.Message = data['Message'];
+              this.ErrorMessage = data['ErrorMessage'];
+              //
+              if (this.State == EnumStatus.Success) {
+                this.toastr.success(this.Message)
+                this.getStaffForExaminerData()
+                /*         await this.GetAllStudent();*/
+              }
+              else if (this.State == EnumStatus.Warning) {
+                this.toastr.warning(this.Message)
+              }
+              else {
+                this.toastr.error(this.ErrorMessage)
+              }
+            })
+        } catch (ex) {
+          console.log(ex);
+        }
+      }
+    });
+  }
+
+
+
+
   onSelectionChange(event: any): void {
     const value = event.value;
 

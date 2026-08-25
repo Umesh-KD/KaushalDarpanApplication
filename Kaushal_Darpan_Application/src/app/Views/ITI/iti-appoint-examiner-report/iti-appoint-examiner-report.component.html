@@ -24,12 +24,18 @@
         <b class="text-1xl-5"><i class="ti ti-list"></i> List</b>
         <div>
           <a href="javascript:void(0)" (click)="downloadCenterWiseReport()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download PDF</a>
+
+          <a href="javascript:void(0)" style="display:none" (click)="downloadCenterWiseReportnew()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download PDF</a>
+
+
           <a href="javascript:void(0)" (click)="exportExcelData()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download Excel</a>
           <!--<a href="javascript:void(0)" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile)" title="View" ><i class="ti ti-eye"></i></a>-->
           <button class="btn bg-info text-white" type="button"
                   (click)="SaveExaminerUploadFileRequest(MyModel_ReplayQuery)">
             Examiner Upload File
           </button>
+
+
         </div>
       </div>
 

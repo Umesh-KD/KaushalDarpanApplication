@@ -33,7 +33,11 @@ export class PublishedRollNoITIComponent {
   requestCenter = new CenterMasterDDLDataModel();
   public InstituteMasterDDL: any = [];
   public Table_SearchText: any = '';
+
   public StudentList: any = [];
+
+  public StudentListExcel: any = [];
+
   public _RollListStatus= EnumRollNoStatus; 
   public StudentTypeList: any = [];
 
@@ -112,7 +116,8 @@ export class PublishedRollNoITIComponent {
     })
   }
 
-  async GetAllData() {
+  async GetAllData()
+  {
     try {
       this.StudentList = [];
       //session
@@ -122,8 +127,7 @@ export class PublishedRollNoITIComponent {
       this.searchRequest.ShowAll = this.selectedEndTermID > 0 ? 1 : 0;
       this.searchRequest.Status = this.currentStatus;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-
- 
+      this.searchRequest.ActionName = 'GetRollList';
       //call
       await this.generateRollNumberITIService.GetPublishedRollDataITI(this.searchRequest).then(
         (data: any) => {
@@ -145,6 +149,45 @@ export class PublishedRollNoITIComponent {
       }, 200);
     }
   }
+
+  async GetAllData_ListExcel(ActionName:string='')
+  {
+    try {
+      this.StudentListExcel = [];
+      //session
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.ShowAll = this.selectedEndTermID > 0 ? 1 : 0;
+      this.searchRequest.Status = this.currentStatus;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.searchRequest.ActionName = ActionName;
+      //call
+      await this.generateRollNumberITIService.GetPublishedRollDataITI(this.searchRequest).then(
+        (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success)
+          {
+            this.StudentListExcel = data['Data'];
+            this.exportToExcel_ReportData();
+          }
+        },
+        (error: any) => console.error(error)
+      );
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+
+
+
   async ResetControl() {
     this.searchRequest = new ITIGenerateRollSearchModel()
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -219,6 +262,99 @@ export class PublishedRollNoITIComponent {
     // Export the file as "GeneratedRollNumber.xlsx"
     XLSX.writeFile(wb, 'PublishedRollNumberData.xlsx');
   }
+
+
+
+  async exportToExcel_ReportData()
+  {
+    // Define the columns in the exact order you want for the export
+    const columnOrder = [
+     'CodeAndName', 'TradeCode', 'TradeName', 'TotalCount'
+    ];
+
+    // Define the list of columns to exclude from the export
+    const unwantedColumns = [
+      'StudentID', 'dob_org', 'StreamID', 'SemesterID', 'InstituteID', 'InstituteCode', 'streamCode', 'MobileNo', 'EndTermID',
+    ];
+
+    // Filter the data based on unwanted columns and map it to the correct order
+    const filteredData = this.StudentListExcel.map((item: any, index: number) => {
+      const filteredItem: any = {};
+
+      // Manually order the columns based on the columnOrder array
+      columnOrder.forEach((column, idx) => {
+        // Add 'SrNo' as the first column (index + 1 for numbering)
+        if (column === 'SrNo') {
+          filteredItem[column] = index + 1;
+        } else if (item[column] && !unwantedColumns.includes(column)) {
+          filteredItem[column] = item[column];
+        }
+      });
+
+      return filteredItem;
+    });
+
+    // Create worksheet from filtered data
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+    // Calculate column widths based on max length of content in each column
+    const columnWidths = columnOrder.map((column) => ({
+      wch:
+        Math.max(
+          column.length, // Header length
+          ...filteredData.map((item: any) =>
+            item[column] ? item[column].toString().length : 0
+          ) // Max content length
+        ) + 2, // Add extra padding
+    }));
+
+    // Apply column widths
+    ws['!cols'] = columnWidths;
+
+    // Apply header styling (bold + background color)
+    const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
+    if (range.s && range.e) {
+      for (let col = range.s.c; col <= range.e.c; col++) {
+        const cellAddress = XLSX.utils.encode_col(col) + '1'; // First row (headers)
+        if (!ws[cellAddress]) continue;
+
+        // Bold the header text and apply a background color
+        ws[cellAddress].s = {
+          font: { bold: true, color: { rgb: 'FFFFFF' } }, // Bold text, white color
+          fill: { fgColor: { rgb: '#f3f3f3' } }, // Light background color
+          alignment: { horizontal: 'center', vertical: 'center' }, // Center-align text
+        };
+      }
+    }
+
+    // Create a new workbook and append the sheet
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+   
+   
+
+    const now = new Date();
+
+    const dateTime =
+      now.getFullYear() +
+      '-' +
+      String(now.getMonth() + 1).padStart(2, '0') +
+      '-' +
+      String(now.getDate()).padStart(2, '0') +
+      '_' +
+      String(now.getHours()).padStart(2, '0') +
+      '-' +
+      String(now.getMinutes()).padStart(2, '0') +
+      '-' +
+      String(now.getSeconds()).padStart(2, '0');
+
+    XLSX.writeFile(wb, `ReportData_${dateTime}.xlsx`);
+
+  }
+
+
+
 
   
   //table feature

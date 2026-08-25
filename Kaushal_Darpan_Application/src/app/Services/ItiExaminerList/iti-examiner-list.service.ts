@@ -54,7 +54,7 @@ export class ItiExaminerListService {
   }
   public async DeleteDataByID(PK_ID: number, ModifyBy: number) {
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return await this.http.delete(this.APIUrl + '/DeleteDataByID/' + PK_ID + "/" + ModifyBy, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/DeleteDataByID/' + PK_ID + "/" + ModifyBy, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

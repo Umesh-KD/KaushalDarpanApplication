@@ -1,11 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffHostelListModel, BTER_EM_StaffListSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffDetailsServicePreviewDataModel, StaffGuestHouseSearchModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_RetirementProcessModel, BTER_EM_StaffHostelListModel, BTER_EM_StaffListSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffDetailsServicePreviewDataModel, StaffGuestHouseSearchModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { MenuDataModel, SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
-import { EnumEMProfileStatus, EnumOffice, EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumEMProfileStatus, EnumOffice, EnumRole, EnumStatus, EnumTransferStatus_ITI_EM } from '../../../../Common/GlobalConstants';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDataModel';
@@ -23,6 +23,7 @@ import { GuestRoomSeatSearchModel } from '../../../../Models/GuestRoom-Managemen
 import { GuestRoomManagmentService } from '../../../../Services/GuestRoomManagment/GuestRoomManagment.service';
 import { MenuPermissionService } from '../../../../Services/MenuPermission/menu-permission.service';
 import { MenuPermission } from '../../../../Models/menu-permission.model';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
 
 @Component({
   selector: 'app-bter-em-staff-list',
@@ -73,6 +74,8 @@ export class BTEREMStaffListComponent {
   public searchRequest1 = new GuestRoomSeatSearchModel();
   public guestHouseRequest = new StaffGuestHouseSearchModel();
   public guestHouseSaveRequest = new StaffGuestHouseSearchModel();
+
+  public RetirementProcessModel = new BTER_EM_RetirementProcessModel();
   permissions?: MenuPermission;
 
   public StaffGuestHouseDetails: BTER_EM_StaffHostelListModel[] = []
@@ -102,6 +105,7 @@ export class BTEREMStaffListComponent {
   public isModalOpen: boolean = false;
   _EnumRole = EnumRole;
   _EnumOffice = EnumOffice;
+
 
   public U_Add: boolean = false
   public U_Delete : boolean = false
@@ -892,6 +896,15 @@ export class BTEREMStaffListComponent {
     this.RequestUpdateStatus.Remark = '';
     this.isSubmitted = false;
   }
+
+  CloseModal_Retirement() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.RetirementProcessModel.RetirementRemarks = '';
+    this.RetirementProcessModel.RetirementOrderDate = '';
+    this.RetirementProcessModel.RetirementDocument = '';
+  }
+
   async GetDesignationMasterData() {
     try {
       this.loaderService.requestStarted();
@@ -1123,6 +1136,144 @@ export class BTEREMStaffListComponent {
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });
   }
 
+// Retirement code start
+   async openModal_RetirementStaff(content: any,row:any) {
+    debugger
+
+    if (this.approveRequest.ProfileStatusID == EnumEMProfileStatus.Approve) {
+      this.isApprove = true;
+    } else {
+      this.isApprove = false;
+    }
+    this.RetirementProcessModel.StaffUserID=row.StaffUserID;
+    this.RetirementProcessModel.DepartmentID=this.sSOLoginDataModel.DepartmentID
+    this.RetirementProcessModel.StaffID=row.StaffID  
+    this.RetirementProcessModel.ProfileStatus=this._EnumEMProfileStatus.Retired
+
+    // this.RetirementProcessModel.StaffUserID=row.UserID   
+
+   // will recheck 
+    // if (
+    //   roleIds.includes(this._EnumRole.GuestHouseAdmin)  || 
+    //   roleIds.includes(this._EnumRole.GuestHouseIncharge) || 
+    //   roleIds.includes(this._EnumRole.GuestRoomWarden)
+    // ){
+    //   this.StaffMasterFormGroupGuestHouse.controls['DesignationID'].setValidators([DropdownValidators]);
+    //   this.StaffMasterFormGroupGuestHouse.controls['DesignationID'].clearValidators();
+    //   this.StaffMasterFormGroupGuestHouse.controls['DesignationID'].updateValueAndValidity();
+    // }
+
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });
+  }
+
+  public retirementOrderFile!: File;
+  async onRetirementOrderChange(event: any, Type: string) {
+    try {
+      this.retirementOrderFile = event.target.files[0];
+      if (this.retirementOrderFile) {
+        if (this.retirementOrderFile.type === 'application/pdf' || this.retirementOrderFile.type === 'image/jpeg' || this.retirementOrderFile.type === 'image/png') {
+          //size validation
+          if (this.retirementOrderFile.size > 2000000) {
+            this.toastr.error('Select less then 2MB File')
+            return
+          }
+          //if (this.file.size < 100000) {
+          //  this.toastr.error('Select more then 100kb File')
+          //  return
+          //}
+        }
+        else {// type validation
+          this.toastr.error('error this file ?')
+          return
+        }
+        // upload to server folder
+        this.loaderService.requestStarted();
+        const uploadModel = new UploadFileModel();
+        debugger
+        // uploadModel.FolderName = "RetirementOrders";
+
+        await this.commonMasterService.UploadDocument(this.retirementOrderFile)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+
+              // this.RetirementProcessModel.Dis_RetirementDocument = uploadModel.FolderName + "/" + data['Data'][0]["Dis_FileName"];
+              // this.RetirementProcessModel.RetirementDocument = uploadModel.FolderName + "/" + data['Data'][0]["FileName"];
+
+              this.RetirementProcessModel.Dis_RetirementDocument = data['Data'][0]["Dis_FileName"];
+              this.RetirementProcessModel.RetirementDocument = data['Data'][0]["FileName"];
+
+              //else if (Type == "Sign") {
+              //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
+              //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
+              //}
+              /*              item.FilePath = data['Data'][0]["FilePath"];*/
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      /*setTimeout(() => {*/
+      this.loaderService.requestEnded();
+      /*  }, 200);*/
+    }
+  }
+
+  async SaveRetirementAction() {
+    try {     
+      debugger   
+      if(this.RetirementProcessModel.RetirementRemarks == null || this.RetirementProcessModel.RetirementRemarks == undefined || this.RetirementProcessModel.RetirementRemarks == ""                
+      ) 
+      {
+        this.toastr.error("Please write Retirement Remarks");
+        return;
+      }
+      else if(this.RetirementProcessModel.RetirementOrderDate == null || this.RetirementProcessModel.RetirementOrderDate == undefined || this.RetirementProcessModel.RetirementOrderDate == "")
+      {
+        this.toastr.error("Please select Retirement Order date");
+        return;
+      }
+      else if(this.RetirementProcessModel.RetirementDocument == null || this.RetirementProcessModel.RetirementDocument == undefined || this.RetirementProcessModel.RetirementDocument == ""){
+        this.toastr.error("Please upload Retirement Order Document");
+        return
+      }
+      else{
+        await this.bterEstablishManagementService.SaveRetirementAction(this.RetirementProcessModel)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if(data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            await this.CloseModal_Retirement();
+            await this.BTER_EM_GetStaffList();
+          } else if (data.state === EnumStatus.Warning) {
+            this.toastr.warning(data.Message)
+          } else {
+            this.toastr.error(data.ErrorMessage)
+          }
+        }, (error: any) => console.error(error))
+      }
+      
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  // Retirement Code end 
   async ApproveStaffProfileGuestHouse() {
     debugger
 

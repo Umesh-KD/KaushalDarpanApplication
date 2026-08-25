@@ -6,6 +6,11 @@ import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.m
 import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { PublishedRollNoITIComponent } from './published-roll-no-iti.component';
 import { PublishedRollNoITIRoutingModule } from './published-roll-no-iti-routing.module';
+import { MaterialModule } from '../../../../material.module';
+import { NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { MatCardModule } from '@angular/material/card';
+
 
 
 @NgModule({
@@ -18,7 +23,11 @@ import { PublishedRollNoITIRoutingModule } from './published-roll-no-iti-routing
     FormsModule,
     ReactiveFormsModule,
     TableSearchFilterModule,
-    LoaderModule
+    LoaderModule,
+    MaterialModule,
+    NgMultiSelectDropDownModule.forRoot(),
+    NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
+    MatCardModule 
   ]
 })
 export class PublishedRollNoITIModule { }

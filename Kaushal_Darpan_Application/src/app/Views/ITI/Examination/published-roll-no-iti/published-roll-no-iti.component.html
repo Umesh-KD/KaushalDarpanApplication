@@ -64,7 +64,41 @@
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
             <b class="text-1xl-5"><i class="ti ti-list"></i>All Student List</b>
             <div class="flex justify-end flex-wrap items-center">
-            <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel Data</a>
+
+              <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel Data</a>
+              <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="GetAllData_ListExcel('GetReportByInsituteWise')"><i class="ti ti-download"></i> Download Excel Data</a>
+              <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="GetAllData_ListExcel('GetReportByTradewise')"><i class="ti ti-download"></i> Download Excel Data</a>-->
+
+
+
+              <div class="flex">
+                <button class="dropdown mr-1" mat-raised-button [matMenuTriggerFor]="menuAction"
+
+                        style="background-color: #02436d;color: white;"
+                        >
+                  <i class="ti ti-download"></i> Download Data <i class="ti ti-chevron-down"></i>
+                </button>
+
+                <mat-menu #menuAction="matMenu">
+
+                  <button mat-menu-item
+                          matTooltip="Download Excel Data<"
+                          (click)="exportToExcel()">
+                    <i class="ti ti-download"></i> Download Excel Data
+                  </button>
+                  <button mat-menu-item
+                          (click)="GetAllData_ListExcel('GetReportByInsituteWise')"
+                          matTooltip="Update ITI Campus Details">
+                    <i class="ti ti-download"></i> Download Report Insitute Wise
+                  </button>
+                  <button mat-menu-item
+                          (click)="GetAllData_ListExcel('GetReportByTradewise')"
+                          matTooltip=" Download Report Trade Wise">
+                    <i class="ti ti-download"></i> Download Report Trade Wise
+                  </button>
+
+                </mat-menu>
+              </div>
             </div>
         </div>
         <div class="alert alert-warning" *ngIf="paginatedInTableData?.length > 0 && paginatedInTableData[0]?.status === 214">

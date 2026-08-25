@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_AddStaffDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffListSearchModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, BTERGovtEMStaffMasterDataModel, BTERGovtEMStaff_ServiceDetailsOfPersonalModel, Bter_RequestUpdateStatus, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, BTER_Govt_EM_ServiceDeleteModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel, BTER_DesignationWiseBranchDataModel, BTERExtraOrdinaryLeavesForStaffModel, OfficeVacancyModel, StaffDetailsServicePreviewDataModel, StaffTrainingDetailDataModel, OfficeVacancySearchModel, StaffGuestHouseSearchModel, StaffQualificationDataModel, StaffCareerAdvancementDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_AddStaffDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffListSearchModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, BTERGovtEMStaffMasterDataModel, BTERGovtEMStaff_ServiceDetailsOfPersonalModel, Bter_RequestUpdateStatus, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, BTER_Govt_EM_ServiceDeleteModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel, BTER_DesignationWiseBranchDataModel, BTERExtraOrdinaryLeavesForStaffModel, OfficeVacancyModel, StaffDetailsServicePreviewDataModel, StaffTrainingDetailDataModel, OfficeVacancySearchModel, StaffGuestHouseSearchModel, StaffQualificationDataModel, StaffCareerAdvancementDataModel, BTER_EM_RetirementProcessModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { HODDashboardSearchModel, RequestUpdateStatus } from '../../../Models/ITIGovtEMStaffMasterDataModel';
 
 
@@ -406,6 +406,15 @@ export class BTEREstablishManagementService {
   public async SaveStaff_GuestHouseIDs(searchRequest: StaffGuestHouseSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/SaveStaff_GuestHouseIDs`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+    public async SaveRetirementAction(searchRequest: BTER_EM_RetirementProcessModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/SaveRetirementAction`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

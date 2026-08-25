@@ -99,9 +99,9 @@ export class DiplomaCertificateDownloadComponent {
           this.ResultTypeList = data['Data'];
           // exclude some ids
           this.ResultTypeList = this.ResultTypeList.filter((x: any) => ![
-            EnumResultType.RevaluationResult,
+            //EnumResultType.RevaluationResult,
             EnumResultType.Ufm,
-            EnumResultType.RwhRevalEffected
+            //EnumResultType.RwhRevalEffected
           ].includes(x.ID));
         }, (error: any) => console.error(error)
         );
