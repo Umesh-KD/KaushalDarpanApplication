@@ -102,9 +102,9 @@
             <!--<th align="left">Office Name</th>-->
             <th align="left">Department/Institute</th>
             <!--<th align="left">District Name</th>-->
-            <th class="left">Staff Type</th>
+            <th class="left">Designation as per service book</th>
             <th class="left">Salary Drawn Post </th>
-            <th align="left">Role</th>
+            <th align="left">Role/Additional Role/th>
             <th align="left">Profile Status</th>
             <th align="left">Remark</th>
             <!-- <th align="left">Is Nodal</th> -->
@@ -125,8 +125,8 @@
             <!--<td>{{row.OfficeName}}</td>-->
             <td>{{row.InstituteName}}</td>
             <!--<td>{{row.DistrictName}}</td>-->
-            <td>{{row.StaffTypeName}}</td>
             <td>{{row.PostName}}</td>
+            <td>{{row.SalaryDrawnPost}}</td>
             <td>{{row.RoleName}}</td>
             <td>{{row.ProfileStatus}}</td>
             <td>{{row.Remark}}</td>
@@ -164,7 +164,7 @@
                 </a>
 
                 <a  href="javascript:void(0);" id="btnDelete" title="Unlock Profile" 
-                  *ngIf="(row.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit || row.ProfileStatusID == _EnumEMProfileStatus.Approve) 
+                  *ngIf="(row.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit || row.ProfileStatusID == _EnumEMProfileStatus.Approve || row.ProfileStatusID == _EnumEMProfileStatus.Completed) 
                           && sSOLoginDataModel.UserID != row.StaffUserID"                  
                   (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)">
                   <i class="ti ti-lock-open"></i>

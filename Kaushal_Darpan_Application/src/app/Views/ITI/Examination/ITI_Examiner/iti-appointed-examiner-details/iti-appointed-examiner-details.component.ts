@@ -168,7 +168,7 @@ export class ItiAppointedExaminerDetailsComponent {
     this.Request.SubjectCode = item?.SubjectCode;
     this.Request.sSOID = this.ssoLoginDataModel.SSOID;
     this.Request.SemesterID = item.SemesterID;
-
+    this.Request.CenterID = item.CenterID;
 
     await this.itiExaminerService.TeacherForExaminerReportDewnloadPdf(this.Request)
       .subscribe({
