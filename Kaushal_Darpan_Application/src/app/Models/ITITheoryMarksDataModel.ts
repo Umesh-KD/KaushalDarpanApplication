@@ -38,6 +38,7 @@ export class ITITheoryMarksDataModels {
   public IsPracticalChecked: boolean = false
   public IsInternalAssesmentCheckecd: boolean = false
   public ExaminerID:number=0
+  public otpenable:number=0
 }
 
 export class ITITheoryMarksSearchModel extends RequestBaseModel {
