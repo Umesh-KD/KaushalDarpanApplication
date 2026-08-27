@@ -21,13 +21,15 @@ import { NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, Ng
     EstablishmentReportBTERRoutingModule, 
     FormsModule, 
     ReactiveFormsModule, 
-    CommonModule, 
     LoaderModule, 
     TableSearchFilterModule,
     StudentStatusHistoryModule,
     NgMultiSelectDropDownModule.forRoot(),
     ViewStaffProfileModalModule,
-    NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
+    NgSelectModule, 
+    // NgLabelTemplateDirective, 
+    // NgOptionTemplateDirective, 
+    // NgSelectComponent,
   ]
 })
 export class EstablishmentReportBTERModule { }
