@@ -190,7 +190,7 @@
                           row.RoleID.split(',').includes(_EnumRole.GuestRoomWarden.toString()) ) &&
                         ((sSOLoginDataModel.RoleID == _EnumRole.JD_TTC && row.OfficeID == _EnumOffice.TTC_LRDC) || 
                           (sSOLoginDataModel.RoleID == _EnumRole.Admin && row.OfficeID == _EnumOffice.BTER) || 
-                          (sSOLoginDataModel.RoleID == _EnumRole.DTE && (row.OfficeID == _EnumOffice.DTE || row.OfficeID == _EnumOffice.COLLEGE)))
+                          ((sSOLoginDataModel.RoleID == _EnumRole.DTE || sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR) && (row.OfficeID == _EnumOffice.DTE || row.OfficeID == _EnumOffice.COLLEGE)))
                           && row.ProfileStatusID != _EnumEMProfileStatus.Retired" 
                   (click)="onEditGuestHouse(Modal_GuestHouseEdit, row)"><i class="ti ti-pencil"></i>
                 </a>

@@ -62,13 +62,13 @@ export class IssuetrackerDashboardComponent1 {
     this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
 
 
-  if (this.sSOLoginDataModel.RoleID == 2 || this.sSOLoginDataModel.RoleID == 12) {
+  if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon) {
     this.searchRequest.CommonID = 89;
   }
-  else if (this.sSOLoginDataModel.RoleID == 17 || this.sSOLoginDataModel.RoleID == 18) {
+  else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DTENON || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR) {
     this.searchRequest.CommonID = 88;
   }
-  else if (this.sSOLoginDataModel.RoleID == 7 || this.sSOLoginDataModel.RoleID == 13) {
+  else if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
     this.searchRequest.CommonID = 87;
   }
   else {

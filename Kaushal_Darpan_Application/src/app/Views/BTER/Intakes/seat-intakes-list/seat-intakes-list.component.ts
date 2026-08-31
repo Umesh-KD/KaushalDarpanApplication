@@ -5,7 +5,7 @@ import { SeatIntakeSearchModel } from '../../../../Models/ITI/SeatIntakeDataMode
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ItiCollegesSearchModel, ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
-import { EnumCourseType, EnumDepartment, EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumCourseType, EnumDepartment, EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { BTERSeatsDistributionsService } from '../../../../Services/BTER/Seats-Distributions/seats-distributions.service';
@@ -245,7 +245,7 @@ export class SeatIntakesListComponent implements OnInit {
       this.request.PageSize = this.pageSize;
       //this.request.CollegeStreamId = this.SSOLoginDataModel.Eng_NonEng;
       this.request.StreamTypeId = this.SSOLoginDataModel.Eng_NonEng;
-      this.request.StreamFor = this.SSOLoginDataModel.RoleID == 17 || this.SSOLoginDataModel.RoleID == 18 || this.SSOLoginDataModel.RoleID == 33 || this.SSOLoginDataModel.RoleID == 80 || this.SSOLoginDataModel.RoleID == 81 ? 1 : 2;
+      this.request.StreamFor = this.SSOLoginDataModel.RoleID == EnumRole.DTE || this.SSOLoginDataModel.RoleID == EnumRole.DTENON || this.SSOLoginDataModel.RoleID == EnumRole.DTELateral || this.SSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear || this.SSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear || this.SSOLoginDataModel.RoleID == EnumRole.DIRECTOR ? 1 : 2;
       await this.SeatsDistributionsService.CollegeBranches(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

@@ -183,7 +183,8 @@ export class TransferRequestReportComponent {
 
       }
       else if (
-        this.sSOLoginDataModel.RoleID == EnumRole.DTE
+        this.sSOLoginDataModel.RoleID == EnumRole.DTE || 
+        this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR
       ) {
         this.TransferSystemStatusSearchList =
           this.TransferSystemStatusSearchList

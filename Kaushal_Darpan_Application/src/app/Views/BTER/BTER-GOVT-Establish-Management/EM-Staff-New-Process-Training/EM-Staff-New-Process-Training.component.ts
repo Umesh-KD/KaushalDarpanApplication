@@ -154,7 +154,7 @@ import * as XLSX from 'xlsx';
           //this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE || item.ID == EnumStaffTrainingStatus.ADTE)
           this.StaffTrainingDetailsNewTraining_Search(EnumStaffTrainingStatus.ADTE);
         }
-        else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
+        else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR) {
           this.SearchStatus = EnumStaffTrainingStatus.JDTE;
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.DTE )
           this.StaffTrainingStatusSearchList =
@@ -446,7 +446,7 @@ import * as XLSX from 'xlsx';
       else if (((this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE || this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) && EnumStaffTrainingStatus.ADTE == this.SearchStatus)) {
         this.ShowCheckBoxId = 1;
       }
-      else if (((this.sSOLoginDataModel.RoleID == EnumRole.DTE) && EnumStaffTrainingStatus.JDTE == this.SearchStatus)) {
+      else if (((this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR) && EnumStaffTrainingStatus.JDTE == this.SearchStatus)) {
         this.ShowCheckBoxId = 1;
       } 
 

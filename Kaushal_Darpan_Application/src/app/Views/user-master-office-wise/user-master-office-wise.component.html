@@ -99,7 +99,7 @@
                                     </th>
                                     <th align="left">Role Name</th>
                                     <th align="left">Is Main Role</th>
-                                    <th align="left" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTE"></th>
+                                    <th align="left" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.DTE || sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR)"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -117,7 +117,7 @@
                                             [disabled]="!row.Marked" name="radiocheck" (change)="onRadioChange(row)">
                                     </td>
 
-                                    <td align="left" style="width: 500px;" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTE">
+                                    <td align="left" style="width: 500px;" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTE || sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR">
                                         <div *ngIf="row.ID == _EnumRole.Principal || row.ID == _EnumRole.PrincipalNon">
                                             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
                                             <ng-select [(ngModel)]="row.InstituteID" [clearable]="false" (change)="onInstituteChange($event, row)">

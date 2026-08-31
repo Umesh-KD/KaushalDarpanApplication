@@ -181,12 +181,13 @@
 
                 <!-- DTE Admin Approval -->
                 <a *ngIf=" row.RelievingStatusId == 247  && row.StaffRequestType != 'Transfer'  && row.RequestTypeID == 2  && row.RequestStatusId == 0 && (sSOLoginDataModel.RoleID != 2 || sSOLoginDataModel.RoleID != 12
-                          || sSOLoginDataModel.RoleID == 17
-                          || sSOLoginDataModel.RoleID == 18
-                          || sSOLoginDataModel.RoleID == 33
-                          || sSOLoginDataModel.RoleID == 80
-                          || sSOLoginDataModel.RoleID == 81
-                          || sSOLoginDataModel.RoleID == 180 )"
+                          || sSOLoginDataModel.RoleID == _EnumRole.DTE
+                          || sSOLoginDataModel.RoleID == _EnumRole.DTENON
+                          || sSOLoginDataModel.RoleID == _EnumRole.DTELateral
+                          || sSOLoginDataModel.RoleID == _EnumRole.DTEDegreeCourse1stYear
+                          || sSOLoginDataModel.RoleID == _EnumRole.DTEDegreeCourse2ndYear
+                          || sSOLoginDataModel.RoleID == _EnumRole.NodalVerifier 
+                          || sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR)"
                    href="javascript:void(0);"
                    title="VRS Approve By DTE Admin"
                    (click)="onSubmitModel_VRSApproveDTE(MyModel_VRSDTEApprove, row)">

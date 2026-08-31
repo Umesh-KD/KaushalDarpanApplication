@@ -163,7 +163,7 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
         data = JSON.parse(JSON.stringify(data));
 
         this.TransferSystemStatusSearchList = data['Data'];
-          if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
+          if (this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR) {
             //this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID ==
               //EnumTransferSystemStatus.Appnoved || item.ID == EnumTransferSystemStatus.UnderDTEReview);
 
@@ -368,7 +368,7 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
 
     async onChangeSearchStatus() {
 
-      if (this.sSOLoginDataModel.RoleID == EnumRole.DTE && EnumTransferSystemStatus.UnderDTEReview == this.SearchStatus) {
+      if ((this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR) && EnumTransferSystemStatus.UnderDTEReview == this.SearchStatus) {
         this.ShowCheckBoxId = 1;
       }
 

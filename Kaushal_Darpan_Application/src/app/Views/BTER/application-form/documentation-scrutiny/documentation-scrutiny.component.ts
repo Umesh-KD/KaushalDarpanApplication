@@ -406,8 +406,14 @@ export class DocumentationScrutinyComponent {
 
     this.StudentJanDetailFormGroup.get('txtMobileNumber')?.disable();
     debugger
-    if (this.SSOLoginDataModel.RoleID == 17 || this.SSOLoginDataModel.RoleID == 17 || this.SSOLoginDataModel.RoleID == 18 || this.SSOLoginDataModel.RoleID == 33
-      || this.SSOLoginDataModel.RoleID == 80 || this.SSOLoginDataModel.RoleID == 81) {
+    if (
+      this.SSOLoginDataModel.RoleID == EnumRole.DTE || 
+      this.SSOLoginDataModel.RoleID == EnumRole.DTENON || 
+      this.SSOLoginDataModel.RoleID == EnumRole.DTELateral
+      || this.SSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear || 
+      this.SSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear ||
+      this.SSOLoginDataModel.RoleID == EnumRole.DIRECTOR 
+    ) {
       this.StudentJanDetailFormGroup.get('Gender')?.enable();
       this.StudentJanDetailFormGroup.get('txtMobileNumber')?.enable();
       this.StudentJanDetailFormGroup.get('ddlCategoryB')?.enable();
@@ -1098,7 +1104,9 @@ export class DocumentationScrutinyComponent {
       if (this.SSOLoginDataModel.RoleID == EnumRole.DTE
         || this.SSOLoginDataModel.RoleID == EnumRole.DTENON
         || this.SSOLoginDataModel.RoleID == EnumRole.DTELateral
-        || this.SSOLoginDataModel.RoleID == 80 || this.SSOLoginDataModel.RoleID == 81) {
+        || this.SSOLoginDataModel.RoleID == 80 || this.SSOLoginDataModel.RoleID == 81
+        || this.SSOLoginDataModel.RoleID == EnumRole.DIRECTOR
+      ) {
         this.StudentJanDetailFormGroup.get('ddlCategoryA')?.enable();
 
       }
@@ -1922,7 +1930,9 @@ export class DocumentationScrutinyComponent {
           if (this.SSOLoginDataModel.RoleID  != EnumRole.DTE
             && this.SSOLoginDataModel.RoleID != EnumRole.DTENON
             && this.SSOLoginDataModel.RoleID != EnumRole.DTELateral
-            && this.SSOLoginDataModel.RoleID != 80 && this.SSOLoginDataModel.RoleID != 81)
+            && this.SSOLoginDataModel.RoleID != 80 && this.SSOLoginDataModel.RoleID != 81
+            && this.SSOLoginDataModel.RoleID != EnumRole.DIRECTOR
+          )
           {
             if (data['Data']['VerifierID'] != this.SSOLoginDataModel.UserID)
             {

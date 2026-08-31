@@ -6,6 +6,7 @@ import { SerialMasterComponent } from './serial-master/serial-master.component';
 import { SessionConfigurationComponent } from './session-configuration/session-configuration.component';
 import { AllotmentConfigurationComponent } from './allotment-configuration/allotment-configuration.component';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
+import { EnumRole } from '../../Common/GlobalConstants';
 
 @Component({
   selector: 'app-master-configuration',
@@ -37,7 +38,15 @@ export class MasterConfigurationComponent {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-    if (this.sSOLoginDataModel.RoleID == 17 || this.sSOLoginDataModel.RoleID == 18 || this.sSOLoginDataModel.RoleID == 33 || this.sSOLoginDataModel.RoleID == 16 || this.sSOLoginDataModel.RoleID == 80 || this.sSOLoginDataModel.RoleID == 81) {
+    if (
+      this.sSOLoginDataModel.RoleID == EnumRole.DTE || 
+      this.sSOLoginDataModel.RoleID == EnumRole.DTENON || 
+      this.sSOLoginDataModel.RoleID == EnumRole.DTELateral || 
+      this.sSOLoginDataModel.RoleID == EnumRole.DTETraing || 
+      this.sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear || 
+      this.sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear ||
+      this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR
+    ) {
       this.tabs.push({ TabName: 'Admission Calendar ', TabIcon: 'ti ti-calendar', component: AllotmentConfigurationComponent });
     } else {
       this.tabs.push({ TabName: 'Date Configuration', TabIcon: 'ti ti-calendar', component: DateConfigurationComponent });

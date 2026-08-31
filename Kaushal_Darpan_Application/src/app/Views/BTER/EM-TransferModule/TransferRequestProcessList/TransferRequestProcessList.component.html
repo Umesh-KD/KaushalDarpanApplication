@@ -86,7 +86,7 @@
       </button>
 
       <button type="button"
-              *ngIf="(EnumTransferSystemStatus.UnderDTEReview == this.SearchStatus   && (sSOLoginDataModel?.RoleID === _EnumRole.DTE))"
+              *ngIf="(EnumTransferSystemStatus.UnderDTEReview == this.SearchStatus   && (sSOLoginDataModel?.RoleID === _EnumRole.DTE || sSOLoginDataModel?.RoleID == _EnumRole.DIRECTOR))"
               class="btn bg-info text-white mt-2"
               (click)="TabutarTransferList()">
         Tabular Transfer List
@@ -95,7 +95,7 @@
         <i class="ti ti-download"></i> Download Execel
       </a>
       <h5 style="color: red; padding: 10px;"
-          *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTE">
+          *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTE || sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR">
         Please ensure that at least one priority request is approved before forwarding the user request.
       </h5>
     </div>
@@ -134,7 +134,7 @@
                 ( (sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_NON_GAZETTED_STAFF)   && ShowCheckBoxId ==1)
                  ||
                 ( (this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE|| this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER )  && ShowCheckBoxId ==1)
-                || (sSOLoginDataModel.RoleID == _EnumRole.DTE    &&  ShowCheckBoxId ==1)
+                || ((sSOLoginDataModel.RoleID == _EnumRole.DTE || sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR) &&  ShowCheckBoxId ==1)
               ">
               <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize" 
                      [checked]="AllSelect"
@@ -158,18 +158,18 @@
                 ||
                 ( (this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER || this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE)  && row.StatusID == EnumTransferSystemStatus.UnderADTEReview    && ShowCheckBoxId == 1)
                 ||
-                (sSOLoginDataModel.RoleID == _EnumRole.DTE && ShowCheckBoxId == 1 )
+                ((sSOLoginDataModel.RoleID == _EnumRole.DTE || sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR) && ShowCheckBoxId == 1 )
                    ">
               <input type="checkbox"
-                     *ngIf="(sSOLoginDataModel.RoleID != _EnumRole.DTE && row.FinalApproveStatus == 0)
-            || (sSOLoginDataModel.RoleID == _EnumRole.DTE && row.FinalApproveStatus == 5 )
-                     || (sSOLoginDataModel.RoleID == _EnumRole.DTE  && Status == EnumTransferSystemStatus.Rejected)
+                     *ngIf="(!(sSOLoginDataModel.RoleID == _EnumRole.DTE || sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR) && row.FinalApproveStatus == 0)
+            || ((sSOLoginDataModel.RoleID == _EnumRole.DTE || sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR) && row.FinalApproveStatus == 5 )
+                     || ((sSOLoginDataModel.RoleID == _EnumRole.DTE || sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR)  && Status == EnumTransferSystemStatus.Rejected)
                      "
                      name="MarkCheck"
                      [(ngModel)]="row.Selected" />
 
 
-              <label *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.DTE && row.FinalApproveStatus == 0 && Status != EnumTransferSystemStatus.Rejected)"
+              <label *ngIf="((sSOLoginDataModel.RoleID == _EnumRole.DTE || sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR) && row.FinalApproveStatus == 0 && Status != EnumTransferSystemStatus.Rejected)"
                      title="Please ensure that at least one priority request is approved before forwarding the user request." style="color: red; cursor: pointer; font-size: 18px;">
                 <i class="bi bi-x-circle-fill"></i>
               </label>

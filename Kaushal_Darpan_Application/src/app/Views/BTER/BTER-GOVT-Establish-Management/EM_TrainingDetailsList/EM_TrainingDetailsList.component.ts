@@ -139,7 +139,7 @@ export class EM_TrainingDetailsListComponent {
           this.StaffTrainingDetailsNewTraining_Search(this.SearchStatus);
           this.StaffTrainingDetailsCompletedTraining_Search(this.SearchStatus);
         }
-        else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
+        else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR) {
           
           this.StaffTrainingStatusSearchList =
             this.StaffTrainingStatusSearchList

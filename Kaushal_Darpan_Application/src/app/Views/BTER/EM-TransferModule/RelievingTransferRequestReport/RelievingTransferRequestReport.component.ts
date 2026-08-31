@@ -185,7 +185,7 @@ export class RelievingTransferRequestReportComponent {
             this.SearchStatus = EnumTransferRelievingStatus.RelievingPending;
             this.EM_TransferSystem_GetData_Search(EnumTransferRelievingStatus.RelievingPending);
           }
-          else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
+          else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR) {
             this.SearchStatus = EnumTransferRelievingStatus.RelievingPending;
             this.ShowCheckBoxId = 1;
             this.EM_TransferSystem_GetData_Search(EnumTransferRelievingStatus.RelievingPending);

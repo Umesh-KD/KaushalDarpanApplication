@@ -48,12 +48,6 @@ export class ITIMasterConfigurationComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
-    //if (this.sSOLoginDataModel.RoleID == 17 || this.sSOLoginDataModel.RoleID == 18 || this.sSOLoginDataModel.RoleID == 33 || this.sSOLoginDataModel.RoleID == 16 || this.sSOLoginDataModel.RoleID == 80 || this.sSOLoginDataModel.RoleID == 81) {
-    //  this.tabs.push({ TabName: 'Admission Calendar ', TabIcon: 'ti ti-calendar', component: AllotmentConfigurationComponent });
-    //} else {
-    //  this.tabs.push({ TabName: 'Date Configuration', TabIcon: 'ti ti-calendar', component: DateConfigurationComponent });
-    //}
   }
 
   ngAfterViewInit(): void {
