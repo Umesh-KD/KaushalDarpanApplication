@@ -127,7 +127,9 @@
         </div>
 
         <!-- add branch if role is leacturer  -->
-        <div *ngIf="formData.StaffTypeID == _BTERGovtEM_EnumStaffType.Teaching && formData.StaffLevelChildID==_ITIGovtEM_EnumStaffLevelChild.Lecturer">
+        <div *ngIf="formData.StaffTypeID == _BTERGovtEM_EnumStaffType.Teaching && 
+                    (formData.StaffLevelChildID==_ITIGovtEM_EnumStaffLevelChild.Lecturer || 
+                    formData.StaffLevelChildID==_ITIGovtEM_EnumStaffLevelChild.HOD)">
           <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch<span class="StarMarking">*</span></label>
           <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
                   [(ngModel)]="formData.BranchID" (change)="getSactionedPostList()">
