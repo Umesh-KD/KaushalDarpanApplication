@@ -212,7 +212,8 @@ export class TheoryMarksItiComponent
     }
   }
   //
-  async OnSubmit(isfinalSubmit: boolean = false, StudentExamPaperMarksID: number = 0) {
+  async OnSubmit(isfinalSubmit: boolean = false, StudentExamPaperMarksID: number = 0)
+  {
     try {
       this.loaderService.requestStarted();
 
