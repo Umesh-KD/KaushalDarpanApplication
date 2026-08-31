@@ -714,6 +714,50 @@ export class BterEMAddStaffDetailsComponent {
 
   async SaveData(isSaveDraft: boolean = false) {
     debugger
+
+    if (this.StaffQualificationList?.length > 0) { 
+      const has10thOr12th = this.StaffQualificationList.some( (item: any) => item.QualificationID == 14 || item.QualificationID == 15 ); 
+      // Neither 10th nor 12th entered 
+      if (!has10thOr12th) {
+        const result = await new Promise<any>((resolve) => { 
+          this.Swal2.Confirmation( "Are you sure you want to continue without entering 10th or 12th qualification?", 
+            (result: any) => { 
+              resolve(result); 
+            } 
+          ); 
+        }); 
+        
+        // User pressed Cancel / No
+        if (!result?.isConfirmed) { 
+          return; 
+        } 
+      } 
+    } else { 
+      // Qualification list is empty 
+      const result = await new Promise<any>((resolve) => { 
+        this.Swal2.Confirmation( "Are you sure you want to continue without entering 10th or 12th qualification?", 
+          (result: any) => { 
+            resolve(result); 
+          } 
+        ); 
+      });
+
+      if (!result?.isConfirmed) { 
+        return; 
+      }
+    }
+
+    if(this.StaffQualificationList?.length > 0){
+      this.StaffQualificationList.forEach((item: any) => {
+        if(!(item.QualificationID == 14 || item.QualificationID == 15)){
+          
+        }
+      });
+    } else {
+
+    }
+
+
     await  this.refreshInstituteValidation();
     if(!isSaveDraft){
       this.isSubmitted = true;
