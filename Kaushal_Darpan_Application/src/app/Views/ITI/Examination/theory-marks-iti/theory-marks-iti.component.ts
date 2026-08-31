@@ -25,7 +25,8 @@ import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
   templateUrl: './theory-marks-iti.component.html',
   styleUrl: './theory-marks-iti.component.css'
 })
-export class TheoryMarksItiComponent {
+export class TheoryMarksItiComponent
+{
   public State: number = -1;
   public Message: any = [];
   public ErrorMessage: any = [];
