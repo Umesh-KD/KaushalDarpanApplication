@@ -1279,7 +1279,7 @@
 
         <div class="pt-30 mb-3 flex justify-center flex-wrap items-center">
           <button type="button" class="btn bg-primary text-white" (click)="AddAnotherServiceHistory()">
-            Add More Service History
+            {{ isEditServiceReq ? 'Update Service History' : 'Add More Service History' }}
           </button>
         </div>
 
@@ -1398,8 +1398,12 @@
 
 
               <td class="text-center">
+                <button class="btn bg-info text-white" type="button" title="Edit"
+                        (click)="EditServiceHistory(row)">
+                  <i class="ti ti-pencil"></i>
+                </button>
                 <button class="btn bg-danger text-white" type="button" title="Delete"
-                  (click)="deleteServiceHistory(idx)">
+                        (click)="deleteServiceHistory(idx)">
                   <i class="ti ti-trash"></i>
                 </button>
               </td>

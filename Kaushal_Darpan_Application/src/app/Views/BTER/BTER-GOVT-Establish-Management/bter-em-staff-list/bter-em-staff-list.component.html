@@ -104,7 +104,8 @@
             <!--<th align="left">District Name</th>-->
             <th class="left">Designation as per service book</th>
             <th class="left">Salary Drawn Post </th>
-            <th align="left">Role/Additional Role/th>
+            <th class="left">Course/Branch</th>
+            <th align="left">Role/Additional Role </th>
             <th align="left">Profile Status</th>
             <th align="left">Remark</th>
             <!-- <th align="left">Is Nodal</th> -->
@@ -127,6 +128,7 @@
             <!--<td>{{row.DistrictName}}</td>-->
             <td>{{row.PostName}}</td>
             <td>{{row.SalaryDrawnPost}}</td>
+            <td>{{row.Stream}}</td>
             <td>{{row.RoleName}}</td>
             <td>{{row.ProfileStatus}}</td>
             <td>{{row.Remark}}</td>
@@ -546,6 +548,18 @@
                 </div>
               </div>
 
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head <span class="StarMarking">*</span></label>
+                <select class="form-select" [(ngModel)]="approveRequest.BugetHeadID" formControlName="BugetHeadID">
+                  <option value="0">--Select--</option>
+                  <option *ngFor="let item of BugetHeadList" [value]="item.ID">{{item.Name}}</option>
+                </select>
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.BugetHeadID.errors" class="text-danger">
+                  <p *ngIf="!_StaffMasterFormGroup.BugetHeadID.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
 
             </div>
 
@@ -989,19 +1003,7 @@
                           formControlName="Remark" [(ngModel)]="approveRequest.Remark">
                 </textarea>
               </div>
-
-              <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head <span class="StarMarking">*</span></label>
-                <select class="form-select" [(ngModel)]="approveRequest.BugetHeadID" formControlName="BugetHeadID">
-                  <option value="0">--Select--</option>
-                  <option *ngFor="let item of BugetHeadList" [value]="item.ID">{{item.Name}}</option>
-                </select>
-                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.BugetHeadID.errors" class="text-danger">
-                  <p *ngIf="!_StaffMasterFormGroup.BugetHeadID.errors.DropdownValidators">
-                    <i aria-hidden="true"></i>This field is required .!
-                  </p>
-                </div>
-              </div>
+             
             </div>
           </form>
           <div class="flex justify-center flex-wrap items-centermt-3">

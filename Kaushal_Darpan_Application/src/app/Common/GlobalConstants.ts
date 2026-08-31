@@ -763,6 +763,7 @@ export enum ITIGovtEM_EnumStaffLevelChild {
   StoreKeeperNCVT = 213,
   StoreKeeperSCVT = 214,
   BterGuestRoomWarden = 41,
+  HOD = 15,
 }
 
 export enum EnumEligibilityStatus {
