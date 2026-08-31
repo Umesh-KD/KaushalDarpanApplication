@@ -219,8 +219,6 @@ export class AssignHodComponent {
     this.AddParent.UserAdditionalID = 0
     this.AddParent.Branchlist = []
 
-
-
   }
   @ViewChild('content') content: ElementRef | any;
   async openModal(content: any, row: any) {
@@ -376,8 +374,11 @@ export class AssignHodComponent {
     this.AddParent.RoleID = this.sSOLoginDataModel.RoleID
     if (this.sSOLoginDataModel.RoleID == EnumRole.Principal) {
       this.AddParent.UserRole = EnumRole.HOD_Eng
-    } else {
+    } else if(this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
       this.AddParent.UserRole = EnumRole.HOD_NonEng
+    } else {
+      this.toastr.error("Only Principle can assign HOD")
+      return;
     }
 
     try {
