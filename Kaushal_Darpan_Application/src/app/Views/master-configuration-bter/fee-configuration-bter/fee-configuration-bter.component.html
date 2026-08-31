@@ -294,7 +294,10 @@
                 Stream
                 Name
               </span>
-              <span *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.DTE || this.sSOLoginDataModel.RoleID==_EnumRole.DTENON  || this.sSOLoginDataModel.RoleID==_EnumRole.DTETraing">
+              <span *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.DTE || 
+                          this.sSOLoginDataModel.RoleID==_EnumRole.DTENON  || 
+                          this.sSOLoginDataModel.RoleID==_EnumRole.DTETraing ||
+                          this.sSOLoginDataModel.RoleID==_EnumRole.DIRECTOR">
                 Caste
                 Category
               </span>

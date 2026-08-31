@@ -567,28 +567,35 @@ export class TheoryMarksItiComponent
 
   async LockAndSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
 
-    var IsCheckecd = this.TheoryMarksDetailList.some(x => x.Marked == true);
+    var otpenable = this.TheoryMarksDetailList.some(x => x.otpenable == 1);
 
     //if (IsCheckecd == false) {
     //  this.toastr.error("Please Marked At least One Student")
     //  return
     //}
 
+
     this.Swal2.Confirmation("Are you sure? <br> Once Submitted, It can't be edited anymore.",
       async (result: any) => {
-          if (result.isConfirmed) {
-              this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-              this.childComponent.OpenOTPPopup();
+        if (result.isConfirmed) {
+          if (otpenable) {
+            this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+            this.childComponent.OpenOTPPopup();
 
-              this.childComponent.onVerified.subscribe(() => {
-                  //this.PublishTimeTable();
+            this.childComponent.onVerified.subscribe(() => {
+              //this.PublishTimeTable();
 
-                this.OnSubmit(isFinalSubmit, StudentExamPaperMarksID);
-                 this.GetTheoryMarksDetailList();
-              })
-          
+              this.OnSubmit(isFinalSubmit, StudentExamPaperMarksID);
+              this.GetTheoryMarksDetailList();
+            })
+
+          } else {
+           await this.OnSubmit(isFinalSubmit, StudentExamPaperMarksID);
+          await  this.GetTheoryMarksDetailList();
+          }
         }
-      });
+        });
+
     }
 
 
@@ -600,7 +607,7 @@ export class TheoryMarksItiComponent
     }
     else {
       item.ObtainedTheory=0
-      item.Marked = false;
+ /*     item.Marked = false;*/
     }
 
   }

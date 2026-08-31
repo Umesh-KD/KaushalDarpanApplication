@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../../Common/appsetting.service';
-import { GlobalConstants, EnumCourseType, EnumVerificationAction, EnumDepartment ,EnumLateralCourse, EnumStatus, EnumCasteCategory, EnumRole } from '../../../../Common/GlobalConstants';
+import { GlobalConstants, EnumCourseType, EnumVerificationAction, EnumDepartment, EnumLateralCourse, EnumStatus, EnumCasteCategory, EnumRole } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { BterSearchmodel, SupplementaryDataModel, Lateralsubject, LateralEntryQualificationModel, BterOtherDetailsModel, HighestQualificationModel } from '../../../../Models/ApplicationFormDataModel';
 import { TSPTehsilDataModel } from '../../../../Models/CommonMasterDataModel';
@@ -153,51 +153,51 @@ export class EditMeritDocumentComponent {
     };
 
     this.PersonalDetailForm = this.formBuilder.group({
-        ddlPreferentialCategory: [{ value: '' }, [DropdownValidators]],
-        ddlPreferentialType: [{ value: '', disabled: true } , [DropdownValidators]],
-        txtJanAadhaar: [''],
-        txtName: ['', Validators.required],
-        txtSSOID: [''],
-        txtnameHindi: [{ value: '' }, Validators.required],
-        txtEmail: [''],
-        txtFather: [{ value: '', disabled: true }, Validators.required],
-        txtFatherHindi: [{ value: '' }, Validators.required],
-        txtDOB: ['', Validators.required],
-        txtMotherEngname: [{ value: '' }, Validators.required],
-        Gender: [''],
-        MobileNumber: ['', Validators.required],
-        txtMotherHindiname: [{ value: '' }, Validators.required],
-        ddlIdentityProof: ['', Validators.required],
-        txtDetailsofIDProof: ['', [Validators.required, this.validateIDLength.bind(this)]],
-        CertificateNo: ['', Validators.required],
-        txtGeneratDate: ['', Validators.required],
-        DepartmentName: ['', Validators.required],
-        TradeLevel: [''],
-        TradeID: [''],
-        DirectAdmissionTypeID: [''],
-        BranchID: [''],
-        Apaarid: [''],
-        ddlMaritial: ['', [DropdownValidators]],
-        ddlReligion: ['', [DropdownValidators]],
-        ddlNationality: ['', [DropdownValidators]],
-        ddlCategoryA: [ ''],
-        ddlCategoryB: [''],
-        ddlCategorycp: [{ value: '', disabled: true }],
-        ddlCategoryck: [{ value: '', disabled: true }],
-        ddlCategoryE: [''],
-        ddlPrefential: [{ value: '', disabled: false }, [DropdownValidators]],
-        IsTSP: [''],
-        IsSaharia: [''],
-        TspDistrictID: [''],
-        IsMinority: [''],
-        subCategory: [''],
-        IsDevnarayan: [''],
-        DevnarayanDistrictID: [''],
-        DevnarayanTehsilID: [''],
-        TSPTehsilID: [''],
-        ddlCategoryD: [{ value: '', disabled: false }],
-        ddlIsMBCCertificate: [0,]
-      });
+      ddlPreferentialCategory: [{ value: '' }, [DropdownValidators]],
+      ddlPreferentialType: [{ value: '', disabled: true }, [DropdownValidators]],
+      txtJanAadhaar: [''],
+      txtName: ['', Validators.required],
+      txtSSOID: [''],
+      txtnameHindi: [{ value: '' }, Validators.required],
+      txtEmail: [''],
+      txtFather: [{ value: '', disabled: true }, Validators.required],
+      txtFatherHindi: [{ value: '' }, Validators.required],
+      txtDOB: ['', Validators.required],
+      txtMotherEngname: [{ value: '' }, Validators.required],
+      Gender: [''],
+      MobileNumber: ['', Validators.required],
+      txtMotherHindiname: [{ value: '' }, Validators.required],
+      ddlIdentityProof: ['', Validators.required],
+      txtDetailsofIDProof: ['', [Validators.required, this.validateIDLength.bind(this)]],
+      CertificateNo: ['', Validators.required],
+      txtGeneratDate: ['', Validators.required],
+      DepartmentName: ['', Validators.required],
+      TradeLevel: [''],
+      TradeID: [''],
+      DirectAdmissionTypeID: [''],
+      BranchID: [''],
+      Apaarid: [''],
+      ddlMaritial: ['', [DropdownValidators]],
+      ddlReligion: ['', [DropdownValidators]],
+      ddlNationality: ['', [DropdownValidators]],
+      ddlCategoryA: [''],
+      ddlCategoryB: [''],
+      ddlCategorycp: [{ value: '', disabled: true }],
+      ddlCategoryck: [{ value: '', disabled: true }],
+      ddlCategoryE: [''],
+      ddlPrefential: [{ value: '', disabled: false }, [DropdownValidators]],
+      IsTSP: [''],
+      IsSaharia: [''],
+      TspDistrictID: [''],
+      IsMinority: [''],
+      subCategory: [''],
+      IsDevnarayan: [''],
+      DevnarayanDistrictID: [''],
+      DevnarayanTehsilID: [''],
+      TSPTehsilID: [''],
+      ddlCategoryD: [{ value: '', disabled: false }],
+      ddlIsMBCCertificate: [0,]
+    });
     this.QualificationForm = this.formBuilder.group({
       txtRollNumber: ['', [Validators.required]],
       txtAggregateMaximumMarks: ['', [DropdownValidators]],
@@ -212,27 +212,27 @@ export class EditMeritDocumentComponent {
     });
 
     this.SupplementaryForm = this.formBuilder.group({
-        txtsubject: ['', Validators.required],
-        txtRollNo: ['', Validators.required],
-        ddlPassingYear: ['', [DropdownValidators]],
-      });
+      txtsubject: ['', Validators.required],
+      txtRollNo: ['', Validators.required],
+      ddlPassingYear: ['', [DropdownValidators]],
+    });
 
     this.RadioForm = this.formBuilder.group({
-        SubjectRadio: ['']
-      })
+      SubjectRadio: ['']
+    })
 
     this.LateralQualificationForm = this.formBuilder.group({
-        ddlCourseID: ['', [DropdownValidators]],
-        txtRollNumber: ['', Validators.required],
-        txtAggregateMaximumMarks: ['', Validators.required],
-        txtAggregateMarksObtained: ['', Validators.required],
-        txtpercentage: [{ value: '', disabled: true }],
-        ddlStateID: ['', [DropdownValidators]],
-        ddlBoardID: ['', [DropdownValidators]],
-        ddlPassyear: ['', [DropdownValidators]],
-        ddlMarksType: ['', [DropdownValidators]],
-        SubjectID: ['', Validators.required]
-      })
+      ddlCourseID: ['', [DropdownValidators]],
+      txtRollNumber: ['', Validators.required],
+      txtAggregateMaximumMarks: ['', Validators.required],
+      txtAggregateMarksObtained: ['', Validators.required],
+      txtpercentage: [{ value: '', disabled: true }],
+      ddlStateID: ['', [DropdownValidators]],
+      ddlBoardID: ['', [DropdownValidators]],
+      ddlPassyear: ['', [DropdownValidators]],
+      ddlMarksType: ['', [DropdownValidators]],
+      SubjectID: ['', Validators.required]
+    })
 
     this.EnglishQualificationForm = this.formBuilder.group({
       RollNumberEnglish: ['', [Validators.required]],
@@ -252,7 +252,7 @@ export class EditMeritDocumentComponent {
     });
     this.searchRequest.DepartmentID = EnumDepartment.BTER;
     this.ApplicationID = Number(this.activatedRoute.snapshot.queryParamMap.get('ApplicationID') ?? 0);
-    
+
     await this.GetMasterDDL()
     await this.GetPrefentialCategory(0);
     await this.GetStateMatserDDL()
@@ -535,7 +535,7 @@ export class EditMeritDocumentComponent {
 
   async onFilechange(event: any, Type: string) {
     try {
-      
+
       this.file = event.target.files[0];
       if (this.file) {
         // File type validation (image/jpeg, image/jpg, image/png, and application/pdf)
@@ -582,7 +582,7 @@ export class EditMeritDocumentComponent {
                 default:
                   break;
               }
-            }   
+            }
             event.target.value = null;
             if (data.State === EnumStatus.Error) {
               this.toastr.error(data.ErrorMessage);
@@ -592,7 +592,7 @@ export class EditMeritDocumentComponent {
           });
       }
     } catch (Ex) {
-      console.log(Ex);  
+      console.log(Ex);
     } finally {
       this.loaderService.requestEnded();
     }
@@ -622,7 +622,7 @@ export class EditMeritDocumentComponent {
   }
 
   async Showdropdown() {
-    
+
     var th = this;
     var data = this.PrefentialCategoryList.filter(function (dta: any) { return dta.ID == th.request.ENR_ID });
     if (data != undefined && data.length > 0) {
@@ -647,7 +647,10 @@ export class EditMeritDocumentComponent {
       if (this.SSOLoginDataModel.RoleID == EnumRole.DTE
         || this.SSOLoginDataModel.RoleID == EnumRole.DTENON
         || this.SSOLoginDataModel.RoleID == EnumRole.DTELateral
-        || this.SSOLoginDataModel.RoleID == 80 || this.SSOLoginDataModel.RoleID == 81) {
+        || this.SSOLoginDataModel.RoleID == 80 
+        || this.SSOLoginDataModel.RoleID == 81
+        || this.SSOLoginDataModel.RoleID == EnumRole.DIRECTOR
+      ) {
         // this.PersonalDetailForm.get('ddlCategoryA')?.enable();
 
       }
@@ -760,7 +763,7 @@ export class EditMeritDocumentComponent {
             this.ShowOtherdropdown()
             if (this.request.CategoryA == 9) {
               this.OtherData.EWS = 1
-     
+
             }
             if (this.OtherData.EWS == 0) {
               this.OtherData.EWS = 2
@@ -783,7 +786,7 @@ export class EditMeritDocumentComponent {
   }
 
   ShowOtherdropdown() {
-    if (this.OtherData.ParentsIncome == 71) {   
+    if (this.OtherData.ParentsIncome == 71) {
       this.IsShowDropdown = true
     } else {
       this.IsShowDropdown = false
@@ -871,13 +874,13 @@ export class EditMeritDocumentComponent {
             }
             this.BoardChange(this.request.QualificationID)
             this.BoardStateChange(this.request.QualificationID)
-            
+
             this.request.VerificationDocumentDetailList = data['Data']['VerificationDocumentDetailList']
-          
+
             this.request.VerificationDocumentDetailList = this.request.VerificationDocumentDetailList.map(doc => ({
               ...doc,
               DisFileName: doc.DisFileName.replace(/^upload the scanned copy of /i, '') // Remove "upload the "
-            }));       
+            }));
           }
           if (this.request.LateralEntryQualificationModel == null) {
             this.request.LateralEntryQualificationModel = []
@@ -888,14 +891,14 @@ export class EditMeritDocumentComponent {
             this.GetStreamCourse();
             this.SubjectID = data['Data']['LateralEntryQualificationModel'][0]['SubjectID'];
           }
-            if (this.request.VerificationDocumentDetailList) {   
-              this.filteredDocumentDetails = this.request.VerificationDocumentDetailList.filter((x) => x.GroupNo === 1);
-              this.request.VerificationDocumentDetailList = this.request.VerificationDocumentDetailList.filter((x) => x.GroupNo != 1);
-            } else {
-              this.filteredDocumentDetails = [];
-            }
+          if (this.request.VerificationDocumentDetailList) {
+            this.filteredDocumentDetails = this.request.VerificationDocumentDetailList.filter((x) => x.GroupNo === 1);
+            this.request.VerificationDocumentDetailList = this.request.VerificationDocumentDetailList.filter((x) => x.GroupNo != 1);
+          } else {
+            this.filteredDocumentDetails = [];
+          }
 
-          
+
           const btnSave = document.getElementById('btnSave')
           if (btnSave) btnSave.innerHTML = "Update";
           const btnReset = document.getElementById('btnReset')
@@ -969,16 +972,16 @@ export class EditMeritDocumentComponent {
         }, (error: any) => console.error(error)
         );
 
-      if(this.request.CourseType == 4 || this.request.CourseType == 3) {
+      if (this.request.CourseType == 4 || this.request.CourseType == 3) {
         await this.commonMasterService.GetCommonMasterData("BTER_Other_Board", Type, (this.lateralrequest.BoardStateID))
 
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if (Type == 12) {
-            this.BoardExamList12 = data['Data'];
-          }
-        }, (error: any) => console.error(error)
-        );
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (Type == 12) {
+              this.BoardExamList12 = data['Data'];
+            }
+          }, (error: any) => console.error(error)
+          );
       }
     }
     catch (ex) {
@@ -1393,7 +1396,7 @@ export class EditMeritDocumentComponent {
 
 
   async SaveData() {
-    
+
     this.isSubmitted = true;
     if (this.request.IsSupplement == true) {
       if (this.request.SupplementaryDataModel.length < 1) {
@@ -1495,8 +1498,8 @@ export class EditMeritDocumentComponent {
 
 
     this.request.DocumentPushModel = []
-    if (this.request.CategoryA == EnumCasteCategory.ST && this.UploadDocCategory.CategoryAProfilePhoto!='') {
-      this.AddCategoryDocument(36,1)
+    if (this.request.CategoryA == EnumCasteCategory.ST && this.UploadDocCategory.CategoryAProfilePhoto != '') {
+      this.AddCategoryDocument(36, 1)
     }
     else if (this.request.CategoryA == EnumCasteCategory.EWS && this.UploadDocCategory.CategoryAProfilePhoto != '') {
       this.AddCategoryDocument(35, 1)
@@ -1514,7 +1517,7 @@ export class EditMeritDocumentComponent {
     if (this.request.CategoryB == 1 && this.UploadDocCategory.CategoryBProfilePhoto != '') {
       this.AddCategoryDocument(40, 2)
     }
-    else if (this.request.CategoryB == 2  && this.UploadDocCategory.CategoryBProfilePhoto != '') {
+    else if (this.request.CategoryB == 2 && this.UploadDocCategory.CategoryBProfilePhoto != '') {
       this.AddCategoryDocument(41, 2)
     }
     else if (this.request.CategoryB == 3 && this.UploadDocCategory.CategoryBProfilePhoto != '') {
@@ -1567,7 +1570,7 @@ export class EditMeritDocumentComponent {
 
         this.loaderService.requestStarted();
         try {
-          
+
           await this.correctMeritService.Save_MeritDocumentscrutiny(this.request)
             .then((data: any) => {
               data = JSON.parse(JSON.stringify(data));
@@ -1659,7 +1662,7 @@ export class EditMeritDocumentComponent {
               if (this.State == EnumStatus.Success) {
                 this.toastr.success(this.Message)
                 this.CloseModel()
-            /*    this.router.navigate(['/StudentVerificationList'])*/
+                /*    this.router.navigate(['/StudentVerificationList'])*/
               }
               else {
                 this.toastr.error(this.ErrorMessage)
@@ -1691,40 +1694,35 @@ export class EditMeritDocumentComponent {
       this.router.navigate(['/CorrectMeritNonENG', 2]);
     }
   }
- 
 
 
-  AddCategoryDocument(DocumentMasterID: number, CategoryType: number)
-  {
+
+  AddCategoryDocument(DocumentMasterID: number, CategoryType: number) {
     var vDisFileName = ''
     var vFileName = ''
-    var vCategory=''
+    var vCategory = ''
     if (CategoryType == 1)//cateforyname
     {
       vDisFileName = this.UploadDocCategory.Dis_CategoryAName;
       vFileName = this.UploadDocCategory.CategoryAProfilePhoto
-      vCategory='CategoryA'
+      vCategory = 'CategoryA'
     }
-    else if (CategoryType == 2)
-    {
+    else if (CategoryType == 2) {
       vDisFileName = this.UploadDocCategory.Dis_CategoryBName;
       vFileName = this.UploadDocCategory.CategoryBProfilePhoto
       vCategory = 'CategoryB'
     }
-    else if (CategoryType == 3)
-    {
+    else if (CategoryType == 3) {
       vDisFileName = this.UploadDocCategory.Dis_CategoryCName;
       vFileName = this.UploadDocCategory.CategoryCProfilePhoto
       vCategory = 'CategoryC'
     }
-    else if (CategoryType == 4)
-    {
+    else if (CategoryType == 4) {
       vDisFileName = this.UploadDocCategory.Dis_PrefentialName;
       vFileName = this.UploadDocCategory.PrefentialProfilePhoto
       vCategory = 'Prefential'
     }
-    else if (CategoryType == 5)
-    {
+    else if (CategoryType == 5) {
       vDisFileName = this.UploadDocCategory.Dis_MotherCertificateName;
       vFileName = this.UploadDocCategory.MotherCertificateProfilePhoto
       vCategory = 'Mother'

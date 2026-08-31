@@ -80,6 +80,7 @@
             <th class="text-left">S No</th>
             <th class="text-left">Office Name</th>
             <th class="text-left">Staff Type</th>
+            <th class="text-left">Name of service</th>
             <th class="text-left">Designation Name</th>
             <th class="text-left">Branch</th>
             <th class="text-left">Budget Name</th>
@@ -95,6 +96,7 @@
             <td align="left">{{idx+1}}</td>
             <td align="left">{{ row.OfficeName }}</td>
             <td align="left">{{ row.StaffTypeName }}</td>
+            <td align="left">{{ row.PostServiceTypeName }}</td>
             <td align="left">{{ row.DesignationName }}</td>
             <td align="left">{{ row.BranchName == '' || row.BranchName == null ? '-' : row.BranchName}}</td>
             <td align="left">{{ row.BudgetTypeName }}</td>

@@ -97,7 +97,7 @@ export class GrievanceListComponent implements OnInit {
     await this.GetGrievanceData();
     await this.GetStatusForGrivience();
 
-    if(this.sSOLoginDataModel.RoleID != EnumRole.DTE) {
+    if(!(this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR)) {
       await this.GetMasterSubDDL();
     }    
     

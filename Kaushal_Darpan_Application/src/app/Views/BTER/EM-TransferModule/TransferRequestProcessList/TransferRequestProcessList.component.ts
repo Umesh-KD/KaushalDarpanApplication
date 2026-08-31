@@ -220,7 +220,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
            this.ShowCheckBoxId = 1;
            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderADTEReview);
         }
-         else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
+         else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR) {
 
            this.isDisable = false;
            this.isShowStatus_Checkbox = true;
@@ -318,7 +318,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 
           //  }
           //}
-          else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
+          else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR) {
             if (this.EM_TransferProcessList?.length > 0) {
               this.EM_TransferProcessList = this.EM_TransferProcessList;
             }
@@ -499,7 +499,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
                 }
               });
           }
-          else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
+          else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR) {
             debugger
             this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
             this.searchRequest.Action = "EM_TransferSystemHST";
@@ -600,7 +600,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
       else if (((this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE || this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) && EnumTransferSystemStatus.UnderADTEReview == this.SearchStatus)) {
         this.ShowCheckBoxId = 1;
       }
-      else if (((this.sSOLoginDataModel.RoleID == EnumRole.DTE) && EnumTransferSystemStatus.UnderJDTEReview == this.SearchStatus)) {
+      else if (((this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR) && EnumTransferSystemStatus.UnderJDTEReview == this.SearchStatus)) {
         this.ShowCheckBoxId = 1;
       } 
 

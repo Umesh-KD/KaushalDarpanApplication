@@ -16,6 +16,7 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { DocumentDetailsService } from '../../../../Common/document-details';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-bter-em-add-staff-details',
@@ -110,6 +111,7 @@ export class BterEMAddStaffDetailsComponent {
     private modalService: NgbModal,
     private router: Router,
     private documentDetailsService: DocumentDetailsService,
+    private Swal2: SweetAlert2,
   ) {}
 
   async ngOnInit() {
@@ -710,6 +712,50 @@ export class BterEMAddStaffDetailsComponent {
 
   async SaveData(isSaveDraft: boolean = false) {
     debugger
+
+    if (this.StaffQualificationList?.length > 0) { 
+      const has10thOr12th = this.StaffQualificationList.some( (item: any) => item.QualificationID == 14 || item.QualificationID == 15 ); 
+      // Neither 10th nor 12th entered 
+      if (!has10thOr12th) {
+        const result = await new Promise<any>((resolve) => { 
+          this.Swal2.Confirmation( "Are you sure you want to continue without entering 10th or 12th qualification?", 
+            (result: any) => { 
+              resolve(result); 
+            } 
+          ); 
+        }); 
+        
+        // User pressed Cancel / No
+        if (!result?.isConfirmed) { 
+          return; 
+        } 
+      } 
+    } else { 
+      // Qualification list is empty 
+      const result = await new Promise<any>((resolve) => { 
+        this.Swal2.Confirmation( "Are you sure you want to continue without entering 10th or 12th qualification?", 
+          (result: any) => { 
+            resolve(result); 
+          } 
+        ); 
+      });
+
+      if (!result?.isConfirmed) { 
+        return; 
+      }
+    }
+
+    if(this.StaffQualificationList?.length > 0){
+      this.StaffQualificationList.forEach((item: any) => {
+        if(!(item.QualificationID == 14 || item.QualificationID == 15)){
+          
+        }
+      });
+    } else {
+
+    }
+
+
     await  this.refreshInstituteValidation();
     if(!isSaveDraft){
       this.isSubmitted = true;
@@ -1243,11 +1289,21 @@ export class BterEMAddStaffDetailsComponent {
   }
 
   deleteRow(index: number): void {
-    this.staffDetailsFormData.StaffSubjectListModel.splice(index, 1);
+    this.Swal2.Confirmation("Are you sure you want to delete row?",
+      async (result: any) => {
+        if (result.isConfirmed) {
+          this.staffDetailsFormData.StaffSubjectListModel.splice(index, 1);
+        }
+      });
   }
 
   deleteServiceHistory(index:number):void{
-    this.serviceHistoryList.splice(index,1);
+    this.Swal2.Confirmation("Are you sure you want to delete row?",
+      async (result: any) => {
+        if (result.isConfirmed) {
+          this.serviceHistoryList.splice(index,1);
+        }
+      });    
   }
 
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
@@ -1620,26 +1676,32 @@ export class BterEMAddStaffDetailsComponent {
   }
 
   async deleteQualificationRow(row: any) {
-    try {
-      const request: any = {};
-      request.UserID = this.sSOLoginDataModel.UserID;
-      request.StaffID = this.sSOLoginDataModel.StaffID;
-      request.StaffQualificationID = row.StaffQualificationID;
+    this.Swal2.Confirmation("Are you sure you want to delete this row?",
+      async (result: any) => {
+        if (result.isConfirmed) {
+          try {
+            const request: any = {};
+            request.UserID = this.sSOLoginDataModel.UserID;
+            request.StaffID = this.sSOLoginDataModel.StaffID;
+            request.StaffQualificationID = row.StaffQualificationID;
 
-      await this.bterEstablishManagementService.DeleteStaffQualification_ByID(request).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State == EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          await this.getStaffQualificationData();
-        } else if(data.State == EnumStatus.Warning) {
-          this.toastr.warning(data.Message);
-        } else {
-          this.toastr.error(data.ErrorMessage);
+            await this.bterEstablishManagementService.DeleteStaffQualification_ByID(request).then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              if (data.State == EnumStatus.Success) {
+                this.toastr.success(data.Message);
+                await this.getStaffQualificationData();
+              } else if(data.State == EnumStatus.Warning) {
+                this.toastr.warning(data.Message);
+              } else {
+                this.toastr.error(data.ErrorMessage);
+              }
+            })
+          } catch (error) {
+            console.error(error);
+          }
         }
-      })
-    } catch (error) {
-      console.error(error);
-    }
+      });
+    
   }
 
   async SaveStaffCareerAdvancementData() {
@@ -1694,27 +1756,32 @@ export class BterEMAddStaffDetailsComponent {
   }
 
   async DeleteStaffCareerAdvancementScheme_ByID (row: any) {
-    try {
-      const request: any = {};
-      request.UserID = this.sSOLoginDataModel.UserID;
-      request.StaffID = this.sSOLoginDataModel.StaffID;
-      request.StaffCASID = row.StaffCASID;
+    this.Swal2.Confirmation("Are you sure you want to delete row?",
+      async (result: any) => {
+        if (result.isConfirmed) {
+          try {
+            const request: any = {};
+            request.UserID = this.sSOLoginDataModel.UserID;
+            request.StaffID = this.sSOLoginDataModel.StaffID;
+            request.StaffCASID = row.StaffCASID;
 
-      await this.bterEstablishManagementService.DeleteStaffCareerAdvancementScheme_ByID(request).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State == EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          await this.GetStaffCareerAdvancementSchemeData();
+            await this.bterEstablishManagementService.DeleteStaffCareerAdvancementScheme_ByID(request).then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              if (data.State == EnumStatus.Success) {
+                this.toastr.success(data.Message);
+                await this.GetStaffCareerAdvancementSchemeData();
 
-        } else if(data.State == EnumStatus.Warning) {
-          this.toastr.warning(data.Message);
-        } else {
-          this.toastr.error(data.ErrorMessage);
+              } else if(data.State == EnumStatus.Warning) {
+                this.toastr.warning(data.Message);
+              } else {
+                this.toastr.error(data.ErrorMessage);
+              }
+            })
+          } catch (error) {
+            console.error(error);
+          }
         }
-      })
-    } catch (error) {
-      console.error(error);
-    }
+      });
   }
 
   async GetPayLevelDDL() {

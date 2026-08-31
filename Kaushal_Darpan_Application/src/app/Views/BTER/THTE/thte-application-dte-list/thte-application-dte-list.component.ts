@@ -93,7 +93,7 @@ export class THTEApplicationDteListComponent {
         this.StatusListDDL = data['Data'];
         this.UpdateStatusListDDL = data['Data'];
 
-        if(this.sSOLoginDataModel.RoleID === EnumRole.DTE) {
+        if(this.sSOLoginDataModel.RoleID === EnumRole.DTE || this.sSOLoginDataModel.RoleID === EnumRole.DIRECTOR) {
           this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1353 || x.ID == 1345)
         } else if(this.sSOLoginDataModel.RoleID === EnumRole.CommitteInchargeDTE) {
           this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1354 || x.ID == 1353)
@@ -101,7 +101,7 @@ export class THTEApplicationDteListComponent {
 
         if(this.sSOLoginDataModel.RoleID == EnumRole.CommitteInchargeDTE) {
           this.UpdateStatusListDDL = this.UpdateStatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1353)
-        } else if(this.sSOLoginDataModel.RoleID === EnumRole.DTE) {
+        } else if(this.sSOLoginDataModel.RoleID === EnumRole.DTE || this.sSOLoginDataModel.RoleID === EnumRole.DIRECTOR) {
           this.UpdateStatusListDDL = this.UpdateStatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1345)
         }
       })

@@ -174,7 +174,18 @@
             </td>
             <td align="left">
               <a href="javascript:void(0)" (click)="btnEdit_OnClick(item.Lab_Id)" title="Edit"><i class="ti ti-pencil"></i></a>
-              <a *ngIf="_EnumRole.DTELateral == getRoleID || _EnumRole.AdminNon == getRoleID || _EnumRole.Admin == getRoleID || _EnumRole.NodalVerifier == getRoleID || _EnumRole.DTENON == getRoleID || _EnumRole.DTE == getRoleID || _EnumRole.DTEDegreeCourse2ndYear == getRoleID || _EnumRole.DTEDegreeCourse1stYear == getRoleID" href="javascript:void(0)" (click)="btnDelete_OnClick(item.Lab_Id)" title="Delete"><i class="ti ti-trash"></i> </a>
+              <a href="javascript:void(0)" title="Delete"
+                *ngIf="_EnumRole.DTELateral == getRoleID || 
+                      _EnumRole.AdminNon == getRoleID || 
+                      _EnumRole.Admin == getRoleID || 
+                      _EnumRole.NodalVerifier == getRoleID || 
+                      _EnumRole.DTENON == getRoleID || 
+                      _EnumRole.DTE == getRoleID || 
+                      _EnumRole.DTEDegreeCourse2ndYear == getRoleID || 
+                      _EnumRole.DTEDegreeCourse1stYear == getRoleID ||
+                      _EnumRole.DIRECTOR == getRoleID " 
+                (click)="btnDelete_OnClick(item.Lab_Id)"><i class="ti ti-trash"></i> 
+              </a>
             </td>
           </tr>
         </tbody>

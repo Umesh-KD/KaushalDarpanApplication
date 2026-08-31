@@ -73,6 +73,7 @@ export class EstablishmentReportBTERComponent {
     this.act = this.activatedRoute.snapshot.queryParamMap.get("act")?.toString() || '';
     this.status = Number(this.activatedRoute.snapshot.queryParamMap.get("status")?.toString()) || 0;
 
+    await this.setOfficeOnLoad();
     await this.GetDDLMasterData();
     await this.GetStaffProfileStatusList();
     await this.getInstituteDataList();
@@ -82,7 +83,22 @@ export class EstablishmentReportBTERComponent {
     await this.GetPayLevelDDL();
     await this.BTER_EM_GetStaffList();
     await this.getInstituteMasterList();
+  }
 
+  async setOfficeOnLoad() {
+    if(this.sSOLoginDataModel.RoleID == EnumRole.HO_DTE) {
+      this.searchRequest.OfficeID = EnumOffice.DTE;
+    } else if(this.sSOLoginDataModel.RoleID == EnumRole.HO_BTER) {
+      this.searchRequest.OfficeID = EnumOffice.BTER;
+    } else if(this.sSOLoginDataModel.RoleID == EnumRole.HO_TTC) {
+      this.searchRequest.OfficeID = EnumOffice.TTC_LRDC;
+    } else if(this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+      this.searchRequest.OfficeID = EnumOffice.COLLEGE;
+    }
+
+    if(this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+    }
   }
 
   async BTER_EM_GetStaffList() {
@@ -93,8 +109,6 @@ export class EstablishmentReportBTERComponent {
     this.searchRequest.status=this.searchRequest.status
     this.searchRequest.Eng_NonEng=this.sSOLoginDataModel.Eng_NonEng
     this.searchRequest.GuestHouseID = this.sSOLoginDataModel.GuestHouseID;
-    this.searchRequest.InstitutionManagementTypeID = this.searchRequest.InstitutionManagementTypeID
-    this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
 
     if(this.status>0) {
       this.searchRequest.OfficeID = this.status;

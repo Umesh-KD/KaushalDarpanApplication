@@ -109,12 +109,20 @@ export class AddRequestLabelingEquipmentsComponent {
       }
       
       this.sSOLoginDataModel =  JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-      if (this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse1stYear || this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse2ndYear || this.sSOLoginDataModel.RoleID == this._EnumRole.DTE || this.sSOLoginDataModel.RoleID == this._EnumRole.DTENON || this.sSOLoginDataModel.RoleID == this._EnumRole.NodalVerifier || this.sSOLoginDataModel.RoleID == this._EnumRole.Admin || this.sSOLoginDataModel.RoleID == this._EnumRole.AdminNon || this.sSOLoginDataModel.RoleID == this._EnumRole.DTELateral)  {
+      if (
+        this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse1stYear || 
+        this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse2ndYear || 
+        this.sSOLoginDataModel.RoleID == this._EnumRole.DTE || 
+        this.sSOLoginDataModel.RoleID == this._EnumRole.DIRECTOR ||
+        this.sSOLoginDataModel.RoleID == this._EnumRole.DTENON || 
+        this.sSOLoginDataModel.RoleID == this._EnumRole.NodalVerifier || 
+        this.sSOLoginDataModel.RoleID == this._EnumRole.Admin || 
+        this.sSOLoginDataModel.RoleID == this._EnumRole.AdminNon || 
+        this.sSOLoginDataModel.RoleID == this._EnumRole.DTELateral
+      )  {
         this.RequestFormGroup.get('ddlInstituteID')?.disable();
         this.RequestFormGroup.get('ddlCategoryId')?.disable();
-        this.RequestFormGroup.get('ddlEquipmentsId')?.disable();
-
-        
+        this.RequestFormGroup.get('ddlEquipmentsId')?.disable();      
 
       }
     });

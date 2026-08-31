@@ -189,6 +189,7 @@
                   || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
                   || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear
                   || sSOLoginDataModel.RoleID == EnumRole.DTE
+                  || sSOLoginDataModel.RoleID == EnumRole.DIRECTOR
                   || sSOLoginDataModel.RoleID == EnumRole.DTENON
                   || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
                   || sSOLoginDataModel.RoleID == EnumRole.AdminNon
@@ -265,8 +266,9 @@
                 @if(((item.Status == 0) || (item.Status == 2)) && sSOLoginDataModel.RoleID == EnumRole.StoreKeeper) {
                 <a [routerLink]="['/AddDteItemMaster']" [queryParams]="{ id: item.ItemId }" title="Edit"><i class="ti ti-pencil"></i></a>
                 }
-                @if((item.Status != 2) && sSOLoginDataModel.RoleID == EnumRole.Admin || sSOLoginDataModel.RoleID == EnumRole.AdminNon ||
-                sSOLoginDataModel.RoleID == EnumRole.DTE || sSOLoginDataModel.RoleID == EnumRole.DTENON || sSOLoginDataModel.RoleID == EnumRole.DTELateral) {
+                @if((item.Status != 2) && (sSOLoginDataModel.RoleID == EnumRole.Admin || sSOLoginDataModel.RoleID == EnumRole.AdminNon ||
+                sSOLoginDataModel.RoleID == EnumRole.DTE || sSOLoginDataModel.RoleID == EnumRole.DTENON || sSOLoginDataModel.RoleID == EnumRole.DTELateral
+                || sSOLoginDataModel.RoleID == EnumRole.DIRECTOR)) {
                 <a [routerLink]="['/AddDteItemMaster']" [queryParams]="{ id: item.ItemId }" title="Edit"><i class="ti ti-pencil"></i></a>
                 }
 
@@ -474,6 +476,7 @@
        || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
        || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear
        || sSOLoginDataModel.RoleID == EnumRole.DTE
+       || sSOLoginDataModel.RoleID == EnumRole.DIRECTOR
        || sSOLoginDataModel.RoleID == EnumRole.DTENON
        || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
        || sSOLoginDataModel.RoleID == EnumRole.AdminNon

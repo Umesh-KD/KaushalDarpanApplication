@@ -1562,7 +1562,7 @@
     </form>
     <div class="flex justify-center flex-wrap items-centermt-3">
       <div>
-        <button *ngIf="[0, 288, 249].includes(request.ProfileStatusID) && request.IsAdmin != 1"
+        <button *ngIf="[0, 288, 249, 10388].includes(request.ProfileStatusID) && request.IsAdmin != 1"
           class="btn bg-success text-white mt-3" type="button" (click)="SaveData(1)">
           Save as Draft
         </button>

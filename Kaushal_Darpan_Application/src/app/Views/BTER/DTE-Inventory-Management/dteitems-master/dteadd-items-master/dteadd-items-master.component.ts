@@ -56,7 +56,7 @@ export class DteAddItemsMasterComponent {
   public FileName: string = '';
   public FilePath: string = '';
   isFileError: boolean = false;
-  public Specification: string ='';
+  public Specification: string = '';
   constructor(
     private toastr: ToastrService,
     private dteItemUnitMasterService: DteItemUnitMasterService,
@@ -89,7 +89,7 @@ export class DteAddItemsMasterComponent {
       IsConsume: [''],
       UnitId: [0],
       voucherdate: ['', Validators.required],
-      abbreviation: ['',  Validators.required],
+      abbreviation: ['', Validators.required],
       // receiptbookfolio: [''],
       // issuedate: [''],
       // IndentNo: [''],
@@ -109,17 +109,17 @@ export class DteAddItemsMasterComponent {
     await this.GetAllUnitData();
     if (this.ItemId > 0) {
       await this.GetByID(this.ItemId);
-      
-      
+
+
       this.AddItemsRequestFormGroup.get('ItemCategoryId')?.disable();
       this.AddItemsRequestFormGroup.get('EquipmentsId')?.disable();
       // this.AddItemsRequestFormGroup.get('txtQuantity')?.disable();
-      
+
     }
     this.request.voucherdate = this.todayDate;
     this.request.issuebookfoliodate = this.todayDate;
     this.request.issuedate = this.todayDate;
-    
+
   }
 
   get _AddItemsRequestFormGroup() { return this.AddItemsRequestFormGroup.controls; }
@@ -153,18 +153,18 @@ export class DteAddItemsMasterComponent {
       /*return console.log("Form is invalid, cannot submit")*/
       this.toastr.warning("Form is invalid, cannot submit")
       Object.keys(this.AddItemsRequestFormGroup.controls).forEach(key => {
-          const control = this.AddItemsRequestFormGroup.get(key);
- 
-          if (control && control.invalid) {
-            this.toastr.error(`Control ${key} is invalid`);
-            Object.keys(control.errors!).forEach(errorKey => {
-              this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
-            });
-          }
-        });
+        const control = this.AddItemsRequestFormGroup.get(key);
+
+        if (control && control.invalid) {
+          this.toastr.error(`Control ${key} is invalid`);
+          Object.keys(control.errors!).forEach(errorKey => {
+            this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+          });
+        }
+      });
       return;
     }
-  
+
     //Show Loading
     this.loaderService.requestStarted();
     this.isLoading = true;
@@ -177,15 +177,16 @@ export class DteAddItemsMasterComponent {
       } else {
         this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       }
-           if (this.sSOLoginDataModel.RoleID == this._EnumRole.Admin
-          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.Principal
-          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse1stYear
-          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse2ndYear
-          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.DTE
-          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.DTENON
-          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.NodalVerifier
-          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.AdminNon
-          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.DTELateral
+      if (this.sSOLoginDataModel.RoleID == this._EnumRole.Admin
+        || this.sSOLoginDataModel.RoleID == this._EnumRole.Principal
+        || this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse1stYear
+        || this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse2ndYear
+        || this.sSOLoginDataModel.RoleID == this._EnumRole.DTE
+        || this.sSOLoginDataModel.RoleID == this._EnumRole.DIRECTOR
+        || this.sSOLoginDataModel.RoleID == this._EnumRole.DTENON
+        || this.sSOLoginDataModel.RoleID == this._EnumRole.NodalVerifier
+        || this.sSOLoginDataModel.RoleID == this._EnumRole.AdminNon
+        || this.sSOLoginDataModel.RoleID == this._EnumRole.DTELateral
       ) {
         this.request.Status = 1
       } else {
@@ -232,7 +233,7 @@ export class DteAddItemsMasterComponent {
       await this.itemService.GetByID(id)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          console.log('bind data ==>',data)
+          console.log('bind data ==>', data)
           this.ddlCategory_Change();
           this.request.ItemCategoryId = data['Data']["ItemCategoryId"];
           this.AddItemsRequestFormGroup.patchValue({
@@ -240,7 +241,7 @@ export class DteAddItemsMasterComponent {
           })
           await this.ddlEquipment_Change();
           this.request.EquipmentsId = data['Data']['EquipmentsId'];
-          
+
           await this.DGET_Details();
           this.request.CampanyName = data['Data']["CampanyName"];
 
@@ -253,12 +254,12 @@ export class DteAddItemsMasterComponent {
           this.request.CreatedBy = data['Data']["CreatedBy"];
           this.request.ModifyBy = data['Data']["ModifyBy"];
           this.request.IsConsume = data['Data']["IsConsume"];
-          this.request.BillFileName=data['Data']["BillFileName"];
-          this.request.BillFilePath=data['Data']["BillFilePath"];
-          this.request.Specification=data['Data']["Specification"];
-          this.FileName=data['Data']["BillFileName"];
-          this.FilePath=data['Data']["BillFilePath"];
-          this.Dis_FileName=data['Data']["BillFileName"];
+          this.request.BillFileName = data['Data']["BillFileName"];
+          this.request.BillFilePath = data['Data']["BillFilePath"];
+          this.request.Specification = data['Data']["Specification"];
+          this.FileName = data['Data']["BillFileName"];
+          this.FilePath = data['Data']["BillFilePath"];
+          this.Dis_FileName = data['Data']["BillFileName"];
           const rawDate = data['Data']["voucherdate"];
           this.AddItemsRequestFormGroup.get('BillDocument')?.setValue(this.FileName);
 
@@ -270,7 +271,7 @@ export class DteAddItemsMasterComponent {
           }
           this.request.UnitId = data['Data']["unitId"];
           this.request.abbreviation = data['Data']["abbreviation"];
-          this.request.receiptbookfolio=data['Data']["ReceiptBookFolio"];
+          this.request.receiptbookfolio = data['Data']["ReceiptBookFolio"];
           const rawissueDate = data['Data']["IssueDate"];
 
           if (rawissueDate) {
@@ -278,8 +279,8 @@ export class DteAddItemsMasterComponent {
             this.request.issuedate = dateObj.toISOString().substring(0, 10);
           } else {
             this.request.issuedate = '';
-          } 
-          this.request.IndentNo=data['Data']["IndentNo"];
+          }
+          this.request.IndentNo = data['Data']["IndentNo"];
 
           const rawissueboolfolioDate = data['Data']["IssueBookFolioDate"];
           if (rawissueboolfolioDate) {
@@ -287,9 +288,9 @@ export class DteAddItemsMasterComponent {
             this.request.issuebookfoliodate = dateObj.toISOString().substring(0, 10);
           } else {
             this.request.issuebookfoliodate = '';
-          }  
-          this.request.QuantityIssued=data['Data']["QuantityIssued"];
-          this.request.QuantityBalance=data['Data']["QuantityBalance"];
+          }
+          this.request.QuantityIssued = data['Data']["QuantityIssued"];
+          this.request.QuantityBalance = data['Data']["QuantityBalance"];
           this.request.MappingId = data['Data']["MappingId"];
           const btnSave = document.getElementById('btnSave');
           if (btnSave) btnSave.innerHTML = "Update";
@@ -336,7 +337,7 @@ export class DteAddItemsMasterComponent {
   }
 
   async ddlCategory_Change() {
-    
+
     try {
       this.loaderService.requestStarted();
       await this.commonFunctionService.GetALLEquipmentCategory()
@@ -356,7 +357,7 @@ export class DteAddItemsMasterComponent {
     }
   }
 
- 
+
 
   async ddlEquipment_Change() {
     debugger;
@@ -364,7 +365,7 @@ export class DteAddItemsMasterComponent {
       this.loaderService.requestStarted();
       const selectedCategoryId = this.AddItemsRequestFormGroup.value.ItemCategoryId;
 
-      const defaultEquipment = { ID: 0, Name: '-- Select Equipment --', IsConsume: 0, UnitId: 0,Specification:'' };
+      const defaultEquipment = { ID: 0, Name: '-- Select Equipment --', IsConsume: 0, UnitId: 0, Specification: '' };
 
       if (!selectedCategoryId || selectedCategoryId === 0) {
         this.EquipmentsDDLList = [defaultEquipment];
@@ -373,7 +374,7 @@ export class DteAddItemsMasterComponent {
         this.AddItemsRequestFormGroup.controls['IsConsume'].setValue(0);
         this.request.UnitId = 0;
         this.request.IsConsume = 0;
-        this.Specification='';
+        this.Specification = '';
         return;
       }
 
@@ -383,7 +384,7 @@ export class DteAddItemsMasterComponent {
       this.AddItemsRequestFormGroup.controls['IsConsume'].setValue(0);
       this.request.UnitId = 0;
       this.request.IsConsume = 0;
-      this.Specification='';
+      this.Specification = '';
       const data = await this.commonFunctionService.GetDteEquipment_Branch_Wise_CategoryWise(selectedCategoryId);
       const parsedData = JSON.parse(JSON.stringify(data))?.Data || [];
 
@@ -405,11 +406,11 @@ export class DteAddItemsMasterComponent {
     if (selectedEquipment) {
       this.request.IsConsume = selectedEquipment.IsConsume || 0;
       this.request.UnitId = selectedEquipment.UnitId || 0;
-      this.Specification=selectedEquipment.Specification || '';
+      this.Specification = selectedEquipment.Specification || '';
     } else {
       this.request.IsConsume = 0;
       this.request.UnitId = 0;
-      this.Specification='';
+      this.Specification = '';
     }
 
     this.AddItemsRequestFormGroup.controls['IsConsume'].setValue(this.request.IsConsume);
@@ -495,14 +496,14 @@ export class DteAddItemsMasterComponent {
     this.onQuantityChange(event);
   }
   onQuantityChange(event: Event): void {
-  const qty = this.AddItemsRequestFormGroup.get('txtQuantity')?.value || 0;
-  const issued = this.AddItemsRequestFormGroup.get('txtQuantityIssued')?.value || 0;
+    const qty = this.AddItemsRequestFormGroup.get('txtQuantity')?.value || 0;
+    const issued = this.AddItemsRequestFormGroup.get('txtQuantityIssued')?.value || 0;
 
-  this.AddItemsRequestFormGroup.patchValue(
-    { txtQuantityBalance: qty - issued },
-    { emitEvent: false }
-  );
-}
+    this.AddItemsRequestFormGroup.patchValue(
+      { txtQuantityBalance: qty - issued },
+      { emitEvent: false }
+    );
+  }
 
 
   async ResetControl() {
@@ -521,13 +522,13 @@ export class DteAddItemsMasterComponent {
       UnitId: null,
       voucherdate: '',
       Abbreviation: '',
-      receiptbookfolio:'',
+      receiptbookfolio: '',
       issuedate: '',
       IndentNo: '',
       issuebookfoliodate: '',
       txtQuantityIssued: '0',
       txtQuantityBalance: '',
-       BillDocument: ''
+      BillDocument: ''
     });
 
     this.EquipmentsDDLList = [];
@@ -576,68 +577,68 @@ export class DteAddItemsMasterComponent {
   openDatePicker(event: any) {
     event.target.showPicker();
   }
-  async UploadDocument(event: any, FileName: any, Dis_FileName:any) {
-      try { 
-        let uploadModel: UploadFileModel = {
-          FileName: FileName ?? "",
-          FileExtention: "",
-          MinFileSize: "20kb",
-          MaxFileSize: "2mb",
-          FolderName:"StockRegisterBillUpload",
-     
-        }
-        await this.documentDetailsService.UploadDocument(event, uploadModel)
-          .then((data: any) => {
-            this.State = data['State'];
-            this.Message = data['Message'];
-            this.ErrorMessage = data['ErrorMessage'];
-            //
-            
-            if (this.State == EnumStatus.Success) {
-                this.FileName = data.Data[0].FileName;
-                this.Dis_FileName = data.Data[0].Dis_FileName; 
-                this.FilePath = data.Data[0].FilePath;
-                  this.AddItemsRequestFormGroup
+  async UploadDocument(event: any, FileName: any, Dis_FileName: any) {
+    try {
+      let uploadModel: UploadFileModel = {
+        FileName: FileName ?? "",
+        FileExtention: "",
+        MinFileSize: "20kb",
+        MaxFileSize: "2mb",
+        FolderName: "StockRegisterBillUpload",
+
+      }
+      await this.documentDetailsService.UploadDocument(event, uploadModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          //
+
+          if (this.State == EnumStatus.Success) {
+            this.FileName = data.Data[0].FileName;
+            this.Dis_FileName = data.Data[0].Dis_FileName;
+            this.FilePath = data.Data[0].FilePath;
+            this.AddItemsRequestFormGroup
               .get('BillDocument')
               ?.setValue(this.FileName);
-              event.target.value = null;
-            }
-            if (this.State == EnumStatus.Error) {
-              this.toastr.error(this.ErrorMessage)
-            }
-            else if (this.State == EnumStatus.Warning) {
-              this.toastr.warning(this.ErrorMessage)
-            }
-          });
-      }
-      catch (Ex) {
-        console.log(Ex);
-      }
+            event.target.value = null;
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.ErrorMessage)
+          }
+        });
     }
-    async DeleteDocument(item: any) {
-      try {
-        let deleteModel = new DeleteDocumentDetailsModel()
-        deleteModel.FolderName =  "Students";
-        deleteModel.FileName = item;
-        await this.documentDetailsService.DeleteDocument(deleteModel)
-          .then((data: any) => {
-            this.State = data['State'];
-            this.Message = data['Message'];
-            this.ErrorMessage = data['ErrorMessage'];
-            if (data.State != EnumStatus.Error) {
-              
-                this.FileName = '';
-                this.Dis_FileName = ''; 
-                 this.AddItemsRequestFormGroup.get('BillDocument')?.reset(); 
-            }
-            if (this.State == EnumStatus.Error) {
-              this.toastr.error(this.ErrorMessage)
-            }
-          });
-      }
-      catch (Ex) {
-        console.log(Ex);
-      }
+    catch (Ex) {
+      console.log(Ex);
     }
-  
+  }
+  async DeleteDocument(item: any) {
+    try {
+      let deleteModel = new DeleteDocumentDetailsModel()
+      deleteModel.FolderName = "Students";
+      deleteModel.FileName = item;
+      await this.documentDetailsService.DeleteDocument(deleteModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (data.State != EnumStatus.Error) {
+
+            this.FileName = '';
+            this.Dis_FileName = '';
+            this.AddItemsRequestFormGroup.get('BillDocument')?.reset();
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
 }

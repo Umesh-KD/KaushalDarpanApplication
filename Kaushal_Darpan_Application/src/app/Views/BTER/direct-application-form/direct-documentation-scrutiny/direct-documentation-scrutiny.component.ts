@@ -51,11 +51,11 @@ export class DirectDocumentationScrutinyComponent {
   public searchRequest = new BterSearchmodel()
   public formqual = new HighestQualificationModel()
   public engRequest = new EnglishQualificationDataModel()
-  public key:number=0
+  public key: number = 0
   public SchemelIst: any = []
   public ParentIncome: any = []
   public isAffadavit: boolean = false
-  public BackupCatoryA:number=0
+  public BackupCatoryA: number = 0
   public BranchName: any = []
   public ResidenceList: any = []
   isError: boolean = false;
@@ -167,7 +167,7 @@ export class DirectDocumentationScrutinyComponent {
   public ParentsIncome: number = 0;
   public ApplyScheme: number = 0;
   public Quali = new QualificationDataModel();
-  public statusid:number=0
+  public statusid: number = 0
   pdfUrl: string | null = null;
   safePdfUrl: SafeResourceUrl | null = null;
   showPdfModal: boolean = false;
@@ -183,7 +183,7 @@ export class DirectDocumentationScrutinyComponent {
 
   public CoreBranchList: any = []
   public BranchList: any = []
-  
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -254,7 +254,7 @@ export class DirectDocumentationScrutinyComponent {
     this.StudentJanDetailFormGroup = this.formBuilder.group(
       {
         ddlPreferentialCategory: [{ value: '' }, [DropdownValidators]],
-        ddlPreferentialType: [{ value: '', disabled: true } , [DropdownValidators]],
+        ddlPreferentialType: [{ value: '', disabled: true }, [DropdownValidators]],
         txtJanAadhaar: [''],
         txtName: ['', Validators.required],
         txtnameHindi: [{ value: '' }, Validators.required],
@@ -263,11 +263,11 @@ export class DirectDocumentationScrutinyComponent {
         txtDOB: ['', [Validators.required, this.minimumAgeValidator(10)]],
         email: ['', [Validators.pattern(GlobalConstants.EmailPattern)]],
         /*  txtMobileNumber: ['', Validators.required],*/
-        ddlIdentityProof: [{ value: 0, disabled: true } , [DropdownValidators1]],
+        ddlIdentityProof: [{ value: 0, disabled: true }, [DropdownValidators1]],
         txtFatherHindi: [{ value: '' }, Validators.required],
         txtMotherHindiname: [{ value: '' }, Validators.required],
-        ddlCategoryA: [{ value: '', disabled: true } , [DropdownValidators1]],
-        CategoryAbyChecker: [{ value: ''} , [DropdownValidators1]],
+        ddlCategoryA: [{ value: '', disabled: true }, [DropdownValidators1]],
+        CategoryAbyChecker: [{ value: '' }, [DropdownValidators1]],
         Gender: [{ value: 0, disabled: true }, [DropdownValidatorsString]],
         CertificateNo: ['', Validators.required],
         txtGeneratDate: ['', Validators.required],
@@ -308,16 +308,16 @@ export class DirectDocumentationScrutinyComponent {
       {
         txtRollNumber: ['', [Validators.required]],
 
-      txtAggregateMaximumMarks: ['', [DropdownValidators]],
-      txtAggregateMarksObtained: ['', [DropdownValidators]],
-      txtpercentage: [{ value: '', disabled: true }],
-      StateID: ['', [DropdownValidators]],
-      ddlBoardID: ['', [DropdownValidators]],
-      ddlPassyear: ['', [DropdownValidators]],
-      ddlMarksType: ['', [DropdownValidators]],
-      ddlBoardStateID: ['', [DropdownValidators]],
-      ddlBoardExamID: ['', [DropdownValidators]],
-    });
+        txtAggregateMaximumMarks: ['', [DropdownValidators]],
+        txtAggregateMarksObtained: ['', [DropdownValidators]],
+        txtpercentage: [{ value: '', disabled: true }],
+        StateID: ['', [DropdownValidators]],
+        ddlBoardID: ['', [DropdownValidators]],
+        ddlPassyear: ['', [DropdownValidators]],
+        ddlMarksType: ['', [DropdownValidators]],
+        ddlBoardStateID: ['', [DropdownValidators]],
+        ddlBoardExamID: ['', [DropdownValidators]],
+      });
 
     this.SupplementaryForm = this.formBuilder.group({
 
@@ -359,7 +359,7 @@ export class DirectDocumentationScrutinyComponent {
     this.HighestQualificationForm = this.formBuilder.group({
       ddlHighQualification: [{ value: 0, disabled: true }, [DropdownValidators1]],
       ddlYearOfPassing: ['', [DropdownValidators]],
-      ddlMarksType: ['', [DropdownValidators ]],
+      ddlMarksType: ['', [DropdownValidators]],
       txtBoardUniversity: ['', Validators.required],
       txtSchoolCollege: ['', Validators.required],
       txtHighestQualification: [''],
@@ -406,8 +406,14 @@ export class DirectDocumentationScrutinyComponent {
 
     this.StudentJanDetailFormGroup.get('txtMobileNumber')?.disable();
     debugger
-    if (this.SSOLoginDataModel.RoleID == 17 || this.SSOLoginDataModel.RoleID == 17 || this.SSOLoginDataModel.RoleID == 18 || this.SSOLoginDataModel.RoleID == 33
-      || this.SSOLoginDataModel.RoleID == 80 || this.SSOLoginDataModel.RoleID == 81) {
+    if (
+      this.SSOLoginDataModel.RoleID == EnumRole.DTE || 
+      this.SSOLoginDataModel.RoleID == EnumRole.DTENON || 
+      this.SSOLoginDataModel.RoleID == EnumRole.DTELateral || 
+      this.SSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear || 
+      this.SSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear || 
+      this.SSOLoginDataModel.RoleID == EnumRole.DIRECTOR
+    ) {
       this.StudentJanDetailFormGroup.get('Gender')?.enable();
       this.StudentJanDetailFormGroup.get('txtMobileNumber')?.enable();
       this.StudentJanDetailFormGroup.get('ddlCategoryB')?.enable();
@@ -443,10 +449,10 @@ export class DirectDocumentationScrutinyComponent {
     this.key = Number(this.activatedRoute.snapshot.queryParamMap.get('key'))
     this.statusid = Number(this.activatedRoute.snapshot.queryParamMap.get('statusid'))
     /*this.ApplicationID = Number(this.activatedRoute.snapshot.queryParamMap.get('ApplicationID') ?? 0);*/
-    
+
     await this.GetCoreBranches();
     await this.GetMarktYPEDDL()
-    await  this.GetMasterData()
+    await this.GetMasterData()
     await this.GetMasterDDL()
     await this.GetDegreeCourse();
     await this.loadDropdownData('BTER_Board')
@@ -460,18 +466,18 @@ export class DirectDocumentationScrutinyComponent {
     this.GetOtherMasterDDL()
 
     if (this.ApplicationID > 0) {
-       ;
+      ;
       this.searchRequest.ApplicationID = this.ApplicationID;
       await this.GetDocumentbyID();
-      await this.GetByqualificationId(this.request.SSOID);      
+      await this.GetByqualificationId(this.request.SSOID);
       await this.GetOtherById()
       await this.filteredDocumentDetails1();
       await this.ischeckerloggedInFun();
-     
-    }else {
+
+    } else {
       window.location.href = "/StudentVerificationList";
     }
-   
+
   }
 
 
@@ -535,18 +541,18 @@ export class DirectDocumentationScrutinyComponent {
 
 
   async ischeckerloggedInFun() {
-    const roleid= this.SSOLoginDataModel.RoleID;
-    this.isCheckerLoggedIn = this.SSOLoginDataModel.RoleID == EnumRole.BTERVerifierDiplomaNonENG || 
-                             this.SSOLoginDataModel.RoleID == EnumRole.BTERVerifierDiplomaLaterl ||
-                             this.SSOLoginDataModel.RoleID == EnumRole.BTERVerifierDegreeNonEngg || 
-                             this.SSOLoginDataModel.RoleID == EnumRole.BTERVerifierDegreeLateral;
+    const roleid = this.SSOLoginDataModel.RoleID;
+    this.isCheckerLoggedIn = this.SSOLoginDataModel.RoleID == EnumRole.BTERVerifierDiplomaNonENG ||
+      this.SSOLoginDataModel.RoleID == EnumRole.BTERVerifierDiplomaLaterl ||
+      this.SSOLoginDataModel.RoleID == EnumRole.BTERVerifierDegreeNonEngg ||
+      this.SSOLoginDataModel.RoleID == EnumRole.BTERVerifierDegreeLateral;
 
-    return ;
+    return;
   }
 
 
-  
-  
+
+
   changeCategoryA() {
     if (this.request.CategoryA != 5) {
       this.request.IsDevnarayan = 0;
@@ -560,19 +566,19 @@ export class DirectDocumentationScrutinyComponent {
   async GetCoreBranches() {
     this.commonMasterService.GetCommonMasterData('CORE BRANCH').then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
-      if(data.State == EnumStatus.Success){
+      if (data.State == EnumStatus.Success) {
         this.CoreBranchList = data['Data'];
-      } 
-      
+      }
+
     });
   }
 
   async GetBranches_ByCoreBranch() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.DC2ndYear_BranchesDDL(this.request.CourseType,this.lateralrequest.CoreBranchID).then((data: any) => {
+      await this.commonMasterService.DC2ndYear_BranchesDDL(this.request.CourseType, this.lateralrequest.CoreBranchID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        if(data.State == EnumStatus.Success){
+        if (data.State == EnumStatus.Success) {
           this.BranchList = data['Data'];
         }
       })
@@ -596,39 +602,39 @@ export class DirectDocumentationScrutinyComponent {
       this.loaderService.requestStarted();
       await this.ApplicationService1.GetQualificationDatabyID(searchrequest)
         .then(async (data: any) => {
-           ;
+          ;
           data = JSON.parse(JSON.stringify(data));
-          if (data['Data'] != null) {             
+          if (data['Data'] != null) {
             this.Quali = data['Data']
             if (this.Quali.CourseType == 3) {
               this.lateralrequest = this.Quali.LateralEntryQualificationModel[0]
-              if(this.lateralrequest.CourseID == 143) {
-                if(this.lateralrequest.Qualification == '12Th') {
-                  this.lateralrequest.Qualification='12'
+              if (this.lateralrequest.CourseID == 143) {
+                if (this.lateralrequest.Qualification == '12Th') {
+                  this.lateralrequest.Qualification = '12'
                 }
                 await this.BoardChange(Number(this.lateralrequest.Qualification))
                 await this.BoardStateChange(Number(this.lateralrequest.Qualification))
               }
             }
-            if(this.Quali.CourseType == 4 || this.Quali.CourseType == 5) {
+            if (this.Quali.CourseType == 4 || this.Quali.CourseType == 5) {
               this.lateralrequest = this.Quali.LateralEntryQualificationModel.filter((list: any) => list.Qualification != 'English')[0]
-              if(this.lateralrequest.CourseID == 281) {
-                if(this.lateralrequest.Qualification == '12Th') {
-                  this.lateralrequest.Qualification='12'
+              if (this.lateralrequest.CourseID == 281) {
+                if (this.lateralrequest.Qualification == '12Th') {
+                  this.lateralrequest.Qualification = '12'
                 }
                 await this.BoardChange(Number(this.lateralrequest.Qualification))
                 await this.BoardStateChange(Number(this.lateralrequest.Qualification))
               }
 
-              if(this.Quali.CourseType == 5 && this.lateralrequest.CourseID == 278) {
+              if (this.Quali.CourseType == 5 && this.lateralrequest.CourseID == 278) {
                 await this.GetBranches_ByCoreBranch();
               }
 
-              
+
               await this.GetStreamDegreeCourse()
               const engqua = this.Quali.LateralEntryQualificationModel.filter((list: any) => list.Qualification == 'English')
 
-              if(engqua.length > 0){
+              if (engqua.length > 0) {
                 this.engRequest.ApplicationQualificationId = engqua[0].ApplicationQualificationId
                 this.engRequest.MarksTypeIDEnglish = engqua[0].MarkType
                 this.engRequest.MaxMarksEnglish = engqua[0].AggMaxMark
@@ -659,7 +665,7 @@ export class DirectDocumentationScrutinyComponent {
               })
             }
 
-            if (this.Quali.LateralEntryQualificationModel != null  && this.Quali.CourseType == 3) {
+            if (this.Quali.LateralEntryQualificationModel != null && this.Quali.CourseType == 3) {
               this.Quali.LateralEntryQualificationModel.map((list: any) => {
                 if (list.Qualification == "Diploma") {
                   this.Diploma_Engineering = true
@@ -676,7 +682,7 @@ export class DirectDocumentationScrutinyComponent {
               })
             }
 
-            if (this.Quali.LateralEntryQualificationModel != null  && this.Quali.CourseType == 4) {
+            if (this.Quali.LateralEntryQualificationModel != null && this.Quali.CourseType == 4) {
               this.Quali.LateralEntryQualificationModel.map((list: any) => {
                 if (list.Qualification == "Diploma") {
                   this.Diploma_Engineering = true
@@ -693,7 +699,7 @@ export class DirectDocumentationScrutinyComponent {
               })
             }
 
-            if (this.Quali.LateralEntryQualificationModel != null  && this.Quali.CourseType == 5) {
+            if (this.Quali.LateralEntryQualificationModel != null && this.Quali.CourseType == 5) {
               this.Quali.LateralEntryQualificationModel.map((list: any) => {
                 if (list.Qualification == "Diploma") {
                   this.Diploma_Engineering = true
@@ -749,7 +755,7 @@ export class DirectDocumentationScrutinyComponent {
 
     let neweDocs = this.request.VerificationDocumentDetailList.filter((x: any) => x.Status == 5);
 
-    let verificationDocumentDetailListFiles = this.request.VerificationDocumentDetailList.filter((x: any) => x.Status!=5);
+    let verificationDocumentDetailListFiles = this.request.VerificationDocumentDetailList.filter((x: any) => x.Status != 5);
     this.documents.AadharPhoto = verificationDocumentDetailListFiles.filter((x: any) => x.ColumnName == "AadharPhoto")[0];
     this.documents.OtherDocument = verificationDocumentDetailListFiles.filter((x: any) => x.ColumnName == "OtherDocument")[0];
 
@@ -817,8 +823,8 @@ export class DirectDocumentationScrutinyComponent {
       this.documents.CategoryA = verificationDocumentDetailListFiles.filter((x: any) => x.ColumnName == "CategoryA_OBC")[0];
     }
 
-     
-    if (this.request.CategoryD != 179 && this.request.CategoryD !=0 ) {
+
+    if (this.request.CategoryD != 179 && this.request.CategoryD != 0) {
       this.documents.CategoryD = verificationDocumentDetailListFiles.filter((x: any) => x.ColumnName == "CategoryD")[0];
     }
 
@@ -899,7 +905,7 @@ export class DirectDocumentationScrutinyComponent {
 
       if (certDate <= oneYearAgo) {
         // OBC certificate is valid → hide Affidavit
-        this.isAffadavit=true
+        this.isAffadavit = true
         this.documents.AffidavitCertificate = verificationDocumentDetailListFiles.filter((x: any) => x.ColumnName == 'AffidavitCertificate')[0];
       } else {
         // OBC certificate is old → show Affidavit, hide OBC
@@ -948,7 +954,7 @@ export class DirectDocumentationScrutinyComponent {
 
         }, (error: any) => console.error(error)
         );
-    
+
       await this.commonMasterService.GetCommonMasterDDLByType('Nationality')
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -1071,7 +1077,7 @@ export class DirectDocumentationScrutinyComponent {
     //}
 
 
-    
+
     var th = this;
     var data = this.PrefentialCategoryList.filter(function (dta: any) { return dta.ID == th.model.ENR_ID });
     if (data != undefined && data.length > 0) {
@@ -1093,10 +1099,14 @@ export class DirectDocumentationScrutinyComponent {
         this.IdentityProofList.push({ Id: '3', Name: 'Jan Aadhar Id' });
       }
 
-      if (this.SSOLoginDataModel.RoleID == EnumRole.DTE
+      if (
+        this.SSOLoginDataModel.RoleID == EnumRole.DTE
         || this.SSOLoginDataModel.RoleID == EnumRole.DTENON
         || this.SSOLoginDataModel.RoleID == EnumRole.DTELateral
-        || this.SSOLoginDataModel.RoleID == 80 || this.SSOLoginDataModel.RoleID == 81) {
+        || this.SSOLoginDataModel.RoleID == 80 
+        || this.SSOLoginDataModel.RoleID == 81
+        || this.SSOLoginDataModel.RoleID == EnumRole.DIRECTOR
+      ) {
         this.StudentJanDetailFormGroup.get('ddlCategoryA')?.enable();
 
       }
@@ -1276,26 +1286,26 @@ export class DirectDocumentationScrutinyComponent {
 
 
 
-  onItemSelect(item: any, centerID: number=0) {
+  onItemSelect(item: any, centerID: number = 0) {
 
     if (!this.SubjectID.includes(item)) {
       this.SubjectID.push(item);
     }
-   
+
   }
 
-  onDeSelect(item: any, centerID: number=0) {
+  onDeSelect(item: any, centerID: number = 0) {
 
-  
+
   }
 
-  onSelectAll(items: any[], centerID: number=0) {
+  onSelectAll(items: any[], centerID: number = 0) {
 
     /*    this.SelectedSubjectList = [...items];*/
 
   }
 
-  onDeSelectAll(centerID: number=0) {
+  onDeSelectAll(centerID: number = 0) {
 
     /*  this.SelectedSubjectList = [];*/
 
@@ -1367,7 +1377,7 @@ export class DirectDocumentationScrutinyComponent {
   }
 
   async GetStreamDegreeCourse() {
-     
+
     try {
       this.loaderService.requestStarted();
       if (this.lateralrequest.CourseID == EnumDegreeCourse.Diploma_Engineering) {
@@ -1683,7 +1693,7 @@ export class DirectDocumentationScrutinyComponent {
     }
   }
 
- 
+
 
   /*new Qualification-------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -1752,16 +1762,16 @@ export class DirectDocumentationScrutinyComponent {
         }, (error: any) => console.error(error)
         );
 
-      if(this.request.CourseType == 4 || this.request.CourseType == 3) {
+      if (this.request.CourseType == 4 || this.request.CourseType == 3) {
         await this.commonMasterService.GetCommonMasterData("BTER_Other_Board", Type, (this.lateralrequest.BoardStateID))
 
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if (Type == 12) {
-            this.BoardExamList12 = data['Data'];
-          }
-        }, (error: any) => console.error(error)
-        );
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (Type == 12) {
+              this.BoardExamList12 = data['Data'];
+            }
+          }, (error: any) => console.error(error)
+          );
       }
     }
     catch (ex) {
@@ -1915,18 +1925,20 @@ export class DirectDocumentationScrutinyComponent {
           data = JSON.parse(JSON.stringify(data));
           console.log(data, 'data ');
           debugger
-          
+
           this.request.ApplicationID = data['Data']['ApplicationID']
-          if (this.SSOLoginDataModel.RoleID  != EnumRole.DTE
-            && this.SSOLoginDataModel.RoleID != EnumRole.DTENON
-            && this.SSOLoginDataModel.RoleID != EnumRole.DTELateral
-            && this.SSOLoginDataModel.RoleID != 80 && this.SSOLoginDataModel.RoleID != 81)
-          {
-            if (data['Data']['VerifierID'] != this.SSOLoginDataModel.UserID)
-            {
+          if (
+            !(this.SSOLoginDataModel.RoleID == EnumRole.DTE
+              || this.SSOLoginDataModel.RoleID == EnumRole.DTENON
+              || this.SSOLoginDataModel.RoleID == EnumRole.DTELateral
+              || this.SSOLoginDataModel.RoleID == 80
+              || this.SSOLoginDataModel.RoleID == 81
+              || this.SSOLoginDataModel.RoleID == EnumRole.DIRECTOR
+            )) {
+            if (data['Data']['VerifierID'] != this.SSOLoginDataModel.UserID) {
               this.router.navigate(['/StudentVerificationList?status=1']);
             }
-            
+
           }
 
           if (data['Data'] != null) {
@@ -1951,7 +1963,7 @@ export class DirectDocumentationScrutinyComponent {
             this.BoardChange(this.request.QualificationID)
             this.BoardStateChange(this.request.QualificationID)
             if (this.request.CourseType == 2 && this.request.HighestQualificationModel != null) {
-              if(this.request.HighestQualificationModel.length > 0) {
+              if (this.request.HighestQualificationModel.length > 0) {
                 this.nonEngHighQuali = this.request.HighestQualificationModel[0].HighestQualificationHigh
                 this.formData1.StateIDHigh = this.request.HighestQualificationModel[0].StateIDHigh
                 this.formData1 = this.request.HighestQualificationModel[0]
@@ -1966,7 +1978,7 @@ export class DirectDocumentationScrutinyComponent {
             } else if (this.request.CourseType == 2 && this.request.HighestQualificationModel == null) {
               this.hideHighestQualification = true
             }
-            
+
             if (this.request.HighestQualificationModel == null) {
               this.request.HighestQualificationModel = []
               this.formData1 = new HighestQualificationModel()
@@ -1990,7 +2002,7 @@ export class DirectDocumentationScrutinyComponent {
               this.lateralrequest = data['Data']['LateralEntryQualificationModel'][0]
 
               this.GetStream();
-               
+
               this.SupplypassingYear();
               if (data['Data']['LateralEntryQualificationModel'][0]['SubjectID'] != null) {
                 this.SubjectID = data['Data']['LateralEntryQualificationModel'][0]['SubjectID']
@@ -2039,12 +2051,12 @@ export class DirectDocumentationScrutinyComponent {
             //this.GetPreferentialCategory();
             //this.selectDDID(this.model.DevnarayanDistrictID)
 
- 
+
             this.request.ENR_ID = data['Data']['Prefential']
 
 
             var th = this;
-           this.Showdropdown().then(function () {
+            this.Showdropdown().then(function () {
               //th.model.IndentyProff = data['Data']['IndentyProff']
               //th.cdr.detectChanges();
               //th.cdr.markForCheck();
@@ -2054,7 +2066,7 @@ export class DirectDocumentationScrutinyComponent {
             this.request.CategoryD = data['Data']['CategoryD']
             console.log(this.request.CategoryD, "CategoryD Data")
 
-         
+
             //this.model.DevnarayanTehsilID = data['Data']['DevnarayanTehsilID']
             // this.selectDDID(this.request.DevnarayanDistrictID)
             // this.request.DevnarayanTehsilID = data.Data.DevnarayanTehsilID
@@ -2066,7 +2078,7 @@ export class DirectDocumentationScrutinyComponent {
 
 
 
-  
+
             this.request.VerificationDocumentDetailList = data['Data']['VerificationDocumentDetailList']
             //this.request.DOB = new Date(data['Data']['DOB']).toISOString().split('T').shift().toString();
             //this.request.R  eligion = data['Data']['Religion
@@ -2077,63 +2089,63 @@ export class DirectDocumentationScrutinyComponent {
             this.request.VerificationDocumentDetailList.forEach((dOC: any) => {
               dOC.ShowRemark = dOC.Status === EnumVerificationAction.Revert;
             });
-          //  this.request.VerificationDocumentDetailList.some((x: any) => x.Status === 5); this.request.VerificationDocumentDetailList.forEach((x: any) => {
-          //     if (x.Status === 5) {
-          //       x.Status = 0;
-          //     }
-          //  });
-            
+            //  this.request.VerificationDocumentDetailList.some((x: any) => x.Status === 5); this.request.VerificationDocumentDetailList.forEach((x: any) => {
+            //     if (x.Status === 5) {
+            //       x.Status = 0;
+            //     }
+            //  });
+
             if (this.request.VerificationDocumentDetailList.some((x: any) => x.Status != 0)) {
               this.changeshow = false
             } else if (this.request.VerificationDocumentDetailList.every((x: any) => x.Status == 0)) {
               this.changeshow = true
             }
-     
-           /* this.Isremarkshow = this.request.VerificationDocumentDetailList.some((x: any) => x.Status === EnumVerificationAction.Revert);*/
+
+            /* this.Isremarkshow = this.request.VerificationDocumentDetailList.some((x: any) => x.Status === EnumVerificationAction.Revert);*/
           }
-       
 
 
 
 
-            if (this.request?.VerificationDocumentDetailList) {
-              this.filteredDocumentDetails = this.request.VerificationDocumentDetailList.filter((x) => x.GroupNo == 1 && x.Status!=5);
-            } else {         
-              this.filteredDocumentDetails = [];
-            }
 
-            this.OtherDocument();
+          if (this.request?.VerificationDocumentDetailList) {
+            this.filteredDocumentDetails = this.request.VerificationDocumentDetailList.filter((x) => x.GroupNo == 1 && x.Status != 5);
+          } else {
+            this.filteredDocumentDetails = [];
+          }
+
+          this.OtherDocument();
 
 
-           
 
-            //if (data.Data.IsTSP == true) {
-            //  this.request.subCategory = 1
-            //  console.log("subCategory", this.request.subCategory)
-            //} else if (data.Data.IsSaharia == true) {
-            //  this.request.subCategory = 2
-            //} else {
-            //  this.request.subCategory = 3
-            //}
-            //console.log(this.request.VerificationDocumentDetailList,"ddd")
-   
-            //this.commonMasterService.GetCommonMasterData('DevnarayanAreaTehsil')
-            //  .then((data: any) => {
-            //    data = JSON.parse(JSON.stringify(data));
-            //    this.DevnarayanTehsilList = data['Data'];
-            //    this.selectDDID(this.request.DevnarayanDistrictID);
-            //    this.filteredTehsilList.ID = this.request.DevnarayanDistrictID;
-            //    this.request.DevnarayanTehsilID = data.Data.DevnarayanTehsilID;
-            //  }, (error: any) => {
-            //  });
-            //this.request.DevnarayanTehsilID;
 
-          
-          
+          //if (data.Data.IsTSP == true) {
+          //  this.request.subCategory = 1
+          //  console.log("subCategory", this.request.subCategory)
+          //} else if (data.Data.IsSaharia == true) {
+          //  this.request.subCategory = 2
+          //} else {
+          //  this.request.subCategory = 3
+          //}
+          //console.log(this.request.VerificationDocumentDetailList,"ddd")
+
+          //this.commonMasterService.GetCommonMasterData('DevnarayanAreaTehsil')
+          //  .then((data: any) => {
+          //    data = JSON.parse(JSON.stringify(data));
+          //    this.DevnarayanTehsilList = data['Data'];
+          //    this.selectDDID(this.request.DevnarayanDistrictID);
+          //    this.filteredTehsilList.ID = this.request.DevnarayanDistrictID;
+          //    this.request.DevnarayanTehsilID = data.Data.DevnarayanTehsilID;
+          //  }, (error: any) => {
+          //  });
+          //this.request.DevnarayanTehsilID;
+
+
+
 
           //this.request = data['Data'];
 
-          console.log(this.request.RemarkModel,"remark")
+          console.log(this.request.RemarkModel, "remark")
 
           const btnSave = document.getElementById('btnSave')
           if (btnSave) btnSave.innerHTML = "Update";
@@ -2772,7 +2784,7 @@ export class DirectDocumentationScrutinyComponent {
 
 
 
-  
+
 
   async GetMarktYPEDDL() {
     try {
@@ -2865,17 +2877,17 @@ export class DirectDocumentationScrutinyComponent {
 
   async SaveData(Action: number = 0) {
 
-   debugger
+    debugger
     console.log(this.sSOLoginDataModel)
-     console.log("this.request.ApplicationID",this.request.ApplicationID)
+    console.log("this.request.ApplicationID", this.request.ApplicationID)
     //const IsRemarKvalid = this.request.VerificationDocumentDetailList.some((x: any) => x.Status == EnumVerificationAction.Revert && x.Remark == '' || x.Status == 0);
     //if (IsRemarKvalid == true) {
     //  /*      this.toastr.error("Please enter valisd Remark")*/
     //  return
     //}
-     
 
-    if (Action == 1 || Action==3) {
+
+    if (Action == 1 || Action == 3) {
       if (this.RemarkDocument.length > 0) {
         this.toastr.error("Please Unselect Revert Document Remarks")
         return
@@ -2907,16 +2919,16 @@ export class DirectDocumentationScrutinyComponent {
 
 
 
-    if (!this.RemarkDocument || this.RemarkDocument.length == 0 || Action==3) {
+    if (!this.RemarkDocument || this.RemarkDocument.length == 0 || Action == 3) {
       this.request.VerificationDocumentDetailList.forEach(doc => {
         doc.Status = EnumVerificationAction.Approved; // e.g. 1
       });
     } else {
       const selectedIds = this.RemarkDocument.map((x: any) => x.DocumentMasterID);
       const isOtherDoc = selectedIds.includes(91);
-      const isInStudeVerification = this.request.VerificationDocumentDetailList.some((x: any) => x.DocumentMasterID == 91 )
+      const isInStudeVerification = this.request.VerificationDocumentDetailList.some((x: any) => x.DocumentMasterID == 91)
 
-      if(isOtherDoc && !isInStudeVerification){
+      if (isOtherDoc && !isInStudeVerification) {
         this.request.VerificationDocumentDetailList.push({
           DocumentDetailsID: 0,
           DocumentMasterID: 91,
@@ -2938,10 +2950,10 @@ export class DirectDocumentationScrutinyComponent {
       this.request.VerificationDocumentDetailList.forEach(doc => {
         if (selectedIds.includes(doc.DocumentMasterID)) {
           doc.Status = EnumVerificationAction.Revert; // e.g. 3
-          if(doc.DocumentMasterID!=91){
+          if (doc.DocumentMasterID != 91) {
             doc.Remark = this.RemarkDocument.find((f: any) => f.DocumentMasterID === doc.DocumentMasterID)?.DisFileName || '';
           }
- 
+
         } else {
           doc.Status = EnumVerificationAction.Approved; // e.g. 1
         }
@@ -2949,7 +2961,7 @@ export class DirectDocumentationScrutinyComponent {
     }
 
 
-     
+
     if (this.BackupCatoryA != this.request.CategoryA && this.request.CategoryA != EnumCasteCategory.GENERAL) {
 
       var DocumentMasterId = 0
@@ -2989,26 +3001,24 @@ export class DirectDocumentationScrutinyComponent {
 
     this.Isremarkshow = this.request.VerificationDocumentDetailList.some((x: any) => x.Status == EnumVerificationAction.Revert);
 
-/*    console.log(this.request.VerificationDocumentDetailList,"VerificationDocumentDetailList")*/
+    /*    console.log(this.request.VerificationDocumentDetailList,"VerificationDocumentDetailList")*/
 
-    if (this.Isremarkshow == true)
-    {
+    if (this.Isremarkshow == true) {
       this.request.status = EnumVerificationAction.Revert
- /*     this.request.Remark = 'Revert'*/
+      /*     this.request.Remark = 'Revert'*/
     }
-    else
-    {
+    else {
       this.request.status = EnumVerificationAction.Approved
-/*      this.request.Remark = 'Approved'*/
+      /*      this.request.Remark = 'Approved'*/
     }
 
 
     if (Action == 3) {
       this.request.status = EnumVerificationAction.Accept_with_deficiency
-  /*    this.request.Remark = 'Accept_with_deficiency'*/
+      /*    this.request.Remark = 'Accept_with_deficiency'*/
     }
 
-/*    this.updateRemarkText1();*/
+    /*    this.updateRemarkText1();*/
 
     const confirmationMessage =
       this.request.status === EnumVerificationAction.Approved
@@ -3021,7 +3031,7 @@ export class DirectDocumentationScrutinyComponent {
       this.refereshDepartmentValidator(true)
     } else {
       this.refereshDepartmentValidator(false)
-    }  
+    }
 
     if (this.request.CategoryA == EnumCasteCategory.OBC || this.request.CategoryA == EnumCasteCategory.MBC || this.request.CategoryA == EnumCasteCategory.EWS) {
       this.refreshBranchRefValidation(true)
@@ -3043,7 +3053,7 @@ export class DirectDocumentationScrutinyComponent {
       this.refreshDepartmentNameRefValidation(true)
     } else {
       this.refreshDepartmentNameRefValidation(false)
-    }  
+    }
 
     if (this.request.CategoryA == 3) {
       this.StudentJanDetailFormGroup.get('subCategory')?.clearValidators();
@@ -3062,7 +3072,7 @@ export class DirectDocumentationScrutinyComponent {
         this.request.TSPTehsilID = 0
       } else {
         this.StudentJanDetailFormGroup.get('subCategory')?.setValidators(DropdownValidators1);
-      
+
       }
       this.StudentJanDetailFormGroup.get('subCategory')?.updateValueAndValidity();
     }
@@ -3071,7 +3081,7 @@ export class DirectDocumentationScrutinyComponent {
       if (this.request.TspDistrictID == 0 || this.request.TspDistrictID == null || this.request.TspDistrictID == undefined) {
         this.StudentJanDetailFormGroup.get('TspDistrictID')?.setValidators(DropdownValidators1);
         this.StudentJanDetailFormGroup.get('TspDistrictID')?.updateValueAndValidity();
-      
+
       }
     } else {
       this.StudentJanDetailFormGroup.get('TspDistrictID')?.clearValidators();
@@ -3089,7 +3099,7 @@ export class DirectDocumentationScrutinyComponent {
 
     this.loaderService.requestStarted();
     this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-    this.request.DepartmentID =1;
+    this.request.DepartmentID = 1;
     this.request.SSOID = this.sSOLoginDataModel.SSOID;
 
     if (this.request.ENR_ID == 5) {
@@ -3207,7 +3217,7 @@ export class DirectDocumentationScrutinyComponent {
 
     if (this.request.CategoryA == 3 && this.request.IsTSP == true) {
       this.StudentJanDetailFormGroup.get('TSPTehsilID')?.setValidators(Validators.required);
-      this.StudentJanDetailFormGroup.get('TspDistrictID')?.setValidators(Validators.required);  
+      this.StudentJanDetailFormGroup.get('TspDistrictID')?.setValidators(Validators.required);
 
       this.StudentJanDetailFormGroup.get('TSPTehsilID')?.updateValueAndValidity();
       this.StudentJanDetailFormGroup.get('TspDistrictID')?.updateValueAndValidity();
@@ -3242,7 +3252,7 @@ export class DirectDocumentationScrutinyComponent {
       this.isSub = true;
       this.HighestQualificationForm.get('txtHighestQualification')?.setValidators([DropdownValidatorsString]);
       this.request.HighestQualificationModel = [];
-      await this.RefreshValidators()      
+      await this.RefreshValidators()
 
       if (this.request.CourseType != 2 && this.nonEngHighQuali != '') {
         if (this.HighestQualificationForm.invalid) {
@@ -3335,7 +3345,7 @@ export class DirectDocumentationScrutinyComponent {
         this.toastr.warning("Please Select State of Study for Highest qualification")
         return
       }
- 
+
       this.HighQualificationList = []
       this.HighQualificationList.push({
         UniversityBoard: this.formData1.UniversityBoard,
@@ -3424,7 +3434,7 @@ export class DirectDocumentationScrutinyComponent {
       // }
 
 
-     
+
 
 
       if (this.lateralrequest.BoardID != 38) {
@@ -3484,17 +3494,17 @@ export class DirectDocumentationScrutinyComponent {
       });
     }
 
-    if(this.request.CourseType == 4) {
+    if (this.request.CourseType == 4) {
 
 
       await this.RefreshValidators()
       if (this.LateralQualificationForm.invalid) {
         this.toastr.error("Please fill all mandatory fields")
-        
+
         return
       }
-      if(this.request.CourseType == 4 && this.lateralrequest.CourseID ==280){
-        if(this.EnglishQualificationForm.invalid){
+      if (this.request.CourseType == 4 && this.lateralrequest.CourseID == 280) {
+        if (this.EnglishQualificationForm.invalid) {
           this.toastr.error("Please fill all mandatory fields")
           return
         }
@@ -3551,7 +3561,7 @@ export class DirectDocumentationScrutinyComponent {
       });
 
 
-      if(this.request.CourseType == 4 && this.lateralrequest.CourseID == 280) {
+      if (this.request.CourseType == 4 && this.lateralrequest.CourseID == 280) {
         this.HighQualificationList = []
         this.HighQualificationList.push({
           UniversityBoard: this.engRequest.UniversityBoardEnglish,
@@ -3582,7 +3592,7 @@ export class DirectDocumentationScrutinyComponent {
     /*    this.request.CourseType = this.sSOLoginDataModel.Eng_NonEng*/
     this.request.ModifyBy = this.sSOLoginDataModel.UserID
 
-  
+
     this.request.QualificationID = 10
 
     this.swat.Confirmation(confirmationMessage, async (result: any) => {
@@ -4143,7 +4153,7 @@ export class DirectDocumentationScrutinyComponent {
         this.lateralrequest.ClassSubject = ''
       }
 
- 
+
       this.SubjectID.forEach(e => e.CourseID = this.lateralrequest.CourseID)
       this.request.LateralEntryQualificationModel.push({
         CourseID: this.lateralrequest.CourseID,
@@ -4232,7 +4242,7 @@ export class DirectDocumentationScrutinyComponent {
   async CloseModel() {
     this.loaderService.requestStarted();
     this.request.Remark = ''
-   
+
     setTimeout(() => {
       this.modalService.dismissAll();
       this.loaderService.requestEnded();
@@ -4240,7 +4250,7 @@ export class DirectDocumentationScrutinyComponent {
   }
 
   async RejectDocument() {
-     ;
+    ;
 
     this.updateRemarkText();
 
@@ -4252,7 +4262,7 @@ export class DirectDocumentationScrutinyComponent {
       this.toastr.error("Please enter remarks");
       return;
     }
-    
+
 
     this.reject.ModifyBy = this.SSOLoginDataModel.UserID;
     this.reject.DepartmentID = EnumDepartment.BTER
@@ -4260,7 +4270,7 @@ export class DirectDocumentationScrutinyComponent {
     this.reject.Action = EnumVerificationAction.Reject
     this.CloseModel()
     this.swat.Confirmation("Are you sure you want to Reject?", async (result: any) => {
- 
+
       if (result.isConfirmed) {
 
         this.loaderService.requestStarted();
@@ -4299,544 +4309,544 @@ export class DirectDocumentationScrutinyComponent {
     })
 
   }
-////  async SaveDataChange() {
+  ////  async SaveDataChange() {
 
-////    this.isSubmitted = true;
-////    this.request.RoleID = this.sSOLoginDataModel.RoleID;
-////    if (this.request.DepartmentID == EnumDepartment.BTER) {
-////      this.refereshDepartmentValidator(true)
-////    } else {
-////      this.refereshDepartmentValidator(false)
-////    }
-
-
-
-////    if (this.request.CategoryA == EnumCasteCategory.OBC || this.request.CategoryA == EnumCasteCategory.MBC || this.request.CategoryA == EnumCasteCategory.EWS) {
-////      this.refreshBranchRefValidation(true)
-////    } else {
-////      this.refreshBranchRefValidation(false)
-////      this.request.CasteCertificateNo = '';
-////    }
-
-////    if (this.request.CategoryA == EnumCasteCategory.MBC) {
-////      this.StudentJanDetailFormGroup.get('ddlIsMBCCertificate')?.setValidators(DropdownValidators1);
-////      this.StudentJanDetailFormGroup.get('ddlIsMBCCertificate')?.updateValueAndValidity();
-
-////    } else {
-////      this.StudentJanDetailFormGroup.get('ddlIsMBCCertificate')?.clearValidators();
-////      this.StudentJanDetailFormGroup.get('ddlIsMBCCertificate')?.updateValueAndValidity();
-////    }
-
-////    if (this.request.ENR_ID == 6) {
-////      this.refreshDepartmentNameRefValidation(true)
-////    } else {
-////      this.refreshDepartmentNameRefValidation(false)
-////    }
-
-
-
-////    if (this.request.CategoryA == 3) {
-////      this.StudentJanDetailFormGroup.get('subCategory')?.clearValidators();
-////      if (this.request.subCategory == 1) {
-////        this.request.IsTSP = true
-////        this.request.IsSaharia = false
-////      } else if (this.request.subCategory == 2) {
-////        this.request.IsSaharia = true
-////        this.request.IsTSP = false
-////        this.request.TspDistrictID = 0
-////        this.request.TSPTehsilID = 0
-////      } else if (this.request.subCategory == 3) {
-////        this.request.IsTSP = false
-////        this.request.IsSaharia = false
-////        this.request.TspDistrictID = 0
-////        this.request.TSPTehsilID = 0
-////      } else {
-////        this.StudentJanDetailFormGroup.get('subCategory')?.setValidators(DropdownValidators1);
-
-////      }
-////      this.StudentJanDetailFormGroup.get('subCategory')?.updateValueAndValidity();
-
-
-////    }
-
-
-
-////    if (this.request.IsTSP == true) {
-////      if (this.request.TspDistrictID == 0 || this.request.TspDistrictID == null || this.request.TspDistrictID == undefined) {
-////        this.StudentJanDetailFormGroup.get('TspDistrictID')?.setValidators(DropdownValidators1);
-////        this.StudentJanDetailFormGroup.get('TspDistrictID')?.updateValueAndValidity();
-
-////      }
-////    } else {
-////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.clearValidators();
-////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.updateValueAndValidity();
-////      this.request.TspDistrictID = 0
-////    }
-
-////    if (this.request.IndentyProff == 1 && this.request.DetailID.length < 12) {
-////      this.toastr.warning("Invalid Aadhar Number");
-////      //return
-////    } else if (this.request.IndentyProff == 2 && this.request.DetailID.length < 14) {
-////      this.toastr.warning("Invalid Aadhar Enrollment ID");
-////      //return
-////    }
-
-
-
-
-////    this.loaderService.requestStarted();
-////    this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-////    this.request.DepartmentID = 1;
-////    this.request.SSOID = this.sSOLoginDataModel.SSOID;
-
-////    if (this.request.ENR_ID == 5) {
-////      this.request.IsRajasthani = true
-////    } else {
-////      this.request.IsRajasthani = false
-////    }
-
-
-
-////    if (this.request.PrefentialCategoryType == 2) {
-////      this.request.CategoryA = 1
-////      this.request.CategoryB = 0
-////      this.request.CategoryC = 0
-////      this.request.CategoryD = 0
-////      this.request.CategoryE = 0
-////      this.request.IsPH = '0'
-////      this.request.IsTSP = false
-////      this.request.IsDevnarayan = 0
-////      this.request.IsEws = 0
-////      this.request.IsRajasthani = false
-////      this.request.DevnarayanTehsilID = 0
-////      this.request.DevnarayanDistrictID = 0
-////      this.request.TSPTehsilID = 0
-////      this.request.TspDistrictID = 0
-////      ///this.StudentJanDetailFormGroup.get('ddlCategoryA')?.clearValidators();
-////      this.StudentJanDetailFormGroup.get('ddlCategoryB')?.clearValidators();
-////      this.StudentJanDetailFormGroup.get('ddlCategorycp')?.clearValidators();
-////      this.StudentJanDetailFormGroup.get('ddlCategoryD')?.clearValidators();
-////      this.StudentJanDetailFormGroup.get('ddlCategoryE')?.clearValidators();
-////      //this.StudentJanDetailFormGroup.get('IsDevnarayan')?.clearValidators();
-////      //this.StudentJanDetailFormGroup.get('DevnarayanTehsilID')?.clearValidators();
-////      //this.StudentJanDetailFormGroup.get('DevnarayanDistrictID')?.clearValidators();
-////      this.StudentJanDetailFormGroup.get('TSPTehsilID')?.clearValidators();
-////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.clearValidators();
-
+  ////    this.isSubmitted = true;
+  ////    this.request.RoleID = this.sSOLoginDataModel.RoleID;
+  ////    if (this.request.DepartmentID == EnumDepartment.BTER) {
+  ////      this.refereshDepartmentValidator(true)
+  ////    } else {
+  ////      this.refereshDepartmentValidator(false)
+  ////    }
+
+
+
+  ////    if (this.request.CategoryA == EnumCasteCategory.OBC || this.request.CategoryA == EnumCasteCategory.MBC || this.request.CategoryA == EnumCasteCategory.EWS) {
+  ////      this.refreshBranchRefValidation(true)
+  ////    } else {
+  ////      this.refreshBranchRefValidation(false)
+  ////      this.request.CasteCertificateNo = '';
+  ////    }
+
+  ////    if (this.request.CategoryA == EnumCasteCategory.MBC) {
+  ////      this.StudentJanDetailFormGroup.get('ddlIsMBCCertificate')?.setValidators(DropdownValidators1);
+  ////      this.StudentJanDetailFormGroup.get('ddlIsMBCCertificate')?.updateValueAndValidity();
+
+  ////    } else {
+  ////      this.StudentJanDetailFormGroup.get('ddlIsMBCCertificate')?.clearValidators();
+  ////      this.StudentJanDetailFormGroup.get('ddlIsMBCCertificate')?.updateValueAndValidity();
+  ////    }
+
+  ////    if (this.request.ENR_ID == 6) {
+  ////      this.refreshDepartmentNameRefValidation(true)
+  ////    } else {
+  ////      this.refreshDepartmentNameRefValidation(false)
+  ////    }
+
+
+
+  ////    if (this.request.CategoryA == 3) {
+  ////      this.StudentJanDetailFormGroup.get('subCategory')?.clearValidators();
+  ////      if (this.request.subCategory == 1) {
+  ////        this.request.IsTSP = true
+  ////        this.request.IsSaharia = false
+  ////      } else if (this.request.subCategory == 2) {
+  ////        this.request.IsSaharia = true
+  ////        this.request.IsTSP = false
+  ////        this.request.TspDistrictID = 0
+  ////        this.request.TSPTehsilID = 0
+  ////      } else if (this.request.subCategory == 3) {
+  ////        this.request.IsTSP = false
+  ////        this.request.IsSaharia = false
+  ////        this.request.TspDistrictID = 0
+  ////        this.request.TSPTehsilID = 0
+  ////      } else {
+  ////        this.StudentJanDetailFormGroup.get('subCategory')?.setValidators(DropdownValidators1);
+
+  ////      }
+  ////      this.StudentJanDetailFormGroup.get('subCategory')?.updateValueAndValidity();
+
+
+  ////    }
+
+
+
+  ////    if (this.request.IsTSP == true) {
+  ////      if (this.request.TspDistrictID == 0 || this.request.TspDistrictID == null || this.request.TspDistrictID == undefined) {
+  ////        this.StudentJanDetailFormGroup.get('TspDistrictID')?.setValidators(DropdownValidators1);
+  ////        this.StudentJanDetailFormGroup.get('TspDistrictID')?.updateValueAndValidity();
+
+  ////      }
+  ////    } else {
+  ////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.clearValidators();
+  ////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.updateValueAndValidity();
+  ////      this.request.TspDistrictID = 0
+  ////    }
+
+  ////    if (this.request.IndentyProff == 1 && this.request.DetailID.length < 12) {
+  ////      this.toastr.warning("Invalid Aadhar Number");
+  ////      //return
+  ////    } else if (this.request.IndentyProff == 2 && this.request.DetailID.length < 14) {
+  ////      this.toastr.warning("Invalid Aadhar Enrollment ID");
+  ////      //return
+  ////    }
+
+
+
+
+  ////    this.loaderService.requestStarted();
+  ////    this.request.ModifyBy = this.sSOLoginDataModel.UserID;
+  ////    this.request.DepartmentID = 1;
+  ////    this.request.SSOID = this.sSOLoginDataModel.SSOID;
+
+  ////    if (this.request.ENR_ID == 5) {
+  ////      this.request.IsRajasthani = true
+  ////    } else {
+  ////      this.request.IsRajasthani = false
+  ////    }
+
+
+
+  ////    if (this.request.PrefentialCategoryType == 2) {
+  ////      this.request.CategoryA = 1
+  ////      this.request.CategoryB = 0
+  ////      this.request.CategoryC = 0
+  ////      this.request.CategoryD = 0
+  ////      this.request.CategoryE = 0
+  ////      this.request.IsPH = '0'
+  ////      this.request.IsTSP = false
+  ////      this.request.IsDevnarayan = 0
+  ////      this.request.IsEws = 0
+  ////      this.request.IsRajasthani = false
+  ////      this.request.DevnarayanTehsilID = 0
+  ////      this.request.DevnarayanDistrictID = 0
+  ////      this.request.TSPTehsilID = 0
+  ////      this.request.TspDistrictID = 0
+  ////      ///this.StudentJanDetailFormGroup.get('ddlCategoryA')?.clearValidators();
+  ////      this.StudentJanDetailFormGroup.get('ddlCategoryB')?.clearValidators();
+  ////      this.StudentJanDetailFormGroup.get('ddlCategorycp')?.clearValidators();
+  ////      this.StudentJanDetailFormGroup.get('ddlCategoryD')?.clearValidators();
+  ////      this.StudentJanDetailFormGroup.get('ddlCategoryE')?.clearValidators();
+  ////      //this.StudentJanDetailFormGroup.get('IsDevnarayan')?.clearValidators();
+  ////      //this.StudentJanDetailFormGroup.get('DevnarayanTehsilID')?.clearValidators();
+  ////      //this.StudentJanDetailFormGroup.get('DevnarayanDistrictID')?.clearValidators();
+  ////      this.StudentJanDetailFormGroup.get('TSPTehsilID')?.clearValidators();
+  ////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.clearValidators();
+
 
-////      //this.StudentJanDetailFormGroup.get('ddlCategoryA')?.updateValueAndValidity();
-////      this.StudentJanDetailFormGroup.get('ddlCategoryB')?.updateValueAndValidity();
-////      this.StudentJanDetailFormGroup.get('ddlCategorycp')?.updateValueAndValidity();
-////      this.StudentJanDetailFormGroup.get('ddlCategoryD')?.updateValueAndValidity();
-////      this.StudentJanDetailFormGroup.get('ddlCategoryE')?.updateValueAndValidity();
-////      //this.StudentJanDetailFormGroup.get('IsDevnarayan')?.updateValueAndValidity();
-////      //this.StudentJanDetailFormGroup.get('DevnarayanTehsilID')?.updateValueAndValidity();
-////      //this.StudentJanDetailFormGroup.get('DevnarayanDistrictID')?.updateValueAndValidity();
-////      this.StudentJanDetailFormGroup.get('TSPTehsilID')?.updateValueAndValidity();
-////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.updateValueAndValidity();
+  ////      //this.StudentJanDetailFormGroup.get('ddlCategoryA')?.updateValueAndValidity();
+  ////      this.StudentJanDetailFormGroup.get('ddlCategoryB')?.updateValueAndValidity();
+  ////      this.StudentJanDetailFormGroup.get('ddlCategorycp')?.updateValueAndValidity();
+  ////      this.StudentJanDetailFormGroup.get('ddlCategoryD')?.updateValueAndValidity();
+  ////      this.StudentJanDetailFormGroup.get('ddlCategoryE')?.updateValueAndValidity();
+  ////      //this.StudentJanDetailFormGroup.get('IsDevnarayan')?.updateValueAndValidity();
+  ////      //this.StudentJanDetailFormGroup.get('DevnarayanTehsilID')?.updateValueAndValidity();
+  ////      //this.StudentJanDetailFormGroup.get('DevnarayanDistrictID')?.updateValueAndValidity();
+  ////      this.StudentJanDetailFormGroup.get('TSPTehsilID')?.updateValueAndValidity();
+  ////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.updateValueAndValidity();
 
 
-
-
-////    }
-////    else {
-
-////      //this.StudentJanDetailFormGroup.get('ddlCategoryA')?.setValidators(Validators.required);
-////      this.StudentJanDetailFormGroup.get('ddlCategoryB')?.setValidators(DropdownValidators1);
-////      this.StudentJanDetailFormGroup.get('ddlCategorycp')?.setValidators(DropdownValidatorsString1);
-////      //this.StudentJanDetailFormGroup.get('ddlCategoryD')?.setValidators(DropdownValidators1);
-////      this.StudentJanDetailFormGroup.get('ddlCategoryE')?.setValidators(DropdownValidators1);
-
-
-////      //this.StudentJanDetailFormGroup.get('ddlCategoryA')?.updateValueAndValidity();
-////      this.StudentJanDetailFormGroup.get('ddlCategoryB')?.updateValueAndValidity();
-////      this.StudentJanDetailFormGroup.get('ddlCategorycp')?.updateValueAndValidity();
-////      //this.StudentJanDetailFormGroup.get('ddlCategoryD')?.updateValueAndValidity();
-////      this.StudentJanDetailFormGroup.get('ddlCategoryE')?.updateValueAndValidity();
+
+
+  ////    }
+  ////    else {
+
+  ////      //this.StudentJanDetailFormGroup.get('ddlCategoryA')?.setValidators(Validators.required);
+  ////      this.StudentJanDetailFormGroup.get('ddlCategoryB')?.setValidators(DropdownValidators1);
+  ////      this.StudentJanDetailFormGroup.get('ddlCategorycp')?.setValidators(DropdownValidatorsString1);
+  ////      //this.StudentJanDetailFormGroup.get('ddlCategoryD')?.setValidators(DropdownValidators1);
+  ////      this.StudentJanDetailFormGroup.get('ddlCategoryE')?.setValidators(DropdownValidators1);
+
+
+  ////      //this.StudentJanDetailFormGroup.get('ddlCategoryA')?.updateValueAndValidity();
+  ////      this.StudentJanDetailFormGroup.get('ddlCategoryB')?.updateValueAndValidity();
+  ////      this.StudentJanDetailFormGroup.get('ddlCategorycp')?.updateValueAndValidity();
+  ////      //this.StudentJanDetailFormGroup.get('ddlCategoryD')?.updateValueAndValidity();
+  ////      this.StudentJanDetailFormGroup.get('ddlCategoryE')?.updateValueAndValidity();
 
-////      if (this.request.Gender != 97 && this.request.Maritial != 62) {
-////        this.StudentJanDetailFormGroup.get('ddlCategoryD')?.setValidators(DropdownValidators1);
-
-////      } else {
-////        this.StudentJanDetailFormGroup.get('ddlCategoryD')?.clearValidators();
-////        this.request.CategoryD = 0;
-////      }
-////      this.StudentJanDetailFormGroup.get('ddlCategoryD')?.updateValueAndValidity();
-////      //this.StudentJanDetailFormGroup.get('IsDevnarayan')?.clearValidators();
-////      //this.StudentJanDetailFormGroup.get('IsDevnarayan')?.updateValueAndValidity();
-
-////      //if (this.request.CategoryA == 5) {
-////      //  this.StudentJanDetailFormGroup.get('IsDevnarayan')?.setValidators([DropdownValidators]);
-////      //  this.StudentJanDetailFormGroup.get('IsDevnarayan')?.updateValueAndValidity();
-////      //}
-
-////    }
-
-////    //if (this.request.CategoryA != 5 ||  this.request.IsDevnarayan == 0) {
-////    //  this.request.IsDevnarayan = 0
-////    //  this.request.DevnarayanTehsilID = 0
-////    //  this.request.DevnarayanDistrictID = 0
+  ////      if (this.request.Gender != 97 && this.request.Maritial != 62) {
+  ////        this.StudentJanDetailFormGroup.get('ddlCategoryD')?.setValidators(DropdownValidators1);
+
+  ////      } else {
+  ////        this.StudentJanDetailFormGroup.get('ddlCategoryD')?.clearValidators();
+  ////        this.request.CategoryD = 0;
+  ////      }
+  ////      this.StudentJanDetailFormGroup.get('ddlCategoryD')?.updateValueAndValidity();
+  ////      //this.StudentJanDetailFormGroup.get('IsDevnarayan')?.clearValidators();
+  ////      //this.StudentJanDetailFormGroup.get('IsDevnarayan')?.updateValueAndValidity();
+
+  ////      //if (this.request.CategoryA == 5) {
+  ////      //  this.StudentJanDetailFormGroup.get('IsDevnarayan')?.setValidators([DropdownValidators]);
+  ////      //  this.StudentJanDetailFormGroup.get('IsDevnarayan')?.updateValueAndValidity();
+  ////      //}
+
+  ////    }
+
+  ////    //if (this.request.CategoryA != 5 ||  this.request.IsDevnarayan == 0) {
+  ////    //  this.request.IsDevnarayan = 0
+  ////    //  this.request.DevnarayanTehsilID = 0
+  ////    //  this.request.DevnarayanDistrictID = 0
 
-////    //  this.StudentJanDetailFormGroup.get('DevnarayanTehsilID')?.clearValidators();
-////    //  this.StudentJanDetailFormGroup.get('DevnarayanDistrictID')?.clearValidators();
+  ////    //  this.StudentJanDetailFormGroup.get('DevnarayanTehsilID')?.clearValidators();
+  ////    //  this.StudentJanDetailFormGroup.get('DevnarayanDistrictID')?.clearValidators();
 
-////    //  this.StudentJanDetailFormGroup.get('IsDevnarayan')?.updateValueAndValidity();
-////    //  this.StudentJanDetailFormGroup.get('DevnarayanTehsilID')?.updateValueAndValidity();
-////    //  this.StudentJanDetailFormGroup.get('DevnarayanDistrictID')?.updateValueAndValidity();
-
-////    //}
-
-////    //if (this.request.CategoryA == 5 && this.request.IsDevnarayan == 1) {
-////    //  this.StudentJanDetailFormGroup.get('DevnarayanTehsilID')?.setValidators([DropdownValidators]);
-////    //  this.StudentJanDetailFormGroup.get('DevnarayanDistrictID')?.setValidators([DropdownValidators]);
-
-////    //  this.StudentJanDetailFormGroup.get('DevnarayanTehsilID')?.updateValueAndValidity();
-////    //  this.StudentJanDetailFormGroup.get('DevnarayanDistrictID')?.updateValueAndValidity();
-
-////    //}
-
-////    if (this.request.CategoryA != 3 || (this.request.CategoryA == 3 && (this.request.subCategory == 2 || this.request.subCategory == 3))) {
-////      this.request.IsTSP = false
-////      this.request.TSPTehsilID = 0
-////      this.request.TspDistrictID = 0
-////      this.StudentJanDetailFormGroup.get('subCategory')?.clearValidators();
-////      this.StudentJanDetailFormGroup.get('TSPTehsilID')?.clearValidators();
-////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.clearValidators();
-
-////      this.StudentJanDetailFormGroup.get('subCategory')?.updateValueAndValidity();
-////      this.StudentJanDetailFormGroup.get('TSPTehsilID')?.updateValueAndValidity();
-////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.updateValueAndValidity();
-
-////    }
-
-
-////    if (this.request.CategoryA == 3 && this.request.IsTSP == true) {
-////      this.StudentJanDetailFormGroup.get('TSPTehsilID')?.setValidators(Validators.required);
-////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.setValidators(Validators.required);
-
-////      this.StudentJanDetailFormGroup.get('TSPTehsilID')?.updateValueAndValidity();
-////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.updateValueAndValidity();
-////    }
-
-
-
-
-////    //new Date(x.To_Date)
-
-
-
-////    if (this.StudentJanDetailFormGroup.invalid) {
-////      this.toastr.error('fill required detals');
-////      //Object.keys(this.StudentJanDetailFormGroup.controls).forEach(key => {
-////      //  const control = this.StudentJanDetailFormGroup.get(key);
-
-////      //  if (control && control.invalid) {
-////      //    this.toastr.error(`Control ${key} is invalid`);
-////      //    Object.keys(control.errors!).forEach(errorKey => {
-////      //      this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
-////      //    });
-////      //  }
-////      //});
-////      return;
-////    }
-
-
-////    await this.RefreshValidators()
-////    if (this.QualificationForm.invalid) {
-////      return
-////    }
-////    if (this.request.BoardID != 38) {
-////      this.request.BoardExamID = 0
-////      this.request.BoardStateID = 0
-////    }
-
-
-
-////    if (this.request.CourseType == 4 || this.request.CourseType == 2) {
-////      this.isSub = true;
-////      this.HighestQualificationForm.get('txtHighestQualification')?.setValidators([DropdownValidatorsString]);
-////      this.request.HighestQualificationModel = [];
-////      await this.RefreshValidators()
-
-////      if (this.HighestQualificationForm.invalid) {
-////        this.toastr.warning("Please Fill Highest Qualification Form Properly")
-
-////        //Object.keys(this.HighestQualificationForm.controls).forEach(key => {
-////        //  const control = this.HighestQualificationForm.get(key);
-////        //   if (control && control.invalid) {
-////        //     this.toastr.error(`Control ${key} is invalid`);
-////        //     Object.keys(control.errors!).forEach(errorKey => {
-////        //       this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
-////        //     });
-////        //   }
-////        // });
-
-////        return
-////      }
-
-
-
-////      if (this.formData1.HighestQualificationHigh == '') {
-////        this.toastr.warning("Please Select Highest Qualification")
-////        return
-////      }
-////      this.HighQualificationList = []
-////      if (this.formData1.BoardID != 38) {
-////        this.formData1.BoardStateID = 0
-////        this.formData1.BoardExamID = 0
-////      }
-////      if (this.nonEngHighQuali != '12') {
-////        this.formData1.BoardID = 0
-////      } else if (this.nonEngHighQuali == '12') {
-////        this.formData1.UniversityBoard = ''
-////      }
-////      if (this.request.CourseType == 4 && this.formData1.StateIDHigh == 6) {
-////        this.formData1.HighestQualificationHigh = 'D-Voc'
-////      }
-////      this.HighQualificationList.push(
-////        {
-////          UniversityBoard: this.formData1.UniversityBoard,
-////          SchoolCollegeHigh: this.formData1.SchoolCollegeHigh,
-////          HighestQualificationHigh: this.formData1.HighestQualificationHigh,
-////          YearofPassingHigh: this.formData1.YearofPassingHigh,
-////          RollNumberHigh: this.formData1.RollNumberHigh,
-////          MarksTypeIDHigh: this.formData1.MarksTypeIDHigh,
-////          MaxMarksHigh: this.formData1.MaxMarksHigh,
-////          PercentageHigh: this.formData1.PercentageHigh,
-////          MarksObtainedHigh: this.formData1.MarksObtainedHigh,
-////          ClassSubject: this.formData1.ClassSubject,
-////          BoardID: this.formData1.BoardID,
-////          BoardStateID: this.formData1.BoardStateID,
-////          BoardExamID: this.formData1.BoardExamID,
-////          ApplicationQualificationId: this.formData1.ApplicationQualificationId,
-////          StateIDHigh: this.formData1.StateIDHigh
-////        },
-////      );
-
-////      this.request.ApplicationID = this.sSOLoginDataModel.ApplicationID;
-////      this.request.HighestQualificationModel = this.HighQualificationList
-////      // this.AddMore()
-////    }
-
-////    if (this.request.CourseType == 2 && this.nonEngHighQuali != '') {
-
-////      this.isSub = true;
-////      this.request.HighestQualificationModel = [];
-////      this.formData1.HighestQualificationHigh = this.nonEngHighQuali
-
-
-////      //if (this.HighestQualificationForm.invalid) {
-////      //  this.toastr.warning("Please Fill Highest Qualification Form Properly")
-////      //  return
-////      //}
-
-////      if (this.formData1.StateIDHigh == 0 && this.nonEngHighQuali == '12') {
-////        this.toastr.warning("Please Select State of Study")
-////        return
-////      }
-
-////      if (Number(this.request.Percentage) > Number(this.formData1.PercentageHigh)) {
-////        this.toastr.warning("Highest Qualification Percentage should be greater then 10th Qualification Percentage")
-////        return
-////      }
-
-////      if (this.nonEngHighQuali != '12') {
-////        this.formData1.StateIDHigh = 0
-////      } else if (this.nonEngHighQuali == '12' && this.formData1.StateIDHigh == 0) {
-////        this.toastr.warning("Please Select State of Study for Highest qualification")
-////        return
-////      }
-
-////      this.HighQualificationList = []
-////      this.HighQualificationList.push({
-////        UniversityBoard: this.formData1.UniversityBoard,
-////        SchoolCollegeHigh: this.formData1.SchoolCollegeHigh,
-////        HighestQualificationHigh: this.formData1.HighestQualificationHigh,
-////        YearofPassingHigh: this.formData1.YearofPassingHigh,
-////        RollNumberHigh: this.formData1.RollNumberHigh,
-////        MarksTypeIDHigh: this.formData1.MarksTypeIDHigh,
-////        MaxMarksHigh: this.formData1.MaxMarksHigh,
-////        PercentageHigh: this.formData1.PercentageHigh,
-////        MarksObtainedHigh: this.formData1.MarksObtainedHigh,
-////        ClassSubject: this.formData1.ClassSubject,
-////        ApplicationQualificationId: this.formData1.ApplicationQualificationId,
-////        StateIDHigh: this.formData1.StateIDHigh,
-////        BoardID: this.formData1.BoardID,
-////        BoardStateID: this.formData1.BoardStateID,
-////        BoardExamID: this.formData1.BoardExamID,
-////      },
-////      );
-
-
-
-////      this.request.HighestQualificationModel = this.HighQualificationList
-////    } else if (this.request.CourseType == 2 && this.nonEngHighQuali == '') {
-////      this.formData1 = new HighestQualificationModel()
-////    }
-
-
-////    if (this.HighQualificationList.length == 0 && this.request.CourseType == 2 && this.nonEngHighQuali != '') {
-////      this.toastr.error("Please Fill HighQualification Form")
-////      return
-////    }
-
-////    if (this.HighQualificationList.length == 0 && this.request.CourseType == 4) {
-////      this.toastr.error("Please Fill HighQualification Form")
-////      return
-////    }
-
-
-////    if (this.request.IsSupplement == true) {
-////      if (this.request.SupplementaryDataModel.length < 1) {
-////        this.toastr.error("please Add Supplementry details")
-////        return
-////      }
-////    }
-
-////    this.request.LateralEntryQualificationModel = []
-
-
-////    if (this.request.CourseType == EnumCourseType.Lateral || this.request.CourseType == 5) {
-////      await this.RefreshValidators()
-
-
-
-
-////      if (this.LateralQualificationForm.invalid) {
-
-
-////        //Object.keys(this.LateralQualificationForm.controls).forEach(key => {
-////        //  const control = this.LateralQualificationForm.get(key);
-////        //   if (control && control.invalid) {
-////        //     this.toastr.error(`Control ${key} is invalid`);
-////        //     Object.keys(control.errors!).forEach(errorKey => {
-////        //       this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
-////        //     });
-////        //   }
-////        // });
-
-////        return
-////      }
-////      if (this.lateralrequest.CourseID == EnumLateralCourse.Diploma_Engineering) {
-////        if (this.SubjectID.length != 1) {
-////          this.toastr.error("Please Select Only One Stream")
-////          this.isSubmitted = false
-////          return
-////        }
-
-////      }
-
-////      //else if (this.lateralrequest.CourseID == EnumLateralCourse.Senior_Secondary) {
-////      //  if (this.SubjectID.length != 3) {
-////      //    this.toastr.error("Please Select 3 Subjects")
-////      //    this.isSubmitted = false
-////      //    return
-////      //  }
-
-////      //}
-
-////      else if (this.lateralrequest.CourseID == EnumLateralCourse.Senior_Secondary) {
-////        const selectedCount = this.SubjectID?.length || 0;
-
-////        if (selectedCount < 2 || selectedCount > 3) {
-////          this.toastr.error("Please select Minimum 2 subjects and Maximum 3 subjects.");
-////          this.isSubmitted = false;
-////          return;
-////        }
-////      }
-
-
-////      if (this.lateralrequest.BoardID != 38) {
-////        this.lateralrequest.BoardStateID = 0
-////        this.lateralrequest.BoardExamID = 0
-////      }
-////      if (this.lateralrequest.CourseID == 141) {
-////        this.lateralrequest.BoardID = 0
-////      }
-
-
-////      if (this.request.CourseType == 5) {
-////        this.SubjectID = []
-////      }
-
-////      this.SubjectID.forEach(e => e.CourseID = this.lateralrequest.CourseID)
-////      this.request.LateralEntryQualificationModel.push({
-////        CourseID: this.lateralrequest.CourseID,
-////        SubjectID: this.SubjectID,
-////        BoardID: this.lateralrequest.BoardID,
-////        BoardName: this.lateralrequest.BoardName,
-////        ClassSubject: this.lateralrequest.ClassSubject,
-////        PassingID: this.lateralrequest.PassingID,
-////        AggMaxMark: this.lateralrequest.AggMaxMark,
-////        AggObtMark: this.lateralrequest.AggObtMark,
-////        Percentage: this.lateralrequest.Percentage,
-////        Qualification: this.lateralrequest.Qualification,
-////        RollNumber: this.lateralrequest.RollNumber,
-////        StateID: this.lateralrequest.StateID,
-////        MarkType: this.lateralrequest.MarkType,
-////        BoardStateID: this.lateralrequest.BoardStateID,
-////        BoardExamID: this.lateralrequest.BoardExamID,
-////        ApplicationQualificationId: this.lateralrequest.ApplicationQualificationId
-////      });
-////    }
-
-
-////    console.log(this.request.LateralEntryQualificationModel)
-
-
-
-////    this.request.LateralCourseID = this.lateralrequest.CourseID
-////    this.request.CourseType = this.sSOLoginDataModel.Eng_NonEng
-
-
-////    this.request.QualificationID = 10
-
-
-////    this.request.status = EnumVerificationAction.Changed
-////    this.request.Remark="Changed"
-
-////    const confirmationMessage =
-////      this.request.status === EnumVerificationAction.Changed
-////        ? "Are you sure you want to Changed?"
-////        : "Are you sure you want to Revert?";
-
-
-  
-
-////    this.swat.Confirmation(confirmationMessage, async (result: any) => {
-////      if (result.isConfirmed) {
-
-////        this.loaderService.requestStarted();
-////        try {
-////          await this.ApplicationService.Save_Documentscrutiny(this.request)
-////            .then((data: any) => {
-////              data = JSON.parse(JSON.stringify(data));
-////              console.log(data);
-////              this.State = data['State'];
-////              this.Message = data['Message'];
-////              this.ErrorMessage = data['ErrorMessage'];
-
-////              if (this.State == EnumStatus.Success) {
-////                this.toastr.success(this.Message)
-/////*                if (this.SSOLoginDataModel.RoleID==)*/
-////                this.router.navigate(['/StudentVerificationList'])
-////              }
-////              else {
-////                this.toastr.error(this.ErrorMessage)
-////              }
-
-////            }, (error: any) => console.error(error)
-////            );
-////        }
-////        catch (ex) { console.log(ex) }
-////        finally {
-////          setTimeout(() => {
-////            this.loaderService.requestEnded();
-////          }, 200);
-////        }
-////      }
-////    })
-////  }
+  ////    //  this.StudentJanDetailFormGroup.get('IsDevnarayan')?.updateValueAndValidity();
+  ////    //  this.StudentJanDetailFormGroup.get('DevnarayanTehsilID')?.updateValueAndValidity();
+  ////    //  this.StudentJanDetailFormGroup.get('DevnarayanDistrictID')?.updateValueAndValidity();
+
+  ////    //}
+
+  ////    //if (this.request.CategoryA == 5 && this.request.IsDevnarayan == 1) {
+  ////    //  this.StudentJanDetailFormGroup.get('DevnarayanTehsilID')?.setValidators([DropdownValidators]);
+  ////    //  this.StudentJanDetailFormGroup.get('DevnarayanDistrictID')?.setValidators([DropdownValidators]);
+
+  ////    //  this.StudentJanDetailFormGroup.get('DevnarayanTehsilID')?.updateValueAndValidity();
+  ////    //  this.StudentJanDetailFormGroup.get('DevnarayanDistrictID')?.updateValueAndValidity();
+
+  ////    //}
+
+  ////    if (this.request.CategoryA != 3 || (this.request.CategoryA == 3 && (this.request.subCategory == 2 || this.request.subCategory == 3))) {
+  ////      this.request.IsTSP = false
+  ////      this.request.TSPTehsilID = 0
+  ////      this.request.TspDistrictID = 0
+  ////      this.StudentJanDetailFormGroup.get('subCategory')?.clearValidators();
+  ////      this.StudentJanDetailFormGroup.get('TSPTehsilID')?.clearValidators();
+  ////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.clearValidators();
+
+  ////      this.StudentJanDetailFormGroup.get('subCategory')?.updateValueAndValidity();
+  ////      this.StudentJanDetailFormGroup.get('TSPTehsilID')?.updateValueAndValidity();
+  ////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.updateValueAndValidity();
+
+  ////    }
+
+
+  ////    if (this.request.CategoryA == 3 && this.request.IsTSP == true) {
+  ////      this.StudentJanDetailFormGroup.get('TSPTehsilID')?.setValidators(Validators.required);
+  ////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.setValidators(Validators.required);
+
+  ////      this.StudentJanDetailFormGroup.get('TSPTehsilID')?.updateValueAndValidity();
+  ////      this.StudentJanDetailFormGroup.get('TspDistrictID')?.updateValueAndValidity();
+  ////    }
+
+
+
+
+  ////    //new Date(x.To_Date)
+
+
+
+  ////    if (this.StudentJanDetailFormGroup.invalid) {
+  ////      this.toastr.error('fill required detals');
+  ////      //Object.keys(this.StudentJanDetailFormGroup.controls).forEach(key => {
+  ////      //  const control = this.StudentJanDetailFormGroup.get(key);
+
+  ////      //  if (control && control.invalid) {
+  ////      //    this.toastr.error(`Control ${key} is invalid`);
+  ////      //    Object.keys(control.errors!).forEach(errorKey => {
+  ////      //      this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+  ////      //    });
+  ////      //  }
+  ////      //});
+  ////      return;
+  ////    }
+
+
+  ////    await this.RefreshValidators()
+  ////    if (this.QualificationForm.invalid) {
+  ////      return
+  ////    }
+  ////    if (this.request.BoardID != 38) {
+  ////      this.request.BoardExamID = 0
+  ////      this.request.BoardStateID = 0
+  ////    }
+
+
+
+  ////    if (this.request.CourseType == 4 || this.request.CourseType == 2) {
+  ////      this.isSub = true;
+  ////      this.HighestQualificationForm.get('txtHighestQualification')?.setValidators([DropdownValidatorsString]);
+  ////      this.request.HighestQualificationModel = [];
+  ////      await this.RefreshValidators()
+
+  ////      if (this.HighestQualificationForm.invalid) {
+  ////        this.toastr.warning("Please Fill Highest Qualification Form Properly")
+
+  ////        //Object.keys(this.HighestQualificationForm.controls).forEach(key => {
+  ////        //  const control = this.HighestQualificationForm.get(key);
+  ////        //   if (control && control.invalid) {
+  ////        //     this.toastr.error(`Control ${key} is invalid`);
+  ////        //     Object.keys(control.errors!).forEach(errorKey => {
+  ////        //       this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+  ////        //     });
+  ////        //   }
+  ////        // });
+
+  ////        return
+  ////      }
+
+
+
+  ////      if (this.formData1.HighestQualificationHigh == '') {
+  ////        this.toastr.warning("Please Select Highest Qualification")
+  ////        return
+  ////      }
+  ////      this.HighQualificationList = []
+  ////      if (this.formData1.BoardID != 38) {
+  ////        this.formData1.BoardStateID = 0
+  ////        this.formData1.BoardExamID = 0
+  ////      }
+  ////      if (this.nonEngHighQuali != '12') {
+  ////        this.formData1.BoardID = 0
+  ////      } else if (this.nonEngHighQuali == '12') {
+  ////        this.formData1.UniversityBoard = ''
+  ////      }
+  ////      if (this.request.CourseType == 4 && this.formData1.StateIDHigh == 6) {
+  ////        this.formData1.HighestQualificationHigh = 'D-Voc'
+  ////      }
+  ////      this.HighQualificationList.push(
+  ////        {
+  ////          UniversityBoard: this.formData1.UniversityBoard,
+  ////          SchoolCollegeHigh: this.formData1.SchoolCollegeHigh,
+  ////          HighestQualificationHigh: this.formData1.HighestQualificationHigh,
+  ////          YearofPassingHigh: this.formData1.YearofPassingHigh,
+  ////          RollNumberHigh: this.formData1.RollNumberHigh,
+  ////          MarksTypeIDHigh: this.formData1.MarksTypeIDHigh,
+  ////          MaxMarksHigh: this.formData1.MaxMarksHigh,
+  ////          PercentageHigh: this.formData1.PercentageHigh,
+  ////          MarksObtainedHigh: this.formData1.MarksObtainedHigh,
+  ////          ClassSubject: this.formData1.ClassSubject,
+  ////          BoardID: this.formData1.BoardID,
+  ////          BoardStateID: this.formData1.BoardStateID,
+  ////          BoardExamID: this.formData1.BoardExamID,
+  ////          ApplicationQualificationId: this.formData1.ApplicationQualificationId,
+  ////          StateIDHigh: this.formData1.StateIDHigh
+  ////        },
+  ////      );
+
+  ////      this.request.ApplicationID = this.sSOLoginDataModel.ApplicationID;
+  ////      this.request.HighestQualificationModel = this.HighQualificationList
+  ////      // this.AddMore()
+  ////    }
+
+  ////    if (this.request.CourseType == 2 && this.nonEngHighQuali != '') {
+
+  ////      this.isSub = true;
+  ////      this.request.HighestQualificationModel = [];
+  ////      this.formData1.HighestQualificationHigh = this.nonEngHighQuali
+
+
+  ////      //if (this.HighestQualificationForm.invalid) {
+  ////      //  this.toastr.warning("Please Fill Highest Qualification Form Properly")
+  ////      //  return
+  ////      //}
+
+  ////      if (this.formData1.StateIDHigh == 0 && this.nonEngHighQuali == '12') {
+  ////        this.toastr.warning("Please Select State of Study")
+  ////        return
+  ////      }
+
+  ////      if (Number(this.request.Percentage) > Number(this.formData1.PercentageHigh)) {
+  ////        this.toastr.warning("Highest Qualification Percentage should be greater then 10th Qualification Percentage")
+  ////        return
+  ////      }
+
+  ////      if (this.nonEngHighQuali != '12') {
+  ////        this.formData1.StateIDHigh = 0
+  ////      } else if (this.nonEngHighQuali == '12' && this.formData1.StateIDHigh == 0) {
+  ////        this.toastr.warning("Please Select State of Study for Highest qualification")
+  ////        return
+  ////      }
+
+  ////      this.HighQualificationList = []
+  ////      this.HighQualificationList.push({
+  ////        UniversityBoard: this.formData1.UniversityBoard,
+  ////        SchoolCollegeHigh: this.formData1.SchoolCollegeHigh,
+  ////        HighestQualificationHigh: this.formData1.HighestQualificationHigh,
+  ////        YearofPassingHigh: this.formData1.YearofPassingHigh,
+  ////        RollNumberHigh: this.formData1.RollNumberHigh,
+  ////        MarksTypeIDHigh: this.formData1.MarksTypeIDHigh,
+  ////        MaxMarksHigh: this.formData1.MaxMarksHigh,
+  ////        PercentageHigh: this.formData1.PercentageHigh,
+  ////        MarksObtainedHigh: this.formData1.MarksObtainedHigh,
+  ////        ClassSubject: this.formData1.ClassSubject,
+  ////        ApplicationQualificationId: this.formData1.ApplicationQualificationId,
+  ////        StateIDHigh: this.formData1.StateIDHigh,
+  ////        BoardID: this.formData1.BoardID,
+  ////        BoardStateID: this.formData1.BoardStateID,
+  ////        BoardExamID: this.formData1.BoardExamID,
+  ////      },
+  ////      );
+
+
+
+  ////      this.request.HighestQualificationModel = this.HighQualificationList
+  ////    } else if (this.request.CourseType == 2 && this.nonEngHighQuali == '') {
+  ////      this.formData1 = new HighestQualificationModel()
+  ////    }
+
+
+  ////    if (this.HighQualificationList.length == 0 && this.request.CourseType == 2 && this.nonEngHighQuali != '') {
+  ////      this.toastr.error("Please Fill HighQualification Form")
+  ////      return
+  ////    }
+
+  ////    if (this.HighQualificationList.length == 0 && this.request.CourseType == 4) {
+  ////      this.toastr.error("Please Fill HighQualification Form")
+  ////      return
+  ////    }
+
+
+  ////    if (this.request.IsSupplement == true) {
+  ////      if (this.request.SupplementaryDataModel.length < 1) {
+  ////        this.toastr.error("please Add Supplementry details")
+  ////        return
+  ////      }
+  ////    }
+
+  ////    this.request.LateralEntryQualificationModel = []
+
+
+  ////    if (this.request.CourseType == EnumCourseType.Lateral || this.request.CourseType == 5) {
+  ////      await this.RefreshValidators()
+
+
+
+
+  ////      if (this.LateralQualificationForm.invalid) {
+
+
+  ////        //Object.keys(this.LateralQualificationForm.controls).forEach(key => {
+  ////        //  const control = this.LateralQualificationForm.get(key);
+  ////        //   if (control && control.invalid) {
+  ////        //     this.toastr.error(`Control ${key} is invalid`);
+  ////        //     Object.keys(control.errors!).forEach(errorKey => {
+  ////        //       this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+  ////        //     });
+  ////        //   }
+  ////        // });
+
+  ////        return
+  ////      }
+  ////      if (this.lateralrequest.CourseID == EnumLateralCourse.Diploma_Engineering) {
+  ////        if (this.SubjectID.length != 1) {
+  ////          this.toastr.error("Please Select Only One Stream")
+  ////          this.isSubmitted = false
+  ////          return
+  ////        }
+
+  ////      }
+
+  ////      //else if (this.lateralrequest.CourseID == EnumLateralCourse.Senior_Secondary) {
+  ////      //  if (this.SubjectID.length != 3) {
+  ////      //    this.toastr.error("Please Select 3 Subjects")
+  ////      //    this.isSubmitted = false
+  ////      //    return
+  ////      //  }
+
+  ////      //}
+
+  ////      else if (this.lateralrequest.CourseID == EnumLateralCourse.Senior_Secondary) {
+  ////        const selectedCount = this.SubjectID?.length || 0;
+
+  ////        if (selectedCount < 2 || selectedCount > 3) {
+  ////          this.toastr.error("Please select Minimum 2 subjects and Maximum 3 subjects.");
+  ////          this.isSubmitted = false;
+  ////          return;
+  ////        }
+  ////      }
+
+
+  ////      if (this.lateralrequest.BoardID != 38) {
+  ////        this.lateralrequest.BoardStateID = 0
+  ////        this.lateralrequest.BoardExamID = 0
+  ////      }
+  ////      if (this.lateralrequest.CourseID == 141) {
+  ////        this.lateralrequest.BoardID = 0
+  ////      }
+
+
+  ////      if (this.request.CourseType == 5) {
+  ////        this.SubjectID = []
+  ////      }
+
+  ////      this.SubjectID.forEach(e => e.CourseID = this.lateralrequest.CourseID)
+  ////      this.request.LateralEntryQualificationModel.push({
+  ////        CourseID: this.lateralrequest.CourseID,
+  ////        SubjectID: this.SubjectID,
+  ////        BoardID: this.lateralrequest.BoardID,
+  ////        BoardName: this.lateralrequest.BoardName,
+  ////        ClassSubject: this.lateralrequest.ClassSubject,
+  ////        PassingID: this.lateralrequest.PassingID,
+  ////        AggMaxMark: this.lateralrequest.AggMaxMark,
+  ////        AggObtMark: this.lateralrequest.AggObtMark,
+  ////        Percentage: this.lateralrequest.Percentage,
+  ////        Qualification: this.lateralrequest.Qualification,
+  ////        RollNumber: this.lateralrequest.RollNumber,
+  ////        StateID: this.lateralrequest.StateID,
+  ////        MarkType: this.lateralrequest.MarkType,
+  ////        BoardStateID: this.lateralrequest.BoardStateID,
+  ////        BoardExamID: this.lateralrequest.BoardExamID,
+  ////        ApplicationQualificationId: this.lateralrequest.ApplicationQualificationId
+  ////      });
+  ////    }
+
+
+  ////    console.log(this.request.LateralEntryQualificationModel)
+
+
+
+  ////    this.request.LateralCourseID = this.lateralrequest.CourseID
+  ////    this.request.CourseType = this.sSOLoginDataModel.Eng_NonEng
+
+
+  ////    this.request.QualificationID = 10
+
+
+  ////    this.request.status = EnumVerificationAction.Changed
+  ////    this.request.Remark="Changed"
+
+  ////    const confirmationMessage =
+  ////      this.request.status === EnumVerificationAction.Changed
+  ////        ? "Are you sure you want to Changed?"
+  ////        : "Are you sure you want to Revert?";
+
+
+
+
+  ////    this.swat.Confirmation(confirmationMessage, async (result: any) => {
+  ////      if (result.isConfirmed) {
+
+  ////        this.loaderService.requestStarted();
+  ////        try {
+  ////          await this.ApplicationService.Save_Documentscrutiny(this.request)
+  ////            .then((data: any) => {
+  ////              data = JSON.parse(JSON.stringify(data));
+  ////              console.log(data);
+  ////              this.State = data['State'];
+  ////              this.Message = data['Message'];
+  ////              this.ErrorMessage = data['ErrorMessage'];
+
+  ////              if (this.State == EnumStatus.Success) {
+  ////                this.toastr.success(this.Message)
+  /////*                if (this.SSOLoginDataModel.RoleID==)*/
+  ////                this.router.navigate(['/StudentVerificationList'])
+  ////              }
+  ////              else {
+  ////                this.toastr.error(this.ErrorMessage)
+  ////              }
+
+  ////            }, (error: any) => console.error(error)
+  ////            );
+  ////        }
+  ////        catch (ex) { console.log(ex) }
+  ////        finally {
+  ////          setTimeout(() => {
+  ////            this.loaderService.requestEnded();
+  ////          }, 200);
+  ////        }
+  ////      }
+  ////    })
+  ////  }
 
 
   //async BoardChange(Type: number) {
@@ -5170,8 +5180,8 @@ export class DirectDocumentationScrutinyComponent {
 
   async RefreshValidators() {
     /* for 2nd year lateral Diploma */
-    console.log("this.lateralrequest",this.lateralrequest)
-    if(this.request.CourseType == 3){
+    console.log("this.lateralrequest", this.lateralrequest)
+    if (this.request.CourseType == 3) {
       if (this.lateralrequest.CourseID == 143) {
 
         this.LateralQualificationForm.get('txtClassSubject')?.clearValidators();
@@ -5246,11 +5256,11 @@ export class DirectDocumentationScrutinyComponent {
 
     this.HighestQualificationForm.get('ddlBoardStateID')?.updateValueAndValidity();
     this.HighestQualificationForm.get('ddlBoardExamID')?.updateValueAndValidity();
-    
+
 
     /* for Degree Course 1st year*/
 
-    if(this.request.CourseType == 4 || this.request.CourseType == 5){ 
+    if (this.request.CourseType == 4 || this.request.CourseType == 5) {
       this.LateralQualificationForm.get('SubjectID')?.clearValidators();
       if (this.lateralrequest.CourseID == 281) {
 
@@ -5295,8 +5305,8 @@ export class DirectDocumentationScrutinyComponent {
 
     /* for Degree Course 2nd Year Lateral*/
 
-    if(this.request.CourseType == 5) {
-      if(this.lateralrequest.CourseID == 278) {
+    if (this.request.CourseType == 5) {
+      if (this.lateralrequest.CourseID == 278) {
         this.LateralQualificationForm.get('CoreBranchID')?.setValidators([DropdownValidators]);
         this.LateralQualificationForm.get('BranchID')?.setValidators([DropdownValidators]);
       } else {
@@ -5306,44 +5316,43 @@ export class DirectDocumentationScrutinyComponent {
 
       this.LateralQualificationForm.get('CoreBranchID')?.updateValueAndValidity();
       this.LateralQualificationForm.get('BranchID')?.updateValueAndValidity();
-      
+
     }
 
     /* end Degree Course 2nd Year Lateral*/
   }
 
 
- async openPdfModal1(url: string) {
+  async openPdfModal1(url: string) {
 
     const ext = url.split('.').pop()?.toLowerCase() || '';
     this.isPdf = ext === 'pdf';
     this.isImage = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext);
     this.isError = false;
-    
-   try {
+
+    try {
 
 
-     await this.http.get(url, { responseType: 'blob' }).subscribe(blob => {
-       const blobUrl = URL.createObjectURL(blob);
-       this.safePdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(blobUrl);
-       this.imageSrc = blobUrl;
-       this.pdfUrl = url;
-       this.showPdfModal = true;  this.showPdfModal = true;
+      await this.http.get(url, { responseType: 'blob' }).subscribe(blob => {
+        const blobUrl = URL.createObjectURL(blob);
+        this.safePdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(blobUrl);
+        this.imageSrc = blobUrl;
+        this.pdfUrl = url;
+        this.showPdfModal = true; this.showPdfModal = true;
 
 
-     });
+      });
 
-   } catch (error)
-   {
+    } catch (error) {
 
-     console.error('File load failed, showing dummy image.', error);
-     this.showPdfModal = true;
-     this.isPdf = false;
-     this.isImage = true;
-     this.safePdfUrl = null;
-     this.imageSrc = 'assets/images/dummyImg.jpg';  // 🔁 Fallback image
-     this.isError = true;
-   }
+      console.error('File load failed, showing dummy image.', error);
+      this.showPdfModal = true;
+      this.isPdf = false;
+      this.isImage = true;
+      this.safePdfUrl = null;
+      this.imageSrc = 'assets/images/dummyImg.jpg';  // 🔁 Fallback image
+      this.isError = true;
+    }
 
   }
 
@@ -5414,15 +5423,15 @@ export class DirectDocumentationScrutinyComponent {
 
   ShowOtherdropdown() {
     if (this.OtherData.ParentsIncome == 71) {
-   
+
       this.IsShowDropdown = true
-     
+
 
 
     }
     else {
 
-    
+
 
 
       this.IsShowDropdown = false
@@ -5489,7 +5498,7 @@ export class DirectDocumentationScrutinyComponent {
             this.ShowOtherdropdown()
             if (this.request.CategoryA == 9) {
               this.OtherData.EWS = 1
-     
+
             }
             if (this.OtherData.EWS == 0) {
               this.OtherData.EWS = 2
@@ -5532,7 +5541,7 @@ export class DirectDocumentationScrutinyComponent {
 
 
 
-  
+
   public file!: File;
 
   async onFilechange(event: any, Type: string) {
@@ -5562,7 +5571,7 @@ export class DirectDocumentationScrutinyComponent {
 
         // Upload to server folder
         this.loaderService.requestStarted();
-         
+
         await this.commonMasterService.UploadDocument(this.file, uploadModel)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
@@ -5573,11 +5582,11 @@ export class DirectDocumentationScrutinyComponent {
                   this.FileName = data['Data'][0]["FileName"];
                   this.FilePath = data['Data'][0]["FilePath"];
                   break;
-             
+
                 default:
                   break;
               }
-            }   
+            }
             event.target.value = null;
             if (data.State === EnumStatus.Error) {
               this.toastr.error(data.ErrorMessage);
@@ -5587,7 +5596,7 @@ export class DirectDocumentationScrutinyComponent {
           });
       }
     } catch (Ex) {
-      console.log(Ex);  
+      console.log(Ex);
     } finally {
       this.loaderService.requestEnded();
     }
@@ -5611,19 +5620,19 @@ export class DirectDocumentationScrutinyComponent {
     return invalid;
   }
 
-  ff(formGroup: FormGroup){
+  ff(formGroup: FormGroup) {
     const invalidControls = [];
-for (const [key, control] of Object.entries(formGroup.controls)) {
-  if (control.invalid) {
-    invalidControls.push({
-      name: key,
-      value: control.value,
-      errors: control.errors
-    });
-  }
-}
+    for (const [key, control] of Object.entries(formGroup.controls)) {
+      if (control.invalid) {
+        invalidControls.push({
+          name: key,
+          value: control.value,
+          errors: control.errors
+        });
+      }
+    }
 
-console.log(invalidControls);
+    console.log(invalidControls);
 
   }
 

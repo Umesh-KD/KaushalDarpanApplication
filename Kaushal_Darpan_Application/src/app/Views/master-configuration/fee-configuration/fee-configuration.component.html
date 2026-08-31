@@ -252,7 +252,10 @@
 
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('CasteCategoryName')" >
               <span *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.Admin || this.sSOLoginDataModel.RoleID==_EnumRole.AdminNon">Stream Name </span>
-              <span *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.DTE || this.sSOLoginDataModel.RoleID==_EnumRole.DTENON  || this.sSOLoginDataModel.RoleID==_EnumRole.DTETraing">Caste Category</span>
+              <span *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.DTE || 
+                          this.sSOLoginDataModel.RoleID==_EnumRole.DTENON  || 
+                          this.sSOLoginDataModel.RoleID==_EnumRole.DTETraing ||
+                          this.sSOLoginDataModel.RoleID==_EnumRole.DIRECTOR">Caste Category</span>
               @if (sortInTableColumn=='CasteCategoryName')
               {
               <span class="shortingSpan" [innerHTML]="sortInTableDirectionAero"></span>

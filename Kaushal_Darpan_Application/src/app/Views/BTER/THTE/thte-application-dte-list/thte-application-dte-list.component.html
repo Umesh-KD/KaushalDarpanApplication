@@ -42,7 +42,7 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center gap-3">
-        <button type="button" *ngIf="searchRequest.status == 1345 && sSOLoginDataModel.RoleID === enumRole.DTE"
+        <button type="button" *ngIf="searchRequest.status == 1345 && (sSOLoginDataModel.RoleID === enumRole.DTE || sSOLoginDataModel.RoleID === enumRole.DIRECTOR)"
           class="btn bg-info text-white inline-block me-2" (click)="GenrateOrderInWord()">Generate order in word</button>
         <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Excel</a> -->
         <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize"
@@ -57,7 +57,7 @@
 
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3" 
         *ngIf="(searchRequest.status == 1354 && sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE) || 
-                (searchRequest.status == 1353 && sSOLoginDataModel.RoleID === enumRole.DTE)">
+                (searchRequest.status == 1353 && (sSOLoginDataModel.RoleID === enumRole.DTE || sSOLoginDataModel.RoleID === enumRole.DIRECTOR))">
 
       <div *ngIf="(searchRequest.status == 1354 && sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE)">
         <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
@@ -88,7 +88,7 @@
         </div>
       </div>
       <div class="mt-6">
-        <button type="button" *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE"
+        <button type="button" *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE || sSOLoginDataModel.RoleID === enumRole.DIRECTOR"
           class="btn bg-info text-white inline-block" (click)="updateStatusRemark()">Approve for Order Genration</button>
 
         <button type="button" *ngIf="sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE"
@@ -106,7 +106,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left" *ngIf="(searchRequest.status == 1354 && sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE) || 
-                      (searchRequest.status == 1353 && sSOLoginDataModel.RoleID === enumRole.DTE)">
+                      (searchRequest.status == 1353 && (sSOLoginDataModel.RoleID === enumRole.DTE || sSOLoginDataModel.RoleID === enumRole.DIRECTOR))">
               <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect"
                 (change)="selectInTableAllCheckbox()"/>
             </th>
@@ -129,7 +129,7 @@
         <tbody>
           <tr *ngFor="let row of paginatedInTableData; let idx=index;">
             <td *ngIf="(searchRequest.status == 1354 && sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE) || 
-                      (searchRequest.status == 1353 && sSOLoginDataModel.RoleID === enumRole.DTE)">
+                      (searchRequest.status == 1353 && (sSOLoginDataModel.RoleID === enumRole.DTE || sSOLoginDataModel.RoleID === enumRole.DIRECTOR))">
               <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected" #checkboxInTableSeletedSingle
                 (change)="selectInTableSingleCheckbox(row.Selected, row)" />
             </td>
@@ -224,8 +224,8 @@
                 <th class="text-left">Institute Name</th>
                 <th class="text-left">Distance(KM)</th>
                 <th class="text-left">Recommendation by College Committee</th>
-                <th class="text-left" *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE">DTE Committee Status</th>
-                <th class="text-left" *ngIf="sSOLoginDataModel.RoleID !== enumRole.DTE">Choose Status</th>
+                <th class="text-left" *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE || sSOLoginDataModel.RoleID === enumRole.DIRECTOR">DTE Committee Status</th>
+                <th class="text-left" *ngIf="!(sSOLoginDataModel.RoleID == enumRole.DTE || sSOLoginDataModel.RoleID == enumRole.DIRECTOR)">Choose Status</th>
                 <th class="text-left">Remarks</th>
 
               </tr>
@@ -238,16 +238,16 @@
                 <td align="left">{{ row.CollegeName }}</td>
                 <td align="left">{{ row.Distance }}</td>
                 <td align="left">{{ row.InstituteStatus_str }}</td>
-                <td align="left" *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE">{{ row.DTECommitteeStatus_str }}</td>
-                <td align="left" *ngIf="sSOLoginDataModel.RoleID !== enumRole.DTE">
+                <td align="left" *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE || sSOLoginDataModel.RoleID === enumRole.DIRECTOR">{{ row.DTECommitteeStatus_str }}</td>
+                <td align="left" *ngIf="!(sSOLoginDataModel.RoleID == enumRole.DTE || sSOLoginDataModel.RoleID == enumRole.DIRECTOR)">
                   <select class="form-select" id="StatusID" [(ngModel)]="row.DTECommitteeStatus" name="StatusID">
                     <option value="0">--Choose Status--</option>
                     <option value="1343">Accept</option>
                     <option value="1342">Reject</option>
                   </select>
                 </td>
-                <td align="left" *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE">{{ row.Remarks }}</td>
-                <td align="left" *ngIf="sSOLoginDataModel.RoleID !== enumRole.DTE">
+                <td align="left" *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE || sSOLoginDataModel.RoleID === enumRole.DIRECTOR">{{ row.Remarks }}</td>
+                <td align="left" *ngIf="!(sSOLoginDataModel.RoleID == enumRole.DTE || sSOLoginDataModel.RoleID == enumRole.DIRECTOR)">
                   <input class="form-input" type="text" name="appliedInstituteDistance"
                     placeholder="Enter Remarks" 
                     [(ngModel)]="row.Remarks"
