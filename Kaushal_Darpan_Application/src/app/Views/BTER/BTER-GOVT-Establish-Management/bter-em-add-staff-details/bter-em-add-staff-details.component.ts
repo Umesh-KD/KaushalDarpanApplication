@@ -77,6 +77,8 @@ export class BterEMAddStaffDetailsComponent {
 
   isSubmitted: boolean = false;
   public ShowAllSemester: number = 0;
+  public editServiceIndex: number = -1;
+  public isEditServiceReq: boolean =false 
   public userID:number=0;
   public State: number = 0;
   public Message: string = '';
@@ -1110,10 +1112,101 @@ export class BterEMAddStaffDetailsComponent {
       });
 
       this.serviceReq=new BTER_EM_AddServiceHistoryDataModel();
-      this.isAddServiceReq = false;
-  
+    this.isAddServiceReq = false;
+    this.isEditServiceReq = false,
+      this.editServiceIndex=-1
+  }
+  private formatDateForInput(date: any): string {
+    if (!date) return '';
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return '';
+    return d.toISOString().split('T')[0];
   }
 
+  //private formatDateForInput(date: any): string {
+  //  if (!date) return '';
+  //  const d = new Date(date);
+  //  if (isNaN(d.getTime())) return '';
+  //  return d.toISOString().split('T')[0];
+  //}
+
+  async EditServiceHistory(row: any, index: number) {
+
+    this.isEditServiceReq = true;
+    this.editServiceIndex = index;
+    this.isAddServiceReq = false;
+
+    // remove the row being edited so it isn't duplicated once re-added
+    this.deleteServiceHistory(index);
+
+    // local UI flags driving *ngIf sections
+    this.IsTransfer = !!row.IsTransfer;
+    this.IsPromotion = !!row.IsPromotion;
+
+    // ---- ngModel-bound fields on serviceReq (null/undefined safe) ----
+    this.serviceReq.OfficeID = this.orDefault(row.OfficeID, 0);
+    this.serviceReq.InstituteID = this.orDefault(row.InstituteID, 0);
+    this.serviceReq.FromDate = this.formatDateForInput(row.FromDate);
+    this.serviceReq.ToDate = this.formatDateForInput(row.ToDate);
+
+    this.serviceReq.ServiceBranchID = this.orDefault(row.ServiceBranchID, 0);
+    this.serviceReq.QualificationID = this.orDefault(row.QualificationID, 0);
+
+    this.serviceReq.IsTransfer = this.IsTransfer;
+    this.serviceReq.TransferToOfficeID = this.orDefault(row.TransferToOfficeID, 0);
+    this.serviceReq.TransferToInstituteID = this.orDefault(row.TransferToInstituteID, 0);
+    this.serviceReq.DateOfTransfer = this.formatDateForInput(row.DateOfTransfer);
+
+    this.serviceReq.IsPromotion = this.IsPromotion;
+    this.serviceReq.ToDesignationIDPromotion = this.orDefault(row.ToDesignationIDPromotion, 0);
+    this.serviceReq.ToBranchIDPromotion = this.orDefault(row.ToBranchIDPromotion, 0);
+    this.serviceReq.DateOfpromotion = this.formatDateForInput(row.DateOfpromotion);
+
+    // doc metadata / display-only fields — not on the form, still ngModel-bound elsewhere
+    this.serviceReq.DisUploadDoc = this.orDefault(row.DisUploadDoc, '');
+    this.serviceReq.UploadDoc = this.orDefault(row.UploadDoc, '');
+    this.serviceReq.TransferDocuments = row.TransferDocuments ? [...row.TransferDocuments] : [];
+    this.serviceReq.PromotionDocuments = row.PromotionDocuments ? [...row.PromotionDocuments] : [];
+    this.serviceReq.TransferToOfficeName = this.orDefault(row.TransferToOfficeName, '');
+    this.serviceReq.TransferToInstituteName = this.orDefault(row.TransferToInstituteName, '');
+    this.serviceReq.ToDesignationName = this.orDefault(row.ToDesignationName, '');
+    this.serviceReq.DesignationName = this.orDefault(row.DesignationName, '');
+    this.serviceReq.OfficeName = this.orDefault(row.OfficeName, '');
+    this.serviceReq.InstituteName = this.orDefault(row.InstituteName, '');
+
+    // preload dependent dropdowns BEFORE patching reactive form
+    await this.GetDesignationData_ServiceHistory();
+    if (this.serviceReq.OfficeID == 21) {
+      await this.getStreamMasterData();
+    }
+    this.serviceReq.DesignationID = this.orDefault(row.DesignationID, 0);
+    // ---- reactive form (formControlName) fields, same null-safe defaults ----
+    this.AddServiceistoryFormGroup.patchValue({
+      OfficeID: this.serviceReq.OfficeID,
+      InstituteID: this.serviceReq.InstituteID,
+      FromDate: this.serviceReq.FromDate,
+      ToDate: this.serviceReq.ToDate,
+    /*  DesignationID: this.serviceReq.DesignationID,*/
+      ServiceBranchID: this.serviceReq.ServiceBranchID,
+      QualificationID: this.serviceReq.QualificationID,
+
+      IsTransfer: this.serviceReq.IsTransfer,
+      TransferToOfficeID: this.serviceReq.TransferToOfficeID,
+      TransferToInstituteID: this.serviceReq.TransferToInstituteID,
+      DateOfTransfer: this.serviceReq.DateOfTransfer,
+
+      IsPromotion: this.serviceReq.IsPromotion,
+/*      ToDesignationIDPromotion: this.serviceReq.ToDesignationIDPromotion,*/
+      ToBranchIDPromotion: this.serviceReq.ToBranchIDPromotion,
+      DateOfpromotion: this.serviceReq.DateOfpromotion,
+    });
+
+    document.querySelector('form[formGroup]')
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  private orDefault<T>(value: T | null | undefined, fallback: T): T {
+    return value === null || value === undefined ? fallback : value;
+  }
 
   async refreshValidators(){
     debugger
@@ -1253,14 +1346,18 @@ export class BterEMAddStaffDetailsComponent {
       });
   }
 
-  deleteServiceHistory(index:number):void{
-    this.Swal2.Confirmation("Are you sure you want to delete row?",
-      async (result: any) => {
-        if (result.isConfirmed) {
-          this.serviceHistoryList.splice(index,1);
-        }
-      });    
-  }
+  deleteServiceHistory(index: number): void{
+    if (this.isEditServiceReq==true) {
+      this.serviceHistoryList.splice(index, 1);
+    } else {
+      this.Swal2.Confirmation("Are you sure you want to delete row?",
+        async (result: any) => {
+          if (result.isConfirmed) {
+            this.serviceHistoryList.splice(index, 1);
+          }
+        });
+    }
+    }
 
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
 
