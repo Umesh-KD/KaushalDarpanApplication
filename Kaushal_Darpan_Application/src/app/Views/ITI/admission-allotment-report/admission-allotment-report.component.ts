@@ -107,6 +107,11 @@ tableConfig: TableConfig = {
     }
   }
 
+  async onActionTypeChange(event: any) {
+    debugger
+    this.ActionType = event.target.value;
+    this.GetAllData();
+  }
   async GetAllData() {
     try {
       let obj = {
