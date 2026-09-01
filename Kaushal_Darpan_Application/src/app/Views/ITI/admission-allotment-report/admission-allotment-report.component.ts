@@ -39,6 +39,8 @@ export class AdmissionAllotmentReportComponent implements OnInit {
 
 tableConfig: TableConfig = {
 
+   showExport: true,  //for showing excel button
+  //  showColumnCustomizer: false, //for showing column customizer button
    unwantedColumns: [
         'ID',
         'InstituteID',
@@ -48,6 +50,7 @@ tableConfig: TableConfig = {
         'TradeId',
         'AcademicYearID'
     ],
+    // showExport: true,
 
 };
 
