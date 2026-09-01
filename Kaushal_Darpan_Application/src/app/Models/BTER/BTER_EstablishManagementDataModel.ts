@@ -772,6 +772,7 @@ export class StaffTrainingDetailDataModel {
   public TrainingStatus: number = 0;
   public ComplitionTrainingDoc: string = '';
   public Dis_complitionTrainingDoc: string = '';
+  public Remarks: string = '';
   public Remark: string = '';
   public RoleID: number = 0;
   public InstituteID: number = 0;

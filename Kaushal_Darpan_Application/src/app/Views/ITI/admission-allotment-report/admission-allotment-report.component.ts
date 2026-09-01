@@ -39,6 +39,8 @@ export class AdmissionAllotmentReportComponent implements OnInit {
 
 tableConfig: TableConfig = {
 
+   showExport: true,  //for showing excel button
+  //  showColumnCustomizer: false, //for showing column customizer button
    unwantedColumns: [
         'ID',
         'InstituteID',
@@ -46,8 +48,10 @@ tableConfig: TableConfig = {
         'CreatedDate',
         'StateID',
         'TradeId',
-        'AcademicYearID'
+        'AcademicYearID',
+        'CollegeId'
     ],
+    // showExport: true,
 
 };
 
@@ -103,6 +107,11 @@ tableConfig: TableConfig = {
     }
   }
 
+  async onActionTypeChange(event: any) {
+    debugger
+    this.ActionType = event.target.value;
+    this.GetAllData();
+  }
   async GetAllData() {
     try {
       let obj = {

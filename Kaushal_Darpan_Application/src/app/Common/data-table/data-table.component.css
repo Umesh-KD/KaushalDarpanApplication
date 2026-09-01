@@ -390,6 +390,7 @@ table {
     transition:.2s;
 
     font-weight:500;
+    white-space: nowrap;
 
 }
 

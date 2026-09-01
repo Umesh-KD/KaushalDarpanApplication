@@ -115,7 +115,7 @@
                  placeholder="Duration"
                  (input)="validateTrainingDates()"
                  oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-         
+
           <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.Duration.errors?.required" class="text-danger">
             <p>This field is required!</p>
           </div>
@@ -125,7 +125,7 @@
           <label for="voucherdate" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Start Date: <span class="StarMarking">*</span>
           </label>
-          
+
           <input type="date"
                  id="StartDate"
                  name="StartDate"
@@ -147,14 +147,13 @@
           <label for="voucherdate" class="text-gray-800 text-sm font-medium inline-block mb-2">
             End Date: <span class="StarMarking">*</span>
           </label>
-         
+
           <input type="date"
                  id="EndDate"
                  name="EndDate"
                  class="form-input"
                  formControlName="EndDate"
-                 [(ngModel)]="request.EndDate"
-                 readonly />
+                 [(ngModel)]="request.EndDate" (change)="onEndDateChange($event.target.value)" />
 
           <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.EndDate.errors" class="text-danger">
             <p *ngIf="!_AddTrainingDetailsFromGroup.EndDate.errors.DropdownValidators">
@@ -209,6 +208,7 @@
             </div>
           </div>
         </div>
+
         <!--{{request.TrainingTypeID|json}}-->
         <div *ngIf="request.TrainingTypeID == 1">
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -229,8 +229,23 @@
           </div>
         </div>
 
-
-
+        <div>
+          <label for="Remarks" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Remarks:
+            <span class="StarMarking" *ngIf="isEndDateExtended">*</span>
+          </label>
+          <input type="text"
+                 id="Remarks"
+                 name="Remarks"
+                 class="form-input"
+                 formControlName="Remarks"
+                 [(ngModel)]="request.Remarks" placeholder="Enter Remarks" />
+          <div *ngIf="isSubmitted && isEndDateExtended && _AddTrainingDetailsFromGroup.Remarks.errors" class="text-danger">
+            <p *ngIf="_AddTrainingDetailsFromGroup.Remarks.errors.required">
+              <i aria-hidden="true"></i> This field is required when the end date is extended.
+            </p>
+          </div>
+        </div>
 
       </div>
       <div>
@@ -290,6 +305,7 @@
               <th align="left">Mode Of Training</th>
               <th class="text-left">View Document</th>
               <th class="text-left">View Completion Training Document</th>
+              <th class="text-left">Remark</th>
               <th class="text-left">Status</th>
               <th align="center" width="200">Action</th>
              
@@ -307,6 +323,7 @@
               <td>{{row.Duration}}</td>
               <td>{{row.StartDate}} - {{row.EndDate}}</td>
               <td>{{row.Venue}}</td>
+
               <td>{{row.ModeOfTraining_str}}</td>
               <td align="left">
                 <div class="flex" *ngIf="row.TrainingDoc; else noDoc1">
@@ -329,6 +346,9 @@
                 </div>
                 <ng-template #noDoc2>-----</ng-template>
               </td>
+
+              <td>{{row.ExtendDateRemark}}</td>
+
               <td *ngIf="row.StatusID == 6362">
                 Final Approved
               </td>
@@ -397,6 +417,7 @@
               <th align="left">Mode Of Training</th>
               <th class="text-left">View Document</th>
               <th class="text-left">View Completion Training Document</th>
+              <th class="text-left">Remark</th>
               <th class="text-left">Status</th>
               <th align="center" width="200">Action</th>
             </tr>
@@ -435,6 +456,7 @@
                 </div>
                 <ng-template #noDoc2>-----</ng-template>
               </td>
+              <td>{{row.ExtendDateRemark}}</td>
               <td *ngIf="row.StatusID == 6362">
                 Final Approved
               </td>
@@ -444,7 +466,7 @@
               </td>
               <td>
                 <a href="javascript:void(0);" title="Status History" (click)="onEmtrainingStatusHistory(EmtrainingStatusHistory, row.StaffTrainingDetailID)"><i class="ti ti-list"></i></a>
-                <button  class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(row.StaffTrainingDetailID)" *ngIf="_EnumStaffTrainingStatus.Applied== row.StatusID">
+                <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(row.StaffTrainingDetailID)" *ngIf="_EnumStaffTrainingStatus.Applied== row.StatusID">
                   <i class="ti ti-trash"></i>
                 </button>
               </td>
