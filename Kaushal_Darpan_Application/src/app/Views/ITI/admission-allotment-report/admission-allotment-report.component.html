@@ -30,26 +30,23 @@
         </div> -->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Report Action</label>
-          <select class="form-select" id="ActionType" [(ngModel)]="ActionType">
+          <select class="form-select" id="ActionType" [(ngModel)]="ActionType" (change)="onActionTypeChange($event)">
             <option value="">--Select--</option>
             <option *ngFor="let item of AdmissionAllotmentData_ddl" value="{{item.Name}}">{{item.Name}}</option>
           </select>
         </div>
         <div>        
-          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <!-- <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button> -->
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
             <i class="ti ti-refresh"></i>
             Reset
           </button>
         </div>
-
       </div>
-
-
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Admission Allotment Report</b>
-      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
+      <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a> -->
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">     
     </div>

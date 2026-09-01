@@ -150,7 +150,7 @@ export class ProvisionalDiplomaCertificateDownloadComponent {
       //   return;
       // }
       // else 
-        debugger
+        //debugger
         if (this.searchRequest.ResultTypeID == this._EnumResultType.RwhResult || this.searchRequest.ResultTypeID == this._EnumResultType.RwhRevalEffected) {
         if ((this.searchRequest.EffectiveFromEndTermId ?? 0) <= 0) {
           this.toastr.error("Please select Result Type Effective From!");
@@ -375,11 +375,11 @@ export class ProvisionalDiplomaCertificateDownloadComponent {
   }
 
   async DownloadChunkDiplomaCertificate(start: number, end: number) {
-    debugger
+    //debugger
 
     const StudentList: any[] = this.StudentList.slice(start, end + 1);
     try {
-      const fullSession = this.FinYearList.find((x: any) => x.EndTermID == this.searchRequest.EndTermID)?.FinancialYearName;
+     //const fullSession = this.FinYearList.find((x: any) => x.EndTermID == this.searchRequest.EndTermID)?.FinancialYearName;
       // const Session = fullSession ? fullSession.split('-')[0] : '';
 
       StudentList.forEach((element: any) => {
@@ -388,7 +388,7 @@ export class ProvisionalDiplomaCertificateDownloadComponent {
         //element.EndTermID = this.sSOLoginDataModel.EndTermID;
         //element.EndTermID = this.searchRequest.EndTermID;
         // element.SessionName = Session;
-        element.SessionName = fullSession;
+        element.SessionName = element.financialyearname;
         element.ModifyBy = this.sSOLoginDataModel.UserID;
         element.RoleID = this.sSOLoginDataModel.RoleID;
       });

@@ -1,3 +1,5 @@
+import * as XLSX from 'xlsx';
+
 import { Component, EventEmitter, Input, Output ,OnChanges, AfterViewInit, ViewChild, SimpleChanges, ElementRef, HostListener} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -7,6 +9,7 @@ import { TableConfig } from './DatatableModels/table-config.model';
 import { TableColumn } from './DatatableModels/table-column.model';
 import { TableConstants } from './DatatableModels/table.constant';
 import { DEFAULT_COLUMN, DEFAULT_IMAGE_CONFIG, DEFAULT_TABLE_CONFIG } from './DatatableModels/table.default';
+import { SweetAlert2 } from '../SweetAlert2';
 
 
 @Component({
@@ -57,7 +60,8 @@ export class DataTableComponent implements OnChanges, AfterViewInit {
   //#endregion
 
    constructor(
-     private elementRef: ElementRef
+     private elementRef: ElementRef,
+     private Swal2: SweetAlert2
    ) { }
 
    @HostListener('document:click', ['$event'])
@@ -678,25 +682,19 @@ movePreview(event: MouseEvent): void {
 
 
 private refreshDisplayedColumns(): void {
-
-     const columns: string[] = [];
-
+    const columns: string[] = [];
     if (this.normalizedConfig.showSerialNo) {
         columns.push(this.TABLE_CONSTANTS.SERIAL_COLUMN);
     }
-
     columns.push(
         ...this.normalizedColumns
             .filter(x => x.visible)
             .map(x => x.dataField)
     );
-
     if (this.normalizedConfig.actions?.length) {
         columns.push(this.TABLE_CONSTANTS.ACTION_COLUMN);
     }
-
     this.displayedColumns = [...columns];
-
     console.log(this.displayedColumns);
 
 }
@@ -794,6 +792,159 @@ get filteredColumns(): TableColumn[] {
 
     );
 
+}
+
+
+// --------------Excel Enhancement-------------------
+downloadExcel(): void {
+
+    // -----------------------------------------
+    // Get rows currently displayed after search
+    // -----------------------------------------
+
+    const rows = this.dataSource.filteredData;
+
+    if (!rows || rows.length === 0) {
+
+            this.Swal2.Info('Please select at least one column to export.');
+
+        return;
+    }
+
+    // -----------------------------------------
+    // Get currently visible columns
+    // -----------------------------------------
+
+    const visibleColumns = this.normalizedColumns.filter(
+        column => column.visible
+    );
+
+    if (visibleColumns.length === 0) {
+
+        this.Swal2.Info('Please select at least one column to export.');
+
+        return;
+    }
+
+    // -----------------------------------------
+    // Prepare Excel data
+    // -----------------------------------------
+
+    const excelData = rows.map(row => {
+
+        const excelRow: any = {};
+        visibleColumns.forEach(column => {
+            const header =
+                column.displayField ||
+                this.splitCamelCase(column.dataField);
+            let value = row[column.dataField];
+            // Date
+            if (column.type === 'date' && value) {
+                value = this.formatExcelDate(
+                    value,
+                    column.format
+                );
+
+            }
+            // Boolean
+            else if (column.type === 'boolean') {
+                value = value ? 'Yes' : 'No';
+            }
+            // Badge
+            else if (column.type === 'badge') {
+                const status =
+                    this.getStatus(value);
+                value =
+                    status?.text ||
+                    value;
+            }
+            // Image
+            else if (column.type === 'image') {
+                // Excel will contain the image path/name,
+                // not the rendered HTML image.
+                value = value || '';
+            }
+            // Formatter
+            if (column.formatter) {
+                value = column.formatter(value, row);
+            }
+            excelRow[header] = value;
+        });
+        return excelRow;
+    });
+
+    // -----------------------------------------
+    // Create worksheet
+    // -----------------------------------------
+
+    const worksheet: XLSX.WorkSheet =
+        XLSX.utils.json_to_sheet(excelData);
+
+    // -----------------------------------------
+    // Create workbook
+    // -----------------------------------------
+
+    const workbook: XLSX.WorkBook =
+        XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        'Data'
+    );
+
+    // -----------------------------------------
+    // Download
+    // -----------------------------------------
+
+    const fileName =
+        `Data_${this.getExcelDate()}.xlsx`;
+
+    XLSX.writeFile(
+        workbook,
+        fileName
+    );
+
+}
+
+private formatExcelDate(
+    value: any,
+    format?: string
+): string {
+    if (!value) {
+        return '';
+    }
+    const date = new Date(value);
+    if (isNaN(date.getTime())) {
+        return value;
+    }
+    const day =
+        String(date.getDate()).padStart(2, '0');
+    const month =
+        String(date.getMonth() + 1).padStart(2, '0');
+    const year =
+        date.getFullYear();
+    if (format === 'yyyy-MM-dd') {
+        return `${year}-${month}-${day}`;
+    }
+    return `${day}-${month}-${year}`;
+}
+
+private getExcelDate(): string {
+    const now = new Date();
+    const day =
+        String(now.getDate()).padStart(2, '0');
+    const month =
+        String(now.getMonth() + 1).padStart(2, '0');
+    const year =
+        now.getFullYear();
+    const hours =
+        String(now.getHours()).padStart(2, '0');
+    const minutes =
+        String(now.getMinutes()).padStart(2, '0');
+    const seconds =
+        String(now.getSeconds()).padStart(2, '0');
+    return `${day}${month}${year}_${hours}${minutes}${seconds}`;
 }
 
 }
