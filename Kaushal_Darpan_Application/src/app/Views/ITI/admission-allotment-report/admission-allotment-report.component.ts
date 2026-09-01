@@ -48,7 +48,8 @@ tableConfig: TableConfig = {
         'CreatedDate',
         'StateID',
         'TradeId',
-        'AcademicYearID'
+        'AcademicYearID',
+        'CollegeId'
     ],
     // showExport: true,
 

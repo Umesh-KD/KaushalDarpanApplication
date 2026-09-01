@@ -682,25 +682,19 @@ movePreview(event: MouseEvent): void {
 
 
 private refreshDisplayedColumns(): void {
-
-     const columns: string[] = [];
-
+    const columns: string[] = [];
     if (this.normalizedConfig.showSerialNo) {
         columns.push(this.TABLE_CONSTANTS.SERIAL_COLUMN);
     }
-
     columns.push(
         ...this.normalizedColumns
             .filter(x => x.visible)
             .map(x => x.dataField)
     );
-
     if (this.normalizedConfig.actions?.length) {
         columns.push(this.TABLE_CONSTANTS.ACTION_COLUMN);
     }
-
     this.displayedColumns = [...columns];
-
     console.log(this.displayedColumns);
 
 }
