@@ -1,4 +1,4 @@
-<p>data-table works!</p>
+<!-- <p>data-table works!</p> -->
 <div class="datatable-container">
 
     <!-- customizable column -->
@@ -408,9 +408,9 @@
 
         *ngIf="normalizedConfig.showPagination"
 
-        [pageSize]="normalizedConfig.pageSize || 10"
+        [pageSize]="normalizedConfig.pageSize || 50"
 
-        [pageSizeOptions]="normalizedConfig.pageSizeOptions || [10,20,50,100]"
+        [pageSizeOptions]="normalizedConfig.pageSizeOptions || [50,100,500,1000]"
 
         showFirstLastButtons>
 
