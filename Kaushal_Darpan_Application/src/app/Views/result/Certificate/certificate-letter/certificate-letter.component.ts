@@ -137,6 +137,12 @@ export class CertificateLetterComponent {
           if (data.State === EnumStatus.Success) {
             const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
             this.commonFunctionHelper.downloadBase64OfPdf(data.Data, `certificate_letter_${timestamp}.pdf`);
+          } else if (data.State === EnumStatus.Warning) {
+            this.toastr.warning(data.Message);
+          }
+          else {
+            this.toastr.error(data.Message);
+            console.log(data.ErrorMessage);
           }
         }, (error: any) => console.error(error));
     } catch (ex) {

@@ -1279,7 +1279,7 @@
 
         <div class="pt-30 mb-3 flex justify-center flex-wrap items-center">
           <button type="button" class="btn bg-primary text-white" (click)="AddAnotherServiceHistory()">
-            Add More Service History
+            {{ isEditServiceReq ? 'Update Service History' : 'Add More Service History' }}
           </button>
         </div>
 
