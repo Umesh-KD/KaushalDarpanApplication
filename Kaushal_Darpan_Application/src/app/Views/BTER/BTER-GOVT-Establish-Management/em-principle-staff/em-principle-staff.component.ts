@@ -1972,6 +1972,7 @@ async GetCategroyData() {
         x.ModifiedBy = this.sSOLoginDataModel.UserID,
         x.DepartmentID = this.sSOLoginDataModel.DepartmentID
         x.InstituteID = this.sSOLoginDataModel.InstituteID
+        x.ParentRoleID = this.sSOLoginDataModel.RoleID
       });
       
       await this.assignRoleRightsService.SaveAssignedRole_UserWise(editChild)
