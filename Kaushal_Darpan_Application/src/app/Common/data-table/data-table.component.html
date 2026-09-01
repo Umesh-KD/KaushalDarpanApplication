@@ -1,4 +1,4 @@
-<p>data-table works!</p>
+<!-- <p>data-table works!</p> -->
 <div class="datatable-container">
 
     <!-- customizable column -->
@@ -54,6 +54,19 @@
             </button>
 
         </div>
+
+        <!-- <button
+            *ngIf="normalizedConfig.showExport"
+            type="button"
+            class="toolbar-btn"
+            title="Download Excel"
+            (click)="downloadExcel()">
+
+            <i class="ti ti-file-spreadsheet"></i>
+
+            <span>Excel</span>
+
+        </button> -->
 
         <div class="column-search">
 
@@ -408,9 +421,9 @@
 
         *ngIf="normalizedConfig.showPagination"
 
-        [pageSize]="normalizedConfig.pageSize || 10"
+        [pageSize]="normalizedConfig.pageSize || 50"
 
-        [pageSizeOptions]="normalizedConfig.pageSizeOptions || [10,20,50,100]"
+        [pageSizeOptions]="normalizedConfig.pageSizeOptions || [50,100,500,1000]"
 
         showFirstLastButtons>
 

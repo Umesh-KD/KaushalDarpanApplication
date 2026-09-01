@@ -2161,6 +2161,13 @@ export class ReportService {
   }
 
 
+   public async GetZoneWiseAllotmentReport(searchRequest: any) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetZoneWiseAllotmentReport`, body, this.headersOptions)
+      .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   
   
 }

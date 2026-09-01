@@ -766,13 +766,26 @@ closeColumnPanel(): void {
 
 get filteredColumns(): TableColumn[] {
 
-    if (!this.columnSearch.trim()) {
+    // if (!this.columnSearch.trim()) {
 
+    //     return this.normalizedColumns;
+
+    // }
+      console.log(
+        'SEARCH:',
+        this.columnSearch,
+        'COLUMNS:',
+        this.normalizedColumns
+    );
+     const search = this.columnSearch.trim().toLowerCase();
+
+    if (!search) {
         return this.normalizedColumns;
-
     }
 
-    console.log("herehrheher",this.columnSearch);
+    console.log('Column Search:', search);
+
+    // console.log("herehrheher",this.columnSearch);
 
     return this.normalizedColumns.filter(x => !this.columnSearch ||
         x.displayField
