@@ -64,7 +64,9 @@ export class ItiExaminerListComponent implements OnInit {
   MobileNumber: string = ''
   Name: string = ''
   SSOID: string = ''
-  Isverifed: boolean=false
+  Isverifed: boolean = false
+
+
 
 
   constructor(private commonMasterService: CommonFunctionService,
@@ -363,7 +365,7 @@ export class ItiExaminerListComponent implements OnInit {
 }
 
 
-  async getExaminerBundleDetails(Content:any,ExaminerID: number) {
+  async getExaminerBundleDetails(Content:any,ExaminerID: number,itemdata:any) {
     this.modalRef = this.modalService.open(Content, {
       size: 'xl',
       ariaLabelledBy: 'modal-basic-title',
@@ -377,12 +379,23 @@ export class ItiExaminerListComponent implements OnInit {
       (reason: any) => {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       }
+
     );
+
+     this.Name = itemdata.Name;
+      this.SSOID = itemdata.SSOID;
+    this.GetBundleDetils(ExaminerID);
+
+  }
+
+  async GetBundleDetils(ExaminerID:number) {
+
+
     try {
 
-      this.searchRequest1.ExaminerID = ExaminerID
+      this.searchRequest1.ExaminerID = ExaminerID;
       this.searchRequest1.EndTermID = this.sSOLoginDataModel.EndTermID
-      this.searchRequest1.Status = 10  
+      this.searchRequest1.Status = 10
 
 
       this.loaderService.requestStarted();
@@ -425,7 +438,8 @@ export class ItiExaminerListComponent implements OnInit {
             this.Message = data['Message'];
             this.ErrorMessage = data['ErrorMessage'];
             //
-            if (this.State == EnumStatus.Success) {
+            if (this.State == EnumStatus.Success)
+            {
               await this.GetItiExaminerMasterList();
               this.toastr.success(this.Message)
             }
@@ -495,8 +509,11 @@ export class ItiExaminerListComponent implements OnInit {
             this.Message = data['Message'];
             this.ErrorMessage = data['ErrorMessage'];
             //
-            if (this.State == EnumStatus.Success) {
-            
+
+            if (this.State == EnumStatus.Success)
+            {
+
+              this.GetBundleDetils(row.ExaminerID);
               this.toastr.success(this.Message)
             }
 
