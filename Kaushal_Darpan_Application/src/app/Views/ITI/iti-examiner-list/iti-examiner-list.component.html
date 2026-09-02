@@ -26,9 +26,9 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Code</label>
-          <input type="text" class="form-input" placeholder="Search By Code" [(ngModel)]="searchRequest.ExaminerCode" />
-        </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Code</label>
+    <input type="text" class="form-input" placeholder="Search By Code" [(ngModel)]="searchRequest.ExaminerCode" />
+  </div>-->
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Name</label>
@@ -55,6 +55,16 @@
         </div>
 
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Status:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.CheckStatus">
+            <option value="0">ALL</option>
+            <option value="1">Completed</option>
+            <option value="2">Pending</option>
+
+          </select>
+        </div>
+
+        <div>
           <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="GetItiExaminerMasterList()">Search</button>
           <button type="button" id="btnReset" (click)="ResetData()" class="btn bg-danger text-white">
             <i class="ti ti-refresh"></i> Reset
@@ -62,12 +72,12 @@
         </div>
 
         <!--<div>
-          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetData()">
-            <i class="ti ti-refresh"></i>
-            Reset
-          </button>
-        </div>-->
+    <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+    <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetData()">
+      <i class="ti ti-refresh"></i>
+      Reset
+    </button>
+  </div>-->
 
       </div>
 
