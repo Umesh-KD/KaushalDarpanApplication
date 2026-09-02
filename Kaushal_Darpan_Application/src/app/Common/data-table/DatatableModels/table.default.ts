@@ -18,7 +18,7 @@ export const DEFAULT_TABLE_CONFIG: Partial<TableConfig> = {
 
     stickyHeader: false,
 
-    showExport: false,
+    showExport: true,
 
     noDataMessage: "No Records Found",
 

@@ -34,6 +34,7 @@
             </button>
 
             <button
+                *ngIf="normalizedConfig.showColumnCustomizer"
                 class="toolbar-btn"
                 (click)="toggleColumnPanel()">
                 <i class="ti ti-layout-columns"></i>

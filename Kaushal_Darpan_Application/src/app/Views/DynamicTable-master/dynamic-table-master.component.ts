@@ -37,6 +37,10 @@ export class DynamicTableMasterComponent implements OnInit {
 
 tableConfig: TableConfig = {
 
+  //  showExport: false,  //for showing excel button, default true
+  //  showColumnCustomizer: false, //for showing column customizer button,default true
+  // showSerialNo: false, //for showing serial no. default true
+  
    unwantedColumns: [
 
         'ID',
