@@ -1,3 +1,5 @@
+import * as XLSX from 'xlsx';
+
 import { Component, EventEmitter, Input, Output ,OnChanges, AfterViewInit, ViewChild, SimpleChanges, ElementRef, HostListener} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -7,6 +9,7 @@ import { TableConfig } from './DatatableModels/table-config.model';
 import { TableColumn } from './DatatableModels/table-column.model';
 import { TableConstants } from './DatatableModels/table.constant';
 import { DEFAULT_COLUMN, DEFAULT_IMAGE_CONFIG, DEFAULT_TABLE_CONFIG } from './DatatableModels/table.default';
+import { SweetAlert2 } from '../SweetAlert2';
 
 
 @Component({
@@ -57,7 +60,8 @@ export class DataTableComponent implements OnChanges, AfterViewInit {
   //#endregion
 
    constructor(
-     private elementRef: ElementRef
+     private elementRef: ElementRef,
+     private Swal2: SweetAlert2
    ) { }
 
    @HostListener('document:click', ['$event'])
@@ -678,25 +682,19 @@ movePreview(event: MouseEvent): void {
 
 
 private refreshDisplayedColumns(): void {
-
-     const columns: string[] = [];
-
+    const columns: string[] = [];
     if (this.normalizedConfig.showSerialNo) {
         columns.push(this.TABLE_CONSTANTS.SERIAL_COLUMN);
     }
-
     columns.push(
         ...this.normalizedColumns
             .filter(x => x.visible)
             .map(x => x.dataField)
     );
-
     if (this.normalizedConfig.actions?.length) {
         columns.push(this.TABLE_CONSTANTS.ACTION_COLUMN);
     }
-
     this.displayedColumns = [...columns];
-
     console.log(this.displayedColumns);
 
 }
@@ -766,13 +764,26 @@ closeColumnPanel(): void {
 
 get filteredColumns(): TableColumn[] {
 
-    if (!this.columnSearch.trim()) {
+    // if (!this.columnSearch.trim()) {
 
+    //     return this.normalizedColumns;
+
+    // }
+      console.log(
+        'SEARCH:',
+        this.columnSearch,
+        'COLUMNS:',
+        this.normalizedColumns
+    );
+     const search = this.columnSearch.trim().toLowerCase();
+
+    if (!search) {
         return this.normalizedColumns;
-
     }
 
-    console.log("herehrheher",this.columnSearch);
+    console.log('Column Search:', search);
+
+    // console.log("herehrheher",this.columnSearch);
 
     return this.normalizedColumns.filter(x => !this.columnSearch ||
         x.displayField
@@ -781,6 +792,751 @@ get filteredColumns(): TableColumn[] {
 
     );
 
+}
+
+
+// --------------Excel Enhancement-------------------
+downloadExcel(): void {
+
+    // -----------------------------------------
+    // Get rows currently displayed after search
+    // -----------------------------------------
+
+    const rows = this.dataSource.filteredData;
+
+    if (!rows || rows.length === 0) {
+
+            this.Swal2.Info('Please select at least one column to export.');
+
+        return;
+    }
+
+    // -----------------------------------------
+    // Get currently visible columns
+    // -----------------------------------------
+
+    const visibleColumns = this.normalizedColumns.filter(
+        column => column.visible
+    );
+
+    if (visibleColumns.length === 0) {
+
+        this.Swal2.Info('Please select at least one column to export.');
+
+        return;
+    }
+
+
+    // -----------------------------------------
+    // Prepare headers
+    // -----------------------------------------
+
+    const headers: string[] = [];
+
+    if (this.normalizedConfig.showSerialNo) {
+
+        headers.push('Sr. No.');
+
+    }
+
+    visibleColumns.forEach(column => {
+
+        headers.push(
+            column.displayField ||
+            this.splitCamelCase(column.dataField)
+        );
+
+    });
+
+    // -----------------------------------------
+    // Prepare Excel data
+    // -----------------------------------------
+    
+
+    const excelData: any[][] = rows.map( (row: any, index: number) => {
+       
+        const excelRow: any[] = [];
+         // Serial number
+        if (this.normalizedConfig.showSerialNo) {
+           excelRow.push(index + 1);
+        }
+
+        visibleColumns.forEach( (column: TableColumn) => {
+            // const header =
+            //     column.displayField ||
+            //     this.splitCamelCase(column.dataField);
+
+            let value = row[column.dataField];
+
+            // Date
+            if (column.type === 'date' && value) {
+                value = this.formatExcelDate(
+                    value,
+                    column.format
+                );
+
+            }
+            // Boolean
+            else if (column.type === 'boolean') {
+                value = value ? 'Yes' : 'No';
+            }
+
+            // Badge
+            else if (column.type === 'badge') {
+                const status =
+                    this.getStatus(value);
+                value =
+                    status?.text ||
+                    value;
+            }
+
+            // Image
+            else if (column.type === 'image') {
+                // Excel will contain the image path/name,
+                // not the rendered HTML image.
+                value = value || '';
+            }
+
+            // Formatter
+            if (column.formatter) {
+                value = column.formatter(value, row);
+                if (
+                    typeof value === 'object' &&
+                    value !== null
+                ) {
+                    value = JSON.stringify(value);
+                }
+            }
+
+            // -------------------------
+            // Safe Excel value
+            // -------------------------
+
+            if (
+                value !== null &&
+                typeof value === 'object'
+            ) {
+
+                value = JSON.stringify(value);
+
+            }
+            
+            excelRow.push(
+                    value ?? ''
+                );
+
+            // excelRow[header] = value?? '';
+        });
+        return excelRow;
+    });
+
+
+    // -----------------------------------------
+    // Add report information
+    // -----------------------------------------   
+    
+
+    const exportDate =
+        new Date().toLocaleString();
+
+    const searchText =
+        this.getCurrentSearchText();        
+
+    // -----------------------------------------
+    // Create complete sheet data
+    // -----------------------------------------
+
+ const sheetData: any[][] = [
+    ['Data Export Report'],
+    [`Exported On: ${exportDate}`],
+    [`Total Records: ${rows.length}`],
+    [`Search: ${searchText || 'All Records'}`],
+    [],
+    headers,
+    ...excelData
+];
+
+
+  // -----------------------------------------
+    // Create worksheet DIRECTLY
+    // -----------------------------------------
+
+    const worksheet: XLSX.WorkSheet =
+        XLSX.utils.aoa_to_sheet(sheetData);
+
+    // -----------------------------------------
+    // Calculate last column
+    // -----------------------------------------
+
+    const totalColumns =
+        headers.length;
+
+    const lastColumn =
+        this.getExcelColumnName(
+            totalColumns
+        );
+
+// -----------------------------------------
+    // Worksheet range
+    // -----------------------------------------
+
+    worksheet['!ref'] =
+        `A1:${lastColumn}${sheetData.length}`;
+
+    // -----------------------------------------
+    // Merge report information
+    // -----------------------------------------
+
+    worksheet['!merges'] = [
+
+        // Title
+        {
+            s: { r: 0, c: 0 },
+            e: {
+                r: 0,
+                c: totalColumns - 1
+            }
+        },
+
+        // Exported On
+        {
+            s: { r: 1, c: 0 },
+            e: {
+                r: 1,
+                c: totalColumns - 1
+            }
+        },
+
+        // Total Records
+        {
+            s: { r: 2, c: 0 },
+            e: {
+                r: 2,
+                c: totalColumns - 1
+            }
+        },
+
+        // Search
+        {
+            s: { r: 3, c: 0 },
+            e: {
+                r: 3,
+                c: totalColumns - 1
+            }
+        }
+
+    ];
+
+
+    // -----------------------------------------
+    // Style title
+    // -----------------------------------------
+
+    this.applyExcelTitleStyle(
+        worksheet,
+        totalColumns
+    );
+
+     // -----------------------------------------
+    // Style header
+    // -----------------------------------------
+
+    this.applyExcelHeaderStyle(
+        worksheet,
+        6
+    );
+
+     // -----------------------------------------
+    // Style body
+    // -----------------------------------------
+
+    this.applyExcelBodyStyle(
+        worksheet,
+        6,
+        excelData.length
+    );
+
+    // -----------------------------------------
+    // Column widths
+    // -----------------------------------------
+
+    this.autoFitExcelColumns(
+        worksheet,
+        excelData,
+        6
+    );
+
+
+    // -----------------------------------------
+    // Freeze header
+    // -----------------------------------------
+
+    worksheet['!freeze'] = {
+        xSplit: 0,
+        ySplit: 6
+    };
+
+     // -----------------------------------------
+    // Auto filter
+    // -----------------------------------------
+
+    worksheet['!autofilter'] = {
+
+        ref:
+            `A6:${lastColumn}${6 + excelData.length}`
+
+    };
+
+    // -----------------------------------------
+    // Create workbook
+    // -----------------------------------------
+
+    const workbook: XLSX.WorkBook =
+        XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        'Data'
+    );
+
+    // -----------------------------------------
+    // Download
+    // -----------------------------------------
+
+    const fileName =
+        `Data_${this.getExcelDate()}.xlsx`;
+
+    XLSX.writeFile(
+        workbook,
+        fileName
+    );
+
+}
+
+private getCurrentSearchText(): string {
+
+    return this.dataSource.filter || '';
+
+}
+
+private applyExcelTitleStyle(
+    worksheet: XLSX.WorkSheet,
+    totalColumns: number
+): void {
+
+    const lastColumn =
+        this.getExcelColumnName(totalColumns);
+
+    // Title
+    const titleCell = worksheet['A1'];
+
+    if (titleCell) {
+
+        titleCell.s = {
+
+            font: {
+                bold: true,
+                sz: 16,
+                color: {
+                    rgb: 'FFFFFF'
+                }
+            },
+
+            fill: {
+                fgColor: {
+                    rgb: '2563EB'
+                }
+            },
+
+            alignment: {
+                horizontal: 'center',
+                vertical: 'center'
+            }
+
+        };
+
+    }
+
+    // Metadata rows
+    for (let row = 2; row <= 4; row++) {
+
+        const cellAddress = `A${row}`;
+
+        const cell = worksheet[cellAddress];
+
+        if (!cell) {
+            continue;
+        }
+
+        cell.s = {
+
+            font: {
+                bold: true,
+                sz: 10
+            },
+
+            alignment: {
+                horizontal: 'left',
+                vertical: 'center'
+            }
+
+        };
+
+    }
+
+    // Row heights
+    worksheet['!rows'] = [
+
+        {
+            hpt: 28
+        },
+
+        {
+            hpt: 20
+        },
+
+        {
+            hpt: 20
+        },
+
+        {
+            hpt: 20
+        },
+
+        {
+            hpt: 8
+        }
+
+    ];
+
+}
+
+private applyExcelHeaderStyle(
+    worksheet: XLSX.WorkSheet,
+    headerRow: number
+): void {
+
+    const range =
+        XLSX.utils.decode_range(
+            worksheet['!ref']!
+        );
+
+    for (
+        let col = range.s.c;
+        col <= range.e.c;
+        col++
+    ) {
+
+        const cellAddress =
+            XLSX.utils.encode_cell({
+                r: headerRow - 1,
+                c: col
+            });
+
+        const cell =
+            worksheet[cellAddress];
+
+        if (!cell) {
+            continue;
+        }
+
+        cell.s = {
+
+            font: {
+
+                bold: true,
+
+                color: {
+                    rgb: 'FFFFFF'
+                }
+
+            },
+
+            fill: {
+
+                fgColor: {
+                    rgb: '1F4E78'
+                }
+
+            },
+
+            alignment: {
+
+                horizontal: 'center',
+
+                vertical: 'center',
+
+                wrapText: true
+
+            },
+
+            border: {
+
+                top: {
+                    style: 'thin',
+                    color: {
+                        rgb: 'D9E2F3'
+                    }
+                },
+
+                bottom: {
+                    style: 'thin',
+                    color: {
+                        rgb: 'D9E2F3'
+                    }
+                },
+
+                left: {
+                    style: 'thin',
+                    color: {
+                        rgb: 'D9E2F3'
+                    }
+                },
+
+                right: {
+                    style: 'thin',
+                    color: {
+                        rgb: 'D9E2F3'
+                    }
+                }
+
+            }
+
+        };
+
+    }
+
+}
+
+private applyExcelBodyStyle(
+    worksheet: XLSX.WorkSheet,
+    headerRow: number,
+    dataLength: number
+): void {
+
+    const range =
+        XLSX.utils.decode_range(
+            worksheet['!ref']!
+        );
+
+    const firstDataRow =
+        headerRow;
+
+    const lastDataRow =
+        headerRow + dataLength - 1;
+
+    for (
+        let row = firstDataRow;
+        row <= lastDataRow;
+        row++
+    ) {
+
+        for (
+            let col = range.s.c;
+            col <= range.e.c;
+            col++
+        ) {
+
+            const cellAddress =
+                XLSX.utils.encode_cell({
+                    r: row,
+                    c: col
+                });
+
+            const cell =
+                worksheet[cellAddress];
+
+            if (!cell) {
+                continue;
+            }
+
+            cell.s = {
+
+                alignment: {
+
+                    vertical: 'center',
+
+                    wrapText: true
+
+                },
+
+                border: {
+
+                    top: {
+                        style: 'thin',
+                        color: {
+                            rgb: 'E5E7EB'
+                        }
+                    },
+
+                    bottom: {
+                        style: 'thin',
+                        color: {
+                            rgb: 'E5E7EB'
+                        }
+                    },
+
+                    left: {
+                        style: 'thin',
+                        color: {
+                            rgb: 'E5E7EB'
+                        }
+                    },
+
+                    right: {
+                        style: 'thin',
+                        color: {
+                            rgb: 'E5E7EB'
+                        }
+                    }
+
+                }
+
+            };
+
+        }
+
+    }
+
+}
+
+private autoFitExcelColumns(
+    worksheet: XLSX.WorkSheet,
+    data: any[],
+    headerRow: number
+): void {
+
+    const range =
+        XLSX.utils.decode_range(
+            worksheet['!ref']!
+        );
+
+    const widths: number[] = [];
+
+    for (
+        let col = range.s.c;
+        col <= range.e.c;
+        col++
+    ) {
+
+        let maxLength = 10;
+
+        for (
+            let row = headerRow - 1;
+            row <= range.e.r;
+            row++
+        ) {
+
+            const cellAddress =
+                XLSX.utils.encode_cell({
+                    r: row,
+                    c: col
+                });
+
+            const cell =
+                worksheet[cellAddress];
+
+            if (!cell || cell.v == null) {
+                continue;
+            }
+
+            const value =
+                String(cell.v);
+
+            maxLength =
+                Math.max(
+                    maxLength,
+                    value.length
+                );
+
+        }
+
+        // Minimum / maximum width
+        widths.push(
+            Math.min(
+                Math.max(maxLength + 2, 12),
+                35
+            )
+        );
+
+    }
+
+    worksheet['!cols'] =
+        widths.map(width => ({
+            wch: width
+        }));
+
+}
+
+private getExcelColumnName(
+    columnNumber: number
+): string {
+
+    let columnName = '';
+
+    while (columnNumber > 0) {
+
+        const remainder =
+            (columnNumber - 1) % 26;
+
+        columnName =
+            String.fromCharCode(
+                65 + remainder
+            ) + columnName;
+
+        columnNumber =
+            Math.floor(
+                (columnNumber - 1) / 26
+            );
+
+    }
+
+    return columnName;
+
+}
+
+
+private formatExcelDate(
+    value: any,
+    format?: string
+): string {
+    if (!value) {
+        return '';
+    }
+    const date = new Date(value);
+    if (isNaN(date.getTime())) {
+        return value;
+    }
+    const day =
+        String(date.getDate()).padStart(2, '0');
+    const month =
+        String(date.getMonth() + 1).padStart(2, '0');
+    const year =
+        date.getFullYear();
+    if (format === 'yyyy-MM-dd') {
+        return `${year}-${month}-${day}`;
+    }
+    return `${day}-${month}-${year}`;
+}
+
+
+
+private getExcelDate(): string {
+    const now = new Date();
+    const day =
+        String(now.getDate()).padStart(2, '0');
+    const month =
+        String(now.getMonth() + 1).padStart(2, '0');
+    const year =
+        now.getFullYear();
+    const hours =
+        String(now.getHours()).padStart(2, '0');
+    const minutes =
+        String(now.getMinutes()).padStart(2, '0');
+    const seconds =
+        String(now.getSeconds()).padStart(2, '0');
+    return `${day}${month}${year}_${hours}${minutes}${seconds}`;
 }
 
 }

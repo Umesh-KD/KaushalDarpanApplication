@@ -262,7 +262,7 @@ export class EMPrincipleStaffComponent {
 
     await this.GetDesignationMasterData();
     await this.GetCategroyData();
-    await this.getBranchesInstituteIDWise();
+    await this.getInstituteBranchDDL();
 
     this.approveRequest.WorkOfficeID = 0;
 
@@ -1093,6 +1093,27 @@ async GetTechnicianDll() {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+  async getInstituteBranchDDL() {
+    try {
+      debugger
+      const request: any = {};
+      request.OfficeID = this.formData.OfficeID;
+      request.StaffTypeID = this.formData.StaffTypeID;
+      request.InstituteID = this.formData.InstituteID;
+      request.BranchID = this.formData.BranchID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Action = "BranchMasterDDL";
+      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.BranchInstituteDDL = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -1951,6 +1972,7 @@ async GetCategroyData() {
         x.ModifiedBy = this.sSOLoginDataModel.UserID,
         x.DepartmentID = this.sSOLoginDataModel.DepartmentID
         x.InstituteID = this.sSOLoginDataModel.InstituteID
+        x.ParentRoleID = this.sSOLoginDataModel.RoleID
       });
       
       await this.assignRoleRightsService.SaveAssignedRole_UserWise(editChild)

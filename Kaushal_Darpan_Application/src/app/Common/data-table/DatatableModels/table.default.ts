@@ -12,13 +12,13 @@ export const DEFAULT_TABLE_CONFIG: Partial<TableConfig> = {
 
     serverSide: false,
 
-    pageSize: 10,
+    pageSize: 50,
 
-    pageSizeOptions: [10, 20, 50, 100],
+    pageSizeOptions: [50, 100, 500, 1000],
 
     stickyHeader: false,
 
-    showExport: false,
+    showExport: true,
 
     noDataMessage: "No Records Found",
 

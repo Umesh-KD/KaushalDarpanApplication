@@ -54,6 +54,7 @@ export class BTER_EM_AddStaffDataModel extends RequestBaseModel {
   public MobileNo: string = ''
   public EmailID: string = ''
   public DistrictID: number=0
+  public BranchID: number=0
 
   public ModifyBy: number=0
   public CourseTypeID: number = 0;
@@ -772,6 +773,7 @@ export class StaffTrainingDetailDataModel {
   public TrainingStatus: number = 0;
   public ComplitionTrainingDoc: string = '';
   public Dis_complitionTrainingDoc: string = '';
+  public Remarks: string = '';
   public Remark: string = '';
   public RoleID: number = 0;
   public InstituteID: number = 0;

@@ -26,7 +26,7 @@ export class AddStaffInitialDetailsComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public AddStaffBasicDetailFromGroup!: FormGroup;
   public formData = new BTER_EM_AddStaffDataModel();
-  public roleModel= new ITI_Govt_EM_RoleOfficeMapping_GetAllDataSearchDataModel();
+  public roleModel = new ITI_Govt_EM_RoleOfficeMapping_GetAllDataSearchDataModel();
   public NodalsearchRequest = new ITI_Govt_EM_NodalSearchDataModel();
   public requestSSoApi = new CommonVerifierApiDataModel();
   public _EnumRole = EnumRole
@@ -37,7 +37,7 @@ export class AddStaffInitialDetailsComponent {
   public IsAddasPrincipal: boolean = false;
   public IsGuestHouseAdmin: boolean = false;
 
-  public BugetHeadList:any=[];
+  public BugetHeadList: any = [];
   public OfficeList: any[] = [];
   public LevelList: any[] = [];
   public ListITICollegeByManagement: any[] = [];
@@ -50,6 +50,8 @@ export class AddStaffInitialDetailsComponent {
   public GuestHouseNameList: any = [];
   public SactionedPostList: any = [];
   public PostBudgetHeadList: any = [];
+  public PostForBranchDropdown: any = []
+  public BranchMasterDDL_PostWise: any = []
 
   public GetDesignationID: number = 0;
   public State: number = 0;
@@ -57,6 +59,7 @@ export class AddStaffInitialDetailsComponent {
   public ErrorMessage: string = '';
   public searchRequest1 = new GuestRoomSeatSearchModel();
   public settingsMultiselect: object = {};
+  public isPostForBranchAvailable: boolean = false;
 
   public _EnumOffice = EnumOffice;
 
@@ -70,7 +73,7 @@ export class AddStaffInitialDetailsComponent {
     private bterEstablishManagementService: BTEREstablishManagementService,
     private guestRoomManagmentService: GuestRoomManagmentService,
     private sweetAlert2: SweetAlert2,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.AddStaffBasicDetailFromGroup = this.formBuilder.group({
@@ -86,7 +89,8 @@ export class AddStaffInitialDetailsComponent {
       IsGuestStaff: [false],
       ddlPost: ['', [DropdownValidators]],
       Office: ['', [DropdownValidators]],
-      BugetHeadID:[''],
+      BranchID: [''],
+      BugetHeadID: [''],
       // BugetHeadTypeID:[0]
 
     })
@@ -112,16 +116,17 @@ export class AddStaffInitialDetailsComponent {
     };
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetOfficeList();  
+    await this.GetOfficeList();
     await this.GetStaffTypeData();
     await this.GetBudgetList();
+    await this.getPostForBranchDropdown();
   }
 
   get _AddStaffBasicDetailFromGroup() { return this.AddStaffBasicDetailFromGroup.controls; }
 
-  goBack() {}
+  goBack() { }
   async GetOfficeList() {
-   // debugger;
+    // debugger;
     this.formData.OfficeID = 0;
     try {
       this.loaderService.requestStarted();
@@ -138,7 +143,7 @@ export class AddStaffInitialDetailsComponent {
           // }
           // this.OfficeList = this.OfficeList.filter((item: any) => item.ID != 21);
 
-          console.log(this.OfficeList, "OfficeList")          
+          console.log(this.OfficeList, "OfficeList")
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -171,7 +176,7 @@ export class AddStaffInitialDetailsComponent {
           }
           this.OfficeList = this.OfficeList.filter((item: any) => item.ID != 21);
 
-          console.log(this.OfficeList, "OfficeList")          
+          console.log(this.OfficeList, "OfficeList")
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -185,15 +190,14 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async GetOfficeWiselogic() {
-   debugger;
+    debugger;
     this.formData.IsGuestStaff = false;
     if (this.formData.OfficeID == 17) {
       this.IsNodalOfficer = true;
       this.IsGuestStaffoffice = false;
       // this.IsGuestStaffoffice = true;
     }
-    else if(this.formData.OfficeID==19)
-    {
+    else if (this.formData.OfficeID == 19) {
       this.IsNodalOfficer = false;
       // this.formData.IsNodal = false;
       // this.formData.IsGuestStaff = false;
@@ -215,30 +219,30 @@ export class AddStaffInitialDetailsComponent {
     this.formData.GuestHouseID = 0;
     // this.GetRoleMasterData();
     if (this.formData.IsNodal == true) {
-       // staffTypeControl.disable();
-       await this.GetInstituteMaster();
-       // ✅ Filter only Govt institutes (1)
+      // staffTypeControl.disable();
+      await this.GetInstituteMaster();
+      // ✅ Filter only Govt institutes (1)
       this.InstituteMasterDDL = this.InstituteMasterDDL.filter(
-       (item: any) => item.InstitutionManagementTypeID === 1
-     );
-     this.AddStaffBasicDetailFromGroup.controls['InstituteID'].setValidators([DropdownValidators]);
-     // this.formData.RoleID = 7;
-     // 1- govt. 5- pvt
+        (item: any) => item.InstitutionManagementTypeID === 1
+      );
+      this.AddStaffBasicDetailFromGroup.controls['InstituteID'].setValidators([DropdownValidators]);
+      // this.formData.RoleID = 7;
+      // 1- govt. 5- pvt
 
-     if(this.formData.RoleID != EnumRole.IIP_Incharge) {
-      this.formData.StaffTypeID=30;
-      this._AddStaffBasicDetailFromGroup['StaffType']?.setValue(30);
-      this._AddStaffBasicDetailFromGroup['StaffType'].disable();
-     }
-      
+      if (this.formData.RoleID != EnumRole.IIP_Incharge) {
+        this.formData.StaffTypeID = 30;
+        this._AddStaffBasicDetailFromGroup['StaffType']?.setValue(30);
+        this._AddStaffBasicDetailFromGroup['StaffType'].disable();
+      }
+
       this.StaffTypeChangePost();
-          // ✅ Disable dropdown
-          
-  // this.f['StaffType'].setValue(30);
-  // this.f['StaffType'].disable();   
-  } else {
+      // ✅ Disable dropdown
+
+      // this.f['StaffType'].setValue(30);
+      // this.f['StaffType'].disable();   
+    } else {
       this.formData.IsNodal = false;
-      if (this.formData.RoleID != EnumRole.EM_NON_GAZETTED_STAFF && this.formData.RoleID !=EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
+      if (this.formData.RoleID != EnumRole.EM_NON_GAZETTED_STAFF && this.formData.RoleID != EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
         this._AddStaffBasicDetailFromGroup['StaffType'].enable();
       }
 
@@ -248,13 +252,13 @@ export class AddStaffInitialDetailsComponent {
     }
     this.AddStaffBasicDetailFromGroup.controls['InstituteID'].updateValueAndValidity();
 
-  
+
   }
 
   async onRoleChange() {
     debugger
-    if (this.formData.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF ||this.formData.RoleID==EnumRole.EM_NON_GAZETTED_STAFF) {
-      this.StaffTypeList = this.StaffTypeList.filter((x: any) => x.ID == 31);  
+    if (this.formData.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF || this.formData.RoleID == EnumRole.EM_NON_GAZETTED_STAFF) {
+      this.StaffTypeList = this.StaffTypeList.filter((x: any) => x.ID == 31);
       this.formData.StaffTypeID = 31;
       this.AddStaffBasicDetailFromGroup.get('StaffType')?.disable();
       this.StaffTypeChangePost();
@@ -262,32 +266,32 @@ export class AddStaffInitialDetailsComponent {
     }
     else {
       await this.GetStaffTypeData();
-     // this.AddStaffBasicDetailFromGroup.get('StaffType')?.enable();
+      // this.AddStaffBasicDetailFromGroup.get('StaffType')?.enable();
     }
-    
-    if(this.formData.RoleID==EnumRole.Principal || this.formData.RoleID==EnumRole.PrincipalNon || this.formData.RoleID == EnumRole.IIP_Incharge){
-      this.formData.IsNodal=true;
+
+    if (this.formData.RoleID == EnumRole.Principal || this.formData.RoleID == EnumRole.PrincipalNon || this.formData.RoleID == EnumRole.IIP_Incharge) {
+      this.formData.IsNodal = true;
       await this.InstituteMasterWiselogic();
     }
-    else{
-      this.formData.IsNodal=false;
+    else {
+      this.formData.IsNodal = false;
       await this.InstituteMasterWiselogic();
-  
+
     }
-    if(this.formData.RoleID==EnumRole.GuestHouseAdmin || this.formData.RoleID==EnumRole.GuestHouseIncharge || this.formData.RoleID==EnumRole.GuestRoomWarden){
-      this.formData.IsGuestStaff=true;
+    if (this.formData.RoleID == EnumRole.GuestHouseAdmin || this.formData.RoleID == EnumRole.GuestHouseIncharge || this.formData.RoleID == EnumRole.GuestRoomWarden) {
+      this.formData.IsGuestStaff = true;
       await this.GuestHouseMasterWiselogic();
     }
-    else{
-      this.formData.IsGuestStaff=false;
+    else {
+      this.formData.IsGuestStaff = false;
     }
   }
 
   async roleBySubDepartment() {
-   // debugger
-   
+    // debugger
+
     await this.GetRoleMasterData();
-   
+
   }
 
   async GetDistrictMaster() {
@@ -310,10 +314,10 @@ export class AddStaffInitialDetailsComponent {
     try {
       this.loaderService.requestStarted();
       var Eng_NonEng = 0
-      if(this.formData.RoleID == EnumRole.Principal){
-        Eng_NonEng= 1
-      } else if(this.formData.RoleID == EnumRole.PrincipalNon){
-        Eng_NonEng= 2
+      if (this.formData.RoleID == EnumRole.Principal) {
+        Eng_NonEng = 1
+      } else if (this.formData.RoleID == EnumRole.PrincipalNon) {
+        Eng_NonEng = 2
       } else {
         Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       }
@@ -328,7 +332,7 @@ export class AddStaffInitialDetailsComponent {
             const instituteList = Array.isArray(data?.Data) ? data.Data : [];
             this.InstituteMasterDDL = instituteList;
           }
-          else if (data.State == EnumStatus.Warning) {                       
+          else if (data.State == EnumStatus.Warning) {
             this.toastr.warning(data.Message, '', { timeOut: 5000 });
           }
           else {
@@ -383,8 +387,8 @@ export class AddStaffInitialDetailsComponent {
 
     this.AddStaffBasicDetailFromGroup.controls['ddlITICollegeTrade'].updateValueAndValidity();
     this.AddStaffBasicDetailFromGroup.controls['ddlDistrictID'].updateValueAndValidity();
-   
-    
+
+
   }
 
   async GetRoleMasterData() {
@@ -393,12 +397,12 @@ export class AddStaffInitialDetailsComponent {
       this.loaderService.requestStarted();
       // await this.commonMasterService.GetRoleMasterDDL(, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
       this.roleModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.roleModel.RoleID=this.sSOLoginDataModel.RoleID;
-      this.roleModel.UserID=this.sSOLoginDataModel.UserID;
+      this.roleModel.RoleID = this.sSOLoginDataModel.RoleID;
+      this.roleModel.UserID = this.sSOLoginDataModel.UserID;
       await this.ITIGovtEMStaffMasterService.ITIGovtEM_Govt_RoleOfficeMapping_GetAllData(this.roleModel).then((data: any) => {
-     
+
         data = JSON.parse(JSON.stringify(data));
-        this.RoleMasterList = data.Data;        
+        this.RoleMasterList = data.Data;
 
         if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin) {
           this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == EnumRole.GuestRoomWarden || item.ID == EnumRole.GuestHouseIncharge)
@@ -418,7 +422,7 @@ export class AddStaffInitialDetailsComponent {
         //else {
         //  this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == this._EnumRole.Principal)
         //}
-        
+
         console.log("RoleMasterList", this.RoleMasterList);
       })
     } catch (error) {
@@ -433,11 +437,11 @@ export class AddStaffInitialDetailsComponent {
   async GetPostList() {
     try {
       var id = 0;
-      if(this.formData.StaffTypeID == 31 && this.formData.OfficeID ==17 && this.formData.RoleID == 252 ) {
+      if (this.formData.StaffTypeID == 31 && this.formData.OfficeID == 17 && this.formData.RoleID == 252) {
         id = 2;
       } else if (this.formData.RoleID == 252 && this.formData.StaffTypeID == 31) {
         id = 1;
-      } 
+      }
       this.loaderService.requestStarted();
       await this.commonMasterService.GetDesignationAndPostMaster(id)
         .then((data: any) => {
@@ -476,6 +480,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async getBudgetHeadPostWise() {
+    await this.getBranchMasterDDL_PostWise();
     try {
       const request: any = {};
       request.OfficeID = this.formData.OfficeID;
@@ -490,17 +495,23 @@ export class AddStaffInitialDetailsComponent {
         data = JSON.parse(JSON.stringify(data));
         this.PostBudgetHeadList = data['Data'];
       })
+
+      this.isPostForBranchAvailable =
+        this.PostForBranchDropdown?.some(
+          (x: any) => Number(x.DesignationID) === Number(this.formData.PostID)
+        ) ?? false;
+
     } catch (error) {
       console.error(error);
     }
   }
 
-  async getITICollege() {}
+  async getITICollege() { }
 
-  async ddl_DivisionID_Wise_District() {}
+  async ddl_DivisionID_Wise_District() { }
 
-  async DuplicateNodal(){
-   
+  async DuplicateNodal() {
+
     this.NodalsearchRequest.DistrictID = this.formData.DistrictID;
     this.NodalsearchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.NodalsearchRequest.LevelID = this.formData.LevelID;
@@ -513,8 +524,8 @@ export class AddStaffInitialDetailsComponent {
 
 
           }
-          else if (data.State == EnumStatus.Warning) {            
-            
+          else if (data.State == EnumStatus.Warning) {
+
             this.toastr.warning(data.Message, '', { timeOut: 5000 });
             this.formData.DistrictID = 0;
           }
@@ -536,7 +547,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async GetStaffTypeData() {
-debugger
+    debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {
@@ -553,7 +564,7 @@ debugger
     }
   }
 
-  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {   
+  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
     if (SSOID == "") {
       this.toastr.error("Please Enter SSOID", '', { timeOut: 5000 });
       return;
@@ -593,7 +604,7 @@ debugger
               this.AddStaffBasicDetailFromGroup.controls['Office'].clearValidators();
               this.AddStaffBasicDetailFromGroup.controls['StaffType'].clearValidators();
               this.AddStaffBasicDetailFromGroup.controls['ddlPost'].clearValidators();
-             
+
               this.GetRoleMasterData();
             } else {
               this.AddStaffBasicDetailFromGroup.controls['Office'].setValidators([DropdownValidators]);
@@ -613,7 +624,7 @@ debugger
 
               this.formData.PostID = this.GetDesignationID;
 
-           
+
             }
             else {
               this.formData.PostID = 0;
@@ -638,15 +649,15 @@ debugger
     }
   }
 
-  async DuplicateCheck(SSOID : string) {  
-   // console.log('id test ', this.searchRequest.DivisionID);
+  async DuplicateCheck(SSOID: string) {
+    // console.log('id test ', this.searchRequest.DivisionID);
     try {
       this.loaderService.requestStarted();
       await this.ITIGovtEMStaffMasterService.ITIGovtEM_SSOIDCheck(SSOID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
-          
+
           }
           else if (data.State == EnumStatus.Warning) {
             const msg = `SSOID ${SSOID} is already mapped in system.</br> If you want to assign a new role, please use the Assign Role Menu.`;
@@ -655,9 +666,9 @@ debugger
               this.isSSOVisible = false;
               this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.enable();
             }, 'OK', false);
-            
-            
-           /* this.toastr.warning(msg);*/
+
+
+            /* this.toastr.warning(msg);*/
             // this.toastr.warning(msg, '', { timeOut: 5000 });
             // this.formData.SSOID = '';
             // this.isSSOVisible = false;
@@ -690,7 +701,7 @@ debugger
       this.formData.SSOID === element.SSOID
     );
 
-  //  debugger
+    //  debugger
     if (isDuplicate) {
       this.toastr.error('SSO ID Already Exists.', '', { timeOut: 5000 });
       return;
@@ -717,17 +728,26 @@ debugger
   async refreshValidation() {
     this.AddStaffBasicDetailFromGroup.get('GuestHouseID')?.clearValidators();
     this.AddStaffBasicDetailFromGroup.get('GuestHouseID')?.updateValueAndValidity();
+
+    if (this.isPostForBranchAvailable) {
+      this.AddStaffBasicDetailFromGroup.controls['BranchID'].setValidators([DropdownValidators]);
+    } else {
+      this.AddStaffBasicDetailFromGroup.controls['BranchID'].clearValidators();
+      this.formData.BranchID = 0;
+    }
+
+    this.AddStaffBasicDetailFromGroup.controls['BranchID'].updateValueAndValidity();
   }
 
   async SaveData() {
-   debugger
+    debugger
     // if (this.AddedZonalList.length == 0) {
     //   this.toastr.error("Please Add At Least One Office");
     //   return;
     // }
 
     // this.AddedZonalList.forEach((element: any) => {
-     
+
     //   element.CreatedBy = this.sSOLoginDataModel.UserID;
     //   element.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
     //   element.DepartmentID = this.sSOLoginDataModel.DepartmentID;  
@@ -735,7 +755,7 @@ debugger
 
     this.isSubmitted = true;
     await this.refreshValidation();
-    if (this.formData.IsGuestStaff==true && (this.formData.MultiGuestHouseIDs == '' || this.formData.MultiGuestHouseIDs == null || this.formData.MultiGuestHouseIDs == undefined)) {
+    if (this.formData.IsGuestStaff == true && (this.formData.MultiGuestHouseIDs == '' || this.formData.MultiGuestHouseIDs == null || this.formData.MultiGuestHouseIDs == undefined)) {
       this.toastr.error("Please Add At Least One Guest House");
       return;
     }
@@ -744,15 +764,15 @@ debugger
     }
     this.formData.ModifyBy = this.sSOLoginDataModel.UserID;
     // this.formData.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
-    if(this.formData.RoleID == EnumRole.Principal){
+    if (this.formData.RoleID == EnumRole.Principal) {
       this.formData.CourseTypeID = 1
-    } else if(this.formData.RoleID == EnumRole.PrincipalNon){
+    } else if (this.formData.RoleID == EnumRole.PrincipalNon) {
       this.formData.CourseTypeID = 2
     } else {
       this.formData.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng
     }
     this.formData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    this.formData.EndTermID=this.sSOLoginDataModel.EndTermID;
+    this.formData.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.formData.ParentRoleID = this.sSOLoginDataModel.RoleID;
     this.formData.GuestHouseID = 0 // storing multiple guesthouseids in param named multiGuestHouseIDs
     this.formData.BugetHeadTypeID = this.PostBudgetHeadList.find((x: any) => x.ID == this.formData.BugetHeadID)?.BudgetTypeID || 0;
@@ -761,7 +781,7 @@ debugger
 
       await this.bterEstablishManagementService.BTER_EM_AddStaffInitialDetails(this.formData).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        if (data.State == EnumStatus.Success) {    
+        if (data.State == EnumStatus.Success) {
           this.toastr.success(data.Message);
           this.AddedZonalList = [];
           this.router.navigate(['/bter-em-stafflist']);
@@ -785,17 +805,17 @@ debugger
   async ResetControl() { }
 
 
-  async StaffTypeChangePost() { 
+  async StaffTypeChangePost() {
     await this.GetPostList();
     await this.getSactionedPostList();
   }
 
 
   async GetBudgetList() {
-    debugger;  
+    debugger;
     try {
       this.loaderService.requestStarted();
-        await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1,this.formData.BugetHeadTypeID)
+      await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1, this.formData.BugetHeadTypeID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.BugetHeadList = data['Data'];
@@ -811,9 +831,9 @@ debugger
       }, 200);
     }
   }
-  
+
   async GuestHouseMasterWiselogic() {
-   //debugger
+    //debugger
     this.formData.IsNodal = false;
     this.formData.InstituteID = 0;
     if (this.formData.IsGuestStaff == true) {
@@ -821,7 +841,7 @@ debugger
       this.AddStaffBasicDetailFromGroup.controls['GuestHouseID'].setValidators([DropdownValidators]);
       if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin) {
         this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == EnumRole.GuestHouseIncharge)
-      } else if(this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseIncharge){
+      } else if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseIncharge) {
         this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == EnumRole.GuestRoomWarden)
       }
       // else {
@@ -839,7 +859,7 @@ debugger
   }
 
   async GetGuestHouseNameList() {
-   // debugger;
+    // debugger;
     try {
       this.loaderService.requestStarted();
       this.searchRequest1.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID;
@@ -852,7 +872,7 @@ debugger
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.GuestHouseNameList = data['Data'];
-        }, error => console.error(error));  
+        }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
@@ -866,13 +886,13 @@ debugger
 
 
 
-  onItemSelect(item: any,) {    
+  onItemSelect(item: any,) {
     if (!this.formData.GuestHouseIDs?.some(ele => ele.ID === item.ID)) {
       const selectedGuestHouse = new BTER_EM_StaffHostelListModel();
       selectedGuestHouse.ID = item.ID;
-      selectedGuestHouse.Name = item.Name; 
+      selectedGuestHouse.Name = item.Name;
       this.formData.GuestHouseIDs?.push(selectedGuestHouse);
-    }    
+    }
     this.formData.MultiGuestHouseIDs = this.formData.GuestHouseIDs?.map(ele => ele.ID).join(',');
   }
 
@@ -880,10 +900,10 @@ debugger
     this.formData.MultiGuestHouseIDs = '';
   }
 
-  onSelectAll(items: any[],) {    
+  onSelectAll(items: any[],) {
     this.GuestHouseNameList = [...items];
     if (this.GuestHouseNameList.length > 0) {
-      this.formData.MultiGuestHouseIDs = this.GuestHouseNameList.map((item :any)=> item.ID).join(',');
+      this.formData.MultiGuestHouseIDs = this.GuestHouseNameList.map((item: any) => item.ID).join(',');
     }
   }
 
@@ -895,11 +915,49 @@ debugger
         ?.map((x: any) => x.ID)
         ?.join(',') || '';
 
-    console.log("multiguesthouseids",this.formData.MultiGuestHouseIDs);
+    console.log("multiguesthouseids", this.formData.MultiGuestHouseIDs);
   }
 
   onDropDownCloses(item: any) {
     console.log(item);
   }
 
+  async getPostForBranchDropdown() {
+    try {
+      const request: any = {};
+      request.OfficeID = this.formData.OfficeID;
+      request.StaffTypeID = this.formData.StaffTypeID;
+      request.InstituteID = this.formData.InstituteID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Action = "BranchDropdown_Post";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.PostForBranchDropdown = data['Data'] || [];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getBranchMasterDDL_PostWise() {
+    try {
+      const request: any = {};
+      request.OfficeID = this.formData.OfficeID;
+      request.StaffTypeID = this.formData.StaffTypeID;
+      request.InstituteID = this.formData.InstituteID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.DesignationID = this.formData.PostID;
+      request.Action = "BranchDDL_PostWise";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.BranchMasterDDL_PostWise = data['Data'] || [];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 }
+

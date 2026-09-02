@@ -250,6 +250,8 @@ const routes: Routes = [
       { path: 'CompanyMaster', loadChildren: () => import('./Views/CompanyMaster/company-master/company-master.module').then(m => m.CompanyMasterListModule), title: 'Company Master' },
       { path: 'DynamicTableMaster', loadChildren: () => import('./Views/DynamicTable-master/dynamic-table-master.module').then(m => m.DynamicTableMasterListModule), title: 'Dynamic Table Master' },
       
+      { path: 'AdmissionAllotmentReport', loadChildren: () => import('./Views/ITI/admission-allotment-report/admission-allotment-report.module').then(m => m.AdmissionAllotmentReportModule), title: 'Admission Allotment Report' },
+      
       { path: 'IIPDashboard', loadChildren: () => import('./Views/IIPCompnyMaster/iip-dashboard/iip-dashboard.module').then(m => m.IipDashboardModule), title: 'IIP Dashboard' },
       { path: 'AddIIPCompany', loadChildren: () => import('./Views/IIPCompnyMaster/add-iip-company-master/add-iip-company-master.module').then(m => m.AddIipCompanyMasterModule), title: 'Add IIP Company' },
       { path: 'IIPCompanyMaster', loadChildren: () => import('./Views/IIPCompnyMaster/iip-company-master/iip-company-master.module').then(m => m.IipCompanyMasterModule), title: 'IIP Company Master' },
