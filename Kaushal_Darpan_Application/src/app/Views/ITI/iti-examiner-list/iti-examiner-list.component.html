@@ -26,9 +26,9 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Code</label>
-    <input type="text" class="form-input" placeholder="Search By Code" [(ngModel)]="searchRequest.ExaminerCode" />
-  </div>-->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Code</label>
+          <input type="text" class="form-input" placeholder="Search By Code" [(ngModel)]="searchRequest.ExaminerCode" />
+        </div>-->
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Name</label>
@@ -72,12 +72,12 @@
         </div>
 
         <!--<div>
-    <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
-    <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetData()">
-      <i class="ti ti-refresh"></i>
-      Reset
-    </button>
-  </div>-->
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetData()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>-->
 
       </div>
 
@@ -159,7 +159,9 @@
                   <a *ngIf="row.IsAllFinalSubmitted === 1 &&  row.AssignedCount > 0" (click)="RevertBundle1(row.ExaminerID)" title="View">
                     <i class="ti ti-lock-open"></i>
                   </a>
-
+                  <a *ngIf="row.AssignedCount > 0" (click)="getExaminerBundleDetails(modal_ExaminerBundle,row.ExaminerID)" title="View Bundle">
+                    <i class="ti ti-list"></i>
+                  </a>
                   <a (click)="downloadCenterWiseReport(row)" title="Download Trade Wise Report">
                     <i class="ti ti-download"></i>
                   </a>
@@ -235,7 +237,7 @@
                 <th class="text-left">Action</th>
               </tr>
             </thead>
-            
+
             <tbody>
 
               <tr *ngFor="let row of StudentList let idx=index;">
@@ -252,7 +254,7 @@
                   <span [class]="row.IsChecked==true?'fa fa-check text-success':'fa fa-remove text-danger'"></span>
 
                 </td>
-              
+
                 <td>
                   <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
@@ -331,7 +333,7 @@
           <div>
             <button type="button" class="btn bg-info text-white" (click)="SSOIDGetSomeDetails(SSOID)">GetDetails</button>
             <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="AssignCenterSuperintendent()">
-            Submit
+              Submit
             </button>
           </div>
 
@@ -341,3 +343,103 @@
   </div>
 </ng-template>
 
+
+<ng-template #modal_ExaminerBundle let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+
+  <div class="card">
+    <div class="card-header flex justify-between  items-center">
+      <b><i class="fa fa-plus"></i>&nbsp; Examiner Bundle List</b>
+      <!--<button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>-->
+      <button class="btn bg-info text-white" (click)="ClosePopup()"><i class="ti ti-x"></i></button>
+    </div>
+
+    <div class="card">
+      <div class="card-body p-5">
+        <div class="mb-8">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Examiner Bundle List</b>
+            <a href="javascript:void(0)" (click)="exportExcelData()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download</a>
+          </div>
+
+
+
+        </div>
+
+
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+
+              <tr>
+                <th class="text-left">Sr No</th>
+                <th class="text-left">CCode</th>
+                <th class="text-left">Trade Name</th>
+                <th class="text-left">Semester/Year Name</th>
+                <th class="text-left">Subject Name</th>
+                <th class="text-left">Examiner Code</th>
+                <th class="text-left">Total Student</th>
+                <th class="text-left">Total Checked</th>
+
+                <!--<th class="text-left">Assigned Date</th>-->
+                <th class="text-center">Action</th>
+
+              </tr>
+
+            </thead>
+            <tbody>
+            <tbody>
+            <tbody>
+            <tbody>
+              <tr *ngFor="let row of ExaminerBundlelist; let idx=index; ">
+                <td align="left">{{idx+1}}</td>
+                <td>{{row.CenterCode}}</td>
+                <td>{{row.StreamName}}</td>
+                <td>{{row.SemesterName}}</td>
+                <td>{{row.SubjectName}}</td>
+                <td>{{row.ExaminerCode}}</td>
+                <td>{{row.AssignedCount}}</td>
+                <td>{{row.checkedcount}}</td>
+
+                <!--<td>{{row.checkedcount}}</td>-->
+                <td>
+                  <div class="flex align-center justify-center actionBtns w-auto"
+                       style="width:auto !important">
+                    <!--@if(this.ExamTypeID==1) {
+   <a [routerLink]="'/Ititheorymarks'" [queryParams]="{id:row.AppointExaminerID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
+  }
+  @if(this.ExamTypeID==2) {
+      <a [routerLink]="'/PracticalAssesment'" [queryParams]="{id:row.AppointExaminerID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
+  }-->
+                    <!--<a (click)="OpenModalPopup(MyModel_ExaminerCodeLogin,row.AppointExaminerID,row.ExaminerCode,row)" href="javascript:void(0);" title="edit">
+    <i class="ti ti-clipboard-check"></i>
+
+
+  </a>
+
+
+  <a (click)="downloadCenterWiseReport(row)" title="Download Trade Wise Report">
+    <i class="ti ti-download"></i>
+  </a>-->
+
+                    <a (click)="UnlockBundle1(row)" title="Unlock">
+                      <i class="ti ti-lock-open"></i>
+                    </a>
+
+
+                  </div>
+                </td>
+              </tr>
+
+              <tr *ngIf="ExaminerBundlelist?.length == 0">
+                <td colspan="10" class="text-center">No record found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</ng-template>

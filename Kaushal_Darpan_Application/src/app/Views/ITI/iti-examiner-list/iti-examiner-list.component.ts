@@ -19,6 +19,7 @@ import { EncryptionService } from '../../../Services/EncryptionService/encryptio
 import { ItiExaminerService } from '../../../Services/ItiExaminer/iti-examiner.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
+import { ITI_AppointExaminerDetailsModel } from '../../../Models/ITI/ITI_ExaminerDashboard';
 
 @Component({
   selector: 'app-centers',
@@ -40,11 +41,13 @@ export class ItiExaminerListComponent implements OnInit {
   isSubmittedItemDetails: boolean = false;
   public isLoadingExport: boolean = false;
   public assignedInstitutesReady: boolean = false;
+  public searchRequest1 = new ITI_AppointExaminerDetailsModel()
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
   public tbl_txtSearch: string = '';
   public Table_SearchText: string = '';
   public DistrictList: any = [];
+  public ExaminerBundlelist: any = [];
   public requestSSoApi = new CommonVerifierApiDataModel();
   //public GenderList: any = [];
   public ManagmentTypeList: any = []
@@ -360,6 +363,49 @@ export class ItiExaminerListComponent implements OnInit {
 }
 
 
+  async getExaminerBundleDetails(Content:any,ExaminerID: number) {
+    this.modalRef = this.modalService.open(Content, {
+      size: 'xl',
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: 'static'
+    });
+
+    this.modalRef.result.then(
+      (result: any) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason: any) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+    try {
+
+      this.searchRequest1.ExaminerID = ExaminerID
+      this.searchRequest1.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.searchRequest1.Status = 10  
+
+
+      this.loaderService.requestStarted();
+      await this.itiexaminerservice.GetItiAppointExaminerDetails(this.searchRequest1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ExaminerBundlelist = data['Data'];
+
+
+          console.log("ExaminerBundlelist", this.ExaminerBundlelist)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+  }
+
 
 
   async RevertBundle(AppointExaminerID: number) {
@@ -425,6 +471,43 @@ export class ItiExaminerListComponent implements OnInit {
     });
   }
 
+
+  async UnlockBundle1(row: any) {
+
+    this.Swal2.Confirmation("Are you sure want to Lock the Process for this Examiner Bundle?", async (result: any) => {
+      //confirmed
+      
+      try {
+        let obj = {
+          AppointExaminerID: row.ExaminerID,
+          Remark: '',
+          FinalSubmit: 0,
+          CenterID: row.CenterID,
+          SemesterID: row.SemesterID,
+          SubjectName: row.SubjectName,
+          StreamID: row.streamID, 
+         EndTermID: this.sSOLoginDataModel.EndTermID
+        }
+        // Call service to save student exam status
+        await this.TheoryMarksService.UnlockBundle1(obj)
+          .then(async (data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            //
+            if (this.State == EnumStatus.Success) {
+            
+              this.toastr.success(this.Message)
+            }
+
+
+          })
+      } catch (ex) {
+        console.log(ex);
+        console.log(this.ErrorMessage);
+      }
+    });
+  }
 
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
     this.Isverifed = false
