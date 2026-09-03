@@ -127,8 +127,10 @@
         </div>
 
         <!-- add branch if role is leacturer  -->
-        <div *ngIf="formData.StaffTypeID == _BTERGovtEM_EnumStaffType.Teaching && formData.StaffLevelChildID==_ITIGovtEM_EnumStaffLevelChild.Lecturer">
-          <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch<span class="StarMarking">*</span></label>
+        <div *ngIf="formData.StaffTypeID == _BTERGovtEM_EnumStaffType.Teaching && 
+                    (formData.StaffLevelChildID==_ITIGovtEM_EnumStaffLevelChild.Lecturer || 
+                    formData.StaffLevelChildID==_ITIGovtEM_EnumStaffLevelChild.HOD)">
+          <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch/Subject <span class="StarMarking">*</span></label>
           <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
                   [(ngModel)]="formData.BranchID" (change)="getSactionedPostList()">
             <option value="0">Choose Option</option>
@@ -181,6 +183,38 @@
           </select>
           <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPost.errors" class="text-danger">
             <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPost.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="IsNonGazetted">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name Of Service <span class="StarMarking">*</span></label>
+          <select class="form-select" 
+            [(ngModel)]="formData.PostServiceTypeID" 
+            formControlName="PostServiceTypeID"
+            (change)="getChildPostServiceTypeDDL()">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PostServiceTypeDDL" [value]="item.PostServiceTypeID">{{item.PostServiceTypeName}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.PostServiceTypeID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.PostServiceTypeID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+        <div *ngIf="formData.PostServiceTypeID == _EnumPostServiceType_BTER.Other_Department_Services && IsNonGazetted">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> If Other Department Services <span class="StarMarking">*</span></label>
+          <select class="form-select" 
+            [(ngModel)]="formData.ChildPostServiceTypeID" 
+            formControlName="ChildPostServiceTypeID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of ChildPostServiceTypeDDL" [value]="item.PostServiceTypeID">{{item.PostServiceTypeName}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ChildPostServiceTypeID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ChildPostServiceTypeID.errors.DropdownValidators">
               <i aria-hidden="true"></i>This
               field is required .!
             </p>
@@ -1196,7 +1230,7 @@
                 <td align="left">{{ row.DisplayName }}</td>
                 <td align="left">{{ row.UserProfileStatus }}</td>
                 <td align="left">{{ row.Remarks}}</td>
-                <td align="left">{{ row.CreatedDate }}</td>
+                <td align="left">{{ row.CreatedDate | date: 'dd-MM-yyyy'}}</td>
 
               </tr>
               <tr *ngIf="UserProfileStatusHistoryList?.length==0">

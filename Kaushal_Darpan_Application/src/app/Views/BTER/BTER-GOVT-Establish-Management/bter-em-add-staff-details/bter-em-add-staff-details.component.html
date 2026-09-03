@@ -725,7 +725,7 @@
               <td class="text-center">{{idx+1}}</td>
               <td class="text-center">{{row.QualificationObtainedDuringService}}</td>
               <td class="text-center">{{row.QualificationName}}</td>
-              <td class="text-center">{{row.QualificationAcquredDate}}</td>
+              <td class="text-center">{{row.QualificationAcquredDate | date: 'dd-MM-yyyy'}}</td>
               <td class="text-center">{{row.ObtainedDivision}}</td>
               <td class="text-center">{{row.Specialization}}</td>
               <td class="text-center">
@@ -1279,7 +1279,7 @@
 
         <div class="pt-30 mb-3 flex justify-center flex-wrap items-center">
           <button type="button" class="btn bg-primary text-white" (click)="AddAnotherServiceHistory()">
-            Add More Service History
+            {{ isEditServiceReq ? 'Update Service History' : 'Add More Service History' }}
           </button>
         </div>
 
@@ -1398,8 +1398,12 @@
 
 
               <td class="text-center">
+                <button class="btn bg-info text-white" type="button" title="Edit"
+                        (click)="EditServiceHistory(row,idx)">
+                  <i class="ti ti-pencil"></i>
+                </button>
                 <button class="btn bg-danger text-white" type="button" title="Delete"
-                  (click)="deleteServiceHistory(idx)">
+                        (click)="deleteServiceHistory(idx)">
                   <i class="ti ti-trash"></i>
                 </button>
               </td>
@@ -1535,9 +1539,9 @@
             <tr *ngFor="let row of StaffCareerAdvancementSchemeData; let idx = index">
               <td class="text-center">{{idx+1}}</td>
               <td class="text-center">{{row.PayLevel}}</td>
-              <td class="text-center">{{row.DateOfImplementation}}</td>
+              <td class="text-center">{{row.DateOfImplementation | date: 'dd-MM-yyyy'}}</td>
               <td class="text-center">{{row.OrderNo}}</td>
-              <td class="text-center">{{row.OrderDate}}</td>
+              <td class="text-center">{{row.OrderDate | date: 'dd-MM-yyyy'}}</td>
               <td class="text-center">
                 <a target="_blank"
                   href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/CareerAdvancementSchemeDocument/' + row.CASDocument }}">
@@ -1627,7 +1631,7 @@
                 <td align="left">{{ row.DisplayName }}</td>
                 <td align="left">{{ row.UserProfileStatus }}</td>
                 <td align="left">{{ row.Remarks}}</td>
-                <td align="left">{{ row.CreatedDate }}</td>
+                <td align="left">{{ row.CreatedDate | date: 'dd-MM-yyyy'}}</td>
 
               </tr>
               <tr *ngIf="UserProfileStatusHistoryList?.length==0">

@@ -120,7 +120,7 @@ export class QualificationMasterComponent {
       deleteRequest.UserID = this.sSOLoginDataModel.UserID;
       await this.qualificationMasterService.QualificationMaster_GetData(deleteRequest).then(async (data: any) => {
         if(data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message);
+          this.toastr.success("Deleted Successfully");
           await this.QualificationMaster_GetData();
         } else {
           this.toastr.error(data.ErrorMessage);

@@ -101,6 +101,27 @@ export class studentwithdrawnlistComponent {
 
     this.studentWithdrawnRequest = new StudentthdranSeat1Model();
   }
+  
+  
+    exportToExcel(): void {
+      const unwantedColumns = [
+        'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+        'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','TradeId','AcademicYearID','CollegeId','MobileNo','CollegeId1',
+      ];
+      const filteredData = this.AllotedSeatList.map((item: any) => {
+        const filteredItem: any = {};
+        Object.keys(item).forEach(key => {
+          if (!unwantedColumns.includes(key)) {
+            filteredItem[key] = item[key];
+          }
+        });
+        return filteredItem;
+      });
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      XLSX.writeFile(wb, `AllotedSeatListData.xlsx`);
+    }
 
   async GetAllotedSeatByCollegeList() {
 

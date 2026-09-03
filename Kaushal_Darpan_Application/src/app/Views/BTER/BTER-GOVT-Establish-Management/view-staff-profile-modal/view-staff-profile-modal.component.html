@@ -227,25 +227,26 @@
             </div>
           </div>
 
-          <div>
+          <!-- <div>
             <label class="text-sm font-semibold text-gray-700 block mb-1">Qualification as per Service Book at the time of joining</label>
             <div class="bg-gray-50 border rounded px-3 py-2">
               {{staffDetailsServicePreview.QualificationAtJoining}}
             </div>
-          </div>
+          </div> -->
 
-          <div>
+          <!-- <div>
             <label class="text-sm font-semibold text-gray-700 block mb-1">Qualifications as per Service Book gained after joining</label>
             <div class="bg-gray-50 border rounded px-3 py-2">
               {{staffDetailsServicePreview.QualificationAfterJoining}}
             </div>
-          </div>
-          <div *ngIf="staffDetailsServicePreview.QualificationAfterJoining != 'Not Acquired'">
+          </div> -->
+
+          <!-- <div *ngIf="staffDetailsServicePreview.QualificationAfterJoining != 'Not Acquired'">
             <label class="text-sm font-semibold text-gray-700 block mb-1">Date of acquiring the qualification</label>
             <div class="bg-gray-50 border rounded px-3 py-2">
               {{staffDetailsServicePreview.QualificationAcquiringDate | date: 'dd-MM-yyyy'}}
             </div>
-          </div>
+          </div> -->
 
           <div>
             <label class="text-sm font-semibold text-gray-700 block mb-1">Date of Retirement</label>
@@ -390,8 +391,8 @@
                 <td>{{i+1}}</td>
                 <td>{{row.OfficeName}}</td>
                 <td>{{row.InstituteName}}</td>
-                <td>{{row.FromDate | date:'yyyy-MM-dd'}}</td>
-                <td>{{row.ToDate | date:'yyyy-MM-dd'}}</td>
+                <td>{{row.FromDate | date:'dd-MM-yyyy'}}</td>
+                <td>{{row.ToDate | date:'dd-MM-yyyy'}}</td>
                 <td>{{row.DesignationName}}</td>
                 <td>{{row.ServiceBranchName}}</td>
                 <td>
@@ -401,7 +402,7 @@
                     <div>{{row.TransferToOfficeName}}</div>
                     <div>{{row.TransferToInstituteName}}</div>
                     <div class="text-xs">
-                      {{row.DateOfTransfer | date:'yyyy-MM-dd'}}
+                      {{row.DateOfTransfer | date:'dd-MM-yyyy'}}
                     </div>
                   </div>
 
@@ -410,7 +411,7 @@
                     <div>{{row.ToDesignationNamePromotion}}</div>
                     <div>{{row.ToBranchNamePromotion}}</div>
                     <div class="text-xs">
-                      {{row.DateOfpromotion | date:'yyyy-MM-dd'}}
+                      {{row.DateOfpromotion | date:'dd-MM-yyyy'}}
                     </div>
                   </div>
 
@@ -531,9 +532,9 @@
 
                 <td class="text-center">{{i+1}}</td>
                 <td class="text-center">{{row.PayLevel}}</td>
-                <td class="text-center">{{row.DateOfImplementation}}</td>
+                <td class="text-center">{{row.DateOfImplementation | date: 'dd-MM-yyyy'}}</td>
                 <td class="text-center">{{row.OrderNo}}</td>
-                <td class="text-center">{{row.OrderDate}}</td>
+                <td class="text-center">{{row.OrderDate | date: 'dd-MM-yyyy'}}</td>
                 <td class="text-center">
                   <a target="_blank" 
                     href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/CareerAdvancementSchemeDocument/' + row.CASDocument }}">

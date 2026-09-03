@@ -230,7 +230,9 @@ export class PassoutRegistrationReportListComponent {
         InstituteID: this.searchRequest.InstituteID,
         UserID: UserID,
         TradeID: this.searchRequest.TradeID,
-        PassYear: this.searchRequest.PassYear
+        PassYear: this.searchRequest.PassYear,
+        PortalYear: this.searchRequest.PortalYear,
+        PortalMonth: this.searchRequest.PortalMonth
       };
 
 
@@ -302,6 +304,10 @@ export class PassoutRegistrationReportListComponent {
   }
   async ResetControl() {
     this.isSubmitted = false;
+    this.searchRequest.PassYear = ''
+    this.searchRequest.InstituteID = 0
+    this.searchRequest.TradeID = 0
+    this.searchRequest.PortalYear = 0
     /*    this.SubjectMasterDDLList = [];*/
     this.ExaminersList = [];
 
@@ -365,7 +371,9 @@ export class PassoutRegistrationReportListComponent {
         InstituteID: this.searchRequest.InstituteID,
         UserID: UserID,
         TradeID: this.searchRequest.TradeID,
-        PassYear: this.searchRequest.PassYear
+        PassYear: this.searchRequest.PassYear,
+             PortalYear: this.searchRequest.PortalYear,
+        PortalMonth: this.searchRequest.PortalMonth
       };
 
       this.loaderService.requestStarted();

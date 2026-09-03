@@ -106,7 +106,7 @@ export class DiplomaCertificateDownloadComponent {
         }, (error: any) => console.error(error)
         );
 
-      await this.commonFunctionService.GetCommonMasterData('Institute')
+      await this.commonFunctionService.GetCommonMasterData('Institute', this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.InstituteMasterList = data['Data'];

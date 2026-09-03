@@ -68,6 +68,7 @@ export class ItiExaminerSearchModel {
   public SSOID: string = '';
   public DistrictID: number = 0;
   public EndTermID: number = 0;
+  public CheckStatus: number = 0;
   
 }
 

@@ -449,6 +449,7 @@ export class PmnamMelaReportComponent {
     this.DistrictID = 0;
       this.FinancialYearID = 0;
     this.BeforeMonth = 0;
+    this.obj.ZoneID = 0;
     this.GetAllData()
   }
 

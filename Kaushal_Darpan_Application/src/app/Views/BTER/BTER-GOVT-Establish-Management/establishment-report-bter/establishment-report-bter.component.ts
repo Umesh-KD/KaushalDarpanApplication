@@ -114,6 +114,7 @@ export class EstablishmentReportBTERComponent {
       this.searchRequest.OfficeID = this.status;
     }
 
+   
     try {
       this.loaderService.requestStarted();
       await this.bterEstablishManagementService.GetEstablishmentReportData(this.searchRequest)

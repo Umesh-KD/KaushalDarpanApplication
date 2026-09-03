@@ -81,6 +81,15 @@ export class ItiTheoryMarksService {
 
 
 
+  public async UnlockBundle1(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/UnlockBundle1`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async RevertBundle(searchRequest: any) {
     var body = JSON.stringify(searchRequest);
 

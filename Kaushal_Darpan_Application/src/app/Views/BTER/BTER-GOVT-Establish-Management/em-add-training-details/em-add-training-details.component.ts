@@ -30,11 +30,13 @@ export class EMAddTrainingDetailsComponent {
 
   public AddTrainingDetailsFromGroup!: FormGroup;
   public TrainingDocFromGroup!: FormGroup;
-
+  calculatedEndDate: string = '';   // the system auto-computed end date
+  isEndDateExtended: boolean = false;
   public EM_TrainingCourseTypeList: any = [];
   public StaffTrainingDetailsDataList: any = [];
   public StaffTrainingDetailsCompletedTrainingDataList: any = [];
   public StaffTrainingDetailsNewTrainingDataList: any = [];
+  public HolidaymasterList: any = [];
 
   isSubmitted: boolean = false;
   Table_SearchText: string = '';
@@ -73,7 +75,8 @@ export class EMAddTrainingDetailsComponent {
       Venue: ['', [Validators.required]],
       TrainingDoc: ['', [Validators.required]],
       TrainingType: [''],
-      ComplitionTrainingDoc: ['']
+      ComplitionTrainingDoc: [''],
+      Remarks: [''],
       
     });
 
@@ -88,6 +91,7 @@ export class EMAddTrainingDetailsComponent {
     await this.GetEM_TrainingCourseType();
     await this.StaffTrainingDetailsCompletedTraining_GetData();
     await this.StaffTrainingDetailsNewTraining_GetData();
+    await this.GetHolidayMster();
 
     this.isTrainingCom = true;
   }
@@ -106,6 +110,20 @@ export class EMAddTrainingDetailsComponent {
       console.error(error);
     }
   }
+
+  async GetHolidayMster() {
+    try {
+      await this.commonFunctionService.GetCommonMasterData('GovtHoliday')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.HolidaymasterList = data['Data'];
+        }, (error: any) => console.error(error)
+        );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 
   async refreshValidators() {
     if(this.request.ModeOfTraining == 1) {
@@ -444,97 +462,97 @@ export class EMAddTrainingDetailsComponent {
     })
 
   }
-  validateTrainingDates() {
+  //validateTrainingDates() {
 
-    const startDate = this.request.StartDate;
-    const duration = Number(this.request.Duration);
-    const durationUnit = Number(this.request.DurationUnit);
-    const trainingType = Number(this.request.TrainingTypeID);
+  //  const startDate = this.request.StartDate;
+  //  const duration = Number(this.request.Duration);
+  //  const durationUnit = Number(this.request.DurationUnit);
+  //  const trainingType = Number(this.request.TrainingTypeID);
 
-    if (!startDate || !duration || !durationUnit) {
-      return;
-    }
+  //  if (!startDate || !duration || !durationUnit) {
+  //    return;
+  //  }
 
-    // =========================
-    // Parse Start Date Properly
-    // =========================
+  //  // =========================
+  //  // Parse Start Date Properly
+  //  // =========================
 
-    const start = new Date(startDate);
+  //  const start = new Date(startDate);
 
-    start.setHours(0, 0, 0, 0);
-
-   
-
-    let totalDays = 0;
-
-    // Days
-    if (durationUnit === 1) {
-      totalDays = duration;
-    }
-
-    // Weeks
-    if (durationUnit === 2) {
-      totalDays = duration * 7;
-    }
+  //  start.setHours(0, 0, 0, 0);
 
    
 
-    const end = new Date(start);
+  //  let totalDays = 0;
 
-    end.setDate(end.getDate() + totalDays - 1);
+  //  // Days
+  //  if (durationUnit === 1) {
+  //    totalDays = duration;
+  //  }
 
+  //  // Weeks
+  //  if (durationUnit === 2) {
+  //    totalDays = duration * 7;
+  //  }
 
-    const yyyy = end.getFullYear();
-    const mm = String(end.getMonth() + 1).padStart(2, '0');
-    const dd = String(end.getDate()).padStart(2, '0');
+   
 
-    const endDate = `${yyyy}-${mm}-${dd}`;
+  //  const end = new Date(start);
 
-    this.request.EndDate = endDate;
-
-    this.AddTrainingDetailsFromGroup.controls['EndDate']
-      .setValue(endDate);
-
-
-    this.AddTrainingDetailsFromGroup.controls['StartDate']
-      .setErrors(null);
-
-    this.AddTrainingDetailsFromGroup.controls['EndDate']
-      .setErrors(null);
+  //  end.setDate(end.getDate() + totalDays - 1);
 
 
-    const today = new Date();
+  //  const yyyy = end.getFullYear();
+  //  const mm = String(end.getMonth() + 1).padStart(2, '0');
+  //  const dd = String(end.getDate()).padStart(2, '0');
 
-    today.setHours(0, 0, 0, 0);
+  //  const endDate = `${yyyy}-${mm}-${dd}`;
+
+  //  this.request.EndDate = endDate;
+
+  //  this.AddTrainingDetailsFromGroup.controls['EndDate']
+  //    .setValue(endDate);
 
 
-    if (trainingType == 1) {
+  //  this.AddTrainingDetailsFromGroup.controls['StartDate']
+  //    .setErrors(null);
 
-      if (start > today) {
+  //  this.AddTrainingDetailsFromGroup.controls['EndDate']
+  //    .setErrors(null);
 
-        this.AddTrainingDetailsFromGroup.controls['StartDate']
-          .setErrors({
-            futureDateNotAllowed: true
-          });
 
-      }
+  //  const today = new Date();
 
-    }
+  //  today.setHours(0, 0, 0, 0);
 
-    if (trainingType == 2) {
 
-      if (start < today) {
+  //  if (trainingType == 1) {
 
-        this.AddTrainingDetailsFromGroup.controls['StartDate']
-          .setErrors({
-            backDateNotAllowed: true
-          });
+  //    if (start > today) {
 
-      }
+  //      this.AddTrainingDetailsFromGroup.controls['StartDate']
+  //        .setErrors({
+  //          futureDateNotAllowed: true
+  //        });
 
-    }
+  //    }
 
-  }
+  //  }
+
+  //  if (trainingType == 2) {
+
+  //    if (start < today) {
+
+  //      this.AddTrainingDetailsFromGroup.controls['StartDate']
+  //        .setErrors({
+  //          backDateNotAllowed: true
+  //        });
+
+  //    }
+
+  //  }
+
+  //}
   //validateTrainingDates() {
 
   //  const startDate = this.request.StartDate;
@@ -624,6 +642,113 @@ export class EMAddTrainingDetailsComponent {
   //}
 
 
+
+  private isHoliday(date: Date): boolean {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    const dateStr = `${y}-${m}-${d}`;
+
+    return this.HolidaymasterList.some((h: any) => {
+      const hDate = new Date(h.Name);
+      const hy = hDate.getFullYear();
+      const hm = String(hDate.getMonth() + 1).padStart(2, '0');
+      const hd = String(hDate.getDate()).padStart(2, '0');
+      return `${hy}-${hm}-${hd}` === dateStr;
+    });
+  }
+
+  private isWeekend(date: Date): boolean {
+    const day = date.getDay(); // 0 = Sunday, 6 = Saturday
+    return day === 0 || day === 6;
+  }
+
+  private isWorkingDay(date: Date): boolean {
+    return !this.isWeekend(date) && !this.isHoliday(date);
+  }
+
+  private addWorkingDays(start: Date, workingDaysToAdd: number): Date {
+    const result = new Date(start);
+    // If the start date itself isn't a working day, roll forward first
+    while (!this.isWorkingDay(result)) {
+      result.setDate(result.getDate() + 1);
+    }
+    let count = 1; // start date counts as day 1
+    while (count < workingDaysToAdd) {
+      result.setDate(result.getDate() + 1);
+      if (this.isWorkingDay(result)) {
+        count++;
+      }
+    }
+    return result;
+  }
+
+  // Returns how many "training days" count per calendar week,
+  // based on the total number of weeks selected.
+  private getDaysPerWeek(durationInWeeks: number): number {
+    // 1 week -> standard 5-day week
+    // 2+ weeks -> 6-day week
+    return durationInWeeks >= 2 ? 6 : 5;
+  }
+
+  validateTrainingDates() {
+    const startDate = this.request.StartDate;
+    const duration = Number(this.request.Duration);
+    const durationUnit = Number(this.request.DurationUnit);
+    const trainingType = Number(this.request.TrainingTypeID);
+    if (!startDate || !duration || !durationUnit) {
+      return;
+    }
+
+    // =========================
+    // Parse Start Date Properly
+    // =========================
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+
+    let totalDays = 0;
+    // Days
+    if (durationUnit === 1) {
+      totalDays = duration;
+    }
+    // Weeks -> variable working days per week depending on duration
+    if (durationUnit === 2) {
+      const daysPerWeek = this.getDaysPerWeek(duration);
+      totalDays = duration * daysPerWeek;
+    }
+
+    const end = this.addWorkingDays(start, totalDays);
+
+    const yyyy = end.getFullYear();
+    const mm = String(end.getMonth() + 1).padStart(2, '0');
+    const dd = String(end.getDate()).padStart(2, '0');
+    const endDate = `${yyyy}-${mm}-${dd}`;
+
+    this.request.EndDate = endDate;
+    this.AddTrainingDetailsFromGroup.controls['EndDate'].setValue(endDate);
+    this.AddTrainingDetailsFromGroup.controls['StartDate'].setErrors(null);
+    this.AddTrainingDetailsFromGroup.controls['EndDate'].setErrors(null);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (trainingType == 1) {
+      if (start > today) {
+        this.AddTrainingDetailsFromGroup.controls['StartDate'].setErrors({
+          futureDateNotAllowed: true
+        });
+      }
+    }
+    if (trainingType == 2) {
+      if (start < today) {
+        this.AddTrainingDetailsFromGroup.controls['StartDate'].setErrors({
+          backDateNotAllowed: true
+        });
+      }
+    }
+
+    this.calculatedEndDate = this.request.EndDate;
+  }
   exportToExcelNew(): void {
 
     if (this.StaffTrainingDetailsNewTrainingDataList.length == 0) {
@@ -753,4 +878,26 @@ export class EMAddTrainingDetailsComponent {
       console.error(error);
     }
   }
+
+  onEndDateChange(newValue: string) {
+    this.request.EndDate = newValue;
+    this.updateRemarksRequirement(newValue);
+  }
+
+  private updateRemarksRequirement(currentEndDate: string) {
+    const remarksControl = this.AddTrainingDetailsFromGroup.controls['Remarks'];
+
+    this.isEndDateExtended =
+      !!this.calculatedEndDate && currentEndDate > this.calculatedEndDate;
+
+    if (this.isEndDateExtended) {
+      remarksControl.setValidators([Validators.required]);
+    } else {
+      remarksControl.clearValidators();
+    }
+
+    remarksControl.updateValueAndValidity({ emitEvent: false });
+  }
+
+
 }

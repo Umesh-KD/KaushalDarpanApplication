@@ -104,7 +104,8 @@
             <!--<th align="left">District Name</th>-->
             <th class="left">Designation as per service book</th>
             <th class="left">Salary Drawn Post </th>
-            <th align="left">Role/Additional Role/th>
+            <th class="left">Course/Branch</th>
+            <th align="left">Role/Additional Role </th>
             <th align="left">Profile Status</th>
             <th align="left">Remark</th>
             <!-- <th align="left">Is Nodal</th> -->
@@ -127,6 +128,7 @@
             <!--<td>{{row.DistrictName}}</td>-->
             <td>{{row.PostName}}</td>
             <td>{{row.SalaryDrawnPost}}</td>
+            <td>{{row.Stream}}</td>
             <td>{{row.RoleName}}</td>
             <td>{{row.ProfileStatus}}</td>
             <td>{{row.Remark}}</td>
@@ -312,7 +314,7 @@
                 <td align="left">{{ row.DisplayName }}</td>
                 <td align="left">{{ row.UserProfileStatus }}</td>
                 <td align="left">{{ row.Remarks}}</td>
-                <td align="left">{{ row.CreatedDate }}</td>
+                <td align="left">{{ row.CreatedDate | date: 'dd-MM-yyyy'}}</td>
 
               </tr>
               <tr *ngIf="UserProfileStatusHistoryList?.length==0">
@@ -546,6 +548,18 @@
                 </div>
               </div>
 
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head <span class="StarMarking">*</span></label>
+                <select class="form-select" [(ngModel)]="approveRequest.BugetHeadID" formControlName="BugetHeadID">
+                  <option value="0">--Select--</option>
+                  <option *ngFor="let item of BugetHeadList" [value]="item.ID">{{item.Name}}</option>
+                </select>
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.BugetHeadID.errors" class="text-danger">
+                  <p *ngIf="!_StaffMasterFormGroup.BugetHeadID.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
 
             </div>
 
@@ -989,19 +1003,7 @@
                           formControlName="Remark" [(ngModel)]="approveRequest.Remark">
                 </textarea>
               </div>
-
-              <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head <span class="StarMarking">*</span></label>
-                <select class="form-select" [(ngModel)]="approveRequest.BugetHeadID" formControlName="BugetHeadID">
-                  <option value="0">--Select--</option>
-                  <option *ngFor="let item of BugetHeadList" [value]="item.ID">{{item.Name}}</option>
-                </select>
-                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.BugetHeadID.errors" class="text-danger">
-                  <p *ngIf="!_StaffMasterFormGroup.BugetHeadID.errors.DropdownValidators">
-                    <i aria-hidden="true"></i>This field is required .!
-                  </p>
-                </div>
-              </div>
+             
             </div>
           </form>
           <div class="flex justify-center flex-wrap items-centermt-3">
@@ -1486,7 +1488,7 @@
 
           <div>
             <label class="text-sm font-semibold text-gray-700 block mb-1">Date of Birth</label>
-            <div class="bg-gray-50 border rounded px-3 py-2">{{staffDetailsServicePreview.DateofBirth}}</div>
+            <div class="bg-gray-50 border rounded px-3 py-2">{{staffDetailsServicePreview.DateofBirth | date:'dd-MM-yyyy'}}</div>
           </div>
 
           <div>
@@ -1494,14 +1496,14 @@
               Date of First Appointment
             </label>
             <div class="bg-gray-50 border rounded px-3 py-2">
-              {{staffDetailsServicePreview.DateOfFirstAppointment}}
+              {{staffDetailsServicePreview.DateOfFirstAppointment | date:'dd-MM-yyyy'}}
             </div>
           </div>
 
           <div>
             <label class="text-sm font-semibold text-gray-700 block mb-1">Department Joining</label>
             <div class="bg-gray-50 border rounded px-3 py-2">
-              {{staffDetailsServicePreview.DepartmentJoiningDate}}
+              {{staffDetailsServicePreview.DepartmentJoiningDate | date:'dd-MM-yyyy'}}
             </div>
           </div>
 
@@ -1510,7 +1512,7 @@
               Date of Appointment
             </label>
             <div class="bg-gray-50 border rounded px-3 py-2">
-              {{staffDetailsServicePreview.DateOfAppointment}}
+              {{staffDetailsServicePreview.DateOfAppointment | date:'dd-MM-yyyy'}}
             </div>
           </div>
 
@@ -1519,7 +1521,7 @@
               Date of Joining in Institute
             </label>
             <div class="bg-gray-50 border rounded px-3 py-2">
-              {{staffDetailsServicePreview.DateOfJoining}}
+              {{staffDetailsServicePreview.DateOfJoining | date:'dd-MM-yyyy'}}
             </div>
           </div>
 
@@ -1594,7 +1596,7 @@
           <div>
             <label class="text-sm font-semibold text-gray-700 block mb-1">Date of Retirement</label>
             <div class="bg-gray-50 border rounded px-3 py-2">
-              {{staffDetailsServicePreview.DateOfRetirement}}
+              {{staffDetailsServicePreview.DateOfRetirement | date:'dd-MM-yyyy'}}
             </div>
           </div>
 
@@ -1631,8 +1633,8 @@
                 <td>{{i+1}}</td>
                 <td>{{row.OfficeName}}</td>
                 <td>{{row.InstituteName}}</td>
-                <td>{{row.FromDate | date:'yyyy-MM-dd'}}</td>
-                <td>{{row.ToDate | date:'yyyy-MM-dd'}}</td>
+                <td>{{row.FromDate | date:'dd-MM-yyyy'}}</td>
+                <td>{{row.ToDate | date:'dd-MM-yyyy'}}</td>
                 <td>{{row.DesignationName}}</td>
 
                 <td>
@@ -1642,7 +1644,7 @@
                     <div>{{row.TransferToOfficeName}}</div>
                     <div>{{row.TransferToInstituteName}}</div>
                     <div class="text-xs">
-                      {{row.DateOfTransfer | date:'yyyy-MM-dd'}}
+                      {{row.DateOfTransfer | date:'dd-MM-yyyy'}}
                     </div>
                   </div>
 
@@ -1650,7 +1652,7 @@
                     <b class="text-green-600">Promotion</b>
                     <div>{{row.ToDesignationNamePromotion}}</div>
                     <div class="text-xs">
-                      {{row.DateOfpromotion | date:'yyyy-MM-dd'}}
+                      {{row.DateOfpromotion | date:'dd-MM-yyyy'}}
                     </div>
                   </div>
 

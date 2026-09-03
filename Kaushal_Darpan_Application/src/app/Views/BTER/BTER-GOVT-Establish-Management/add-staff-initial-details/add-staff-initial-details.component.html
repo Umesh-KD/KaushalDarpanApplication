@@ -169,21 +169,35 @@
           </div>
 
           <!-- *ngIf="this.IsGuestHouseAdmin != true" -->
-          <div >
+          <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Salary Drawn Post <span class="StarMarking">*</span></label>
-            <!-- <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost" (change)="getBudgetHeadPostWise()">
+            <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost" (change)="getBudgetHeadPostWise()">
               <option value="0">--Select--</option>
               <option *ngFor="let item of SactionedPostList" [value]="item.ID">{{item.Name}}</option>
-            </select> -->
+            </select>
 
-            <ng-select [items]="SactionedPostList" bindLabel="Name" bindValue="ID" placeholder="---Choose Post---"
+            <!-- <ng-select [items]="SactionedPostList" bindLabel="Name" bindValue="ID" placeholder="---Choose Post---"
               formControlName="ddlPost" [(ngModel)]="formData.PostID" [searchable]="true" [clearable]="true" (change)="getBudgetHeadPostWise()">
-            </ng-select>
+            </ng-select> -->
 
             <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPost.errors" class="text-danger">
               <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPost.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This
                 field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf="isPostForBranchAvailable">
+            <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch/Subject <span class="StarMarking">*</span></label>
+            <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
+                    [(ngModel)]="formData.BranchID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of BranchMasterDDL_PostWise" [value]="item.BranchID">{{item.BranchName}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.BranchID.errors" class="text-danger">
+              <p *ngIf="!_AddStaffBasicDetailFromGroup.BranchID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
               </p>
             </div>
           </div>
@@ -196,6 +210,38 @@
               <option value="2">Non-Planned Budget</option>
             </select>
           </div> -->
+
+          <div *ngIf="IsNonGazetted">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name Of Service <span class="StarMarking">*</span></label>
+            <select class="form-select" 
+              [(ngModel)]="formData.PostServiceTypeID" 
+              formControlName="PostServiceTypeID"
+              (change)="getChildPostServiceTypeDDL()">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of PostServiceTypeDDL" [value]="item.PostServiceTypeID">{{item.PostServiceTypeName}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.PostServiceTypeID.errors" class="text-danger">
+              <p *ngIf="!_AddStaffBasicDetailFromGroup.PostServiceTypeID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div>
+          <div *ngIf="formData.PostServiceTypeID == _EnumPostServiceType_BTER.Other_Department_Services && IsNonGazetted">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> If Other Department Services <span class="StarMarking">*</span></label>
+            <select class="form-select" 
+              [(ngModel)]="formData.ChildPostServiceTypeID" 
+              formControlName="ChildPostServiceTypeID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of ChildPostServiceTypeDDL" [value]="item.PostServiceTypeID">{{item.PostServiceTypeName}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ChildPostServiceTypeID.errors" class="text-danger">
+              <p *ngIf="!_AddStaffBasicDetailFromGroup.ChildPostServiceTypeID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div>
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head <span class="StarMarking">*</span></label>

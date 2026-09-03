@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
-import { EnumStatus, EnumStatusOfStaff, ITIGovtEM_EnumStaffLevel, ITIGovtEM_EnumStaffLevelChild, ITIGovtEM_EnumStaffType, EnumEMProfileStatus, EnumRole, BTERGovtEM_EnumStaffType } from '../../../../Common/GlobalConstants';
+import { EnumStatus, EnumStatusOfStaff, ITIGovtEM_EnumStaffLevel, ITIGovtEM_EnumStaffLevelChild, ITIGovtEM_EnumStaffType, EnumEMProfileStatus, EnumRole, BTERGovtEM_EnumStaffType, EnumPostServiceType_BTER } from '../../../../Common/GlobalConstants';
 import { BTER_DesignationWiseBranchDataModel, BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_RetirementProcessModel, BTER_EM_StaffHostelListModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
 import { ToastrService } from 'ngx-toastr';
@@ -54,6 +54,7 @@ export class EMPrincipleStaffComponent {
   public searchRequest1 = new GuestRoomSeatSearchModel();
   public hostelSearchReq = new StaffHostelSearchModel();
   request = new UserMasterModel();
+  public RetirementProcessModel = new BTER_EM_RetirementProcessModel();
 
   public GuestHouseNameList: any = [];
   public UserProfileStatusHistoryList: any = [];
@@ -85,13 +86,15 @@ export class EMPrincipleStaffComponent {
   public BugetHeadList: any= [];
   public PostBudgetHeadList: any = [];
   public AssignedRoleRights: any = [];
-  public RetirementProcessModel = new BTER_EM_RetirementProcessModel();
+  public ChildPostServiceTypeDDL: any = [];
+  public PostServiceTypeDDL: any = [];
 
   _ITIGovtEM_EnumStaffLevel = ITIGovtEM_EnumStaffLevel;
   _ITIGovtEM_EnumStaffLevelChild = ITIGovtEM_EnumStaffLevelChild;
   _ITIGovtEM_EnumStaffType = ITIGovtEM_EnumStaffType;
   _BTERGovtEM_EnumStaffType = BTERGovtEM_EnumStaffType;
   _EnumEMProfileStatus = EnumEMProfileStatus;
+  _EnumPostServiceType_BTER = EnumPostServiceType_BTER;
 
   public State: number = 0;
   public Message: string = '';
@@ -112,6 +115,7 @@ export class EMPrincipleStaffComponent {
   IsView: boolean = false
   public IsHideShow: boolean = false
   public allSelected: boolean = false;
+  public IsNonGazetted: boolean = false;
 
   @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
 
@@ -148,7 +152,9 @@ export class EMPrincipleStaffComponent {
       guestRoomID: [0, []],
       ddlPost: ['', [DropdownValidators]],
       BranchID:['',[DropdownValidators]] ,
-      BugetHeadID:['',[DropdownValidators]] 
+      BugetHeadID:['',[DropdownValidators]] ,
+      PostServiceTypeID:[''] ,
+      ChildPostServiceTypeID:[''] 
     })
 
     this.settingsMultiselect = {
@@ -262,7 +268,7 @@ export class EMPrincipleStaffComponent {
 
     await this.GetDesignationMasterData();
     await this.GetCategroyData();
-    await this.getBranchesInstituteIDWise();
+    await this.getInstituteBranchDDL();
 
     this.approveRequest.WorkOfficeID = 0;
 
@@ -637,6 +643,10 @@ async GetTechnicianDll() {
 
   async getBudgetHeadPostWise() {
     await this.resetBranchValidators();
+    await this.GetIsNonGazettedPost();
+    if(this.IsNonGazetted){
+      await this.getPostServiceTypeDDL();
+    }
     try {
       const request: any = {};
       request.OfficeID = this.formData.OfficeID;
@@ -827,12 +837,33 @@ async GetTechnicianDll() {
 
   }
 
+  async resetValidators() {
+    if(this.IsNonGazetted){
+      this.AddStaffBasicDetailFromGroup.controls['PostServiceTypeID'].setValidators([DropdownValidators]);
+      if(this.formData.PostServiceTypeID == EnumPostServiceType_BTER.Other_Department_Services){
+        this.AddStaffBasicDetailFromGroup.controls['ChildPostServiceTypeID'].setValidators([DropdownValidators]);
+      } else {
+        this.AddStaffBasicDetailFromGroup.controls['ChildPostServiceTypeID'].clearValidators();
+      }
+    } else {
+      this.AddStaffBasicDetailFromGroup.controls['PostServiceTypeID'].clearValidators();
+      this.AddStaffBasicDetailFromGroup.controls['ChildPostServiceTypeID'].clearValidators();
+
+      this.formData.PostServiceTypeID = 0;
+      this.formData.ChildPostServiceTypeID = 0;
+    }
+    
+    this.AddStaffBasicDetailFromGroup.controls['PostServiceTypeID'].updateValueAndValidity();
+    this.AddStaffBasicDetailFromGroup.controls['ChildPostServiceTypeID'].updateValueAndValidity();
+  }
+
   async OnFormSubmit() {
     // debugger
     if(this.sSOLoginDataModel.RoleID != 7) {
       this.AddStaffBasicDetailFromGroup.get('InstituteID')?.removeValidators([DropdownValidators]);
       this.AddStaffBasicDetailFromGroup.get('InstituteID')?.updateValueAndValidity();
     }
+    await this.resetValidators();
     try {
       this.isSubmitted = true;
       if (this.AddStaffBasicDetailFromGroup.invalid) {
@@ -1093,6 +1124,27 @@ async GetTechnicianDll() {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+  async getInstituteBranchDDL() {
+    try {
+      debugger
+      const request: any = {};
+      request.OfficeID = this.formData.OfficeID;
+      request.StaffTypeID = this.formData.StaffTypeID;
+      request.InstituteID = this.formData.InstituteID;
+      request.BranchID = this.formData.BranchID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Action = "BranchMasterDDL";
+      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.BranchInstituteDDL = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -1951,6 +2003,7 @@ async GetCategroyData() {
         x.ModifiedBy = this.sSOLoginDataModel.UserID,
         x.DepartmentID = this.sSOLoginDataModel.DepartmentID
         x.InstituteID = this.sSOLoginDataModel.InstituteID
+        x.ParentRoleID = this.sSOLoginDataModel.RoleID
       });
       
       await this.assignRoleRightsService.SaveAssignedRole_UserWise(editChild)
@@ -2015,5 +2068,77 @@ async GetCategroyData() {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  async getPostServiceTypeDDL() {
+    try {
+      this.PostServiceTypeDDL = [];
+      this.formData.PostServiceTypeID = 0;
+
+      const request: any = {};
+      request.StaffTypeID = this.formData.StaffTypeID;
+      request.DesignationID = this.formData.PostID;
+      request.OfficeID = 21;  // static passing because we are using this only for institute level
+      request.InstituteID = this.formData.InstituteID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+
+      request.Action = "GetPostServiceType";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.PostServiceTypeDDL = data['Data'] || [];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getChildPostServiceTypeDDL() {
+    if(this.formData.PostServiceTypeID != EnumPostServiceType_BTER.Other_Department_Services){
+      this.ChildPostServiceTypeDDL = [];
+      this.formData.ChildPostServiceTypeID = 0;
+      return;
+    } 
+    else {
+      try {
+        this.ChildPostServiceTypeDDL = [];
+        this.formData.ChildPostServiceTypeID = 0;
+
+        const request: any = {};
+        request.OfficeID = 21;  // static passing because we are using this only for institute level
+        request.StaffTypeID = this.formData.StaffTypeID;
+        request.InstituteID = this.formData.InstituteID;
+        request.RoleID = this.sSOLoginDataModel.RoleID;
+        request.UserID = this.sSOLoginDataModel.UserID;
+        request.DesignationID = this.formData.PostID;
+        request.PostServiceTypeID = this.formData.PostServiceTypeID;
+        request.Action = "GetChildPostServiceType";
+        await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ChildPostServiceTypeDDL = data['Data'] || [];
+        })
+
+      } catch (error) {
+        console.error(error);
+      }
+    }    
+  }
+
+  async GetIsNonGazettedPost() {
+    try {
+      const request: any = {};
+      request.DesignationID = this.formData.PostID;
+      request.Action = "GetIsPostGazOrNot";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.Data[0].ISNonGazetted == true) {
+          this.IsNonGazetted = true;
+        } else {
+          this.IsNonGazetted = false;
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    } 
   }
 }
