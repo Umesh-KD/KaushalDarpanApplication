@@ -115,18 +115,30 @@
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
               <th class="text-left whitespace-nowrap">Sr. No</th>
-              <th class="text-left">जिला</th>
-              <th class="text-left">AAA का नाम</th>
-              <!--<th class="text-left"><span class="main-heading">भाग लेने वाले AAA का नाम</span></th>-->
-              <th class="text-left">कार्यशाला की तिथि</th>
+
+              <th class="text-left cursor-pointer" (click)="sortTable('DistrictName', 'string')">
+                जिला
+                <i class="ti" [ngClass]="sortColumn==='DistrictName' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+
+              <th class="text-left cursor-pointer" (click)="sortTable('AAAMemberNames', 'string')">
+                AAA का नाम
+                <i class="ti" [ngClass]="sortColumn==='AAAMemberNames' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+
+              <th class="text-left cursor-pointer" (click)="sortTable('WorkshopDateFormatted', 'date')">
+                कार्यशाला की तिथि
+                <i class="ti" [ngClass]="sortColumn==='WorkshopDateFormatted' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+
               <th class="text-left"><span class="main-heading">कार्यशाला मे दिये गये प्रजेंटेशन / जानक ारी का संक्षिप्त विवरण</span></th>
+
               <th class="text-center" colspan="3">त्रैमास के प्रारंभ मे स्थिति</th>
               <th class="text-center" colspan="3">त्रैमास की समाप्ति पर स्थिति</th>
               <th class="text-center" colspan="3">त्रैमास में हुई वृद्धि</th>
 
               <th class="text-left"><span class="main-heading">त्रैमास के दौरान शिक्षु पोर्टल पर फ्रेशर शिक्षुओं के पंजीयन की संख्या (सूची संलग्न करे)</span></th>
               <th class="text-left"><span class="main-heading">त्रैमास के दौरान आई. टी. आई ग्रेजुए ट के पोर्टल पर पंजीय न की संख्या (सूची संलग्न करे)</span></th>
-              <!--<th class="text-left">विविध विवरण</th>-->
               <th class="text-left">Action</th>
             </tr>
             <tr>
@@ -136,81 +148,105 @@
               <th></th>
               <th></th>
 
-              <th class="text-left whitespace-nowrap">प्रतिष्ठानों की संख्या</th>
-              <th class="text-left whitespace-nowrap">सीट् की संख्या</th>
-              <th class="text-left"><span class="heading-span">पोर्टल पर नियोंजित शिक्षुओं की संख्या</span></th>
+              <th class="text-left whitespace-nowrap cursor-pointer" (click)="sortTable('BeforeEstablishmentNo', 'number')">
+                प्रतिष्ठानों की संख्या
+                <i class="ti" [ngClass]="sortColumn==='BeforeEstablishmentNo' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+              <th class="text-left whitespace-nowrap cursor-pointer" (click)="sortTable('BeforeEstablishmentSeat', 'number')">
+                सीट् की संख्या
+                <i class="ti" [ngClass]="sortColumn==='BeforeEstablishmentSeat' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+              <th class="text-left cursor-pointer" (click)="sortTable('BeforeStudentCount', 'number')">
+                <span class="heading-span">पोर्टल पर नियोंजित शिक्षुओं की संख्या</span>
+                <i class="ti" [ngClass]="sortColumn==='BeforeStudentCount' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
 
-              <th class="text-left whitespace-nowrap">प्रतिष्ठानों की संख्या</th>
-              <th class="text-left whitespace-nowrap">सीट् की संख्या</th>
-              <th class="text-left"><span class="heading-span">पोर्टल पर नियोंजित शिक्षुओं की संख्या</span></th>
+              <th class="text-left whitespace-nowrap cursor-pointer" (click)="sortTable('AfterEstablishmentNo', 'number')">
+                प्रतिष्ठानों की संख्या
+                <i class="ti" [ngClass]="sortColumn==='AfterEstablishmentNo' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+              <th class="text-left whitespace-nowrap cursor-pointer" (click)="sortTable('AfterEstablishmentSeat', 'number')">
+                सीट् की संख्या
+                <i class="ti" [ngClass]="sortColumn==='AfterEstablishmentSeat' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+              <th class="text-left cursor-pointer" (click)="sortTable('AfterStudentCount', 'number')">
+                <span class="heading-span">पोर्टल पर नियोंजित शिक्षुओं की संख्या</span>
+                <i class="ti" [ngClass]="sortColumn==='AfterStudentCount' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
 
+              <th class="text-left whitespace-nowrap cursor-pointer" (click)="sortTable('QuaterIncreaseEstablishment', 'number')">
+                प्रतिष्ठानों की संख्या
+                <i class="ti" [ngClass]="sortColumn==='QuaterIncreaseEstablishment' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+              <th class="text-left whitespace-nowrap cursor-pointer" (click)="sortTable('QuaterIncreaseSeat', 'number')">
+                सीट् की संख्या
+                <i class="ti" [ngClass]="sortColumn==='QuaterIncreaseSeat' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+              <th class="text-left cursor-pointer" (click)="sortTable('QuaterIncreaseStudent', 'number')">
+                <span class="heading-span">पोर्टल पर नियोंजित शिक्षुओं की संख्या</span>
+                <i class="ti" [ngClass]="sortColumn==='QuaterIncreaseStudent' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
 
-              <th class="text-left whitespace-nowrap">प्रतिष्ठानों की संख्या</th>
-              <th class="text-left whitespace-nowrap">सीट् की संख्या</th>
-              <th class="text-left"><span class="heading-span">पोर्टल पर नियोंजित शिक्षुओं की संख्या</span></th>
               <th></th>
               <th></th>
               <th></th>
-              <!--<th></th>-->
-              <!--<th></th>-->
             </tr>
-
           </thead>
-          <tbody>
+            <tbody>
 
-            <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index; ">
+              <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index; ">
 
-              <td align="left">{{idx+1}}</td>
-              <td>{{row.DistrictName}}</td>
-              <td>{{row.AAAMemberNames}}</td>
-              <!--<td>{{row.ParticipateName}}</td>-->
-              <td class="whitespace-nowrap">{{row.WorkshopDateFormatted}}</td>
-              <td><span>{{row.workshopdetail}}</span></td>
-              <td>{{row.BeforeEstablishmentNo}}</td>
-              <td>{{row.BeforeEstablishmentSeat}}</td>
-              <td>{{row.BeforeStudentCount}}</td>
-              <td>{{row.AfterEstablishmentNo}}</td>
-              <td>{{row.AfterEstablishmentSeat}}</td>
-              <td>{{row.AfterStudentCount}}</td>
-              <td>{{row.QuaterIncreaseEstablishment}}</td>
-              <td>{{row.QuaterIncreaseSeat}}</td>
-              <td>{{row.QuaterIncreaseStudent}}</td>
-              <td class="text-center">
-                <a class="btn bg-success text-white" type="button" title="View" (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/' + row.RegisterStudentPdf)">
-                  View
-                </a>
+                <td align="left">{{idx+1}}</td>
+                <td>{{row.DistrictName}}</td>
+                <td>{{row.AAAMemberNames}}</td>
+                <!--<td>{{row.ParticipateName}}</td>-->
+                <td class="whitespace-nowrap">{{row.WorkshopDateFormatted}}</td>
+                <td><span>{{row.workshopdetail}}</span></td>
+                <td>{{row.BeforeEstablishmentNo}}</td>
+                <td>{{row.BeforeEstablishmentSeat}}</td>
+                <td>{{row.BeforeStudentCount}}</td>
+                <td>{{row.AfterEstablishmentNo}}</td>
+                <td>{{row.AfterEstablishmentSeat}}</td>
+                <td>{{row.AfterStudentCount}}</td>
+                <td>{{row.QuaterIncreaseEstablishment}}</td>
+                <td>{{row.QuaterIncreaseSeat}}</td>
+                <td>{{row.QuaterIncreaseStudent}}</td>
+                <td class="text-center">
+                  <a class="btn bg-success text-white" type="button" title="View" (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/' + row.RegisterStudentPdf)">
+                    View
+                  </a>
 
-              </td>
+                </td>
 
-              <td class="text-center">
-                <a class="btn bg-success text-white" type="button" title="View" (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/' + row.WorkshopPdf)">
-                  View
-                </a>
+                <td class="text-center">
+                  <a class="btn bg-success text-white" type="button" title="View" (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/' + row.WorkshopPdf)">
+                    View
+                  </a>
 
-              </td>
+                </td>
 
-              <td>
-                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                  <a *ngIf="SSOLoginDataModel.RoleID == 100" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,1)"><i class="ti ti-pencil"></i></a>
-                  <a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="View" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
-                  <a *ngIf="SSOLoginDataModel.RoleID != 97" href="javascript:void(0)" title="view" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
-                  <a *ngIf="SSOLoginDataModel.RoleID == 100" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>
-                </div>
-              </td>
+                <td>
+                  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                    <a *ngIf="SSOLoginDataModel.RoleID == 100" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,1)"><i class="ti ti-pencil"></i></a>
+                    <a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="View" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
+                    <a *ngIf="SSOLoginDataModel.RoleID != 97" href="javascript:void(0)" title="view" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
+                    <a *ngIf="SSOLoginDataModel.RoleID == 100" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>
+                  </div>
+                </td>
 
-            </tr>
-            <tr *ngIf="DataList.length>0" class="font-bold bg-gray-100">
-              <td colspan="5" class="text-center">Total</td>
+              </tr>
+              <tr *ngIf="DataList.length>0" class="font-bold bg-gray-100">
+                <td colspan="5" class="text-center">Total</td>
 
-              <td *ngFor="let key of Object.keys(totals)">
-                {{ totals[key] }}
-              </td>
+                <td *ngFor="let key of Object.keys(totals)">
+                  {{ totals[key] }}
+                </td>
 
-              <td colspan="3"></td>
-            </tr>
+                <td colspan="3"></td>
+              </tr>
 
 
-          </tbody>
+            </tbody>
         </table>
 
       </div>
