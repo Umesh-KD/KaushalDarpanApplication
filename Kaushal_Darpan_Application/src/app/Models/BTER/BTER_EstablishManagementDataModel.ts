@@ -216,6 +216,10 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public BterServiceHistoryListModel:BTER_EM_AddServiceHistoryDataModel[]=[];
 
   public IsAdmin: number = 0;
+  public ISNonGazetted: number = 0;
+  public PostServiceTypeName: string = '';
+  public StaffPostTypeID: number = 0;
+  public OtherDepartmentStaff: number = 0;
 }
 
 

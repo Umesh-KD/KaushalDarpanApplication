@@ -102,6 +102,7 @@ export class BterEMAddStaffDetailsComponent {
   public isCASSubmitted: boolean = false;
   public showServiceBranch: boolean = false;
   public showServiceToBranch: boolean = false;
+  public IsNonGazetted: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -2617,6 +2618,16 @@ async EditServiceHistory(row: any, index: number) {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  get probationMinDate(): string | null {
+    if (
+      this.request.ISNonGazetted == 1 &&
+      this.request.OtherDepartmentStaff == 1
+    ) {
+      return null;
+    }
+    return this.request.DepartmentJoiningDate;
   }
 }
 

@@ -935,7 +935,6 @@ async GetTechnicianDll() {
       this.formData.OfficeID = 21;
       this.loaderService.requestStarted();
       this.formData.BugetHeadTypeID = this.PostBudgetHeadList.find((x: any) => x.ID == this.formData.BugetHeadID)?.BudgetTypeID || 0;
-      debugger;
       await this.bterEstablishManagementService.BTER_EM_AddStaffPrinciple(this.formData)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));

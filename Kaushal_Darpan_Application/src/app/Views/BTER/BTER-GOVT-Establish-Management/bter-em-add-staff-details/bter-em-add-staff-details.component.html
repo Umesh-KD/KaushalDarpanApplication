@@ -352,7 +352,7 @@
               class="StarMarking">*</span></label>
           <input class="form-input" type="date" name="ProbationCompletionDate" id="ProbationCompletionDate"
             formControlName="ProbationCompletionDate" [(ngModel)]="request.ProbationCompletionDate"
-            (click)="openDatePicker($event)" [min]="request.DepartmentJoiningDate" [max]="this.today" />
+            (click)="openDatePicker($event)" [min]="probationMinDate" [max]="this.today" />
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.ProbationCompletionDate.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.ProbationCompletionDate.errors.required">
               <i aria-hidden="true"></i>This field is required .!
