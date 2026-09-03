@@ -132,16 +132,36 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th rowspan="2">Sr No</th>
-            <th rowspan="2" class="text-left">आवृत्ति</th>
 
-            <th *ngIf="ssoLoginDataModel.RoleID != 97" rowspan="2" class="text-left">
-              नोडल अधिकारी का नाम
+            <th rowspan="2" class="text-left cursor-pointer" (click)="sortTable('TypeName', 'string')">
+              आवृत्ति
+              <i class="ti" [ngClass]="sortColumn==='TypeName' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
             </th>
 
-            <th rowspan="2">संस्थान का नाम</th>
-            <th rowspan="2">पोर्टल पर पंजीकरण करने की तिथि</th>
-            <th rowspan="2">व्यवसाय का नाम</th>
-            <th rowspan="2">व्यवसाय मे कुल प्रशिक्षणार्थियों की संख्या</th>
+            <th *ngIf="ssoLoginDataModel.RoleID != 97" rowspan="2" class="text-left cursor-pointer" (click)="sortTable('NodalOfficerName', 'string')">
+              नोडल अधिकारी का नाम
+              <i class="ti" [ngClass]="sortColumn==='NodalOfficerName' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+
+            <th rowspan="2" class="cursor-pointer" (click)="sortTable('Nameofinstitute', 'string')">
+              संस्थान का नाम
+              <i class="ti" [ngClass]="sortColumn==='Nameofinstitute' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+
+            <th rowspan="2" class="cursor-pointer" (click)="sortTable('Dateofregistration', 'date')">
+              पोर्टल पर पंजीकरण करने की तिथि
+              <i class="ti" [ngClass]="sortColumn==='Dateofregistration' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+
+            <th rowspan="2" class="cursor-pointer" (click)="sortTable('BusinessName', 'string')">
+              व्यवसाय का नाम
+              <i class="ti" [ngClass]="sortColumn==='BusinessName' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+
+            <th rowspan="2" class="cursor-pointer" (click)="sortTable('NumberofTrainees', 'number')">
+              व्यवसाय मे कुल प्रशिक्षणार्थियों की संख्या
+              <i class="ti" [ngClass]="sortColumn==='NumberofTrainees' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
 
             <!-- PARENT HEADER -->
             <th colspan="2" class="text-left">
@@ -152,13 +172,11 @@
             <th rowspan="2">विविध विवरण</th>
             <th rowspan="2">कार्रवाई</th>
           </tr>
-
           <!-- Row 2 (Child headers) -->
           <tr>
             <th class="text-left whitespace-nowrap">नाम</th>
             <th class="text-left whitespace-nowrap">पंजीकरण संख्या</th>
           </tr>
-
         </thead>
         <tbody>
           <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index; ">

@@ -142,29 +142,53 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left" rowspan="2">Sr No</th>
-            <th *ngIf="SSOLoginDataModel.RoleID != 97" rowspan="2" class="text-center">नोडल अधिकारी का नाम</th>
+
+            <th *ngIf="SSOLoginDataModel.RoleID != 97" rowspan="2" class="text-center cursor-pointer" (click)="sortTable('NodalOfficerName', 'string')">
+              नोडल अधिकारी का नाम
+              <i class="ti" [ngClass]="sortColumn==='NodalOfficerName' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+
             <!--<th *ngIf="SSOLoginDataModel.RoleID != 97" rowspan="2" class="text-center">नोडल अधिकारी का जिला</th>-->
+
             <th class="text-center" colspan="4">PMNAM Mela Before Date </th>
             <th class="text-center" colspan="4">PMNAM Mela After Date </th>
             <th class="text-center" rowspan="2">Action</th>
           </tr>
           <tr>
-            <!--<th class="text-left">#</th>-->
-            <th class="text-left">दिनांक</th>
-            <th class="text-left">पोर्टल पर पंजीकृत प्रतिष्ठानों की संख्या</th>
+            <th class="text-left cursor-pointer" (click)="sortTable('BeforeDate1', 'date')">
+              दिनांक
+              <i class="ti" [ngClass]="sortColumn==='BeforeDate1' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+            <th class="text-left cursor-pointer" (click)="sortTable('EstablishmentsRegisterNoBefore', 'number')">
+              पोर्टल पर पंजीकृत प्रतिष्ठानों की संख्या
+              <i class="ti" [ngClass]="sortColumn==='EstablishmentsRegisterNoBefore' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+            <th class="text-left cursor-pointer" (click)="sortTable('NumberofSeatBefore', 'number')">
+              पोर्टल पर पंजीकृत प्रतिष्ठानों में सीटों की संख्या
+              <i class="ti" [ngClass]="sortColumn==='NumberofSeatBefore' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+            <th class="text-left cursor-pointer" (click)="sortTable('NumberofEmployedStudentBefore', 'number')">
+              पोर्टल पर नियोंजित शिक्षुओं की संख्या
+              <i class="ti" [ngClass]="sortColumn==='NumberofEmployedStudentBefore' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
 
-            <th class="text-left">पोर्टल पर पंजीकृत प्रतिष्ठानों में सीटों की संख्या</th>
-            <th class="text-left">पोर्टल पर नियोंजित शिक्षुओं की संख्या</th>
-            <th class="text-left">दिनांक</th>
-            <th class="text-left">पोर्टल पर पंजीकृत प्रतिष्ठानों की संख्या</th>
-            <th class="text-left">पोर्टल पर पंजीकृत प्रतिष्ठानों में सीटों की संख्या</th>
-            <th class="text-left">पोर्टल पर नियोंजित शिक्षुओं की संख्या</th>
-            <!--<th class="text-left">Provision of uploading</th>
-            <th class="text-left">PNM Mela Document</th>-->
-
-            <!--<th></th>-->
+            <th class="text-left cursor-pointer" (click)="sortTable('AfterDate1', 'date')">
+              दिनांक
+              <i class="ti" [ngClass]="sortColumn==='AfterDate1' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+            <th class="text-left cursor-pointer" (click)="sortTable('EstablishmentsRegisterNoAfter', 'number')">
+              पोर्टल पर पंजीकृत प्रतिष्ठानों की संख्या
+              <i class="ti" [ngClass]="sortColumn==='EstablishmentsRegisterNoAfter' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+            <th class="text-left cursor-pointer" (click)="sortTable('NumberofSeatAfter', 'number')">
+              पोर्टल पर पंजीकृत प्रतिष्ठानों में सीटों की संख्या
+              <i class="ti" [ngClass]="sortColumn==='NumberofSeatAfter' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+            <th class="text-left cursor-pointer" (click)="sortTable('NumberofEmployedStudentAfter', 'number')">
+              पोर्टल पर नियोंजित शिक्षुओं की संख्या
+              <i class="ti" [ngClass]="sortColumn==='NumberofEmployedStudentAfter' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
           </tr>
-
         </thead>
         <!--{{DataList | json}}-->
       <tbody>

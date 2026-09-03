@@ -137,15 +137,37 @@
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
               <th class="text-left">क्र.सं.</th>
-              <th *ngIf="SSOLoginDataModel.RoleID != 97" class="text-left">नोडल अधिकारी का नाम</th>
+
+              <th *ngIf="SSOLoginDataModel.RoleID != 97" class="text-left cursor-pointer" (click)="sortTable('NodalOfficerName', 'string')">
+                नोडल अधिकारी का नाम
+                <i class="ti" [ngClass]="sortColumn==='NodalOfficerName' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+
               <!--<th *ngIf="SSOLoginDataModel.RoleID != 97" class="text-left">नोडल अधिकारी का जिला</th>-->
-              <th class="text-left">कार्यशाला की तिथि</th>
-              <th class="text-left">कार्यशाला आयोजित करने <br /> वाले जिलें का नाम</th>
-              <th class="text-left">कार्यशाला मे भाग लेने वाले जिलें का नाम </th>
+
+              <th class="text-left cursor-pointer" (click)="sortTable('workshopDate', 'date')">
+                कार्यशाला की तिथि
+                <i class="ti" [ngClass]="sortColumn==='workshopDate' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+
+              <th class="text-left cursor-pointer" (click)="sortTable('OrganisedDistrictName', 'string')">
+                कार्यशाला आयोजित करने <br /> वाले जिलें का नाम
+                <i class="ti" [ngClass]="sortColumn==='OrganisedDistrictName' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+
+              <th class="text-left cursor-pointer" (click)="sortTable('ParticipatedDistrictNameList', 'string')">
+                कार्यशाला मे भाग लेने वाले जिलें का नाम
+                <i class="ti" [ngClass]="sortColumn==='ParticipatedDistrictNameList' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+
               <th class="text-left">कार्यशाला भाग लेने वाले प्रतिष्ठानों<br /> का नाम व पता </th>
+
               <th class="text-left">कार्यशाला मे भाग लेने वाले <br /> प्रतिनिधि का नाम ,पद व मो.नं.</th>
+
               <th class="text-left">विविध विवरण</th>
+
               <th>कार्य प्रगति दस्तावेज़</th>
+
               <th class="text-left">कार्रवाई</th>
             </tr>
           </thead>

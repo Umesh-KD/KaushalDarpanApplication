@@ -190,15 +190,52 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr No</th>
-            <th class="text-left">पंजीकरण करने वाले संस्थान का नाम</th>
-            <th class="text-left">पोर्टल पर पंजीकरण करने की तिथि</th>
-            <th class="text-left">पंजीकरण संख्या</th>
-            <th class="text-left">नाम / पिता का नाम</th>
-            <th class="text-left">आधार नम्बर</th>
-            <th class="text-left">व्यवसाय का नाम</th>
-            <th class="text-left">संस्थान, जहां से आईटीआई उत्तीर्ण की है</th>
-            <th class="text-left">आईटीआई उत्तीर्ण करने का वर्ष</th>
-            <th class="text-left">NCVT / SCVT</th>
+
+            <th class="text-left cursor-pointer" (click)="sortTable('Name', 'string')">
+              पंजीकरण करने वाले संस्थान का नाम
+              <i class="ti" [ngClass]="sortColumn==='Name' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+
+            <th class="text-left cursor-pointer" (click)="sortTable('RegDate', 'date')">
+              पोर्टल पर पंजीकरण करने की तिथि
+              <i class="ti" [ngClass]="sortColumn==='RegDate' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+
+            <th class="text-left cursor-pointer" (click)="sortTable('RegCount', 'number')">
+              पंजीकरण संख्या
+              <i class="ti" [ngClass]="sortColumn==='RegCount' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+
+            <th class="text-left cursor-pointer" (click)="sortTable('StudentName', 'string')">
+              नाम / पिता का नाम
+              <i class="ti" [ngClass]="sortColumn==='StudentName' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+
+            <th class="text-left cursor-pointer" (click)="sortTable('Aadhar', 'number')">
+              आधार नम्बर
+              <i class="ti" [ngClass]="sortColumn==='Aadhar' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+
+            <th class="text-left cursor-pointer" (click)="sortTable('TradeName', 'string')">
+              व्यवसाय का नाम
+              <i class="ti" [ngClass]="sortColumn==='TradeName' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+
+            <th class="text-left cursor-pointer" (click)="sortTable('PassITIName', 'string')">
+              संस्थान, जहां से आईटीआई उत्तीर्ण की है
+              <i class="ti" [ngClass]="sortColumn==='PassITIName' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+
+            <th class="text-left cursor-pointer" (click)="sortTable('PassYearName', 'number')">
+              आईटीआई उत्तीर्ण करने का वर्ष
+              <i class="ti" [ngClass]="sortColumn==='PassYearName' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+
+            <th class="text-left cursor-pointer" (click)="sortTable('TradeSchemeName', 'string')">
+              NCVT / SCVT
+              <i class="ti" [ngClass]="sortColumn==='TradeSchemeName' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+
             <th class="text-left">विशेष विवरण</th>
             <!--<th class="text-left">दस्तावेज़</th>-->
             <th class="text-center">कार्रवाई</th>

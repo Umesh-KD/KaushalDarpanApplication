@@ -256,6 +256,7 @@ export class BTER_EM_AddServiceHistoryDataModel extends RequestBaseModel {
   public TransferToOfficeName:string=''
   public DateOfTransfer:string=''
   public ServiceBranchName:string=''
+  public TransferTime:string=''
 
   // Promotion
   public IsPromotion:boolean=false;
@@ -264,6 +265,7 @@ export class BTER_EM_AddServiceHistoryDataModel extends RequestBaseModel {
   public DateOfpromotion: string='';
   public ToBranchNamePromotion: string='';
   public ToBranchIDPromotion: number = 0;
+  public PromotionTime: string='';
 
    // Multiple Documents
    public TransferDocuments: BTER_EM_DocumentServiceHistoryDataModel[] = []
