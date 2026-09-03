@@ -210,7 +210,10 @@ export class BterEMAddStaffDetailsComponent {
       IsPromotion: [false],
       ToDesignationIDPromotion: [0],
       ToBranchIDPromotion: [0],
-      DateOfpromotion: ['']
+      DateOfpromotion: [''],
+
+      PromotionTime: [''],
+      TransferTime: [''],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -1416,6 +1419,9 @@ export class BterEMAddStaffDetailsComponent {
   this.serviceReq.TransferToInstituteName =
     institute?.InstituteName || '';
 
+  this.serviceReq.ToBranchNamePromotion =
+    ToBranchNamePromotion || ''; 
+
   // =========================================================
   // Login details
   // =========================================================
@@ -1506,6 +1512,9 @@ export class BterEMAddStaffDetailsComponent {
     TransferToInstituteName:
       this.serviceReq.TransferToInstituteName,
 
+    TransferTime:
+      this.serviceReq.TransferTime,
+
     TransferDocuments:
       this.serviceReq.TransferDocuments
         ? [...this.serviceReq.TransferDocuments]
@@ -1530,8 +1539,11 @@ export class BterEMAddStaffDetailsComponent {
     ToBranchIDPromotion:
       formValue.ToBranchIDPromotion,
 
-    ToBranchName:
+    ToBranchNamePromotion:
       ToBranchNamePromotion,
+
+    PromotionTime:
+      this.serviceReq.PromotionTime,
 
     PromotionDocuments:
       this.serviceReq.PromotionDocuments
@@ -1719,6 +1731,8 @@ export class BterEMAddStaffDetailsComponent {
 async EditServiceHistory(row: any, index: number) {
   debugger;
 
+  await this.GetDesignationData_ServiceHistory();
+
   // Store edit state
   this.isEditServiceReq = true;
   this.editServiceIndex = index;
@@ -1750,6 +1764,12 @@ async EditServiceHistory(row: any, index: number) {
   this.serviceReq.QualificationID =
     this.orDefault(row.QualificationID, 0);
 
+  this.serviceReq.DesignationID =
+    this.orDefault(row.DesignationID, 0);
+
+
+  // await this.onChange_SearviceToDesignation();
+
   // Transfer
   this.serviceReq.IsTransfer =
     this.IsTransfer;
@@ -1762,6 +1782,9 @@ async EditServiceHistory(row: any, index: number) {
 
   this.serviceReq.DateOfTransfer =
     this.formatDateForInput(row.DateOfTransfer);
+
+  this.serviceReq.TransferTime=
+    this.orDefault(  row.TransferTime?.toString().trim().toUpperCase() , '');    
 
   // Promotion
   this.serviceReq.IsPromotion =
@@ -1783,6 +1806,9 @@ async EditServiceHistory(row: any, index: number) {
     this.formatDateForInput(
       row.DateOfpromotion
     );
+
+  this.serviceReq.PromotionTime=
+    this.orDefault( row.PromotionTime?.toString().trim().toUpperCase() , '');
 
   // =========================================================
   // Documents
@@ -1848,17 +1874,17 @@ async EditServiceHistory(row: any, index: number) {
   // Load dependent dropdown data
   // =========================================================
 
-  await this.GetDesignationData_ServiceHistory();
 
-  if (this.serviceReq.OfficeID == 21) {
+
+  if (this.serviceReq.OfficeID == 21 ) {
     await this.getStreamMasterData();
   }
 
-  this.serviceReq.DesignationID =
-    this.orDefault(
-      row.DesignationID,
-      0
-    );
+  // this.serviceReq.DesignationID =
+  //   this.orDefault(
+  //     row.DesignationID,
+  //     0
+  //   );
 
   // =========================================================
   // Patch reactive form
@@ -1899,6 +1925,8 @@ async EditServiceHistory(row: any, index: number) {
 
     DateOfTransfer:
       this.serviceReq.DateOfTransfer,
+      
+    TransferTime: this.serviceReq.TransferTime,
 
     // Promotion
     IsPromotion:
@@ -1911,7 +1939,9 @@ async EditServiceHistory(row: any, index: number) {
       this.serviceReq.ToBranchIDPromotion,
 
     DateOfpromotion:
-      this.serviceReq.DateOfpromotion
+      this.serviceReq.DateOfpromotion,
+
+    PromotionTime: this.serviceReq.PromotionTime
   });
 
   // =========================================================
@@ -2590,9 +2620,11 @@ async EditServiceHistory(row: any, index: number) {
   }
 
   async onChange_SearviceToDesignation() {
+
     const Designation_StaffType = this.DesignationMasterDDLList_ServiceHistory.find((x: any) => x.ID == this.serviceReq.ToDesignationIDPromotion)?.TypeID;
     if (Designation_StaffType == 30) {
       this.showServiceToBranch = true;
+      this.AddServiceistoryFormGroup['controls']['ToBranchIDPromotion'].setValue(0);
       this.AddServiceistoryFormGroup.get('ToBranchIDPromotion')?.addValidators([DropdownValidators]);
     } else {
       this.showServiceToBranch = false;

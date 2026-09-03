@@ -1040,7 +1040,7 @@
             <select class="form-select " name="DesignationID" id="DesignationID" formControlName="DesignationID"
               [(ngModel)]="serviceReq.DesignationID" (change)="onChange_ServiceDesignation()">
               <option value="0">Choose Option</option>
-              <option *ngFor="let item of DesignationMasterDDLList_ServiceHistory" [value]="item.ID">{{item.Name}}
+              <option *ngFor="let item of DesignationMasterDDLList_ServiceHistory" [ngValue]="item.ID">{{item.Name}}
               </option>
             </select>
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.DesignationID.errors" class="text-danger">
@@ -1056,7 +1056,7 @@
             <select class="form-select " name="ServiceBranchID" id="ServiceBranchID" formControlName="ServiceBranchID"
               [(ngModel)]="serviceReq.ServiceBranchID">
               <option value="0">Choose Option</option>
-              <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID">{{item.StreamName}}
+              <option *ngFor="let item of CourseMasterDDL" [ngValue]="item.StreamID">{{item.StreamName}}
               </option>
             </select>
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.ServiceBranchID.errors" class="text-danger">
@@ -1106,11 +1106,74 @@
 
           <!-- (click)="checkTransfer($event)" -->
           <div class="flex flex-col justify-end mb-4">
-            <label class="me-2 ">
+            <label class="me-2">
               <input type="checkbox" value="" id="Box8THForm" (click)="checkTransfer($event)" [checked]="IsTransfer"
                 [(ngModel)]="serviceReq.IsTransfer" formControlName="IsTransfer" />
               Transfer
             </label>
+          </div>
+
+          <!-- Show only when Transfer is selected -->
+          <!-- <div *ngIf="serviceReq.IsTransfer" class="flex gap-4 mb-2 mt-4">
+
+            <label  class="me-4 mt-4">
+              <input
+                type="radio"
+                name="TransferTime"
+                value="Before Noon"
+                [(ngModel)]="serviceReq.TransferTime"
+                formControlName="TransferTime"
+              />
+              Before Noon
+            </label>
+
+            <label  class="me-4 mt-4">
+              <input
+                type="radio"
+                name="TransferTime"
+                value="After Noon"
+                [(ngModel)]="serviceReq.TransferTime"
+                formControlName="TransferTime"
+              />
+              After Noon
+            </label>
+            
+          </div> -->
+
+            <div *ngIf="serviceReq.IsTransfer" class="mt-3">
+
+            <div class="mb-2">
+              <label class="font-semibold">
+               Relieved Time
+              </label>
+            </div>
+
+            <div class="flex gap-4">
+
+              <label>
+                <input
+                  type="radio"
+                  name="TransferTime"
+                  [ngValue]="AM"
+                  formControlName="TransferTime"
+                  [(ngModel)]="serviceReq.TransferTime"
+                />
+                Before Noon
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  name="TransferTime"
+                  [ngValue]="PM"
+                  formControlName="TransferTime"
+                  [(ngModel)]="serviceReq.TransferTime"
+                />
+                After Noon
+              </label>
+
+            </div>
+
           </div>
 
           <div *ngIf="serviceReq.IsTransfer">
@@ -1160,6 +1223,69 @@
               Promotion
             </label>
           </div>
+
+<!-- <div *ngIf="serviceReq.IsPromotion" class="flex gap-4 mb-4">
+
+            <label class="me-4 mt-4">
+              <input
+                type="radio"
+                name="PromotionTime"
+                value="Before Noon"
+                [(ngModel)]="serviceReq.PromotionTime"
+                formControlName="PromotionTime"
+              />
+              Before Noon
+            </label>
+
+            <label class="me-4 mt-4">
+              <input
+                type="radio"
+                name="PromotionTime"
+                value="After Noon"
+                [(ngModel)]="serviceReq.PromotionTime"
+                formControlName="PromotionTime"
+              />
+              After Noon
+            </label>
+            
+          </div> -->
+
+          <div *ngIf="serviceReq.IsPromotion" class="mt-3">
+
+            <div class="mb-2">
+              <label class="font-semibold">
+               Joining Time
+              </label>
+            </div>
+
+            <div class="flex gap-4">
+
+              <label>
+                <input
+                  type="radio"
+                  name="PromotionTime"
+                  [ngValue]="AM"
+                  formControlName="PromotionTime"
+                  [(ngModel)]="serviceReq.PromotionTime"
+                />
+                Before Noon
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  name="PromotionTime"
+                  [ngValue]="PM"
+                  formControlName="PromotionTime"
+                  [(ngModel)]="serviceReq.PromotionTime"
+                />
+                After Noon
+              </label>
+
+            </div>
+
+          </div>
+
 
           <div *ngIf="serviceReq.IsPromotion">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Designation<span
@@ -1350,6 +1476,9 @@
                   <div class="text-sm">
                     Tansfer Date: {{row.DateOfTransfer | date:'dd-MM-yyyy'}}
                   </div>
+                  <div class="text-sm">
+                    Relieved Time: {{row.TransferTime=='AM'?'Before Noon':'After Noon'}}
+                  </div>
                   <div class="text-sm" *ngIf="row.TransferToInstituteID">
                     To Institute: {{row.TransferToInstituteName}}
                   </div>
@@ -1380,6 +1509,9 @@
                   </div>
                   <div class="text-sm">
                     Date: {{row.DateOfpromotion | date:'dd-MM-yyyy'}}
+                  </div>
+                   <div class="text-sm">
+                    Joining Time: {{row.PromotionTime=='AM'?'Before Noon':'After Noon'}}
                   </div>
                   <div *ngIf="row.PromotionDocuments?.length>0">
                     Docs:

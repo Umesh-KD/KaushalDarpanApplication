@@ -404,6 +404,12 @@
                     <div class="text-xs">
                       {{row.DateOfTransfer | date:'dd-MM-yyyy'}}
                     </div>
+                    <div class="text-xs">
+                      {{row.DateOfTransfer | date:'yyyy-MM-dd'}}
+                    </div>
+                     <div class="text-xs">
+                      {{row.TransferTime=='AM'?'Before Noon':'After Noon'}}
+                    </div>
                   </div>
 
                   <div *ngIf="row.IsPromotion" class="mt-1">
@@ -412,6 +418,9 @@
                     <div>{{row.ToBranchNamePromotion}}</div>
                     <div class="text-xs">
                       {{row.DateOfpromotion | date:'dd-MM-yyyy'}}
+                    </div>
+                      <div class="text-xs">
+                      {{row.PromotionTime=='AM'?'Before Noon':'After Noon'}}
                     </div>
                   </div>
 
