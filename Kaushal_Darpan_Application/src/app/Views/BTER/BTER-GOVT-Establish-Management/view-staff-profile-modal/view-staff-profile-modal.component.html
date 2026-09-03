@@ -391,8 +391,8 @@
                 <td>{{i+1}}</td>
                 <td>{{row.OfficeName}}</td>
                 <td>{{row.InstituteName}}</td>
-                <td>{{row.FromDate | date:'yyyy-MM-dd'}}</td>
-                <td>{{row.ToDate | date:'yyyy-MM-dd'}}</td>
+                <td>{{row.FromDate | date:'dd-MM-yyyy'}}</td>
+                <td>{{row.ToDate | date:'dd-MM-yyyy'}}</td>
                 <td>{{row.DesignationName}}</td>
                 <td>{{row.ServiceBranchName}}</td>
                 <td>
@@ -402,7 +402,7 @@
                     <div>{{row.TransferToOfficeName}}</div>
                     <div>{{row.TransferToInstituteName}}</div>
                     <div class="text-xs">
-                      {{row.DateOfTransfer | date:'yyyy-MM-dd'}}
+                      {{row.DateOfTransfer | date:'dd-MM-yyyy'}}
                     </div>
                   </div>
 
@@ -411,7 +411,7 @@
                     <div>{{row.ToDesignationNamePromotion}}</div>
                     <div>{{row.ToBranchNamePromotion}}</div>
                     <div class="text-xs">
-                      {{row.DateOfpromotion | date:'yyyy-MM-dd'}}
+                      {{row.DateOfpromotion | date:'dd-MM-yyyy'}}
                     </div>
                   </div>
 
@@ -532,9 +532,9 @@
 
                 <td class="text-center">{{i+1}}</td>
                 <td class="text-center">{{row.PayLevel}}</td>
-                <td class="text-center">{{row.DateOfImplementation}}</td>
+                <td class="text-center">{{row.DateOfImplementation | date: 'dd-MM-yyyy'}}</td>
                 <td class="text-center">{{row.OrderNo}}</td>
-                <td class="text-center">{{row.OrderDate}}</td>
+                <td class="text-center">{{row.OrderDate | date: 'dd-MM-yyyy'}}</td>
                 <td class="text-center">
                   <a target="_blank" 
                     href="{{ appsettingConfig.StaticFileRootPathURL + '/BTER_Establishment/CareerAdvancementSchemeDocument/' + row.CASDocument }}">

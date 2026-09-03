@@ -55,6 +55,8 @@ export class BTER_EM_AddStaffDataModel extends RequestBaseModel {
   public EmailID: string = ''
   public DistrictID: number=0
   public BranchID: number=0
+  public PostServiceTypeID: number=0
+  public ChildPostServiceTypeID: number=0
 
   public ModifyBy: number=0
   public CourseTypeID: number = 0;
@@ -126,6 +128,8 @@ export class BTER_EM_AddStaffBasicDetailDataModel extends RequestBaseModel {
   public VacancyID?: number = 0;
   public BugetHeadID?: number = 0;
   public BugetHeadTypeID?: number = 0;
+  public PostServiceTypeID?: number = 0;
+  public ChildPostServiceTypeID?: number = 0;
   public OrderNo?: string = '';
 }
 
