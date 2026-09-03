@@ -1,6 +1,6 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Apprenticeship Registration List (ITI Pass Out)</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Passout registration report by AAA (KP-3)</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <!--<a href="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>-->
@@ -8,7 +8,7 @@
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
 
       <!--<a href="/AddITITimeTable" class="text-sm font-medium text-slate-700" aria-current="page">Add/Edit ITI Time Table</a>-->
-      <a [routerLink]="['/AddITITimeTable']" class="text-sm font-medium text-slate-700" aria-current="page">Apprenticeship Registration List (ITI Pass Out) </a>
+      <a [routerLink]="['/AddITITimeTable']" class="text-sm font-medium text-slate-700" aria-current="page">ITI Passout registration report by AAA (KP-3) </a>
     </div>
   </div>
   <!--<a href="/ItiTimeTable" class="inline-flex items-center btn bg-dark text-white btn-sm">
@@ -94,13 +94,50 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             आईटीआई उत्तीर्ण करने का वर्ष : <span class="StarMarking">*</span>
           </label>
-          <select class="form-select"  [(ngModel)]="searchRequest.PassYear">
+          <select class="form-select" [(ngModel)]="searchRequest.PassYear">
             <option value="">--Select--</option>
 
             <option *ngFor="let row of PassYearList" [value]="row.Year">{{row.Year}}</option>
           </select>
-        
+
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            आईटीआई उत्तीर्ण करने का वर्ष : <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.PortalYear">
+            <option value="">--Select--</option>
+
+            <option *ngFor="let row of PassYearList" [value]="row.Year">{{row.Year}}</option>
+          </select>
+
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            महीना <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select"
+                  id="MonthID"
+                  name="MonthID"
+                  [(ngModel)]="searchRequest.PortalMonth">
+            <option value="0">Choose Option</option>
+            <option value="1">जनवरी</option>
+            <option value="2">फ़रवरी</option>
+            <option value="3">मार्च</option>
+            <option value="4">अप्रैल</option>
+            <option value="5">मई</option>
+            <option value="6">जून</option>
+            <option value="7">जुलाई</option>
+            <option value="8">अगस्त</option>
+            <option value="9">सितंबर</option>
+            <option value="10">अक्टूबर</option>
+            <option value="11">नवंबर</option>
+            <option value="12">दिसंबर</option>
+          </select>
+        </div>
+
+
         <!--commonsubject(yes/no)-->
         <!--branch-->
         <!--subject-->

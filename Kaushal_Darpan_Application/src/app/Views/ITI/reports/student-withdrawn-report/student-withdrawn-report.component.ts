@@ -395,10 +395,10 @@ export class studentwithdrawnreportComponent
       }
 
       
-      this.childComponent.OpenOTPPopup();
-      var th = this;
-      this.childComponent.onVerified.subscribe(() =>
-      { 
+      //this.childComponent.OpenOTPPopup();
+      //var th = this;
+      //this.childComponent.onVerified.subscribe(() =>
+      //{ 
 
       this.loaderService.requestStarted();
        this.itiallotmentStatusService.StudentSeatWithdrawRequest(this.studentWithdrawnRequest)
@@ -416,7 +416,8 @@ export class studentwithdrawnreportComponent
           this.toastr.error(this.ErrorMessage);
         }
         });
-      });
+    //}
+    //  );
 
     } catch (error) {
       console.log(error);
