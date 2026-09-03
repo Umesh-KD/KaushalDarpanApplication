@@ -314,7 +314,7 @@
                 <td align="left">{{ row.DisplayName }}</td>
                 <td align="left">{{ row.UserProfileStatus }}</td>
                 <td align="left">{{ row.Remarks}}</td>
-                <td align="left">{{ row.CreatedDate }}</td>
+                <td align="left">{{ row.CreatedDate | date: 'dd-MM-yyyy'}}</td>
 
               </tr>
               <tr *ngIf="UserProfileStatusHistoryList?.length==0">
@@ -1488,7 +1488,7 @@
 
           <div>
             <label class="text-sm font-semibold text-gray-700 block mb-1">Date of Birth</label>
-            <div class="bg-gray-50 border rounded px-3 py-2">{{staffDetailsServicePreview.DateofBirth}}</div>
+            <div class="bg-gray-50 border rounded px-3 py-2">{{staffDetailsServicePreview.DateofBirth | date:'dd-MM-yyyy'}}</div>
           </div>
 
           <div>
@@ -1496,14 +1496,14 @@
               Date of First Appointment
             </label>
             <div class="bg-gray-50 border rounded px-3 py-2">
-              {{staffDetailsServicePreview.DateOfFirstAppointment}}
+              {{staffDetailsServicePreview.DateOfFirstAppointment | date:'dd-MM-yyyy'}}
             </div>
           </div>
 
           <div>
             <label class="text-sm font-semibold text-gray-700 block mb-1">Department Joining</label>
             <div class="bg-gray-50 border rounded px-3 py-2">
-              {{staffDetailsServicePreview.DepartmentJoiningDate}}
+              {{staffDetailsServicePreview.DepartmentJoiningDate | date:'dd-MM-yyyy'}}
             </div>
           </div>
 
@@ -1512,7 +1512,7 @@
               Date of Appointment
             </label>
             <div class="bg-gray-50 border rounded px-3 py-2">
-              {{staffDetailsServicePreview.DateOfAppointment}}
+              {{staffDetailsServicePreview.DateOfAppointment | date:'dd-MM-yyyy'}}
             </div>
           </div>
 
@@ -1521,7 +1521,7 @@
               Date of Joining in Institute
             </label>
             <div class="bg-gray-50 border rounded px-3 py-2">
-              {{staffDetailsServicePreview.DateOfJoining}}
+              {{staffDetailsServicePreview.DateOfJoining | date:'dd-MM-yyyy'}}
             </div>
           </div>
 
@@ -1596,7 +1596,7 @@
           <div>
             <label class="text-sm font-semibold text-gray-700 block mb-1">Date of Retirement</label>
             <div class="bg-gray-50 border rounded px-3 py-2">
-              {{staffDetailsServicePreview.DateOfRetirement}}
+              {{staffDetailsServicePreview.DateOfRetirement | date:'dd-MM-yyyy'}}
             </div>
           </div>
 
@@ -1633,8 +1633,8 @@
                 <td>{{i+1}}</td>
                 <td>{{row.OfficeName}}</td>
                 <td>{{row.InstituteName}}</td>
-                <td>{{row.FromDate | date:'yyyy-MM-dd'}}</td>
-                <td>{{row.ToDate | date:'yyyy-MM-dd'}}</td>
+                <td>{{row.FromDate | date:'dd-MM-yyyy'}}</td>
+                <td>{{row.ToDate | date:'dd-MM-yyyy'}}</td>
                 <td>{{row.DesignationName}}</td>
 
                 <td>
@@ -1644,7 +1644,7 @@
                     <div>{{row.TransferToOfficeName}}</div>
                     <div>{{row.TransferToInstituteName}}</div>
                     <div class="text-xs">
-                      {{row.DateOfTransfer | date:'yyyy-MM-dd'}}
+                      {{row.DateOfTransfer | date:'dd-MM-yyyy'}}
                     </div>
                   </div>
 
@@ -1652,7 +1652,7 @@
                     <b class="text-green-600">Promotion</b>
                     <div>{{row.ToDesignationNamePromotion}}</div>
                     <div class="text-xs">
-                      {{row.DateOfpromotion | date:'yyyy-MM-dd'}}
+                      {{row.DateOfpromotion | date:'dd-MM-yyyy'}}
                     </div>
                   </div>
 
