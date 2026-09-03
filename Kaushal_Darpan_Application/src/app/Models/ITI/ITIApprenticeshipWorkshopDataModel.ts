@@ -39,6 +39,8 @@ export class ITIApprenticeshipRegPassOutModel extends RequestBaseModel{
   public InstituteID:number=0
   public TradeID:number=0
   public UserID:number=0
+  public PortalYear:number=0
+  public PortalMonth:number=0
   public RegDate: string = ''
   public RegCount: string = ''
   public Remarks: string = ''

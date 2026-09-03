@@ -78,7 +78,7 @@
             </div>
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">पंजीकरण संख्या: <span class="StarMarking">*</span></label>
-              <input type="text" class="form-input" placeholder="Enter Registration Count" (keypress)="numberOnly($event)" [(ngModel)]="request.RegCount" formControlName="RegCount">
+              <input type="text" class="form-input" placeholder="Enter Registration Count" [(ngModel)]="request.RegCount" formControlName="RegCount">
               <div *ngIf="isSubmitted && _TimeTableForm.RegCount.errors" class="text-danger">
                 <p *ngIf="_TimeTableForm.RegCount.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
               </div>
@@ -150,11 +150,11 @@
 
 
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">विशेष विवरण: <span class="StarMarking">*</span></label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">विशेष विवरण:</label>
               <input type="text" class="form-input" placeholder="Enter Remarks" [(ngModel)]="request.Remarks" formControlName="Remarks">
-              <div *ngIf="isSubmitted && _TimeTableForm.Remarks.errors" class="text-danger">
+              <!--<div *ngIf="isSubmitted && _TimeTableForm.Remarks.errors" class="text-danger">
                 <p *ngIf="_TimeTableForm.Remarks.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
-              </div>
+              </div>-->
             </div>
             <!--<div>
               <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"

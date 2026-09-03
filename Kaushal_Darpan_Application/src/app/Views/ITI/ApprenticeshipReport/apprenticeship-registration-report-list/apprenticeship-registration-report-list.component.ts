@@ -307,7 +307,11 @@ export class ApprenticeshipRegistrationReportList {
   }
 
   async Reset() {
-
+    this.DistrictID = 0
+    this.ZoneID = 0
+    this.TypeID = 0
+    this.FinancialYearID = 0
+    this.GetReportAllData()
   }
 
   async GetDistrictMatserDDL() {
