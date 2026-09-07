@@ -72,7 +72,7 @@ export class CopyCheckerDashboardComponent {
 
         let VendorID = this.StaffMasterList[0].VendorID??'';
         if (VendorID == null || VendorID == '') {
-          this.sweetAlert2.Confirmation("Update Your Vendor ID", async (result: any) => {
+          this.sweetAlert2.Confirmation("Please Update Your Vendor ID", async (result: any) => {
             if(this.sSOLoginDataModel.DepartmentID == 1) {              
               window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self")
             }
