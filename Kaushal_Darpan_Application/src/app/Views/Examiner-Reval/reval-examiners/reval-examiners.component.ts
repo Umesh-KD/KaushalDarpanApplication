@@ -14,6 +14,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import { CommonDDLCommonSubjectModel } from '../../../Models/CommonDDLCommonSubjectModel';
 import { CommonDDLSubjectMasterModel } from '../../../Models/CommonDDLSubjectMasterModel';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-reval-examiners',
@@ -40,6 +41,18 @@ export class RevalExaminersComponent implements OnInit {
   public commonDDLCommonSubjectModel = new CommonDDLCommonSubjectModel();
   public CommonSubjectYesNo: number = 1;
   public CommonSubjectDDLList: any[] = [];
+
+
+  public paginatedInTableData: any[] = [];//copy of main data
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "50";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -178,6 +191,48 @@ export class RevalExaminersComponent implements OnInit {
     }
   }
 
+    exportToExcel(): void {
+  
+      // set column
+      const exportData = this.ExaminersList?.map((row: any, index: number) => ({
+        'Sr No': index + 1,
+        'Semester': row.SemesterName,
+        'Scheme': row.Scheme,
+        'Group Code': row.Code,
+        'SSOID': row.SSOID,
+        'Teacher Name': row.Name,
+        'Mobile': row.MobileNumber,
+        'College Name': row.InstituteName,
+        'Examiner Code': row.ExaminerCode,
+        'Branch': row.StreamName,
+        'Email': row.Email,
+        'Subject': `${row.SubjectCode} (${row.SubjectName})`,
+        'Regiatred Students': row.TotalRegStudent
+      }));
+  
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  
+      XLSX.utils.book_append_sheet(wb, ws, 'Examiner List');
+  
+      // Current Date & Time (DDMMYYYY_HHMMSS)
+      const now = new Date();
+  
+      const date =
+        String(now.getDate()).padStart(2, '0') +
+        String(now.getMonth() + 1).padStart(2, '0') +
+        now.getFullYear();
+  
+      const time =
+        String(now.getHours()).padStart(2, '0') +
+        String(now.getMinutes()).padStart(2, '0') +
+        String(now.getSeconds()).padStart(2, '0');
+  
+      const fileName = `ExaminerList_${date}_${time}.xlsx`;
+  
+      XLSX.writeFile(wb, fileName);
+    }
+  
   async getExaminerData() {
     //console.log("searchRequest", this.searchRequest);
     this.searchRequest.CommonSubjectYesNo = this.CommonSubjectYesNo;
@@ -196,6 +251,8 @@ export class RevalExaminersComponent implements OnInit {
     } 
   }
 
+
+  
   async btnDelete_OnClick(ExaminerID: number) {
     this.Swal2.Confirmation("Are you sure you want to Remove this ?",
       async (result: any) => {
@@ -313,5 +370,21 @@ export class RevalExaminersComponent implements OnInit {
     catch (ex) {
       console.log(ex);
     }
+  }
+
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
+
+  async sortInTableData(field: string) {
+
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.ExaminersList] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
   }
 }

@@ -179,6 +179,8 @@ export class AddStaffMasterComponent implements OnInit {
 
         ]
       ],
+
+      txtVendorID: [''],
     });
 
     this.EduQualificationFormGroup = this.formBuilder.group({
@@ -232,6 +234,16 @@ export class AddStaffMasterComponent implements OnInit {
     await this.GetFinancialMasterDDL()
     this.GetStaffTypeDDL()
     this.setTodayDate();
+
+    if(this.staffDetailsFormData.RoleID == EnumRole.Examiner || this.staffDetailsFormData.RoleID == EnumRole.Examiner_NonEng 
+      ||this.sSOLoginDataModel.RoleID == EnumRole.Examiner || this.sSOLoginDataModel.RoleID == EnumRole.Examiner_NonEng) {
+      this.StaffMasterFormGroup.get('txtVendorID')?.setValidators([Validators.required]);
+    }
+    else{
+      this.StaffMasterFormGroup.get('txtVendorID')?.clearValidators();
+    }
+
+    this.StaffMasterFormGroup.get('txtVendorID')?.updateValueAndValidity();
 
   }
 
@@ -1014,9 +1026,16 @@ export class AddStaffMasterComponent implements OnInit {
 
 
   async SaveData() {
-
+    
     this.isSubmitted = true;
     if(!(this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon)) {
+      if(this.staffDetailsFormData.RoleID === EnumRole.Examiner || this.staffDetailsFormData.RoleID === EnumRole.Examiner_NonEng 
+        ||this.sSOLoginDataModel.RoleID === EnumRole.Examiner || this.sSOLoginDataModel.RoleID === EnumRole.Examiner_NonEng) {
+        if (!this.staffDetailsFormData.VendorID || this.staffDetailsFormData.VendorID.trim() === '') {
+          this.toastr.error("Vendor ID is required for Examiner role.");
+          return;
+        }
+      }
       if (this.staffDetailsFormData.DateOfAppointment) {
         const dob = new Date(this.staffDetailsFormData.DateOfBirth);
         const doa = new Date(this.staffDetailsFormData.DateOfAppointment);
@@ -1102,7 +1121,7 @@ export class AddStaffMasterComponent implements OnInit {
       this.staffDetailsFormData.PanCardNumber = this.encryptionService.encryptData(this.staffDetailsFormData.PanCardNumber);
       this.staffDetailsFormData.AdharCardNumber = this.encryptionService.encryptData(this.staffDetailsFormData.AdharCardNumber);
 
-      
+
       await this.staffMasterService.SaveStaffDetails(this.staffDetailsFormData)
         .then((data: any) => {
           this.State = data['State'];
@@ -1513,6 +1532,7 @@ export class AddStaffMasterComponent implements OnInit {
     this.StaffMasterFormGroup.get('txtIFSCCode')?.clearValidators();
     this.StaffMasterFormGroup.get('UGQualificationID')?.clearValidators();
     this.StaffMasterFormGroup.get('PHDQualification')?.clearValidators();
+    this.StaffMasterFormGroup.get('txtVendorID')?.clearValidators();
 
     this.StaffMasterFormGroup.get('txtAdharCardNumber')?.updateValueAndValidity();
     this.StaffMasterFormGroup.get('txtPanCardNumber')?.updateValueAndValidity();
@@ -1533,6 +1553,7 @@ export class AddStaffMasterComponent implements OnInit {
     this.StaffMasterFormGroup.get('txtIFSCCode')?.updateValueAndValidity();
     this.StaffMasterFormGroup.get('UGQualificationID')?.updateValueAndValidity();
     this.StaffMasterFormGroup.get('PHDQualification')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('txtVendorID')?.updateValueAndValidity();
   }
 
 }

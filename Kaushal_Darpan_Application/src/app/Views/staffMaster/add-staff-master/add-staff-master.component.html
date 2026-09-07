@@ -553,6 +553,18 @@
             </div>
           </div>
         </div>
+
+         <div  *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Examiner || sSOLoginDataModel.RoleID==_EnumRole.Examiner_NonEng">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Vendor ID <span class="StarMarking">*</span></label>
+          <input autocomplete="off" type="text" class="form-input" id="VendorID" placeholder="Enter Applicant Vendor ID" formControlName="txtVendorID" [(ngModel)]="staffDetailsFormData.VendorID" maxlength="40">
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.txtVendorID.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.txtVendorID.errors.required">
+              <i aria-hidden="true"></i>
+              This field is required .!
+            </p>
+          </div>
+        </div>
+
       </div>
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
         <b class="text-1xl-5"><i class="ti ti-plus"></i> Joining Details</b>

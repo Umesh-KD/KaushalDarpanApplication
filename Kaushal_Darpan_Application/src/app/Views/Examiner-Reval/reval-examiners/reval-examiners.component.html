@@ -120,6 +120,9 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="ExaminersList && ExaminersList?.length > 0">
+        <i class="ti ti-excel"></i> Export Excel
+      </a>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
@@ -144,12 +147,22 @@
           <tr>
             <th class="text-left">Sr No</th>
             <!--<th class="text-left">Exam Name</th>-->
-            <th class="text-left">SSOID</th>
-            <th class="text-left">Group Code</th>
-            <th class="text-left">Teacher Name</th>
-            <th class="text-left">Email</th>
-            <th class="text-left">Subject</th>
-            <th class="text-center">Action</th>
+            <th class="text-left cursorHand"  title="Click to sorting" (click)="sortInTableData('SSOID')">SSOID
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='SSOID'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand"  title="Click to sorting" (click)="sortInTableData('Code')">Group Code
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Code'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand"  title="Click to sorting" (click)="sortInTableData('Name')">Teacher Name
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Name'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand"  title="Click to sorting" (click)="sortInTableData('Email')">Email
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Email'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand"  title="Click to sorting" (click)="sortInTableData('SubjectCode')">Subject
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='SubjectCode'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-center cursorHand"  title="Click to sorting" (click)="sortInTableData('SSOID')">Action</th>
 
           </tr>
 
