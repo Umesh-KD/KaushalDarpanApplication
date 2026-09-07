@@ -365,7 +365,7 @@ export class EMPrincipleStaffComponent {
   }
 
   async GetBudgetList() {
-    debugger;  
+     ;  
     try {
       this.loaderService.requestStarted();
 
@@ -386,7 +386,7 @@ export class EMPrincipleStaffComponent {
     }
   }
   async refreshValidators() {
-    debugger
+     
     if(this.approveRequest.IsEmpWorkingOnDeputationFromOther == false) {
       this.StaffMasterFormGroup.get('EmpInstituteID')?.removeValidators([DropdownValidators]);
     }
@@ -452,7 +452,7 @@ export class EMPrincipleStaffComponent {
 
 
   async GetHostelData() {
-    debugger
+     
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetHostelDDL(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
@@ -550,7 +550,7 @@ async GetTechnicianDll() {
   }
 
   async StaffLevelChild() {
-    debugger
+     
     this.formData.StaffLevelChildID = 0;
     // this.AddValidationStaffLevelNon();
     this.formData.Show_StaffLevelChild = true;
@@ -561,7 +561,7 @@ async GetTechnicianDll() {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     try {
       this.loaderService.requestStarted();
-      debugger
+       
       await this.StaffMasterService.StaffLevelChild(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -773,7 +773,7 @@ async GetTechnicianDll() {
   }
 
   async GetChangeTechcian() {
-    debugger
+     
     if (this.formData.StaffTypeID == this._BTERGovtEM_EnumStaffType.Teaching && this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.LabIncharge) {
       this.AddStaffBasicDetailFromGroup.controls['Technician'].setValidators([DropdownValidators]);
     } else {
@@ -858,7 +858,7 @@ async GetTechnicianDll() {
   }
 
   async OnFormSubmit() {
-    // debugger
+    //  
     if(this.sSOLoginDataModel.RoleID != 7) {
       this.AddStaffBasicDetailFromGroup.get('InstituteID')?.removeValidators([DropdownValidators]);
       this.AddStaffBasicDetailFromGroup.get('InstituteID')?.updateValueAndValidity();
@@ -1081,7 +1081,7 @@ async GetTechnicianDll() {
   }
 
   async getStreamMasterData() {
-    debugger;
+     ;
     try {
       this.StreamSearch.InstituteID = this.sSOLoginDataModel.InstituteID
       this.StreamSearch.StreamType = this.sSOLoginDataModel.Eng_NonEng
@@ -1105,7 +1105,7 @@ async GetTechnicianDll() {
   }
 
   async getBranchesInstituteIDWise() {
-    debugger;
+     ;
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.Stream_InstituteIdWise(this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.Eng_NonEng,this.sSOLoginDataModel.EndTermID,this.sSOLoginDataModel.InstituteID,this.sSOLoginDataModel.FinancialYearID).then((data: any) =>
@@ -1128,7 +1128,7 @@ async GetTechnicianDll() {
 
   async getInstituteBranchDDL() {
     try {
-      debugger
+       
       const request: any = {};
       request.OfficeID = this.formData.OfficeID;
       request.StaffTypeID = this.formData.StaffTypeID;
@@ -1175,7 +1175,7 @@ async GetTechnicianDll() {
 
   async GetPersonalDetailByUserID(StaffUserID: any, SSOID: any) {
     try {
-      debugger
+       
       this.loaderService.requestStarted();
       this.requestUser.SSOID = SSOID;
       this.requestUser.StaffUserID = StaffUserID;
@@ -1246,7 +1246,7 @@ async GetTechnicianDll() {
   }
 
   async openModal_ApproveStaffProfile(content: any, StaffUserID: number, SSOID: any, type: boolean) {
-    debugger
+     
     this.IsView = type;
 
     
@@ -1267,7 +1267,7 @@ async GetTechnicianDll() {
   // Retirement Code start 
   // Retirement code start
    async openModal_RetirementStaff(content: any,row:any) {
-    debugger
+     
 
     if (this.approveRequest.ProfileStatusID == EnumEMProfileStatus.Approve) {
       this.isApprove = true;
@@ -1327,7 +1327,7 @@ async GetTechnicianDll() {
           // upload to server folder
           this.loaderService.requestStarted();
           const uploadModel = new UploadFileModel();
-          debugger
+           
           // uploadModel.FolderName = "RetirementOrders";
   
           await this.commonMasterService.UploadDocument(this.retirementOrderFile)
@@ -1374,7 +1374,7 @@ async GetTechnicianDll() {
   
   async SaveRetirementAction() {
     try {     
-      debugger   
+          
       if(this.RetirementProcessModel.RetirementRemarks == null || this.RetirementProcessModel.RetirementRemarks == undefined || this.RetirementProcessModel.RetirementRemarks == ""                
       ) 
       {
@@ -1428,7 +1428,7 @@ async GetTechnicianDll() {
 
 
 async GetCategroyData() {
-  debugger;
+   ;
   try {
     this.loaderService.requestStarted();
     await this.commonMasterService.DDL_AllCasteCategoryA()
@@ -1548,7 +1548,7 @@ async GetCategroyData() {
   }
 
   async onUserProfileStatusHistorylist(model: any, StaffUserID: number) {
-    debugger
+     
     try {
       this.loaderService.requestStarted();
       this.searchRequestUserProfileStatus.StaffUserID = StaffUserID;
@@ -1763,7 +1763,7 @@ async GetCategroyData() {
 
 
   onEmpWorkingChange(value: boolean) {
-    debugger;
+     ;
     this.approveRequest.IsEmpWorkingOnPost = value;
 
     if (value === true) {
@@ -1776,7 +1776,7 @@ async GetCategroyData() {
   }
 
   onSalaryDrawnChange(value: boolean) {
-    debugger;
+     ;
     this.approveRequest.IsSalaryDrawnFromSamePost = value;
 
     if (value === true) {
@@ -1789,7 +1789,7 @@ async GetCategroyData() {
   }
 
   WorkAccordingonSalaryDrawnChange(value: boolean) {
-    debugger;
+     ;
     /*this.approveRequest.IsSalaryDrawnFromSamePost = value;*/
 
     if (value === true) {
@@ -1805,7 +1805,7 @@ async GetCategroyData() {
   }
 
   async openModal_ApproveStaffProfileOterFaculty(content: any, StaffUserID: number, SSOID: any, type: boolean) {
-    debugger
+     
     this.IsView = type;
     await this.GetPersonalDetailByUserID(StaffUserID, SSOID);
 
@@ -1819,7 +1819,7 @@ async GetCategroyData() {
   }
 
   async ApproveStaffProfileOterFaculty() {
-    debugger
+     
     
     this.isApproveSubmitted = true;
 
@@ -1866,7 +1866,7 @@ async GetCategroyData() {
   }
 
   async OpenStaffProfileViewModal(StaffID: number, UserID: number) {
-    //debugger
+    // 
     this.childComponentViewStaffProfile.StaffID = StaffID;
     this.childComponentViewStaffProfile.UserID = UserID;
     await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
@@ -1982,7 +1982,7 @@ async GetCategroyData() {
 
   async SaveData_AssignRole() {
     try {
-      debugger
+       
       var editChild = this.RoleMasterList.filter((x: { Marked: boolean; }) => x.Marked == true);
       var isMainRole = this.RoleMasterList.filter((x: { IsMainRole: boolean; }) => x.IsMainRole == true);
 

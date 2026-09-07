@@ -619,7 +619,7 @@ export class AddCollegeMasterComponent implements OnInit {
   get form() { return this.instituteForm.controls; }
 
   async saveData(withPayment: boolean = false): Promise<boolean | void> {
-    //debugger;
+    debugger;
 
     // Default Capacity to 0 if empty
     if (this.request.Capacity?.toString() === "") {
@@ -671,7 +671,12 @@ export class AddCollegeMasterComponent implements OnInit {
           this.toastr.success(this.Message);
           this.routers.navigate(['/collegemaster']);
         }
-      } else {
+        else if (this.collegeRequest.InstituteID == 0) {
+          this.toastr.success(this.Message);
+          this.routers.navigate(['/collegemaster']);
+        } 
+      }
+       else {
         this.toastr.error(this.ErrorMessage);
         return false;
       }

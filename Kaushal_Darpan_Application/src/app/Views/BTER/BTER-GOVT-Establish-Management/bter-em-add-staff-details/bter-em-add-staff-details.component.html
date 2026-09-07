@@ -20,9 +20,7 @@
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
-        <!--{{request.OfficeID}}-->
-        <!--{{request.OfficeID}}
-  {{request.IsNodal|json}}-->
+
         <div *ngIf="this.IsGuestHouse != true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span
               class="StarMarking">*</span></label>
@@ -280,6 +278,38 @@
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfJoining.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DateOfJoining.errors.required">
               <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="request.ISNonGazetted == 1">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name Of Service <span class="StarMarking">*</span></label>
+          <select class="form-select" 
+            [(ngModel)]="request.PostServiceTypeID" 
+            formControlName="PostServiceTypeID"
+            (change)="getChildPostServiceTypeDDL()">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PostServiceTypeDDL" [value]="item.PostServiceTypeID">{{item.PostServiceTypeName}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.PostServiceTypeID.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.PostServiceTypeID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+        <div *ngIf="request.PostServiceTypeID == _EnumPostServiceType_BTER.Other_Department_Services && request.ISNonGazetted == 1">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> If Other Department Services <span class="StarMarking">*</span></label>
+          <select class="form-select" 
+            [(ngModel)]="request.ChildPostServiceTypeID" 
+            formControlName="ChildPostServiceTypeID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of ChildPostServiceTypeDDL" [value]="item.PostServiceTypeID">{{item.PostServiceTypeName}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.ChildPostServiceTypeID.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.ChildPostServiceTypeID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
             </p>
           </div>
         </div>
@@ -1698,7 +1728,7 @@
     </form>
     <div class="flex justify-center flex-wrap items-centermt-3">
       <div>
-        <button *ngIf="[0, 288, 249, 10388].includes(request.ProfileStatusID) && request.IsAdmin != 1"
+        <button *ngIf="[0, 288, 249, 10388, 2].includes(request.ProfileStatusID) && request.IsAdmin != 1"
           class="btn bg-success text-white mt-3" type="button" (click)="SaveData(1)">
           Save as Draft
         </button>

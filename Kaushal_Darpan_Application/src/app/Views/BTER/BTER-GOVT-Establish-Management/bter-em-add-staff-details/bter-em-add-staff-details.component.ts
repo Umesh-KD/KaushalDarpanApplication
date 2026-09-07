@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
-import { EnumEMProfileStatus, EnumDepartment, EnumStatus, GlobalConstants, EnumRole, EnumOffice } from '../../../../Common/GlobalConstants';
+import { EnumEMProfileStatus, EnumDepartment, EnumStatus, GlobalConstants, EnumRole, EnumOffice, EnumPostServiceType_BTER } from '../../../../Common/GlobalConstants';
 import { BTER_DesignationWiseBranchDataModel, BTER_EM_AddServiceHistoryDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_DocumentServiceHistoryDataModel, BTER_EM_GetPersonalDetailByUserID, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, Bter_RequestUpdateStatus, BTERGovtEMStaff_ServiceDetailsOfPersonalModel, StaffCareerAdvancementDataModel, StaffQualificationDataModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
@@ -72,8 +72,11 @@ export class BterEMAddStaffDetailsComponent {
   public StaffCareerAdvancementSchemeData: any = [];
   public PayLevelDDLList: any = [];
   public QualificationDivisionList: any = [];
+  public ChildPostServiceTypeDDL: any = [];
+  public PostServiceTypeDDL: any = [];
 
   public _EnumEMProfileStatus = EnumEMProfileStatus;
+  public _EnumPostServiceType_BTER = EnumPostServiceType_BTER;
 
   isSubmitted: boolean = false;
   public ShowAllSemester: number = 0;
@@ -159,6 +162,8 @@ export class BterEMAddStaffDetailsComponent {
       DistrictID: ['', [DropdownValidators]],
       Address: ['', [Validators.required]],
       Pincode: ['', [Validators.required]],
+      PostServiceTypeID: [''],
+      ChildPostServiceTypeID: [''],
     });
 
     this.AddsubjectFormGroup = this.formBuilder.group({
@@ -537,10 +542,17 @@ export class BterEMAddStaffDetailsComponent {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
           this.request = data.Data[0];
+          const ChildPostServiceTypeID_Local = data.Data[0].ChildPostServiceTypeID;
+          const PostServiceTypeID_Local = data.Data[0].PostServiceTypeID;
           await this.DistrictMaster_StateIDWise();
-          console.log(this.request.DateOfBirth);
-          console.log(this.StaffMasterFormGroup.get('DateOfBirth')?.value);
-          /*this.staffDetailsFormData.StaffSubjectListModel = request.*/
+          if(this.request.ISNonGazetted == 1) {
+            await this.getPostServiceTypeDDL();
+          } 
+          this.request.PostServiceTypeID = PostServiceTypeID_Local;
+          if(this.request.ISNonGazetted == 1 && this.request.PostServiceTypeID == EnumPostServiceType_BTER.Other_Department_Services) {
+            await this.getChildPostServiceTypeDDL();
+          }
+          this.request.ChildPostServiceTypeID = ChildPostServiceTypeID_Local;
           console.log("GetPersonalDetailByUserID", this.request);
           await this.getStaffQualificationData();
           await this.GetStaffCareerAdvancementSchemeData();
@@ -2660,6 +2672,61 @@ async EditServiceHistory(row: any, index: number) {
       return null;
     }
     return this.request.DepartmentJoiningDate;
+  }
+
+  async getPostServiceTypeDDL() {
+    debugger;
+    try {
+      this.PostServiceTypeDDL = [];
+      this.request.PostServiceTypeID = 0;
+
+      const request: any = {};
+      request.StaffTypeID = this.request.StaffTypeID;
+      // request.DesignationID = this.request.DesignationID;
+      request.OfficeID = this.request.OfficeID;  // static passing because we are using this only for institute level
+      request.InstituteID = this.request.InstituteID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+
+      request.Action = "GetPostServiceType";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.PostServiceTypeDDL = data['Data'] || [];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getChildPostServiceTypeDDL() {
+    if(this.request.PostServiceTypeID != EnumPostServiceType_BTER.Other_Department_Services){
+      this.ChildPostServiceTypeDDL = [];
+      this.request.ChildPostServiceTypeID = 0;
+      return;
+    } 
+    else {
+      try {
+        this.ChildPostServiceTypeDDL = [];
+        this.request.ChildPostServiceTypeID = 0;
+
+        const request: any = {};
+        request.OfficeID = this.request.OfficeID;  // static passing because we are using this only for institute level
+        request.StaffTypeID = this.request.StaffTypeID;
+        request.InstituteID = this.request.InstituteID;
+        request.RoleID = this.sSOLoginDataModel.RoleID;
+        request.UserID = this.sSOLoginDataModel.UserID;
+        // request.DesignationID = this.request.DesignationID;
+        request.PostServiceTypeID = this.request.PostServiceTypeID;
+        request.Action = "GetChildPostServiceType";
+        await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ChildPostServiceTypeDDL = data['Data'] || [];
+        })
+
+      } catch (error) {
+        console.error(error);
+      }
+    }    
   }
 }
 

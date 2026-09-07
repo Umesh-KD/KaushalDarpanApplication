@@ -220,6 +220,8 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public PostServiceTypeName: string = '';
   public StaffPostTypeID: number = 0;
   public OtherDepartmentStaff: number = 0;
+  public PostServiceTypeID: number = 0;
+  public ChildPostServiceTypeID: number = 0;
 }
 
 
