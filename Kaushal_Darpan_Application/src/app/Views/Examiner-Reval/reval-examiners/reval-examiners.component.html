@@ -168,7 +168,7 @@
 
         </thead>
         <tbody>
-          <tr *ngFor="let examiner of ExaminersList | tableSearchFilter:Table_SearchText;let idx=index;">
+          <tr *ngFor="let examiner of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
             <td align="left">{{idx+1}}</td>
             <!--<td>{{examiner.ExamName}}</td>-->
             <td>{{examiner.SSOID}}</td>
