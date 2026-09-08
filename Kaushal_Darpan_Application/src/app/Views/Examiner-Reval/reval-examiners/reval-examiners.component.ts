@@ -228,7 +228,7 @@ export class RevalExaminersComponent implements OnInit {
         String(now.getMinutes()).padStart(2, '0') +
         String(now.getSeconds()).padStart(2, '0');
   
-      const fileName = `ExaminerList_${date}_${time}.xlsx`;
+      const fileName = `Reval_ExaminerList_${date}_${time}.xlsx`;
   
       XLSX.writeFile(wb, fileName);
     }
