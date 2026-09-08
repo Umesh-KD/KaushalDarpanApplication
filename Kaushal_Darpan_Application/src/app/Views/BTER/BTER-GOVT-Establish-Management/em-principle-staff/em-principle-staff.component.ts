@@ -1013,6 +1013,7 @@ async GetTechnicianDll() {
     this.searchRequest.FilterStaffTypeID = 0;
     this.searchRequest.FilterSSOID = "";
     this.searchRequest.FilterName = "";
+    this.searchRequest = new BTER_EM_StaffMasterSearchModel();
     await this.GetAllData();
   }
 
