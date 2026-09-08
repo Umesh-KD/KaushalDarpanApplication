@@ -1042,6 +1042,7 @@ export class AddStaffMasterComponent implements OnInit {
           return;
         }
       }
+      this.StaffMasterFormGroup.markAllAsTouched();
       if(this.staffDetailsFormData.PanCardNumber=="" || this.staffDetailsFormData.PanCardNumber==null) {
         // this.StaffMasterFormGroup.get('txtPanCardNumber')?.setValidators([Validators.required]);
         const control = this.StaffMasterFormGroup.get('txtPanCardNumber');
