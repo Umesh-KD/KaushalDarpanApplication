@@ -771,7 +771,7 @@ export class AddStaffMasterComponent implements OnInit {
           } else {
             this.staffDetailsFormData.Dis_Certificate = ''
           }
-    
+          debugger
           this.staffDetailsFormData.PanCardNumber = data['Data']["PanCardNumber"];
         
           this.staffDetailsFormData.DateOfBirth = this.dateSetter(data['Data']['DateOfBirth'])
@@ -1042,6 +1042,13 @@ export class AddStaffMasterComponent implements OnInit {
           return;
         }
       }
+      if(this.staffDetailsFormData.PanCardNumber=="" || this.staffDetailsFormData.PanCardNumber==null) {
+        // this.StaffMasterFormGroup.get('txtPanCardNumber')?.setValidators([Validators.required]);
+        const control = this.StaffMasterFormGroup.get('txtPanCardNumber');
+        control?.markAsTouched();  
+        this.toastr.error("Pan Card Number is required.");
+        return;
+      }
       if (this.staffDetailsFormData.DateOfAppointment) {
         const dob = new Date(this.staffDetailsFormData.DateOfBirth);
         const doa = new Date(this.staffDetailsFormData.DateOfAppointment);
@@ -1090,13 +1097,10 @@ export class AddStaffMasterComponent implements OnInit {
     }
 
     
-   
-
     if (this.StaffMasterFormGroup.invalid) {
-      this.toastr.error("invalid form values");
+      this.toastr.error("Please fill all required fields correctly.");
       Object.keys(this.StaffMasterFormGroup.controls).forEach(key => {
           const control = this.StaffMasterFormGroup.get(key);
-
           if (control && control.invalid) {
             console.log(`Control ${key} is invalid`);
             Object.keys(control.errors!).forEach(errorKey => {
