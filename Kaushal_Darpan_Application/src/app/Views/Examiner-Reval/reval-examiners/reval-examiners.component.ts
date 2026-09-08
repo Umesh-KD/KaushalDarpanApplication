@@ -207,7 +207,7 @@ export class RevalExaminersComponent implements OnInit {
         'Branch': row.StreamName,
         'Email': row.Email,
         'Subject': `${row.SubjectCode} (${row.SubjectName})`,
-        'Regiatred Students': row.TotalRegStudent
+        'Registered Students': row.TotalRegStudent
       }));
   
       const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
