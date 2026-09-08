@@ -803,7 +803,9 @@ export class AddStaffMasterComponent implements OnInit {
 
           })
 
-
+          if(this.staffDetailsFormData.IFSCCode != null && this.staffDetailsFormData.IFSCCode != '') {
+            this.staffDetailsFormData.IFSCCode = this.staffDetailsFormData.IFSCCode.toUpperCase();
+          }
          
 
   
@@ -1027,6 +1029,10 @@ export class AddStaffMasterComponent implements OnInit {
 
   async SaveData() {
     
+    debugger
+    if(this.staffDetailsFormData.IFSCCode){
+        this.staffDetailsFormData.IFSCCode = this.staffDetailsFormData.IFSCCode?.toUpperCase();
+    }
     this.isSubmitted = true;
     if(!(this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon)) {
       if(this.staffDetailsFormData.RoleID === EnumRole.Examiner || this.staffDetailsFormData.RoleID === EnumRole.Examiner_NonEng 
@@ -1083,11 +1089,14 @@ export class AddStaffMasterComponent implements OnInit {
       await this.removeValidation();
     }
 
+    
+   
+
     if (this.StaffMasterFormGroup.invalid) {
       this.toastr.error("invalid form values");
       Object.keys(this.StaffMasterFormGroup.controls).forEach(key => {
           const control = this.StaffMasterFormGroup.get(key);
- 
+
           if (control && control.invalid) {
             console.log(`Control ${key} is invalid`);
             Object.keys(control.errors!).forEach(errorKey => {
@@ -1121,6 +1130,7 @@ export class AddStaffMasterComponent implements OnInit {
       this.staffDetailsFormData.PanCardNumber = this.encryptionService.encryptData(this.staffDetailsFormData.PanCardNumber);
       this.staffDetailsFormData.AdharCardNumber = this.encryptionService.encryptData(this.staffDetailsFormData.AdharCardNumber);
 
+      // this.staffDetailsFormData.IFSCCode = this.staffDetailsFormData.IFSCCode?.toUpperCase();
 
       await this.staffMasterService.SaveStaffDetails(this.staffDetailsFormData)
         .then((data: any) => {
