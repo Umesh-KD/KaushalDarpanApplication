@@ -59,6 +59,7 @@ export class CopyCheckerDashboardComponent {
     }
 
     await this.CheckProfileStatus();
+
       if (this.StaffMasterList.length > 0) {
         let status = this.StaffMasterList[0].ProfileStatus;
         if (status == this._EnumEMProfileStatus.Pending || status == this._EnumEMProfileStatus.Completed || status == this._EnumEMProfileStatus.Revert) {
@@ -68,7 +69,17 @@ export class CopyCheckerDashboardComponent {
             }
           }, 'OK', false);
         }
+
+        let VendorID = this.StaffMasterList[0].VendorID??'';
+        if (VendorID == null || VendorID == '') {
+          this.sweetAlert2.Confirmation("Please Update Your Vendor ID", async (result: any) => {
+            if(this.sSOLoginDataModel.DepartmentID == 1) {              
+              window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self")
+            }
+          }, 'OK', false);
+        }
       }
+      
   }
   
   async GetCopyCheckerDashData() {
@@ -110,7 +121,7 @@ export class CopyCheckerDashboardComponent {
       this.searchReq.SSOID = this.sSOLoginDataModel.SSOID;
       this.searchReq.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchReq.CourseTypeId = this.sSOLoginDataModel.Eng_NonEng;
-
+      debugger
       await this.staffMasterService.GetAllData(this.searchReq)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

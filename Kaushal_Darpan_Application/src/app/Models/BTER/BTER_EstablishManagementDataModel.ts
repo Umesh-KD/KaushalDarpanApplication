@@ -216,6 +216,12 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public BterServiceHistoryListModel:BTER_EM_AddServiceHistoryDataModel[]=[];
 
   public IsAdmin: number = 0;
+  public ISNonGazetted: number = 0;
+  public PostServiceTypeName: string = '';
+  public StaffPostTypeID: number = 0;
+  public OtherDepartmentStaff: number = 0;
+  public PostServiceTypeID: number = 0;
+  public ChildPostServiceTypeID: number = 0;
 }
 
 
@@ -252,6 +258,7 @@ export class BTER_EM_AddServiceHistoryDataModel extends RequestBaseModel {
   public TransferToOfficeName:string=''
   public DateOfTransfer:string=''
   public ServiceBranchName:string=''
+  public TransferTime:string=''
 
   // Promotion
   public IsPromotion:boolean=false;
@@ -260,6 +267,7 @@ export class BTER_EM_AddServiceHistoryDataModel extends RequestBaseModel {
   public DateOfpromotion: string='';
   public ToBranchNamePromotion: string='';
   public ToBranchIDPromotion: number = 0;
+  public PromotionTime: string='';
 
    // Multiple Documents
    public TransferDocuments: BTER_EM_DocumentServiceHistoryDataModel[] = []
