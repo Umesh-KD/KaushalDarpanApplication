@@ -14,6 +14,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import { CommonDDLCommonSubjectModel } from '../../../Models/CommonDDLCommonSubjectModel';
 import { CommonDDLSubjectMasterModel } from '../../../Models/CommonDDLSubjectMasterModel';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-reval-examiners',
@@ -40,6 +41,18 @@ export class RevalExaminersComponent implements OnInit {
   public commonDDLCommonSubjectModel = new CommonDDLCommonSubjectModel();
   public CommonSubjectYesNo: number = 1;
   public CommonSubjectDDLList: any[] = [];
+
+
+  public paginatedInTableData: any[] = [];//copy of main data
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "50";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -178,6 +191,48 @@ export class RevalExaminersComponent implements OnInit {
     }
   }
 
+    exportToExcel(): void {
+  
+      // set column
+      const exportData = this.ExaminersList?.map((row: any, index: number) => ({
+        'Sr No': index + 1,
+        'Semester': row.SemesterName,
+        'Scheme': row.Scheme,
+        'Group Code': row.Code,
+        'SSOID': row.SSOID,
+        'Teacher Name': row.Name,
+        'Mobile': row.MobileNumber,
+        'College Name': row.InstituteName,
+        'Examiner Code': row.ExaminerCode,
+        'Branch': row.StreamName,
+        'Email': row.Email,
+        'Subject': `${row.SubjectCode} (${row.SubjectName})`,
+        'Registered Students': row.TotalRegStudent
+      }));
+  
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  
+      XLSX.utils.book_append_sheet(wb, ws, 'Examiner List');
+  
+      // Current Date & Time (DDMMYYYY_HHMMSS)
+      const now = new Date();
+  
+      const date =
+        String(now.getDate()).padStart(2, '0') +
+        String(now.getMonth() + 1).padStart(2, '0') +
+        now.getFullYear();
+  
+      const time =
+        String(now.getHours()).padStart(2, '0') +
+        String(now.getMinutes()).padStart(2, '0') +
+        String(now.getSeconds()).padStart(2, '0');
+  
+      const fileName = `Reval_ExaminerList_${date}_${time}.xlsx`;
+  
+      XLSX.writeFile(wb, fileName);
+    }
+  
   async getExaminerData() {
     //console.log("searchRequest", this.searchRequest);
     this.searchRequest.CommonSubjectYesNo = this.CommonSubjectYesNo;
@@ -189,6 +244,7 @@ export class RevalExaminersComponent implements OnInit {
       await this.examinerservice.GetExaminerData_Reval(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ExaminersList = data.Data;
+        this.loadInTable();
         //console.log("this.ExaminersList", this.ExaminersList)
       })
     } catch (error) {
@@ -196,6 +252,8 @@ export class RevalExaminersComponent implements OnInit {
     } 
   }
 
+
+  
   async btnDelete_OnClick(ExaminerID: number) {
     this.Swal2.Confirmation("Are you sure you want to Remove this ?",
       async (result: any) => {
@@ -314,4 +372,84 @@ export class RevalExaminersComponent implements OnInit {
       console.log(ex);
     }
   }
+
+  
+  //table feature 
+  calculateInTableTotalPage() {
+    this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
+  }
+  // (replace org. list here)
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.ExaminersList].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+  nextInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+  randamInTablePage() {
+    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
+      this.currentInTablePage = 1;
+    }
+    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.updateInTablePaginatedData();
+    }
+  }
+  // (replace org. list here)
+  async sortInTableData(field: string) {
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.ExaminersList] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
+  }
+  //main
+  loadInTable() {
+    this.resetInTableValiable();
+    this.calculateInTableTotalPage();
+    this.updateInTablePaginatedData();
+  }
+  // (replace org. list here)
+  resetInTableValiable() {
+    this.paginatedInTableData = [];//copy of main data
+    this.currentInTablePage = 1;
+    this.totalInTablePage = 0;
+    this.sortInTableColumn = '';
+    this.sortInTableDirection = 'asc';
+    this.startInTableIndex = 0;
+    this.endInTableIndex = 0;
+    this.totalInTableRecord = this.ExaminersList.length;
+  }
+
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
+
 }

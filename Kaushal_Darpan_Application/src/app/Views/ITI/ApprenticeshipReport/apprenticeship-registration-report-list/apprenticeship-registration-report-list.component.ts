@@ -307,7 +307,11 @@ export class ApprenticeshipRegistrationReportList {
   }
 
   async Reset() {
-
+    this.DistrictID = 0
+    this.ZoneID = 0
+    this.TypeID = 0
+    this.FinancialYearID = 0
+    this.GetReportAllData()
   }
 
   async GetDistrictMatserDDL() {
@@ -463,6 +467,55 @@ export class ApprenticeshipRegistrationReportList {
 
   formatWithBreak(value: string): string {
     return value ? value.replace(/,\s*/g, '<br>') : '';
+  }
+
+
+
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+  sortTable(column: string, type: 'string' | 'number' | 'date' = 'string') {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    const dir = this.sortDirection === 'asc' ? 1 : -1;
+
+    this.DataList.sort((a: any, b: any) => {
+      let valA = a[column];
+      let valB = b[column];
+
+      if (type === 'date') {
+        const parseDate = (val: string) => {
+          if (!val) return 0;
+          const parts = val.split(/[\/\-]/);
+          if (parts.length === 3) {
+            // assumes dd/mm/yyyy — adjust if your DB format differs
+            return new Date(+parts[2], +parts[1] - 1, +parts[0]).getTime();
+          }
+          return new Date(val).getTime();
+        };
+        valA = parseDate(valA);
+        valB = parseDate(valB);
+        return (valA - valB) * dir;
+      }
+
+      if (type === 'number') {
+        valA = parseFloat(valA) || 0;
+        valB = parseFloat(valB) || 0;
+        return (valA - valB) * dir;
+      }
+
+      // string compare
+      valA = (valA || '').toString().toLowerCase();
+      valB = (valB || '').toString().toLowerCase();
+      if (valA < valB) return -1 * dir;
+      if (valA > valB) return 1 * dir;
+      return 0;
+    });
   }
 
 }

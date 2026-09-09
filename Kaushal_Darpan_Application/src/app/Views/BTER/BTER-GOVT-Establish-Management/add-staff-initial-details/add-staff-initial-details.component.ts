@@ -7,7 +7,7 @@ import { DropdownValidators } from '../../../../Services/CustomValidators/custom
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { ITI_Govt_EM_NodalSearchDataModel, ITI_Govt_EM_RoleOfficeMapping_GetAllDataSearchDataModel } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
 import { ITIGovtEMStaffMaster } from '../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
-import { EnumStatus, EnumRole, EnumOffice } from '../../../../Common/GlobalConstants';
+import { EnumStatus, EnumRole, EnumOffice, EnumPostServiceType_BTER } from '../../../../Common/GlobalConstants';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
 import { Router } from '@angular/router';
@@ -52,6 +52,8 @@ export class AddStaffInitialDetailsComponent {
   public PostBudgetHeadList: any = [];
   public PostForBranchDropdown: any = []
   public BranchMasterDDL_PostWise: any = []
+  public PostServiceTypeDDL: any = []
+  public ChildPostServiceTypeDDL: any = []
 
   public GetDesignationID: number = 0;
   public State: number = 0;
@@ -62,6 +64,8 @@ export class AddStaffInitialDetailsComponent {
   public isPostForBranchAvailable: boolean = false;
 
   public _EnumOffice = EnumOffice;
+  public _EnumPostServiceType_BTER = EnumPostServiceType_BTER;
+  public IsNonGazetted: boolean = false;
 
   constructor(
     private loaderService: LoaderService,
@@ -91,8 +95,9 @@ export class AddStaffInitialDetailsComponent {
       Office: ['', [DropdownValidators]],
       BranchID: [''],
       BugetHeadID: [''],
-      // BugetHeadTypeID:[0]
-
+      PostServiceTypeID: [''],
+      ChildPostServiceTypeID: [''],
+      
     })
 
     this.settingsMultiselect = {
@@ -480,7 +485,12 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async getBudgetHeadPostWise() {
+    await this.GetIsNonGazettedPost();
     await this.getBranchMasterDDL_PostWise();
+    if(this.IsNonGazetted){
+      await this.getPostServiceTypeDDL();
+    }
+
     try {
       const request: any = {};
       request.OfficeID = this.formData.OfficeID;
@@ -489,6 +499,11 @@ export class AddStaffInitialDetailsComponent {
       request.InstituteID = this.formData.InstituteID;
       request.RoleID = this.sSOLoginDataModel.RoleID;
       request.UserID = this.sSOLoginDataModel.UserID;
+      if(this.formData.PostServiceTypeID != EnumPostServiceType_BTER.Other_Department_Services){
+        request.PostServiceTypeID = this.formData.PostServiceTypeID;
+      } else {
+        request.PostServiceTypeID = this.formData.ChildPostServiceTypeID;
+      }
       request.Action = "GetBudgetHead_PostWise";
 
       await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
@@ -737,6 +752,21 @@ export class AddStaffInitialDetailsComponent {
     }
 
     this.AddStaffBasicDetailFromGroup.controls['BranchID'].updateValueAndValidity();
+
+    if(this.IsNonGazetted){
+      this.AddStaffBasicDetailFromGroup.controls['PostServiceTypeID'].setValidators([DropdownValidators]);
+      if(this.formData.PostServiceTypeID == EnumPostServiceType_BTER.Other_Department_Services){
+        this.AddStaffBasicDetailFromGroup.controls['ChildPostServiceTypeID'].setValidators([DropdownValidators]);
+      } else {
+        this.AddStaffBasicDetailFromGroup.controls['ChildPostServiceTypeID'].clearValidators();
+      }
+    } else {
+      this.AddStaffBasicDetailFromGroup.controls['PostServiceTypeID'].clearValidators();
+      this.AddStaffBasicDetailFromGroup.controls['ChildPostServiceTypeID'].clearValidators();
+    }
+    
+    this.AddStaffBasicDetailFromGroup.controls['PostServiceTypeID'].updateValueAndValidity();
+    this.AddStaffBasicDetailFromGroup.controls['ChildPostServiceTypeID'].updateValueAndValidity();
   }
 
   async SaveData() {
@@ -942,6 +972,9 @@ export class AddStaffInitialDetailsComponent {
 
   async getBranchMasterDDL_PostWise() {
     try {
+      this.BranchMasterDDL_PostWise = [];
+      this.formData.BranchID = 0;
+
       const request: any = {};
       request.OfficeID = this.formData.OfficeID;
       request.StaffTypeID = this.formData.StaffTypeID;
@@ -957,6 +990,77 @@ export class AddStaffInitialDetailsComponent {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async getPostServiceTypeDDL() {
+    try {
+      this.PostServiceTypeDDL = [];
+      this.formData.PostServiceTypeID = 0;
+
+      const request: any = {};
+      request.OfficeID = this.formData.OfficeID;
+      request.StaffTypeID = this.formData.StaffTypeID;
+      request.InstituteID = this.formData.InstituteID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.DesignationID = this.formData.PostID;
+      request.Action = "GetPostServiceType";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.PostServiceTypeDDL = data['Data'] || [];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getChildPostServiceTypeDDL() {
+    if(this.formData.PostServiceTypeID != EnumPostServiceType_BTER.Other_Department_Services){
+      this.ChildPostServiceTypeDDL = [];
+      this.formData.ChildPostServiceTypeID = 0;
+      return;
+    } 
+    else {
+      try {
+        this.ChildPostServiceTypeDDL = [];
+        this.formData.ChildPostServiceTypeID = 0;
+
+        const request: any = {};
+        request.OfficeID = this.formData.OfficeID;
+        request.StaffTypeID = this.formData.StaffTypeID;
+        request.InstituteID = this.formData.InstituteID;
+        request.RoleID = this.sSOLoginDataModel.RoleID;
+        request.UserID = this.sSOLoginDataModel.UserID;
+        request.DesignationID = this.formData.PostID;
+        request.PostServiceTypeID = this.formData.PostServiceTypeID;
+        request.Action = "GetChildPostServiceType";
+        await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ChildPostServiceTypeDDL = data['Data'] || [];
+        })
+
+      } catch (error) {
+        console.error(error);
+      }
+    }    
+  }
+
+  async GetIsNonGazettedPost() {
+    try {
+      const request: any = {};
+      request.DesignationID = this.formData.PostID;
+      request.Action = "GetIsPostGazOrNot";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.Data[0].ISNonGazetted == true) {
+          this.IsNonGazetted = true;
+        } else {
+          this.IsNonGazetted = false;
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    } 
   }
 
 }

@@ -1397,6 +1397,8 @@ const routes: Routes = [
 
       { path: '8th-category-wise-seat-utilization', loadChildren: () => import('./Views/ITI/reports/iti-8th-category-wise-seat-utilization/iti-8th-category-wise-seat-utilization.module').then(m => m.Iti8ThCategoryWiseSeatUtilizationModule), title: '8th-category-wise-seat-utilization' },
       { path: '10th-category-wise-seat-utilization', loadChildren: () => import('./Views/ITI/reports/iti-10th-category-wise-seat-utilization/iti-10th-category-wise-seat-utilization.module').then(m => m.Iti10ThCategoryWiseSeatUtilizationModule), title: '10th-category-wise-seat-utilization' },
+      { path: 'category-wise-seat-utilization', loadChildren: () => import('./Views/ITI/reports/iti-category-wise-seat-utilization/iti-category-wise-seat-utilization.module').then(m => m.ItiCategoryWiseSeatUtilizationModule), title: 'category-wise-seat-utilization' },
+      
       { path: 'StudentPlacementMapping', loadChildren: () => import('./Views/BTER/Student/student-placement-mapping/student-placement-mapping.module').then(m => m.StudentPlacementMappingModule) },
 
 

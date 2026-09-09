@@ -110,7 +110,7 @@ export class fresherRegistrationReportComponent {
       RegDate: ['', Validators.required],
       FileNameDoc: [''],
       RegCount: ['', Validators.required],
-      Remarks: ['', Validators.required],
+      Remarks: [''],
       Aadhar: [
         '',
         [

@@ -106,7 +106,7 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">व्यवसाय मे कुल प्रशिक्षणार्थियों की संख्या: <span class="StarMarking">*</span></label>
-              <input type="number" class="form-input" placeholder="Total number of trainees in the trade" formControlName="NumberofTrainees">
+              <input type="text" class="form-input" placeholder="Total number of trainees in the trade" formControlName="NumberofTrainees">
               <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('NumberofTrainees')?.hasError('required')
                    && ApprenticeshipReportFormGroup.get('NumberofTrainees')?.touched">
                 This field is required
@@ -142,11 +142,11 @@
 
 
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">विविध विवरण: <span class="StarMarking">*</span></label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">विविध विवरण:</label>
               <input type="text" class="form-input" placeholder="Enter Remark" formControlName="Remarks">
-              <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('Remarks')?.hasError('required') && ApprenticeshipReportFormGroup.get('Remarks')?.touched">
+              <!--<div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('Remarks')?.hasError('required') && ApprenticeshipReportFormGroup.get('Remarks')?.touched">
                 This field is required
-              </div>
+              </div>-->
             </div>
             <div>
               <button (click)="AddRow()" *ngIf="!IsUpdateCase &&  ssoLoginDataModel.RoleID == 97" type="submit" class="btn bg-info text-white mt-6" [disabled]="!ApprenticeshipReportFormGroup.valid">Add More</button>
