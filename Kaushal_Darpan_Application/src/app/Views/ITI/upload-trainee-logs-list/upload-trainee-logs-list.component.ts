@@ -309,9 +309,10 @@ calculateInTableTotalPage() {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
 
-          if (this.State === EnumStatus.Success) {
-            this.toastr.success("Items issued successfully", "", {
-
+          if (this.State === EnumStatus.Success)
+          {
+            this.toastr.success("Status Change Successfully", "",
+              {
 
               toastClass: "ngx-toastr my-update-toast"
             });
@@ -324,7 +325,9 @@ calculateInTableTotalPage() {
 
             this.router.navigate(['/Upload-Status-Check']);
             
-          } else if (this.State === EnumStatus.Error) {
+          }
+          else if (this.State === EnumStatus.Error)
+          {
             this.toastr.error(this.ErrorMessage || "Something went wrong.");
           }
         });
