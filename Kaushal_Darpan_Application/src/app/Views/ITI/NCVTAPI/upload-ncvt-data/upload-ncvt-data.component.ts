@@ -27,7 +27,7 @@ export class UploadNcvtDataComponent implements OnInit
   public searchRequest = new ChunksSearchModel();
   public SemesterName: string = '';
   masterSelected: boolean = false;
-
+  IsAadharData: number = 0;
   public PostData: NCVTChunkInfoDataModelDataPagingList[] = []
 
 
@@ -129,6 +129,12 @@ export class UploadNcvtDataComponent implements OnInit
       item.IsSelected = this.masterSelected;
     }
   }
+
+  GetAadhar_Without_Aadhar_Data() {
+    this.GetAllData();
+  }
+
+  
 
   // Check if all rows are selected
   isAllSelected()

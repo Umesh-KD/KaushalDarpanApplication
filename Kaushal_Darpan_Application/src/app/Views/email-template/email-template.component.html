@@ -1,0 +1,416 @@
+
+<div class="card">
+
+  <!-- Header -->
+  <div class="page-header">
+
+    <div>
+      <h2>Email Template Master</h2>
+
+      <span class="page-subtitle">
+        Manage email templates and email configuration
+      </span>
+    </div>
+
+    <button mat-stroked-button
+            type="button"
+            (click)="resetForm()">
+
+      <mat-icon>add</mat-icon>
+
+      New Template
+
+    </button>
+
+  </div>
+
+
+  <form [formGroup]="templateForm"
+        (ngSubmit)="saveTemplate()">
+
+
+    <!-- ============================= -->
+    <!-- Basic Information -->
+    <!-- ============================= -->
+
+    <mat-card class="form-card">
+
+      <div class="card-title">
+
+        <mat-icon>description</mat-icon>
+
+        <span>Basic Information</span>
+
+      </div>
+
+      <mat-divider></mat-divider>
+
+
+      <div class="form-row">
+
+        <!-- Template Code -->
+
+        <mat-form-field appearance="outline"
+                        class="form-field gap-2">
+
+          <mat-label>Template Code</mat-label>
+
+          <input matInput
+                 formControlName="TemplateCode"
+                 placeholder="APPLICATION_APPROVED"
+                 maxlength="100">
+
+          <mat-hint>
+            Unique template code
+          </mat-hint>
+
+          <mat-error *ngIf="f['TemplateCode'].hasError('required')">
+
+            Template Code is required
+
+          </mat-error>
+
+        </mat-form-field>
+
+        
+        <!-- Template Name -->
+
+        <mat-form-field appearance="outline"
+                        class="form-field">
+
+          <mat-label>Template Name</mat-label>
+
+          <input matInput
+                 formControlName="TemplateName"
+                 placeholder="Application Approved"
+                 maxlength="200">
+
+          <mat-error *ngIf="f['TemplateName'].hasError('required')">
+
+            Template Name is required
+
+          </mat-error>
+
+        </mat-form-field>
+
+
+        <!-- Status -->
+
+        <div class="status-field">
+
+          <label>Status</label>
+
+          <mat-checkbox formControlName="IsActive">
+
+            Active
+
+          </mat-checkbox>
+
+        </div>
+
+      </div>
+
+
+      <!-- Email Subject -->
+
+      <mat-form-field appearance="outline"
+                      class="full-width">
+
+        <mat-label>Email Subject</mat-label>
+
+        <input matInput
+               formControlName="EmailSubject"
+               placeholder=""
+               maxlength="500">
+
+        <mat-error *ngIf="f['EmailSubject'].hasError('required')">
+
+          Email Subject is required
+
+        </mat-error>
+
+      </mat-form-field>
+
+    </mat-card>
+
+
+
+    <!-- ============================= -->
+    <!-- Recipient Queries -->
+    <!-- ============================= -->
+
+    <mat-card class="form-card">
+
+      <div class="card-title">
+
+        <mat-icon>people</mat-icon>
+
+        <span>Recipient Configuration</span>
+
+      </div>
+
+      <mat-divider></mat-divider>
+
+
+      <div class="query-grid">
+
+        <!-- To Query -->
+
+        <mat-form-field appearance="outline">
+
+          <mat-label>To Query</mat-label>
+
+          <textarea matInput
+                    rows="5"
+                    formControlName="ToQuery"
+                    placeholder="SELECT Email FROM M_UserMaster WHERE UserID = @UserID">
+          </textarea>
+
+          <mat-hint>
+            SQL query for recipient email
+          </mat-hint>
+
+        </mat-form-field>
+
+
+        <!-- CC Query -->
+
+        <mat-form-field appearance="outline">
+
+          <mat-label>CC Query</mat-label>
+
+          <textarea matInput
+                    rows="5"
+                    formControlName="CcQuery"
+                    placeholder="SELECT Email FROM ...">
+          </textarea>
+
+        </mat-form-field>
+
+
+        <!-- BCC Query -->
+
+        <mat-form-field appearance="outline">
+
+          <mat-label>BCC Query</mat-label>
+
+          <textarea matInput
+                    rows="5"
+                    formControlName="BccQuery"
+                    placeholder="SELECT Email FROM ...">
+          </textarea>
+
+        </mat-form-field>
+
+      </div>
+
+    </mat-card>
+
+
+
+    <!-- ============================= -->
+    <!-- Data Query -->
+    <!-- ============================= -->
+
+    <mat-card class="form-card">
+
+      <div class="card-title">
+
+        <mat-icon>storage</mat-icon>
+
+        <span>Data Query</span>
+
+      </div>
+
+      <mat-divider></mat-divider>
+
+
+      <mat-form-field appearance="outline"
+                      class="full-width">
+
+        <mat-label>Data Query</mat-label>
+
+        <textarea matInput
+                  rows="6"
+                  formControlName="DataQuery"
+                  placeholder="SELECT Name, ApplicationNo, Status FROM Application WHERE ID =1">
+        </textarea>
+
+        <mat-hint>
+          Query used to retrieve template variables
+        </mat-hint>
+
+      </mat-form-field>
+
+    </mat-card>
+
+
+
+    <!-- ============================= -->
+    <!-- Email Body -->
+    <!-- ============================= -->
+
+    <mat-card class="form-card">
+
+      <div class="body-header">
+
+        <div class="card-title">
+
+          <mat-icon>code</mat-icon>
+
+          <span>Email Body</span>
+
+        </div>
+
+
+        <div class="body-actions">
+
+          <mat-checkbox formControlName="IsHtml">
+
+            HTML Email
+
+          </mat-checkbox>
+
+
+          <button mat-stroked-button
+                  type="button"
+                  (click)="previewEmail()">
+
+            <mat-icon>visibility</mat-icon>
+
+            Preview
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <mat-divider></mat-divider>
+
+
+      <mat-form-field appearance="outline"
+                      class="full-width email-body-field">
+
+        <mat-label>Email Body</mat-label>
+
+        <textarea matInput
+                  rows="5"
+                  formControlName="EmailBody"
+                  placeholder="">
+        </textarea>
+
+        <mat-error *ngIf="f['EmailBody'].hasError('required')">
+
+          Email Body is required
+
+        </mat-error>
+
+      </mat-form-field>
+
+
+      <!-- Variables -->
+
+      <div class="variable-info">
+
+        <strong>Available Variables:</strong>
+
+        <!--<span>{{Name}}</span>
+
+        <span>{{ApplicationNo}}</span>
+
+        <span>{{Status}}</span>
+
+        <span>{{Date}}</span>
+
+        <span>{{ReferenceID}}</span>-->
+
+      </div>
+
+    </mat-card>
+
+
+
+    <!-- ============================= -->
+    <!-- Attachment -->
+    <!-- ============================= -->
+
+    <mat-card class="form-card">
+
+      <div class="card-title">
+
+        <mat-icon>attach_file</mat-icon>
+
+        <span>Attachment</span>
+
+      </div>
+
+      <mat-divider></mat-divider>
+
+
+      <mat-form-field appearance="outline"
+                      class="full-width">
+
+        <mat-label>Email Attachment</mat-label>
+
+        <textarea matInput
+                  rows="3"
+                  formControlName="EmailAttachment"
+                  placeholder="D:\Documents\Application.pdf">
+        </textarea>
+
+        <mat-hint>
+          Attachment path or attachment configuration
+        </mat-hint>
+
+      </mat-form-field>
+
+    </mat-card>
+
+
+
+    <!-- ============================= -->
+    <!-- Buttons -->
+    <!-- ============================= -->
+
+    <div class="form-actions">
+
+      <button mat-button
+              type="button"
+              (click)="resetForm()">
+
+        <mat-icon>refresh</mat-icon>
+
+        Reset
+
+      </button>
+
+
+      <button mat-stroked-button
+              type="button"
+              (click)="testEmail()">
+
+        <mat-icon>send</mat-icon>
+
+        Test Email
+
+      </button>
+
+
+      <button mat-raised-button
+              type="submit"
+              class="save-button">
+
+        <mat-icon>
+          {{ isEditMode ? 'edit' : 'save' }}
+        </mat-icon>
+
+        {{ isEditMode ? 'Update Template' : 'Save Template' }}
+
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
