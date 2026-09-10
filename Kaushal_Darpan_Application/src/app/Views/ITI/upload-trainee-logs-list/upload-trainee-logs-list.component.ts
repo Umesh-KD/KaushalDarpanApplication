@@ -323,7 +323,7 @@ calculateInTableTotalPage() {
             this.selectedRows = [];
             this.selectedDataList = [];
 
-            this.router.navigate(['/Upload-Status-Check']);
+             this.GetUploadedTraineeLogsData();
             
           }
           else if (this.State === EnumStatus.Error)
