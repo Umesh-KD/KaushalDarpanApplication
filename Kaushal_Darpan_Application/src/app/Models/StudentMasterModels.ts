@@ -259,6 +259,8 @@ export class ITIStudentCorrectionMasterSearchModel {
   public ErrorDescription?: string = '';
   public DateOfBirth?: string = '';
 
+  public AID?: string = '';
+
 }
 
 //----------------------------- route update-studentdetails  -----------------------------
