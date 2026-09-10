@@ -16,32 +16,24 @@
 </div>
 
 
-
-
 <form [formGroup]="CandidateFormGroup" id="ComapnyMasterFormGroup" class="form-horizontal">
 
- 
   <div class="card">
-
     <div class="card-body p-5">
       <div class="mb-8">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti" [ngClass]="{'ti-plus':key==1, 'ti-pencil':key==2, 'ti-eye':key==3}"></i> {{key==1?'Update Trainee Details': key==2? 'Add Trainee Details' : 'See Trainee Details'}}</b>
           <b *ngIf="key==1" class="text-1xl-5">SR Number: {{request.StateRegNumber}}</b>
         </div>
-
         <div class="alert alert-danger" role="alert" style="font-size:15px">
           Error:{{request.ErrorDescription}}
         </div>
-
         <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
-
-
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Mother's Name <span class="StarMarking">*</span>
             </label>
-            <input type="text" class="form-input" placeholder="Enter Father's Name" id="CandidateMotherName" name="CandidateMotherName"
+            <input type="text" class="form-input" placeholder="Enter Mother's Name" id="CandidateMotherName" name="CandidateMotherName"
                    [(ngModel)]="request.CandidateMotherName" formControlName="CandidateMotherName">
             <div *ngIf="isSubmitted && _CandidateFormGroup.CandidateMotherName.errors" class="text-danger">
               <p *ngIf="_CandidateFormGroup.CandidateMotherName.errors.required">
@@ -50,7 +42,6 @@
               </p>
             </div>
           </div>
-
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               UIDNumber <span class="StarMarking">*</span>

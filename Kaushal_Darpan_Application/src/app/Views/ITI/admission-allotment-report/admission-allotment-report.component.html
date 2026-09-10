@@ -19,17 +19,8 @@
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>      
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-        <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Report Action</label>
-          <select class="form-select" id="ActionType" [(ngModel)]="ActionType">
-            <option value="">--Select--</option>
-            <option value="ZoneWiseData">ZoneWiseData</option>
-            <option value="AllotmentDataGovtPvtSchemeType">AllotmentDataGovtPvtSchemeType</option>
-            <option value="AllotmentDataTradeWise">AllotmentDataTradeWise</option>
-          </select>
-        </div> -->
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Report Action</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Report Type</label>
           <select class="form-select" id="ActionType" [(ngModel)]="ActionType" (change)="onActionTypeChange($event)">
             <option value="">--Select--</option>
             <option *ngFor="let item of AdmissionAllotmentData_ddl" value="{{item.Name}}">{{item.Name}}</option>
