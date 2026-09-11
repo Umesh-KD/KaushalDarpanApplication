@@ -231,7 +231,7 @@ export class CollegeTradeMasterComponent {
 
 
       this.searchRequest.PageNumber = 1;
-      this.searchRequest.Action = 'LIST_DOWNLOAD'
+      this.searchRequest.Action = 'LIST'
 
 
 
@@ -248,7 +248,7 @@ export class CollegeTradeMasterComponent {
       this.searchRequest.PageSize = this.totalRecord
 
       this.loaderService.requestStarted();
-      await this.ITICollegeTradeService.GetTradeCollegesMaster(this.searchRequest)
+      await this.ITICollegeTradeService.GetTradeAndColleges(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log("ExportExcelData data", data);
