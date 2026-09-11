@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../Models/StudentMasterModels';
+import { LeftOutStudentMigrationCertificateDataModel, StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../Models/StudentMasterModels';
 import { AnnexureDataModel, GetPartiallyDetainedStudentDataModel, OptionalSubjectRequestModel, PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../Models/PreExamStudentDataModel';
 import { CommonSubjectDetailsMasterModel } from '../../Models/CommonSubjectDetailsMasterModel';
 import { ViewStudentDetailsRequestModel } from '../../Models/ViewStudentDetailsRequestModel';
@@ -293,5 +293,14 @@ export class PreExamStudentExaminationService {
         })
       ).toPromise();
   }
-    
+
+  public async GenerateLeftOutStuMigrationCertificate(request: LeftOutStudentMigrationCertificateDataModel) {
+    return this.http.post(this.APIUrl + '/GenerateLeftOutStudentMigrationCertificate', request, this.headersOptions)
+      .pipe(
+        catchError(error => {
+          console.error('Error:', error);
+          return throwError(error);
+        })
+      ).toPromise();
+  }    
 }
