@@ -88,6 +88,7 @@ export class EMPrincipleStaffComponent {
   public AssignedRoleRights: any = [];
   public ChildPostServiceTypeDDL: any = [];
   public PostServiceTypeDDL: any = [];
+  public StaffProfileStatusList: any = [];
 
   _ITIGovtEM_EnumStaffLevel = ITIGovtEM_EnumStaffLevel;
   _ITIGovtEM_EnumStaffLevelChild = ITIGovtEM_EnumStaffLevelChild;
@@ -257,6 +258,7 @@ export class EMPrincipleStaffComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
 
+    await this.GetStaffProfileStatusList();
     await this.getInstituteMasterList();
     await this.GetStaffTypeData();
     await this.GetHostelData();
@@ -1154,8 +1156,6 @@ async GetTechnicianDll() {
       await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DesignationMasterDDLList = data.Data;
-        //this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.approveRequest.StaffTypeID);
-        // console.log("DesignationMasterList", this.DesignationMasterDDLList);
       }, error => console.error(error))
 
       await this.commonMasterService.GetCommonMasterDDLByType('Gender')
@@ -2140,5 +2140,37 @@ async GetCategroyData() {
     } catch (error) {
       console.error(error);
     } 
+  }
+
+  async GetStaffProfileStatusList() {
+    try {
+      this.loaderService.requestStarted();
+      debugger
+      await this.commonMasterService.GetCommonMasterData('ITIvtARRStauts').then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StaffProfileStatusList = data.Data;
+        if(this.StaffProfileStatusList.length>0) {
+          this.StaffProfileStatusList = this.StaffProfileStatusList.map((x:any)=>{
+            switch(x.ID){
+              case 0:
+                x.Name='Pending for update profile by employee';
+                break;
+              case 247:
+                x.Name='Approved';
+                break;
+              case 249:
+                x.Name='Reverted to employee';
+                break;
+              case 10388:
+                x.Name='Unlocked profile';
+                break;
+            }
+            return x;
+          })
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

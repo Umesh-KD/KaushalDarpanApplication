@@ -290,10 +290,7 @@
           <button class="btn bg-danger text-white mt-6" type="button" (click)="ResetControls()">Cancel</button>
         </div>
       </div>
-
     </form>
-
-
 
     <div class="mb-8 mt-3">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
@@ -333,6 +330,25 @@
                   [(ngModel)]="searchRequest.BranchID">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of BranchInstituteDDL" [value]="item.StreamID">{{item.StreamName}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Designation</label>
+          <ng-select [(ngModel)]="searchRequest.DesignationID"
+                      [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of DesignationMasterDDLList;">
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+              </ng-container>
+          </ng-select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Profile Status:</label>
+          <select class="form-select" id="ProfileStatus" [(ngModel)]="searchRequest.ProfileStatus">
+            <option value="-1">Choose Option</option>
+            <option *ngFor="let item of StaffProfileStatusList" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
 
@@ -379,8 +395,9 @@
             <th class="text-left">Staff Type</th>
             <th class="text-left">Designation as per service book</th>
             <th class="text-left">Salary Drawn Post</th>
+            <th class="text-left">Branch as per service book</th>
+            <th class="text-left">Salary Drawn Branch</th>
             <th class="text-left">Role/Additional Role</th>
-            <th class="text-left">Course/Branch</th>
             <!-- <th class="text-left">Subject</th> -->
             <!-- <th class="text-left">Address Details</th> -->
             <th class="text-left">Profile Status</th>
@@ -400,8 +417,9 @@
             <td>{{row.StaffType}}</td>
             <td> {{row.DesignationName}}</td>
             <td> {{row.SalaryDrownPost}}</td>
+            <td>{{row.ServiceBookBranch}}</td>
+            <td>{{row.SalaryDrawnBranch}}</td>
             <td> {{row.Role}} </td>
-            <td>{{row.Stream}}</td>
             <!-- <td>{{row.Subject}}</td> -->
             <!-- <td>
               <p *ngIf="row.Address?.length>0" style="max-width:350px">

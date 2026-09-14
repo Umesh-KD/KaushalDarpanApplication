@@ -166,6 +166,8 @@ export class BTER_EM_StaffMasterSearchModel {
   public FilterName: string = '';
   public FilterStaffTypeID: number = 0;  
   public PostID: number = 0;  
+  public ProfileStatus: number = -1;  
+  public DesignationID: number = 0;  
   public FilterSSOID: string = '';
 }
 

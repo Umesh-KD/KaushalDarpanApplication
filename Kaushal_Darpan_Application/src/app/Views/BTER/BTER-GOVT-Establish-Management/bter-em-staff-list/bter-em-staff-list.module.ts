@@ -11,6 +11,7 @@ import { BTEREMStaffListRoutingModule } from './bter-em-staff-list-routing.modul
 import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
 import { ViewStaffProfileModalModule } from '../view-staff-profile-modal/view-staff-profile-modal.model';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     OTPModalModule,
     ViewStaffProfileModalModule,
     NgMultiSelectDropDownModule.forRoot(),
+    NgSelectModule, 
   ]
 })
 export class BTEREMStaffListModule { }
