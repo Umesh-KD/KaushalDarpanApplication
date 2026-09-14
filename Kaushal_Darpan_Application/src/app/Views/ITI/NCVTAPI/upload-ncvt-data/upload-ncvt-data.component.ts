@@ -110,7 +110,7 @@ export class UploadNcvtDataComponent implements OnInit
               data?.Message ||
               'Something went wrong';
 
-            this.toastrService.success(message)
+            this.toastrService.success(message);
 
           }
 
