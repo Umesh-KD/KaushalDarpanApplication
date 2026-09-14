@@ -102,8 +102,16 @@ export class UploadNcvtDataComponent implements OnInit
           if (data.State == EnumStatus.Success) {
             this.toastrService.success(data.Message)
           }
-          else {
-            this.toastrService.success(data.Message)
+          else
+          {
+
+            const message =
+              data?.Data?.error ||
+              data?.Message ||
+              'Something went wrong';
+
+            this.toastrService.success(message)
+
           }
 
           this.PostData = [];
