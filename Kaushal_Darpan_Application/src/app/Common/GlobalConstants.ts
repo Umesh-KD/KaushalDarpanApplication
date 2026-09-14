@@ -17,6 +17,7 @@ export class GlobalConstants {
   public static RejectAtBter: string = "RejectAtBter";
   public static DepartmentBterFolder:string = "BTER";
   public static StudentPlacementResumes: string = "/StudentPlacementResumes/";
+  public static MigrationCertificateFolder: string = "MigrationCertificate";
 
   // regex
   public static AadhaarPattern: RegExp = /^[2-9]{1}[0-9]{11}$/;  // Aadhaar must start with 2-9 and be 12 digits long

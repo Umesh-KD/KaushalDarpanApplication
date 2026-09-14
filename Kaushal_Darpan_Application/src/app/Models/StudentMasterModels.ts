@@ -1,9 +1,8 @@
-import { extend } from "highcharts/highcharts.src";
 import { DocumentDetailList } from "./ApplicationFormDataModel";
-import { CommonSubjectDetailsMasterModel } from "./CommonSubjectDetailsMasterModel";
 import { DocumentDetailsModel } from "./DocumentDetailsModel";
 import { RequestBaseModel } from "./RequestBaseModel";
 import { SubjectMasterDataModel } from "./SubjectMasterDataModel";
+import { ResponseBaseModel } from "./ResponseBaseModel";
 
 export class StudentMasterModel {
   public AID: number = 0;
@@ -103,6 +102,7 @@ export class StudentMasterModel {
   public RoleID?: number = 0;
   public CourseTypeID?: number = 0;
   public FinancialYearName?: string = '';
+  public MigrationCertificateFileName?: string = '';
 }
 
 export class M_StudentMaster_QualificationDetailsModel {
@@ -259,6 +259,8 @@ export class ITIStudentCorrectionMasterSearchModel {
   public ErrorDescription?: string = '';
   public DateOfBirth?: string = '';
 
+  public AID?: string = '';
+
 }
 
 //----------------------------- route update-studentdetails  -----------------------------
@@ -343,6 +345,10 @@ export class ChunksSearchModel {
 export class BasePostAttendanceTimeTableModal {
   public postAttendanceTimeTables: any[] = [];
   public markedAttendanceDatesDetails: any[] = [];
+}
+export class LeftOutStudentMigrationCertificateDataModel extends ResponseBaseModel {
+  public StudentId: number = 0;
+  public SemesterId: number = 0;
 }
 
 

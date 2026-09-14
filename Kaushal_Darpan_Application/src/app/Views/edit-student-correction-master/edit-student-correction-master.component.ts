@@ -168,6 +168,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
           console.log(data,"Candidate data");
           this.CandidateData=data.Data;
           if(data && data.Data){
+            this.request.AID = data.Data[0]?.AID;
             this.request.StateRegNumber = data.Data[0]?.StateRegNumber;
             this.request.ErrorDescription = data.Data[0]?.ErrorDescription;
             this.IsEditName = data.Data[0]?.IsEditName
@@ -223,8 +224,8 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
       if(this.CandidateFormGroup.invalid){
         return;
       }
-      this.childComponent.MobileNo= this.CandidateFormGroup.get('MobileNo')?.value;
-      this.childComponent.OpenOTPPopup();
+      // this.childComponent.MobileNo= this.CandidateFormGroup.get('MobileNo')?.value;
+      // this.childComponent.OpenOTPPopup();
       this.request.DepartmentID=this.sSOLoginDataModel.DepartmentID;
       // this.request.RoleID=this.sSOLoginDataModel.RoleID;
       this.request.ModifyBy=this.sSOLoginDataModel.UserID;
@@ -233,7 +234,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
       //save
         //  this.childComponent.onVerified.subscribe(() =>
       // { 
-        this.childComponent.onVerified.subscribe(async ()=>{
+        // this.childComponent.onVerified.subscribe(async ()=>{
           await this.ItiDataMasterService.SaveStudentCorrectionData(this.request)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
@@ -254,7 +255,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
 
           }, (error: any) => console.error(error)
           );
-        })
+        // })
     
 
     }

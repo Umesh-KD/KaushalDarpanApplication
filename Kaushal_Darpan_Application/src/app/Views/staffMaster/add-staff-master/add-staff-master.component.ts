@@ -771,7 +771,7 @@ export class AddStaffMasterComponent implements OnInit {
           } else {
             this.staffDetailsFormData.Dis_Certificate = ''
           }
-    
+          debugger
           this.staffDetailsFormData.PanCardNumber = data['Data']["PanCardNumber"];
         
           this.staffDetailsFormData.DateOfBirth = this.dateSetter(data['Data']['DateOfBirth'])
@@ -803,7 +803,9 @@ export class AddStaffMasterComponent implements OnInit {
 
           })
 
-
+          if(this.staffDetailsFormData.IFSCCode != null && this.staffDetailsFormData.IFSCCode != '') {
+            this.staffDetailsFormData.IFSCCode = this.staffDetailsFormData.IFSCCode.toUpperCase();
+          }
          
 
   
@@ -1027,6 +1029,10 @@ export class AddStaffMasterComponent implements OnInit {
 
   async SaveData() {
     
+    debugger
+    if(this.staffDetailsFormData.IFSCCode){
+        this.staffDetailsFormData.IFSCCode = this.staffDetailsFormData.IFSCCode?.toUpperCase();
+    }
     this.isSubmitted = true;
     if(!(this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon)) {
       if(this.staffDetailsFormData.RoleID === EnumRole.Examiner || this.staffDetailsFormData.RoleID === EnumRole.Examiner_NonEng 
@@ -1035,6 +1041,14 @@ export class AddStaffMasterComponent implements OnInit {
           this.toastr.error("Vendor ID is required for Examiner role.");
           return;
         }
+      }
+      this.StaffMasterFormGroup.markAllAsTouched();
+      if(this.staffDetailsFormData.PanCardNumber=="" || this.staffDetailsFormData.PanCardNumber==null) {
+        // this.StaffMasterFormGroup.get('txtPanCardNumber')?.setValidators([Validators.required]);
+        const control = this.StaffMasterFormGroup.get('txtPanCardNumber');
+        control?.markAsTouched();  
+        this.toastr.error("Pan Card Number is required.");
+        return;
       }
       if (this.staffDetailsFormData.DateOfAppointment) {
         const dob = new Date(this.staffDetailsFormData.DateOfBirth);
@@ -1083,11 +1097,11 @@ export class AddStaffMasterComponent implements OnInit {
       await this.removeValidation();
     }
 
+    
     if (this.StaffMasterFormGroup.invalid) {
-      this.toastr.error("invalid form values");
+      this.toastr.error("Please fill all required fields correctly.");
       Object.keys(this.StaffMasterFormGroup.controls).forEach(key => {
           const control = this.StaffMasterFormGroup.get(key);
- 
           if (control && control.invalid) {
             console.log(`Control ${key} is invalid`);
             Object.keys(control.errors!).forEach(errorKey => {
@@ -1121,6 +1135,7 @@ export class AddStaffMasterComponent implements OnInit {
       this.staffDetailsFormData.PanCardNumber = this.encryptionService.encryptData(this.staffDetailsFormData.PanCardNumber);
       this.staffDetailsFormData.AdharCardNumber = this.encryptionService.encryptData(this.staffDetailsFormData.AdharCardNumber);
 
+      // this.staffDetailsFormData.IFSCCode = this.staffDetailsFormData.IFSCCode?.toUpperCase();
 
       await this.staffMasterService.SaveStaffDetails(this.staffDetailsFormData)
         .then((data: any) => {

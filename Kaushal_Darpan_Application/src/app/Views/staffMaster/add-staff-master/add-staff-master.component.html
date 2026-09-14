@@ -842,7 +842,7 @@
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">IFSC Code<span class="StarMarking">*</span></label>
-          <input style="text-transform:uppercase" type="text" class="form-input" placeholder="Enter IFSCCode"
+          <input style="text-transform:uppercase" type="text" class="form-input" placeholder="Enter IFSCCode" (input)="staffDetailsFormData.IFSCCode = staffDetailsFormData.IFSCCode?.toUpperCase()"
                  name="IFSCCode" id="txtIFSCCode" formControlName="txtIFSCCode"
                  [(ngModel)]="staffDetailsFormData.IFSCCode" />
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.txtIFSCCode.errors" class="text-danger">

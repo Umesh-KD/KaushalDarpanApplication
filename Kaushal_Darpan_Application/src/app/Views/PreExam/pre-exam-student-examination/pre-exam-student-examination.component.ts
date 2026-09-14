@@ -1,7 +1,7 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { AnnexureDataModel, OptionalSubjectRequestModel, PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../../Models/PreExamStudentDataModel';
 import { SubjectSearchModel } from '../../../Models/SubjectMasterDataModel';
-import { ForSMSEnrollmentStudentMarkedModel, ForSMSNotifyStudentModel, M_StudentMaster_QualificationDetailsModel, StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../../Models/StudentMasterModels';
+import { ForSMSEnrollmentStudentMarkedModel, ForSMSNotifyStudentModel, LeftOutStudentMigrationCertificateDataModel, M_StudentMaster_QualificationDetailsModel, StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../../Models/StudentMasterModels';
 import { EnumFileUpload, EnumRole, EnumStatus, EnumStudentExamType, GlobalConstants, enumExamStudentStatus, EnumStudentType, EnumCourseType, EnumMessageType } from '../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { ModalDismissReasons, NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -32,6 +32,8 @@ import { GenerateAdmitCardModel, GenerateAdmitCardSearchModel } from '../../../M
 import { CampusPostMaster_Action } from '../../../Models/CampusPostDataModel';
 import { ApplicationMessageDataModel } from '../../../Models/ApplicationMessageDataModel';
 import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
+import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
+import { MarksheetDownloadService } from '../../../Services/MarksheetDownload/marksheet-download.service';
 
 declare function tableToExcel(table: any, name: any, fileName: any): any;
 
@@ -171,6 +173,7 @@ export class PreExamStudentExaminationComponent {
   public updateOptionalAfterEligibleList: any = [];
   public updateOptionalChildAfterEligibleList: any = [];
   public alreadyAssignedOptionalSubject: any = [];
+  public leftOutStudentMigrationCertificateDataModel = new LeftOutStudentMigrationCertificateDataModel();
 
   constructor(private commonMasterService: CommonFunctionService,
     private preExamStudentExaminationService: PreExamStudentExaminationService,
@@ -186,9 +189,8 @@ export class PreExamStudentExaminationComponent {
     private http: HttpClient,
     private documentDetailsService: DocumentDetailsService,
     private smsMailService: SMSMailService,
+    public commonFunctionHelper: CommonFunctionHelper
   ) {
-
-
 
   }
 
@@ -3179,4 +3181,64 @@ export class PreExamStudentExaminationComponent {
       console.log(Ex);
     }
   }
+
+  async GenerateLeftOutStuMigrationCertificate(row: any) {
+   // debugger
+
+    try {
+      this.leftOutStudentMigrationCertificateDataModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.leftOutStudentMigrationCertificateDataModel.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.leftOutStudentMigrationCertificateDataModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.leftOutStudentMigrationCertificateDataModel.RoleID = this.sSOLoginDataModel.RoleID;
+      this.leftOutStudentMigrationCertificateDataModel.ModifyBy = this.sSOLoginDataModel.UserID;
+      this.leftOutStudentMigrationCertificateDataModel.StudentId = row.StudentID;
+      this.leftOutStudentMigrationCertificateDataModel.SemesterId = row.SemesterID;
+
+      // make file and save
+      await this.preExamStudentExaminationService.GenerateLeftOutStuMigrationCertificate(this.leftOutStudentMigrationCertificateDataModel)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          // 
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            // download file
+            const filefullpath = [
+              this.appsettingConfig.StaticFileRootPathURL,
+              GlobalConstants.StudentsFolder,
+              GlobalConstants.DepartmentBterFolder,
+              GlobalConstants.MigrationCertificateFolder,
+              data.Data
+            ].join("/");
+            this.commonFunctionHelper.downloadFileFromServerFullPath(filefullpath);
+            // get data
+            await this.btn_SearchClick();
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.Message);
+          }
+          else {
+            this.toastr.error(data.Message);
+            console.log(data.ErrorMessage);
+          }
+
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+  }
+
+  async DownloadMigrationCertificate(row: any) {
+    const filefullpath = [
+      this.appsettingConfig.StaticFileRootPathURL,
+      GlobalConstants.StudentsFolder,
+      GlobalConstants.DepartmentBterFolder,
+      GlobalConstants.MigrationCertificateFolder,
+      row.MigrationCertificateFileName
+    ].join("/");
+    //
+    this.commonFunctionHelper.downloadFileFromServerFullPath(filefullpath);
+  }
+
 }

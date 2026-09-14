@@ -415,7 +415,7 @@
                 </a>
 
                 <!-- update optional subject after eligible-->
-                <a href="javascript:void(0);"  *ngIf="IsShowOptionalSubject(row)"
+                <a href="javascript:void(0);" *ngIf="IsShowOptionalSubject(row)"
                    class="bg-gray-200" title="Update Optional Subject"
                    (click)="UpdateOptionalAfterEligibleModelView(updateOptionalAfterEligibleModal,row.StudentID, row.StudentExamID)">
                   <i class="fa fa-book"></i>
@@ -427,9 +427,18 @@
                   <i class="ti ti-download"></i>
                 </a>
 
-                <a href="javascript:void(0);" *ngIf="row.status==_enumExamStudentStatus.RejectatBTER" class="bg-gray-200"
+                <a href="javascript:void(0);" *ngIf="row.status == _enumExamStudentStatus.RejectatBTER && (sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon)" class="bg-gray-200"
                    title="Reject Student Details" (click)="OpenRejectViewModal(MyModel_ViewReject, row.StudentID,row.StudentExamID)">
                   <i class="fa fa-file-o"></i>
+                </a>
+
+                <a href="javascript:void(0);" *ngIf="row.status == _enumExamStudentStatus.RejectatBTER && (sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon)" class="bg-gray-200"
+                   title="Generate Migration Certificate" (click)="GenerateLeftOutStuMigrationCertificate(row)">
+                  <i class="fa fa-certificate"></i>
+                </a>
+                <a href="javascript:void(0);" *ngIf="row.status == _enumExamStudentStatus.RejectatBTER && (sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon) && !commonFunctionHelper.isNullOrWhiteSpace(row.MigrationCertificateFileName)" class="bg-gray-200"
+                   title="Download Migration Certificate" (click)="DownloadMigrationCertificate(row)">
+                  <i class="fa fa-file-pdf-o"></i>
                 </a>
 
               </div>

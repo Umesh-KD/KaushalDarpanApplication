@@ -16,9 +16,9 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="mb-8">
-      <a title="Download" (click)="BulkUploadApi()"
+      <a title="upload" (click)="BulkUploadApi()"
          class="btn bg-primary btn-sm text-white">
-      <i class="ti ti-download"></i> Upload Selected Data 
+      <i class="ti ti-upload"></i> Upload Selected Data 
       </a>
       <div class="overflow-x-auto mt-3">
         <table class="table table-border w-full table-auto" cellpadding="5" id="tbl_TblAdmitCard">
@@ -43,7 +43,7 @@
               <td>{{item.TotalRecord}}</td>
               <td>{{item.PageFrom}} To  {{item.PageTo}}</td>
               <td class="text-left">
-                <a title="Download" (click)="UploadDataInChunks(item)" class="btn bg-primary btn-sm text-white"> <i class="ti ti-download"></i> Upload Data</a>
+                <a title="Download" (click)="UploadDataInChunks(item)" class="btn bg-primary btn-sm text-white"> <i class="ti ti-upload"></i> Upload Data</a>
               </td>
             </tr>
             <tr *ngIf="listDataPaging?.length==0"><td colspan="10">No Record Found</td></tr>

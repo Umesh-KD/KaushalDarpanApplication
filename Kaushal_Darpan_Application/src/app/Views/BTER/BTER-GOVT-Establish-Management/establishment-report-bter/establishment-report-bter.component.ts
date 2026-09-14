@@ -40,6 +40,8 @@ export class EstablishmentReportBTERComponent {
   public EmployeeQualificationDDLList:any=[];
   public PayLevelDDLList:any=[];
   public InstituteMasterDDLList:any[]=[]
+  public StateMasterList: any[] = [];
+  public DistrictMasterDDL: any = [];
 
   public Table_SearchText: string = '';
   public act: string = '';
@@ -117,6 +119,7 @@ export class EstablishmentReportBTERComponent {
    
     try {
       this.loaderService.requestStarted();
+      debugger
       await this.bterEstablishManagementService.GetEstablishmentReportData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -176,6 +179,13 @@ export class EstablishmentReportBTERComponent {
           data = JSON.parse(JSON.stringify(data));
           this.StaffTypeList = data.Data;
         })
+
+        await this.commonMasterService.GetStateMaster()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data['Data']);
+          this.StateMasterList = data['Data'];
+        }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
@@ -186,6 +196,21 @@ export class EstablishmentReportBTERComponent {
       }, 200);
     }
   }
+
+   async DistrictMaster_StateIDWise() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.DistrictMaster_StateIDWise(this.searchRequest.StateID || 0).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.DistrictMasterDDL = data.Data;
+      }, error => console.error(error));
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
 
   async getInstituteDataList() {
     try {
@@ -211,9 +236,29 @@ export class EstablishmentReportBTERComponent {
   async GetStaffProfileStatusList() {
     try {
       this.loaderService.requestStarted();
+      debugger
       await this.commonMasterService.GetCommonMasterData('ITIvtARRStauts').then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StaffProfileStatusList = data.Data;
+        if(this.StaffProfileStatusList.length>0) {
+          this.StaffProfileStatusList = this.StaffProfileStatusList.map((x:any)=>{
+            switch(x.ID){
+              case 0:
+                x.Name='Pending for approval at Principal Level';
+                break;
+              case 247:
+                x.Name='Approved';
+                break;
+              case 249:
+                x.Name='Reverted to employee';
+                break;
+              case 10388:
+                x.Name='Unlocked profile';
+                break;
+            }
+            return x;
+          })
+        }
       });
     } catch (error) {
       console.error(error);
@@ -227,7 +272,7 @@ export class EstablishmentReportBTERComponent {
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo','LevelName'
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','LevelName'
       ,'OfficeName','PostName','UserID','IsNodal','ProfileStatusID',
       'StaffID','StaffUserID','DistrictName','uod_InstituteID','RoleID'
     ];
@@ -363,7 +408,7 @@ export class EstablishmentReportBTERComponent {
 
   async getStreamMasterList() {
     try {
-      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, 0).then((data: any) => {
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDLList = data.Data;
       })

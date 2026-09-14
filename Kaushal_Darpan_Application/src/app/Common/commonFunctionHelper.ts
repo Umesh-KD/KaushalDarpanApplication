@@ -131,4 +131,29 @@ export class CommonFunctionHelper {
 
   public isNullOrWhiteSpace = (value?: string | null) =>
     value == null || value.trim() == "";
+
+  async downloadFileFromServerFullPath(fullServerPath: string) {
+    var fileName = fullServerPath.split('/').pop() || 'downloaded_file';
+    // Fetch the file as a blob
+    this.http.get(fullServerPath, { responseType: 'blob' }).subscribe((blob: any) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = fileName; // Set the desired file name
+      downloadLink.click();
+      // Clean up the object URL
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
+  getStrSplitedValue(seperator: string, strVal: string, index?: number) {
+    if (index == null || index < 0) {
+      var fileName = strVal.split(seperator).pop() || "";
+      return fileName;
+    } else {
+      var fileName = strVal.split(seperator)[index] || "";
+      return fileName;
+    }
+  }
+
 }

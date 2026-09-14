@@ -30,6 +30,12 @@ export class BTER_EM_StaffListSearchModel {
   DateOfImplementation: string = '';
   SalaryDrawnInstituteID?: number = 0;
   BugetHeadID?:number=0;
+
+  IsSpeciallyAbledPerson?: number = -1;
+  IsEmpWorkingOnDeputationToOther?: number = -1;
+  DistrictID?: number = 0;
+  StateID?: number = 0;
+
 }
 
 export class BTER_EM_AddStaffDataModel extends RequestBaseModel {
