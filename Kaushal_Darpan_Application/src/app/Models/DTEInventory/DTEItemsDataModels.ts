@@ -34,6 +34,7 @@ export class DTEItemsSearchModel {
   public ItemId?: number = 0;
   public ConditionID?: number = 0;
   public IsAuction?: number = 0;
+  public UserID?: number = 0;
 }
 
 export class DTEItemsSearchModel1 {
@@ -46,6 +47,7 @@ export class DTEItemsSearchModel1 {
   public OfficeID: number = 0;
   public StatusID: number = 0;
   public ItemType: number = 0;
+  public UserID?: number = 0;
 }
 
 export class ItemsDetailsModel {
@@ -102,6 +104,7 @@ export class inventoryIssueHistorySearchModel {
   public status? : number = 0;
   public IssueStatus? : number = 2;
   public ItemDetailsId? : number =0;
+  public OfficeID? : number =0;
   public IsStaff? : boolean = false;
 }
 export class inventoryIssueHistoryITISearchModel {

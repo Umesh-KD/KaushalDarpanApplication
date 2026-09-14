@@ -280,8 +280,8 @@ export class DteItemsMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  public async GetDTEIssueItemListPermanent(EquipmentsId: number, ItemCategoryId: number, InstituteID:number=0) {
-    return await this.http.get(this.APIUrl + "/GetDTEIssueItemListPermanent/" + EquipmentsId + "/" + ItemCategoryId + "/" + InstituteID, this.headersOptions)
+  public async GetDTEIssueItemListPermanent(EquipmentsId: number, ItemCategoryId: number, InstituteID:number=0, UserID:number=0, OfficeID:number=0) {
+    return await this.http.get(this.APIUrl + "/GetDTEIssueItemListPermanent/" + EquipmentsId + "/" + ItemCategoryId + "/" + InstituteID + "/" + UserID + "/" + OfficeID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
