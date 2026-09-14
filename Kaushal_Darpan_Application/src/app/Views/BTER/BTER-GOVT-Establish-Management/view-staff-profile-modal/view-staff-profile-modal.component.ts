@@ -109,6 +109,8 @@ export class ViewStaffProfileModalComponent {
 
   ClosePreviewPopup() {
     this.staffDetailsServicePreview = new StaffDetailsServicePreviewDataModel();
+    this.StaffQualificationList = [];
+    this.StaffCareerAdvancementSchemeData = [];
     if (this.modalRef) {
       this.modalRef.close(); 
     }

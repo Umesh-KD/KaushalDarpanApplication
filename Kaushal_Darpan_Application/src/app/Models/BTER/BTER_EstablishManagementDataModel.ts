@@ -236,7 +236,7 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
 export class BTER_EM_AddServiceHistoryDataModel extends RequestBaseModel {
   public SSOID: string = ''
   public UserID: number = 0
-
+  public IsCurrentlyWorking: boolean = false
   public JoiningDate:string=''
   public OfficeID: number = 0
   public OfficeName?:string=''

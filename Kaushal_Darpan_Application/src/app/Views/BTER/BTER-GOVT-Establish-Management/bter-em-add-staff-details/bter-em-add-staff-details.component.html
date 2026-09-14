@@ -998,12 +998,38 @@
                 request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit) || 
                 request.IsAdmin == 1">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Service History</b>
+        
       </div>
       <form [formGroup]="AddServiceistoryFormGroup"
         *ngIf="!(request.ProfileStatusID == _EnumEMProfileStatus.Approve || 
                 request.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit) || 
                 request.IsAdmin == 1">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Currently Working<span
+                class="StarMarking">*</span></label>
+
+            <div class="flex gap-4">
+              <label class="flex items-center space-x-2">
+                <input type="radio" name="IsCurrentlyWorking" [value]="true" formControlName="IsCurrentlyWorking"
+                  [(ngModel)]="serviceReq.IsCurrentlyWorking" (change)="onChangeIsCurrentlyWorking(true)" />
+                <span>Yes</span>
+              </label>
+
+              <label class="flex items-center space-x-2">
+                <input type="radio" name="IsCurrentlyWorking" [value]="false" formControlName="IsCurrentlyWorking"
+                  [(ngModel)]="serviceReq.IsCurrentlyWorking" (change)="onChangeIsCurrentlyWorking(false)" />
+                <span>No</span>
+              </label>
+            </div>
+
+            <div *ngIf="isAddServiceReq && _AddServiceistoryFormGroup.IsCurrentlyWorking.errors" class="text-danger">
+              <p *ngIf="_AddServiceistoryFormGroup.IsCurrentlyWorking.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Department<span
@@ -1052,7 +1078,7 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Till Date<span
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">{{serviceReq.IsCurrentlyWorking == true ? 'Till' : 'To'}} Date<span
                 class="StarMarking">*</span></label>
             <input autocomplete="off" type="date" class="form-input" placeholder="" name="ToDate" id="ToDate"
               formControlName="ToDate" [(ngModel)]="serviceReq.ToDate" (click)="openDatePicker($event)"
