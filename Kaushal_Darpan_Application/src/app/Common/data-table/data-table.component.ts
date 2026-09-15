@@ -10,6 +10,7 @@ import { TableColumn } from './DatatableModels/table-column.model';
 import { TableConstants } from './DatatableModels/table.constant';
 import { DEFAULT_COLUMN, DEFAULT_IMAGE_CONFIG, DEFAULT_TABLE_CONFIG } from './DatatableModels/table.default';
 import { SweetAlert2 } from '../SweetAlert2';
+import { CdkDragDrop,DragDropModule,moveItemInArray} from '@angular/cdk/drag-drop';
 
 
 @Component({
@@ -53,6 +54,13 @@ export class DataTableComponent implements OnChanges, AfterViewInit {
   displayedColumns: string[] = [];
   filterText = '';
   normalizedColumns: TableColumn[] = [];
+
+  draggingTableColumn: TableColumn | null = null;
+  private tableColumnDragStarted = false;
+  private tableColumnDragStartX = 0;
+  private tableColumnDragStartY = 0;
+  private tableColumnDragThreshold = 5;
+
   private initialColumnState: Record<string, boolean> = {};
 
   showColumnPanel = false;
@@ -195,6 +203,49 @@ private generateColumnsFromData(): void {
     }
 
   }
+
+
+// method  for column customization draggable
+dropColumn( event: CdkDragDrop<TableColumn[]>): void {
+
+    if (this.normalizedConfig.draggable === false) {
+        return;
+    }
+
+    const draggedColumn =
+        this.filteredColumns[event.previousIndex];
+
+    const targetColumn =
+        this.filteredColumns[event.currentIndex];
+
+    if (!draggedColumn || !targetColumn) {
+        return;
+    }
+
+    const previousIndex =
+        this.normalizedColumns.indexOf(draggedColumn);
+
+    const currentIndex =
+        this.normalizedColumns.indexOf(targetColumn);
+
+    if (
+        previousIndex === -1 ||
+        currentIndex === -1 ||
+        previousIndex === currentIndex
+    ) {
+        return;
+    }
+
+    moveItemInArray(
+        this.normalizedColumns,
+        previousIndex,
+        currentIndex
+    );
+
+    this.refreshDisplayedColumns();
+}
+
+
 
 private normalizeColumns(): void {
 
@@ -1537,6 +1588,251 @@ private getExcelDate(): string {
     const seconds =
         String(now.getSeconds()).padStart(2, '0');
     return `${day}${month}${year}_${hours}${minutes}${seconds}`;
+}
+
+
+//#region draggable column customization functions
+startTableColumnDrag(
+    event: PointerEvent,
+    column: TableColumn
+): void {
+
+    if (this.normalizedConfig.draggable === false) {
+        return;
+    }
+
+    /*
+     * Only primary mouse button / normal touch.
+     */
+    if (
+        event.pointerType === 'mouse' &&
+        event.button !== 0
+    ) {
+        return;
+    }
+
+    this.draggingTableColumn = column;
+
+    this.tableColumnDragStarted = false;
+
+    this.tableColumnDragStartX = event.clientX;
+    this.tableColumnDragStartY = event.clientY;
+
+}
+
+@HostListener(
+    'document:pointermove',
+    ['$event']
+)
+onTableColumnPointerMove(
+    event: PointerEvent
+): void {
+
+    if (!this.draggingTableColumn) {
+        return;
+    }
+
+    const deltaX =
+        Math.abs(
+            event.clientX -
+            this.tableColumnDragStartX
+        );
+
+    const deltaY =
+        Math.abs(
+            event.clientY -
+            this.tableColumnDragStartY
+        );
+
+    /*
+     * Prevent accidental dragging when the user
+     * simply clicks the header for sorting.
+     */
+    if (!this.tableColumnDragStarted) {
+
+        if (
+            deltaX < this.tableColumnDragThreshold &&
+            deltaY < this.tableColumnDragThreshold
+        ) {
+            return;
+        }
+
+        this.tableColumnDragStarted = true;
+
+        event.preventDefault();
+    }
+
+    if (!this.tableColumnDragStarted) {
+        return;
+    }
+
+    event.preventDefault();
+
+    this.reorderTableColumnAtPosition(
+        event.clientX,
+        event.clientY
+    );
+}
+
+@HostListener(
+    'document:pointerup',
+    ['$event']
+)
+onTableColumnPointerUp(
+    event: PointerEvent
+): void {
+
+    if (!this.draggingTableColumn) {
+        return;
+    }
+
+    if (this.tableColumnDragStarted) {
+        event.preventDefault();
+    }
+
+    this.draggingTableColumn = null;
+
+    this.tableColumnDragStarted = false;
+
+}
+
+private reorderTableColumnAtPosition(
+    clientX: number,
+    clientY: number
+): void {
+
+    if (!this.draggingTableColumn) {
+        return;
+    }
+
+    const headers =
+        Array.from(
+            this.elementRef.nativeElement
+                .querySelectorAll(
+                    'th.datatable-draggable-header'
+                )
+        ) as HTMLElement[];
+
+    if (!headers.length) {
+        return;
+    }
+
+    /*
+     * Find the header that the mouse is currently
+     * over.
+     */
+    let targetElement: HTMLElement | null = null;
+
+    for (const header of headers) {
+
+        const rect =
+            header.getBoundingClientRect();
+
+        if (
+            clientX >= rect.left &&
+            clientX <= rect.right &&
+            clientY >= rect.top &&
+            clientY <= rect.bottom
+        ) {
+
+            targetElement = header;
+
+            break;
+        }
+    }
+
+    if (!targetElement) {
+        return;
+    }
+
+    const targetField =
+        targetElement.getAttribute(
+            'data-column-field'
+        );
+
+    if (!targetField) {
+        return;
+    }
+
+    /*
+     * Find the target column.
+     */
+    const targetColumn =
+        this.normalizedColumns.find(
+            column =>
+                column.dataField === targetField
+        );
+
+    if (!targetColumn) {
+        return;
+    }
+
+    if (
+        targetColumn ===
+        this.draggingTableColumn
+    ) {
+        return;
+    }
+
+    /*
+     * Current position of dragged column.
+     */
+    const currentIndex =
+        this.normalizedColumns.indexOf(
+            this.draggingTableColumn
+        );
+
+    /*
+     * Current position of target.
+     */
+    const targetIndex =
+        this.normalizedColumns.indexOf(
+            targetColumn
+        );
+
+    if (
+        currentIndex === -1 ||
+        targetIndex === -1
+    ) {
+        return;
+    }
+
+    /*
+     * Move the dragged column to the target
+     * position.
+     *
+     * This is INSERT behavior, NOT SWAP.
+     *
+     * A B C D
+     *
+     * D -> A
+     *
+     * D A B C
+     */
+    this.normalizedColumns.splice(
+        currentIndex,
+        1
+    );
+
+    this.normalizedColumns.splice(
+        targetIndex,
+        0,
+        this.draggingTableColumn
+    );
+
+    /*
+     * IMPORTANT:
+     *
+     * displayedColumns is rebuilt.
+     *
+     * Angular Material therefore moves:
+     *
+     * Header + TD values
+     *
+     * together.
+     */
+    this.refreshDisplayedColumns();
+
 }
 
 }
