@@ -106,6 +106,7 @@ export class inventoryIssueHistorySearchModel {
   public ItemDetailsId? : number =0;
   public OfficeID? : number =0;
   public IsStaff? : boolean = false;
+  public SSOID? : string = '';
 }
 export class inventoryIssueHistoryITISearchModel {
   public InstituteID: number = 0;
