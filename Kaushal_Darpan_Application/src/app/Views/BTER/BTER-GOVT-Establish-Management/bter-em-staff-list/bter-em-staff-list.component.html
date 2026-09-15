@@ -56,7 +56,26 @@
           <select class="form-select" id="ddlInstitutionType" [(ngModel)]="searchRequest.InstitutionManagementTypeID">
             <option [value]="0">Choose Option</option>
             <option [value]="1">Government</option>
-            <option [value]="2">Private</option>
+            <option [value]="5">Private</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Designation</label>
+          <ng-select [(ngModel)]="searchRequest.DesignationID"
+                      [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of DesignationMasterDDLList;">
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+              </ng-container>
+          </ng-select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Profile Status:</label>
+          <select class="form-select" id="ProfileStatus" [(ngModel)]="searchRequest.ProfileStatus">
+            <option value="-1">Choose Option</option>
+            <option *ngFor="let item of StaffProfileStatusList" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
 
@@ -104,7 +123,8 @@
             <!--<th align="left">District Name</th>-->
             <th class="left">Designation as per service book</th>
             <th class="left">Salary Drawn Post </th>
-            <th class="left">Course/Branch</th>
+            <th class="left">Branch as per service book</th>
+            <th class="left">Salary Drawn Branch</th>
             <th align="left">Role/Additional Role </th>
             <th align="left">Profile Status</th>
             <th align="left">Remark</th>
@@ -128,7 +148,8 @@
             <!--<td>{{row.DistrictName}}</td>-->
             <td>{{row.PostName}}</td>
             <td>{{row.SalaryDrawnPost}}</td>
-            <td>{{row.Stream}}</td>
+            <td>{{row.ServiceBookBranch}}</td>
+            <td>{{row.SalaryDrawnBranch}}</td>
             <td>{{row.RoleName}}</td>
             <td>{{row.ProfileStatus}}</td>
             <td>{{row.Remark}}</td>

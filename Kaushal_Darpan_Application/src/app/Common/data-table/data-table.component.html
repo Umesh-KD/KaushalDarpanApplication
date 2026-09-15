@@ -82,7 +82,10 @@
 
         </div>
 
-        <div class="column-list">
+        <div class="column-list"
+            cdkDropList
+            [cdkDropListDisabled]="normalizedConfig.draggable === false"
+            (cdkDropListDropped)="dropColumn($event)">
 
             <!-- Select All -->
 
@@ -108,7 +111,22 @@
 
             <div
                 class="column-item"
-                *ngFor="let column of filteredColumns; let i = index">
+                *ngFor="let column of filteredColumns; let i = index"
+                cdkDrag
+                [cdkDragDisabled]="normalizedConfig.draggable === false">
+
+                 <!-- Drag Handle -->
+                <span
+                    class="drag-handle"
+                    cdkDragHandle
+                    [class.disabled]="normalizedConfig.draggable === false"
+                    [title]="
+                        normalizedConfig.draggable === false
+                            ? 'Column reordering is disabled'
+                            : 'Drag to reorder'
+                    ">
+                    <i class="ti ti-grip-vertical"></i>
+                </span>                
 
                 <input
 
@@ -119,6 +137,7 @@
                     [checked]="column.visible"
 
                     [disabled]="column.lockVisibility"
+                    (mousedown)="$event.stopPropagation()"
 
                     (change)="toggleColumn(column,$event)">
 
@@ -127,6 +146,30 @@
                     {{column.displayField}}
 
                 </label>
+
+                  <!-- Drag Preview -->
+
+                <ng-template cdkDragPreview>
+
+                    <div class="column-drag-preview">
+
+                        <i class="ti ti-grip-vertical"></i>
+
+                        <span>
+                            {{column.displayField}}
+                        </span>
+
+                    </div>
+
+                </ng-template>
+
+                <!-- Placeholder -->
+
+                <ng-template cdkDragPlaceholder>
+
+                    <div class="column-drag-placeholder"></div>
+
+                </ng-template>
 
             </div>
 
@@ -190,14 +233,19 @@
 
                 <th
                     mat-header-cell
-                    *matHeaderCellDef
+                    *matHeaderCellDef                   
                     [style.width]="column.width"
                     [style.text-align]="column.align"
                     [sticky]="column.sticky"
-                    [mat-sort-header]="column.sortable?column.dataField:null">
+                    [mat-sort-header]="column.sortable?column.dataField:null"
+                    class="datatable-draggable-header"
+                    [class.table-column-dragging]="draggingTableColumn === column"
+                    [attr.data-column-field]="column.dataField"
+                    (pointerdown)="startTableColumnDrag($event, column)">
 
-                   <!-- {{getDisplayField(column)}} -->
-                    {{column.displayField}}
+                     <div class="datatable-header-content">
+                        {{ column.displayField }}
+                    </div>
 
                 </th>
 
@@ -334,13 +382,13 @@
 
             <ng-container [matColumnDef]="TABLE_CONSTANTS.ACTION_COLUMN">
 
-                <th mat-header-cell *matHeaderCellDef>
+                <th mat-header-cell *matHeaderCellDef  class="datatable-fixed-header action-header">
 
                     Action
 
                 </th>
 
-                <td mat-cell *matCellDef="let row">
+                <td mat-cell *matCellDef="let row"  class="datatable-fixed-cell action-cell"> 
 
                     <div class="actionBtns">
 
@@ -384,8 +432,8 @@
 
             <tr
                 mat-header-row
-                *matHeaderRowDef="displayedColumns">
-
+                *matHeaderRowDef="displayedColumns"            
+                class="datatable-header-row">
             </tr>
 
             <!-- Row -->

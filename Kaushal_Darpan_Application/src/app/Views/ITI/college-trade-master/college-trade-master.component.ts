@@ -231,7 +231,7 @@ export class CollegeTradeMasterComponent {
 
 
       this.searchRequest.PageNumber = 1;
-      this.searchRequest.Action = 'LIST_DOWNLOAD'
+      this.searchRequest.Action = 'LIST'
 
 
 

@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CreateTpoService } from '../../../../Services/TPOMaster/create-tpo.service';
 import { ToastrService } from 'ngx-toastr';
+import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 
 @Component({
     selector: 'app-edit-tpo',
@@ -18,7 +19,7 @@ export class EditTpoComponent implements OnInit {
   isSubmitted = false;
   Message: string = '';
   ErrorMessage: string = '';
-  State: boolean = false;
+  State: number=0;
   request: CreateTpoAddEditModel = {
       UserID: 0,
       InstituteID: 0,
@@ -36,6 +37,7 @@ export class EditTpoComponent implements OnInit {
       DepartmentID: 0
   }
 
+  public   _EnumStatus = EnumStatus;
   // No need for @Input() here, as data is passed via MAT_DIALOG_DATA
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: CreateTpoAddEditModel,
@@ -105,13 +107,14 @@ export class EditTpoComponent implements OnInit {
           IPAddress: '',
           DepartmentID: 0
       }
+      debugger
       await this.createTpoService.SaveData(obj)
         .then(async (data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          if (this.State) {
-            this.toastr.success("Submitted Successfully")
+          if (this.State==this._EnumStatus.Success) {            
+            this.toastr.success(this.Message);
             console.log('Form Submitted Successfully', obj);
             //await this.addCenterData();
             this.dialogRef.close(this.State);

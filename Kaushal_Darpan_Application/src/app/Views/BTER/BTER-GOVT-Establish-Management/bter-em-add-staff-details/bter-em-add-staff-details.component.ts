@@ -220,6 +220,7 @@ export class BterEMAddStaffDetailsComponent {
 
       PromotionTime: [''],
       TransferTime: [''],
+      IsCurrentlyWorking: [''],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -545,11 +546,11 @@ export class BterEMAddStaffDetailsComponent {
           const ChildPostServiceTypeID_Local = data.Data[0].ChildPostServiceTypeID;
           const PostServiceTypeID_Local = data.Data[0].PostServiceTypeID;
           await this.DistrictMaster_StateIDWise();
-          if(this.request.ISNonGazetted == 1) {
+          if (this.request.ISNonGazetted == 1) {
             await this.getPostServiceTypeDDL();
-          } 
+          }
           this.request.PostServiceTypeID = PostServiceTypeID_Local;
-          if(this.request.ISNonGazetted == 1 && this.request.PostServiceTypeID == EnumPostServiceType_BTER.Other_Department_Services) {
+          if (this.request.ISNonGazetted == 1 && this.request.PostServiceTypeID == EnumPostServiceType_BTER.Other_Department_Services) {
             await this.getChildPostServiceTypeDDL();
           }
           this.request.ChildPostServiceTypeID = ChildPostServiceTypeID_Local;
@@ -1108,7 +1109,7 @@ export class BterEMAddStaffDetailsComponent {
   //     const transferOffice = this.OfficeList.find((x: any) => x.ID == formValue.TransferToOfficeID);
   //     const promotionDesignation = this.DesignationMasterDDLList_ServiceHistory.find((x: any) => x.ID == formValue.ToDesignationIDPromotion);
   //     const Qualification = this.EmployeeQualificationDDLList.find((x: any) => x.QualificationID == formValue.QualificationID)?.QualificationName;
-      
+
   //     const ServiceBranchName = this.CourseMasterDDL.find((x: any) => x.StreamID == this.serviceReq.ServiceBranchID)?.StreamName;
   //     const ToBranchNamePromotion = this.CourseMasterDDL.find((x: any) => x.StreamID == this.serviceReq.ToBranchIDPromotion)?.StreamName;
 
@@ -1157,7 +1158,7 @@ export class BterEMAddStaffDetailsComponent {
 
   //         // Transfer Documents (Multiple)
   //       TransferDocuments: [...this.serviceReq.TransferDocuments],
-   
+
   //       // Promotion
   //       IsPromotion: formValue.IsPromotion,
   //       ToDesignationIDPromotion: formValue.ToDesignationIDPromotion,
@@ -1167,7 +1168,7 @@ export class BterEMAddStaffDetailsComponent {
   //       ToBranchNamePromotion: ToBranchNamePromotion,
   //       // Promotion Documents (Multiple)
   //       PromotionDocuments: [...this.serviceReq.PromotionDocuments]        
-  
+
   //     };
 
   //      // ============================================================
@@ -1190,7 +1191,7 @@ export class BterEMAddStaffDetailsComponent {
   //   this.serviceHistoryList.push(serviceData);
   // }
 
-      
+
   //     // push entry
   //     // this.serviceHistoryList.push(serviceData);
 
@@ -1213,446 +1214,194 @@ export class BterEMAddStaffDetailsComponent {
   // }
 
   async AddAnotherServiceHistory() {
-  debugger;
+    this.isAddServiceReq = true;
+    // =========================================================
+    // Validate form
+    // =========================================================
 
-  this.isAddServiceReq = true;
-
-  // =========================================================
-  // Validate form
-  // =========================================================
-
-  await this.refreshValidators();
-
-  if (this.AddServiceistoryFormGroup.invalid) {
-
-    this.toastr.error(
-      "Please enter required fields in service history section."
-    );
-
-    Object.keys(
-      this.AddServiceistoryFormGroup.controls
-    ).forEach(key => {
-
-      const control =
-        this.AddServiceistoryFormGroup.get(key);
-
-      if (control && control.invalid) {
-
-        console.error(
-          `Control ${key} is invalid`
-        );
-      }
-    });
-
-    return;
-  }
-
-  // =========================================================
-  // Get form value
-  // =========================================================
-
-  const formValue =
-    this.AddServiceistoryFormGroup.value;
-
-  const newFromDate =
-    new Date(formValue.FromDate);
-
-  const newToDate =
-    new Date(formValue.ToDate);
-
-  // =========================================================
-  // Duplicate date validation
-  // Ignore currently edited row
-  // =========================================================
-
-  const duplicate =
-    this.serviceHistoryList.some(
-      (x: any, index: number) => {
-
-        // Ignore current row while editing
-        if (
-          this.isEditServiceReq &&
-          index === this.editServiceIndex
-        ) {
-          return false;
+    await this.refreshValidators();
+    if (this.AddServiceistoryFormGroup.invalid) {
+      this.toastr.error(
+        "Please enter required fields in service history section."
+      );
+      Object.keys(this.AddServiceistoryFormGroup.controls).forEach(key => {
+        const control = this.AddServiceistoryFormGroup.get(key);
+        if (control && control.invalid) {
+          console.error(`Control ${key} is invalid`);
         }
+      });
+      return;
+    }
 
-        return (
-          x.FromDate === formValue.FromDate &&
-          x.ToDate === formValue.ToDate
-        );
-      }
-    );
+    // =========================================================
+    // Get form value
+    // =========================================================
 
-  if (duplicate) {
+    const formValue = this.AddServiceistoryFormGroup.value;
+    const newFromDate = new Date(formValue.FromDate);
+    const newToDate = new Date(formValue.ToDate);
 
-    this.toastr.error(
-      "This service Period is already Exists!"
-    );
+    // =========================================================
+    // Duplicate date validation
+    // Ignore currently edited row
+    // =========================================================
 
-    return;
-  }
+    const duplicate =
+      this.serviceHistoryList.some(
+        (x: any, index: number) => {
 
-  // =========================================================
-  // Overlap validation
-  // Ignore currently edited row
-  // =========================================================
+          // Ignore current row while editing
+          if (
+            this.isEditServiceReq &&
+            index === this.editServiceIndex
+          ) {
+            return false;
+          }
 
-  const overlap =
-    this.serviceHistoryList.some(
-      (x: any, index: number) => {
-
-        // IMPORTANT:
-        // Don't compare edited row with itself
-        if (
-          this.isEditServiceReq &&
-          index === this.editServiceIndex
-        ) {
-          return false;
+          return (
+            x.FromDate === formValue.FromDate &&
+            x.ToDate === formValue.ToDate
+          );
         }
-
-        const existingFrom =
-          new Date(x.FromDate);
-
-        const existingTo =
-          new Date(x.ToDate);
-
-        return (
-          newFromDate <= existingTo &&
-          newToDate >= existingFrom
-        );
-      }
-    );
-
-  if (overlap) {
-
-    this.toastr.error(
-      "Date range overlaps with existing Service History!"
-    );
-
-    return;
-  }
-
-  // =========================================================
-  // Get dropdown names
-  // =========================================================
-
-  const institute =
-    this.InstituteMasterDDLList.find(
-      (x: any) =>
-        x.InstituteID ==
-        formValue.TransferToInstituteID
-    );
-
-  const designation =
-    this.DesignationMasterDDLList_ServiceHistory.find(
-      (x: any) =>
-        x.ID ==
-        formValue.DesignationID
-    );
-
-  const office =
-    this.OfficeList.find(
-      (x: any) =>
-        x.ID ==
-        formValue.OfficeID
-    );
-
-  const transferOffice =
-    this.OfficeList.find(
-      (x: any) =>
-        x.ID ==
-        formValue.TransferToOfficeID
-    );
-
-  const promotionDesignation =
-    this.DesignationMasterDDLList_ServiceHistory.find(
-      (x: any) =>
-        x.ID ==
-        formValue.ToDesignationIDPromotion
-    );
-
-  const Qualification =
-    this.EmployeeQualificationDDLList.find(
-      (x: any) =>
-        x.QualificationID ==
-        formValue.QualificationID
-    )?.QualificationName;
-
-  const ServiceBranchName =
-    this.CourseMasterDDL.find(
-      (x: any) =>
-        x.StreamID ==
-        formValue.ServiceBranchID
-    )?.StreamName;
-
-  const ToBranchNamePromotion =
-    this.CourseMasterDDL.find(
-      (x: any) =>
-        x.StreamID ==
-        formValue.ToBranchIDPromotion
-    )?.StreamName;
-
-  // =========================================================
-  // Institute Name
-  // =========================================================
-
-  if (formValue.InstituteID != 0) {
-
-    const selectedInstitute =
-      this.InstituteMasterDDLList.find(
-        (x: any) =>
-          x.InstituteID ==
-          formValue.InstituteID
       );
 
-    this.serviceReq.InstituteName =
-      selectedInstitute?.InstituteName || '';
+    if (duplicate) {
+
+      this.toastr.error(
+        "This service Period is already Exists!"
+      );
+
+      return;
+    }
+
+    // =========================================================
+    // Overlap validation
+    // Ignore currently edited row
+    // =========================================================
+
+    const overlap =
+      this.serviceHistoryList.some(
+        (x: any, index: number) => {
+
+          // IMPORTANT:
+          // Don't compare edited row with itself
+          if (
+            this.isEditServiceReq &&
+            index === this.editServiceIndex
+          ) {
+            return false;
+          }
+
+          const existingFrom =
+            new Date(x.FromDate);
+
+          const existingTo =
+            new Date(x.ToDate);
+
+          return (
+            newFromDate <= existingTo &&
+            newToDate >= existingFrom
+          );
+        }
+      );
+
+    if (overlap) {
+      this.toastr.error("Date range overlaps with existing Service History!");
+      return;
+    }
+
+    const institute = this.InstituteMasterDDLList.find((x: any) => x.InstituteID == formValue.TransferToInstituteID);
+    const designation = this.DesignationMasterDDLList_ServiceHistory.find((x: any) => x.ID == formValue.DesignationID);
+    const office = this.OfficeList.find((x: any) => x.ID == formValue.OfficeID);
+    const transferOffice = this.OfficeList.find((x: any) => x.ID == formValue.TransferToOfficeID);
+    const promotionDesignation = this.DesignationMasterDDLList_ServiceHistory.find((x: any) => x.ID == formValue.ToDesignationIDPromotion);
+    const Qualification = this.EmployeeQualificationDDLList.find((x: any) => x.QualificationID == formValue.QualificationID)?.QualificationName;
+    const ServiceBranchName = this.CourseMasterDDL.find((x: any) => x.StreamID == formValue.ServiceBranchID)?.StreamName;
+    const ToBranchNamePromotion = this.CourseMasterDDL.find((x: any) => x.StreamID == formValue.ToBranchIDPromotion)?.StreamName;
+
+    if (formValue.InstituteID != 0) {
+      const selectedInstitute = this.InstituteMasterDDLList.find((x: any) => x.InstituteID == formValue.InstituteID);
+      this.serviceReq.InstituteName = selectedInstitute?.InstituteName || '';
+    }
+    else {
+      this.serviceReq.InstituteName = '';
+    }
+
+    this.serviceReq.DesignationName = designation?.Name || '';
+    this.serviceReq.OfficeName = office?.Name || '';
+    this.serviceReq.TransferToOfficeName = transferOffice?.Name || '';
+    this.serviceReq.ToDesignationName = promotionDesignation?.Name || '';
+    this.serviceReq.TransferToInstituteName = institute?.InstituteName || '';
+    this.serviceReq.ToBranchNamePromotion = ToBranchNamePromotion || '';
+
+    this.serviceReq.UserID = this.sSOLoginDataModel.UserID;
+    this.serviceReq.SSOID = this.sSOLoginDataModel.SSOID;
+
+    const serviceData = {
+      OfficeID:formValue.OfficeID,
+      InstituteID: formValue.InstituteID,
+      FromDate: formValue.FromDate,
+      ToDate: formValue.ToDate,
+      DesignationID: formValue.DesignationID,
+      ServiceBranchID: formValue.ServiceBranchID,
+      ServiceBranchName: ServiceBranchName,
+      QualificationID: formValue.QualificationID,
+      Qualification: Qualification,
+      DesignationName: this.serviceReq.DesignationName,
+      InstituteName: this.serviceReq.InstituteName,
+      OfficeName: this.serviceReq.OfficeName,
+      SSOID: this.serviceReq.SSOID,
+      UserID: this.serviceReq.UserID,
+      IsCurrentlyWorking: this.serviceReq.IsCurrentlyWorking,
+      DisUploadDoc: this.serviceReq.DisUploadDoc,
+      UploadDoc: this.serviceReq.UploadDoc,
+      IsTransfer: formValue.IsTransfer,
+      DateOfTransfer: formValue.DateOfTransfer,
+      TransferToInstituteID: formValue.TransferToInstituteID,
+      TransferToOfficeID: formValue.TransferToOfficeID,
+      TransferToOfficeName: this.serviceReq.TransferToOfficeName,
+      TransferToInstituteName: this.serviceReq.TransferToInstituteName,
+      TransferTime: this.serviceReq.TransferTime,
+      TransferDocuments: this.serviceReq.TransferDocuments ? [...this.serviceReq.TransferDocuments]: [],
+      IsPromotion: formValue.IsPromotion,
+      ToDesignationIDPromotion: formValue.ToDesignationIDPromotion,
+      ToDesignationName: this.serviceReq.ToDesignationName,
+      DateOfpromotion: formValue.DateOfpromotion,
+      ToBranchIDPromotion: formValue.ToBranchIDPromotion,
+      ToBranchNamePromotion: ToBranchNamePromotion,
+      PromotionTime: this.serviceReq.PromotionTime,
+      PromotionDocuments: this.serviceReq.PromotionDocuments ? [...this.serviceReq.PromotionDocuments]: []
+    };
+
+    const editServiceIndex = this.editServiceIndex ?? -1;
+
+    if (this.isEditServiceReq && editServiceIndex !== null && editServiceIndex >= 0 && editServiceIndex < this.serviceHistoryList.length) {
+      this.serviceHistoryList[editServiceIndex] = serviceData;
+    } else {
+      this.serviceHistoryList.push(serviceData);
+    }
+
+    this.AddServiceistoryFormGroup.reset({
+      OfficeID: 0,
+      InstituteID: 0,
+      DesignationID: 0,
+      ServiceBranchID: 0,
+      QualificationID: 0,
+      TransferToOfficeID: 0,
+      TransferToInstituteID: 0,
+      ToDesignationIDPromotion: 0,
+      ToBranchIDPromotion: 0,
+      IsTransfer: false,
+      IsPromotion: false
+    });
+
+    this.serviceReq = new BTER_EM_AddServiceHistoryDataModel();
+    this.isAddServiceReq = false;
+    this.isEditServiceReq = false;
+    this.editServiceIndex = -1;
+    this.IsTransfer = false;
+    this.IsPromotion = false;
   }
-  else {
-    this.serviceReq.InstituteName = '';
-  }
-
-  // =========================================================
-  // Set display names
-  // =========================================================
-
-  this.serviceReq.DesignationName =
-    designation?.Name || '';
-
-  this.serviceReq.OfficeName =
-    office?.Name || '';
-
-  this.serviceReq.TransferToOfficeName =
-    transferOffice?.Name || '';
-
-  this.serviceReq.ToDesignationName =
-    promotionDesignation?.Name || '';
-
-  this.serviceReq.TransferToInstituteName =
-    institute?.InstituteName || '';
-
-  this.serviceReq.ToBranchNamePromotion =
-    ToBranchNamePromotion || ''; 
-
-  // =========================================================
-  // Login details
-  // =========================================================
-
-  this.serviceReq.UserID =
-    this.sSOLoginDataModel.UserID;
-
-  this.serviceReq.SSOID =
-    this.sSOLoginDataModel.SSOID;
-
-  // =========================================================
-  // Create service data
-  // =========================================================
-
-  const serviceData = {
-
-    OfficeID:
-      formValue.OfficeID,
-
-    InstituteID:
-      formValue.InstituteID,
-
-    FromDate:
-      formValue.FromDate,
-
-    ToDate:
-      formValue.ToDate,
-
-    DesignationID:
-      formValue.DesignationID,
-
-    ServiceBranchID:
-      formValue.ServiceBranchID,
-
-    ServiceBranchName:
-      ServiceBranchName,
-
-    QualificationID:
-      formValue.QualificationID,
-
-    Qualification:
-      Qualification,
-
-    DesignationName:
-      this.serviceReq.DesignationName,
-
-    InstituteName:
-      this.serviceReq.InstituteName,
-
-    OfficeName:
-      this.serviceReq.OfficeName,
-
-    SSOID:
-      this.serviceReq.SSOID,
-
-    UserID:
-      this.serviceReq.UserID,
-
-    // =====================================================
-    // Service History Document
-    // =====================================================
-
-    DisUploadDoc:
-      this.serviceReq.DisUploadDoc,
-
-    UploadDoc:
-      this.serviceReq.UploadDoc,
-
-    // =====================================================
-    // Transfer
-    // =====================================================
-
-    IsTransfer:
-      formValue.IsTransfer,
-
-    DateOfTransfer:
-      formValue.DateOfTransfer,
-
-    TransferToInstituteID:
-      formValue.TransferToInstituteID,
-
-    TransferToOfficeID:
-      formValue.TransferToOfficeID,
-
-    TransferToOfficeName:
-      this.serviceReq.TransferToOfficeName,
-
-    TransferToInstituteName:
-      this.serviceReq.TransferToInstituteName,
-
-    TransferTime:
-      this.serviceReq.TransferTime,
-
-    TransferDocuments:
-      this.serviceReq.TransferDocuments
-        ? [...this.serviceReq.TransferDocuments]
-        : [],
-
-    // =====================================================
-    // Promotion
-    // =====================================================
-
-    IsPromotion:
-      formValue.IsPromotion,
-
-    ToDesignationIDPromotion:
-      formValue.ToDesignationIDPromotion,
-
-    ToDesignationName:
-      this.serviceReq.ToDesignationName,
-
-    DateOfpromotion:
-      formValue.DateOfpromotion,
-
-    ToBranchIDPromotion:
-      formValue.ToBranchIDPromotion,
-
-    ToBranchNamePromotion:
-      ToBranchNamePromotion,
-
-    PromotionTime:
-      this.serviceReq.PromotionTime,
-
-    PromotionDocuments:
-      this.serviceReq.PromotionDocuments
-        ? [...this.serviceReq.PromotionDocuments]
-        : []
-  };
-
-  // =========================================================
-  // ADD OR UPDATE
-  // =========================================================
-
-  const editServiceIndex = this.editServiceIndex??-1;
-
-  if (
-    this.isEditServiceReq &&
-    editServiceIndex !== null &&
-    editServiceIndex >= 0 &&
-    editServiceIndex <
-      this.serviceHistoryList.length
-  ) {
-
-    console.log(
-      "Updating row:",
-      editServiceIndex
-    );
-
-    // IMPORTANT:
-    // Replace ONLY the selected row.
-    // Do NOT use splice().
-    this.serviceHistoryList[
-      editServiceIndex
-    ] = serviceData;
-
-  }
-  else {
-
-    console.log(
-      "Adding new row"
-    );
-
-    // New record
-    this.serviceHistoryList.push(
-      serviceData
-    );
-  }
-
-  // =========================================================
-  // Reset form
-  // =========================================================
-
-  this.AddServiceistoryFormGroup.reset({
-
-    OfficeID: 0,
-
-    InstituteID: 0,
-
-    DesignationID: 0,
-
-    ServiceBranchID: 0,
-
-    QualificationID: 0,
-
-    TransferToOfficeID: 0,
-
-    TransferToInstituteID: 0,
-
-    ToDesignationIDPromotion: 0,
-
-    ToBranchIDPromotion: 0,
-
-    IsTransfer: false,
-
-    IsPromotion: false
-  });
-
-  // =========================================================
-  // Reset service model
-  // =========================================================
-
-  this.serviceReq =
-    new BTER_EM_AddServiceHistoryDataModel();
-
-  // =========================================================
-  // Reset edit state
-  // =========================================================
-
-  this.isAddServiceReq = false;
-
-  this.isEditServiceReq = false;
-
-  this.editServiceIndex = -1;
-
-  this.IsTransfer = false;
-
-  this.IsPromotion = false;
-}
 
   private formatDateForInput(date: any): string {
     if (!date) return '';
@@ -1666,308 +1415,176 @@ export class BterEMAddStaffDetailsComponent {
     return `${year}-${month}-${day}`;
   }
 
-//   async EditServiceHistory(row: any, index: number) {
-//   debugger
-//     this.isEditServiceReq = true;
-//     this.editServiceIndex = index;
-//     this.isAddServiceReq = false;
+  //   async EditServiceHistory(row: any, index: number) {
+  //   debugger
+  //     this.isEditServiceReq = true;
+  //     this.editServiceIndex = index;
+  //     this.isAddServiceReq = false;
 
-//     // remove the row being edited so it isn't duplicated once re-added
-//     this.deleteServiceHistory(index);
+  //     // remove the row being edited so it isn't duplicated once re-added
+  //     this.deleteServiceHistory(index);
 
-//     // local UI flags driving *ngIf sections
-//     this.IsTransfer = !!row.IsTransfer;
-//     this.IsPromotion = !!row.IsPromotion;
+  //     // local UI flags driving *ngIf sections
+  //     this.IsTransfer = !!row.IsTransfer;
+  //     this.IsPromotion = !!row.IsPromotion;
 
-//     // ---- ngModel-bound fields on serviceReq (null/undefined safe) ----
-//     this.serviceReq.OfficeID = this.orDefault(row.OfficeID, 0);
-//     this.serviceReq.InstituteID = this.orDefault(row.InstituteID, 0);
-//     this.serviceReq.FromDate = this.formatDateForInput(row.FromDate);
-//     this.serviceReq.ToDate = this.formatDateForInput(row.ToDate);
+  //     // ---- ngModel-bound fields on serviceReq (null/undefined safe) ----
+  //     this.serviceReq.OfficeID = this.orDefault(row.OfficeID, 0);
+  //     this.serviceReq.InstituteID = this.orDefault(row.InstituteID, 0);
+  //     this.serviceReq.FromDate = this.formatDateForInput(row.FromDate);
+  //     this.serviceReq.ToDate = this.formatDateForInput(row.ToDate);
 
-//     this.serviceReq.ServiceBranchID = this.orDefault(row.ServiceBranchID, 0);
-//     this.serviceReq.QualificationID = this.orDefault(row.QualificationID, 0);
+  //     this.serviceReq.ServiceBranchID = this.orDefault(row.ServiceBranchID, 0);
+  //     this.serviceReq.QualificationID = this.orDefault(row.QualificationID, 0);
 
-//     this.serviceReq.IsTransfer = this.IsTransfer;
-//     this.serviceReq.TransferToOfficeID = this.orDefault(row.TransferToOfficeID, 0);
-//     this.serviceReq.TransferToInstituteID = this.orDefault(row.TransferToInstituteID, 0);
-//     this.serviceReq.DateOfTransfer = this.formatDateForInput(row.DateOfTransfer);
+  //     this.serviceReq.IsTransfer = this.IsTransfer;
+  //     this.serviceReq.TransferToOfficeID = this.orDefault(row.TransferToOfficeID, 0);
+  //     this.serviceReq.TransferToInstituteID = this.orDefault(row.TransferToInstituteID, 0);
+  //     this.serviceReq.DateOfTransfer = this.formatDateForInput(row.DateOfTransfer);
 
-//     this.serviceReq.IsPromotion = this.IsPromotion;
-//     this.serviceReq.ToDesignationIDPromotion = this.orDefault(row.ToDesignationIDPromotion, 0);
-//     this.serviceReq.ToBranchIDPromotion = this.orDefault(row.ToBranchIDPromotion, 0);
-//     this.serviceReq.DateOfpromotion = this.formatDateForInput(row.DateOfpromotion);
+  //     this.serviceReq.IsPromotion = this.IsPromotion;
+  //     this.serviceReq.ToDesignationIDPromotion = this.orDefault(row.ToDesignationIDPromotion, 0);
+  //     this.serviceReq.ToBranchIDPromotion = this.orDefault(row.ToBranchIDPromotion, 0);
+  //     this.serviceReq.DateOfpromotion = this.formatDateForInput(row.DateOfpromotion);
 
-//     // doc metadata / display-only fields — not on the form, still ngModel-bound elsewhere
-//     this.serviceReq.DisUploadDoc = this.orDefault(row.DisUploadDoc, '');
-//     this.serviceReq.UploadDoc = this.orDefault(row.UploadDoc, '');
-//     this.serviceReq.TransferDocuments = row.TransferDocuments ? [...row.TransferDocuments] : [];
-//     this.serviceReq.PromotionDocuments = row.PromotionDocuments ? [...row.PromotionDocuments] : [];
-//     this.serviceReq.TransferToOfficeName = this.orDefault(row.TransferToOfficeName, '');
-//     this.serviceReq.TransferToInstituteName = this.orDefault(row.TransferToInstituteName, '');
-//     this.serviceReq.ToDesignationName = this.orDefault(row.ToDesignationName, '');
-//     this.serviceReq.DesignationName = this.orDefault(row.DesignationName, '');
-//     this.serviceReq.OfficeName = this.orDefault(row.OfficeName, '');
-//     this.serviceReq.InstituteName = this.orDefault(row.InstituteName, '');
+  //     // doc metadata / display-only fields — not on the form, still ngModel-bound elsewhere
+  //     this.serviceReq.DisUploadDoc = this.orDefault(row.DisUploadDoc, '');
+  //     this.serviceReq.UploadDoc = this.orDefault(row.UploadDoc, '');
+  //     this.serviceReq.TransferDocuments = row.TransferDocuments ? [...row.TransferDocuments] : [];
+  //     this.serviceReq.PromotionDocuments = row.PromotionDocuments ? [...row.PromotionDocuments] : [];
+  //     this.serviceReq.TransferToOfficeName = this.orDefault(row.TransferToOfficeName, '');
+  //     this.serviceReq.TransferToInstituteName = this.orDefault(row.TransferToInstituteName, '');
+  //     this.serviceReq.ToDesignationName = this.orDefault(row.ToDesignationName, '');
+  //     this.serviceReq.DesignationName = this.orDefault(row.DesignationName, '');
+  //     this.serviceReq.OfficeName = this.orDefault(row.OfficeName, '');
+  //     this.serviceReq.InstituteName = this.orDefault(row.InstituteName, '');
 
-//     // preload dependent dropdowns BEFORE patching reactive form
-//     await this.GetDesignationData_ServiceHistory();
-//     if (this.serviceReq.OfficeID == 21) {
-//       await this.getStreamMasterData();
-//     }
-//     this.serviceReq.DesignationID = this.orDefault(row.DesignationID, 0);
-//     // ---- reactive form (formControlName) fields, same null-safe defaults ----
-//     this.AddServiceistoryFormGroup.patchValue({
-//       OfficeID: this.serviceReq.OfficeID,
-//       InstituteID: this.serviceReq.InstituteID,
-//       FromDate: this.serviceReq.FromDate,
-//       ToDate: this.serviceReq.ToDate,
-//     /*  DesignationID: this.serviceReq.DesignationID,*/
-//       ServiceBranchID: this.serviceReq.ServiceBranchID,
-//       QualificationID: this.serviceReq.QualificationID,
+  //     // preload dependent dropdowns BEFORE patching reactive form
+  //     await this.GetDesignationData_ServiceHistory();
+  //     if (this.serviceReq.OfficeID == 21) {
+  //       await this.getStreamMasterData();
+  //     }
+  //     this.serviceReq.DesignationID = this.orDefault(row.DesignationID, 0);
+  //     // ---- reactive form (formControlName) fields, same null-safe defaults ----
+  //     this.AddServiceistoryFormGroup.patchValue({
+  //       OfficeID: this.serviceReq.OfficeID,
+  //       InstituteID: this.serviceReq.InstituteID,
+  //       FromDate: this.serviceReq.FromDate,
+  //       ToDate: this.serviceReq.ToDate,
+  //     /*  DesignationID: this.serviceReq.DesignationID,*/
+  //       ServiceBranchID: this.serviceReq.ServiceBranchID,
+  //       QualificationID: this.serviceReq.QualificationID,
 
-//       IsTransfer: this.serviceReq.IsTransfer,
-//       TransferToOfficeID: this.serviceReq.TransferToOfficeID,
-//       TransferToInstituteID: this.serviceReq.TransferToInstituteID,
-//       DateOfTransfer: this.serviceReq.DateOfTransfer,
+  //       IsTransfer: this.serviceReq.IsTransfer,
+  //       TransferToOfficeID: this.serviceReq.TransferToOfficeID,
+  //       TransferToInstituteID: this.serviceReq.TransferToInstituteID,
+  //       DateOfTransfer: this.serviceReq.DateOfTransfer,
 
-//       IsPromotion: this.serviceReq.IsPromotion,
-// /*      ToDesignationIDPromotion: this.serviceReq.ToDesignationIDPromotion,*/
-//       ToBranchIDPromotion: this.serviceReq.ToBranchIDPromotion,
-//       DateOfpromotion: this.serviceReq.DateOfpromotion,
-//     });
+  //       IsPromotion: this.serviceReq.IsPromotion,
+  // /*      ToDesignationIDPromotion: this.serviceReq.ToDesignationIDPromotion,*/
+  //       ToBranchIDPromotion: this.serviceReq.ToBranchIDPromotion,
+  //       DateOfpromotion: this.serviceReq.DateOfpromotion,
+  //     });
 
-//     document.querySelector('form[formGroup]')
-//       ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-//   }
+  //     document.querySelector('form[formGroup]')
+  //       ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //   }
 
-async EditServiceHistory(row: any, index: number) {
-  debugger;
+  async EditServiceHistory(row: any, index: number) {
+    debugger;
 
-  await this.GetDesignationData_ServiceHistory();
+    await this.GetDesignationData_ServiceHistory();
 
-  // Store edit state
-  this.isEditServiceReq = true;
-  this.editServiceIndex = index;
-  this.isAddServiceReq = false;
+    // Store edit state
+    this.isEditServiceReq = true;
+    this.editServiceIndex = index;
+    this.isAddServiceReq = false;
 
-  // UI flags
-  this.IsTransfer = !!row.IsTransfer;
-  this.IsPromotion = !!row.IsPromotion;
+    // UI flags
+    this.IsTransfer = !!row.IsTransfer;
+    this.IsPromotion = !!row.IsPromotion;
 
-  // =========================================================
-  // Patch ngModel-bound serviceReq fields
-  // =========================================================
+    // =========================================================
+    // Patch ngModel-bound serviceReq fields
+    // =========================================================
 
-  this.serviceReq.OfficeID =
-    this.orDefault(row.OfficeID, 0);
+    this.serviceReq.OfficeID = this.orDefault(row.OfficeID, 0);
+    this.serviceReq.InstituteID = this.orDefault(row.InstituteID, 0);
+    this.serviceReq.IsCurrentlyWorking = this.orDefault(row.IsCurrentlyWorking, false);
+    this.serviceReq.FromDate = this.formatDateForInput(row.FromDate);
+    this.serviceReq.ToDate = this.formatDateForInput(row.ToDate);
+    this.serviceReq.ServiceBranchID = this.orDefault(row.ServiceBranchID, 0);
+    this.serviceReq.QualificationID = this.orDefault(row.QualificationID, 0);
+    this.serviceReq.DesignationID = this.orDefault(row.DesignationID, 0);
 
-  this.serviceReq.InstituteID =
-    this.orDefault(row.InstituteID, 0);
-
-  this.serviceReq.FromDate =
-    this.formatDateForInput(row.FromDate);
-
-  this.serviceReq.ToDate =
-    this.formatDateForInput(row.ToDate);
-
-  this.serviceReq.ServiceBranchID =
-    this.orDefault(row.ServiceBranchID, 0);
-
-  this.serviceReq.QualificationID =
-    this.orDefault(row.QualificationID, 0);
-
-  this.serviceReq.DesignationID =
-    this.orDefault(row.DesignationID, 0);
-
-
-  // await this.onChange_SearviceToDesignation();
-
-  // Transfer
-  this.serviceReq.IsTransfer =
-    this.IsTransfer;
-
-  this.serviceReq.TransferToOfficeID =
-    this.orDefault(row.TransferToOfficeID, 0);
-
-  this.serviceReq.TransferToInstituteID =
-    this.orDefault(row.TransferToInstituteID, 0);
-
-  this.serviceReq.DateOfTransfer =
-    this.formatDateForInput(row.DateOfTransfer);
-
-  this.serviceReq.TransferTime=
-    this.orDefault(  row.TransferTime?.toString().trim().toUpperCase() , '');    
-
-  // Promotion
-  this.serviceReq.IsPromotion =
-    this.IsPromotion;
-
-  this.serviceReq.ToDesignationIDPromotion =
-    this.orDefault(
-      row.ToDesignationIDPromotion,
-      0
-    );
-
-  this.serviceReq.ToBranchIDPromotion =
-    this.orDefault(
-      row.ToBranchIDPromotion,
-      0
-    );
-
-  this.serviceReq.DateOfpromotion =
-    this.formatDateForInput(
-      row.DateOfpromotion
-    );
-
-  this.serviceReq.PromotionTime=
-    this.orDefault( row.PromotionTime?.toString().trim().toUpperCase() , '');
-
-  // =========================================================
-  // Documents
-  // =========================================================
-
-  this.serviceReq.DisUploadDoc =
-    this.orDefault(row.DisUploadDoc, '');
-
-  this.serviceReq.UploadDoc =
-    this.orDefault(row.UploadDoc, '');
-
-  this.serviceReq.TransferDocuments =
-    row.TransferDocuments
-      ? [...row.TransferDocuments]
-      : [];
-
-  this.serviceReq.PromotionDocuments =
-    row.PromotionDocuments
-      ? [...row.PromotionDocuments]
-      : [];
-
-  // =========================================================
-  // Display fields
-  // =========================================================
-
-  this.serviceReq.TransferToOfficeName =
-    this.orDefault(
-      row.TransferToOfficeName,
-      ''
-    );
-
-  this.serviceReq.TransferToInstituteName =
-    this.orDefault(
-      row.TransferToInstituteName,
-      ''
-    );
-
-  this.serviceReq.ToDesignationName =
-    this.orDefault(
-      row.ToDesignationName,
-      ''
-    );
-
-  this.serviceReq.DesignationName =
-    this.orDefault(
-      row.DesignationName,
-      ''
-    );
-
-  this.serviceReq.OfficeName =
-    this.orDefault(
-      row.OfficeName,
-      ''
-    );
-
-  this.serviceReq.InstituteName =
-    this.orDefault(
-      row.InstituteName,
-      ''
-    );
-
-  // =========================================================
-  // Load dependent dropdown data
-  // =========================================================
-
-
-
-  if (this.serviceReq.OfficeID == 21 ) {
-    await this.getStreamMasterData();
-  }
-
-  // this.serviceReq.DesignationID =
-  //   this.orDefault(
-  //     row.DesignationID,
-  //     0
-  //   );
-
-  // =========================================================
-  // Patch reactive form
-  // =========================================================
-
-  this.AddServiceistoryFormGroup.patchValue({
-
-    OfficeID:
-      this.serviceReq.OfficeID,
-
-    InstituteID:
-      this.serviceReq.InstituteID,
-
-    FromDate:
-      this.serviceReq.FromDate,
-
-    ToDate:
-      this.serviceReq.ToDate,
-
-    DesignationID:
-      this.serviceReq.DesignationID,
-
-    ServiceBranchID:
-      this.serviceReq.ServiceBranchID,
-
-    QualificationID:
-      this.serviceReq.QualificationID,
+    // await this.onChange_SearviceToDesignation();
 
     // Transfer
-    IsTransfer:
-      this.serviceReq.IsTransfer,
-
-    TransferToOfficeID:
-      this.serviceReq.TransferToOfficeID,
-
-    TransferToInstituteID:
-      this.serviceReq.TransferToInstituteID,
-
-    DateOfTransfer:
-      this.serviceReq.DateOfTransfer,
-      
-    TransferTime: this.serviceReq.TransferTime,
+    this.serviceReq.IsTransfer = this.IsTransfer;
+    this.serviceReq.TransferToOfficeID = this.orDefault(row.TransferToOfficeID, 0);
+    this.serviceReq.TransferToInstituteID = this.orDefault(row.TransferToInstituteID, 0);
+    this.serviceReq.DateOfTransfer = this.formatDateForInput(row.DateOfTransfer);
+    this.serviceReq.TransferTime = this.orDefault(row.TransferTime?.toString().trim().toUpperCase(), '');
 
     // Promotion
-    IsPromotion:
-      this.serviceReq.IsPromotion,
+    this.serviceReq.IsPromotion = this.IsPromotion;
+    this.serviceReq.ToDesignationIDPromotion = this.orDefault(row.ToDesignationIDPromotion, 0);
+    this.serviceReq.ToBranchIDPromotion = this.orDefault(row.ToBranchIDPromotion, 0);
+    this.serviceReq.DateOfpromotion = this.formatDateForInput(row.DateOfpromotion);
 
-    ToDesignationIDPromotion:
-      this.serviceReq.ToDesignationIDPromotion,
+    this.serviceReq.PromotionTime =
+      this.orDefault(row.PromotionTime?.toString().trim().toUpperCase(), '');
 
-    ToBranchIDPromotion:
-      this.serviceReq.ToBranchIDPromotion,
+    // Documents
+    this.serviceReq.DisUploadDoc = this.orDefault(row.DisUploadDoc, '');
+    this.serviceReq.UploadDoc = this.orDefault(row.UploadDoc, '');
+    this.serviceReq.TransferDocuments =   row.TransferDocuments ? [...row.TransferDocuments]: [];
+    this.serviceReq.PromotionDocuments = row.PromotionDocuments ? [...row.PromotionDocuments]: [];
 
-    DateOfpromotion:
-      this.serviceReq.DateOfpromotion,
+    // Display fields
+    this.serviceReq.TransferToOfficeName = this.orDefault(row.TransferToOfficeName,'');
+    this.serviceReq.TransferToInstituteName = this.orDefault(row.TransferToInstituteName, '');
+    this.serviceReq.ToDesignationName = this.orDefault(row.ToDesignationName, '');
+    this.serviceReq.DesignationName = this.orDefault(row.DesignationName, '');
+    this.serviceReq.OfficeName = this.orDefault(row.OfficeName, '');
+    this.serviceReq.InstituteName = this.orDefault(row.InstituteName, '');
 
-    PromotionTime: this.serviceReq.PromotionTime
-  });
+    if (this.serviceReq.OfficeID == 21) {
+      await this.getStreamMasterData();
+    }
 
-  // =========================================================
-  // Scroll to form
-  // =========================================================
+    this.AddServiceistoryFormGroup.patchValue({
+      OfficeID: this.serviceReq.OfficeID,
+      InstituteID: this.serviceReq.InstituteID,
+      FromDate: this.serviceReq.FromDate,
+      ToDate: this.serviceReq.ToDate,
+      DesignationID: this.serviceReq.DesignationID,
+      ServiceBranchID: this.serviceReq.ServiceBranchID,
+      QualificationID: this.serviceReq.QualificationID,
 
-  document
-    .querySelector('form[formGroup]')
-    ?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
+      // Transfer
+      IsTransfer: this.serviceReq.IsTransfer,
+      TransferToOfficeID: this.serviceReq.TransferToOfficeID,
+      TransferToInstituteID: this.serviceReq.TransferToInstituteID,
+      DateOfTransfer: this.serviceReq.DateOfTransfer,
+      TransferTime: this.serviceReq.TransferTime,
+
+      // Promotion
+      IsPromotion: this.serviceReq.IsPromotion,
+      ToDesignationIDPromotion: this.serviceReq.ToDesignationIDPromotion,
+      ToBranchIDPromotion: this.serviceReq.ToBranchIDPromotion,
+      DateOfpromotion: this.serviceReq.DateOfpromotion,
+      PromotionTime: this.serviceReq.PromotionTime,
+      IsCurrentlyWorking: this.serviceReq.IsCurrentlyWorking
     });
-}
+
+    document
+      .querySelector('form[formGroup]')
+      ?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+  }
 
   private orDefault<T>(value: T | null | undefined, fallback: T): T {
     return value === null || value === undefined ? fallback : value;
@@ -2397,6 +2014,16 @@ async EditServiceHistory(row: any, index: number) {
     }
     this.StaffMasterFormGroup.get('DateofJoiningADHOC')?.updateValueAndValidity();
   }
+
+  onChangeIsCurrentlyWorking(value: boolean) {
+    this.serviceReq.IsCurrentlyWorking = value;
+
+    if (this.serviceReq.IsCurrentlyWorking) {
+      this.serviceReq.ToDate = new Date().toISOString().split('T')[0];
+    } else {
+      this.serviceReq.ToDate = '';
+    }
+  }
   onChangeIsProbationCompleted(value: boolean) {
     this.request.IsProbationCompleted = value;
 
@@ -2699,11 +2326,11 @@ async EditServiceHistory(row: any, index: number) {
   }
 
   async getChildPostServiceTypeDDL() {
-    if(this.request.PostServiceTypeID != EnumPostServiceType_BTER.Other_Department_Services){
+    if (this.request.PostServiceTypeID != EnumPostServiceType_BTER.Other_Department_Services) {
       this.ChildPostServiceTypeDDL = [];
       this.request.ChildPostServiceTypeID = 0;
       return;
-    } 
+    }
     else {
       try {
         this.ChildPostServiceTypeDDL = [];
@@ -2726,7 +2353,7 @@ async EditServiceHistory(row: any, index: number) {
       } catch (error) {
         console.error(error);
       }
-    }    
+    }
   }
 }
 

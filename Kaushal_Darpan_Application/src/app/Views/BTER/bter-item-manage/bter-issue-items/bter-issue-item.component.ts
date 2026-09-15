@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumOffice, EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
 import { DTEItemsSaveModel, DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTEItemsSearchModel1, DTELabMasterModel, } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
@@ -61,6 +61,7 @@ export class AddBterIssueItemComponent {
   showDetailsTable: boolean = false;
   public maxQty: number = 0;
   _EnumRole = EnumRole;
+  _EnumOffice = EnumOffice;
   public ItemtypeList: any[] = []
   public OfficeList: any = [];
   public AllInTableSelect: boolean = false;
@@ -77,6 +78,7 @@ export class AddBterIssueItemComponent {
   public IssuedItemList: any = [];
   isFileError: boolean = false;
   consumableIndentNo: string = '';
+  public OfficeID: number = 0;
   constructor(
     private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
@@ -102,6 +104,7 @@ export class AddBterIssueItemComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
     this.InstituteID = this.sSOLoginDataModel.InstituteID;
+    await this.GetUserOfficeId();
     this.prepareChunkedItems();
     await this.GetMasterData()
 
@@ -298,6 +301,8 @@ export class AddBterIssueItemComponent {
     try {
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.Searchrequests.UserID = this.sSOLoginDataModel.UserID;
+      this.Searchrequests.OfficeID = this.sSOLoginDataModel.OfficeID
       this.Searchrequests.TypeName = 'staffList';
 
       const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
@@ -368,14 +373,11 @@ export class AddBterIssueItemComponent {
     this.ItemsDDLList = [];
 
     if (this.Searchrequests.issuedTo == 2) {
-      // Staff → load staff + category
       this.GetStaffDDL();
       //this.GetCategoryDDL();
     } else if (this.Searchrequests.issuedTo == 3) {
-      // Department → load department list
       this.GetDepartmentDDL();
     } else if (this.Searchrequests.issuedTo == 1) {
-      // Office → no dropdowns, only search
       this.ItemsDDLList = []; // ready for office search
     }
   }
@@ -498,7 +500,8 @@ export class AddBterIssueItemComponent {
         CollegeId: this.sSOLoginDataModel.InstituteID || 0,
         ItemType: this.Searchrequests.ItemType || 0,
         EquipmentsId: this.Searchrequests.ItemCategoryId || 0,
-        OfficeID: 0,
+        OfficeID: this.sSOLoginDataModel.OfficeID || 0,
+        UserID: this.sSOLoginDataModel.UserID || 0,
         StatusID: 0
       };
       await this.bterInventoryService.GetAllItemList(searchdata)
@@ -511,11 +514,6 @@ export class AddBterIssueItemComponent {
     }
     catch (Ex) {
       console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -848,15 +846,16 @@ export class AddBterIssueItemComponent {
 
     console.log('Logs Item ID:' + row.ItemId);
 
-    await this.bterInventoryService.GetDTEIssueItemListPermanent(row.EquipmentsId, row.ItemCategoryId, this.sSOLoginDataModel.InstituteID).then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
-      if (data.State === EnumStatus.Success) {
-        this.ItemsDataList = data.Data;
-        this.ItemsDDLList = [];
-        this.SelectedItems = [];
-        console.log(this.ItemsDataList);
-        this.BindItem_list();
-      }
+    await this.bterInventoryService.GetDTEIssueItemListPermanent(row.EquipmentsId, row.ItemCategoryId, this.sSOLoginDataModel.InstituteID, this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.OfficeID)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.ItemsDataList = data.Data;
+          this.ItemsDDLList = [];
+          this.SelectedItems = [];
+          console.log(this.ItemsDataList);
+          this.BindItem_list();
+        }
     });
 
 
@@ -1017,5 +1016,18 @@ export class AddBterIssueItemComponent {
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
 
     return;
+  }
+
+  async GetUserOfficeId() {
+    try {
+      await this.commonFunctionService.GetCommonMasterData("GetUserOfficeID", this.sSOLoginDataModel.UserID)
+        .then((data: any) => {
+          if (data.State == EnumStatus.Success) {
+            this.OfficeID = data.Data[0].OfficeID;
+          }
+      })
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

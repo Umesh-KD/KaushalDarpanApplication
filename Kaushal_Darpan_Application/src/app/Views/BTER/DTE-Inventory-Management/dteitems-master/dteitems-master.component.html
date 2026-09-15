@@ -32,7 +32,8 @@
         <div *ngIf="sSOLoginDataModel.RoleID !== EnumRole.StoreKeeper &&
             sSOLoginDataModel.RoleID !== EnumRole.Principal &&
             sSOLoginDataModel.RoleID !== EnumRole.PrincipalNon &&
-            sSOLoginDataModel.RoleID !== EnumRole.BTER_StoreIncharge">
+            sSOLoginDataModel.RoleID !== EnumRole.BTER_StoreIncharge &&
+            sSOLoginDataModel.RoleID !== EnumRole.HO_DTE">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             College
           </label>
@@ -135,7 +136,7 @@
           <tr>
             <th class="text-left">SNO</th>
             <th class="text-left" *ngIf="sSOLoginDataModel.RoleID !== 201">
-              College Name
+              College/Office Name
             </th>
             <th class="text-left">Entry Date</th>
             <th class="text-left">Supplier Name</th>
@@ -247,7 +248,12 @@
                   Revert
                 </button>
 
-                <button *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal || sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) && item.Isabbreviation != 1"
+                <button *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal || 
+                                sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+                                sSOLoginDataModel.RoleID == EnumRole.HO_DTE ||
+                                sSOLoginDataModel.RoleID == EnumRole.HO_BTER ||
+                                sSOLoginDataModel.RoleID == EnumRole.HO_TTC) && 
+                                item.Isabbreviation != 1"
                         class="btn btn-sm text-white"
                         (click)="(item.Status == 3) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
                         [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"

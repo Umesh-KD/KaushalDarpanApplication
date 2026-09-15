@@ -42,25 +42,6 @@
             </div>
           </div>
 
-
-          <div>
-            <label class="text-gray-700 text-sm font-semibold mb-1 block">
-              Designation as per Service Book
-            </label>
-            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
-              {{staffDetailsServicePreview.ServiceBookDesignation}}
-            </div>
-          </div>
-
-          <div>
-            <label class="text-gray-700 text-sm font-semibold mb-1 block">
-              Branch as per Service Book
-            </label>
-            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
-              {{staffDetailsServicePreview?.ServiceBookBranch}}
-            </div>
-          </div>
-
         </div>
 
 
@@ -207,9 +188,43 @@
         <div class="grid grid-cols-4 gap-4 mb-6">
 
           <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Salary Drawn Post</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.SalaryDrawnPost}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-700 text-sm font-semibold mb-1 block">
+              Designation as per Service Book
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsServicePreview.ServiceBookDesignation}}
+            </div>
+          </div>
+
+          <div>
             <label class="text-sm font-semibold text-gray-700 block mb-1">Current Designation</label>
             <div class="bg-gray-50 border rounded px-3 py-2">
               {{staffDetailsServicePreview.CurrentDesignation}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-700 text-sm font-semibold mb-1 block">
+              Branch as per Service Book
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsServicePreview?.ServiceBookBranch}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-700 text-sm font-semibold mb-1 block">
+              SalaryDrawnBranch
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsServicePreview?.SalaryDrawnBranch}}
             </div>
           </div>
 
@@ -227,31 +242,17 @@
             </div>
           </div>
 
-          <!-- <div>
-            <label class="text-sm font-semibold text-gray-700 block mb-1">Qualification as per Service Book at the time of joining</label>
-            <div class="bg-gray-50 border rounded px-3 py-2">
-              {{staffDetailsServicePreview.QualificationAtJoining}}
-            </div>
-          </div> -->
-
-          <!-- <div>
-            <label class="text-sm font-semibold text-gray-700 block mb-1">Qualifications as per Service Book gained after joining</label>
-            <div class="bg-gray-50 border rounded px-3 py-2">
-              {{staffDetailsServicePreview.QualificationAfterJoining}}
-            </div>
-          </div> -->
-
-          <!-- <div *ngIf="staffDetailsServicePreview.QualificationAfterJoining != 'Not Acquired'">
-            <label class="text-sm font-semibold text-gray-700 block mb-1">Date of acquiring the qualification</label>
-            <div class="bg-gray-50 border rounded px-3 py-2">
-              {{staffDetailsServicePreview.QualificationAcquiringDate | date: 'dd-MM-yyyy'}}
-            </div>
-          </div> -->
-
           <div>
             <label class="text-sm font-semibold text-gray-700 block mb-1">Date of Retirement</label>
             <div class="bg-gray-50 border rounded px-3 py-2">
               {{staffDetailsServicePreview?.DateOfRetirement | date: 'dd-MM-yyyy'}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Budget Head</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview?.BudgetHead}}
             </div>
           </div>
 

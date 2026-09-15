@@ -244,7 +244,7 @@ export class EstablishmentReportBTERComponent {
           this.StaffProfileStatusList = this.StaffProfileStatusList.map((x:any)=>{
             switch(x.ID){
               case 0:
-                x.Name='Pending for approval at Principal Level';
+                x.Name='Pending for update profile by employee';
                 break;
               case 247:
                 x.Name='Approved';
@@ -262,10 +262,6 @@ export class EstablishmentReportBTERComponent {
       });
     } catch (error) {
       console.error(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
