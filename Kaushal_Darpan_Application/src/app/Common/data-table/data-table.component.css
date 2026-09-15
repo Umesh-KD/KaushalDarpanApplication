@@ -559,3 +559,216 @@ table {
 .column-panel.show{
     display:block;
 }
+
+
+/* drag and drop functionality  */
+.column-item {
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+}
+
+.drag-handle {
+    width: 28px;
+    min-width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 5px;
+
+    color: #adb5bd;
+    cursor: grab;
+
+    border-radius: 5px;
+}
+
+.drag-handle:hover {
+    color: #495057;
+    background: #f1f3f5;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.drag-handle.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.cdk-drag-preview {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 14px;
+
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 7px;
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.cdk-drag-placeholder {
+    opacity: 0.25;
+    background: #f5f8ff;
+    border: 2px dashed #c7d2fe;
+    border-radius: 7px;
+    min-height: 42px;
+}
+
+.cdk-drag-animating {
+    transition: transform 200ms ease;
+}
+
+.column-list.cdk-drop-list-dragging
+.column-item:not(.cdk-drag-placeholder) {
+    transition: transform 200ms ease;
+}
+
+
+/* for the table header drag and drop functionality */
+/* =========================================================
+   DATATABLE HEADER
+   ========================================================= */
+
+.datatable-header-row {
+    position: relative;
+}
+
+
+/*
+ * The complete header cell is the drag area.
+ */
+.datatable-draggable-header {
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    box-sizing: border-box;
+}
+
+.mat-header-cell {
+    overflow: hidden;
+}
+
+/*
+ * Cursor while dragging.
+ */
+.datatable-draggable-header:active {
+    cursor: grabbing;
+}
+
+
+/*
+ * Keep the header content stable.
+ */
+.datatable-header-content {
+    width: 100%;
+    min-height: 40px;
+
+    display: flex;
+    align-items: center;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    user-select: none;
+}
+
+
+/* =========================================================
+   DRAG PREVIEW
+   ========================================================= */
+
+.datatable-drag-preview {
+    min-width: 140px;
+    min-height: 42px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 16px;
+
+    background: #fff;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.18);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PLACEHOLDER
+   ========================================================= */
+
+/*
+ * This is the empty space created when a column
+ * is being moved.
+ */
+.datatable-drag-placeholder {
+    width: 100%;
+    height: 100%;
+
+    min-height: 42px;
+
+    background: rgba(0, 0, 0, 0.04);
+
+    border: 1px dashed #bdbdbd;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CDK DRAG ANIMATION
+   ========================================================= */
+
+.datatable-header-row.cdk-drop-list-dragging
+.datatable-draggable-header {
+
+    transition:
+        transform 180ms ease;
+}
+
+
+/*
+ * The item currently being dragged.
+ */
+.datatable-draggable-header.cdk-drag-preview {
+    z-index: 1000;
+}
+
+
+/* =========================================================
+   FIXED COLUMNS
+   ========================================================= */
+
+.datatable-fixed-header {
+    user-select: none;
+}
+
+.serial-header,
+.serial-cell {
+    width: 70px;
+    min-width: 70px;
+    text-align: center;
+}
+
+.action-header,
+.action-cell {
+    white-space: nowrap;
+}

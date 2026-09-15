@@ -86,4 +86,5 @@ export interface TableColumn {
 
     lockVisibility?: boolean;
 
+
 }

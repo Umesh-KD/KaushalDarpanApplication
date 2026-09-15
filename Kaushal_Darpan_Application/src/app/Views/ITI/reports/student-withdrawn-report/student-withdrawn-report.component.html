@@ -1,14 +1,14 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
 
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2"> Student Withdrawn Report</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2"> Student Name Struck</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Reports</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a [routerLink]="['/studentWithdrawn-report']" class="text-sm font-medium text-slate-700" aria-current="page">Student Withdrawn Report</a>
+      <a [routerLink]="['/studentWithdrawn-report']" class="text-sm font-medium text-slate-700" aria-current="page">Student Name Struck</a>
     </div>
 
   </div>
@@ -123,7 +123,7 @@
               <button class="btn bg-info text-white" type="button"
                       *ngIf="item.AllotmentStatus != 9 && SeatWithDrawl==1"
                       (click)="SavestudentWithdrawnRequest(MyModel_ReplayQuery, item)">
-                Withdrawn
+                Name Struck
               </button>
 
 
