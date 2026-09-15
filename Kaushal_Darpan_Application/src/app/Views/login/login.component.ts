@@ -328,9 +328,9 @@ export class LoginComponent implements OnInit {
             {
               //redirect
               //window.open('/dashboard', "_self");
-              this.CheckMultiColleges();
-             //this.routers.navigate(['/dashboard']);
+                this.CheckMultiColleges();
               
+             //this.routers.navigate(['/dashboard']);              
 
             }
           }
@@ -438,7 +438,7 @@ export class LoginComponent implements OnInit {
   }
 
   async BeforeLogin() {
-    //debugger
+    debugger;
     this.isSubmitted = true;
     if (this.LoginForm.invalid) {
       return;
@@ -520,10 +520,9 @@ export class LoginComponent implements OnInit {
 
   async CheckMultiColleges()
   {
-
     try {
       // check and get multiple department of user
-      await this.sSOLoginService.CheckMultiInsituteUser(this.UserName, this.Password)
+      await this.sSOLoginService.CheckMultiInsituteUser(this.UserName, this.Password,this.DepartmentID)
         .then(async (res: any) => {
           if (res.State == EnumStatus.Success)
           {
@@ -531,7 +530,6 @@ export class LoginComponent implements OnInit {
 
             if (this.MutiUserCollegeList?.length > 1) {
               this.openUsermultipletModal(this.modal_MultiInsitute);
-
             }
             else
             {
@@ -551,6 +549,37 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  // async CheckMultiColleges_BTER()
+  // {
+
+  //   try {
+  //     // check and get multiple department of user
+  //     await this.sSOLoginService.CheckMultiColleges_BTER(this.UserName, this.Password,this.DepartmentID)
+  //       .then(async (res: any) => {
+  //         if (res.State == EnumStatus.Success)
+  //         {
+  //           this.MutiUserCollegeList = res.Data;
+
+  //           if (this.MutiUserCollegeList?.length > 1) {
+  //             this.openUsermultipletModal(this.modal_MultiInsitute);
+  //           }
+  //           else
+  //           {
+  //             this.routers.navigate(['/dashboard']);
+  //           }
+  //         }
+  //         else
+  //         { // any invalid
+  //           this.toastr.error(res.Message);
+  //           console.error(res.ErrorMessage);
+  //         }
+  //       }, error => console.error(error)
+  //       );
+  //   }
+  //   catch (Ex) {
+  //     console.log(Ex);
+  //   }
+  // }
 
 
 

@@ -89,7 +89,7 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
   }
 
   async Citizenlogin(Loginssoid: string) {
-    //debugger
+    debugger
     try {
       this.sSOLandingDataDataModel.Username = Loginssoid;
       this.sSOLandingDataDataModel.LoginType = '-999';
@@ -226,7 +226,7 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
 
   // check multi user department and login
   async BeforeLogin() {
-    //debugger
+    debugger
     try {
       // check and get multiple department of user
       await this.sSOLoginService.CheckMultiDepartUserBySearchRecordID(this.Username)
@@ -316,7 +316,7 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
     {
       debugger;
       // check and get multiple department of user
-      await this.sSOLoginService.CheckMultiInsituteUser(this.sSOLoginDataModel.SSOID, '')
+      await this.sSOLoginService.CheckMultiInsituteUser(this.sSOLoginDataModel.SSOID, '', this.DepartmentID)
         .then(async (res: any) => {
           if (res.State == EnumStatus.Success) {
             this.MutiUserCollegeList = res.Data;
