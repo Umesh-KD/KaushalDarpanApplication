@@ -38,6 +38,10 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   public SanctionedList: any = [];
   public SeatIntakeDataList: any = [];
   public DivisionMasterList: any = [];
+  public SchemeTypeRequest: any = {};
+  modalReference: NgbModalRef | undefined;
+  closeResult: string | undefined;
+  // @ViewChild('ModalSchemeTypeChange') ModalSchemeTypeChange!: TemplateRef<any>;
 
   public Table_SearchText: string = '';
   public SeatIntakeIDnew: number = 0;
@@ -57,6 +61,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   public endInTableIndex: number = 0;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
+  public SeatIntakeID: number = 0;
   //end table feature default
 
   constructor(
@@ -94,9 +99,9 @@ export class SeatIntakesListAdmissionComponent implements OnInit
     this.SeatIntakeSearchFormGroupPopUp = this.formBuilder.group(
       {
         OrderDate: [''],
-        OrderNo: ['']
+        OrderNo: [''],
+        Remark: ['']
       });
-
 
 
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -540,6 +545,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
 
   @ViewChild('ModalStatusActiveInactive') ModalStatusActiveInactive!: TemplateRef<any>;
 
+
   async openModal(content: any, SeatIntakeID: number, ModifyBy: number) {
 
     this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' });
@@ -683,9 +689,36 @@ debugger
   }
 
 
+ changeStatusSchemeType(model: any, seatIntakeID: number, item: any, action: string = 'ActiveInactiveSeat')
+  {
+    try{
+      this.SchemeTypeRequest=item;
+      this.SchemeTypeRequest.action=action;
+      this.modalReference = this.modalService.open(model, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' });
+       this.modalReference.result.then(
+      (result: any) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason: any) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+    }
+    catch(ex){
+      console.log(ex);
+    }
 
+  }
 
-
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 
 
   //old
@@ -703,6 +736,9 @@ debugger
   //}
   CloseModal() {
     this.modalService.dismissAll();
+    this.SchemeTypeRequest={};
+    this.popUpsearchRequest=new SeatIntakePopUpSearchModel();
+    // this.SeatIntakeSearchFormGroup.reset();
   }
 
 
@@ -797,5 +833,73 @@ debugger
       this.loadInTable();
     }
   }
+  
 
+  async SaveSchemeTypeModal() {
+        debugger
+        try {
+          let ConfirmationText = "Are you sure you want to change Scheme Type?";
+          this.Swal2.Confirmation(ConfirmationText,
+            async (result: any) => {
+              //confirmed
+              if (result.isConfirmed) {
+                try {
+                  //Show Loading
+                  this.loaderService.requestStarted();
+                  if(this.SeatIntakeSearchFormGroupPopUp.value.OrderDate==null || this.SeatIntakeSearchFormGroupPopUp.value.OrderDate==undefined 
+                    ||this.SeatIntakeSearchFormGroupPopUp.value.OrderDate=='' ||this.SeatIntakeSearchFormGroupPopUp.value.OrderNo==null 
+                    || this.SeatIntakeSearchFormGroupPopUp.value.OrderNo==undefined || this.SeatIntakeSearchFormGroupPopUp.value.OrderNo==''
+                    || this.SeatIntakeSearchFormGroupPopUp.value.Remark==null || this.SeatIntakeSearchFormGroupPopUp.value.Remark==undefined 
+                    || this.SeatIntakeSearchFormGroupPopUp.value.Remark==''){
+                    this.toastr.error("Please fill all the required fields.");
+                    return;
+                  }
+                  const request = {
+                    SeatIntakeID: this.SchemeTypeRequest.SeatIntakeID,
+                    CollegeID: this.SchemeTypeRequest.CollegeID,
+                    ModifyBy: this.SSOLoginDataModel.UserID,
+                    ActiveStatus: this.SchemeTypeRequest.ActiveStatus,
+                    AcademicYearID: this.SSOLoginDataModel.FinancialYearID,
+                    Action: this.SchemeTypeRequest.action,
+                    TradeId: this.SchemeTypeRequest.TradeID,
+                    TradeSchemeId: this.SchemeTypeRequest.TradeSchemeID,
+
+                    // New Fields
+                    // OrderNo: formData.OrderNo,
+                    // OrderDate: formData.OrderDate,
+                    Remark: this.popUpsearchRequest.Remarks?this.popUpsearchRequest.Remarks: null,
+                    OrderNo: this.popUpsearchRequest.OrderNo ? this.popUpsearchRequest.OrderNo: null,
+                    OrderDate: this.popUpsearchRequest.OrderDate || null,
+                  };
+                  this.loaderService.requestStarted();
+
+                  await this.ItiSeatIntakeService.ChangeSchemeType(request)
+                    .then(async (data: any) => {
+                      data = JSON.parse(JSON.stringify(data));
+
+                      if (data.State == EnumStatus.Success) {
+                        this.toastr.success(data.Message);
+                        this.CloseModal();
+                        await this.onSearch();
+                      } else {
+                        this.toastr.error(data.ErrorMessage);
+                      }
+                    });
+  
+                }
+                catch (ex) {
+                  console.log(ex);
+                }
+                finally {
+                  setTimeout(() => {
+                    this.loaderService.requestEnded();
+                  }, 200);
+                }
+              }
+            });
+  
+        } catch (error) {
+          console.error(error);
+        }
+  }
 }
