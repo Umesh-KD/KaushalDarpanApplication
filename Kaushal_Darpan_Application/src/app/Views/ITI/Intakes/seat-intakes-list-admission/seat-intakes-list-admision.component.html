@@ -298,7 +298,6 @@
 
                     <mat-menu #menuAdmit="matMenu">
 
-
                         <!--First Semester-->
                         <button mat-menu-item
                                 (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveSeat')">
@@ -307,6 +306,12 @@
                         <!--Second Semester-->
                         <button mat-menu-item (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveCollege')">
                             {{row.IsActiveColleges==1?'Inactive College':'Active Colleges'}}
+                        </button>
+
+                        <!-- action for edit scheme scvt to ncvt -->
+                         <!-- *ngIf="row.TradeScheme=='SCVT'" -->
+                        <button *ngIf="row.TradeScheme === 'SCVT'"  mat-menu-item (click)="changeStatusSchemeType(ModalSchemeTypeChange,row.SeatIntakeID, row,'SchemeTypeChange')">
+                            Update Scheme Type
                         </button>
 
                     </mat-menu>
@@ -368,6 +373,58 @@
         </div>
         <div class="card-footer text-center flex items-center justify-center mt-3">
           <button class="btn bg-info btn-sm text-white" (click)="SaveDataModal()"><i class="fa fa-refresh"></i> Update</button>
+          <button class="btn bg-danger btn-sm text-white" (click)="CloseModal()"><i class="ti ti-x"></i> Close</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+
+<ng-template #ModalSchemeTypeChange let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="SeatIntakeSearchFormGroupPopUp">
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <b>
+            <i class="fa fa-refresh"></i>&nbsp; Status Update
+          </b>
+          <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Order No: <span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Unit No" formControlName="OrderNo" [(ngModel)]="popUpsearchRequest.OrderNo">
+
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Order Date: <span class="StarMarking">*</span>
+              </label>
+              <input type="date" class="form-input" placeholder="Enter Unit No" formControlName="OrderDate" [(ngModel)]="popUpsearchRequest.OrderDate">
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark <span class="StarMarking">*</span>
+              </label>
+              <textarea class="form-input"
+                id="Remark"
+                placeholder="Enter Remark"
+                formControlName="Remark"
+                [(ngModel)]="popUpsearchRequest.Remarks">
+              </textarea>
+            </div>
+
+          </div>
+        </div>
+        <div class="card-footer text-center flex items-center justify-center mt-3">
+          <button class="btn bg-info btn-sm text-white" (click)="SaveSchemeTypeModal()"><i class="fa fa-refresh"></i> Update</button>
           <button class="btn bg-danger btn-sm text-white" (click)="CloseModal()"><i class="ti ti-x"></i> Close</button>
         </div>
       </div>

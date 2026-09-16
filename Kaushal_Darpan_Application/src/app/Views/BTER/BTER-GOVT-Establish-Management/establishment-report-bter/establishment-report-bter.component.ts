@@ -404,7 +404,13 @@ export class EstablishmentReportBTERComponent {
 
   async getStreamMasterList() {
     try {
-      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
+      const IsForEstablishment = true;
+      await this.commonMasterService.StreamMaster(
+        this.sSOLoginDataModel.DepartmentID, 
+        this.sSOLoginDataModel.Eng_NonEng, 
+        this.sSOLoginDataModel.EndTermID, 
+        IsForEstablishment
+      ).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDLList = data.Data;
       })
