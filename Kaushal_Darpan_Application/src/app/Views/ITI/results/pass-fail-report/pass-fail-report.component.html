@@ -78,7 +78,7 @@
 
           <tr *ngIf="GetStudentITI_MarksheetList2.length>0">
             <th class="text-left p-5">Trade</th>
-            <th class="text-left p-5">Pass Student </th>
+            {{ MarksheetSearch.PassFailID == '2' ? 'Fail Student' : (MarksheetSearch.PassFailID == '1' ? 'Pass Student' : 'Student') }}
           </tr>
 
           <tr *ngFor="let item of GetStudentITI_MarksheetList2 ;let idx=index;">
