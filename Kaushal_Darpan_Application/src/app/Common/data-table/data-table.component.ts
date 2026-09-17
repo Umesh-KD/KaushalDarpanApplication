@@ -60,6 +60,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit {
   private tableColumnDragStartX = 0;
   private tableColumnDragStartY = 0;
   private tableColumnDragThreshold = 5;
+  private lastDragTargetField: string | null = null;
 
   private initialColumnState: Record<string, boolean> = {};
 
@@ -1618,6 +1619,8 @@ startTableColumnDrag(
     this.tableColumnDragStartX = event.clientX;
     this.tableColumnDragStartY = event.clientY;
 
+    this.lastDragTargetField = null;
+
 }
 
 @HostListener(
@@ -1694,6 +1697,8 @@ onTableColumnPointerUp(
 
     this.tableColumnDragStarted = false;
 
+    this.lastDragTargetField = null;
+
 }
 
 private reorderTableColumnAtPosition(
@@ -1701,10 +1706,24 @@ private reorderTableColumnAtPosition(
     clientY: number
 ): void {
 
+     // No column is currently being dragged
     if (!this.draggingTableColumn) {
         return;
     }
 
+    // Dragging is disabled
+    if (this.normalizedConfig.draggable === false) {
+        return;
+    }
+
+     /*
+     * Get only the visible/draggable table headers.
+     *
+     * Serial No. and Action column are not included
+     * because they do not have:
+     *
+     * .datatable-draggable-header
+     */
     const headers =
         Array.from(
             this.elementRef.nativeElement
@@ -1755,6 +1774,18 @@ private reorderTableColumnAtPosition(
     }
 
     /*
+    * Don't reorder repeatedly while the mouse
+    * is still over the same column.
+    */
+    if (
+        this.lastDragTargetField === targetField
+    ) {
+        return;
+    }
+
+    this.lastDragTargetField = targetField;
+
+    /*
      * Find the target column.
      */
     const targetColumn =
@@ -1767,6 +1798,7 @@ private reorderTableColumnAtPosition(
         return;
     }
 
+    // Do nothing when dragging over itself
     if (
         targetColumn ===
         this.draggingTableColumn
@@ -1797,8 +1829,12 @@ private reorderTableColumnAtPosition(
         return;
     }
 
+       // Remember this target
+    this.lastDragTargetField =targetField;
+        
+    const draggedColumn =this.draggingTableColumn;
     /*
-     * Move the dragged column to the target
+     * Move the dragged column to the target 
      * position.
      *
      * This is INSERT behavior, NOT SWAP.
@@ -1814,10 +1850,23 @@ private reorderTableColumnAtPosition(
         1
     );
 
+     /*
+     * IMPORTANT:
+     *
+     * If the dragged column was BEFORE the target,
+     * removing it shifts the target one position left.
+     */
+    let insertIndex = targetIndex;
+
+    if (currentIndex < targetIndex) {
+        insertIndex = targetIndex - 1;
+    }
+
+
     this.normalizedColumns.splice(
         targetIndex,
         0,
-        this.draggingTableColumn
+       draggedColumn
     );
 
     /*
@@ -1832,6 +1881,10 @@ private reorderTableColumnAtPosition(
      * together.
      */
     this.refreshDisplayedColumns();
+
+    this.dataSource.data = [
+        ...this.dataSource.data
+    ];
 
 }
 

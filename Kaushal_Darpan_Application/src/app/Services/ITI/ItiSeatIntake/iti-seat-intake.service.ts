@@ -305,6 +305,14 @@ export class ItiSeatIntakeService {
       ).toPromise();
   }
   
+  public async ChangeSchemeType(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/ChangeSchemeType`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetActiveSeatIntakeAdmission(request: SeatIntakeSearchModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetActiveSeatIntakeAdmission`, body, this.headersOptions)
