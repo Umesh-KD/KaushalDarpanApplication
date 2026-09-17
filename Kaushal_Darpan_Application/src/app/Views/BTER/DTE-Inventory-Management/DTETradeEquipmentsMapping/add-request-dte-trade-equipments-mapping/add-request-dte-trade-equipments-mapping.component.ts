@@ -178,6 +178,7 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
       this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
       this.Searchrequest.OfficeID = this.sSOLoginDataModel.OfficeID;
       this.Searchrequest.SSOID = this.sSOLoginDataModel.SSOID;
+      
       await this.tradeEquipmentsMappingService.GetAllRequestData(this.Searchrequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
