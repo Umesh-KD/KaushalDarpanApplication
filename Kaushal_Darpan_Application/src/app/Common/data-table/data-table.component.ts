@@ -56,10 +56,13 @@ export class DataTableComponent implements OnChanges, AfterViewInit {
   normalizedColumns: TableColumn[] = [];
 
   draggingTableColumn: TableColumn | null = null;
+  private dragPreviewElement: HTMLElement | null = null;
+  private dragStartHeaderElement: HTMLElement | null = null;
   private tableColumnDragStarted = false;
   private tableColumnDragStartX = 0;
   private tableColumnDragStartY = 0;
   private tableColumnDragThreshold = 5;
+  private lastDragTargetField: string | null = null;
 
   private initialColumnState: Record<string, boolean> = {};
 
@@ -1611,6 +1614,8 @@ startTableColumnDrag(
         return;
     }
 
+     const target = event.currentTarget as HTMLElement;
+
     this.draggingTableColumn = column;
 
     this.tableColumnDragStarted = false;
@@ -1618,6 +1623,8 @@ startTableColumnDrag(
     this.tableColumnDragStartX = event.clientX;
     this.tableColumnDragStartY = event.clientY;
 
+    this.lastDragTargetField = null;
+    this.dragStartHeaderElement = target;
 }
 
 @HostListener(
@@ -1660,6 +1667,21 @@ onTableColumnPointerMove(
         this.tableColumnDragStarted = true;
 
         event.preventDefault();
+
+        /*
+        * Mark original column as picked up.
+        */
+        if (this.dragStartHeaderElement) {
+
+            this.dragStartHeaderElement.classList.add(
+                'table-column-dragging'
+            );
+        }
+
+          /*
+         * Create the floating column visual.
+         */
+        this.createTableColumnPreview();
     }
 
     if (!this.tableColumnDragStarted) {
@@ -1667,6 +1689,14 @@ onTableColumnPointerMove(
     }
 
     event.preventDefault();
+
+        /*
+     * Move floating preview with mouse.
+     */
+    this.moveTableColumnPreview(
+        event.clientX,
+        event.clientY
+    );
 
     this.reorderTableColumnAtPosition(
         event.clientX,
@@ -1687,13 +1717,50 @@ onTableColumnPointerUp(
     }
 
     if (this.tableColumnDragStarted) {
+
         event.preventDefault();
+
+        if (this.dragPreviewElement) {
+
+            this.dragPreviewElement.classList.add(
+                'datatable-column-drop'
+            );
+        }
+
+        /*
+         * Remove original picked state
+         */
+        if (this.dragStartHeaderElement) {
+
+            this.dragStartHeaderElement.classList.remove(
+                'table-column-dragging'
+            );
+        }
     }
 
-    this.draggingTableColumn = null;
+    setTimeout(() => {
 
-    this.tableColumnDragStarted = false;
+        if (this.dragPreviewElement) {
 
+            this.dragPreviewElement.remove();
+
+            this.dragPreviewElement =
+                null;
+        }
+
+    }, 180);
+
+    this.draggingTableColumn =
+        null;
+
+    this.tableColumnDragStarted =
+        false;
+
+    this.lastDragTargetField =
+        null;
+
+    this.dragStartHeaderElement =
+        null;
 }
 
 private reorderTableColumnAtPosition(
@@ -1701,10 +1768,24 @@ private reorderTableColumnAtPosition(
     clientY: number
 ): void {
 
+     // No column is currently being dragged
     if (!this.draggingTableColumn) {
         return;
     }
 
+    // Dragging is disabled
+    if (this.normalizedConfig.draggable === false) {
+        return;
+    }
+
+     /*
+     * Get only the visible/draggable table headers.
+     *
+     * Serial No. and Action column are not included
+     * because they do not have:
+     *
+     * .datatable-draggable-header
+     */
     const headers =
         Array.from(
             this.elementRef.nativeElement
@@ -1755,6 +1836,18 @@ private reorderTableColumnAtPosition(
     }
 
     /*
+    * Don't reorder repeatedly while the mouse
+    * is still over the same column.
+    */
+    if (
+        this.lastDragTargetField === targetField
+    ) {
+        return;
+    }
+
+    this.lastDragTargetField = targetField;
+
+    /*
      * Find the target column.
      */
     const targetColumn =
@@ -1767,6 +1860,7 @@ private reorderTableColumnAtPosition(
         return;
     }
 
+    // Do nothing when dragging over itself
     if (
         targetColumn ===
         this.draggingTableColumn
@@ -1797,8 +1891,12 @@ private reorderTableColumnAtPosition(
         return;
     }
 
+       // Remember this target
+    this.lastDragTargetField =targetField;
+        
+    const draggedColumn =this.draggingTableColumn;
     /*
-     * Move the dragged column to the target
+     * Move the dragged column to the target 
      * position.
      *
      * This is INSERT behavior, NOT SWAP.
@@ -1814,10 +1912,23 @@ private reorderTableColumnAtPosition(
         1
     );
 
+     /*
+     * IMPORTANT:
+     *
+     * If the dragged column was BEFORE the target,
+     * removing it shifts the target one position left.
+     */
+    let insertIndex = targetIndex;
+
+    if (currentIndex < targetIndex) {
+        insertIndex = targetIndex - 1;
+    }
+
+
     this.normalizedColumns.splice(
         targetIndex,
         0,
-        this.draggingTableColumn
+       draggedColumn
     );
 
     /*
@@ -1832,6 +1943,228 @@ private reorderTableColumnAtPosition(
      * together.
      */
     this.refreshDisplayedColumns();
+
+    this.dataSource.data = [
+        ...this.dataSource.data
+    ];
+
+}
+
+private createTableColumnPreview(): void {
+
+    if (!this.draggingTableColumn || this.dragPreviewElement) {
+        return;
+    }
+
+    const field = this.draggingTableColumn.dataField;
+
+    const table = this.elementRef.nativeElement.querySelector(
+        '.datatable-table'
+    ) as HTMLElement;
+
+    if (!table) {
+        return;
+    }
+
+    const header = table.querySelector(
+        `th.datatable-draggable-header[data-column-field="${field}"]`
+    ) as HTMLElement;
+
+    if (!header) {
+        return;
+    }
+
+    const headerRect = header.getBoundingClientRect();
+
+    /*
+     * Create floating column
+     */
+    const preview = document.createElement('div');
+
+    preview.className =
+        'datatable-column-floating-preview';
+
+    preview.style.width =
+        `${headerRect.width}px`;
+
+    /*
+     * IMPORTANT:
+     * Make it fixed to the viewport.
+     */
+    preview.style.position = 'fixed';
+
+    preview.style.left = '0px';
+    preview.style.top = '0px';
+
+    /*
+     * Start exactly over the original column.
+     */
+    preview.style.transform =
+        `translate3d(
+            ${headerRect.left}px,
+            ${headerRect.top}px,
+            0
+        )`;
+
+    /*
+     * Header
+     */
+    const floatingHeader =
+        document.createElement('div');
+
+    floatingHeader.className =
+        'datatable-floating-header';
+
+    floatingHeader.innerText =
+        this.draggingTableColumn.displayField??'';
+
+    /*
+     * Get column index
+     */
+    const headerCells =
+        Array.from(
+            header.parentElement?.children || []
+        );
+
+    const columnIndex =
+        headerCells.indexOf(header);
+
+    /*
+     * Body cells
+     */
+    const bodyRows =
+        Array.from(
+            table.querySelectorAll(
+                'tbody tr'
+            )
+        ) as HTMLElement[];
+
+    preview.appendChild(
+        floatingHeader
+    );
+
+    bodyRows.forEach(row => {
+
+        const cells =
+            Array.from(
+                row.children
+            ) as HTMLElement[];
+
+        const cell =
+            cells[columnIndex];
+
+        if (!cell) {
+            return;
+        }
+
+        const floatingCell =
+            document.createElement('div');
+
+        floatingCell.className =
+            'datatable-floating-cell';
+
+        floatingCell.innerHTML =
+            cell.innerHTML;
+
+        floatingCell.style.height =
+            `${cell.getBoundingClientRect().height}px`;
+
+        preview.appendChild(
+            floatingCell
+        );
+    });
+
+    document.body.appendChild(preview);
+
+    this.dragPreviewElement =
+        preview;
+
+    /*
+     * Force browser to render initial state
+     */
+    preview.getBoundingClientRect();
+
+    /*
+     * PICK-UP animation
+     */
+    requestAnimationFrame(() => {
+
+        preview.classList.add(
+            'datatable-column-picked'
+        );
+
+    });
+}
+
+private getColumnDomIndex(
+    field: string
+): number {
+
+    const headers =
+        Array.from(
+            this.elementRef.nativeElement.querySelectorAll(
+                'th'
+            )
+        ) as HTMLElement[];
+
+    const header =
+        headers.find(
+            x =>
+                x.getAttribute(
+                    'data-column-field'
+                ) === field
+        );
+
+    if (!header) {
+        return -1;
+    }
+
+    return (
+        Array.from(
+            header.parentElement?.children || []
+        ).indexOf(header) + 1
+    );
+}
+
+private moveTableColumnPreview(
+    clientX: number,
+    clientY: number
+): void {
+
+    if (!this.dragPreviewElement) {
+        return;
+    }
+
+    const preview =
+        this.dragPreviewElement;
+
+
+    const width =
+        preview.offsetWidth;
+
+
+    // const height =
+    //     preview.offsetHeight;
+
+
+    /*
+     * Keep preview centered around pointer.
+     */
+    const left =
+        clientX - (width / 2);
+
+
+    const top = clientY - 28;
+
+
+     preview.style.transform =
+        `translate3d(
+            ${left}px,
+            ${top}px,
+            0
+        )
+        scale(1.04)
+        rotate(2deg)`;
 
 }
 
