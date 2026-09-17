@@ -26,7 +26,10 @@
 <div class="card"  
   *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal || 
           sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge ||
-          sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)">
+          sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+          sSOLoginDataModel.RoleID == EnumRole.HO_DTE ||
+          sSOLoginDataModel.RoleID == EnumRole.HO_BTER ||
+          sSOLoginDataModel.RoleID == EnumRole.HO_TTC)">
   <div class="card-body p-5">
     <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>{{TE_MappingId>0?'Edit':'Add'}} Request Branch Equipment</b>
@@ -103,7 +106,10 @@
         </div>
         <div *ngIf="!(sSOLoginDataModel.RoleID == EnumRole.Principal || 
                       sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge || 
-                      sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)">
+                      sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+                      sSOLoginDataModel.RoleID == EnumRole.HO_DTE ||
+                      sSOLoginDataModel.RoleID == EnumRole.HO_BTER ||
+                      sSOLoginDataModel.RoleID == EnumRole.HO_TTC)">
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                  for="fileIndentPhoto">Upload Indent Document<span class="StarMarking">*</span></label>
           <div class="flex fileUploader">
@@ -235,7 +241,11 @@
             <th>Description / Remarks</th>
             <th *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal ||
                         sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge ||
-                        sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)" class="text-left">Date Of Approval</th>
+                        sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+                        sSOLoginDataModel.RoleID == EnumRole.HO_DTE ||
+                        sSOLoginDataModel.RoleID == EnumRole.HO_BTER ||
+                        sSOLoginDataModel.RoleID == EnumRole.HO_TTC)" class="text-left">Date Of Approval</th>
+
             <th *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
                 || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
                 || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear
@@ -271,7 +281,10 @@
             <td align="left">{{ item.Remark}}</td>
             <td *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal || 
                         sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge ||
-                        sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)" align="left">{{ item.DateOfApproval}}</td>
+                        sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+                        sSOLoginDataModel.RoleID == EnumRole.HO_DTE ||
+                        sSOLoginDataModel.RoleID == EnumRole.HO_BTER ||
+                        sSOLoginDataModel.RoleID == EnumRole.HO_TTC)" align="left">{{ item.DateOfApproval}}</td>
             <td *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
                 || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
                 || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear
@@ -312,16 +325,24 @@
                    [routerLink]="['/RequestEquipmentsMapping', item.InstituteId, item.CategoryId, item.EquipmentId, item.Quantity, item.TE_MappingId,item.FileName]"
                    title="Edit"> <i class="ti ti-pencil"></i></a>
 
-                <a *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal
-                   && item.PrincipalApproveStatus==0
-                )
+                <a *ngIf="((sSOLoginDataModel.RoleID == EnumRole.Principal ||
+                            sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge ||
+                            sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+                            sSOLoginDataModel.RoleID == EnumRole.HO_DTE ||
+                            sSOLoginDataModel.RoleID == EnumRole.HO_BTER ||
+                            sSOLoginDataModel.RoleID == EnumRole.HO_TTC)
+                          && item.PrincipalApproveStatus==0)
                    && item.EquipmentsStatus == 'Approved'"
                    (click)="PrincipalstatusApprove(item.ItemId)"
                    title="Approve"> <i class="fa fa-check"></i></a>
-                <a *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal
-                   && item.PrincipalApproveStatus==0
-  )
-     && item.EquipmentsStatus == 'Approved'"
+                <a *ngIf="((sSOLoginDataModel.RoleID == EnumRole.Principal ||
+                            sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge ||
+                            sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+                            sSOLoginDataModel.RoleID == EnumRole.HO_DTE ||
+                            sSOLoginDataModel.RoleID == EnumRole.HO_BTER ||
+                            sSOLoginDataModel.RoleID == EnumRole.HO_TTC)
+                            && item.PrincipalApproveStatus==0)
+                          && item.EquipmentsStatus == 'Approved'"
                    (click)="PrincipalstatusReject(item.ItemId)"
                    title="Reject"> <i class="fa fa-remove"></i></a>
 

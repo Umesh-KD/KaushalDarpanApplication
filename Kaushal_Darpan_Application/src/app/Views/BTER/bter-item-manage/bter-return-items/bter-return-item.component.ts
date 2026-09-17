@@ -82,6 +82,9 @@ export class AddBterReturnItemComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
       this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
+      this.Searchrequest.SSOID = this.sSOLoginDataModel.SSOID;
+      this.Searchrequest.OfficeID = this.sSOLoginDataModel.OfficeID;
       
       await this.bterInventoryService.GetIssueItemList(this.Searchrequest)
         .then((data: any) => {
