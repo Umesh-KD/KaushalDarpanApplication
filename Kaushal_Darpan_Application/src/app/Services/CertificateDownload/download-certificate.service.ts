@@ -43,11 +43,11 @@ export class DownloadCertificateService {
       ).toPromise();
   }
 
-  //public async GetPrincipalIssueCertificate(request: PrincipalIssueCertificateModel) {
-  //  const body = JSON.stringify(request);
-  //  return this.http.post(`${this.APIUrl}/GetPrincipalIssueCertificate`, body, this.headersOptions)
-  //    .pipe(
-  //      catchError(this.handleErrorObservable)
-  //    ).toPromise();
-  //}
+  public async DownloadDiplomaForwardingLetter(searchRequest: CertificateSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/DownloadDiplomaForwardingLetter`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

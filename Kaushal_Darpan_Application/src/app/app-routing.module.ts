@@ -459,6 +459,7 @@ const routes: Routes = [
       { path: 'DownloadMarksheet', loadChildren: () => import('./Views/result/marksheet-download/marksheet-download.module').then(m => m.MarksheetDownloadModule), title: 'Download Marksheet' },
       { path: 'marksheet-letter', loadChildren: () => import('./Views/result/Marksheet/marksheet-letter/marksheet-letter.module').then(m => m.MarksheetLetterModule), title: 'Marksheet Letter' },
       { path: 'CertificateLetter', loadChildren: () => import('./Views/result/Certificate/certificate-letter/certificate-letter.module').then(m => m.CertificateLetterModule), title: 'Certificate Letter' },
+      { path: 'diploma-forwarding-letter', loadChildren: () => import('./Views/result/Certificate/certificate-letter/certificate-letter.module').then(m => m.CertificateLetterModule), title: 'Diploma Forwarding Letter' },
       { path: 'DiplomaLetter', loadChildren: () => import('./Views/result/Certificate/diploma-letter/diploma-letter.module').then(m => m.DiplomaLetterModule), title: 'Diploma Letter' },
       { path: 'ApplicationList', loadChildren: () => import('./Views/StudentApplication/application-list/application-list.module').then(m => m.ApplicationListModule), title: 'Application List' },
       //{ path: 'applicationstatus', loadChildren: () => import('./Views/Student/emitra-application-status/emitra-application-status.module').then(m => m.EmitraApplicationStatusModule) },
