@@ -68,6 +68,9 @@ export class AssignRoleRightsDataModel {
   public IPAddress: string = ''
   public DepartmentID: number = 0
   public Eng_NonEng: number = 0
+    
+  //public InstituteIDs?: number[] = [];  // For ng-select / ngModel
+  //public InstituteIDList?: string = ''; 
 }
 
 

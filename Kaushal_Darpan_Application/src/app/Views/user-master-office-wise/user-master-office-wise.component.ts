@@ -291,13 +291,15 @@ export class UserMasterOfficeWiseComponent {
 
   async SaveData_AssignRole() {
     try {
+      debugger
       var editChild = this.RoleMasterList.filter(x => x.Marked == true);
       var isMainRole = this.RoleMasterList.filter(x => x.IsMainRole == true);
 
       const hasInvalidRole = this.RoleMasterList.some((x: any) =>
         (x.ID == EnumRole.Principal || x.ID == EnumRole.PrincipalNon) &&
         x.Marked == true &&
-        x.InstituteID == 0
+         x.InstituteID == 0
+        //(!x.InstituteIDs || x.InstituteIDs.length == 0)
       );
 
       if (hasInvalidRole) {
@@ -323,6 +325,7 @@ export class UserMasterOfficeWiseComponent {
         // x.InstituteID = this.sSOLoginDataModel.InstituteID
       });
       
+      debugger
       await this.assignRoleRightsService.SaveAssignedRole_UserWise(editChild)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -535,6 +538,9 @@ export class UserMasterOfficeWiseComponent {
 
   onInstituteChange(selectedValue: number, row: any) {
     // Explicitly update the reference value
+    debugger
     row.InstituteID = selectedValue;
+    //row.InstituteIDs = selectedValue || [];
+    //row.InstituteIDList = row.InstituteIDs.join(',');
   }
 }

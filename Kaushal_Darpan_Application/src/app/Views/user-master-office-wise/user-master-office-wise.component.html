@@ -120,12 +120,24 @@
                                     <td align="left" style="width: 500px;" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTE || sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR">
                                         <div *ngIf="row.ID == _EnumRole.Principal || row.ID == _EnumRole.PrincipalNon">
                                             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
-                                            <ng-select [(ngModel)]="row.InstituteID" [clearable]="false" (change)="onInstituteChange($event, row)">
+                                             <ng-select [(ngModel)]="row.InstituteID" [clearable]="false" (change)="onInstituteChange($event, row)">
                                                 <ng-option [value]="0" selected>--All--</ng-option>
                                                 <ng-container *ngFor="let item of InstituteMasterList;">
                                                     <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
                                                 </ng-container>
-                                            </ng-select>
+                                            </ng-select> 
+                                            <!--<ng-select
+                                                [items]="InstituteMasterList"
+                                                bindLabel="InstituteName"
+                                                bindValue="InstituteID"
+                                                [(ngModel)]="row.InstituteIDs"
+                                                [multiple]="true"
+                                                [closeOnSelect]="false"
+                                                [clearable]="true"
+                                                placeholder="--Select Institute--"
+                                                (ngModelChange)="onInstituteChange($event, row)">
+                                            </ng-select>-->
+
                                         </div>
                                     </td>
                                 </tr>
