@@ -1,6 +1,7 @@
-<!-- Page Title Start -->
+<!----------------------------------------------- Certificate Letter Start-------------------------------------------------------->
 
-<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6"
+  *ngIf="pageType == 'certificate_letter'">
   <div>
     <h4 class="text-slate-900 text-lg font-medium mb-2">Download Certificate Letter</h4>
 
@@ -11,10 +12,9 @@
     </div>
   </div>
 </div>
-<!-- Page Title End -->
 
-
-<div class="card">
+<div class="card"
+  *ngIf="pageType == 'certificate_letter'">
     <div class="card-body p-5">
       <div class="mb-8">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
@@ -60,4 +60,68 @@
       </div>
     </div>
 </div>
-<!-- end row -->
+<!----------------------------------------------- Certificate Letter End -------------------------------------------------------->
+
+
+<!----------------------------------------------- Diploma Forwarding Letter Start -------------------------------------------------------->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6"
+  *ngIf="pageType == 'diploma_forwarding_letter'">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Diploma Forwarding Letter</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Diploma Forwarding Letter</a>
+    </div>
+  </div>
+</div>
+
+<div class="card"
+  *ngIf="pageType == 'diploma_forwarding_letter'">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+            <select class="form-select" [(ngModel)]="diplomaSearchReq.InstituteID">
+              <option value="0">--- Select ---</option>
+              <option *ngFor="let row of InstituteList" [value]="row.InstituteID">{{row.InstituteName}}</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Result Type:</label>
+            <select class="form-select" [(ngModel)]="searchRequest.ExamTypeID"  (change)="GetEffectiveFinYear()">
+              <option value="0">--- Select ---</option>
+              <option *ngFor="let row of ResultTypeList" [value]="row.ID">{{row.Name}}</option>
+            </select>
+          </div>
+
+          <div *ngIf="searchRequest.ExamTypeID==_EnumResultType.RwhResult || searchRequest.ExamTypeID==_EnumResultType.RwhRevalEffected">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Effective From</label>
+            <select class="form-select" [(ngModel)]="searchRequest.EffectiveFromEndTermId" name="EffectiveFromEndTermId">
+              <option [value]="0">--- Select ---</option>
+              <option *ngFor="let item of endTermFinYear" [value]="item.EndTermID">{{ item.EndTermName }}</option>
+            </select>
+          </div>
+
+
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="DownloadDiplomaForwardingLetter()">Download</button>
+            <button type="button" class="btn bg-danger text-white mt-6">
+              <i class="ti ti-refresh"></i>
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!----------------------------------------------- Diploma Forwarding Letter END -------------------------------------------------------->
