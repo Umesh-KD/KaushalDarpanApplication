@@ -70,6 +70,10 @@ export class CertificateLetterComponent {
       this.pageType = 'certificate_letter';
     } else if (currentUrl.endsWith('/diploma-forwarding-letter')) {
       this.pageType = 'diploma_forwarding_letter';
+    } else if(currentUrl.endsWith('/diploma-passed-student-register-report')) {
+      this.pageType = 'diploma_passed_student_register_report';
+    } else if(currentUrl.endsWith('/pending-diploma-certificate-report')) {
+      this.pageType = 'pending_diploma_certificate_report';
     }
 
     await this.GetInstituteListDDL();
@@ -235,4 +239,66 @@ export class CertificateLetterComponent {
 
   
   //----------------------------------------------- Diploma Forwarding Letter END -------------------------------------------------------->
+
+  //----------------------------------------------- Diploma Passed Student Register Report Start -------------------------------------------------------->
+
+  async DownloadDiplomaPassedStudentRegisterReport() {
+
+    try {
+      this.loaderService.requestStarted();
+      this.diplomaSearchReq.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.diplomaSearchReq.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.diplomaSearchReq.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+
+      await this.downloadCertificateService.DownloadDiplomaPassedStudentRegisterReport(this.diplomaSearchReq)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+            this.commonFunctionHelper.downloadBase64OfPdf(data.Data, `Diploma_Passed_Student_Register_Report_${timestamp}.pdf`);
+          } else if (data.State === EnumStatus.Warning) {
+            this.toastr.warning(data.Message);
+          }
+          else {
+            this.toastr.error(data.Message);
+          }
+        }, (error: any) => console.error(error));
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+
+  
+  //----------------------------------------------- Diploma Passed Student Register Report END -------------------------------------------------------->
+
+  //----------------------------------------------- Pending Diploma Certificate Report Start -------------------------------------------------------->
+
+  async DownloadPendingDiplomaCertificateReport() {
+
+    try {
+      this.loaderService.requestStarted();
+      this.diplomaSearchReq.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.diplomaSearchReq.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.diplomaSearchReq.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+
+      await this.downloadCertificateService.DownloadPendingDiplomaCertificateReport(this.diplomaSearchReq)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+            this.commonFunctionHelper.downloadBase64OfPdf(data.Data, `Pending_Diploma_Certificate_Report${timestamp}.pdf`);
+          } else if (data.State === EnumStatus.Warning) {
+            this.toastr.warning(data.Message);
+          }
+          else {
+            this.toastr.error(data.Message);
+          }
+        }, (error: any) => console.error(error));
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+
+  
+  //----------------------------------------------- Pending Diploma Certificate Report END -------------------------------------------------------->
 }
