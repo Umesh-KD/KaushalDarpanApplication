@@ -84,6 +84,9 @@ export class fresherRegistrationReportListComponent {
     await this.getExamMasterList()
     //this.getExaminerData();
     //this.getExamMasterList();//grid data
+    if (this.sSOLoginDataModel.RoleID == 20) {
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+    }
     await this.GetReportAllData();
     await this.calculateDynamicTotals(this.DataList);
   }
@@ -473,6 +476,43 @@ export class fresherRegistrationReportListComponent {
       if (valA > valB) return 1 * dir;
       return 0;
     });
+  }
+
+  forwarddata(UpdateEditID: number) {
+
+    this.Swal2.Confirmation(
+      'Are you sure you want to forward this report?',
+      (result: any) => {
+        if (result.isConfirmed) {
+          this.doForward(UpdateEditID);
+        }
+      },
+      'Yes, forward it'
+    );
+  }
+
+  private async doForward(UpdateEditID: number) {
+    try {
+      this.loaderService.requestStarted();
+
+      const data: any = await this.ApprenticeShipRPTService.FowardReport(UpdateEditID, 'schoolcollege');
+
+      if (data?.Data?.length > 0) {
+        this.toastr.success('Succesfully Forward');
+
+        setTimeout(() => {
+          this.routers.navigate(['/fresherRegistrationReportlist']);
+        }, 1300);
+      } else {
+        this.toastr.error('Something went wrong while forwarding the report.');
+      }
+
+    } catch (ex) {
+      console.log(ex);
+      this.toastr.error('Failed to forward the report. Please try again.');
+    } finally {
+      this.loaderService.requestEnded();
+    }
   }
 
 }

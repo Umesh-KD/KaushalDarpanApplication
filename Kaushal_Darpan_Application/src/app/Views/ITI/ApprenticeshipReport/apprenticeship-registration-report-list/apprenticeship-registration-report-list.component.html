@@ -201,7 +201,7 @@
                 <a *ngIf="ssoLoginDataModel.RoleID == 97" href="javascript:void(0)" title="view" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
                 <a *ngIf="ssoLoginDataModel.RoleID == 97 && row.IsForward==0" href="javascript:void(0)" title="Foward" (click)="forwarddata(row.ID)"><i class="ti ti-check"></i></a>
                 <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,1)"><i class="ti ti-pencil"></i></a>-->
-                <a *ngIf="ssoLoginDataModel.RoleID == 97 || ssoLoginDataModel.RoleID == 20" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,1)"><i class="ti ti-pencil"></i></a>
+                <a *ngIf=" ssoLoginDataModel.RoleID == 20" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,1)"><i class="ti ti-pencil"></i></a>
                 <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>-->
                 <a *ngIf="ssoLoginDataModel.RoleID == 20"  href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>
                 <a *ngIf="ssoLoginDataModel.RoleID != 97" href="javascript:void(0)" title="view" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
