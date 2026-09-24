@@ -50,4 +50,20 @@ export class DownloadCertificateService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async DownloadDiplomaPassedStudentRegisterReport(searchRequest: CertificateSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/DownloadDiplomaPassedStudentRegisterReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DownloadPendingDiplomaCertificateReport(searchRequest: CertificateSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/DownloadPendingDiplomaCertificateReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

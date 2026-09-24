@@ -460,6 +460,8 @@ const routes: Routes = [
       { path: 'marksheet-letter', loadChildren: () => import('./Views/result/Marksheet/marksheet-letter/marksheet-letter.module').then(m => m.MarksheetLetterModule), title: 'Marksheet Letter' },
       { path: 'CertificateLetter', loadChildren: () => import('./Views/result/Certificate/certificate-letter/certificate-letter.module').then(m => m.CertificateLetterModule), title: 'Certificate Letter' },
       { path: 'diploma-forwarding-letter', loadChildren: () => import('./Views/result/Certificate/certificate-letter/certificate-letter.module').then(m => m.CertificateLetterModule), title: 'Diploma Forwarding Letter' },
+      { path: 'diploma-passed-student-register-report', loadChildren: () => import('./Views/result/Certificate/certificate-letter/certificate-letter.module').then(m => m.CertificateLetterModule), title: 'Diploma Passed Student Register Report' },
+      { path: 'pending-diploma-certificate-report', loadChildren: () => import('./Views/result/Certificate/certificate-letter/certificate-letter.module').then(m => m.CertificateLetterModule), title: 'Pending Diploma Certificate Report' },
       { path: 'DiplomaLetter', loadChildren: () => import('./Views/result/Certificate/diploma-letter/diploma-letter.module').then(m => m.DiplomaLetterModule), title: 'Diploma Letter' },
       { path: 'ApplicationList', loadChildren: () => import('./Views/StudentApplication/application-list/application-list.module').then(m => m.ApplicationListModule), title: 'Application List' },
       //{ path: 'applicationstatus', loadChildren: () => import('./Views/Student/emitra-application-status/emitra-application-status.module').then(m => m.EmitraApplicationStatusModule) },
