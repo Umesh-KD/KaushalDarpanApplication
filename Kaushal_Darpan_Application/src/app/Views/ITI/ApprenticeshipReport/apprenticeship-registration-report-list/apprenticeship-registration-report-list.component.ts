@@ -517,5 +517,41 @@ export class ApprenticeshipRegistrationReportList {
       return 0;
     });
   }
+  forwarddata(UpdateEditID: number) {
+
+    this.Swal2.Confirmation(
+      'Are you sure you want to forward this report?',
+      (result: any) => {
+        if (result.isConfirmed) {
+          this.doForward(UpdateEditID);
+        }
+      },
+      'Yes, forward it'
+    );
+  }
+
+  private async doForward(UpdateEditID: number) {
+    try {
+      this.loaderService.requestStarted();
+
+      const data: any = await this.ApprenticeShipRPTService.FowardReport(UpdateEditID, 'Fresher');
+
+      if (data?.Data?.length > 0) {
+        this.toastr.success('Succesfully Forward');
+
+        setTimeout(() => {
+          this.routers.navigate(['/ApprenticeshipRegistrationReport-list']);
+        }, 1300);
+      } else {
+        this.toastr.error('Something went wrong while forwarding the report.');
+      }
+
+    } catch (ex) {
+      console.log(ex);
+      this.toastr.error('Failed to forward the report. Please try again.');
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
 
 }

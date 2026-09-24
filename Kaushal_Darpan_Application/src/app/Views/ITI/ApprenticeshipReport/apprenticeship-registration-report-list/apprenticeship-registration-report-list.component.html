@@ -66,7 +66,7 @@
           </select>
         </div>
 
-        <div *ngIf="ssoLoginDataModel.RoleID !=97">
+        <div *ngIf="ssoLoginDataModel.RoleID !=97 && ssoLoginDataModel.RoleID !=20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्षेत्र<span class="StarMarking">*</span></label>
           <select [disabled]="ssoLoginDataModel.RoleID == 100" class="form-select" id="PlacementCompanyI1D" name="PlacementCompanyI1D" [(ngModel)]="ZoneID" (change)="GetDistrictMatserDDL()">
             <option value="0">Choose Option</option>
@@ -77,8 +77,8 @@
 
         </div>
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">जिला  <span class="StarMarking">*</span></label>
+        <div *ngIf="ssoLoginDataModel.RoleID !=20">
+          <label  class="text-gray-800 text-sm font-medium inline-block mb-1">जिला  <span class="StarMarking">*</span></label>
           <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="DistrictID">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of DistrictLisrt" [value]="item.ID">{{item.Name}}</option>
@@ -104,7 +104,7 @@
       <b class="text-1xl-5"><i class="ti ti-list"></i>Apprenticeship Registration Report List </b>
 
       <div class="flex justify-end flex-wrap items-center">
-        <a (click)="GoToReportEntryPage()" *ngIf="ssoLoginDataModel.RoleID == 97" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Add New</a>
+        <a (click)="GoToReportEntryPage()" *ngIf=" ssoLoginDataModel.RoleID ==20" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Add New</a>
         <a (click)="DownloadApprenticeshipReport()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Download Report</a>
          </div>
 
@@ -199,8 +199,11 @@
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a *ngIf="ssoLoginDataModel.RoleID == 97" href="javascript:void(0)" title="view" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
-                <a *ngIf="ssoLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,1)"><i class="ti ti-pencil"></i></a>
-                <a *ngIf="ssoLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>
+                <a *ngIf="ssoLoginDataModel.RoleID == 97 && row.IsForward==0" href="javascript:void(0)" title="Foward" (click)="forwarddata(row.ID)"><i class="ti ti-check"></i></a>
+                <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,1)"><i class="ti ti-pencil"></i></a>-->
+                <a *ngIf="ssoLoginDataModel.RoleID == 97 || ssoLoginDataModel.RoleID == 20" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,1)"><i class="ti ti-pencil"></i></a>
+                <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>-->
+                <a *ngIf="ssoLoginDataModel.RoleID == 20"  href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>
                 <a *ngIf="ssoLoginDataModel.RoleID != 97" href="javascript:void(0)" title="view" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
               </div>
             </td>
