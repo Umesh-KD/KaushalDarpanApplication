@@ -62,6 +62,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   public SeatIntakeID: number = 0;
+  missingData: any[] = [];
   //end table feature default
 
   constructor(
@@ -902,4 +903,135 @@ debugger
           console.error(error);
         }
   }
+
+
+   async openModal_UpdateSeatData(model: any)
+  {
+    debugger
+    try{
+
+      this.modalReference = this.modalService.open(model, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' });
+       this.modalReference.result.then(
+      (result: any) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason: any) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+    }
+    catch(ex){
+      console.log(ex);
+    }
+
+  }
+
+    public importFile: any;
+    public selectedFile: File | null = null;
+
+    onFileChange(event: any): void {
+      debugger;
+        const file: File = event.target.files[0];
+        if (file) {
+          this.selectedFile = file;
+          // this.ImportExcelFile(file);
+        }
+        // this.selectedFile = null;
+         // Reset file input so selecting the same file again triggers change
+        // event.target.value = null;
+      }
+
+  ImportExcelFile(file: File): void {
+    debugger
+    this.Swal2.Confirmation("Do you want to Update Status?",
+       async (result: any) => {
+        //confirmed
+         if (result.isConfirmed) {
+          try{
+            this.loaderService.requestStarted();
+            await this.ItiSeatIntakeService.UpdateITISeatDataBulk(file)
+            .then((data: any) => {
+
+              data = JSON.parse(JSON.stringify(data));
+              this.missingData = [];
+              if (data.State === EnumStatus.Success) {
+                this.toastr.success(data.Message);
+                this.missingData = [];             
+              }
+               else if (
+                data.Data &&
+                data.Data.Value &&
+                data.Data.Value.missingData &&
+                data.Data.Value.missingData.length > 0
+              ) {
+
+                // const missingData =
+                //   data.Data.Value.missingData;
+                this.missingData =
+                  data.Data.Value.missingData;
+
+                console.log("Missing Data:", this.missingData);
+
+                this.toastr.error(
+                  "Following Key_su records do not exist."
+                );
+
+                // Assign to your grid/table variable
+                // this.missingData = missingData;
+              }
+              else{
+                this.toastr.error(  data.ErrorMessage ||
+                  data.Message ||
+                  "Update failed.");
+              }
+            });
+          }
+           catch (ex) {
+            console.log(ex);
+          }
+          finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200);
+          }
+        }
+      });
+         
+  }
+
+
+  
+// ShowMissingData(missingData: any[]): void {
+
+//   let message = "The following Key_su records do not exist:\n\n";
+
+//   missingData.forEach((item: any) => {
+
+//     message +=
+//       `${item.Key_su} - ${item.Remark}\n`;
+
+//   });
+
+//   this.Swal2.Confirmation(
+//     message,
+//     (result: any) => {
+//       // close
+//     }
+//   );
+// }
+
+
+  //   async openModal_UpdateSeatData(model: any) {
+
+  //   try {
+  //     // this.RequestUpdateStatus = { ...userSubmitData };
+  //     // this.RequestUpdateStatus.StatusIDs = 0;
+  //     // this.RequestUpdateStatus.Remark = '';
+  //     // console.log(this.RequestUpdateStatus, "modal");
+  //     this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   }
+  // }
+
 }
