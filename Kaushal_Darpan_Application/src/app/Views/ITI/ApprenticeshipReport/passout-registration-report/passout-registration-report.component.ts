@@ -164,6 +164,10 @@ export class PassoutRegistrationReportComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.ExamShiftList = data['Data'];
+          if (this.sSOLoginDataModel.RoleID == 20) {
+            this.ExamShiftList = this.ExamShiftList.filter((e: any) => e.ID == this.sSOLoginDataModel.InstituteID)
+          }
+
           console.log("this.ExamShiftList", this.ExamShiftList)
         }, error => console.error(error));
     }

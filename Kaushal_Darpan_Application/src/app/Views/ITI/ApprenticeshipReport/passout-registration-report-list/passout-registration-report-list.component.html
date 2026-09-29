@@ -28,7 +28,7 @@
           <!--<a routerLink="/AddSchlorship" class="btn bg-info btn-sm text-white me-2">
     <i class="ti ti-plus"></i>Add
   </a>-->
-          <a *ngIf="sSOLoginDataModel.RoleID == 97" (click)="GoToReportEntryPage()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+          <a *ngIf="sSOLoginDataModel.RoleID == 20" (click)="GoToReportEntryPage()" class="inline-flex items-center btn bg-dark text-white btn-sm">
             <i class=""></i>
             Add new
           </a>
@@ -78,7 +78,7 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID != 97">
+        <div *ngIf="sSOLoginDataModel.RoleID != 97 && sSOLoginDataModel.RoleID != 20" >
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             संस्थान का नाम : <span class="StarMarking">*</span>
           </label>
@@ -104,10 +104,10 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            आईटीआई उत्तीर्ण करने का वर्ष : <span class="StarMarking">*</span>
+            पंजीकरण का वर्ष : <span class="StarMarking">*</span>
           </label>
           <select class="form-select" [(ngModel)]="searchRequest.PortalYear">
-            <option value="">--Select--</option>
+            <option value="0">--Select--</option>
 
             <option *ngFor="let row of PassYearList" [value]="row.Year">{{row.Year}}</option>
           </select>
@@ -281,8 +281,8 @@
 
             <td>
               <div class="flex align-center justify-center actionBtns">
-
-                <a *ngIf="sSOLoginDataModel.RoleID == 97"
+                <a *ngIf="sSOLoginDataModel.RoleID == 97 && row.IsForward==0" href="javascript:void(0)" title="Foward" (click)="forwarddata(row.ID)"><i class="ti ti-check"></i></a>
+                <a *ngIf="sSOLoginDataModel.RoleID == 20"
                    href="javascript:void(0)"
                    title="Edit"
                    (click)="EditData(row.ID,1)">
@@ -295,7 +295,7 @@
                   <i class="ti ti-eye"></i>
                 </a>
 
-                <a *ngIf="sSOLoginDataModel.RoleID == 97"
+                <a *ngIf="sSOLoginDataModel.RoleID == 20"
                    href="javascript:void(0)"
                    title="Delete"
                    (click)="DeleteByID(row.ID)">

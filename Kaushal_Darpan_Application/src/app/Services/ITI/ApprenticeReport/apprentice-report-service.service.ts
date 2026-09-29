@@ -317,4 +317,15 @@ export class ApprenticeReportServiceService {
       ).toPromise();
   }
 
+
+  public async FowardReport(PKid: number,Type:string) {
+    //var body = JSON.stringify(obj);
+    //console.log(body);
+    const headers = { 'content-type': 'application/json' }
+    return await this.http.post(this.APIUrl + "/FowardReport/" + PKid + '/' + Type, { 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
