@@ -50,6 +50,7 @@ tableConfig: TableConfig = {
         'StateID'
 
     ],
+    draggable: true, //for enabling drag and drop column, default true
 
   columns: [
     {
@@ -61,14 +62,18 @@ tableConfig: TableConfig = {
             height: 40,
             borderRadius: 'circle'
         },
-        visible: false,    //to show in list view
-        lockVisibility: true   // to lock in customize column dropdown
+        // visible: false,    //to show in list view
+        hidden: true,    //to show in list view
+        // lockVisibility: true   // to lock in customize column dropdown
     },
 
-    // {
-    //   dataField: 'Name',
-    //   // displayField: 'Company Name',    
-    // },
+    {
+      dataField: 'DistrictID',
+      visible: false,    //to show in list view
+      // visible: false,    //to show in list view
+        // lockVisibility: true   // to lock in customize column dropdown
+      // displayField: 'Company Name',    
+    },
 
     // {
     //   dataField: 'Website',

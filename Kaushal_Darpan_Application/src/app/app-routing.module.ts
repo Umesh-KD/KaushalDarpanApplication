@@ -459,6 +459,9 @@ const routes: Routes = [
       { path: 'DownloadMarksheet', loadChildren: () => import('./Views/result/marksheet-download/marksheet-download.module').then(m => m.MarksheetDownloadModule), title: 'Download Marksheet' },
       { path: 'marksheet-letter', loadChildren: () => import('./Views/result/Marksheet/marksheet-letter/marksheet-letter.module').then(m => m.MarksheetLetterModule), title: 'Marksheet Letter' },
       { path: 'CertificateLetter', loadChildren: () => import('./Views/result/Certificate/certificate-letter/certificate-letter.module').then(m => m.CertificateLetterModule), title: 'Certificate Letter' },
+      { path: 'diploma-forwarding-letter', loadChildren: () => import('./Views/result/Certificate/certificate-letter/certificate-letter.module').then(m => m.CertificateLetterModule), title: 'Diploma Forwarding Letter' },
+      { path: 'diploma-passed-student-register-report', loadChildren: () => import('./Views/result/Certificate/certificate-letter/certificate-letter.module').then(m => m.CertificateLetterModule), title: 'Diploma Passed Student Register Report' },
+      { path: 'pending-diploma-certificate-report', loadChildren: () => import('./Views/result/Certificate/certificate-letter/certificate-letter.module').then(m => m.CertificateLetterModule), title: 'Pending Diploma Certificate Report' },
       { path: 'DiplomaLetter', loadChildren: () => import('./Views/result/Certificate/diploma-letter/diploma-letter.module').then(m => m.DiplomaLetterModule), title: 'Diploma Letter' },
       { path: 'ApplicationList', loadChildren: () => import('./Views/StudentApplication/application-list/application-list.module').then(m => m.ApplicationListModule), title: 'Application List' },
       //{ path: 'applicationstatus', loadChildren: () => import('./Views/Student/emitra-application-status/emitra-application-status.module').then(m => m.EmitraApplicationStatusModule) },
@@ -1397,6 +1400,8 @@ const routes: Routes = [
 
       { path: '8th-category-wise-seat-utilization', loadChildren: () => import('./Views/ITI/reports/iti-8th-category-wise-seat-utilization/iti-8th-category-wise-seat-utilization.module').then(m => m.Iti8ThCategoryWiseSeatUtilizationModule), title: '8th-category-wise-seat-utilization' },
       { path: '10th-category-wise-seat-utilization', loadChildren: () => import('./Views/ITI/reports/iti-10th-category-wise-seat-utilization/iti-10th-category-wise-seat-utilization.module').then(m => m.Iti10ThCategoryWiseSeatUtilizationModule), title: '10th-category-wise-seat-utilization' },
+      { path: 'category-wise-seat-utilization', loadChildren: () => import('./Views/ITI/reports/iti-category-wise-seat-utilization/iti-category-wise-seat-utilization.module').then(m => m.ItiCategoryWiseSeatUtilizationModule), title: 'category-wise-seat-utilization' },
+      
       { path: 'StudentPlacementMapping', loadChildren: () => import('./Views/BTER/Student/student-placement-mapping/student-placement-mapping.module').then(m => m.StudentPlacementMappingModule) },
 
 

@@ -103,6 +103,8 @@ export class SeatIntakePopUpSearchModel {
   public MinPercentageInMath: string = '';
   public MinPercentageInScience: string = '';
   public OnlyForWomen: boolean = false;
+
+  public Remarks?: string = '';
 }
 
 //------BTER------//

@@ -88,6 +88,8 @@ export class StaffDetailsDataModel {
 
   public EduQualificationDetailsModel: Staff_EduQualificationDetailsModel[] = [];
   public StaffSubjectListModel: StaffSubjectList[]= [];
+
+  public VendorID?: string = '';
 }
 
 export class Staff_EduQualificationDetailsModel {

@@ -17,6 +17,7 @@ export class GlobalConstants {
   public static RejectAtBter: string = "RejectAtBter";
   public static DepartmentBterFolder:string = "BTER";
   public static StudentPlacementResumes: string = "/StudentPlacementResumes/";
+  public static MigrationCertificateFolder: string = "MigrationCertificate";
 
   // regex
   public static AadhaarPattern: RegExp = /^[2-9]{1}[0-9]{11}$/;  // Aadhaar must start with 2-9 and be 12 digits long
@@ -1032,4 +1033,16 @@ export enum EnumGrievanceCategory {
   Operational_Issue =	3,
   Transactional_Payment_Issue =	4,
   Other	= 5,
+}
+
+export enum EnumPostServiceType_BTER {
+  Other_Department_Services = 1,
+  Rajasthan_Class_IV_Service = 2,
+  Rajasthan_Subordinate_Offices_Ministerial_Service = 3,
+  Rajasthan_Subordinate_Service = 4,
+  Rajasthan_Technical_Education_Subordinate_Service = 5,
+  Rajasthan_Computer_State_and_Subordinate_Service = 6,
+  Rajasthan_Legal_State_and_Subordinate_Service = 7,
+  Rajasthan_State_and_Subordinate_Account_Service = 8,
+  Rajasthan_State_and_Subordinate_Statistical_Service = 9
 }

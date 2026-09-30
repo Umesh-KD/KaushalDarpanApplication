@@ -87,9 +87,11 @@ export class bterinventoryIssueHistoryComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
+      this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
+      this.Searchrequest.SSOID = this.sSOLoginDataModel.SSOID;
+      this.Searchrequest.OfficeID = this.sSOLoginDataModel.OfficeID;
       
       if(this.sSOLoginDataModel.RoleID === EnumRole.BterLabIncharge){
-        this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
         this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
       }
       await this.bterInventoryService.GetAllinventoryIssueHistory(this.Searchrequest)

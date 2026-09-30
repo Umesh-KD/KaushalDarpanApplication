@@ -423,8 +423,7 @@ export class AddDTEOfficeVacancyComponent {
 
       this.AddOfficeVacancyForm.get('BranchID')?.updateValueAndValidity();
      
-
-      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, Eng_NonEng).then((data: any) => {
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, Eng_NonEng,0).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDLList = data.Data;
       })

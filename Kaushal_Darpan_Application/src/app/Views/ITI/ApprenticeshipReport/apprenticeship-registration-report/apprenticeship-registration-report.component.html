@@ -106,7 +106,7 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">व्यवसाय मे कुल प्रशिक्षणार्थियों की संख्या: <span class="StarMarking">*</span></label>
-              <input type="number" class="form-input" placeholder="Total number of trainees in the trade" formControlName="NumberofTrainees">
+              <input type="text" class="form-input" placeholder="Total number of trainees in the trade" formControlName="NumberofTrainees">
               <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('NumberofTrainees')?.hasError('required')
                    && ApprenticeshipReportFormGroup.get('NumberofTrainees')?.touched">
                 This field is required
@@ -142,14 +142,14 @@
 
 
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">विविध विवरण: <span class="StarMarking">*</span></label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">विविध विवरण:</label>
               <input type="text" class="form-input" placeholder="Enter Remark" formControlName="Remarks">
-              <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('Remarks')?.hasError('required') && ApprenticeshipReportFormGroup.get('Remarks')?.touched">
+              <!--<div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('Remarks')?.hasError('required') && ApprenticeshipReportFormGroup.get('Remarks')?.touched">
                 This field is required
-              </div>
+              </div>-->
             </div>
             <div>
-              <button (click)="AddRow()" *ngIf="!IsUpdateCase &&  ssoLoginDataModel.RoleID == 97" type="submit" class="btn bg-info text-white mt-6" [disabled]="!ApprenticeshipReportFormGroup.valid">Add More</button>
+              <button (click)="AddRow()" *ngIf="!IsUpdateCase &&  ssoLoginDataModel.RoleID == 97 || !IsUpdateCase &&  ssoLoginDataModel.RoleID == 20" type="submit" class="btn bg-info text-white mt-6" [disabled]="!ApprenticeshipReportFormGroup.valid">Add More</button>
             </div>
 
           </div>
@@ -158,7 +158,7 @@
         </form>
 
       </div>
-      <div *ngIf="ApprenticeshipRows.length > 0 &&  IsUpdateCase == false &&  ssoLoginDataModel.RoleID == 97" class="mt-5">
+      <div *ngIf="ApprenticeshipRows.length > 0 &&  IsUpdateCase == false &&  ssoLoginDataModel.RoleID == 97 || ApprenticeshipRows.length > 0 &&  IsUpdateCase == false &&  ssoLoginDataModel.RoleID == 20" class="mt-5">
         <h3 class="text-lg font-semibold mb-3">Added Apprenticeship Entries</h3>
         <table class="table-auto w-full border border-collapse border-gray-300">
           <thead class="bg-gray-100">
@@ -194,10 +194,10 @@
         </table>
       </div>
       <div *ngIf="!disable" class="mt-5 text-center">
-        <button class="btn bg-success text-white" *ngIf="!IsUpdateCase &&  ApprenticeshipRows.length > 0 &&  ssoLoginDataModel.RoleID == 97 " (click)="onFinalSubmit()" [disabled]="ApprenticeshipRows.length === 0">
+        <button class="btn bg-success text-white" *ngIf="!IsUpdateCase &&  ApprenticeshipRows.length > 0 &&  ssoLoginDataModel.RoleID == 97 || !IsUpdateCase &&  ApprenticeshipRows.length > 0 &&  ssoLoginDataModel.RoleID == 20 " (click)="onFinalSubmit()" [disabled]="ApprenticeshipRows.length === 0">
           Submit All
         </button>
-        <button *ngIf="IsUpdateCase &&  ssoLoginDataModel.RoleID == 97" type="button" class="btn bg-primary text-white mt-4" (click)="UpdateRecordbyID(UpdateEditID)">Update</button>
+        <button *ngIf="IsUpdateCase  &&  ssoLoginDataModel.RoleID == 97 || IsUpdateCase  &&  ssoLoginDataModel.RoleID == 20 " type="button" class="btn bg-primary text-white mt-4" (click)="UpdateRecordbyID(UpdateEditID)">Update</button>
       </div>
     </div>
   </div>

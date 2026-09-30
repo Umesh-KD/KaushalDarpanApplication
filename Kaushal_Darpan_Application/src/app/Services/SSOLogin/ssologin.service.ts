@@ -200,14 +200,22 @@ export class SSOLoginService {
       ).toPromise();
   }
 
-  public async CheckMultiInsituteUser(SSOID: string, Pass: string) {
+  public async CheckMultiInsituteUser(SSOID: string, Pass: string, DepartmentID: number = 0) {
     const headers = { 'content-type': 'application/json' }
-    const body = { UserName: SSOID, Password: Pass }
+    const body = { UserName: SSOID, Password: Pass, DepartmentID: DepartmentID }
     return await this.http.post(`${this.APIUrl}/CheckMultiInsituteUser`, body, { 'headers': headers })
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
 
+  //   public async CheckMultiColleges_BTER(SSOID: string, Pass: string, DepartmentID: number = 0) {
+  //   const headers = { 'content-type': 'application/json' }
+  //   const body = { UserName: SSOID, Password: Pass, DepartmentID: DepartmentID }
+  //   return await this.http.post(`${this.APIUrl}/CheckMultiColleges_BTER`, body, { 'headers': headers })
+  //     .pipe(
+  //       catchError(this.handleErrorObservable)
+  //     ).toPromise();
+  // }
 
 }

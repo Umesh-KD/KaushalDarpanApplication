@@ -194,24 +194,23 @@ export class DteAddItemsMasterComponent {
       }
       this.request.BillFileName = this.FileName;
       this.request.BillFilePath = 'StockRegisterBillUpload/' + this.FileName;
-      debugger
+
+      this.request.UserID = this.sSOLoginDataModel.UserID;
+      this.request.OfficeID = this.sSOLoginDataModel.OfficeID;
+      
       await this.itemService.SaveData(this.request)
         .then((data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-
-          if (this.State == EnumStatus.Success) {
-            this.toastr.success(this.Message)
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message)
             this.ResetControl();
             this.routers.navigate(['/DteItemsMasterList']);
           }
-          else if (this.State == EnumStatus.Warning) {
-            this.toastr.warning(this.ErrorMessage)
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.ErrorMessage)
 
           }
-          else if (this.State == EnumStatus.Error) {
-            this.toastr.error(this.ErrorMessage);
+          else if (data.State == EnumStatus.Error) {
+            this.toastr.error(data.ErrorMessage);
           }
         })
     }

@@ -159,7 +159,7 @@
                   <a *ngIf="row.IsAllFinalSubmitted === 1 &&  row.AssignedCount > 0" (click)="RevertBundle1(row.ExaminerID)" title="View">
                     <i class="ti ti-lock-open"></i>
                   </a>
-                  <a *ngIf="row.AssignedCount > 0" (click)="getExaminerBundleDetails(modal_ExaminerBundle,row.ExaminerID)" title="View Bundle">
+                  <a *ngIf="row.AssignedCount > 0" (click)="getExaminerBundleDetails(modal_ExaminerBundle,row.ExaminerID,row)" title="View Bundle">
                     <i class="ti ti-list"></i>
                   </a>
                   <a (click)="downloadCenterWiseReport(row)" title="Download Trade Wise Report">
@@ -348,22 +348,14 @@
 
   <div class="card">
     <div class="card-header flex justify-between  items-center">
-      <b><i class="fa fa-plus"></i>&nbsp; Examiner Bundle List</b>
+      <b><i class="fa fa-plus"></i>&nbsp; Examiner Bundle List ({{Name}})</b>
       <!--<button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>-->
       <button class="btn bg-info text-white" (click)="ClosePopup()"><i class="ti ti-x"></i></button>
     </div>
 
     <div class="card">
       <div class="card-body p-5">
-        <div class="mb-8">
-          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-            <b class="text-1xl-5"><i class="ti ti-plus"></i> Examiner Bundle List</b>
-            <a href="javascript:void(0)" (click)="exportExcelData()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download</a>
-          </div>
-
-
-
-        </div>
+  
 
 
         <div class="overflow-x-auto mt-3">
@@ -380,7 +372,7 @@
                 <th class="text-left">Total Student</th>
                 <th class="text-left">Total Checked</th>
 
-                <!--<th class="text-left">Assigned Date</th>-->
+                <th class="text-left">Submit Date</th>
                 <th class="text-center">Action</th>
 
               </tr>
@@ -400,7 +392,7 @@
                 <td>{{row.AssignedCount}}</td>
                 <td>{{row.checkedcount}}</td>
 
-                <!--<td>{{row.checkedcount}}</td>-->
+                <td>{{row.MarkSubmitDate}}</td>
                 <td>
                   <div class="flex align-center justify-center actionBtns w-auto"
                        style="width:auto !important">
@@ -422,7 +414,7 @@
   </a>-->
 
                     <a (click)="UnlockBundle1(row)" title="Unlock">
-                      <i class="ti ti-lock-open"></i>
+                      <i class="ti ti-lock"></i>
                     </a>
 
 

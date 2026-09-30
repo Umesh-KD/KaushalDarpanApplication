@@ -26,4 +26,5 @@ export class CertificateSearchModel {
   public RoleID: number = 0
   public DepartmentID: number = 0;
   public CourseTypeID: number = 0;
+  public Eng_NonEng: number = 0;
 }

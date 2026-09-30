@@ -49,7 +49,8 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
   public CandidateData:any=[];
   public GenderList: any = [];
   public FromDate: string = ''
-  public IsEditName: boolean=false
+  public IsEditName: boolean = false
+  public IsEditAadhar: boolean = false
   constructor(private commonMasterService: CommonFunctionService, private CompanyMasterService: CompanyMasterService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute, public appsettingConfig: AppsettingService, private routers: Router, private modalService: NgbModal,
@@ -167,20 +168,39 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
           data = JSON.parse(JSON.stringify(data));
           console.log(data,"Candidate data");
           this.CandidateData=data.Data;
-          if(data && data.Data){
+          if (data && data.Data)
+          {
+            this.request.AID = data.Data[0]?.AID;
             this.request.StateRegNumber = data.Data[0]?.StateRegNumber;
             this.request.ErrorDescription = data.Data[0]?.ErrorDescription;
+
             this.IsEditName = data.Data[0]?.IsEditName
+            this.IsEditAadhar = data.Data[0]?.IsEditAadhar
+
 
             if (this.IsEditName == true)
             {
               this.CandidateFormGroup.controls['Name'].enable()
               this.CandidateFormGroup.controls['CandidateFatherName'].enable()
             }
-            else {
+            else
+            {
               this.CandidateFormGroup.controls['Name'].disable()
               this.CandidateFormGroup.controls['CandidateFatherName'].disable()
             }
+
+
+            if (this.IsEditAadhar == true)
+            {
+              this.CandidateFormGroup.controls['UIDNumber'].enable()
+            
+            }
+            else
+            {
+              this.CandidateFormGroup.controls['UIDNumber'].disable()
+     
+            }
+
 
             this.CandidateFormGroup.patchValue({
               Name: data.Data[0].Name,
@@ -223,8 +243,8 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
       if(this.CandidateFormGroup.invalid){
         return;
       }
-      this.childComponent.MobileNo= this.CandidateFormGroup.get('MobileNo')?.value;
-      this.childComponent.OpenOTPPopup();
+      // this.childComponent.MobileNo= this.CandidateFormGroup.get('MobileNo')?.value;
+      // this.childComponent.OpenOTPPopup();
       this.request.DepartmentID=this.sSOLoginDataModel.DepartmentID;
       // this.request.RoleID=this.sSOLoginDataModel.RoleID;
       this.request.ModifyBy=this.sSOLoginDataModel.UserID;
@@ -233,7 +253,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
       //save
         //  this.childComponent.onVerified.subscribe(() =>
       // { 
-        this.childComponent.onVerified.subscribe(async ()=>{
+        // this.childComponent.onVerified.subscribe(async ()=>{
           await this.ItiDataMasterService.SaveStudentCorrectionData(this.request)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
@@ -254,7 +274,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
 
           }, (error: any) => console.error(error)
           );
-        })
+        // })
     
 
     }

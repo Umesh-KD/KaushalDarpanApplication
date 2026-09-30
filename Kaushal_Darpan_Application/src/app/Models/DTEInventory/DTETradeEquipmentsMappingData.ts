@@ -35,6 +35,8 @@ export class DTESearchTradeEquipmentsMapping {
   public CategoryId: number = 0;
   public EquipmentId: number = 0;
   public InstituteID: number = 0;
+  public UserID: number = 0;
+  public SSOID: string = '';
 }
 
 export class DTEEquipmentVerificationsDataModel {

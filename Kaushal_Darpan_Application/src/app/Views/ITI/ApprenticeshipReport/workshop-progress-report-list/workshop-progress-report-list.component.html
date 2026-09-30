@@ -1,12 +1,12 @@
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Workshop Progress Report By AAA</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Workshop Report By AAA (KPI-2)</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a class="text-sm font-medium text-slate-700" aria-current="page">Progress Report List</a>
+      <a class="text-sm font-medium text-slate-700" aria-current="page">Workshop Report By AAA (KPI-2)</a>
     </div>
   </div>
 
@@ -32,7 +32,7 @@
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
 
-          <!--<div>
+          <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               वित्तीय वर्ष <span class="StarMarking">*</span>
             </label>
@@ -69,7 +69,7 @@
               <option value="11">नवंबर</option>
               <option value="12">दिसंबर</option>
             </select>
-          </div>-->
+          </div>
 
 
           <div *ngIf="SSOLoginDataModel.RoleID !=97">
@@ -137,15 +137,37 @@
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
               <th class="text-left">क्र.सं.</th>
-              <th *ngIf="SSOLoginDataModel.RoleID != 97" class="text-left">नोडल अधिकारी का नाम</th>
+
+              <th *ngIf="SSOLoginDataModel.RoleID != 97" class="text-left cursor-pointer" (click)="sortTable('NodalOfficerName', 'string')">
+                नोडल अधिकारी का नाम
+                <i class="ti" [ngClass]="sortColumn==='NodalOfficerName' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+
               <!--<th *ngIf="SSOLoginDataModel.RoleID != 97" class="text-left">नोडल अधिकारी का जिला</th>-->
-              <th class="text-left">कार्यशाला की तिथि</th>
-              <th class="text-left">कार्यशाला आयोजित करने <br /> वाले जिलें का नाम</th>
-              <th class="text-left">कार्यशाला मे भाग लेने वाले जिलें का नाम </th>
+
+              <th class="text-left cursor-pointer" (click)="sortTable('workshopDate', 'date')">
+                कार्यशाला की तिथि
+                <i class="ti" [ngClass]="sortColumn==='workshopDate' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+
+              <th class="text-left cursor-pointer" (click)="sortTable('OrganisedDistrictName', 'string')">
+                कार्यशाला आयोजित करने <br /> वाले जिलें का नाम
+                <i class="ti" [ngClass]="sortColumn==='OrganisedDistrictName' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+
+              <th class="text-left cursor-pointer" (click)="sortTable('ParticipatedDistrictNameList', 'string')">
+                कार्यशाला मे भाग लेने वाले जिलें का नाम
+                <i class="ti" [ngClass]="sortColumn==='ParticipatedDistrictNameList' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+              </th>
+
               <th class="text-left">कार्यशाला भाग लेने वाले प्रतिष्ठानों<br /> का नाम व पता </th>
+
               <th class="text-left">कार्यशाला मे भाग लेने वाले <br /> प्रतिनिधि का नाम ,पद व मो.नं.</th>
+
               <th class="text-left">विविध विवरण</th>
+
               <th>कार्य प्रगति दस्तावेज़</th>
+
               <th class="text-left">कार्रवाई</th>
             </tr>
           </thead>

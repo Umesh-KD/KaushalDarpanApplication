@@ -4,6 +4,7 @@ import { MaterialModule } from '../../material.module';
 import { DataTableComponent } from './data-table.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 
@@ -13,7 +14,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     MaterialModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    DragDropModule
   ],
   exports: [
     DataTableComponent

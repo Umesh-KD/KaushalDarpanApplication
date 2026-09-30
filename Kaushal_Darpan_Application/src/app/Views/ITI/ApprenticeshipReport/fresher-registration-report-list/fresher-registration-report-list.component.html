@@ -1,6 +1,6 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Apprenticeship Registration List (School/College student)</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">School/college fresher registration report by AAA(KP-3) </h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <!--<a href="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>-->
@@ -27,7 +27,7 @@
         <!--<a routerLink="/AddSchlorship" class="btn bg-info btn-sm text-white me-2">
     <i class="ti ti-plus"></i>Add
   </a>-->
-        <a *ngIf="sSOLoginDataModel.RoleID == 97" (click)="GoToReportEntryPage()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+        <a *ngIf="sSOLoginDataModel.RoleID == 20" (click)="GoToReportEntryPage()" class="inline-flex items-center btn bg-dark text-white btn-sm">
           <i class=""></i>
           Add new
         </a>
@@ -57,7 +57,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             संस्थान का नाम : <span class="StarMarking">*</span>
           </label>
-          <select class="form-select" [(ngModel)]="searchRequest.InstituteID">
+          <select class="form-select" [disabled]="sSOLoginDataModel.RoleID == 20" [(ngModel)]="searchRequest.InstituteID">
             <option value="0">--Select--</option>
 
             <option *ngFor="let row of InstituteMasterDDLList" [value]="row.ID">{{row.Name}}</option>
@@ -129,21 +129,30 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr No</th>
-            <th class="text-left">संस्थान का नाम</th>
-            <th class="text-left">पोर्टल पर पंजीकरण करने की तिथि</th>
-            <th class="text-left">पंजीकरण संख्या</th>
+            <th class="text-left cursor-pointer" (click)="sortTable('Name', 'string')">
+              संस्थान का नाम
+              <i class="ti" [ngClass]="sortColumn==='Name' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+            <th class="text-left cursor-pointer" (click)="sortTable('RegDate', 'date')">
+              पोर्टल पर पंजीकरण करने की तिथि
+              <i class="ti" [ngClass]="sortColumn==='RegDate' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
+            <th class="text-left cursor-pointer" (click)="sortTable('RegCount', 'number')">
+              पंजीकरण संख्या
+              <i class="ti" [ngClass]="sortColumn==='RegCount' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
             <th class="text-center">पिता का नाम</th>
             <th class="text-center">आधार नंबर</th>
-            <th class="text-center">जन्म तिथि</th>
+            <th class="text-center cursor-pointer" (click)="sortTable('DOB', 'date')">
+              जन्म तिथि
+              <i class="ti" [ngClass]="sortColumn==='DOB' ? (sortDirection==='asc' ? 'ti-arrow-up' : 'ti-arrow-down') : 'ti-arrows-sort'"></i>
+            </th>
             <th class="text-center">पता</th>
             <th class="text-center">शैक्षणिक योग्यता</th>
             <th class="text-center">वर्तमान में क्या कर रहे हैं</th>
-            <!--<th class="text-left">दस्तावेज़</th>-->
-            <!--<th class="text-left">विविध विवरण</th>-->
             <th class="text-left">विशेष विवरण</th>
             <th class="text-center">Action</th>
           </tr>
-
         </thead>
         <tbody>
           <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index; ">
@@ -168,13 +177,13 @@
             <td>{{row.Remarks}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a *ngIf="sSOLoginDataModel.RoleID == 97 && row.IsForward==0" href="javascript:void(0)" title="Foward" (click)=" forwarddata(row.ID)"><i class="ti ti-check"></i></a>
+                <a *ngIf="sSOLoginDataModel.RoleID != 20" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
 
-                <a *ngIf="sSOLoginDataModel.RoleID != 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
+                <a *ngIf="sSOLoginDataModel.RoleID == 20" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,0)"><i class="ti ti-eye"></i></a>
+                <a *ngIf="sSOLoginDataModel.RoleID == 20" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,1)"><i class="ti ti-pencil"></i></a>
 
-                <a *ngIf="sSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,0)"><i class="ti ti-eye"></i></a>
-                <a *ngIf="sSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,1)"><i class="ti ti-pencil"></i></a>
-
-                <a *ngIf="sSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>
+                <a *ngIf="sSOLoginDataModel.RoleID == 20" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>
               </div>
             </td>
 

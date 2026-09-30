@@ -4,6 +4,7 @@ import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { DiplomaCertificateDownloadSearchModel, DownloadMarksheetSearchModel, StudentResultSearchModel } from '../../Models/DownloadMarksheetDataModel';
 import { MarksheetLetterSearchModel } from '../../Models/MarksheetLetterDataModel';
+import { LeftOutStudentMigrationCertificateDataModel } from '../../Models/StudentMasterModels';
 
 @Injectable({
   providedIn: 'root'
@@ -73,11 +74,6 @@ export class MarksheetDownloadService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
-
-
-
-
 
 
 

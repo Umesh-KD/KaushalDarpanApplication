@@ -84,6 +84,9 @@ export class fresherRegistrationReportListComponent {
     await this.getExamMasterList()
     //this.getExaminerData();
     //this.getExamMasterList();//grid data
+    if (this.sSOLoginDataModel.RoleID == 20) {
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+    }
     await this.GetReportAllData();
     await this.calculateDynamicTotals(this.DataList);
   }
@@ -424,4 +427,92 @@ export class fresherRegistrationReportListComponent {
       this.toastr.error('Something went wrong.');
     }
   }
+
+  // Add these properties to your component class
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+  sortTable(column: string, type: 'string' | 'number' | 'date' = 'string') {
+    // Toggle direction if same column clicked again, else default to ascending
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    const dir = this.sortDirection === 'asc' ? 1 : -1;
+
+    this.DataList.sort((a: any, b: any) => {
+      let valA = a[column];
+      let valB = b[column];
+
+      if (type === 'number') {
+        valA = parseFloat(valA) || 0;
+        valB = parseFloat(valB) || 0;
+        return (valA - valB) * dir;
+      }
+
+      if (type === 'date') {
+        // Handles dd/mm/yyyy or dd-mm-yyyy formats commonly used in Hindi/Indian date fields
+        const parseDate = (val: string) => {
+          if (!val) return 0;
+          const parts = val.split(/[\/\-]/);
+          if (parts.length === 3) {
+            // assuming dd/mm/yyyy
+            return new Date(+parts[2], +parts[1] - 1, +parts[0]).getTime();
+          }
+          return new Date(val).getTime();
+        };
+        valA = parseDate(valA);
+        valB = parseDate(valB);
+        return (valA - valB) * dir;
+      }
+
+      // default string compare
+      valA = (valA || '').toString().toLowerCase();
+      valB = (valB || '').toString().toLowerCase();
+      if (valA < valB) return -1 * dir;
+      if (valA > valB) return 1 * dir;
+      return 0;
+    });
+  }
+
+  forwarddata(UpdateEditID: number) {
+
+    this.Swal2.Confirmation(
+      'Are you sure you want to forward this report?',
+      (result: any) => {
+        if (result.isConfirmed) {
+          this.doForward(UpdateEditID);
+        }
+      },
+      'Yes, forward it'
+    );
+  }
+
+  private async doForward(UpdateEditID: number) {
+    try {
+      this.loaderService.requestStarted();
+
+      const data: any = await this.ApprenticeShipRPTService.FowardReport(UpdateEditID, 'schoolcollege');
+
+      if (data?.Data?.length > 0) {
+        this.toastr.success('Succesfully Forward');
+
+        setTimeout(() => {
+          this.routers.navigate(['/fresherRegistrationReportlist']);
+        }, 1300);
+      } else {
+        this.toastr.error('Something went wrong while forwarding the report.');
+      }
+
+    } catch (ex) {
+      console.log(ex);
+      this.toastr.error('Failed to forward the report. Please try again.');
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
 }

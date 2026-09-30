@@ -130,7 +130,7 @@
         <div *ngIf="formData.StaffTypeID == _BTERGovtEM_EnumStaffType.Teaching && 
                     (formData.StaffLevelChildID==_ITIGovtEM_EnumStaffLevelChild.Lecturer || 
                     formData.StaffLevelChildID==_ITIGovtEM_EnumStaffLevelChild.HOD)">
-          <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch/Subject <span class="StarMarking">*</span></label>
+          <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch/Subject as per Salary Drawn Post <span class="StarMarking">*</span></label>
           <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
                   [(ngModel)]="formData.BranchID" (change)="getSactionedPostList()">
             <option value="0">Choose Option</option>
@@ -183,6 +183,38 @@
           </select>
           <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPost.errors" class="text-danger">
             <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPost.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="IsNonGazetted">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name Of Service <span class="StarMarking">*</span></label>
+          <select class="form-select" 
+            [(ngModel)]="formData.PostServiceTypeID" 
+            formControlName="PostServiceTypeID"
+            (change)="getChildPostServiceTypeDDL()">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PostServiceTypeDDL" [value]="item.PostServiceTypeID">{{item.PostServiceTypeName}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.PostServiceTypeID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.PostServiceTypeID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+        <div *ngIf="formData.PostServiceTypeID == _EnumPostServiceType_BTER.Other_Department_Services && IsNonGazetted">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> If Other Department Services <span class="StarMarking">*</span></label>
+          <select class="form-select" 
+            [(ngModel)]="formData.ChildPostServiceTypeID" 
+            formControlName="ChildPostServiceTypeID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of ChildPostServiceTypeDDL" [value]="item.PostServiceTypeID">{{item.PostServiceTypeName}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ChildPostServiceTypeID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ChildPostServiceTypeID.errors.DropdownValidators">
               <i aria-hidden="true"></i>This
               field is required .!
             </p>
@@ -258,10 +290,7 @@
           <button class="btn bg-danger text-white mt-6" type="button" (click)="ResetControls()">Cancel</button>
         </div>
       </div>
-
     </form>
-
-
 
     <div class="mb-8 mt-3">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
@@ -295,6 +324,33 @@
           </select>
         </div>
 
+        <div>
+          <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch/Subject as per Salary Drawn Post <span class="StarMarking">*</span></label>
+          <select class="form-select" name="BranchID" id="BranchID"
+                  [(ngModel)]="searchRequest.BranchID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of BranchInstituteDDL" [value]="item.StreamID">{{item.StreamName}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Designation</label>
+          <ng-select [(ngModel)]="searchRequest.DesignationID"
+                      [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of DesignationMasterDDLList;">
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+              </ng-container>
+          </ng-select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Profile Status:</label>
+          <select class="form-select" id="ProfileStatus" [(ngModel)]="searchRequest.ProfileStatus">
+            <option value="-1">Choose Option</option>
+            <option *ngFor="let item of StaffProfileStatusList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
@@ -339,8 +395,9 @@
             <th class="text-left">Staff Type</th>
             <th class="text-left">Designation as per service book</th>
             <th class="text-left">Salary Drawn Post</th>
+            <th class="text-left">Branch as per service book</th>
+            <th class="text-left">Salary Drawn Branch</th>
             <th class="text-left">Role/Additional Role</th>
-            <th class="text-left">Course/Branch</th>
             <!-- <th class="text-left">Subject</th> -->
             <!-- <th class="text-left">Address Details</th> -->
             <th class="text-left">Profile Status</th>
@@ -360,8 +417,9 @@
             <td>{{row.StaffType}}</td>
             <td> {{row.DesignationName}}</td>
             <td> {{row.SalaryDrownPost}}</td>
+            <td>{{row.ServiceBookBranch}}</td>
+            <td>{{row.SalaryDrawnBranch}}</td>
             <td> {{row.Role}} </td>
-            <td>{{row.Stream}}</td>
             <!-- <td>{{row.Subject}}</td> -->
             <!-- <td>
               <p *ngIf="row.Address?.length>0" style="max-width:350px">
@@ -1198,7 +1256,7 @@
                 <td align="left">{{ row.DisplayName }}</td>
                 <td align="left">{{ row.UserProfileStatus }}</td>
                 <td align="left">{{ row.Remarks}}</td>
-                <td align="left">{{ row.CreatedDate }}</td>
+                <td align="left">{{ row.CreatedDate | date: 'dd-MM-yyyy'}}</td>
 
               </tr>
               <tr *ngIf="UserProfileStatusHistoryList?.length==0">

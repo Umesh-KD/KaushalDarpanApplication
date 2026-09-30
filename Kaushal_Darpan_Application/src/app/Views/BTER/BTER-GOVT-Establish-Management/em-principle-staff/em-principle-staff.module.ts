@@ -11,6 +11,7 @@ import { EMPrincipleStaffComponent } from './em-principle-staff.component';
 import { EMPrincipleStaffRoutingModule } from './em-principle-staff-routing.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ViewStaffProfileModalModule } from '../view-staff-profile-modal/view-staff-profile-modal.model';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -22,12 +23,12 @@ import { ViewStaffProfileModalModule } from '../view-staff-profile-modal/view-st
     EMPrincipleStaffRoutingModule, 
     FormsModule, 
     ReactiveFormsModule, 
-    CommonModule, 
     LoaderModule, 
     TableSearchFilterModule,
     StudentStatusHistoryModule,
     NgMultiSelectDropDownModule.forRoot(),
-    ViewStaffProfileModalModule
+    ViewStaffProfileModalModule,
+    NgSelectModule, 
   ]
 })
 export class EMPrincipleStaffModule { }

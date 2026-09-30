@@ -94,7 +94,7 @@ export class ApprenticeshipRegistrationReport {
 
       console.log(Editid);
     }
-    if (this.ssoLoginDataModel.RoleID != 97) {
+    if (this.ssoLoginDataModel.RoleID != 97 && this.ssoLoginDataModel.RoleID!=20) {
       this.ApprenticeshipReportFormGroup.disable(); // Disables all form controls
     }
     else {
@@ -371,6 +371,7 @@ export class ApprenticeshipRegistrationReport {
         EndTermID: this.ssoLoginDataModel.EndTermID,
         DepartmentID: this.ssoLoginDataModel.DepartmentID,
         RoleID: this.ssoLoginDataModel.RoleID,
+        UserID: this.ssoLoginDataModel.UserID,
         Createdby: 0,
         PKID: ReportID
       };
@@ -539,19 +540,26 @@ export class ApprenticeshipRegistrationReport {
     const DepartmentID: number = this.ssoLoginDataModel.DepartmentID;
     const Eng_NonEng: number = 2;
     const EndTermId: number = this.ssoLoginDataModel.EndTermID;
-    const InsutiteId: number = this.ssoLoginDataModel.InstituteID;
-
+    var InsutiteId: number = this.ssoLoginDataModel.InstituteID;
+    
     try {
+
       const response: any = await this.CommonService.NodalInstituteList(InsutiteId);
 
       // Just in case the backend wraps it in a stringified object (unusual but okay)
       const data = typeof response === 'string' ? JSON.parse(response) : response;
 
       this.CollegeList = data['Data'];
+      if (this.ssoLoginDataModel.RoleID == 20) {
+        this.CollegeList = this.CollegeList.filter((e: any) => e.ID == this.ssoLoginDataModel.InstituteID)
+      }
       console.log('College List:', this.CollegeList);
 
     } catch (error) {
       console.error('Failed to fetch ITI Colleges:', error);
     }
   }
+
+
+
 }

@@ -112,6 +112,7 @@ export class QualificationMasterComponent {
   }
 
   async Qualification_DeleteById(Id: number) {
+    debugger;
     try {
       const deleteRequest: any = {};
       deleteRequest.Action = 'DeleteById';

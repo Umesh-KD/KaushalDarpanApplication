@@ -41,6 +41,7 @@ export class ItemsDataModels {
   public IsRequested: boolean = false;
   public ItemDetailID: number = 0;
   public MappingId: number = 0;
+  public UserID: number = 0;
   
 }
 export class ItemsSearchModel {

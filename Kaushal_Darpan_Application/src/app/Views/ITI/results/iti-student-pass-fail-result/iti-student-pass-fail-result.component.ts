@@ -443,7 +443,7 @@ export class itiStudentPassFailResultComponent {
       debugger;
       // Set trade scheme and result status
       this.requestPassFailModel.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
-
+      this.requestPassFailModel.RoleID = this.sSOLoginDataModel.RoleID
 
       // Call current status check
       await this.itiResultService.GetCurrentPassFailResultStatus(this.requestPassFailModel)
@@ -474,6 +474,7 @@ export class itiStudentPassFailResultComponent {
   async GetStudentPassFailResultData() {
     try {
       this.loaderService.requestStarted();
+      this.requestPassFailModel.RoleID = this.sSOLoginDataModel.RoleID
       this.ResultData = [];
       await this.itiResultService.GetStudentPassFailResultData(this.requestPassFailModel)
         .then((data: any) => {

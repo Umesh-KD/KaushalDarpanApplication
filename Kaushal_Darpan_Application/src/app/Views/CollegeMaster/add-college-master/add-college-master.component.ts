@@ -95,16 +95,18 @@ export class AddCollegeMasterComponent implements OnInit {
       faxNumber: [''],
       website: [''],
       //landlineNumber: [''],
-      divisionID: ['0', [DropdownValidators]],
-      districtID: ['0', [DropdownValidators]],
-      tehsilID: ['0', [DropdownValidators]],
+      divisionID: ['', [DropdownValidators]],
+      districtID: ['', [DropdownValidators]],
+      tehsilID: ['', [DropdownValidators]],
       address: [''],
       pinCode: [''],
       Capacity: [''],
       InstitutionDGTCode: [''],
-      CollegeType: ['0', [DropdownValidators]],
+      CollegeType: ['', [DropdownValidators]],
       CourseType: ['', [DropdownValidators]],
       ActiveStatus: ['true'],
+      IsEng: ['false'],
+      IsNonEng: ['false'],
 
     });
 
@@ -619,7 +621,7 @@ export class AddCollegeMasterComponent implements OnInit {
   get form() { return this.instituteForm.controls; }
 
   async saveData(withPayment: boolean = false): Promise<boolean | void> {
-    //debugger;
+    debugger;
 
     // Default Capacity to 0 if empty
     if (this.request.Capacity?.toString() === "") {
@@ -627,6 +629,14 @@ export class AddCollegeMasterComponent implements OnInit {
     }
 
     this.isSubmitted = true;
+
+    // if(
+    //   (this.request.IsEng == false || this.request.IsEng == null || this.request.IsEng == undefined) && 
+    //   (this.request.IsNonEng == false || this.request.IsNonEng == null || this.request.IsNonEng == undefined)
+    // ){
+    //   this.toastr.warning("Please select either Engineering or NonEngineering");
+    //   return;
+    // }
 
    
     this.refreshAdminRefValidation();
@@ -671,7 +681,12 @@ export class AddCollegeMasterComponent implements OnInit {
           this.toastr.success(this.Message);
           this.routers.navigate(['/collegemaster']);
         }
-      } else {
+        else if (this.collegeRequest.InstituteID == 0) {
+          this.toastr.success(this.Message);
+          this.routers.navigate(['/collegemaster']);
+        } 
+      }
+       else {
         this.toastr.error(this.ErrorMessage);
         return false;
       }

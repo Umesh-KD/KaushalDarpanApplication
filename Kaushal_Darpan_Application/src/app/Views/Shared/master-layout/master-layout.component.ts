@@ -987,8 +987,8 @@ export class MasterLayoutComponent implements OnInit {
   checkJailCollege() {
     JailCollegeID.map((item: any) => {
       if (item === this.sSOLoginDataModel.InstituteID) {
-        
-        if (this.sSOLoginDataModel.RoleID == 20 || this.sSOLoginDataModel.RoleID == 43) {
+
+        if (this.sSOLoginDataModel.RoleID == 20 || this.sSOLoginDataModel.RoleID == 43 || this.sSOLoginDataModel.RoleID == EnumRole.AdmissionIncharges ) {
           this.IsJailCollege = true
         }
 

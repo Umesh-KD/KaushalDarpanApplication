@@ -231,9 +231,9 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async StreamMaster(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0) {
+  public async StreamMaster(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0, IsForEstablishment: boolean = false) {
 
-    return await this.http.get(this.APIUrl + '/StreamMaster/' + DepartmentID + '/' + StreamType + '/' + EndTermId, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/StreamMaster/' + DepartmentID + '/' + StreamType + '/' + EndTermId + '/' + IsForEstablishment, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

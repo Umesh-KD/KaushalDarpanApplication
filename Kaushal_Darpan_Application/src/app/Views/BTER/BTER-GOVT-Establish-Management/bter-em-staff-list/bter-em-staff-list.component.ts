@@ -32,38 +32,12 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
   styleUrl: './bter-em-staff-list.component.css'
 })
 export class BTEREMStaffListComponent {
+  StaffMasterFormGroup!: FormGroup;
+  StaffMasterFormGroupGuestHouse!: FormGroup;
+
   public searchRequest = new BTER_EM_StaffListSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public deleteRequest = new BTER_EM_DeleteModel();
-
-  public menuDataModel: MenuDataModel[] = [];
-
-  StaffMasterFormGroup!: FormGroup;
-  StaffMasterFormGroupGuestHouse!: FormGroup;
-  public StaffTypeList: any = [];
-  public CategoryList: any = [];
-  public OfficeList: any = [];
-  public OfficeWorkList: any = [];
-  public LevelList: any = [];
-  public Table_SearchText: string = '';
-  public StaffList: any = [];
-  _EnumEMProfileStatus = EnumEMProfileStatus;
-  public isSubmitted: boolean = false;
-  IsView: boolean = false
-  groupForm!: FormGroup;
-  //table feature default
-  modalReference: NgbModalRef | undefined;
-  public paginatedInTableData: any[] = [];//copy of main data
-  public currentInTablePage: number = 1;
-  public pageInTableSize: string = "50";
-  public totalInTablePage: number = 0;
-  public sortInTableColumn: string = '';
-  public sortInTableDirection: string = 'asc';
-  public startInTableIndex: number = 0;
-  public endInTableIndex: number = 0;
-  public AllInTableSelect: boolean = false;
-  public totalInTableRecord: number = 0;
-  public CourseMasterDDL: any[] = [];
   public requestUser = new BTER_EM_GetPersonalDetailByUserID();
   public approveRequest = new BTER_EM_ApproveStaffDataModel();
   public StreamSearch = new StreamDDL_InstituteWiseModel();
@@ -74,12 +48,48 @@ export class BTEREMStaffListComponent {
   public searchRequest1 = new GuestRoomSeatSearchModel();
   public guestHouseRequest = new StaffGuestHouseSearchModel();
   public guestHouseSaveRequest = new StaffGuestHouseSearchModel();
-
   public RetirementProcessModel = new BTER_EM_RetirementProcessModel();
-  permissions?: MenuPermission;
 
+  public menuDataModel: MenuDataModel[] = [];
+  public StaffTypeList: any = [];
+  public CategoryList: any = [];
+  public OfficeList: any = [];
+  public OfficeWorkList: any = [];
+  public LevelList: any = [];
+  public StaffList: any = [];
+  public paginatedInTableData: any[] = [];//copy of main data
   public StaffGuestHouseDetails: BTER_EM_StaffHostelListModel[] = []
   public UserProfileStatusHistoryList: any = [];
+  public CourseMasterDDL: any[] = [];
+  public filteredStatusList: any[] = [];
+  public InstituteMasterDDL: any[] = [];
+  public DesignationMasterDDLList: any = [];
+  public GenderList: any = [];
+  public InstituteMasterDDLList: any[] = [];
+  public GuestHouseNameList: any = [];
+  public BugetHeadList:any=[];
+  public StaffProfileStatusList:any=[];
+
+  _EnumEMProfileStatus = EnumEMProfileStatus;
+  _EnumRole = EnumRole;
+  _EnumOffice = EnumOffice;
+  permissions?: MenuPermission;
+
+  public Table_SearchText: string = '';
+  public isSubmitted: boolean = false;
+  IsView: boolean = false
+  groupForm!: FormGroup;
+  //table feature default
+  modalReference: NgbModalRef | undefined;
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "50";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
   public isApproveSubmitted: boolean = false;
   public settingsMultiselect: object = {};
   public isLoading: boolean = false;
@@ -88,30 +98,19 @@ export class BTEREMStaffListComponent {
   public Message: string = '';
   public ErrorMessage: string = '';
   public staffGuestHouseIDs: string = '';
-  public filteredStatusList: any[] = [];
   public type: string = ''
-  public InstituteMasterDDL: any[] = [];
   public IsHideShow: boolean = false
-  public DesignationMasterDDLList: any = [];
-  public GenderList: any = [];
-  public InstituteMasterDDLList: any[] = [];
-  public GuestHouseNameList: any = [];
-  public BugetHeadList:any=[];
-  @ViewChild('otpModal') childComponent!: OTPModalComponent;
-
-  @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
 
   public isApprove: boolean = false;
   public isModalOpen: boolean = false;
-  _EnumRole = EnumRole;
-  _EnumOffice = EnumOffice;
-
-
   public U_Add: boolean = false
   public U_Delete : boolean = false
   public U_Update: boolean = false
   public U_View: boolean = false
   public U_Print : boolean = false
+
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
+  @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
   constructor(
     private loaderService: LoaderService,
     private bterEstablishManagementService: BTEREstablishManagementService,
@@ -238,6 +237,7 @@ export class BTEREMStaffListComponent {
       this.searchRequest.status=0
     }
 
+    await this.GetStaffProfileStatusList();
     await this.GetStatusList();
     await this.BTER_EM_GetStaffList();
     await this.GetOfficeList();
@@ -908,30 +908,14 @@ export class BTEREMStaffListComponent {
   async GetDesignationMasterData() {
     try {
       this.loaderService.requestStarted();
-      //await this.commonMasterService.GetDesignationMaster().then((data: any) => {
-      //  data = JSON.parse(JSON.stringify(data));
-      //  this.DesignationMasterDDLList = data.Data;
-      //  // console.log("DesignationMasterList", this.DesignationMasterDDLList);
-      //}, error => console.error(error))
-      var id = 0;
-      if (this.sSOLoginDataModel.OfficeID == 18) {
-        id = 1
-      }
-      else {
-        id = 0;
-      }
 
-      await this.commonMasterService.GetDesignationAndPostMaster(id).then((data: any) => {
+      // Get Designation master for dropdown
+      await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.DesignationMasterDDLList = data.Data;
-        this.DesignationMasterDDLList = this.DesignationMasterDDLList;
-       
-        // console.log("DesignationMasterList", this.DesignationMasterDDLList);
+        this.DesignationMasterDDLList = data.Data;       
       }, error => console.error(error))
 
-
-
-
+      // Get gender dropdown
       await this.commonMasterService.GetCommonMasterDDLByType('Gender')
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -941,10 +925,6 @@ export class BTEREMStaffListComponent {
         );
     } catch (error) {
       console.error(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
   async getInstituteMasterList() {
@@ -1510,5 +1490,37 @@ debugger
   }
   public onDeSelect(item: any) {
     console.log(item);
+  }
+
+  async GetStaffProfileStatusList() {
+    try {
+      this.loaderService.requestStarted();
+      debugger
+      await this.commonMasterService.GetCommonMasterData('ITIvtARRStauts').then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StaffProfileStatusList = data.Data;
+        if(this.StaffProfileStatusList.length>0) {
+          this.StaffProfileStatusList = this.StaffProfileStatusList.map((x:any)=>{
+            switch(x.ID){
+              case 0:
+                x.Name='Pending for update profile by employee';
+                break;
+              case 247:
+                x.Name='Approved';
+                break;
+              case 249:
+                x.Name='Reverted to employee';
+                break;
+              case 10388:
+                x.Name='Unlocked profile';
+                break;
+            }
+            return x;
+          })
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

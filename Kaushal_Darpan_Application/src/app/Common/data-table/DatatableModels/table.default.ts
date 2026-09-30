@@ -24,6 +24,9 @@ export const DEFAULT_TABLE_CONFIG: Partial<TableConfig> = {
 
     showColumnCustomizer: true,
 
+    // draggable propertiy
+    draggable: true,
+
     actions: [],
 
     columns: [],

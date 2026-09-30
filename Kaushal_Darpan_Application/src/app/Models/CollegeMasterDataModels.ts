@@ -39,6 +39,8 @@ export class CollegeMasterDataModels {
   public DepartmentID: number = 0
   public FinancialYearId: number = 0
   public EndTermId: number = 0
+  public IsEng: boolean = false;
+  public IsNonEng: boolean = false;
   public IsPayment: boolean = false;
   public IsProfileComplete: boolean = false;
 }

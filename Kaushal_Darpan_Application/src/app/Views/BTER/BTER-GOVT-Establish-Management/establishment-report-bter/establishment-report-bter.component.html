@@ -203,8 +203,54 @@
           </select>
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+             Is Deputated:
+          </label>
+          <select class="form-select" id="IsEmpWorkingOnDeputationToOther" [(ngModel)]="searchRequest.IsEmpWorkingOnDeputationToOther">
+            <option value="-1">Choose Option</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Is Specially abled person:
+          </label>
+          <select class="form-select" id="IsSpeciallyAbledPerson" [(ngModel)]="searchRequest.IsSpeciallyAbledPerson">
+            <option value="-1">Choose Option</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
 
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> State </label>
+
+          <ng-select [(ngModel)]="searchRequest.StateID" [clearable]="false" 
+            (change)="DistrictMaster_StateIDWise()">
+            <ng-option [value]="0">--Select--</ng-option>
+            <ng-container *ngFor="let item of StateMasterList">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
+
+        </div>
+
+        
+        <div>
+          <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
+          <ng-select [(ngModel)]="searchRequest.DistrictID" [clearable]="false" >
+            <ng-option [value]="0">--Select--</ng-option>
+            <ng-container *ngFor="let item of DistrictMasterDDL">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
+        </div>
+
+        
       </div>
       <div class="flex justify-center">
         <button type="button" class="btn bg-info text-white mt-6" (click)="BTER_EM_GetStaffList()">Search</button>

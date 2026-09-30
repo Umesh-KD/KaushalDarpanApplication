@@ -27,22 +27,26 @@ import autoTable from 'jspdf-autotable';
   styleUrl: './sr6-report-bter.component.css'
 })
 export class SR6ReportBTERComponent {
+  public SearchRequestFormGroup!: FormGroup;
+  public AuctionFormGroup!: FormGroup;
+
   public Searchrequest = new inventoryIssueHistorySearchModel()
   public request = new AuctionDetailsModel()
-  public isLoading: boolean = false;
-  public isSubmitted: boolean = false;
-  public State: number = 0;
-  public Message: string = '';
-  public ErrorMessage: string = '';
-  public SearchRequestFormGroup!: FormGroup;
   public sSOLoginDataModel = new SSOLoginDataModel();
-  public Table_SearchText: string = "";
+  
   public ItemMasterList: any = [];
   public ItemMasterList1: any = [];
   public CategoryDDLList: any = [];
   public TradeDDLList: any = [];
   public staffDDLList: any = [];
   public LabDetailsData: any = [];
+
+  public isLoading: boolean = false;
+  public isSubmitted: boolean = false;
+  public State: number = 0;
+  public Message: string = '';
+  public ErrorMessage: string = '';
+  public Table_SearchText: string = "";
   public ItemId: number = 0;
   public UserID: number = 0;
   public ItemDetailsId: number = 0;
@@ -50,7 +54,6 @@ export class SR6ReportBTERComponent {
   public today: Date = new Date();
   public AllInTableSelect: boolean = false;
   public closeResult: string | undefined;
-  public AuctionFormGroup!: FormGroup;
   @ViewChild('AuctionItems_Modal') MyModel_AuctionItem: ElementRef | any;
   modalReference: NgbModalRef | undefined;
   public maxDate: string = '';
@@ -104,9 +107,11 @@ export class SR6ReportBTERComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
+      this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
+      this.Searchrequest.OfficeID = this.sSOLoginDataModel.OfficeID;
+      this.Searchrequest.SSOID = this.sSOLoginDataModel.SSOID;
       
       if(this.sSOLoginDataModel.RoleID === EnumRole.BterLabIncharge){
-        this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
         this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
       }
       await this.bterInventoryService.Get_SR6_ReportData(this.Searchrequest)

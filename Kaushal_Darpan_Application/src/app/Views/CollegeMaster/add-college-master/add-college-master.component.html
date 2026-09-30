@@ -29,6 +29,25 @@
     <form [formGroup]="instituteForm">
       <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Engineering/NonEngineering <span class="StarMarking">*</span>
+          </label>
+
+          <div class="flex gap-4">
+            <label class="flex items-center space-x-2">
+              <input type="checkbox" formControlName="IsEng" [(ngModel)]="request.IsEng"/>
+              <span>Eng</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+              <input type="checkbox" formControlName="IsNonEng" [(ngModel)]="request.IsNonEng"/>
+              <span>NonEng</span>
+            </label>
+          </div>
+        </div> -->
+
+
         <div>
           <label for="InstituteSsoid">SSO ID: </label>
           <input formControlName="ssoid" class="form-input" placeholder="Enter SSO ID" type="text" id="ssoid"
@@ -40,7 +59,8 @@
 
         <div>
           <label for="InstituteInstitutionCategoryId">Institute Category: <span class="StarMarking">*</span></label>
-          <select formControlName="institutionCategoryID" class="form-select" id="institutionCategoryID" >
+          <select formControlName="institutionCategoryID" class="form-select" id="institutionCategoryID" 
+            [(ngModel)]="request.InstitutionCategoryID">
             <option value="0">--Select--</option>
             <option *ngFor="let item of categoryList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -54,7 +74,8 @@
     
         <div>
           <label for="InstituteManagementTypeId">Management Type: <span class="StarMarking">*</span></label>
-          <select formControlName="institutionManagementTypeID" class="form-select" id="institutionManagementTypeID" >
+          <select formControlName="institutionManagementTypeID" class="form-select" id="institutionManagementTypeID" 
+            [(ngModel)]="request.InstitutionManagementTypeID">
             <option value="0">--Select--</option>
             <option *ngFor="let item of ManagmentTypeListNew" [value]="item.ID">
               {{item.Name}}
@@ -72,7 +93,8 @@
         <div>
           <label for="CollegeType">College Type:<span class="StarMarking">*</span> </label>
           <select formControlName="CollegeType" class="form-select" id="CollegeType"
-                  (change)="ChangeCollegeType()">
+            (change)="ChangeCollegeType()"
+            [(ngModel)]="request.CollegeTypeID">
             <option value="0">--Select--</option>
             <option *ngFor="let item of CollegeTypeList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -87,7 +109,8 @@
         <!-- Course Type dropdown, shown only if CollegeTypeID corresponds to 'Diploma' -->
         <div *ngIf="IsCollegeType">
           <label for="CourseType">Course Type <!--(If Diploma)-->: </label>
-          <select formControlName="CourseType" class="form-select" id="CourseType" >
+          <select formControlName="CourseType" class="form-select" id="CourseType" 
+            [(ngModel)]="request.CourseTypeID">
             <option value="0">--Select--</option>
             <option *ngFor="let item of CourseTypeList" [value]="item.StreamTypeID">{{item.StreamType}}</option>
           </select>
@@ -190,7 +213,8 @@
 
         <div>
           <label>Division<span class="StarMarking">*</span></label>
-          <select formControlName="divisionID" class="form-select" id="divisionId" (change)="onDivisionChange()">
+          <select formControlName="divisionID" class="form-select" id="divisionId" (change)="onDivisionChange()"
+            [(ngModel)]="request.DivisionID">
             <option value="0">--Select--</option>
             <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
 
@@ -205,7 +229,8 @@
 
         <div>
           <label>District<span class="StarMarking">*</span></label>
-          <select formControlName="districtID" class="form-select" id="districtID" (change)="ddlDistrict_Change()">
+          <select formControlName="districtID" class="form-select" id="districtID" (change)="ddlDistrict_Change()"
+            [(ngModel)]="request.DistrictID">
             <option value="0">--Select--</option>
             <option *ngFor="let item of DistrictMasterList" [value]="item.ID">
               {{item.Name}}
@@ -221,7 +246,8 @@
 
         <div>
           <label>Tehsil<span class="StarMarking">*</span></label>
-          <select formControlName="tehsilID" class="form-select" id="tehsilId">
+          <select formControlName="tehsilID" class="form-select" id="tehsilId"
+            [(ngModel)]="request.TehsilID">
             <option value="0">--Select--</option>
             <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
           </select>

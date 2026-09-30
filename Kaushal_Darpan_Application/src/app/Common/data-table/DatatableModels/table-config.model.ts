@@ -64,5 +64,8 @@ export interface TableConfig {
     badgeConfig?: TableStatus[];
 
     showColumnCustomizer?: boolean;
+    
+    // Common drag and drop setting for all columns
+    draggable?: boolean;
   
 }

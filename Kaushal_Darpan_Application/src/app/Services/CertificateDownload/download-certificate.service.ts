@@ -43,11 +43,27 @@ export class DownloadCertificateService {
       ).toPromise();
   }
 
-  //public async GetPrincipalIssueCertificate(request: PrincipalIssueCertificateModel) {
-  //  const body = JSON.stringify(request);
-  //  return this.http.post(`${this.APIUrl}/GetPrincipalIssueCertificate`, body, this.headersOptions)
-  //    .pipe(
-  //      catchError(this.handleErrorObservable)
-  //    ).toPromise();
-  //}
+  public async DownloadDiplomaForwardingLetter(searchRequest: CertificateSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/DownloadDiplomaForwardingLetter`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DownloadDiplomaPassedStudentRegisterReport(searchRequest: CertificateSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/DownloadDiplomaPassedStudentRegisterReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DownloadPendingDiplomaCertificateReport(searchRequest: CertificateSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/DownloadPendingDiplomaCertificateReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

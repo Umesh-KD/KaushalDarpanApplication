@@ -96,7 +96,12 @@
           <option value="500">500</option>
           <option value="1000">1000</option>
         </select> -->
-        <div *ngIf="sSOLoginDataModel.RoleID==7 || sSOLoginDataModel.RoleID==13" class="flex"> 
+        <div class="flex"
+          *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Principal || 
+                  sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon ||
+                  sSOLoginDataModel.RoleID==_EnumRole.HO_DTE ||
+                  sSOLoginDataModel.RoleID==_EnumRole.HO_BTER ||
+                  sSOLoginDataModel.RoleID==_EnumRole.HO_TTC"> 
           <select class="form-select" id="ItemStatus" [(ngModel)]="ItemStatus" name="ItemStatus">
             <option value="0">Choose Mark As (*)</option>
             <option value="2">Approve</option>

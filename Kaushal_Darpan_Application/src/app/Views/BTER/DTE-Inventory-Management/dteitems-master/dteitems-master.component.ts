@@ -90,17 +90,14 @@ export class DteItemsMasterComponent {
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID
+      this.Searchrequest.OfficeID = this.sSOLoginDataModel.OfficeID
+      this.Searchrequest.UserID = this.sSOLoginDataModel.UserID
       
       await this.dteItemsMasterService.GetAllData(this.Searchrequest)
         .then((data: any) => {
-
-          data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
+          data = JSON.parse(JSON.stringify(data));          
           this.ItemMasterList = data['Data'];
           this.ItemMasterList1 = data['Data'];
-          console.log('Item Master List ==>', this.ItemMasterList)
         }, error => console.error(error));
     }
     catch (Ex) {

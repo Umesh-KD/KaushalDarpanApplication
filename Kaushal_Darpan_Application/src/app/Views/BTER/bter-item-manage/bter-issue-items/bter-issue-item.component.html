@@ -35,7 +35,12 @@
             <option [value]="0">Select</option>
             <option [value]="1">Office</option>
             <option [value]="2">Staff</option>
-            <option [value]="3">Department</option>
+            <option [value]="3" 
+              *ngIf="!(this.OfficeID == _EnumOffice.DTE || 
+                      this.OfficeID == _EnumOffice.BTER ||
+                      this.OfficeID == _EnumOffice.TTC_LRDC)">
+              Department
+            </option>
           </select>
         </div>
         <!--{{staffDDLList|json}}-->
