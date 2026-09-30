@@ -116,6 +116,8 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
     this.tabs.push({ TabName: 'Download ITI Result', TabNameHI: 'आईटीआई परिणाम डाउनलोड करें', TabIcon: 'ti ti-license', component: downloadITIResultComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
 
 
+
+
   }
 
   public ngAfterViewInit(): void {
