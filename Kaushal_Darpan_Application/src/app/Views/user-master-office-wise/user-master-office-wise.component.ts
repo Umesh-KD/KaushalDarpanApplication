@@ -298,8 +298,8 @@ export class UserMasterOfficeWiseComponent {
       const hasInvalidRole = this.RoleMasterList.some((x: any) =>
         (x.ID == EnumRole.Principal || x.ID == EnumRole.PrincipalNon) &&
         x.Marked == true &&
-         x.InstituteID == 0
-        //(!x.InstituteIDs || x.InstituteIDs.length == 0)
+        //  x.InstituteID == 0
+        (!x.InstituteIDs || x.InstituteIDs.length == 0)
       );
 
       if (hasInvalidRole) {
@@ -322,6 +322,7 @@ export class UserMasterOfficeWiseComponent {
         x.SSOID = this.request.SSOID,
         x.ModifiedBy = this.sSOLoginDataModel.UserID,
         x.DepartmentID = this.sSOLoginDataModel.DepartmentID
+        x.ParentRoleID = this.sSOLoginDataModel.RoleID
         // x.InstituteID = this.sSOLoginDataModel.InstituteID
       });
       
@@ -488,6 +489,20 @@ export class UserMasterOfficeWiseComponent {
       await this.assignRoleRightsService.GetAssignedRole_USerWise(request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.RoleMasterList = data['Data'];
+
+         // Convert comma separated InstituteIDList
+        // into array for ng-select
+        this.RoleMasterList.forEach((row: any) => {
+
+          row.InstituteIDs = row.InstituteIDList
+            ? row.InstituteIDList
+                .split(',')
+                .filter((x: string) => x.trim() !== '')
+                .map((x: string) => Number(x))
+            : [];
+
+        });
+
       })
     } catch (error) {
       console.error(error);
@@ -539,8 +554,8 @@ export class UserMasterOfficeWiseComponent {
   onInstituteChange(selectedValue: number, row: any) {
     // Explicitly update the reference value
     debugger
-    row.InstituteID = selectedValue;
-    //row.InstituteIDs = selectedValue || [];
-    //row.InstituteIDList = row.InstituteIDs.join(',');
+    // row.InstituteID = selectedValue;
+    row.InstituteIDs = selectedValue || [];
+    row.InstituteIDList = row.InstituteIDs.join(',');
   }
 }
