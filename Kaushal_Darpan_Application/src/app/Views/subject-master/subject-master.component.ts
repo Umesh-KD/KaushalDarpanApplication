@@ -139,7 +139,7 @@ export class SubjectMasterComponent {
 
   onSubjectTypeChange(value: any) {
     // Show the dropdown only if "Mandatory" is selected
-    debugger
+    //debugger
     if (value == 2) {
       this.showDropdown = true
 
@@ -245,7 +245,7 @@ export class SubjectMasterComponent {
 
 async onIsElectiveChange(val:boolean) {
   // Handle dropdown close event
-  debugger;
+  //debugger;
   console.log(val);
   if (val) {
     if(this.request.StreamID==0 || this.request.SemesterID==0 || this.request.SchemeID==0){
@@ -287,7 +287,7 @@ async onIsElectiveChange(val:boolean) {
 
 
   async onCourseChange(){
-   debugger
+   //debugger
     this.ParentSubjectList = [];
 
     this.form['IsElective'].setValue(false);
@@ -299,7 +299,7 @@ async onIsElectiveChange(val:boolean) {
   }
 
   async onSemesterChange(){
-    debugger
+    //debugger
     this.ParentSubjectList = [];
 
     this.form['IsElective'].setValue(false);
@@ -311,7 +311,7 @@ async onIsElectiveChange(val:boolean) {
   }
 
   async onSchemeChange(){
-   debugger
+   //debugger
     this.ParentSubjectList = [];
 
     this.form['IsElective'].setValue(false);
@@ -362,9 +362,17 @@ async onIsElectiveChange(val:boolean) {
     }
   }
   async SaveData() {
-    debugger
+    //debugger
     this.isSubmitted = true;
     if (this.SubjectMasterFormGroup.invalid) {
+      //  Object.keys(this.SubjectMasterFormGroup.controls).forEach(key => {
+      //   const control = this.SubjectMasterFormGroup.get(key);
+
+      //   if (control?.invalid) {
+      //     console.log('Invalid Control:', key);
+      //     console.log('Errors:', control.errors);
+      //   }
+      // });
       return
     }
     if(this.request.IsElective){
@@ -387,7 +395,7 @@ async onIsElectiveChange(val:boolean) {
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.request.CourseType = this.sSOLoginDataModel.Eng_NonEng
     this.request.EndTermID = this.sSOLoginDataModel.EndTermID
-    this.request.Modify = this.sSOLoginDataModel.UserID
+    this.request.CreatedBy = this.sSOLoginDataModel.UserID
     try {
       await this.SubjectMasterService.SaveData(this.request)
         .then((data: any) => {
@@ -416,7 +424,7 @@ async onIsElectiveChange(val:boolean) {
   }
 
   async btnEdit_OnClick(SubjectID: number) {
-    debugger
+    // //debugger
     this.isSubmitted = false;
     try {
       this.loaderService.requestStarted();
@@ -585,7 +593,7 @@ async onIsElectiveChange(val:boolean) {
   }
 
   async ResetControl() {
-    debugger
+    //debugger
     const txtRoleName = document.getElementById('txtRoleName');
     this.SearchRequest=new SubjectSearchModel()
     this.request = new SubjectMasterDataModel()

@@ -39,6 +39,7 @@ export class SubjectMasterDataModel {
 
   public SchemeID?: number = 0
   public IsElective?: boolean = false
+  public CreatedBy?: number = 0
   // public ParentSubjectID?: number = 0
 
 }
