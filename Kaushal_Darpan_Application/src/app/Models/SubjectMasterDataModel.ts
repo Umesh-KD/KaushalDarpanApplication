@@ -36,6 +36,11 @@ export class SubjectMasterDataModel {
   
 
   public SubjectCredits:number |null=null
+
+  public SchemeID?: number = 0
+  public IsElective?: boolean = false
+  // public ParentSubjectID?: number = 0
+
 }
 export class SubjectSearchModel {
   public BranchID: number = 0
@@ -43,6 +48,7 @@ export class SubjectSearchModel {
   public DepartmentID: number = 0
   public SubjectID: number = 0
   public CourseType:number=0
+  public SchemeID?:number=0
 }
 export class ParentSubjectMap{
   public SubjectID: number = 0
