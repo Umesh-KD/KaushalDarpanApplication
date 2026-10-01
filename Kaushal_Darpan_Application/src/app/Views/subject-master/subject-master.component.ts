@@ -65,6 +65,7 @@ export class SubjectMasterComponent {
   public endInTableIndex: number = 0;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
+  public isAddSubjectDetailsDivVisible=false
   //end table feature default
   constructor(private SubjectMasterService: SubjectMasterService, private SubjectCategoryService: SubjectCategoryService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute,
@@ -463,6 +464,9 @@ async onIsElectiveChange(val:boolean) {
           const btnReset = document.getElementById('btnReset')
           if (btnReset) btnReset.innerHTML = "Cancel";
 
+
+          this.isAddSubjectDetailsDivVisible = true;
+
         }, error => console.error(error));
     }
     catch (ex) { console.log(ex) }
@@ -860,6 +864,15 @@ async onIsElectiveChange(val:boolean) {
   const filename = `SubjectData-${formatedDate}.xlsx`;
 
   XLSX.writeFile(wb, filename);
+}
+
+async onCickAddSubjectDetails(){
+  if(this.isAddSubjectDetailsDivVisible){
+    this.isAddSubjectDetailsDivVisible=false;
+  }
+  else{
+    this.isAddSubjectDetailsDivVisible=true;
+  }
 }
   
 

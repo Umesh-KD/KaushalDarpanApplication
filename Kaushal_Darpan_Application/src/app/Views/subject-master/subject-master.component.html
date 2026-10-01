@@ -14,16 +14,16 @@
 <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
   <div class="card tab-panels" id="QualificationDetail">
     <div class="card-body p-5">
-      <!-- <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light" (click)="onAddSubjectDetails()">
+      <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light cursor-pointer" (click)="onCickAddSubjectDetails()">
         <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Subject Details</b>
-        <span class="text-danger">(* fields are mandatory)</span>
-      </div> -->
+        <span class="text-danger">(* fields are mandatory )</span>
+      </div>
       <form [formGroup]="SubjectMasterFormGroup" class="form-horizontal">
-        <div class="mb-8">
-          <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+        <div *ngIf="isAddSubjectDetailsDivVisible" class="mb-8">
+          <!-- <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
             <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Subject Details</b>
             <span class="text-danger">(* fields are mandatory)</span>
-          </div>
+          </div> -->
           <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
             <!--<div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Course</label>
