@@ -13,6 +13,7 @@ import { DropdownValidators } from '../../Services/CustomValidators/custom-valid
 import * as XLSX from 'xlsx';
 import { EnumStatus } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
+import { I } from '@angular/cdk/a11y-module.d-DBHGyKoh';
 
 @Component({
     selector: 'app-subject-master',
@@ -42,6 +43,7 @@ export class SubjectMasterComponent {
   modalReference: NgbModalRef | undefined;
   public BranchesMasterList: any = []
   public SemesterMasterList: any = []
+  public ParentSubjectList: any = []
   public showDropdown = false;  // Controls dropdown visibility
   public isShowInput = false
   public ParentList: any = []
@@ -63,6 +65,7 @@ export class SubjectMasterComponent {
   public endInTableIndex: number = 0;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
+  public isAddSubjectDetailsDivVisible=false
   //end table feature default
   constructor(private SubjectMasterService: SubjectMasterService, private SubjectCategoryService: SubjectCategoryService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute,
@@ -101,17 +104,20 @@ export class SubjectMasterComponent {
         max_ia: [''],
         sca_grade: [''],
         IsParent: ['', Validators.required],
+        IsElective: [''],
+        
         is_th: ['', Validators.required],
         is_sca: ['', Validators.required],
         is_ia: ['', Validators.required],
         is_pr: ['', Validators.required],
         txtCredits: ['', Validators.required],
 
-     
         ddlSemester: ['', [DropdownValidators]],
         ddlStream: ['', [DropdownValidators]],
-        ddlParent: ['',],
-
+        ddlParent: [''],
+        
+        ddlSchemeID: ['',[DropdownValidators]],
+        // ddlParentSubjectID: [''],
 
         chkActiveStatus: ['true'],
       })
@@ -122,6 +128,7 @@ export class SubjectMasterComponent {
     await this.GetSubjectMasterList()
     await this.GetSemesterMasterData()
     await this.GetBranchesMasterData()
+    // await this.GetParentSubjectList();
 
     if (this.SubjectID > 0) {
       await this.btnEdit_OnClick(this.SubjectID)
@@ -132,6 +139,7 @@ export class SubjectMasterComponent {
 
   onSubjectTypeChange(value: any) {
     // Show the dropdown only if "Mandatory" is selected
+    //debugger
     if (value == 2) {
       this.showDropdown = true
 
@@ -179,8 +187,6 @@ export class SubjectMasterComponent {
     this.SearchRequest.SubjectID = SubjectID
     this.SearchRequest.SemesterID = SemesterID
     this.SearchRequest.BranchID = StreamID
-
-  
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetParentSubjectDDL(this.SearchRequest)
@@ -237,7 +243,21 @@ export class SubjectMasterComponent {
     }
   }
 
+async onIsElectiveChange(val:boolean) {
+  // Handle dropdown close event
+  //debugger;
+  console.log(val);
+  if (val) {
+    if(this.request.StreamID==0 || this.request.SemesterID==0 || this.request.SchemeID==0){
+      this.toastr.error("Please Select Stream, Semester and Scheme");
+      this.request.IsElective = false;
+    }
+    else{
+      await this.GetParentSubjectList();
+    }
+  }
 
+}
 
   async GetSubjectMasterList() {
     this.SearchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
@@ -265,9 +285,108 @@ export class SubjectMasterComponent {
     }
   }
 
+
+  async onCourseChange(){
+   //debugger
+    this.ParentSubjectList = [];
+
+    this.form['IsElective'].setValue(false);
+    this.request.IsElective = false;
+
+    // Reset Parent Subject
+    this.form['ddlParent'].setValue(0);
+    this.request.ParentID = 0;
+  }
+
+  async onSemesterChange(){
+    //debugger
+    this.ParentSubjectList = [];
+
+    this.form['IsElective'].setValue(false);
+    this.request.IsElective = false;
+
+    // Reset Parent Subject
+    this.form['ddlParent'].setValue(0);
+    this.request.ParentID = 0;
+  }
+
+  async onSchemeChange(){
+   //debugger
+    this.ParentSubjectList = [];
+
+    this.form['IsElective'].setValue(false);
+    this.request.IsElective = false;
+
+    // Reset Parent Subject
+    this.form['ddlParent'].setValue(0);
+    this.request.ParentID = 0;
+  }
+
+  async onIsParentchange(val: boolean) {
+    // Handle dropdown close event
+    console.log(val);
+    if (val) {
+      this.form['IsElective'].setValue(false);
+      this.request.IsElective = false;
+      this.form['ddlParent'].setValue(0);
+      this.request.ParentID = 0;
+    }
+  }
+    async GetParentSubjectList() {
+    this.ParentSubjectList = [];
+    this.SearchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    this.SearchRequest.CourseType = this.sSOLoginDataModel.Eng_NonEng
+    this.SearchRequest.BranchID=this.request.StreamID
+    this.SearchRequest.SemesterID=this.request.SemesterID
+    this.SearchRequest.SchemeID=this.request.SchemeID
+    try {
+      this.loaderService.requestStarted();
+      await this.SubjectMasterService.GetParentSubjectList(this.SearchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.ParentSubjectList = data['Data'];
+          this.loadInTable()
+          console.log(this.ParentSubjectList, "CodeSubject")
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
   async SaveData() {
+    //debugger
     this.isSubmitted = true;
     if (this.SubjectMasterFormGroup.invalid) {
+      //  Object.keys(this.SubjectMasterFormGroup.controls).forEach(key => {
+      //   const control = this.SubjectMasterFormGroup.get(key);
+
+      //   if (control?.invalid) {
+      //     console.log('Invalid Control:', key);
+      //     console.log('Errors:', control.errors);
+      //   }
+      // });
+      return
+    }
+    if(this.request.IsElective){
+      if(this.request.ParentID==0){
+        this.toastr.error("Please Select Parent Subject")
+        return
+      }
+      this.request.isParent=true
+    }
+    else{
+      this.request.ParentID=0
+    }
+    if(this.request.is_th==false && this.request.is_pr==false && this.request.is_ia==false && this.request.is_sca==false){
+      this.toastr.error("Please Select Atleast One Subject Type in Additional Options")
       return
     }
     //Show Loading
@@ -276,6 +395,7 @@ export class SubjectMasterComponent {
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.request.CourseType = this.sSOLoginDataModel.Eng_NonEng
     this.request.EndTermID = this.sSOLoginDataModel.EndTermID
+    this.request.CreatedBy = this.sSOLoginDataModel.UserID
     try {
       await this.SubjectMasterService.SaveData(this.request)
         .then((data: any) => {
@@ -304,11 +424,12 @@ export class SubjectMasterComponent {
   }
 
   async btnEdit_OnClick(SubjectID: number) {
+    // //debugger
     this.isSubmitted = false;
     try {
       this.loaderService.requestStarted();
       await this.SubjectMasterService.GetByID(SubjectID, this.sSOLoginDataModel.DepartmentID)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
           this.request = data['Data']
@@ -323,6 +444,21 @@ export class SubjectMasterComponent {
           this.request.ParentID = data['Data']['ParentID']
           this.request.SubjectType = data['Data']["SubjectType"];
           this.request.SubjectCredits = data['Data']["SubjectCredits"];
+          this.request.SchemeID = data['Data']["SchemeID"];
+          if(this.request.ParentID==0){
+            this.request.IsElective = false
+            this.form['IsElective'].setValue(false);
+          }
+          if(this.request.ParentID>0 && this.request.isParent==true){
+            this.request.IsElective = true
+            this.form['IsElective'].setValue(true);
+            this.request.isParent = false;
+            this.form['IsParent'].setValue(false);
+            // await this.GetParentSubjectList();
+            // this.request.isParent = data['Data']["isParent"];
+            await this.onIsElectiveChange(true);
+            this.form['ddlParent'].setValue(this.request.ParentID);
+          }
           if (this.request.ParentID > 0) {
             this.request.SubjectRadio = true
             this.showDropdown = true
@@ -335,6 +471,9 @@ export class SubjectMasterComponent {
           if (btnSave) btnSave.innerHTML = "Update";
           const btnReset = document.getElementById('btnReset')
           if (btnReset) btnReset.innerHTML = "Cancel";
+
+
+          this.isAddSubjectDetailsDivVisible = true;
 
         }, error => console.error(error));
     }
@@ -454,8 +593,9 @@ export class SubjectMasterComponent {
   }
 
   async ResetControl() {
+    //debugger
     const txtRoleName = document.getElementById('txtRoleName');
-
+    this.SearchRequest=new SubjectSearchModel()
     this.request = new SubjectMasterDataModel()
     if (txtRoleName) txtRoleName.focus();
     this.isSubmitted = false;
@@ -468,6 +608,9 @@ export class SubjectMasterComponent {
     this.request.ActiveDeactive = '';
     this.request.DeleteStatus = false;
 
+    this.request.IsElective = false;
+    this.form['IsElective'].setValue(false);
+    this.SubjectMasterFormGroup.reset();
 
 
     this.isDisabledGrid = false;
@@ -674,5 +817,71 @@ export class SubjectMasterComponent {
   }
 
 
+   exportToExcel(): void {
+
+  const unwantedColumns = [
+    'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+    'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'GroupCode',
+    'InstituteID', 'PostID', 'PostCollegeID', 'CompanyID', 'StateID', 'DistrictID',
+    'SubjectID', 'SubjectType', 'SubjectCategory','ParentId','StreamId','DeleteStatus','RTS','CreatedBy','ModifyBy','ModifyDate','IPAddress','DepartmentID','IsBridge',
+    'SubjectID_Old',
+    'IsCalcInResult',
+    'IsShowOnTabulationReport',
+    'SchemeId',
+    'SubjectCategoryName',
+    'ActiveStatus',
+    'SemesterId'
+
+  ];
+
+  const filteredData = this.SubjectMasterList.map((item: any) => {
+
+    const filteredItem: any = {};
+
+    Object.keys(item).forEach(key => {
+
+      if (!unwantedColumns.includes(key)) {
+        // Convert boolean values for Excel
+        if (item[key] === true) {
+          filteredItem[key] = 'YES';
+        }
+        else if (item[key] === false) {
+          filteredItem[key] = 'NO';
+        }
+        else {
+          filteredItem[key] = item[key];
+        }
+      }
+    });
+    return filteredItem;
+  });
+
+  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  const today = new Date();
+
+  const formatedDate =
+    String(today.getDate()).padStart(2, '0') +
+    String(today.getMonth() + 1).padStart(2, '0') +
+    today.getFullYear();
+
+  const filename = `SubjectData-${formatedDate}.xlsx`;
+
+  XLSX.writeFile(wb, filename);
+}
+
+async onCickAddSubjectDetails(){
+  if(this.isAddSubjectDetailsDivVisible){
+    this.isAddSubjectDetailsDivVisible=false;
+  }
+  else{
+    this.isAddSubjectDetailsDivVisible=true;
+  }
+}
+  
 
 }
