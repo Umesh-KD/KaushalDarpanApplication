@@ -7,6 +7,8 @@ export class ItiGetResultDataModel {
   public SemesterID :  number = 0;
   public ExamType :  number = 0;
   public TradeScheme :  number = 0;
+
+  public RoleID?:number=0;
 }
 
 export class ItiGetPassFailResultDataModel {
