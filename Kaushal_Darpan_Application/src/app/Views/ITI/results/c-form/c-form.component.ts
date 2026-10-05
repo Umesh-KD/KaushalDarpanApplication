@@ -171,20 +171,24 @@ export class CFormComponent implements OnInit {
       this.requestModel.InstituteId = this.sSOLoginDataModel.InstituteID;
       this.requestModel.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
       this.requestModel.RoleID = this.sSOLoginDataModel.RoleID;
-
+debugger
           await this.itiResultService.GetCFormReport(this.requestModel).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
-            this.toastr.success("Result Generated Successfully");
             this.ReportData = data.Data.Table1; // Assuming data.Data contains the result data
-            debugger;
+            if(this.ReportData.length>0){   
+              //var Trade = data.Data.filter(function (x: any) {  }).select(x=>x.TradeName);
+              //this.TradeList.push() 
+            // this.TradeList = data.Data.Table1[0];
+            // this.ReportHtml = data.Data.Table1[0].Reportdata;
+              this.toastr.success("Result Generated Successfully");
+              this.ReportHtml = this.sanitizer.bypassSecurityTrustHtml(data.Data.Table1[0].Reportdata);
+              // this.GetAllDataForVerify();
+            }
+            else{
+              this.toastr.error("No Record Found");
+            }
 
-            //var Trade = data.Data.filter(function (x: any) {  }).select(x=>x.TradeName);
-            //this.TradeList.push() 
-          // this.TradeList = data.Data.Table1[0];
-          // this.ReportHtml = data.Data.Table1[0].Reportdata;
-            this.ReportHtml = this.sanitizer.bypassSecurityTrustHtml(data.Data.Table1[0].Reportdata);
-            // this.GetAllDataForVerify();
           } else {
             this.toastr.error(data.ErrorMessage);
           }
