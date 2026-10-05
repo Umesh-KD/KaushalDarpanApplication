@@ -512,6 +512,7 @@ const routes: Routes = [
       { path: 'itimerit10th/:id', loadChildren: () => import('./Views/ITI/ItiMerit/iti-merit/iti-merit.module').then(m => m.ItiMeritModule), title: 'ITI Merit' },
       { path: 'itimerit12th/:id', loadChildren: () => import('./Views/ITI/ItiMerit/iti-merit/iti-merit.module').then(m => m.ItiMeritModule), title: 'ITI Merit' },
 
+      { path: 'exam-eligible-student', loadChildren: () => import('./Views/PreExam/promotion-eligible-student/promotion-eligible-student.module').then(m => m.PromotionEligibleStudentModule), title: 'Exam Eligible Student' },
       { path: 'promotedstudent', loadChildren: () => import('./Views/PreExam/promoted-student/promoted-student.module').then(m => m.PromotedStudentModule), title: 'Promoted Student' },
 
       // { path: 'btermerit', loadChildren: () => import('./Views/BterMerit/bter-merit/bter-merit.module').then(m => m.BterMeritModule), title: 'BTER Merit' },
