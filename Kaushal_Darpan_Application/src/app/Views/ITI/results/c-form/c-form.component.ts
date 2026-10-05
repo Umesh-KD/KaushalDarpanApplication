@@ -171,7 +171,7 @@ export class CFormComponent implements OnInit {
       this.requestModel.InstituteId = this.sSOLoginDataModel.InstituteID;
       this.requestModel.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
       this.requestModel.RoleID = this.sSOLoginDataModel.RoleID;
-debugger
+
           await this.itiResultService.GetCFormReport(this.requestModel).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
