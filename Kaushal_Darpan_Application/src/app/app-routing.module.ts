@@ -1826,6 +1826,8 @@ const routes: Routes = [
 
       { path: 'iti-finalreport', loadChildren: () => import('./Views/ITI/results/ITI-FinalReport/ITI-FinalReport.module').then(m => m.ITIFinalReportModule), title: 'iti-finalreport' },
       { path: 'SignalR-Dashboard', loadChildren: () => import('./Views/signal-r-dashboard/signal-r-dashboard.module').then(m => m.SignalRDashboardModule) },
+      { path: 'Email-Template', loadChildren: () => import('./Views/email-template/email-template.module').then(m => m.EmailTemplateModule), title: 'Email Template' },
+
     ]
   },
 

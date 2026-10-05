@@ -123,6 +123,8 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
         false, HasLink: false
     });
 
+
+
   }
 
   public ngAfterViewInit(): void {

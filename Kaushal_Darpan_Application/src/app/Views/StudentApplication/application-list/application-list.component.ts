@@ -583,7 +583,7 @@ export class ApplicationListComponent {
     //   await this.route.navigate(['/StudentJanAadharDetail'],
     //     { queryParams: { deptid: this.encryptionService.encryptData(EnumDepartment.ITI), isDirectAdmission: this.encryptionService.encryptData(true) } }
     //   );
-    // } 
+    // } b
     else if (key == EnumDirectAdmissionType.JailAdmission) {
       this.CloseModal()
       this.route.navigate(['/iti-direct-admission-student-initial-detail'],

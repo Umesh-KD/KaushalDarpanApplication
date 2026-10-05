@@ -1,5 +1,4 @@
-export class DataPagingListModel
-{
+export class DataPagingListModel {
   public PageNumber: number = 0;
   public PageSize: number = 0;
   public InstituteID: number = 0;
@@ -12,14 +11,13 @@ export class DataPagingListModel
   public StudentExamIDs: string = '';
   public DepartmentID: number = 0;
   public Eng_NonEng: number = 0;
-  
+
 }
 
 
 
 
-export class NCVTChunkInfoDataModelDataPagingList
-{
+export class NCVTChunkInfoDataModelDataPagingList {
   public IsSelected: boolean = false;
   public PageNumber: number = 0;
   public PageSize: number = 0;
@@ -29,4 +27,5 @@ export class NCVTChunkInfoDataModelDataPagingList
   public AIDS: String = '';
   public TotalRecord: String = '';
   public TotalPage: String = '';
- }
+  public IsAadharData: number = 0
+}

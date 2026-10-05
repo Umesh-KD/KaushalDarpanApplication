@@ -340,6 +340,7 @@ export class ChunksSearchModel {
   public RoleID: number = 0;
   public AcedmicYearID: number = 0;
   public Action: number = 0;
+  public IsAadharData: number = 0;
 
 }
 export class BasePostAttendanceTimeTableModal {
