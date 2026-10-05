@@ -65,6 +65,7 @@ export class RevealuationComponent {
   public SelectedItemList: any = [];
   public ItemList: any = [];
   public SelectedItemDataList: any = [];
+  public ISShowRTITab: boolean=false
 
   constructor(private commonFunctionService: CommonFunctionService,
     private revaluationService: RevaluationService,
@@ -87,8 +88,9 @@ export class RevealuationComponent {
 
   ngAfterViewInit(): void {
 
-  }
 
+  }
+ 
 
   //async submitRollDob(stepper: MatStepper): Promise<void> {
   //  debugger
@@ -136,8 +138,8 @@ export class RevealuationComponent {
   async submitRollDob(stepper: MatStepper): Promise<void> {
     debugger;
 
-    this.searchRequest.RollNo = 2601010005;
-    this.searchRequest.DOB = '2006-04-02';
+    //this.searchRequest.RollNo = 2601010005;
+    //this.searchRequest.DOB = '2006-04-02';
 
     if (!this.searchRequest.RollNo || !this.searchRequest.DOB) {
       this.Swal2.Confirmation('Roll Number and Date of Birth are required '

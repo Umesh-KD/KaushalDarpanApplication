@@ -44,6 +44,7 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
   @ViewChild('tabContent', { read: ViewContainerRef }) tabContent!: ViewContainerRef;
   selectedTabIndex = 0;
   sSOLoginDataModel = new SSOLoginDataModel();
+  public ISShowRTITab: boolean = false
   //public RollNo = ''
 //  public dob = ''
 
@@ -81,11 +82,27 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
 
 
     
-
+    await this.GetStatus()
     await this.GetCurrentAdmissionSession();
     await this.LoadTabs();
   }
+  async GetStatus() {
+    try {
 
+
+
+      await this.commonservice.GetCommonMasterData('ShowRTITAB')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ISShowRTITab = data['Data'][0]['ISShowRTITab'];
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+   
+  }
   async GetCurrentAdmissionSession() {
     try {
       await this.commonservice.GetCurrentAdmissionSession(this.DepartmentID)
@@ -114,6 +131,10 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
     this.tabs = [] as { TabName: string; TabNameHI: string; TabIcon: string; component: Type<any>; DepartmentID: number; CourseTypeId: number, Enable: boolean, HasLink: boolean, Link: string }[];
    
     this.tabs.push({ TabName: 'Download ITI Result', TabNameHI: 'आईटीआई परिणाम डाउनलोड करें', TabIcon: 'ti ti-license', component: downloadITIResultComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
+
+    if (this.ISShowRTITab) {
+
+    
     this.tabs.push({
       TabName: 'Apply For RTI', TabNameHI: 'सूचना के अधिकार हेतु आवेदन करें', TabIcon: 'ti ti-license', component: RevealuationComponent, DepartmentID: 2, CourseTypeId: 1, Enable:
         false, HasLink: false
@@ -122,7 +143,7 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
       TabName: 'Know RTI-Status', TabNameHI: 'RTI स्थिति जानें', TabIcon: 'ti ti-license', component: KnowRevealuationITIComponent, DepartmentID: 2, CourseTypeId: 1, Enable:
         false, HasLink: false
     });
-
+    }
 
 
   }
