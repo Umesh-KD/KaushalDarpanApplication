@@ -321,12 +321,13 @@ export class ItiSeatIntakeService {
       ).toPromise();
   }
 
-  public async UpdateITISeatDataBulk(file: any | null = null,  ChunkSize: number = 100) {
+  public async UpdateITISeatDataBulk(file: any | null = null, ChunkSize: number = 1500, Active: number =1) {
       //formdata
       debugger
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("ChunkSize", ChunkSize.toString());
+    formData.append("ChunkSize", ChunkSize.toString());
+    formData.append("Active", Active.toString());
     return await this.http.post(this.APIUrl + "/UpdateITISeatDataBulk" + "/" , formData)
         .pipe(
           catchError(this.handleErrorObservable)

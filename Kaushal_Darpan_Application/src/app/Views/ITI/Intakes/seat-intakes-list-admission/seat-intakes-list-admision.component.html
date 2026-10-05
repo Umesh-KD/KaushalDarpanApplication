@@ -201,7 +201,10 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
-        <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="openModal_UpdateSeatData(ModalUpdateSeatInBulk)"><i class="ti ti-download"></i> Update Seat Data</a> -->
+
+         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="openModal_UpdateSeatData(ModalUpdateSeatInBulk)">
+        <i class="ti ti-upload"></i> Update Bulk Seat Status</a>
+
         <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake('_getActiveSeatIntakeColleges')">
           <i class="ti ti-download"></i>
           {{
@@ -348,7 +351,7 @@
       <div class="card">
         <div class="card-header flex justify-between  items-center">
           <b>
-            <i class="fa fa-refresh"></i>&nbsp; Status Update
+            <i class="fa fa-pencil"></i>&nbsp; Seat Status Update
           </b>
           <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
         </div>
@@ -502,41 +505,61 @@
         <!-- EXCEL UPLOAD -->
         <!-- ============================================= -->
 
-        <div
-          class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <div class="form-group">
+              <label class="form-label">Status</label>
+
+              <select class="form-select" [(ngModel)]="Active">
+                <option [ngValue]="1">Active</option>
+                <option [ngValue]="0">Inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <div class="form-group">
+              <label class="form-label">            Import Excel</label>
+              <div class="flex fileUploader bg-gray-100 items-center">
+
+                <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none"
+                       (change)="onFileChange($event)"
+                       [(ngModel)]="importFile"
+                       id="fileStudentPhoto"
+                       type="file"
+                       accept=".xls,.xlsx">
+
+                <label for="fileStudentPhoto">
+
+                  <span>Choose File</span>
+
+                  {{ selectedFile ? selectedFile.name : 'No file chosen' }}
+
+                </label>
+
+              </div>
+            </div>
+          </div>
 
           <div class="flex items-center me-3">
 
-            <label
-              class="block me-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-              for="fileStudentPhoto">
 
-              Import Excel
+
+            <label class="block me-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                   for="fileStudentPhoto">
+
+  
 
             </label>
 
-            <div
-              class="flex fileUploader bg-gray-100 items-center">
-
-              <input
-                class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none"
-                (change)="onFileChange($event)"
-                [(ngModel)]="importFile"
-                id="fileStudentPhoto"
-                type="file"
-                accept=".xls,.xlsx">
-
-              <label for="fileStudentPhoto">
-
-                <span>Choose File</span>
-
-                {{ selectedFile ? selectedFile.name : 'No file chosen' }}
-
-              </label>
-
-            </div>
+          
 
           </div>
+
+
+
 
         </div>
 
@@ -545,31 +568,47 @@
         <!-- MISSING DATA -->
         <!-- ============================================= -->
 
-        <div
+        <!--<div
           *ngIf="missingData && missingData.length > 0"
-          class="mt-5">
+          class="mt-5">-->
 
-          <div
-            class="alert alert-danger mb-3">
+        <div *ngIf="missingData && missingData.length > 0"
+             class="missing-data-wrapper">
 
-            <strong>
-              Following Key_su records do not exist:
-            </strong>
+          <div class="missing-data-alert">
+            <div class="missing-data-icon">
+              <i class="ti ti-alert-triangle"></i>
+            </div>
 
+            <div class="missing-data-content">
+              <div class="missing-data-title">
+                Following Key_su records do not exist
+              </div>
+
+              <div class="missing-data-subtitle">
+                Please add the following keys to the master and verify the records before continuing.
+              </div>
+            </div>
+
+            <span class="missing-data-count">
+              {{ missingData.length }}
+            </span>
           </div>
+
+       
 
 
           <!-- TABLE -->
           <div class="table-responsive">
 
             <table
-              class="table table-bordered table-striped w-full">
+              class="table table-border w-full table-auto">
 
               <thead>
 
                 <tr>
 
-                  <th class="text-center">
+                  <th class="text-left">
                     S.No.
                   </th>
 
@@ -591,7 +630,7 @@
                 <tr
                   *ngFor="let item of missingData; let i = index">
 
-                  <td class="text-center">
+                  <td class="text-left">
                     {{ i + 1 }}
                   </td>
 
@@ -620,7 +659,7 @@
       <div
         class="card-footer text-center flex items-center justify-center mt-3">
 
-        <button
+        <button *ngIf="missingData && missingData.length == 0"
           class="btn bg-info btn-sm text-white"
           (click)="ImportExcelFile(selectedFile)">
 
