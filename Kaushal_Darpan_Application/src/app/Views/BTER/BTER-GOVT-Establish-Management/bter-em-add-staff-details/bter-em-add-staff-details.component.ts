@@ -814,7 +814,7 @@ export class BterEMAddStaffDetailsComponent {
     if (this.request.InstituteID == 0) {
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
     }
-
+debugger
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -1298,9 +1298,16 @@ export class BterEMAddStaffDetailsComponent {
           const existingTo =
             new Date(x.ToDate);
 
+          // Compare only the date, not the time
+          existingFrom.setHours(0, 0, 0, 0);
+          existingTo.setHours(0, 0, 0, 0);
+
+          newFromDate.setHours(0, 0, 0, 0);
+          newToDate.setHours(0, 0, 0, 0);  
+
           return (
-            newFromDate <= existingTo &&
-            newToDate >= existingFrom
+            newFromDate < existingTo &&
+            newToDate > existingFrom
           );
         }
       );
@@ -1361,7 +1368,8 @@ export class BterEMAddStaffDetailsComponent {
       TransferToOfficeID: formValue.TransferToOfficeID,
       TransferToOfficeName: this.serviceReq.TransferToOfficeName,
       TransferToInstituteName: this.serviceReq.TransferToInstituteName,
-      TransferTime: this.serviceReq.TransferTime,
+      // TransferTime: this.serviceReq.TransferTime,
+      TransferTime: formValue.TransferTime ?? this.serviceReq.TransferTime,
       TransferDocuments: this.serviceReq.TransferDocuments ? [...this.serviceReq.TransferDocuments]: [],
       IsPromotion: formValue.IsPromotion,
       ToDesignationIDPromotion: formValue.ToDesignationIDPromotion,
@@ -1369,14 +1377,34 @@ export class BterEMAddStaffDetailsComponent {
       DateOfpromotion: formValue.DateOfpromotion,
       ToBranchIDPromotion: formValue.ToBranchIDPromotion,
       ToBranchNamePromotion: ToBranchNamePromotion,
-      PromotionTime: this.serviceReq.PromotionTime,
+      // PromotionTime: this.serviceReq.PromotionTime,
+      PromotionTime: formValue.PromotionTime ?? this.serviceReq.PromotionTime,
       PromotionDocuments: this.serviceReq.PromotionDocuments ? [...this.serviceReq.PromotionDocuments]: []
     };
 
     const editServiceIndex = this.editServiceIndex ?? -1;
-
+    console.log('Form Value:', formValue);
+    console.log('TransferTime:', formValue.TransferTime);
+    console.log('PromotionTime:', formValue.PromotionTime);
+    console.log('serviceReq TransferTime:', this.serviceReq.TransferTime);
+    console.log('serviceReq PromotionTime:', this.serviceReq.PromotionTime);
     if (this.isEditServiceReq && editServiceIndex !== null && editServiceIndex >= 0 && editServiceIndex < this.serviceHistoryList.length) {
       this.serviceHistoryList[editServiceIndex] = serviceData;
+
+       console.log(
+    'AFTER ASSIGNMENT:',
+    this.serviceHistoryList[editServiceIndex]
+  );
+
+  console.log(
+    'AFTER TransferTime:',
+    this.serviceHistoryList[editServiceIndex].TransferTime
+  );
+
+  console.log(
+    'AFTER PromotionTime:',
+    this.serviceHistoryList[editServiceIndex].PromotionTime
+  );
     } else {
       this.serviceHistoryList.push(serviceData);
     }
