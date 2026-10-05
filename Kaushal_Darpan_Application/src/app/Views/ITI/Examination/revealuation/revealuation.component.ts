@@ -136,8 +136,8 @@ export class RevealuationComponent {
   async submitRollDob(stepper: MatStepper): Promise<void> {
     debugger;
 
-    //this.searchRequest.RollNo = 1432;
-    //this.searchRequest.DOB = '2001-05-27';
+    this.searchRequest.RollNo = 2601010005;
+    this.searchRequest.DOB = '2006-04-02';
 
     if (!this.searchRequest.RollNo || !this.searchRequest.DOB) {
       this.Swal2.Confirmation('Roll Number and Date of Birth are required '
@@ -417,7 +417,7 @@ export class RevealuationComponent {
           {
             itemAmount: Number(item.FeeAmount ?? 0),
             status: item.ExamStudentStatus,
-            transactionApplicationID: item.StudentExamPaperID,
+            transactionApplicationID: item.StudentExamPaperMarksID,
             tranSemesterID: item.SemesterID
           } as StudentFeesTransactionItems);
 
@@ -451,6 +451,7 @@ export class RevealuationComponent {
             this.emitraRequest.DepartmentID = this.studentDetailsModel.DepartmentID;
             this.emitraRequest.CourseTypeID = this.studentDetailsModel.CourseTypeID;
             this.emitraRequest.ExamStudentStatus = enumExamStudentStatus.Revaluation;
+  
             this.emitraRequest.RevalRequestID=this.RevalRequestID;
             this.emitraRequest.FeeFor = "RevalFee";
             //common

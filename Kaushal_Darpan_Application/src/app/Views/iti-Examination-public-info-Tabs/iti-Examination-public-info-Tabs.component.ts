@@ -114,7 +114,14 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
     this.tabs = [] as { TabName: string; TabNameHI: string; TabIcon: string; component: Type<any>; DepartmentID: number; CourseTypeId: number, Enable: boolean, HasLink: boolean, Link: string }[];
    
     this.tabs.push({ TabName: 'Download ITI Result', TabNameHI: 'आईटीआई परिणाम डाउनलोड करें', TabIcon: 'ti ti-license', component: downloadITIResultComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
-
+    this.tabs.push({
+      TabName: 'Apply For RTI', TabNameHI: 'सूचना के अधिकार हेतु आवेदन करें', TabIcon: 'ti ti-license', component: RevealuationComponent, DepartmentID: 2, CourseTypeId: 1, Enable:
+        false, HasLink: false
+    });
+    this.tabs.push({
+      TabName: 'Know RTI-Status', TabNameHI: 'RTI स्थिति जानें', TabIcon: 'ti ti-license', component: KnowRevealuationITIComponent, DepartmentID: 2, CourseTypeId: 1, Enable:
+        false, HasLink: false
+    });
 
   }
 
