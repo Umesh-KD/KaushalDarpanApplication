@@ -40,6 +40,15 @@ export class SubjectMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetParentSubjectList(searchRequest: SubjectSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetParentSubjectList", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetByID(PK_ID: number, DepartmentID: number = 0) {
     return await this.http.get(this.APIUrl + "/GetByID/" + PK_ID + "/" + DepartmentID, this.headersOptions)
       .pipe(

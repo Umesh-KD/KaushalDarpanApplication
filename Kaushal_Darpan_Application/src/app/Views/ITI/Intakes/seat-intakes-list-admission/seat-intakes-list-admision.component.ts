@@ -62,6 +62,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   public SeatIntakeID: number = 0;
+  public Active: number = 1;
   missingData: any[] = [];
   //end table feature default
 
@@ -557,6 +558,8 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   onToggleChange(event: MouseEvent, seatIntakeID: number, ModifyBy: number) {
     event.preventDefault();
 
+
+
     this.Swal2.Confirmation("Are you sure you want to change status?", async (result: any) => {
       if (result.isConfirmed) {
         this.SeatIntakeIDnew = seatIntakeID;
@@ -627,7 +630,10 @@ export class SeatIntakesListAdmissionComponent implements OnInit
 
 
  changeStatus(seatIntakeID: number, item: any, action: string = 'ActiveInactiveSeat')
-  {
+ {
+
+  
+
     var msg = "Are you sure you want to change status";
 
     if (action == 'ActiveInactiveCollege')
@@ -908,7 +914,9 @@ debugger
    async openModal_UpdateSeatData(model: any)
   {
     debugger
-    try{
+     try {
+       this.selectedFile = null;
+       this.missingData = [];
 
       this.modalReference = this.modalService.open(model, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' });
        this.modalReference.result.then(
@@ -941,15 +949,16 @@ debugger
         // event.target.value = null;
       }
 
-  ImportExcelFile(file: File): void {
-    debugger
-    this.Swal2.Confirmation("Do you want to Update Status?",
+  ImportExcelFile(file: File): void
+  {
+    var statusmsg = this.Active == 1 ? 'Active' : 'Inactive';
+    this.Swal2.Confirmation(`Do you want to update ${statusmsg} status?`,
        async (result: any) => {
         //confirmed
          if (result.isConfirmed) {
           try{
             this.loaderService.requestStarted();
-            await this.ItiSeatIntakeService.UpdateITISeatDataBulk(file)
+            await this.ItiSeatIntakeService.UpdateITISeatDataBulk(file, 1500, this.Active)
             .then((data: any) => {
 
               data = JSON.parse(JSON.stringify(data));
