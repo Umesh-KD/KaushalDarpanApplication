@@ -29,6 +29,7 @@ export class GrievanceDataModel {
 
   public StudentID: number = 0;
   public UserID: number = 0;
+  public InstituteID: number = 0;
 }
 
 export class GrivienceReopenModelsDataModel {

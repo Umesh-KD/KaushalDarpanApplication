@@ -42,6 +42,7 @@ export class GrievanceComponent implements OnInit {
 
   public DepartmentList: any = [];
   public CategoryList: any = [];
+  public Collegename: any = [];
   public SubMasterList: any = [];
   public ShowGrievanceList: any = [];
   public ResponseList: any = [];
@@ -75,6 +76,7 @@ export class GrievanceComponent implements OnInit {
     this.GrievanceFormGroup = this.formBuilder.group(
       {
         ddlCategoryID: ['', [DropdownValidators]],
+        ddlInstituteID: [{ value: '', disabled: true }],
         ddlDepartmentID: ['', [DropdownValidators]],
         ddlModuleID: ['', [DropdownValidators]],
         SubjectRelated: ['', Validators.required],
@@ -96,6 +98,14 @@ export class GrievanceComponent implements OnInit {
     this.loadDropdownData('QueryFor');
     this.loadDropdownData('Grievance Category');
     this.GetGrievanceData();
+    if (this.sSOLoginDataModel.InstituteID > 0 && this.sSOLoginDataModel.DepartmentID == 1) {
+      this.loadDropdownData('CollegeName');
+      this.request.InstituteID = this.sSOLoginDataModel.InstituteID
+    } else if (this.sSOLoginDataModel.InstituteID > 0 && this.sSOLoginDataModel.DepartmentID == 2) {
+      this.loadDropdownData('PrivateITICollege');
+      this.request.InstituteID = this.sSOLoginDataModel.InstituteID
+    }
+
     // await this.setDepartmentId();
   }
 
@@ -109,6 +119,14 @@ export class GrievanceComponent implements OnInit {
           break;
         case 'Grievance Category':
           this.CategoryList = data['Data'];
+          console.log(this.CategoryList, "CategoryList")
+          break;
+        case 'CollegeName':
+          this.Collegename = data['Data'];
+          console.log(this.CategoryList, "CategoryList")
+          break;
+        case 'PrivateITICollege':
+          this.Collegename = data['Data'];
           console.log(this.CategoryList, "CategoryList")
           break;
         default:
@@ -489,7 +507,7 @@ export class GrievanceComponent implements OnInit {
 
   async onChangeCategory() {
     debugger
-    if (this.request.CategoryID > 0 && this.request.CategoryID != EnumGrievanceCategory.Other) {
+    if (this.request.CategoryID > 0 && this.request.CategoryID != EnumGrievanceCategory.Other && this.request.CategoryID != EnumGrievanceCategory.Transactional_Payment_Issue) {
       await this.GetIssueTypeDDL();
     }
     

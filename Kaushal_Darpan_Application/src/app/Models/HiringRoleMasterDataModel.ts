@@ -17,9 +17,11 @@ export class SanctionOrderDataModel {
   public CreatedBy: number = 0;
   public ActiveStatus: boolean = true;
   public ActiveDeactive: string = '';
+  public Action: string = '';
   public DeleteStatus: boolean = false;
   public DepartmentID:number=0
   public ParentID:number=0
+  public ID:number=0
 }
 
 export class AnnouncementTypeMasterModel {

@@ -109,6 +109,7 @@
               <th class="text-left">Grievant Details</th>
               <th class="text-left">Subject/Remark</th>
               <th class="text-left">Status</th>
+              <th *ngIf="sSOLoginDataModel.RoleID==281|| sSOLoginDataModel.RoleID==1"  class="text-left">Transfer Status</th>
               <th class="text-left">Created Date</th>
               <th class="text-left">Resolved Date</th>
               <th class="text-center" style="width:150px">Action</th>
@@ -135,6 +136,9 @@
               </td>
 
               <td align="left">{{item.Status}}</td>
+              <td *ngIf="sSOLoginDataModel.RoleID==281 || sSOLoginDataModel.RoleID==1" align="left">
+                {{ item.IsTransfer == 1 ? ('Yes (' + item.TransferRemarks + ')') : 'No' }}
+              </td>
               <td align="left">{{item.RTS}}</td>
               <td align="left">{{item.ResolvedDate}}</td>
 
@@ -144,6 +148,11 @@
                      (click)="openGriviencePopup(modal_Grivience ,item)">
                      <i class="ti ti-eye"></i>
                   </a>
+
+                         <a *ngIf="sSOLoginDataModel.RoleID==281|| sSOLoginDataModel.RoleID==1" (click)="Transfer(item)" href="javascript:void(0)" title="Transfer Query"
+         >
+          <i class="ti ti-transfer"></i>
+       </a>
                   <!--<a href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.ResponseFileAttachment}}" *ngIf="item.ResponseFileAttachment != 1" target="_blank" title="Attachment File"><i class="ti ti-paperclip"></i></a>-->
                   <!--<a href="javascript:void(0)" data-hs-overlay="#ViewTrail" title="Trail"><i class="ti ti-list"></i></a>-->
                 </div>
