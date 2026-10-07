@@ -1,10 +1,10 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Promoted Student</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student Eligible For Exam</h4>
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/promotedstudent" class="text-sm font-medium text-slate-700" aria-current="page">Promoted Student</a>
+      <a routerLink="/promotedstudent" class="text-sm font-medium text-slate-700" aria-current="page">Student Eligible For Exam</a>
     </div>
   </div>
 </div>
@@ -84,13 +84,10 @@
     </div>
 
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
-
       <div>
         <button type="button" class="btn bg-info text-white inline-block"
-          *ngIf="MapKeyEng == 1 && 
-                (sSOLoginDataModel.RoleID == _EnumRole.Admin || 
-                sSOLoginDataModel.RoleID == _EnumRole.AdminNon)" 
-                (click)="SavePromoteStudent()">Promote
+          *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Admin || 
+                sSOLoginDataModel.RoleID == _EnumRole.AdminNon)" >Promote
         </button><!--*ngIf="MapKeyEng == 1"-->
         &nbsp;<span class="me-3" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
       </div>

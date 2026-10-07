@@ -1,0 +1,355 @@
+import { Component } from '@angular/core';
+import { EnumRole, EnumStatus, GlobalConstants, PromoteStatus } from '../../../Common/GlobalConstants';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { AppsettingService } from '../../../Common/appsetting.service';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { LoaderService } from '../../../Services/Loader/loader.service';
+import { UserMasterService } from '../../../Services/UserMaster/user-master.service';
+import * as XLSX from 'xlsx';
+import { PromotedStudentService } from '../../../Services/PromotedStudent/promoted-student.service';
+import { PrometedStudentMasterModel, PromotedStudentMarkedModel, PromotedStudentSearchModel } from '../../../Models/PrometedStudentMasterModel';
+import { MenuService } from '../../../Services/Menu/menu.service';
+
+@Component({
+  selector: 'app-promotion-eligible-student',
+  standalone: false,
+  templateUrl: './promotion-eligible-student.component.html',
+  styleUrl: './promotion-eligible-student.component.css'
+})
+export class PromotionEligibleStudentComponent {
+  public sSOLoginDataModel = new SSOLoginDataModel();
+  public request = new PromotedStudentSearchModel();//search
+
+  public prometedStudentData: PrometedStudentMasterModel[] = [];//grid
+  public InstituteMasterList: any = [];
+  public StreamMasterList: any = [];
+  public SemesterMasterList: any = [];
+  public StudentTypeMasterList: any = [];
+  public PromoteStatusList: any[] = [];
+
+  public isSubmitted: boolean = false;
+
+  public _GlobalConstants: any = GlobalConstants;
+  public _EnumRole = EnumRole;
+
+  public UserID: number = 0
+  public RoleID: number = 0
+
+  //table feature default
+  public paginatedInTableData: any[] = [];//copy of main data
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "50";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
+  MapKeyEng: number = 0;
+  public DateConfigSetting: any = [];
+  public _PromoteStatus = PromoteStatus;
+
+  //end table feature default
+
+  constructor(private commonMasterService: CommonFunctionService,
+    private promotedstudentservice: PromotedStudentService,
+    private loaderService: LoaderService,
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder,
+    private toastr: ToastrService,
+    private UserMasterService: UserMasterService,
+    private Swal2: SweetAlert2,
+    public appsettingConfig: AppsettingService,
+    private activatedRoute: ActivatedRoute,
+    private menuService: MenuService
+  ) { }
+
+  async ngOnInit() {
+    //session
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.UserID = this.sSOLoginDataModel.UserID
+
+    //load
+    await this.GetDateConfig();
+    await this.GetMasterData();
+  }
+
+  async GetMasterData() {
+    try {
+      await this.commonMasterService.GetCommonMasterDDLByType('PromoteStudentStatus')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PromoteStatusList = data['Data'];
+
+          //filter
+          // this.PromoteStatusList = this.PromoteStatusList.filter((x: any) => {
+          //   return x.ID == this._PromoteStatus.Reg || x.ID == this._PromoteStatus.Ex;
+          // });
+        }, (error: any) => console.error(error));
+
+      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+        .then((data: any) => {
+          this.InstituteMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)
+        .then((data: any) => {
+          this.StreamMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+
+      await this.GetSemesterData();
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  async GetExamStudentForPromotion() {
+    try {
+      // validation
+      if (this.request.PromoteStatusID <= 0) {
+        this.toastr.error("Please select 'Student Status'!.");
+        return;
+      }
+      // validation
+      if (parseInt(this.request.SemesterID || "0") <= 0) {
+        this.toastr.error("Please select 'Semester'!.");
+        return;
+      }
+
+      //session
+      this.request.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      //call
+      await this.promotedstudentservice.GetExamStudentForPromotion(this.request)
+        .then(async (data: any) => {
+          //
+          if (data.State == EnumStatus.Success) {
+            this.AllInTableSelect = false;
+            this.prometedStudentData = data['Data'];
+
+            console.log("this.prometedStudentData", this.prometedStudentData);
+            //table feature load
+            this.loadInTable();
+            //end table feature load
+          }
+          else {
+            this.toastr.error(data.ErrorMessage);
+          }
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  async btn_SearchClick() {
+    try {
+      await this.GetExamStudentForPromotion();
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  async btn_Clear() {
+    this.request = new PromotedStudentSearchModel();
+    await this.GetExamStudentForPromotion();
+  }
+
+  async sortInTableData(field: string) {
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.prometedStudentData] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
+  }
+  //main
+  loadInTable() {
+    this.resetInTableValiable();
+    this.calculateInTableTotalPage();
+    this.updateInTablePaginatedData();
+  }
+
+  // (replace org. list here)
+  resetInTableValiable() {
+    this.paginatedInTableData = [];//copy of main data
+    this.currentInTablePage = 1;
+    this.totalInTablePage = 0;
+    this.sortInTableColumn = '';
+    this.sortInTableDirection = 'asc';
+    this.startInTableIndex = 0;
+    this.endInTableIndex = 0;
+    this.totalInTableRecord = this.prometedStudentData.length;
+  }
+
+  get totalInTableSelected(): number {
+    return this.prometedStudentData.filter(x => x.Selected)?.length;
+  }
+
+  //table feature 
+  calculateInTableTotalPage() {
+    this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
+  }
+
+  // (replace org. list here)
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.prometedStudentData].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+  nextInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+  randamInTablePage() {
+    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
+      this.currentInTablePage = 1;
+    }
+    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.updateInTablePaginatedData();
+    }
+  }
+
+  //checked all (replace org. list here)
+  selectInTableAllCheckbox() {
+    this.prometedStudentData.forEach(x => {
+      x.Selected = this.AllInTableSelect;
+    });
+  }
+  //checked single (replace org. list here)
+  selectInTableSingleCheckbox(isSelected: boolean, item: any) {
+    const data = this.prometedStudentData.filter(x => x.StudentID == item.StudentID);
+    data.forEach(x => {
+      x.Selected = isSelected;
+    });
+    //select all(toggle)
+    this.AllInTableSelect = this.prometedStudentData.every(r => r.Selected);
+  }
+
+  exportToExcel(): void {
+    const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress', 'Selected', 'status', 'StudentID',
+      'EndTermID', 'StreamID', 'SemesterID',
+    ];
+    const filteredData = this.prometedStudentData.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'PreExamStudentsData.xlsx');
+  }
+
+  async GetDateConfig() {
+
+    var data = {
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      CourseTypeId: this.sSOLoginDataModel.Eng_NonEng,
+      AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      Key: "PromotedStudent",
+      SSOID: this.sSOLoginDataModel.SSOID
+    }
+
+    await this.commonMasterService.GetDateConfigSetting(data)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.DateConfigSetting = data['Data'][0];
+        this.MapKeyEng = this.DateConfigSetting.PromotedStudent;
+        console.log(data, 'Dataa');
+
+      }, (error: any) => console.error(error)
+      );
+  }
+
+  getSemesterDisplay(semesterId: any): number {
+    const id = parseInt(semesterId || 0);
+    return id > 0 ? id - 1 : id;
+  }
+
+  async onChangeStudentType() {
+    this.request.InstituteID = "0";
+    this.request.SemesterID = "0";
+    this.request.StreamID = "0";
+    this.request.IsBridge = "0";
+    this.AllInTableSelect = false;
+    this.paginatedInTableData = this.prometedStudentData = [];
+    await this.GetSemesterData();
+  }
+
+  async GetSemesterData() {
+    //debugger
+    try {
+      let ShowAllSemester = 0;
+      let EndTermID = this.sSOLoginDataModel.EndTermID;
+      let IsWithNotYearly = 1;
+      let IsPromote = 0;
+      let IsForEx = this.request.PromoteStatusID == this._PromoteStatus.Reg ? 0 : 1;
+      let IsWithNot6thSem = 0;
+      let EngNonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.SemesterMasterList = [];// reset
+      if (this.request.PromoteStatusID == this._PromoteStatus.Reg) {
+        IsPromote = 1;
+        IsWithNot6thSem = 1;
+      }
+      else if (this.request.PromoteStatusID == this._PromoteStatus.Ex) {
+        IsPromote = 0;
+      }
+      else if (this.request.PromoteStatusID == this._PromoteStatus.NotFormFilled ||
+        this.request.PromoteStatusID == this._PromoteStatus.Detained) {
+        IsPromote = 0;
+        IsWithNot6thSem = 1;
+      }
+      else {
+        return;
+      }
+      await this.commonMasterService.SemesterMaster(ShowAllSemester, EndTermID, IsWithNotYearly, IsPromote, IsForEx, IsWithNot6thSem,EngNonEng)
+        .then((data: any) => {
+          this.SemesterMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+}
