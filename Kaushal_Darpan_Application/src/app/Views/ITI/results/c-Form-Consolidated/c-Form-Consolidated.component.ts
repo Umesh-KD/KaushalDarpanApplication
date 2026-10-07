@@ -155,21 +155,25 @@ export class cFormConsolidatedComponent implements OnInit {
       this.requestModel.ExamType = this.searchRequest.ExamType;
       this.requestModel.InstituteId = this.sSOLoginDataModel.InstituteID;
       this.requestModel.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
+      this.requestModel.RoleID = this.sSOLoginDataModel.RoleID;
 
       await this.itiResultService.GetCFormConsolidatedReport(this.requestModel).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
-          this.toastr.success("Result Generated Successfully");
-          this.ReportData = data.Data.Table1; 
-          debugger;
-
-          this.ReportHtml = this.sanitizer.bypassSecurityTrustHtml(data.Data.Table1[0].Reportdata);
+          if(data.Data==null || data.Data.Table1==null || data.Data.Table1.length==0){
+              this.toastr.error("No Data Found");
+              return;
+            }
+          else{
+            this.ReportData = data.Data.Table1??[]; 
+            this.toastr.success("Result Generated Successfully");
+            this.ReportHtml = this.sanitizer.bypassSecurityTrustHtml(data.Data.Table1[0].Reportdata);
+          }
           
         } else {
           this.toastr.error(data.ErrorMessage);
         }
       })
-
 
 
     } catch (error) {
