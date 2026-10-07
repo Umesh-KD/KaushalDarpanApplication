@@ -31,7 +31,9 @@ export class GrievanceListComponent implements OnInit {
   public request = new GrievanceDataModel();
   public Responserequest = new GrivienceResponseDataModel();
   public SearchRequest = new GrivienceSearchModel();
-
+  public State: number = -1;
+  public Message: any = [];
+  public ErrorMessage: any = [];
   public FinancialYear: any = [];
   public AllotmentTypeList: any = [];
   public DepartmentList: any = [];
@@ -214,10 +216,10 @@ export class GrievanceListComponent implements OnInit {
 
   async GetGrievanceData() {
     try {
-      this.SearchRequest.DepartmentID = this.request.DepartmentID;
-      this.SearchRequest.CategoryID = this.request.CategoryID;
-      this.SearchRequest.ModuleID = this.request.ModuleID;
-      this.SearchRequest.StatusID = this.request.StatusID;
+      this.SearchRequest.DepartmentID = this.request.DepartmentID||0;
+      this.SearchRequest.CategoryID = this.request.CategoryID||0;
+      this.SearchRequest.ModuleID = this.request.ModuleID||0;
+      this.SearchRequest.StatusID = this.request.StatusID||0;
       this.SearchRequest.Action = "GetAllData";
 
       this.SearchRequest.RoleID = this.sSOLoginDataModel.RoleID;
@@ -388,7 +390,7 @@ export class GrievanceListComponent implements OnInit {
           if (data.State = EnumStatus.Success) {
             this.toastr.success(data.Message)
             this.CloseModal();
-            this.GrivienceList;
+          
             await this.GetGrievanceData();
           }
           else {
@@ -440,4 +442,43 @@ export class GrievanceListComponent implements OnInit {
       }, 200);
     }
   }
+
+  Transfer(row: any) {
+    const isTechnical = Number(row.CategoryID) === 1;
+
+    const target = isTechnical ? 'Department' : 'Technical Team';
+    const question = `Are you sure you want to transfer this query to ${target.toLowerCase()}?`;
+
+    this.Swal2.ConfirmationWithRemark(
+      question,
+      async (remark: string) => {
+        const userRemark = (remark ?? '').trim();
+        const transferRemark = `Transfer to ${target} (${userRemark})`;
+
+        const request = {
+          GrivienceID: row.GrivienceID,
+          TransferRemarks: transferRemark,
+          ModifyBy: this.sSOLoginDataModel.UserID            // your logged-in user id
+        };
+
+        try {
+          const data: any = await this._GrievanceService.TransferGrievance(request);  // your service call
+          this.State = data?.['State'];
+          this.Message = data?.['Message'];
+          this.ErrorMessage = data?.['ErrorMessage'];
+
+          if (this.State == EnumStatus.Success) {
+            this.toastr.success(this.Message);
+            this.GetGrievanceData();              // reload the list
+          } else {
+            this.toastr.error(this.ErrorMessage || 'Something went wrong .!');
+          }
+        } catch (error) {
+          console.error(error);
+          this.toastr.error('Something went wrong .!');
+        }
+      }
+    );
+  }
+
 }

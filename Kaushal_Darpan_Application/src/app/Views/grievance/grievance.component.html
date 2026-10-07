@@ -67,14 +67,30 @@
 
           <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
+
+            <div *ngIf="sSOLoginDataModel.InstituteID > 0">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                College Name 
+              </label>
+              <select class="form-select"
+                      [(ngModel)]="request.InstituteID"
+                      formControlName="ddlInstituteID"
+                      >
+                <option value="0" selected>--Choose Option--</option>
+                <option *ngFor="let item of Collegename" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+        
+            </div>
+
+
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Category <span class="StarMarking">*</span>
               </label>
-              <select class="form-select" 
-                [(ngModel)]="request.CategoryID" 
-                formControlName="ddlCategoryID"
-                (change)="onChangeCategory()">
+              <select class="form-select"
+                      [(ngModel)]="request.CategoryID"
+                      formControlName="ddlCategoryID"
+                      (change)="onChangeCategory()">
                 <option value="0" selected>--Choose Option--</option>
                 <option *ngFor="let item of CategoryList" value="{{item.CodeID}}">{{item.Name}}</option>
               </select>
@@ -91,7 +107,7 @@
                 Name of Category
               </label>
               <input type="text" class="form-input" placeholder="Enter Category Name"
-                formControlName="CategoryName" [(ngModel)]="request.CategoryName">
+                     formControlName="CategoryName" [(ngModel)]="request.CategoryName">
               <div *ngIf="isSubmitted && form.CategoryName.errors" class="text-danger">
                 <p *ngIf="form.CategoryName.errors.required">
                   <i aria-hidden="true"></i>Category field is required.!
@@ -120,7 +136,7 @@
                 Name of Issue Type
               </label>
               <input type="text" class="form-input" placeholder="Enter Issue Type"
-                formControlName="IssueTypeName" [(ngModel)]="request.IssueTypeName">
+                     formControlName="IssueTypeName" [(ngModel)]="request.IssueTypeName">
               <div *ngIf="isSubmitted && form.IssueTypeName.errors" class="text-danger">
                 <p *ngIf="form.IssueTypeName.errors.required">
                   <i aria-hidden="true"></i>Category field is required.!
@@ -149,7 +165,7 @@
                 Department <span class="StarMarking">*</span>
               </label>
               <select class="form-select" [(ngModel)]="request.DepartmentID" formControlName="ddlDepartmentID"
-                (change)="GetMasterSubDDL()">
+                      (change)="GetMasterSubDDL()">
                 <option value="0" selected>--Choose Option--</option>
                 <option *ngFor="let item of DepartmentList" value="{{item.ID}}">{{item.Name}}</option>
               </select>
@@ -180,17 +196,17 @@
                 Attachment :
               </label>
               <div class="flex fileUploader">
-                <input
-                  class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                  id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
                 <label for="fileStudentPhoto">
                   <span>Choose File</span>
                   {{request.DisAttachmentFileName === '' ? 'No File Choosen' : request.DisAttachmentFileName}}
                 </label>
                 <div class="flex">
                   <a href="{{ appsettingConfig.StaticFileRootPathURL + request.FileAttachment }}"
-                    *ngIf="this.request.FileAttachment !=''" class="btn bg-primary text-white m-0" target="_blank"><i
-                      class="ti ti-eye"></i></a>
+                     *ngIf="this.request.FileAttachment !=''" class="btn bg-primary text-white m-0" target="_blank">
+                    <i class="ti ti-eye"></i>
+                  </a>
                 </div>
               </div>
             </div>
