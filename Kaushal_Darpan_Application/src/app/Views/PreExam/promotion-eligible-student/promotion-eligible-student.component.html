@@ -84,12 +84,10 @@
     </div>
 
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
-
       <div>
         <button type="button" class="btn bg-info text-white inline-block"
-            *ngIf="MapKeyEng == 1 && 
-                    (sSOLoginDataModel.RoleID == _EnumRole.Admin || 
-                    sSOLoginDataModel.RoleID == _EnumRole.AdminNon)">Promote
+          *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Admin || 
+                sSOLoginDataModel.RoleID == _EnumRole.AdminNon)" >Promote
         </button><!--*ngIf="MapKeyEng == 1"-->
         &nbsp;<span class="me-3" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
       </div>

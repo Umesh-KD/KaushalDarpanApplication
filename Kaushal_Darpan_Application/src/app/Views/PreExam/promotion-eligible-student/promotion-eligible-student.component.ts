@@ -88,9 +88,9 @@ export class PromotionEligibleStudentComponent {
           this.PromoteStatusList = data['Data'];
 
           //filter
-          this.PromoteStatusList = this.PromoteStatusList.filter((x: any) => {
-            return x.ID == this._PromoteStatus.Reg || x.ID == this._PromoteStatus.Ex;
-          });
+          // this.PromoteStatusList = this.PromoteStatusList.filter((x: any) => {
+          //   return x.ID == this._PromoteStatus.Reg || x.ID == this._PromoteStatus.Ex;
+          // });
         }, (error: any) => console.error(error));
 
       await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
@@ -110,7 +110,7 @@ export class PromotionEligibleStudentComponent {
     }
   }
 
-  async GetPromotedStudent() {
+  async GetExamStudentForPromotion() {
     try {
       // validation
       if (this.request.PromoteStatusID <= 0) {
@@ -128,7 +128,7 @@ export class PromotionEligibleStudentComponent {
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       //call
-      await this.promotedstudentservice.GetPromotedStudent(this.request)
+      await this.promotedstudentservice.GetExamStudentForPromotion(this.request)
         .then(async (data: any) => {
           //
           if (data.State == EnumStatus.Success) {
@@ -152,7 +152,7 @@ export class PromotionEligibleStudentComponent {
 
   async btn_SearchClick() {
     try {
-      await this.GetPromotedStudent();
+      await this.GetExamStudentForPromotion();
     }
     catch (Ex) {
       console.log(Ex);
@@ -161,7 +161,7 @@ export class PromotionEligibleStudentComponent {
 
   async btn_Clear() {
     this.request = new PromotedStudentSearchModel();
-    await this.GetPromotedStudent();
+    await this.GetExamStudentForPromotion();
   }
 
   async sortInTableData(field: string) {
@@ -351,4 +351,5 @@ export class PromotionEligibleStudentComponent {
       console.log(Ex);
     }
   }
+
 }
