@@ -133,4 +133,11 @@ export class StudentEnrollmentService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetOptionalSubjectsByStudentID_enr(StudentID: number, DepartmentID: number, SemesterID: number) {
+    return await this.http.get(`${this.APIUrl}/GetOptionalSubjectsByStudentID_enr/${StudentID}/${DepartmentID}/${SemesterID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

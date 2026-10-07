@@ -11,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserMasterService } from '../../Services/UserMaster/user-master.service';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { ActivatedRoute } from '@angular/router';
-import { PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../Models/PreExamStudentDataModel';
+import { OptionalSubjectRequestModel, PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../Models/PreExamStudentDataModel';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { SubjectSearchModel } from '../../Models/SubjectMasterDataModel';
 import { CommonSubjectDetailsMasterModel } from '../../Models/CommonSubjectDetailsMasterModel';
@@ -37,13 +37,29 @@ import { CampusPostMaster_Action } from '../../Models/CampusPostDataModel';
   standalone: false
 })
 export class StudentEnrollmentComponent {
+  requestAction = new CampusPostMaster_Action();
+  request = new PreExamStudentDataModel();
+  searchrequest = new SubjectSearchModel()
+  requestStudent = new StudentMasterModel();
+  RequestStudent = new M_StudentMaster_QualificationDetailsModel();
+  requestUpdateEnrollmentNo = new PreExam_UpdateEnrollmentNoModel();
+  optSubRequest = new OptionalSubjectRequestModel();
+  sSOLoginDataModel = new SSOLoginDataModel();
+
+  EditStudentDataFormGroup!: FormGroup;
+  formUpdateEnrollmentNo!: FormGroup;
+  formAction!: FormGroup;
+  public SearchStudentDataFormGroup!: FormGroup;
+
   public _GlobalConstants: any = GlobalConstants;
+  public _EnumRole = EnumRole;
+
   public State: number = -1;
+  public UserID: number = 0
+  public RoleID: number = 0
   public Message: any = [];
   public ErrorMessage: any = [];
   public SubjectID: any[] = [];
-  public UserID: number = 0
-  public RoleID: number = 0
   public InstituteMasterList: any = [];
   public InstitutionManagementMasterList: any = [];
   public StreamMasterList: any = [];
@@ -57,50 +73,40 @@ export class StudentEnrollmentComponent {
   public StudentProfileDetailsData: any = [];
   public Student_QualificationDetailsData: any = [];
   public documentDetails: DocumentDetailsModel[] = [];
-
   public settingsMultiselect: object = {};
   public commonSubjectDetails: CommonSubjectDetailsMasterModel[] = [];
   public Student_DataList: Student_DataModel[] = []
-  public NesStudentID: number = 0;
-  public InstitutesListForStudent: any = [];
-  requestAction = new CampusPostMaster_Action();
-  request = new PreExamStudentDataModel();
-  searchrequest = new SubjectSearchModel()
-  requestStudent = new StudentMasterModel();
-  RequestStudent = new M_StudentMaster_QualificationDetailsModel();
-  requestUpdateEnrollmentNo = new PreExam_UpdateEnrollmentNoModel();
-  public _EnumRole = EnumRole;
-  sSOLoginDataModel = new SSOLoginDataModel();
-  public Table_SearchText: string = "";
-  modalReference: NgbModalRef | undefined;
-  closeResult: string | undefined;
-  public IsShowViewStudent: boolean = false;
   public StudentTypeMasterList: any = [];
   public BoardMasterList: any = [];
   public PassingYearList: any = [];
+  public InstitutesListForStudent: any = [];
   public ExamStudentStatusDDLList: any = [];
   public CasteCategoryAMasterData: any = [];
   public CasteCategoryBMasterData: any = [];
   public SubjectMasterDDLList: any[] = [];
   public selectedSubjects: any = [];
-  public status: number = 0
   public FinancialYear: any = []
+  public GenderList: any = []
+  public RejectDocumentDetail: any = []
+  public DateConfigSetting: any = [];
+  public NewExamStudentStatusDDLList: any = []
+  public optionalSubjectList: any = []
+  optionalChildSubjectList: any = []
+
+  public NesStudentID: number = 0;
+  public Table_SearchText: string = "";
+  modalReference: NgbModalRef | undefined;
+  closeResult: string | undefined;
+  public IsShowViewStudent: boolean = false;
+  public status: number = 0
   public isShowdrop: boolean = true
   isSearchEnabled: boolean = false;
   IsVerified: boolean = false;
   isDropdownVisible: boolean = false;
-  public NewExamStudentStatusDDLList: any = []
-  EditStudentDataFormGroup!: FormGroup;
-  formUpdateEnrollmentNo!: FormGroup;
-  formAction!: FormGroup;
-  public SearchStudentDataFormGroup!: FormGroup;
   public reportRequest = new ReportBasedModel()
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public StudentFilterStatusId: number = 0;
-  public GenderList: any = []
-  public RejectDocumentDetail: any = []
-  public DateConfigSetting: any = [];
   public MapKeyEng: number = 0;
   public TodayDate = new Date()
   public isShowImageDeleteButton: boolean = false
@@ -2034,5 +2040,48 @@ export class StudentEnrollmentComponent {
       this.toastr.error('Please select at least one student to notify')
       return
     }
+  }
+
+  async StudentOptionalSubjectModelView(content: any, StudentID: number, SemesterID: number) {
+
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason: any) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+    this.optSubRequest.StudentID = StudentID;
+    await this.GetOptionalSubjectMaster(StudentID, SemesterID);
+  }
+
+  async GetOptionalSubjectMaster(StudentID: number, SemesterID: number) {
+    try {
+      await this.studentEnrollmentService.GetOptionalSubjectsByStudentID_enr(StudentID, this.sSOLoginDataModel.DepartmentID, SemesterID)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.optionalSubjectList = data['Data']["Table"];// exam id
+          this.optionalChildSubjectList = data['Data']["Table1"];
+          this.optionalSubjectList.forEach((x: any) => {
+            if (x.SubjectID == 0) {
+              let i = 0;
+              this.optionalChildSubjectList.forEach((c: any) => {
+                if (x.ParentSubjectID == c.ParentSubjectID && i == 0) {
+                  x.SubjectID = c.SubjectID;
+                  i++;
+                }
+              });
+            }
+          });
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  CloseModal() {
+    this.isSubmitted = false
+    this.modalService.dismissAll();
+    this.optionalSubjectList = [];
+    this.optionalChildSubjectList = [];
   }
 }
