@@ -28,6 +28,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade Types: <span class="StarMarking">*</span></label>
 
           <select class="form-select ng-pristine ng-valid ng-touched" id="TradeTypesID" [(ngModel)]="searchRequest.ExamType" formControlName="ExamType">
+            <option value="0">All</option>
             <option  value="1">Eng</option>
           </select>
         </div>
@@ -39,7 +40,6 @@
             <option value="2">Supplementary Exam</option>
           </select>
         </div>-->
-
         <!--<div *ngIf="MapKeyEng == 1">
     <button type="button" class="btn  text-white mt-6 {{ isGenerateResult ? 'bg-info' : 'bg-success' }}" (click)="SubmitGenerateResultData()">{{ isGenerateResult ? 'Generate Result' : 'Publish' }}</button>
   </div>-->
@@ -59,7 +59,6 @@
       <div class="overflow-x-auto1 mt-3" [innerHTML]="ReportHtml">
 
         <!--{{ReportHtml}}-->
-
         <!--<table class="table table-border w-full table-auto" cellpadding="5">
           <tr>
             <th colspan="11" style="text-align:left">{{searchRequest.SemesterID}} Year (Annual Examination) {{searchRequest.SemesterID}} Year Trades </th>
