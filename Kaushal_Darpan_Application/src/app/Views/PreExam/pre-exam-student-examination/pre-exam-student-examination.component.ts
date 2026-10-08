@@ -3122,7 +3122,7 @@ export class PreExamStudentExaminationComponent {
       (enumExamStudentStatus.EligibleForExamination || enumExamStudentStatus.NewEligibleForExamination)
     ]).includes(row.status)
       && row.StudentTypeID == this._enumStudentType.Reg
-      && [4, 5, 6].includes(row.SemesterID)
+      && [3,4, 5, 6].includes(row.SemesterID)
       && this.sSOLoginDataModel.Eng_NonEng == this._EnumCourseType.Engineering
     ) {
       return true;
