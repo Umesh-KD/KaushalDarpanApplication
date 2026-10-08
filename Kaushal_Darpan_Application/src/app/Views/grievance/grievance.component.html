@@ -228,7 +228,7 @@
             </div>
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Remark<span class="StarMarking">*</span>
+                Remark
               </label>
               <textarea class="form-input" placeholder="Enter Remark" formControlName="Remark"
                 [(ngModel)]="request.Remark" rows="4"></textarea>
@@ -275,9 +275,11 @@
               <th class="text-left">Category</th>
               <th class="text-left">Department</th>
               <th class="text-left">Module</th>
-              <th class="text-left">Grievant Details</th>
-              <th class="text-left">Subject/Remark</th>
+              <th class="text-left">User Details</th>
+              <th class="text-left">Subject Description</th>
+              <th class="text-left">Remark</th>
               <th class="text-left">Status</th>
+              <th class="text-left">Document</th>
               <th class="text-left">Created Date</th>
               <th class="text-left">Resolved Date</th>
               <th class="text-center" style="width:150px">Action</th>
@@ -291,17 +293,31 @@
               <td align="left">{{item.DepartmentName}}</td>
               <td align="left">{{item.Module}}</td>
               <td align="left">
-                <p *ngIf="item.UserName?.length>0"><i class="ti ti-user"></i> {{item.UserName }} ({{item.SSOID}})</p>
+                <p *ngIf="item.UserName?.length>0"><i class="ti ti-user"></i> {{item.SSOID }} ({{item.GrievantRole}})</p>
                 <p *ngIf="item.EnrollmentNo?.length>0 && item.IsStudent == 1"><i class="ti ti-list"></i> {{item.EnrollmentNo}}</p>
                 <p *ngIf="item.EmployeeID?.length>0 && item.IsStudent == 0"><i class="ti ti-list"></i> {{item.EmployeeID}}</p>
                 <p *ngIf="item.MobileNo?.length>0"><i class="ti ti-phone"></i> {{item.MobileNo}}</p>
                 <p *ngIf="item.Email?.length>0"><i class="ti ti-mail"></i> {{item.Email}}</p>
               </td>
-              <td align="left"><b>{{item.SubjectRelatedToComplain}}</b>
-                <p class="italic">{{item.Remark}}</p>
+              <td align="left">
+                <b>{{item.SubjectRelatedToComplain}}</b>
+                <!--<p class="italic">{{item.Remark}}</p>-->
               </td>
-
+              <td align="left">
+                <b>{{item.Remark}}</b>
+                <!--<p class="italic">{{item.Remark}}</p>-->
+              </td>
               <td align="left">{{item.Status}}</td>
+
+              <td class="text-center">
+                <a target="_blank" role="button" title="Issue/Suggestion Attachment File"
+                   href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.FileAttachment}}"
+                   *ngIf="item.FileAttachment != ''"
+                   class="fw-bold text-dark text-decoration-none"
+                   style="color: inherit; text-decoration: none; font-weight: 700;">
+                  <i class="ti ti-eye fw-bold" style="font-size: 20px; font-weight: 700;"></i>
+                </a>
+              </td>
               <td align="left">{{item.RTS}}</td>
               <td align="left">{{item.ResolvedDate}}</td>
 
@@ -309,22 +325,22 @@
               <td>
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                   <a href="javascript:void(0)" title="View Response/Trail"
-                    (click)="openGriviencePopup(modal_Grivience,item)">
+                     (click)="openGriviencePopup(modal_Grivience,item)">
                     <i class="ti ti-eye"></i>
                   </a>
 
                   <!--<a href="javascript:void(0)" title="Attachment File"><i class="ti ti-paperclip"></i></a>
-  <a href="javascript:void(0)" data-hs-overlay="#ViewTrail" title="Trail"><i class="ti ti-list"></i></a>-->
+      <a href="javascript:void(0)" data-hs-overlay="#ViewTrail" title="Trail"><i class="ti ti-list"></i></a>-->
 
-                  <a href="javascript:void(0)" title="Re-open" 
-                    *ngIf="item.StatusID==_EnumGrievanceStaus.Resolved"
-                    (click)="openGriviencePopup(modal_Grivience,item)">
+                  <a href="javascript:void(0)" title="Re-open"
+                     *ngIf="item.StatusID==_EnumGrievanceStaus.Resolved"
+                     (click)="openGriviencePopup(modal_Grivience,item)">
                     <i class="ti ti-rotate"></i>
                   </a>
 
                   <a href="javascript:void(0);" title="Delete"
-                    *ngIf="item.StatusID === _EnumGrievanceStaus.Pending && item.ReopenGrivience !== 1"
-                    (click)="DeleteById(item.GrivienceID)">
+                     *ngIf="item.StatusID === _EnumGrievanceStaus.Pending && item.ReopenGrivience !== 1"
+                     (click)="DeleteById(item.GrivienceID)">
                     <i class="ti ti-trash"></i>
                   </a>
                 </div>
@@ -397,12 +413,14 @@
             <table class="table table-border w-full table-auto" cellpadding="5">
               <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
                 <tr>
+                  <th class="text-left">Status</th>
                   <th class="text-left">Complain Response</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let item of ResponseList">
+                  <td>{{item.Status}}</td>
                   <td>
                     <p class="italic m-0">{{ item.Remark }}</p>
                     <span style="font-size:12px">{{ item.RTS }}</span>
