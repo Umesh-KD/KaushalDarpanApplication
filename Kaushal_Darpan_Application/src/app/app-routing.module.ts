@@ -956,6 +956,7 @@ const routes: Routes = [
       { path: 'VerifyRollnumber/:id/:status', loadChildren: () => import('./Views/verify-roll-number/verify-roll-number.module').then(m => m.VerifyRollNumberModule) },
       { path: 'SchlorshipList', loadChildren: () => import('./Views/scholarship-list/scholarship-list.module').then(m => m.ScholarshipListModule) },
       { path: 'AddSchlorship', loadChildren: () => import('./Views/add-scholarship-list/add-scholarship-list.module').then(m => m.AddScholarshipListModule) },
+      { path: 'SeatDataList', loadChildren: () => import('./Views/ITI/ExternalDataMaster/seat-datalist/seat-datalist.module').then(m => m.SeatDataListModule) },
 
       { path: 'CreateGuestHouse', loadChildren: () => import('./Views/added-guest-house/added-guest-house.module').then(m => m.AddedGuestHouseModule) },
       { path: 'create-guest-house', loadChildren: () => import('./Views/GuestRoom-Management/Create-GuestRoom/Create-GuestRoom.module').then(m => m.CreateGuestRoomModule), title: 'Create GuestRoom' },

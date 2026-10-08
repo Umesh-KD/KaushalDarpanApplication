@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
 import { ViewApplicationModule } from '../application-view/application-view.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ViewApplicationModule } from '../application-view/application-view.modu
     ReactiveFormsModule,
     LoaderModule,
     TableSearchFilterModule,
-    ViewApplicationModule
+    ViewApplicationModule,
+    NgSelectModule
   ]
 })
 export class BTERApplicationModule { }

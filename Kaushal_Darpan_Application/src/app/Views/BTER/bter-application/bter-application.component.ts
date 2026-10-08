@@ -77,6 +77,8 @@ export class BTERApplicationComponent {
   public totalInTableRecord: number = 0;
   public AppID: number = 0
   public lstAcedmicYear: any;
+  public InstituteMasterDDLList: any = [];
+  public Branchlist: any[] = [];
   //end table feature default
 
   pageNo: any = 1;
@@ -145,6 +147,7 @@ export class BTERApplicationComponent {
     this.childComponent.OpenViewApplicationPopup();
 
   }
+
 
   async DownloadApplicationForm(ApplicationID: number = 0, SSoid: string = '', FolderName: string) {
     try {
@@ -221,6 +224,22 @@ export class BTERApplicationComponent {
           this.category_CList = data['Data'];
         }, (error: any) => console.error(error)
         );
+
+      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+        // debugger;
+        data = JSON.parse(JSON.stringify(data));
+        console.log(data);
+          this.InstituteMasterDDLList = data.Data;
+          console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
+      })
+
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.Branchlist = data['Data'];
+        }, error => console.error(error));
+
+      
     }
     catch (ex) {
       console.log(ex);
@@ -257,7 +276,8 @@ export class BTERApplicationComponent {
       this.searchRequest.UrlStatus = this.UrlStatus;
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng,
-        this.searchRequest.DepartmentID = EnumDepartment.BTER;
+      this.searchRequest.DepartmentID = EnumDepartment.BTER;
+      this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
       console.log("searchrequest", this.searchRequest)
       await this.ApplicationService.GetDashApplicationData(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -285,7 +305,7 @@ export class BTERApplicationComponent {
     this.searchRequest = new DTEDashApplicationSearchModel();
     this.searchRequest.DepartmentID = EnumDepartment.ITI;
     this.searchRequest.UrlStatus = this.UrlStatus;
-    await this.GetAllData(0);
+    await this.GetAllData(1);
   }
 
   async DownloadApplicationForm111(ApplicationID: number, FolderName: string) {
