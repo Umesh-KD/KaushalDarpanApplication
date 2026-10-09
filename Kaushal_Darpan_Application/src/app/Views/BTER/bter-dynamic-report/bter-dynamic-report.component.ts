@@ -45,18 +45,92 @@ tableConfig: TableConfig = {
   //  showExport: false,  //for showing excel button, default true
   //  showColumnCustomizer: false, //for showing column customizer button,default true
   // showSerialNo: false, //for showing serial no. default true
-   unwantedColumns: [       
+   unwantedColumns: [  
+        'id',     
         'AcademicYearID',
         'CollegeId'
     ],
     // showExport: false,   //default true 
     columns: [
     {
+        dataField: 'ProfileImage',
+
+        displayField: 'ProfileImage',
+
+        type: 'image',
+
+        sortable: false,
+
+        align: 'center',
+
+        width: '80px',
+
+        imageConfig: {
+
+          width: 40,
+
+          height: 40,
+
+          borderRadius: 'circle',
+
+          hoverZoom: true,
+
+          basePath: this.appsettingConfig.StaticFileRootPathURL ,
+
+          defaultImage: this.appsettingConfig.StaticFileRootPathURL 
+        },
+      },
+      
+    {
         dataField: 'Division',       
         // visible: false,    //to show in list view
         lockVisibility: true   // to lock in customize column dropdown
-    }
-  ]
+    },
+    {
+      dataField: 'ActiveStatus',
+      displayField: 'Status',
+      type: 'badge',
+      // align: 'center'
+      sortable: true,
+      align: 'center',
+      width: '130px'
+
+    },
+    {
+        dataField: 'ModifyDate',
+        displayField: 'Modify Date',
+        type: 'date',
+        sortable: true,
+        align: 'center',
+        width: '150px',
+        format: 'dd/MM/yyyy  hh:mm:ss a'
+    },    
+    {
+        dataField: 'CreatedDate',
+        displayField: 'Created Date',
+        type: 'date',
+        sortable: true,
+        align: 'center',
+        width: '150px',
+        format: 'dd/MM/yyyy  hh:mm:ss a'
+    },
+    
+  ],
+
+ badgeConfig: [
+      {
+        value: 1,
+        text: 'Active',
+        cssClass: 'badge bg-success'
+      },
+
+      {
+        value: 0,
+        text: 'Inactive',
+        cssClass: 'badge bg-danger'
+      }
+    ]
+
 
 
 };
