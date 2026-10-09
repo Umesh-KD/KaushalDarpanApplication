@@ -8,4 +8,6 @@ export class RequestBaseModel {
   public SessionTypeID?: number = 0;
   public SelectedInsituteID?: number = 0;
   public SchemeID?: number = 0;
+
+  public ActionFlag?: string = '';
 }
