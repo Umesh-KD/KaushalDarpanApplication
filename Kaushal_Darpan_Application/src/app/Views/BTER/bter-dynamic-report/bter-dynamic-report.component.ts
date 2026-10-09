@@ -28,6 +28,7 @@ export class BterDynamicReportComponent implements OnInit {
   public searchRequest = new CompanyMasterSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public requestObj= new RequestBaseModel();
+  public RequestData = new RequestBaseModel();
   public ApprovedStatus: string = "0";
   public ActionType = '';
   //public columns:TableColumn[]=[];
@@ -44,8 +45,7 @@ tableConfig: TableConfig = {
   //  showExport: false,  //for showing excel button, default true
   //  showColumnCustomizer: false, //for showing column customizer button,default true
   // showSerialNo: false, //for showing serial no. default true
-   unwantedColumns: [
-        'ID',        
+   unwantedColumns: [       
         'AcademicYearID',
         'CollegeId'
     ],
@@ -126,12 +126,19 @@ tableConfig: TableConfig = {
   }
   async GetAllData() {
     try {
-      let obj = {
-        FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
-        Action:this.ActionType
-      }
       this.loaderService.requestStarted();
-      await this.ReportService.GetZoneWiseAllotmentReport(obj).then((data: any) => {
+      this.RequestData.RoleID = this.sSOLoginDataModel.RoleID;
+      this.RequestData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.RequestData.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+      this.RequestData.InstituteId = this.sSOLoginDataModel.InstituteID;
+      this.RequestData.ActionFlag = this.ActionType;
+
+      // let obj = {
+      //   FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
+      //   Action:this.ActionType
+      // }
+      this.loaderService.requestStarted();
+      await this.ReportService.GetBterdynamicReport(this.RequestData).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.BterDynamicDataList = data.Data;
         console.log(this.BterDynamicDataList)
