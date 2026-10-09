@@ -280,7 +280,7 @@
                   <i class="fa fa-file-o"></i>
                 </a>
 
-                <a href="javascript:void(0);" class="bg-gray-200" title="Assign Optional Subject" 
+                <a *ngIf="row.SemesterID==3" href="javascript:void(0);" class="bg-gray-200" title="Assign Optional Subject" 
                    (click)="StudentOptionalSubjectModelView(OptionalSubjectModal, row.StudentID, row.SemesterID)">
                   <i class="fa fa-file-o"></i>
                 </a>
@@ -1296,7 +1296,7 @@ uploa
 
 <ng-template #OptionalSubjectModal let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
-    <form [formGroup]="OptionalSubjectFormGroup" class="form-horizontal">
+    <!--<form [formGroup]="OptionalSubjectFormGroup" class="form-horizontal">-->
       <div class="card">
         <div class="card-header flex justify-between items-center">
           <b><i class="fa fa-plus"></i>&nbsp;Assign Optional Subject</b>
@@ -1337,6 +1337,6 @@ uploa
           </div>
         </div>
       </div>
-    </form>
+    <!--</form>-->
   </div>
 </ng-template>

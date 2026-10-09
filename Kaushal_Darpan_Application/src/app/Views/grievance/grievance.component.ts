@@ -80,7 +80,7 @@ export class GrievanceComponent implements OnInit {
         ddlDepartmentID: ['', [DropdownValidators]],
         ddlModuleID: ['', [DropdownValidators]],
         SubjectRelated: ['', Validators.required],
-        Remark: ['', Validators.required],
+        Remark: [''],
 
         // EmployeeID: [{value:'',disabled:true},],
         // SSOID: [{value:'',disabled:true},],
@@ -99,7 +99,7 @@ export class GrievanceComponent implements OnInit {
     this.loadDropdownData('Grievance Category');
     this.GetGrievanceData();
     if (this.sSOLoginDataModel.InstituteID > 0 && this.sSOLoginDataModel.DepartmentID == 1) {
-      this.loadDropdownData('CollegeName');
+      this.loadDropdownData('Btercollege');
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID
     } else if (this.sSOLoginDataModel.InstituteID > 0 && this.sSOLoginDataModel.DepartmentID == 2) {
       this.loadDropdownData('PrivateITICollege');
@@ -112,7 +112,7 @@ export class GrievanceComponent implements OnInit {
   get form() { return this.GrievanceFormGroup.controls; }
   // Load data for dropdown based on MasterCode
   loadDropdownData(MasterCode: string): void {
-    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+    this.commonMasterService.GetCommonMasterData(MasterCode, this.sSOLoginDataModel.DepartmentID).then((data: any) => {
       switch (MasterCode) {
         case 'QueryFor':
           this.DepartmentList = data['Data'];
@@ -121,7 +121,7 @@ export class GrievanceComponent implements OnInit {
           this.CategoryList = data['Data'];
           console.log(this.CategoryList, "CategoryList")
           break;
-        case 'CollegeName':
+        case 'Btercollege':
           this.Collegename = data['Data'];
           console.log(this.CategoryList, "CategoryList")
           break;
@@ -395,8 +395,12 @@ export class GrievanceComponent implements OnInit {
     if (this.Responserequest.StatusID == EnumGrievanceStaus.Resolved) {
       this.ReplyBox = true;
     }
-
+    this.Responserequest.ResponseFileAttachment = ''
+    this.Responserequest.DisResponseFileName = ''
   }
+
+
+
   private getDismissReason(reason: any): string {
 
     return `with: ${reason}`;
@@ -431,6 +435,8 @@ export class GrievanceComponent implements OnInit {
   CloseModal() {
     this.modalService.dismissAll();
     this.isSubmitted = false;
+    this.Responserequest.ResponseFileAttachment = ''
+    this.Responserequest.DisResponseFileName = ''
   }
 
   async IsReplyBox() {

@@ -28,6 +28,7 @@ import { DocumentDetailsService } from '../../Common/document-details';
 import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
 import { toString } from '@ng-bootstrap/ng-bootstrap/util/util';
 import { CampusPostMaster_Action } from '../../Models/CampusPostDataModel';
+import { PreExamStudentExaminationService } from '../../Services/PreExamStudent/pre-exam-student-examination.service';
 
 
 @Component({
@@ -145,6 +146,7 @@ export class StudentEnrollmentComponent {
     private http: HttpClient,
     private documentDetailsService: DocumentDetailsService,
     private sMSMailService: SMSMailService,
+    private preExamStudentExaminationService: PreExamStudentExaminationService
   ) { }
 
   async ngOnInit() {
@@ -2058,6 +2060,7 @@ export class StudentEnrollmentComponent {
       await this.studentEnrollmentService.GetOptionalSubjectsByStudentID_enr(StudentID, this.sSOLoginDataModel.DepartmentID, SemesterID)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
+          debugger
           this.optionalSubjectList = data['Data']["Table"];// exam id
           this.optionalChildSubjectList = data['Data']["Table1"];
           this.optionalSubjectList.forEach((x: any) => {
@@ -2083,5 +2086,54 @@ export class StudentEnrollmentComponent {
     this.modalService.dismissAll();
     this.optionalSubjectList = [];
     this.optionalChildSubjectList = [];
+  }
+
+  async UpdateSubjectValue(ParentSubjectID: number, SubjectID: any) {
+    this.optionalSubjectList.forEach((x: any) => {
+      if (x.ParentSubjectID == ParentSubjectID) {
+        x.SubjectID = SubjectID;
+      }
+    });
+
+  }
+
+
+  async SaveOptionalSubjectData() {
+
+    if (this.optionalSubjectList.filter((x: any) => x.SubjectID == 0)?.length > 0) {
+      this.toastr.error("Please choose all optional subject");
+      return;
+    }
+    this.isSubmitted = true;
+    this.optSubRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    this.optSubRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+    this.optSubRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+    this.optSubRequest.CreatedBy = this.sSOLoginDataModel.UserID
+    this.optSubRequest.RowJson = JSON.stringify(this.optionalSubjectList);
+    try {
+      await this.studentEnrollmentService.Save_Student_Optional_Subject(this.optSubRequest)
+        .then(async (data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (this.State == EnumStatus.Success) {
+            this.toastr.success(this.Message);
+            this.CloseModal()
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.Message)
+          }
+          else {
+            this.toastr.error(this.ErrorMessage)
+          }
+        })
+        .catch((error: any) => {
+          console.error(error);
+          this.toastr.error('Failed to save optional subject!');
+        });
+    }
+    catch (ex) {
+      console.log(ex);
+    }
   }
 }

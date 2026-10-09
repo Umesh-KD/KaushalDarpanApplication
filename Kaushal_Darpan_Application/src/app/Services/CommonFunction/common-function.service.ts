@@ -1058,6 +1058,14 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+   public async GetBterDynamicReport_ddl(model: any) {
+
+    return await this.http.post(this.APIUrl + '/GetBterDynamicReport_ddl/', model, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetItiVacantPost(model: any) {
 
     return await this.http.post(this.APIUrl + '/GetItiVacantPost/', model, this.headersOptions)

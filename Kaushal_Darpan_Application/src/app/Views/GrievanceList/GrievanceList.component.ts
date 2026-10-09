@@ -151,7 +151,9 @@ export class GrievanceListComponent implements OnInit {
   async GetMasterSubDDL() {
     try {
 
+
       this.selectedOption = this.request.DepartmentID
+
 
       await this.commonMasterService.GetSubjectForCitizenSugg(this.selectedOption)
         .then((data: any) => {
@@ -262,6 +264,13 @@ export class GrievanceListComponent implements OnInit {
 
     debugger
     this.Responserequest = item;
+    await this.commonMasterService.GetSubjectForCitizenSugg(this.Responserequest.DepartmentID)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.SubMasterList = data['Data'];
+        console.log("QueryFor", this.SubMasterList);
+      }, (error: any) => console.error(error)
+      );
 
     if (item.StatusID == EnumGrievanceStaus.Resolved) {
       this.Responserequest.StatusID = EnumGrievanceStaus.Re_Open;
@@ -271,9 +280,11 @@ export class GrievanceListComponent implements OnInit {
     }
     this.Responserequest.Remark = '';
 
+    
     console.log(this.Responserequest,'Responserequest')
     await this.GetResponseData();
   }
+
  
   private getDismissReason(reason: any): string {
     

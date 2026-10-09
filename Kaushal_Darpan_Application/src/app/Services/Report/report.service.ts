@@ -2168,7 +2168,13 @@ export class ReportService {
       ).toPromise();
   }
 
-  
+  public async GetBterdynamicReport(searchRequest: any) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetBterdynamicReport`, body, this.headersOptions)
+      .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   
 }
 

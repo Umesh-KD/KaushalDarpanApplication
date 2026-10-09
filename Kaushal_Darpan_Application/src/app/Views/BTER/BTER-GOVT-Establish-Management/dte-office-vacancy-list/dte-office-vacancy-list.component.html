@@ -44,11 +44,19 @@
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
-          <select class="form-select" [(ngModel)]="SearchData.InstituteID">
+          <!-- <select class="form-select" [(ngModel)]="SearchData.InstituteID" >
             <option value="0">--Select--</option>
             <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-          </select>
+          </select> -->
+
+          <ng-select [(ngModel)]="SearchData.InstituteID" [clearable]="false">
+            <ng-option [value]="0">--Select--</ng-option>
+            <ng-container *ngFor="let item of InstituteMasterDDLList">
+              <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+            </ng-container>
+          </ng-select>
         </div>
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
           <select class="form-select" id="BranchID" [(ngModel)]="SearchData.BranchID">
