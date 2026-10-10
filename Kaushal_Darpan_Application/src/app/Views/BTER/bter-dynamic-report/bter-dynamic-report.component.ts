@@ -117,20 +117,14 @@ tableConfig: TableConfig = {
     
   ],
 
- badgeConfig: [
-      {
-        value: 1,
-        text: 'Active',
-        cssClass: 'badge bg-success'
-      },
-
-      {
-        value: 0,
-        text: 'Inactive',
-        cssClass: 'badge bg-danger'
-      }
-    ]
-
+  badgeConfig: [
+    { value: 'Active', text: 'Active', cssClass: 'badge bg-success text-white' },
+    { value: 'Inactive', text: 'Inactive', cssClass: 'badge bg-danger text-white' },
+    { value: 1, text: 'Active', cssClass: 'badge bg-success text-white' },
+    { value: 0, text: 'Inactive', cssClass: 'badge bg-danger text-white' },
+    { value: true, text: 'Active', cssClass: 'badge bg-success text-white' },
+    { value: false, text: 'Inactive', cssClass: 'badge bg-danger text-white' }
+  ]
 
 
 };
