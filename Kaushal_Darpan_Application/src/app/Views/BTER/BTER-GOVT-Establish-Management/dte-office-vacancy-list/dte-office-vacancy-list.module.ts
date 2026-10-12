@@ -7,6 +7,7 @@ import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.m
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { DTEOfficeVacancyListComponent } from './dte-office-vacancy-list.component';
 import { DTEOfficeVacancyListRoutingModule } from './dte-office-vacancy-list-routing.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { DTEOfficeVacancyListRoutingModule } from './dte-office-vacancy-list-rou
     LoaderModule,
     TableSearchFilterModule,
     NgMultiSelectDropDownModule.forRoot(),
+    NgSelectModule
   ]
 })
 export class DTEOfficeVacancyListModule { }

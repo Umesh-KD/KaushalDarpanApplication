@@ -1110,6 +1110,7 @@ async GetTechnicianDll() {
   async getBranchesInstituteIDWise() {
      ;
     try {
+      debugger;
       this.loaderService.requestStarted();
       await this.commonMasterService.Stream_InstituteIdWise(this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.Eng_NonEng,this.sSOLoginDataModel.EndTermID,this.sSOLoginDataModel.InstituteID,this.sSOLoginDataModel.FinancialYearID).then((data: any) =>
       {
@@ -1131,7 +1132,7 @@ async GetTechnicianDll() {
 
   async getInstituteBranchDDL() {
     try {
-       
+       debugger;
       const request: any = {};
       request.OfficeID = this.formData.OfficeID;
       request.StaffTypeID = this.formData.StaffTypeID;

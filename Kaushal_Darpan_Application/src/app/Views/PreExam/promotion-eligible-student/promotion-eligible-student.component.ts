@@ -352,4 +352,17 @@ export class PromotionEligibleStudentComponent {
     }
   }
 
+  async MarkEligibleForPromote() {
+    try {
+      const selected = this.prometedStudentData.filter(x => x.Selected);
+      if(selected.length == 0) {
+        this.toastr.error("Please select at least one student to promote.");
+        return;
+      }
+
+      
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }

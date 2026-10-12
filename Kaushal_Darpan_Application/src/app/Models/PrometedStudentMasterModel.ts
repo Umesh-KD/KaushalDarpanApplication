@@ -58,9 +58,9 @@ export class PromotedStudentMarkedModel extends RequestBaseModel {
 }
 
 export class PromotedStudentSearchModel extends RequestBaseModel {
-  public InstituteID: string = '0';  // default value is empty string
-  public SemesterID: string = '0';   // default value is empty string
-  public StreamID: string = '0';     // default value is empty string
+  public InstituteID: string = '0';
+  public SemesterID: string = '0';
+  public StreamID: string = '0';
   public IsBridge: string = '';
   public PromoteStatusID: number = 0;
 }
