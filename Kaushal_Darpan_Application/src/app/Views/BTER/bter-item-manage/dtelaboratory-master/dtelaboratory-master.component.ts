@@ -74,6 +74,7 @@ export class DteLaboratoryMasterComponent {
       txtName: ['', Validators.required], 
       StreamID: [0, [DropdownValidators]],
       staffID: [0, [DropdownValidators]],
+      IsOfficerLabIncharge: [false], 
       ActiveStatus: [false] 
     });
 
@@ -129,17 +130,29 @@ export class DteLaboratoryMasterComponent {
     }
     // your logic here
   }
-  async GetMasterData() {
+  async GetMasterData()
+  {
     try {
       this.loaderService.requestStarted();
-
-      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.StreamMasterList = data['Data'];
-          this.StreamMasterList = data['Data'];
-        }, (error: any) => console.error(error));
-      this.request.StreamID = 0;
+      if (this.sSOLoginDataModel.RoleID != EnumRole.HOD_Eng && this.sSOLoginDataModel.RoleID != EnumRole.HOD_NonEng) {
+        await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.StreamMasterList = data['Data'];
+            this.StreamMasterList = data['Data'];
+          }, (error: any) => console.error(error));
+        this.request.StreamID = 0;
+      }
+      else
+      {
+        await this.commonMasterService.GetHODWiseStreams(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng , this.sSOLoginDataModel.UserID , this.sSOLoginDataModel.EndTermID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.StreamMasterList = data['Data'];
+          }, (error: any) => console.error(error));
+        this.request.StreamID = 0;
+      }
+      
       console.log('Stream Master List',this.StreamMasterList)
     }
     catch (Ex) {
@@ -157,6 +170,7 @@ export class DteLaboratoryMasterComponent {
       this.loaderService.requestStarted(); 
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequests.TypeName = 'staffList';
+      this.Searchrequests.UserID = this.sSOLoginDataModel.UserID; // new added 20261005
       const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
 
       if (data && data.State === EnumStatus.Success) {
@@ -226,13 +240,15 @@ export class DteLaboratoryMasterComponent {
           this.request.LabName = lab["LabName"];
           this.request.staffID = lab["staffID"];
           this.request.ActiveStatus = lab["ActiveStatus"] == 1 ? true : false;
+          this.request.IsOfficerLabIncharge = lab["IsOfficerLabIncharge"] == 1 ? true : false;;
           debugger;
           setTimeout(() => {
             this.LaboratoryRequestFormGroup.patchValue({
               txtName: this.request.LabName,
               StreamID: this.request.StreamID,
               staffID: this.request.staffID,
-              ActiveStatus: this.request.ActiveStatus
+              ActiveStatus: this.request.ActiveStatus,
+              IsOfficerLabIncharge: this.request.IsOfficerLabIncharge 
             });
           }, 0);
 
@@ -264,7 +280,8 @@ export class DteLaboratoryMasterComponent {
       txtName: '',
       StreamID: 0,
       staffID: 0,
-      ActiveStatus: false
+      ActiveStatus: false,
+      IsOfficerLabIncharge: false
     });
     const btnSave = document.getElementById('btnSave');
     if (btnSave) btnSave.innerHTML = "Save";
@@ -281,6 +298,12 @@ export class DteLaboratoryMasterComponent {
   async saveData() {
     debugger
     this.isSubmitted = true;
+    console.log(this.LaboratoryRequestFormGroup.value);
+
+    console.log(
+      'OLI:',
+      this.LaboratoryRequestFormGroup.get('IsOfficerLabIncharge')?.value
+    );
     if (this.LaboratoryRequestFormGroup.invalid) {
       //Object.keys(this.LaboratoryRequestFormGroup.controls).forEach(key => {
       //  const control = this.LaboratoryRequestFormGroup.get(key);
@@ -329,6 +352,7 @@ export class DteLaboratoryMasterComponent {
       this.request.LabName = formValues.txtName;
       this.request.staffID = formValues.staffID;
       this.request.ActiveStatus = formValues.ActiveStatus;
+      this.request.IsOfficerLabIncharge = formValues.IsOfficerLabIncharge;
 
       await this.dteLaboratoryService.SaveData(this.request)
         .then((data: any) => {

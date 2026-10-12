@@ -239,6 +239,14 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async GetHODWiseStreams(DepartmentID: number = 0, StreamType: number = 0, UserID: number = 0, EndTermId: number = 0)
+  {
+
+    return await this.http.get(this.APIUrl + '/GetHODWiseStreams/' + DepartmentID + '/' + StreamType + '/' + UserID + '/' + EndTermId , this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
 

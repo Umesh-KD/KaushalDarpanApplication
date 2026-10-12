@@ -46,6 +46,7 @@ export class bterinventoryIssueHistoryComponent {
   public today: Date = new Date();
   closeResult: string | undefined;
   public DashboardStatus: number = 0;
+  AllEnumRole=EnumRole
   constructor(
     private toastr: ToastrService,
     private http: HttpClient,
@@ -91,7 +92,8 @@ export class bterinventoryIssueHistoryComponent {
       this.Searchrequest.SSOID = this.sSOLoginDataModel.SSOID;
       this.Searchrequest.OfficeID = this.sSOLoginDataModel.OfficeID;
       
-      if(this.sSOLoginDataModel.RoleID === EnumRole.BterLabIncharge){
+      if (this.sSOLoginDataModel.RoleID === EnumRole.BterLabIncharge || this.sSOLoginDataModel.RoleID === EnumRole.BTER_OfficerLabIncharge )
+      {
         this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
       }
       await this.bterInventoryService.GetAllinventoryIssueHistory(this.Searchrequest)
