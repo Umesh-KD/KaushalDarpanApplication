@@ -166,6 +166,14 @@ const routes: Routes = [
       },
       { path: 'designationmaster', loadChildren: () => import('./Views/designation-master/designation-master.routing.module').then(m => m.DesignationRoutingModule), title: 'Designation Master' },
 
+
+      // divya's route start
+      
+      { path: 'QueryRequestSubmission', loadChildren: () => import('./Views/QueryRequestSubmission/query-request-submission.routing.module').then(m => m.QueryRequestSubmissionModule), title: 'Query & Request Submission' },
+
+
+      // divya's route end
+
       { path: 'levelmaster', loadChildren: () => import('./Views/level-master/level-master.routing.module').then(m => m.LevelRoutingModule), title: 'Level Master' },
       { path: 'CenterCreate', loadChildren: () => import('./Views/CenterAllotment/center-allotment/center-allotment.routing.module').then(m => m.CenterAllotmentRoutingModule), title: 'Create Center' },
       { path: 'generate-cc-code', loadChildren: () => import('./Views/CenterAllotment/generate-cc-code/generate-cc-code.module').then(m => m.GenerateCcCodeModule), title: 'Generate CC Code' },
