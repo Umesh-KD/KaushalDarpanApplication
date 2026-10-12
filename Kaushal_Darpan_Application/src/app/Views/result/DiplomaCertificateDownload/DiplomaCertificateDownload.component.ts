@@ -540,7 +540,7 @@ export class DiplomaCertificateDownloadComponent {
           }
           else if (data.State == EnumStatus.Warning) {
             this.toastr.warning(data.Message);
-            //console.log(data.ErrorMessage);
+            console.log(data.ErrorMessage);
           }
           else
           {
