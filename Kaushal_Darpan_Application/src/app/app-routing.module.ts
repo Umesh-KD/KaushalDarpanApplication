@@ -1832,6 +1832,7 @@ const routes: Routes = [
       { path: 'SignalR-Dashboard', loadChildren: () => import('./Views/signal-r-dashboard/signal-r-dashboard.module').then(m => m.SignalRDashboardModule) },
       { path: 'Email-Template', loadChildren: () => import('./Views/email-template/email-template.module').then(m => m.EmailTemplateModule), title: 'Email Template' },
       { path: 'GrevianceMapping', loadChildren: () => import('./Views/greviance-mapping/greviance-mapping.module').then(m => m.GrevianceMappingModule) },
+      { path: 'analytic-dashboard', loadChildren: () => import('./Views/analytic-dashboard/analytic-dashboard.module').then(m => m.AnalyticDashboardModule) },
     ]
   },
 
