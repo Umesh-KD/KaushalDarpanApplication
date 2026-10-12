@@ -83,4 +83,67 @@ export class DesignationMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
+
+  // ----------------------services for the query and request submission----------------------------
+  // Get all query/request records
+public async GetAllRequests(request: any = {}) {
+  const body = JSON.stringify(request);
+
+  return await this.http
+    .post(`${this.APIUrl}/GetAllRequests`, body, this.headersOptions)
+    .pipe(
+      catchError(this.handleErrorObservable)
+    )
+    .toPromise();
+}
+
+// Get query/request by ID
+public async GetQueryRequestByID(RequestID: number) {
+
+  return await this.http.get(`${this.APIUrl}/GetQueryRequestByID/${RequestID}`, this.headersOptions)
+    .pipe(
+      catchError(this.handleErrorObservable)
+    )
+    .toPromise();
+}
+
+// Save a new query/request
+public async SaveQueryRequest(request: any) {
+  const body = JSON.stringify(request);
+
+  return await this.http
+    .post(`${this.APIUrl}/SaveQueryRequest`, body, this.headersOptions)
+    .pipe(
+      catchError(this.handleErrorObservable)
+    )
+    .toPromise();
+}
+
+// Update an existing query/request
+public async UpdateRequest(request: any) {
+  const body = JSON.stringify(request);
+
+  return await this.http
+    .post(`${this.APIUrl}/UpdateRequest`, body, this.headersOptions)
+    .pipe(
+      catchError(this.handleErrorObservable)
+    )
+    .toPromise();
+}
+
+// Delete query/request by ID
+public async DeleteQueryRequest(RequestID: number, ModifyBy: number) {
+  return await this.http
+    .delete(
+      `${this.APIUrl}/DeleteQueryRequest/${RequestID}/${ModifyBy}`,
+      this.headersOptions
+    )
+    .pipe(
+      catchError(this.handleErrorObservable)
+    )
+    .toPromise();
+}
 }
