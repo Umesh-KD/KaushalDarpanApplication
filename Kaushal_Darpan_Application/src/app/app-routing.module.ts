@@ -167,12 +167,15 @@ const routes: Routes = [
       { path: 'designationmaster', loadChildren: () => import('./Views/designation-master/designation-master.routing.module').then(m => m.DesignationRoutingModule), title: 'Designation Master' },
 
 
-      // divya's route start
+      // divya's Created Routes start
       
       { path: 'QueryRequestSubmission', loadChildren: () => import('./Views/QueryRequestSubmission/query-request-submission.routing.module').then(m => m.QueryRequestSubmissionModule), title: 'Query & Request Submission' },
+      
+      { path: 'AdmissionAllotmentReport', loadChildren: () => import('./Views/ITI/admission-allotment-report/admission-allotment-report.module').then(m => m.AdmissionAllotmentReportModule), title: 'Admission Allotment Report' },
+      { path: 'DynamicLogsReport', loadChildren: () => import('./Views/BTER/bter-dynamic-report/bter-dynamic-report.module').then(m => m.BterDynamicReportModule), title: 'Bter Dynamic Report' },
+      
 
-
-      // divya's route end
+      // divya's Created Routes end
 
       { path: 'levelmaster', loadChildren: () => import('./Views/level-master/level-master.routing.module').then(m => m.LevelRoutingModule), title: 'Level Master' },
       { path: 'CenterCreate', loadChildren: () => import('./Views/CenterAllotment/center-allotment/center-allotment.routing.module').then(m => m.CenterAllotmentRoutingModule), title: 'Create Center' },
@@ -257,10 +260,7 @@ const routes: Routes = [
       { path: 'AddCompany', loadChildren: () => import('./Views/CompanyMaster/add-company-master/add-company-module').then(m => m.CompanyMasterModule), title: 'Add Company' },
       { path: 'CompanyMaster', loadChildren: () => import('./Views/CompanyMaster/company-master/company-master.module').then(m => m.CompanyMasterListModule), title: 'Company Master' },
       { path: 'DynamicTableMaster', loadChildren: () => import('./Views/DynamicTable-master/dynamic-table-master.module').then(m => m.DynamicTableMasterListModule), title: 'Dynamic Table Master' },
-      
-      { path: 'AdmissionAllotmentReport', loadChildren: () => import('./Views/ITI/admission-allotment-report/admission-allotment-report.module').then(m => m.AdmissionAllotmentReportModule), title: 'Admission Allotment Report' },
-      { path: 'DynamicLogsReport', loadChildren: () => import('./Views/BTER/bter-dynamic-report/bter-dynamic-report.module').then(m => m.BterDynamicReportModule), title: 'Bter Dynamic Report' },
-      
+
 
       { path: 'IIPDashboard', loadChildren: () => import('./Views/IIPCompnyMaster/iip-dashboard/iip-dashboard.module').then(m => m.IipDashboardModule), title: 'IIP Dashboard' },
       { path: 'AddIIPCompany', loadChildren: () => import('./Views/IIPCompnyMaster/add-iip-company-master/add-iip-company-master.module').then(m => m.AddIipCompanyMasterModule), title: 'Add IIP Company' },
