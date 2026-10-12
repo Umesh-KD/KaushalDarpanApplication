@@ -44,19 +44,19 @@
           </div>
 
           <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Revised
-    </label>
-    <select class="form-select" [(ngModel)]="searchRequest.IsRevised" name="IsRevised" formControlName="IsRevised">
-      <option value="-1">--Select--</option>
-      <option value="1">Yes</option>
-      <option value="0">No</option>
-    </select>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Revised
+            </label>
+            <select class="form-select" [(ngModel)]="searchRequest.IsRevised" name="IsRevised" formControlName="IsRevised">
+              <option value="-1">--Select--</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
 
-    <div *ngIf="isSubmitted && downLoadFG.get('IsRevised')?.hasError('defaultValue')" class="text-danger">
-      This field is required!
-    </div>
-  </div>-->
+            <div *ngIf="isSubmitted && downLoadFG.get('IsRevised')?.hasError('defaultValue')" class="text-danger">
+              This field is required!
+            </div>
+          </div>-->
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -164,13 +164,28 @@
 
       <!-- Buttons -->
       <div *ngIf="buttonGroups?.length > 0" class="flex flex-wrap gap-2">
-        <a *ngFor="let group of buttonGroups"
-           href="javascript:void(0);"
-           (click)="DownloadChunkDiplomaCertificate(group.startIndex, group.endIndex)"
-           class="btn bg-info btn-sm text-white whitespace-nowrap">
-          <i class="ti ti-download"></i>
-          Download Diploma Certificate Chunk ({{ group.label }})
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="OpenModelPopup(Model_AssignSrNo)" *ngIf="IsFinalSubmit === false">
+          <i class="ti ti-download"></i> Assign Sr.No.
         </a>
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="OpenModelPopup(Model_MassChangeSrNo)" *ngIf="IsFinalSubmit === false">
+          <i class="ti ti-download"></i>Mass Change Sr.No.
+        </a>
+        <a href="javascript:void(0);" class="btn bg-danger btn-sm text-white" (click)="BtnFinalLock()" *ngIf="IsFinalSubmit === false">
+          <i class="ti ti-lock"></i> Lock & Submit
+        </a>
+
+        
+
+        <ng-container *ngIf="IsFinalSubmit === true">
+          <a *ngFor="let group of buttonGroups"
+             href="javascript:void(0);"
+             (click)="DownloadChunkDiplomaCertificate(group.startIndex, group.endIndex)"
+             class="btn bg-info btn-sm text-white whitespace-nowrap">
+            <i class="ti ti-download"></i>
+            Download Diploma Certificate Chunk ({{ group.label }})
+          </a>
+        </ng-container>
+          
       </div>
 
     </div>
@@ -184,6 +199,7 @@
             <th class="text-left">Enrollment Number</th>
             <th class="text-left">Roll Number</th>
             <th class="text-left">Stream</th>
+            <th class="text-left">Diploma Sr.No.</th>
             <th class="text-left">Action</th>
           </tr>
         </thead>
@@ -195,7 +211,11 @@
             <td align="left">{{row.EnrollmentNo}}</td>
             <td align="left">{{row.RollNo}}</td>
             <td align="left">{{row.StreamName}}</td>
+            <td align="left">{{row.SRNO}}</td>
             <td align="left">
+              <a href="javascript:void(0);" title="Edit" class="edit-btn" (click)="OpenEditSrNoModel(Model_EditSrNo,row.StudentID,row.semesterid,row.EndTermID,row.ResultTypeID)" *ngIf="row.SRNO !=''">
+                <i class="ti ti-pencil"></i>
+              </a>
               <a class="btn bg-info btn-sm text-white" style="cursor: pointer;"
                  *ngIf="row.Dis_FileName != ''"
                  (click)="downloadFile_existing(row)">
@@ -223,3 +243,187 @@
   </div>
 </div>
 
+<!---------Assign Sr. No. Diploma Popup-->
+<ng-template #Model_AssignSrNo let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Assign Sr.No</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <!--<form [formGroup]="AdminUserFormGroup" id="AdminUserFormGroup" class="form-horizontal">-->
+      <div class="card">
+        <div class="card-body p-5">
+          <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Assign Sr.No Diploma</b>
+            </div>
+            <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+              <div>
+                <label for="txtUserName" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  Sr.No Start<span class="StarMarking">*</span>
+                </label>
+                <input type="text" class="form-input" id="txtAssignSRNO" autocomplete="off" maxlength="20" (keypress)="numberOnly($event)" placeholder="Enter serial no." [(ngModel)]="txtAssignSRNO" >
+                <!--<div *ngIf="isSubmitted && _AdminUserFormGroup.txtUserName.errors" class="text-danger">
+                  <p *ngIf="_AdminUserFormGroup.txtUserName.errors.required">
+                    <i aria-hidden="true"></i> This field is
+                    required.!
+                  </p>
+                </div>-->
+              </div>
+            </div>
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+              <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" id="btnSave" (click)="SubmitAssignSrNo()">Submit</button>
+                <!--<button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControls()">
+                  <i class="ti ti-refresh"></i> Reset
+                </button>-->
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+
+      </div>
+      <!--</form>-->
+    </div>
+
+  </div>
+</ng-template>
+
+
+<!---------Mass Change Sr. No. Diploma Popup-->
+<ng-template #Model_MassChangeSrNo let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Mass Change Sr.No</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <!--<form [formGroup]="AdminUserFormGroup" id="AdminUserFormGroup" class="form-horizontal">-->
+      <div class="card">
+        <div class="card-body p-5">
+          <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Mass Change Sr.No Diploma</b>
+            </div>
+            <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+              <div>
+                <label for="txtUserName" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  Change From(Cert.No.)<span class="StarMarking">*</span>
+                </label>
+                <input type="text" class="form-input" id="txtChangeFromCertNo" placeholder="Enter starting certificate no." maxlength="20" autocomplete="off" (keypress)="numberOnly($event)" [(ngModel)]="txtChangeFromCertNo">
+                <!--<div *ngIf="isSubmitted && _AdminUserFormGroup.txtUserName.errors" class="text-danger">
+                  <p *ngIf="_AdminUserFormGroup.txtUserName.errors.required">
+                    <i aria-hidden="true"></i> This field is
+                    required.!
+                  </p>
+                </div>-->
+              </div>
+
+              <div>
+                <label for="txtUserName" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  Change To(Cert.No.)<span class="StarMarking">*</span>
+                </label>
+                <input type="text" class="form-input" id="txtChangeToCertNo" placeholder="Enter ending certificate no." maxlength="20" autocomplete="off" (keypress)="numberOnly($event)" [(ngModel)]="txtChangeToCertNo">
+                <!--<div *ngIf="isSubmitted && _AdminUserFormGroup.txtUserName.errors" class="text-danger">
+                  <p *ngIf="_AdminUserFormGroup.txtUserName.errors.required">
+                    <i aria-hidden="true"></i> This field is
+                    required.!
+                  </p>
+                </div>-->
+              </div>
+
+              <div>
+                <label for="txtUserName" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  New Cert. No Starting From<span class="StarMarking">*</span>
+                </label>
+                <input type="text" class="form-input" id="txtNewCertNo" placeholder="Enter new starting certificate no." maxlength="20" autocomplete="off" (keypress)="numberOnly($event)" [(ngModel)]="txtAssignSRNO">
+                <!--<div *ngIf="isSubmitted && _AdminUserFormGroup.txtUserName.errors" class="text-danger">
+                  <p *ngIf="_AdminUserFormGroup.txtUserName.errors.required">
+                    <i aria-hidden="true"></i> This field is
+                    required.!
+                  </p>
+                </div>-->
+              </div>
+
+            </div>
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+              <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" id="btnSave" (click)="BtnSaveMassChangeSrNo()" >Submit</button>
+                <!--<button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ClearFields()">
+                  <i class="ti ti-refresh"></i> Reset
+                </button>-->
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+
+      </div>
+      <!--</form>-->
+    </div>
+
+  </div>
+</ng-template>
+
+
+<!---------EDIT Sr. No. Diploma Popup-->
+<ng-template #Model_EditSrNo let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Edit Sr.No</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <!--<form [formGroup]="AdminUserFormGroup" id="AdminUserFormGroup" class="form-horizontal">-->
+      <div class="card">
+        <div class="card-body p-5">
+          <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Edit Sr.No Diploma</b>
+            </div>
+            <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+              <div>
+                <label for="txtEditSrNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  Sr.No<span class="StarMarking">*</span>
+                </label>
+                <input type="text" class="form-input" id="txtEditSrNo" placeholder="Enter certificate no. " [(ngModel)]="txtEditSrNo" maxlength="20" autocomplete="off" (keypress)="numberOnly($event)">
+                <!--<div *ngIf="isSubmitted && _AdminUserFormGroup.txtUserName.errors" class="text-danger">
+                  <p *ngIf="_AdminUserFormGroup.txtUserName.errors.required">
+                    <i aria-hidden="true"></i> This field is
+                    required.!
+                  </p>
+                </div>-->
+              </div>
+            </div>
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+              <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" id="btnSave" (click)="BtnEditSrNoSave()">Submit</button>
+                <!--<button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControls()">
+                  <i class="ti ti-refresh"></i> Reset
+                </button>-->
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+
+      </div>
+      <!--</form>-->
+    </div>
+
+  </div>
+</ng-template>

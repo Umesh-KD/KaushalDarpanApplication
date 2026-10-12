@@ -4,6 +4,7 @@ export class DTELaboratoryDataModel {
   public LabName: string = '';
   public staffID: number=0; 
   public ActiveStatus: boolean = true;
+  public IsOfficerLabIncharge: boolean = false;
   public DeleteStatus: boolean = false;
   public CreatedBy: number = 0;
   public ModifyBy: number = 0;

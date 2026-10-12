@@ -77,17 +77,20 @@
       <div class="flex">
 
         <!-- <a href="javascript:void(0);"
-        class="btn bg-info btn-sm text-white"
-        (click)="ApproveIssuedItems()">
-        <i class="ti ti-check"></i> Approve Selected Items
-      </a> -->
+    class="btn bg-info btn-sm text-white"
+    (click)="ApproveIssuedItems()">
+    <i class="ti ti-check"></i> Approve Selected Items
+  </a> -->
 
         <select class="form-select" id="IssuedItemStatus" [(ngModel)]="IssuedItemStatus" name="IssuedItemStatus">
-          <option value="0">Choose Mark As (*)</option>
-          <option value="2">Approve</option>
-          <option value="3">Reject</option>
+          <option value="0">---Select Status---</option>
+          <option *ngIf="sSOLoginDataModel.RoleID != AllEnumRole.BTER_OfficerLabIncharge" value="2">Approve</option>
+          <option *ngIf="sSOLoginDataModel.RoleID != AllEnumRole.BTER_OfficerLabIncharge" value="3">Reject</option>
+          <option *ngIf="sSOLoginDataModel.RoleID === AllEnumRole.BTER_OfficerLabIncharge" value="5">Approve</option>
+          <option *ngIf="sSOLoginDataModel.RoleID === AllEnumRole.BTER_OfficerLabIncharge" value="6">Reject</option>
         </select>
-        <button type="button" class="btn bg-info text-white inline-block" (click)="ApproveIssuedItems()">Save</button>
+        <button  type="button" class="btn bg-info text-white inline-block" (click)="ApproveIssuedItems()" *ngIf="sSOLoginDataModel.RoleID != AllEnumRole.BTER_OfficerLabIncharge">Save</button>
+        <button type="button" class="btn bg-info text-white inline-block" (click)="ApproveIssuedItemsByOfficerLabIncharge()" *ngIf="sSOLoginDataModel.RoleID == AllEnumRole.BTER_OfficerLabIncharge">Submit</button>
       </div>
       <div class="">
         <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
