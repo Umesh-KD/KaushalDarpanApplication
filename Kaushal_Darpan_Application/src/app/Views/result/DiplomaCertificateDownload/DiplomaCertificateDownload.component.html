@@ -213,7 +213,7 @@
             <td align="left">{{row.StreamName}}</td>
             <td align="left">{{row.SRNO}}</td>
             <td align="left">
-              <a href="javascript:void(0);" title="Edit" class="edit-btn" (click)="OpenEditSrNoModel(Model_EditSrNo,row.StudentID,row.semesterid,row.EndTermID,row.ResultTypeID)" *ngIf="row.SRNO !=''">
+              <a href="javascript:void(0);" title="Edit" class="edit-btn" (click)="OpenEditSrNoModel(Model_EditSrNo,row.StudentID,row.semesterid,row.EndTermID,row.ResultTypeID)" *ngIf="row.SRNO !='' && IsFinalSubmit === false">
                 <i class="ti ti-pencil"></i>
               </a>
               <a class="btn bg-info btn-sm text-white" style="cursor: pointer;"

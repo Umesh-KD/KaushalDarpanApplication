@@ -474,6 +474,7 @@ export class DiplomaCertificateDownloadComponent {
        ModifyBy: this.sSOLoginDataModel.UserID,
        ResultTypeId: student.ResultTypeID,
        RoleID: this.sSOLoginDataModel.RoleID,
+       EffectiveEndTermId: this.searchRequest.EffectiveFromEndTermId > 0 ? this.searchRequest.EffectiveFromEndTermId : student.EndTermID,
      }));
      
      //console.log("AssingSrnoList", AssignSrNostudentDataList);
@@ -524,7 +525,8 @@ export class DiplomaCertificateDownloadComponent {
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseType: this.sSOLoginDataModel.Eng_NonEng,
         SemesterID: this.searchRequest.SemesterID,       // filter semesterid
-        EndTermID: this.searchRequest.EndTermID   // filter endtermid
+        EndTermID: this.searchRequest.EndTermID,   // filter endtermid
+        EffectiveEndTermId: this.searchRequest.EffectiveFromEndTermId > 0 ? this.searchRequest.EffectiveFromEndTermId : this.searchRequest.EndTermID,
       };
 
      await this.reportService.MassChangeSrNo(Obj)
@@ -581,7 +583,8 @@ export class DiplomaCertificateDownloadComponent {
        RoleID: this.sSOLoginDataModel.RoleID,
        UserID: this.sSOLoginDataModel.UserID,
        DepartmentID: this.sSOLoginDataModel.DepartmentID,
-       CourseType: this.sSOLoginDataModel.Eng_NonEng
+       CourseType: this.sSOLoginDataModel.Eng_NonEng,
+       EffectiveEndTermId: this.searchRequest.EffectiveFromEndTermId > 0 ? this.searchRequest.EffectiveFromEndTermId : this.editSrNoModel.EndTermID,
      };
 
      await this.reportService.UpdateDiplomaCertificateSrNo(Obj)
@@ -635,6 +638,8 @@ export class DiplomaCertificateDownloadComponent {
          this.searchRequest.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
          this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
          this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID;
+         this.searchRequest.EffectiveEndTermID = this.searchRequest.EffectiveFromEndTermId > 0 ? this.searchRequest.EffectiveFromEndTermId : this.searchRequest.EndTermID ;
+         
 
          await this.reportService.LockStudentDiplomaCertificateSrNo(this.searchRequest)
            .then(async (data: any) => {
