@@ -104,7 +104,7 @@ export class UpdatedEmailTemplateComponent implements OnInit {
     try {
       this.loaderService.requestStarted();
       this.isLoading = true;
-
+debugger
       const response = await this.SMSMailService.GetEmailTemplateList(0, searchText);
       const data = this.parseResponse(response);
 
@@ -215,7 +215,7 @@ export class UpdatedEmailTemplateComponent implements OnInit {
   //==========================================
 
   // Prompt confirmation and trigger SendEmail_New
-async sendTemplateEmail(item: any) {
+async sendTemplateEmail(item: any, isTest: boolean = false) {
   if (!item.TemplateCode) {
     this.toastr.warning('Template code is missing for this record.');
     return;
@@ -238,7 +238,7 @@ async sendTemplateEmail(item: any) {
         RoleId: 0,
         ApplicationNo: '',
         MobileNo: '',
-        MessageType: 'Email'
+        MessageType: isTest ? 'Test' : 'Email'
       }
     ];
 
@@ -251,7 +251,7 @@ async sendTemplateEmail(item: any) {
 
       if (data.State === EnumStatus.Success) {
         this.toastr.success(
-          data.Message || 'Emails dispatched successfully.'
+          data.Message || (isTest ? 'Test email processed successfully.' : 'Emails dispatched successfully.')
         );
       } else {
         this.toastr.error(

@@ -138,7 +138,7 @@
                     </div>-->
 
                     <div class="d-flex justify-content-end w-100 gap-3">
-                      <a [routerLink]="'/singleIIPDetails'" [queryParams]="{id:item.CompanyID}" class="btn  btn-primary text-white  me-2" *ngIf="item.IsShowMoreDetails==true">View More Details</a>
+                      <a [routerLink]="'/singleIIPDetails'" [queryParams]="{id:item.CompanyID, dept:eventSearchRequest.DepartmentID}" class="btn  btn-primary text-white  me-2" *ngIf="item.IsShowMoreDetails==true">View More Details</a>
                       <!-- <a target="_blank" class="btn btn-info text-white "
                         [routerLink]="'/iip-event-consent-list-public'" [queryParams]="{id:item.EventID}">View Consent</a> -->
                       <!--<a href="https://sso.rajasthan.gov.in/" target="_blank" class="btn btn-info text-white ">Give Consent</a>-->

@@ -64,7 +64,15 @@ export class IIPWebAllPostComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.activatedRoute.queryParamMap.subscribe(params => {
+      const type = params.get('type');
 
+      if (type === 'polytechnic') {
+        this.eventSearchRequest.DepartmentID = EnumDepartment.BTER;
+      } else if (type === 'iti') {
+        this.eventSearchRequest.DepartmentID = EnumDepartment.ITI;
+      }
+    });
     
     await this.GetAllData();
     await this.GetStreamMasterList();
@@ -91,7 +99,7 @@ export class IIPWebAllPostComponent {
 
   async GetAllData() {
     //debugger
-    this.eventSearchRequest.DepartmentID = EnumDepartment.BTER;
+    // this.eventSearchRequest.DepartmentID = EnumDepartment.BTER;
     try {
       this.loaderService.requestStarted();
       await this.homeService.GetAllPost_IIP(this.eventSearchRequest)

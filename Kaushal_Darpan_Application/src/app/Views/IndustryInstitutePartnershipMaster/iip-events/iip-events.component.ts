@@ -63,17 +63,17 @@ export class iipeventsComponent {
                     || '/IndustryInstitutePartnershipList';
    
     debugger
-    if (this.sSOLoginDataModel.RoleID == EnumRole.IIP_Incharge) {
-      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+    if (this.sSOLoginDataModel.RoleID == EnumRole.IIP_Incharge || this.sSOLoginDataModel.RoleID == EnumRole.ITI_IIP_Incharge ) {
       await this.GetInstituteMasterDDL();
       await this.GetEventInsituteCompany();
       this.IsDisable = true;
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
     } else {
       this.IsDisable = false;
       await this.GetInstituteMasterDDL();
     }
 
-    if(this.sSOLoginDataModel.RoleID == EnumRole.IIPAdmin){
+    if(this.sSOLoginDataModel.RoleID == EnumRole.IIPAdmin || this.sSOLoginDataModel.RoleID == EnumRole.ITI_IIP_Admin){
       this.searchRequest.ApproveStatus = 0;
     }
     
@@ -97,6 +97,8 @@ export class iipeventsComponent {
       }
       
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
       
       debugger
       await this.industryInstitutePartnershipMasterService.GetCompanyEvents(this.searchRequest)
@@ -160,7 +162,8 @@ export class iipeventsComponent {
       var body =
       {
         MasterCode: "GetEventInsitute",
-        FilterBy:this.sSOLoginDataModel.RoleID
+        FilterBy:this.sSOLoginDataModel.RoleID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID
       }
       await this.commonMasterService.CommonMasterDataByAction(body)
         .then((data: any) =>
@@ -179,9 +182,9 @@ export class iipeventsComponent {
       var body =
       {
         MasterCode: "GetEventInsituteCompany",
-        FilterBy: this.searchRequest.InstituteID
+        FilterBy: this.searchRequest.InstituteID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID
       }
-      debugger
       await this.commonMasterService.CommonMasterDataByAction(body)
         .then((data: any) => {
           this.InstituteCompanyMasterList = data.Data;

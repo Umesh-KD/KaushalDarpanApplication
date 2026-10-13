@@ -369,3 +369,14 @@ h2 {
   transform: scale(1.1);
   background-color: #ecfdf5;
 }
+
+.btn-action-test {
+  color: #8b5cf6; /* Violet accent */
+  transition: transform 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.btn-action-test:hover {
+  color: #6d28d9;
+  transform: scale(1.1);
+  background-color: #f5f3ff;
+}
