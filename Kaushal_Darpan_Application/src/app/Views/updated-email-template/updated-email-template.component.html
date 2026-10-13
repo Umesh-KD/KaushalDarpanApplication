@@ -6,7 +6,7 @@
         <mat-icon class="header-icon">mark_email_read</mat-icon>
         <h2>Email Template Master</h2>
       </div>
-      <p class="subtitle">Design layouts, define recipient logic, and inject dynamic SQL placeholders.</p>
+      <p class="subtitle">Design layouts, define recipient logic, and manage configured templates.</p>
     </div>
 
     <div class="header-actions">
@@ -23,8 +23,98 @@
     </div>
   </header>
 
-  <form [formGroup]="templateForm" (ngSubmit)="saveTemplate()" class="form-content">
-    <mat-tab-group animationDuration="200ms" class="styled-tab-group" dynamicHeight>
+  <form [formGroup]="templateForm" class="form-content">
+    <mat-tab-group [(selectedIndex)]="selectedTabIndex" animationDuration="200ms" class="styled-tab-group" dynamicHeight>
+
+      <!-- ================= TAB 0: ALL TEMPLATES LIST ================= -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">format_list_bulleted</mat-icon>
+          Template List ({{ templateList.length }})
+        </ng-template>
+
+        <div class="tab-body-pane">
+          <mat-card class="glass-card">
+            <!-- Table Action & Search Toolbar -->
+            <div class="list-toolbar">
+              <mat-form-field appearance="outline" class="search-field">
+                <mat-label>Search Templates</mat-label>
+                <input matInput [(ngModel)]="searchKeyword" [ngModelOptions]="{standalone: true}"
+                       (keyup.enter)="GetTemplateList(searchKeyword)" placeholder="Search by name, code or subject...">
+                <mat-icon matSuffix class="search-click-icon" (click)="GetTemplateList(searchKeyword)">search</mat-icon>
+              </mat-form-field>
+
+              <div class="toolbar-btns">
+                <button mat-stroked-button type="button" (click)="GetTemplateList(searchKeyword)">
+                  <mat-icon>refresh</mat-icon> Refresh
+                </button>
+                <button mat-flat-button color="primary" type="button" (click)="newTemplate()">
+                  <mat-icon>add</mat-icon> Create New
+                </button>
+              </div>
+            </div>
+
+            <!-- Templates Table -->
+            <div class="table-responsive">
+              <table class="custom-data-table">
+                <thead>
+                  <tr>
+                    <th style="width: 80px;">ID</th>
+                    <th>Template Code</th>
+                    <th>Template Name</th>
+                    <th>Subject</th>
+                    <th style="width: 100px;">Format</th>
+                    <th style="width: 100px;">Status</th>
+                    <th style="width: 140px; text-align: center;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of templateList">
+                    <td>#{{ item.ID }}</td>
+                    <td><code class="code-pill">{{ item.TemplateCode }}</code></td>
+                    <td class="font-medium">{{ item.TemplateName }}</td>
+                    <td class="text-truncate-cell" [title]="item.EmailSubject">{{ item.EmailSubject }}</td>
+                    <td>
+                      <span class="badge" [ngClass]="item.IsHtml ? 'badge-blue' : 'badge-gray'">
+                        {{ item.IsHtml ? 'HTML' : 'Plain Text' }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge" [ngClass]="item.IsActive ? 'badge-active' : 'badge-inactive'">
+                        {{ item.IsActive ? 'Active' : 'Inactive' }}
+                      </span>
+                    </td>
+                    
+                    <td class="action-cell">
+                      <!-- Send Email Button -->
+                      <button mat-icon-button 
+                              type="button" 
+                              class="btn-action-send" 
+                              title="Send Email" 
+                              (click)="sendTemplateEmail(item)">
+                        <mat-icon>send</mat-icon>
+                      </button>
+                      <button mat-icon-button type="button" color="primary" title="Edit Template" (click)="editTemplate(item)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button mat-icon-button type="button" color="accent" title="Preview Body" (click)="previewTemplateItem(item)">
+                        <mat-icon>visibility</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="templateList.length === 0">
+                    <td colspan="7" class="empty-state-cell">
+                      <mat-icon>inbox</mat-icon>
+                      <p>No email templates found</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </mat-card>
+        </div>
+      </mat-tab>
       
       <!-- ================= TAB 1: General Info ================= -->
       <mat-tab>
@@ -67,7 +157,7 @@
                 <mat-label>Email Subject</mat-label>
                 <input matInput formControlName="EmailSubject" placeholder="Welcome User! Your Application Status" maxlength="500">
                 <mat-icon matSuffix class="field-icon-subtle">title</mat-icon>
-                <mat-hint>Supports dynamic tags like {{ openBraces }}Name{{ closeBraces }}</mat-hint>
+                <mat-hint>Supports dynamic tags like {{ '{{' }}Name{{ '}}' }}</mat-hint>
                 <mat-error *ngIf="f['EmailSubject'].hasError('required')">Email Subject is required</mat-error>
               </mat-form-field>
             </div>
@@ -92,7 +182,7 @@
               </div>
               <div class="chip-container">
                 <button type="button" class="variable-chip" *ngFor="let tag of availableVariables" (click)="insertTag(tag)">
-                  + {{ openBraces + tag + closeBraces }}
+                  + {{ '{{' + tag + '}}' }}
                 </button>
               </div>
             </div>
