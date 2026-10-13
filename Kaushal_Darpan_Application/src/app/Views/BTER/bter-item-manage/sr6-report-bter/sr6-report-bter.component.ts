@@ -57,6 +57,7 @@ export class SR6ReportBTERComponent {
   @ViewChild('AuctionItems_Modal') MyModel_AuctionItem: ElementRef | any;
   modalReference: NgbModalRef | undefined;
   public maxDate: string = '';
+    MenuAllowedRoleList: any;
 
   constructor(
     private toastr: ToastrService,
@@ -75,6 +76,8 @@ export class SR6ReportBTERComponent {
   ) { }
 
   async ngOnInit() {
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     // Check if the current route is 'bter-staff-inventory-details'
     this.AuctionFormGroup = this.formBuilder.group({
       AuctionQuantity: ['', Validators.required],
@@ -87,7 +90,7 @@ export class SR6ReportBTERComponent {
     })
 
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+   
     this.UserID = this.sSOLoginDataModel.UserID;    
     const today = new Date();
     this.maxDate = today.toISOString().split('T')[0]; // format: yyyy-MM-dd
@@ -531,5 +534,29 @@ doc.save(`Inventory_Items_Report_${timestamp}.pdf`);
     this.AvailableQuantity = item.AvailableQuantity
     this.request.AuctionQuantity = item.AvailableQuantity
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

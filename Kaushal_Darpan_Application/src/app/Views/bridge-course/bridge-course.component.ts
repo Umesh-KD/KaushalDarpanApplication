@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserMasterService } from '../../Services/UserMaster/user-master.service';
 import { SweetAlert2 } from '../../Common/SweetAlert2'
 import { AppsettingService } from '../../Common/appsetting.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MenuService } from '../../Services/Menu/menu.service';
 import { BridgeCourseStudentService } from '../../Services/BridgeCourse/ApplyBridgeCourse.service';
 import * as XLSX from 'xlsx';
@@ -60,6 +60,7 @@ export class BridgeCourseComponent {
   public totalInTableRecord: number = 0;
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
+  public MenuAllowedRoleList: any = [];
   //end table feature default
 
   constructor(private commonMasterService: CommonFunctionService,
@@ -72,7 +73,8 @@ export class BridgeCourseComponent {
     private Swal2: SweetAlert2,
     public appsettingConfig: AppsettingService,
     private activatedRoute: ActivatedRoute,
-    private menuService: MenuService
+    private menuService: MenuService,
+    private router: Router,
   ) {
 
   }
@@ -80,10 +82,35 @@ export class BridgeCourseComponent {
   async ngOnInit() {
     //session
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.UserID = this.sSOLoginDataModel.UserID
     //load
     await this.GetMasterData();
     await this.GetDateConfig();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async GetMasterData() {

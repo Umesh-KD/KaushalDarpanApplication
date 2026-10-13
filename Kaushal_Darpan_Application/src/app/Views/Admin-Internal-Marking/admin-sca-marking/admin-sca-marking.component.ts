@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
@@ -49,6 +49,7 @@ export class AdminSCAMarkingComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
   public GradeList: StudentCenteredActivitesModels[] = []
   public InstituteMasterDDLList: any = []
+  public MenuAllowedRoleList: any = []
   public _EnumRole = EnumRole;
 
   //table feature default
@@ -70,12 +71,15 @@ export class AdminSCAMarkingComponent {
     private SCAService: StudentCenteredActivitesService, private toastr: ToastrService,
     private loaderService: LoaderService, private router: ActivatedRoute,
     private modalService: NgbModal, private Swal2: SweetAlert2, private streamMasterService: StreamMasterService, private appsettingConfig: AppsettingService,
-    private documentDetailsService: DocumentDetailsService, private cdr: ChangeDetectorRef) {
+    private documentDetailsService: DocumentDetailsService, private cdr: ChangeDetectorRef,
+    private routers: Router,
+  ) {
   }
 
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
     await this.GetMasterData();
 
@@ -522,5 +526,29 @@ export class AdminSCAMarkingComponent {
 
   isAllChecked(): boolean {
     return this.GradeList?.every(item => item.IsSCAChecked == true);
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 }
