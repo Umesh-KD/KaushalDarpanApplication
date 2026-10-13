@@ -65,4 +65,7 @@ export class bterCollegeSearchModel
     public DistrictId: number = 0
     public PageNumber: number = 0;
     public PageSize: number = 0;
+    public ManagementTypeId: number = 0;
+    public StreamTypeID: number = 0;
+    public StreamID: number = 0;
 }

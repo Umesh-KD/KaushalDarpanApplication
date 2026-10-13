@@ -22,11 +22,11 @@
 
     <div class="row">
 
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+      <!-- <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
         <label class="form-label">Search.</label>
         <input type="text" class="form-control" placeholder="Search Code/Name/Division/District.."
                [(ngModel)]="request.SearchText">
-      </div>
+      </div> -->
 
       <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
         <label class="form-label">Division</label>
@@ -39,8 +39,7 @@
 
       <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
         <label class="form-label">District</label>
-        <select class="form-select" id="DistrictId" (change)="ddlDistrict_Change()">
-
+        <select class="form-select" id="DistrictId" [(ngModel)]="request.DivisionId" (change)="ddlDistrict_Change()">
           <option value="0">--Select--</option>
           <option *ngFor="let item of DistrictMasterList" [value]="item.ID">
             {{item.Name}}
@@ -48,6 +47,37 @@
         </select>
 
       </div>
+      
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3"> 
+        <label class="form-label">Management Type</label>
+        <select class="form-select" id="TradeTypeID"
+                [(ngModel)]="request.ManagementTypeId">
+          <option value="0">--Choose--</option>
+          <option value="1">Govt </option>
+          <option value="5">Pvt </option>
+        </select>
+      </div>
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Branch Type</label>
+        <select class="form-select" id="TradeTypeID" (change)="Streamtype()"
+                [(ngModel)]="request.StreamTypeID">
+          <option value="0">--Choose--</option>
+          <option value="1">Engineering </option>
+          <option value="2">Non-Engineering </option>
+        </select>
+
+      </div>
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Branch</label>
+        <select class="form-select" id="TradeTypeID"
+                [(ngModel)]="request.StreamID">
+          <option value="0">--Choose--</option>
+          <option *ngFor="let item of StreamMasterList" [value]="item.StreamID">{{item.StreamName}}</option>
+        </select>
+      </div>
+
       <label style="color:red">{{ValidationMessage}}</label>
       <!--<div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
         <label class="form-label">Sub Division</label>
