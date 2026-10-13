@@ -1,11 +1,7 @@
 export class ITI_BGT_HeadMasterDataModel {
-  // Personal Details
-
   public HeadName?: string = '';
   public HeadCode?: string = '';
   public HeadDescription?: string = '';
-
-  // Additional Fields
   public ActiveStatus: boolean = true;
   public DeleteStatus: boolean = false;
 

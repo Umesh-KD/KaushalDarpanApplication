@@ -334,6 +334,10 @@ export class DTEDashApplicationSearchModel {
 
   public ITICode: string = '';
   public TradeCode: string = '';
+  public StreamID?: number = 0;
+
+
+
 }
 
 export class EnglishQualificationDataModel {

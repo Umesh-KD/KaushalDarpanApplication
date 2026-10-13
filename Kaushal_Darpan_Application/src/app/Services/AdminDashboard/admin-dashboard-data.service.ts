@@ -127,4 +127,12 @@ export class AdminDashboardDataService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetExecutiveDashboard_StateLevel_Web(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetExecutiveDashboard_StateLevel_Web", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

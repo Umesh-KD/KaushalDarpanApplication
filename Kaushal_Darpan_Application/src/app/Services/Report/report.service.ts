@@ -10,7 +10,7 @@ import { DataPagingListModel } from '../../Models/DataPagingListModel';
 import { DownloadnRollNoModel } from '../../Models/GenerateRollDataModels';
 import { ItiApplicationSearchmodel } from '../../Models/ItiApplicationPreviewDataModel';
 import { BterSearchmodel } from '../../Models/ApplicationFormDataModel';
-import { DownloadMarksheetSearchModel } from '../../Models/DownloadMarksheetDataModel';
+import { DiplomaCertificateDownloadSearchModel, DownloadMarksheetSearchModel } from '../../Models/DownloadMarksheetDataModel';
 import { BlankReportModel } from '../../Models/ExamMasterDataModel';
 import { OptionalFormatReportSearchModel } from '../../Models/BTER/OptionalFormatReportdataModel';
 import { NonElectiveFormFillingReportSearchModel } from '../../Models/BTER/NonElectiveFormFillingReportDataModel';
@@ -2168,7 +2168,44 @@ export class ReportService {
       ).toPromise();
   }
 
-  
+  public async AssignStudentSrNo_Bulk(request: any[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/AssignStudentSrNo_Bulk`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async UpdateDiplomaCertificateSrNo(request: any) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/UpdateDiplomaCertificateSrNo`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async MassChangeSrNo(request: any) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/MassChangeSrNoDiploma`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async LockStudentDiplomaCertificateSrNo(searchRequest: DiplomaCertificateDownloadSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/LockStudentDiplomaCertificateSrNo", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async GetBterdynamicReport(searchRequest: any) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetBterdynamicReport`, body, this.headersOptions)
+      .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   
 }
 

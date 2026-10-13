@@ -97,4 +97,13 @@ export class GrievanceService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async TransferGrievance(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/TransferGrievance`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

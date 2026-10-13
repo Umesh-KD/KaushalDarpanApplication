@@ -255,6 +255,9 @@ export enum EnumRole {
 
   ITI_Instructor = 222,
 
+  // BTER OfficerLabIncharge
+  BTER_OfficerLabIncharge =280
+
 }
 
 export enum DuplicateDocumentType {

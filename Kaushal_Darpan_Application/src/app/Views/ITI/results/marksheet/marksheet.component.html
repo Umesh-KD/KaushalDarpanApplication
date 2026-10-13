@@ -118,7 +118,7 @@
                   <a href="javascript:void(0);" title="Download Consolidated Marksheet" (click)="ConsolidatedDownload(item.EnrollmentNo)"><i class="ti ti-download"></i></a>
                 </div>
                 <div *ngIf="item.certificate_number!=''" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                  <a href="javascript:void(0);" title="Download SCVT Certificate" (click)="DownloadSCVTCertificate(item.EnrollmentNo)"><i class="ti ti-download"></i></a>
+                  <a href="javascript:void(0);" title="Download SCVT Certificate" (click)="DownloadSCVTCertificate(item.EnrollmentNo,item.RollNo)"><i class="ti ti-download"></i></a>
                 </div>
               </div>
             </td>

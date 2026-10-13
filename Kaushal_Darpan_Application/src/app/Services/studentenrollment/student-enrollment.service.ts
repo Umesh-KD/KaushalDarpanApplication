@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
 import { ForSMSEnrollmentStudentMarkedModel, StudentMarkedModel, StudentMarkedModelForJoined, StudentMasterModel } from '../../Models/StudentMasterModels';
-import { PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../Models/PreExamStudentDataModel';
+import { OptionalSubjectRequestModel, PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../Models/PreExamStudentDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -131,6 +131,24 @@ export class StudentEnrollmentService {
     return this.http.post(`${this.APIUrl}/GetRejectAtBter_StudentDetails_Enrollment`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetOptionalSubjectsByStudentID_enr(StudentID: number, DepartmentID: number, SemesterID: number) {
+    return await this.http.get(`${this.APIUrl}/GetOptionalSubjectsByStudentID_enr/${StudentID}/${DepartmentID}/${SemesterID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async Save_Student_Optional_Subject(request: OptionalSubjectRequestModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(this.APIUrl + '/Save_Student_Optional_Subject', body, this.headersOptions)
+      .pipe(
+        catchError(error => {
+          console.error('Error:', error);
+          return throwError(error);
+        })
       ).toPromise();
   }
 }

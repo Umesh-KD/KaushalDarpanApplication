@@ -410,12 +410,13 @@ export class marksheetDownloadComponent implements AfterViewInit {
     }
   }
 
-  async DownloadSCVTCertificate(EnrollmentNo: any) {
+  async DownloadSCVTCertificate(EnrollmentNo: any, RollNo:any) {
     try {
-
+      debugger
       this.loaderService.requestStarted();
       const request = new ITIStateTradeCertificateSearchModel();
       request.EnrollmentNo = EnrollmentNo;
+      request.RollNo = RollNo;
       request.EndTermID = this.sSOLoginDataModel.EndTermID;
       request.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
       await this.ReportServices.ITIStateTradeCertificateReport(request)

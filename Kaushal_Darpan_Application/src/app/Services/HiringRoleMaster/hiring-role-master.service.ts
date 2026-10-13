@@ -45,6 +45,14 @@ export class HiringRoleMasterService {
       ).toPromise();
   }
 
+  public async GetAllDepartmentMapping() {
+    return await this.http.get(this.APIUrl + "/GetAllDepartmentMapping", this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async GetByID(PK_ID: number) {
     return await this.http.get(this.APIUrl + "/GetByID/" + PK_ID, this.headersOptions)
       .pipe(
@@ -85,6 +93,26 @@ export class HiringRoleMasterService {
     const body = JSON.stringify(request);
 
     return await this.http.post(this.APIUrl + '/SaveDataSanction', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async SaveGrevianceModule(request: any) {
+
+    const body = JSON.stringify(request);
+
+    return await this.http.post(this.APIUrl + '/SaveGrevianceModule', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async SaveGrevianceRoleMapping(request: any) {
+
+    const body = JSON.stringify(request);
+
+    return await this.http.post(this.APIUrl + '/SaveGrevianceRoleMapping', body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -88,4 +88,12 @@ export class PromotedStudentService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetExamStudentForPromotion(request: PromotedStudentSearchModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetExamStudentForPromotion`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

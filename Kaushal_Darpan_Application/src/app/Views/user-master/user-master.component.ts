@@ -251,6 +251,7 @@ export class UserMasterComponent implements OnInit {
     }
     this.loaderService.requestStarted();
     this.isLoading = true;
+    this.request.ModifyBy=this.sSOLoginDataModel.UserID
     try {
       await this.UserMasterService.SaveData(this.request)
         .then((data: any) => {

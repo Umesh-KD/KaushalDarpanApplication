@@ -170,23 +170,31 @@ export class CFormComponent implements OnInit {
       this.requestModel.ExamType = this.searchRequest.ExamType;
       this.requestModel.InstituteId = this.sSOLoginDataModel.InstituteID;
       this.requestModel.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
-      await this.itiResultService.GetCFormReport(this.requestModel).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State == EnumStatus.Success) {
-          this.toastr.success("Result Generated Successfully");
-          this.ReportData = data.Data.Table1; // Assuming data.Data contains the result data
-          debugger;
+      this.requestModel.RoleID = this.sSOLoginDataModel.RoleID;
+debugger
+          await this.itiResultService.GetCFormReport(this.requestModel).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            if(data.Data==null || data.Data.Table1==null || data.Data.Table1.length==0){
+              this.toastr.error("No Data Found");
+              return;
+            }
+            else{
+              this.ReportData = data.Data.Table1??[]; // Assuming data.Data contains the result data
+              //var Trade = data.Data.filter(function (x: any) {  }).select(x=>x.TradeName);
+              //this.TradeList.push() 
+            // this.TradeList = data.Data.Table1[0];
+            // this.ReportHtml = data.Data.Table1[0].Reportdata;
+              this.toastr.success("Result Generated Successfully");
+              this.ReportHtml = this.sanitizer.bypassSecurityTrustHtml(data.Data.Table1[0].Reportdata);
+              // this.GetAllDataForVerify();
+            }
 
-          //var Trade = data.Data.filter(function (x: any) {  }).select(x=>x.TradeName);
-          //this.TradeList.push() 
-         // this.TradeList = data.Data.Table1[0];
-         // this.ReportHtml = data.Data.Table1[0].Reportdata;
-          this.ReportHtml = this.sanitizer.bypassSecurityTrustHtml(data.Data.Table1[0].Reportdata);
-          // this.GetAllDataForVerify();
-        } else {
-          this.toastr.error(data.ErrorMessage);
-        }
-      })
+
+          } else {
+            this.toastr.error(data.ErrorMessage);
+          }
+        })
 
 
 
@@ -235,40 +243,42 @@ export class CFormComponent implements OnInit {
       this.requestModel.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.requestModel.SemesterID = this.searchRequest.SemesterID;
       this.requestModel.ExamType = this.searchRequest.ExamType;
-      await this.itiResultService.DownloadCFormReport(this.requestModel)
-        .then((data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          data = JSON.parse(JSON.stringify(data));
-          debugger
-          if (data && data.Data) {
-            const base64 = data.Data;
+      this.requestModel.RoleID = this.sSOLoginDataModel.RoleID;
 
-            const byteCharacters = atob(base64);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-              byteNumbers[i] = byteCharacters.charCodeAt(i);
+          await this.itiResultService.DownloadCFormReport(this.requestModel)
+          .then((data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            data = JSON.parse(JSON.stringify(data));
+            debugger
+            if (data && data.Data) {
+              const base64 = data.Data;
+
+              const byteCharacters = atob(base64);
+              const byteNumbers = new Array(byteCharacters.length);
+              for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+              }
+
+              const byteArray = new Uint8Array(byteNumbers);
+              const blob = new Blob([byteArray], { type: 'application/pdf' });
+              const blobUrl = URL.createObjectURL(blob);
+
+              const link = document.createElement('a');
+              link.href = blobUrl;
+              link.download = fileName;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              URL.revokeObjectURL(blobUrl);
+            } else {
+              this.toastr.error(this.Message)
             }
-
-            const byteArray = new Uint8Array(byteNumbers);
-            const blob = new Blob([byteArray], { type: 'application/pdf' });
-            const blobUrl = URL.createObjectURL(blob);
-
-            const link = document.createElement('a');
-            link.href = blobUrl;
-            link.download = fileName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(blobUrl);
-          } else {
-            this.toastr.error(this.Message)
-          }
-        }, (error: any) => {
-          console.error(error);
-          this.toastr.error(this.ErrorMessage)
-        });
+          }, (error: any) => {
+            console.error(error);
+            this.toastr.error(this.ErrorMessage)
+          });
 
     } catch (Ex) {
       console.log(Ex);

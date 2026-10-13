@@ -239,6 +239,14 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async GetHODWiseStreams(DepartmentID: number = 0, StreamType: number = 0, UserID: number = 0, EndTermId: number = 0)
+  {
+
+    return await this.http.get(this.APIUrl + '/GetHODWiseStreams/' + DepartmentID + '/' + StreamType + '/' + UserID + '/' + EndTermId , this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
 
@@ -1053,6 +1061,14 @@ export class CommonFunctionService {
   public async GetCommonMasterData(MasterCode: string, DepartmentID: number = 0, CourseType: number = 0, StaffTypeID: number = 0) {
 
     return await this.http.get(this.APIUrl + '/CommonMasterDataByCode/' + MasterCode + '/' + DepartmentID + '/' + CourseType + '/' + StaffTypeID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+   public async GetBterDynamicReport_ddl(model: any) {
+
+    return await this.http.post(this.APIUrl + '/GetBterDynamicReport_ddl/', model, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

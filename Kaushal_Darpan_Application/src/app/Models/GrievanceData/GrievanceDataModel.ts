@@ -29,6 +29,7 @@ export class GrievanceDataModel {
 
   public StudentID: number = 0;
   public UserID: number = 0;
+  public InstituteID: number = 0;
 }
 
 export class GrivienceReopenModelsDataModel {
@@ -56,6 +57,8 @@ export class GrivienceSearchModel {
 export class GrivienceResponseDataModel {
   public GrivienceResponseID: number = 0;
   public GrivienceID: number = 0;
+  public ModuleID: number = 0;
+  public DepartmentID: number = 0;
   public Remark: string = '';
   public ResponseFileAttachment: string = '';
   public DisResponseFileName: string = '';

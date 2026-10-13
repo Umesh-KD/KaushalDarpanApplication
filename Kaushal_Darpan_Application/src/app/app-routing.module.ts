@@ -166,6 +166,18 @@ const routes: Routes = [
       },
       { path: 'designationmaster', loadChildren: () => import('./Views/designation-master/designation-master.routing.module').then(m => m.DesignationRoutingModule), title: 'Designation Master' },
 
+
+      // divya's Created Routes start
+      
+      { path: 'QueryRequestSubmission', loadChildren: () => import('./Views/QueryRequestSubmission/query-request-submission.routing.module').then(m => m.QueryRequestSubmissionModule), title: 'Query & Request Submission' },
+      
+      { path: 'AdmissionAllotmentReport', loadChildren: () => import('./Views/ITI/admission-allotment-report/admission-allotment-report.module').then(m => m.AdmissionAllotmentReportModule), title: 'Admission Allotment Report' },
+      { path: 'DynamicLogsReport', loadChildren: () => import('./Views/BTER/bter-dynamic-report/bter-dynamic-report.module').then(m => m.BterDynamicReportModule), title: 'Bter Dynamic Report' },
+      { path: 'Updated-Email-Template', loadChildren: () => import('./Views/updated-email-template/updated-email-template.module').then(m => m.UpdatedEmailTemplateModule), title: 'Email Template' },
+     
+
+      // divya's Created Routes end
+
       { path: 'levelmaster', loadChildren: () => import('./Views/level-master/level-master.routing.module').then(m => m.LevelRoutingModule), title: 'Level Master' },
       { path: 'CenterCreate', loadChildren: () => import('./Views/CenterAllotment/center-allotment/center-allotment.routing.module').then(m => m.CenterAllotmentRoutingModule), title: 'Create Center' },
       { path: 'generate-cc-code', loadChildren: () => import('./Views/CenterAllotment/generate-cc-code/generate-cc-code.module').then(m => m.GenerateCcCodeModule), title: 'Generate CC Code' },
@@ -249,9 +261,8 @@ const routes: Routes = [
       { path: 'AddCompany', loadChildren: () => import('./Views/CompanyMaster/add-company-master/add-company-module').then(m => m.CompanyMasterModule), title: 'Add Company' },
       { path: 'CompanyMaster', loadChildren: () => import('./Views/CompanyMaster/company-master/company-master.module').then(m => m.CompanyMasterListModule), title: 'Company Master' },
       { path: 'DynamicTableMaster', loadChildren: () => import('./Views/DynamicTable-master/dynamic-table-master.module').then(m => m.DynamicTableMasterListModule), title: 'Dynamic Table Master' },
-      
-      { path: 'AdmissionAllotmentReport', loadChildren: () => import('./Views/ITI/admission-allotment-report/admission-allotment-report.module').then(m => m.AdmissionAllotmentReportModule), title: 'Admission Allotment Report' },
-      
+
+
       { path: 'IIPDashboard', loadChildren: () => import('./Views/IIPCompnyMaster/iip-dashboard/iip-dashboard.module').then(m => m.IipDashboardModule), title: 'IIP Dashboard' },
       { path: 'AddIIPCompany', loadChildren: () => import('./Views/IIPCompnyMaster/add-iip-company-master/add-iip-company-master.module').then(m => m.AddIipCompanyMasterModule), title: 'Add IIP Company' },
       { path: 'IIPCompanyMaster', loadChildren: () => import('./Views/IIPCompnyMaster/iip-company-master/iip-company-master.module').then(m => m.IipCompanyMasterModule), title: 'IIP Company Master' },
@@ -512,6 +523,7 @@ const routes: Routes = [
       { path: 'itimerit10th/:id', loadChildren: () => import('./Views/ITI/ItiMerit/iti-merit/iti-merit.module').then(m => m.ItiMeritModule), title: 'ITI Merit' },
       { path: 'itimerit12th/:id', loadChildren: () => import('./Views/ITI/ItiMerit/iti-merit/iti-merit.module').then(m => m.ItiMeritModule), title: 'ITI Merit' },
 
+      { path: 'exam-eligible-student', loadChildren: () => import('./Views/PreExam/promotion-eligible-student/promotion-eligible-student.module').then(m => m.PromotionEligibleStudentModule), title: 'Exam Eligible Student' },
       { path: 'promotedstudent', loadChildren: () => import('./Views/PreExam/promoted-student/promoted-student.module').then(m => m.PromotedStudentModule), title: 'Promoted Student' },
 
       // { path: 'btermerit', loadChildren: () => import('./Views/BterMerit/bter-merit/bter-merit.module').then(m => m.BterMeritModule), title: 'BTER Merit' },
@@ -955,6 +967,7 @@ const routes: Routes = [
       { path: 'VerifyRollnumber/:id/:status', loadChildren: () => import('./Views/verify-roll-number/verify-roll-number.module').then(m => m.VerifyRollNumberModule) },
       { path: 'SchlorshipList', loadChildren: () => import('./Views/scholarship-list/scholarship-list.module').then(m => m.ScholarshipListModule) },
       { path: 'AddSchlorship', loadChildren: () => import('./Views/add-scholarship-list/add-scholarship-list.module').then(m => m.AddScholarshipListModule) },
+      // { path: 'SeatDataList', loadChildren: () => import('./Views/ITI/ExternalDataMaster/seat-datalist/seat-datalist.module').then(m => m.SeatDataListModule) },
 
       { path: 'CreateGuestHouse', loadChildren: () => import('./Views/added-guest-house/added-guest-house.module').then(m => m.AddedGuestHouseModule) },
       { path: 'create-guest-house', loadChildren: () => import('./Views/GuestRoom-Management/Create-GuestRoom/Create-GuestRoom.module').then(m => m.CreateGuestRoomModule), title: 'Create GuestRoom' },
@@ -1827,7 +1840,8 @@ const routes: Routes = [
       { path: 'iti-finalreport', loadChildren: () => import('./Views/ITI/results/ITI-FinalReport/ITI-FinalReport.module').then(m => m.ITIFinalReportModule), title: 'iti-finalreport' },
       { path: 'SignalR-Dashboard', loadChildren: () => import('./Views/signal-r-dashboard/signal-r-dashboard.module').then(m => m.SignalRDashboardModule) },
       { path: 'Email-Template', loadChildren: () => import('./Views/email-template/email-template.module').then(m => m.EmailTemplateModule), title: 'Email Template' },
-
+      { path: 'GrevianceMapping', loadChildren: () => import('./Views/greviance-mapping/greviance-mapping.module').then(m => m.GrevianceMappingModule) },
+      { path: 'analytic-dashboard', loadChildren: () => import('./Views/analytic-dashboard/analytic-dashboard.module').then(m => m.AnalyticDashboardModule) },
     ]
   },
 
@@ -1892,7 +1906,7 @@ const routes: Routes = [
 
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
-    
+   
 
     
 
@@ -1949,6 +1963,8 @@ const routes: Routes = [
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\ITI\EmployeeDashboard', loadChildren: () => import('./Views/ITI/employee-dashboard/employee-dashboard.module').then(m => m.EmployeeDashboardModule) },
+  { path: 'Views\ITI\ITILeaveCredit', loadChildren: () => import('./Views/ITI/iti-leave-credit/iti-leave-credit.module').then(m => m.ItiLeaveCreditModule) },
+
 
  
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },

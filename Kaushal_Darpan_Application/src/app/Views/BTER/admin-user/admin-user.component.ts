@@ -284,6 +284,7 @@ export class AdminUserComponent implements OnInit {
     this.searchRequest.UserAdditionID = UserAdditionID
     this.searchRequest.ProfileID = ProfileID
     this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+    this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID;
     this.Swal2.Confirmation("Do you want to delete?",
       async (result: any) => {
         //confirmed

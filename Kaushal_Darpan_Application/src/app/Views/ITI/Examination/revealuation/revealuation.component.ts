@@ -160,7 +160,7 @@ export class RevealuationComponent {
           if (data.State === EnumStatus.Success) {
 
             this.Request = data['Data'][0];
-            this.EndtermName = data['Data'][0].EndTermName;
+            this.EndtermName = data['Data'][0].EndTermName; 
             this.RevalRequestID=data['Data'][0].RevalRequestID;
             this.PaymentStatus=data['Data'][0].PaymentStatus;
             this.RevalStatus=data['Data'][0].RevalStatus;

@@ -61,7 +61,7 @@
           <!-- Technician Dropdown -->
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Lab-Incharge : <span class="StarMarking">*</span>
+              Physical Lab-Incharge : <span class="StarMarking">*</span>
             </label>
             <select class="form-select" formControlName="staffID">
               <option [ngValue]="0">-- Choose Staff --</option>
@@ -75,6 +75,17 @@
                 Please select a Technician.
               </p>
             </div>
+          </div>
+
+          <!-- Officer Lab Incharge -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Officer Lab-Incharge : <span class="StarMarking">*</span>
+            </label>
+            <select class="form-select" formControlName="IsOfficerLabIncharge">
+              <option [ngValue]="false">No</option>
+              <option [ngValue]="true">Yes</option>
+            </select>
           </div>
 
           <!-- Active Checkbox -->
@@ -152,7 +163,8 @@
             <th class="text-left">Institute</th>
             <th class="text-left">Stream</th>
             <th class="text-left">Laboratory</th>
-            <th class="text-left">Lab Incharge</th>
+            <th class="text-left">Physical Lab Incharge</th>
+            <th class="text-left">Is Officer Lab-Incharge</th>
             <th class="text-left">Is Active</th>
             <th class="text-center">Action</th>
           </tr>
@@ -164,7 +176,8 @@
             <td align="left">{{item.StreamName}}</td>
             <td align="left">{{item.Lab_Name}}</td>
             <td align="left">{{item.StaffName}}</td>
-            <td align="left"> 
+            <td align="left">{{item.Lab_IsOfficerLabIncharge}}</td>
+            <td align="left">
               <span [ngClass]="{
                                 'LabStatus-active': item.Lab_ActiveStatus === true,
                                 'LabStatus-inactive': item.Lab_ActiveStatus === false
@@ -175,16 +188,17 @@
             <td align="left">
               <a href="javascript:void(0)" (click)="btnEdit_OnClick(item.Lab_Id)" title="Edit"><i class="ti ti-pencil"></i></a>
               <a href="javascript:void(0)" title="Delete"
-                *ngIf="_EnumRole.DTELateral == getRoleID || 
-                      _EnumRole.AdminNon == getRoleID || 
-                      _EnumRole.Admin == getRoleID || 
-                      _EnumRole.NodalVerifier == getRoleID || 
-                      _EnumRole.DTENON == getRoleID || 
-                      _EnumRole.DTE == getRoleID || 
-                      _EnumRole.DTEDegreeCourse2ndYear == getRoleID || 
+                 *ngIf="_EnumRole.DTELateral == getRoleID ||
+                      _EnumRole.AdminNon == getRoleID ||
+                      _EnumRole.Admin == getRoleID ||
+                      _EnumRole.NodalVerifier == getRoleID ||
+                      _EnumRole.DTENON == getRoleID ||
+                      _EnumRole.DTE == getRoleID ||
+                      _EnumRole.DTEDegreeCourse2ndYear == getRoleID ||
                       _EnumRole.DTEDegreeCourse1stYear == getRoleID ||
-                      _EnumRole.DIRECTOR == getRoleID " 
-                (click)="btnDelete_OnClick(item.Lab_Id)"><i class="ti ti-trash"></i> 
+                      _EnumRole.DIRECTOR == getRoleID "
+                 (click)="btnDelete_OnClick(item.Lab_Id)">
+                <i class="ti ti-trash"></i>
               </a>
             </td>
           </tr>

@@ -74,6 +74,10 @@ export class LeaveCreditComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID_Session;
+    if (this.sSOLoginDataModel.DepartmentID == 2) {
+
+      this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+    } 
 
     await this.GetCalenderYearList();
     await this.GetSessionYear();
