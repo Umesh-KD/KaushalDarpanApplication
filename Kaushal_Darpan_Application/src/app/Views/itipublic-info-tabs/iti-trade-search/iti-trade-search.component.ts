@@ -355,7 +355,8 @@ export class ItiTradeSearchComponent {
  
  async onResetClick() {
     this.request.DistrictId = 0;
-    this.request.DivisionId = 0;
+   this.request.DivisionId = 0;
+   this.request.TradeTypeID = 0;
     this.request.SearchText = "";
     //this.isVisibleList = false;
     this.ValidationMessage = "";

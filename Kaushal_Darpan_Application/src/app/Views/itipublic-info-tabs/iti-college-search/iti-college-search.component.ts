@@ -167,6 +167,7 @@ export class ItiCollegeSearchComponent {
     this.GetcOmmonData();
     this.GetStateMaterData();
     await this.ddlDistrict();
+    await this.Tradetype();
 
     /*await this.GetPanchayatSamiti('')*/
 
@@ -363,6 +364,11 @@ export class ItiCollegeSearchComponent {
 
   onResetClick() {
     this.request.DistrictId = 0;
+    this.request.DivisionId = 0;
+    this.request.TradeID = 0;
+    this.request.TradeTypeID = 0;
+    this.request.ManagementTypeId = 0;
+    this.request.SchemeTypeID = 0;
     this.request.DivisionId = 0;
     this.request.SearchText = "";
     this.isVisibleSection = false;
@@ -1111,6 +1117,13 @@ export class ItiCollegeSearchComponent {
       }
     }
   }
-
+  async Tradetype() {
+    await this.commonMasterService.GetCommonMasterData('EngNonTrade', this.request.TradeTypeID)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StreamMasterList = data['Data'];
+      }, (error: any) => console.error(error)
+      );
+  }
 
 }

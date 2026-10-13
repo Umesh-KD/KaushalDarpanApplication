@@ -24,7 +24,7 @@
 
       <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
         <label class="form-label">Search.</label>
-        <input type="text" class="form-control" placeholder="Search Code/Name/Division/District.."
+        <input type="text" class="form-control" placeholder="Search Code/Name/Tehsil/Block.."
                [(ngModel)]="request.SearchText">
       </div>
 
@@ -47,155 +47,219 @@
         </select>
 
       </div>
+
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3"> 
+        <label class="form-label">Management Type</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="TradeTypeID"
+                [(ngModel)]="request.ManagementTypeId">
+          <option value="0">--Choose--</option>
+          <option value="1">Govt </option>
+          <option value="5">Pvt </option>
+
+
+
+
+        </select>
+
+      </div>
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Trade Type</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="TradeTypeID" (change)="Tradetype()"
+                [(ngModel)]="request.TradeTypeID">
+          <option value="0">--Choose--</option>
+          <option value="1">Engineering </option>
+          <option value="2">Non-Engineering </option>
+
+
+
+        </select>
+
+      </div>
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Trade</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="TradeTypeID"
+                [(ngModel)]="request.TradeID">
+          <option value="0">--Choose--</option>
+          <option *ngFor="let item of StreamMasterList" [value]="item.ID">{{item.Name}}</option>
+
+          <!--<option value="1">Engineering </option>
+          <option value="2">Non-Engineering </option>-->
+
+        </select>
+
+      </div>
+
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Trade Scheme</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="TradeTypeID"
+                [(ngModel)]="request.SchemeTypeID">
+          <option value="0">--Choose--</option>
+          <option value="1">NCVT </option>
+          <option value="2">SCVT </option>
+
+
+
+
+        </select>
+
+      </div>
+
+
+
       <label style="color:red">{{ValidationMessage}}</label>
       <!--<div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
-        <label class="form-label">Sub Division</label>
-        <select [ngModelOptions]="{standalone: true}" class="form-select" id="SubDivisionId" [(ngModel)]="request.SubDivisionId">
-          <option value="0">--Select--</option>
-          <option *ngFor="let item of SubDivisionMasterList" [value]="item.ID">{{item.Name}}</option>
-        </select>
+    <label class="form-label">Sub Division</label>
+    <select [ngModelOptions]="{standalone: true}" class="form-select" id="SubDivisionId" [(ngModel)]="request.SubDivisionId">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of SubDivisionMasterList" [value]="item.ID">{{item.Name}}</option>
+    </select>
 
-      </div>
+  </div>
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+    <label class="form-label">Tehsil</label>
+    <select [ngModelOptions]="{standalone: true}" class="form-select" id="TehsilId" [(ngModel)]="request.TehsilId" (change)="GetGramPanchayatSamiti()">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+
+  </div>
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+    <label class="form-label">Urban/Rural:</label>
+    <select [ngModelOptions]="{standalone: true}" class="form-select" id="UrbanRural" [(ngModel)]="request.UrbanRural">
+      <option value="0">Select Urban/Rural</option>
+      <option *ngFor="let item of ResidenceList" value="{{item.ID}}">{{item.Name}}</option>
+    </select>
+
+  </div>
+
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
+    <label class="form-label" for="PanchayatSamiti">Panchayat Samiti:</label>
+    <select [ngModelOptions]="{standalone: true}" class="form-select" id="PanchayatSamiti"
+            [(ngModel)]="request.PanchayatsamityId">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+
+  </div>
+
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
+    <label class="form-label" for="GramPanchayatSamiti">Gram Panchayat:</label>
+    <select [ngModelOptions]="{standalone: true}" class="form-select" id="GramPanchayatSamiti"
+            [(ngModel)]="request.GrampanchayatId" (change)="villageMaster()">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of GramPanchayatList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+
+  </div>
+
+
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
+    <label class="form-label" for="village">Village:</label>
+    <select [ngModelOptions]="{standalone: true}" class="form-select" id="village"
+            [(ngModel)]="request.VillageId">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of VillageMasterList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+
+  </div>
+
+
+
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
+    <label class="form-label">Administrative Body:</label>
+    <select [ngModelOptions]="{standalone: true}" class="form-select" id="Administrative" [(ngModel)]="request.AdministrativeId">
+      <option value="0">Select Administrative Body</option>
+      <option value="1">Cantonment Board</option>
+      <option value="2">Nagar Nigam</option>
+      <option value="3">Nagar Palika</option>
+      <option value="4">Nagar Parishad</option>
+    </select>
+
+  </div>
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 1 && request.UrbanRural==75">
+    <label class="form-label" for="CantonmentBoard">CantonmentBoard Name:</label>
+    <input  class="form-control" type="text" id="CantonmentBoard"
+           placeholder="Enter CantonmentBoard Name" [(ngModel)]="request.CantonmentBoardName">
+
+  </div>
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 2 && request.UrbanRural==75">
+    <label class="form-label" for="NagarNigam">Nagar Nigam Name:</label>
+    <input  class="form-control" type="text" id="NagarNigam"
+           placeholder="Enter NagarNigam Name" [(ngModel)]="request.NagarNigamName">
+
+  </div>
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 3 && request.UrbanRural==75">
+    <label class="form-label" for="NagarPalika">Nagar Palika Name:</label>
+    <input  class="form-control" type="text" id="NagarPalika"
+           placeholder="Enter NagarPalika Name" [(ngModel)]="request.NagarPalikaName">
+
+  </div>
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 4 && request.UrbanRural==75">
+    <label class="form-label" for="NagarParishad">Nagar Parishad Name:</label>
+    <input  class="form-control" type="text" id="NagarParishad"
+           placeholder="Enter NagarParishad Name" [(ngModel)]="request.NagarParishadName">
+
+  </div>
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
+    <label class="form-label">City:</label>
+    <select [ngModelOptions]="{standalone: true}" class="form-select" id="CityID" [(ngModel)]="request.CityID">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of CityMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+
+  </div>
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
+    <label class="form-label" for="Ward">Ward number:</label>
+    <input  class="form-control" type="text" id="Ward" placeholder="Enter Ward"
+           [(ngModel)]="request.Ward">
+  </div>
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+    <label class="form-label">Parliament Area:</label>
+    <select [ngModelOptions]="{standalone: true}" class="form-select" id="ParliamentId"
+            [(ngModel)]="request.ParliamentId">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of ParliamentMasterList" [value]="item.ID">
+        {{item.Name}}
+      </option>
+    </select>
+  </div>
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+    <label class="form-label">Assembly Area:</label>
+    <select [ngModelOptions]="{standalone: true}" class="form-select" id="AssemblyId" [(ngModel)]="request.AssemblyId">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of AssemblyMasterList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+  </div>
+
+  <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+    <label class="form-label" for="InstitutePincode">Pincode:</label>
+    <input  class="form-control" type="text" id="pincode" placeholder="Enter Pincode"
+           (keypress)="numberOnly($event)" [(ngModel)]="request.Pincode">
+
+  </div>-->
+
+
 
       <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
-        <label class="form-label">Tehsil</label>
-        <select [ngModelOptions]="{standalone: true}" class="form-select" id="TehsilId" [(ngModel)]="request.TehsilId" (change)="GetGramPanchayatSamiti()">
-          <option value="0">--Select--</option>
-          <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
-        </select>
 
-      </div>
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
-        <label class="form-label">Urban/Rural:</label>
-        <select [ngModelOptions]="{standalone: true}" class="form-select" id="UrbanRural" [(ngModel)]="request.UrbanRural">
-          <option value="0">Select Urban/Rural</option>
-          <option *ngFor="let item of ResidenceList" value="{{item.ID}}">{{item.Name}}</option>
-        </select>
-
-      </div>
-
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
-        <label class="form-label" for="PanchayatSamiti">Panchayat Samiti:</label>
-        <select [ngModelOptions]="{standalone: true}" class="form-select" id="PanchayatSamiti"
-                [(ngModel)]="request.PanchayatsamityId">
-          <option value="0">--Select--</option>
-          <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
-        </select>
-
-      </div>
-
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
-        <label class="form-label" for="GramPanchayatSamiti">Gram Panchayat:</label>
-        <select [ngModelOptions]="{standalone: true}" class="form-select" id="GramPanchayatSamiti"
-                [(ngModel)]="request.GrampanchayatId" (change)="villageMaster()">
-          <option value="0">--Select--</option>
-          <option *ngFor="let item of GramPanchayatList" [value]="item.ID">{{item.Name}}</option>
-        </select>
-
-      </div>
-
-
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
-        <label class="form-label" for="village">Village:</label>
-        <select [ngModelOptions]="{standalone: true}" class="form-select" id="village"
-                [(ngModel)]="request.VillageId">
-          <option value="0">--Select--</option>
-          <option *ngFor="let item of VillageMasterList" [value]="item.ID">{{item.Name}}</option>
-        </select>
-
-      </div>
-
-
-
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
-        <label class="form-label">Administrative Body:</label>
-        <select [ngModelOptions]="{standalone: true}" class="form-select" id="Administrative" [(ngModel)]="request.AdministrativeId">
-          <option value="0">Select Administrative Body</option>
-          <option value="1">Cantonment Board</option>
-          <option value="2">Nagar Nigam</option>
-          <option value="3">Nagar Palika</option>
-          <option value="4">Nagar Parishad</option>
-        </select>
-
-      </div>
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 1 && request.UrbanRural==75">
-        <label class="form-label" for="CantonmentBoard">CantonmentBoard Name:</label>
-        <input  class="form-control" type="text" id="CantonmentBoard"
-               placeholder="Enter CantonmentBoard Name" [(ngModel)]="request.CantonmentBoardName">
-
-      </div>
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 2 && request.UrbanRural==75">
-        <label class="form-label" for="NagarNigam">Nagar Nigam Name:</label>
-        <input  class="form-control" type="text" id="NagarNigam"
-               placeholder="Enter NagarNigam Name" [(ngModel)]="request.NagarNigamName">
-
-      </div>
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 3 && request.UrbanRural==75">
-        <label class="form-label" for="NagarPalika">Nagar Palika Name:</label>
-        <input  class="form-control" type="text" id="NagarPalika"
-               placeholder="Enter NagarPalika Name" [(ngModel)]="request.NagarPalikaName">
-
-      </div>
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 4 && request.UrbanRural==75">
-        <label class="form-label" for="NagarParishad">Nagar Parishad Name:</label>
-        <input  class="form-control" type="text" id="NagarParishad"
-               placeholder="Enter NagarParishad Name" [(ngModel)]="request.NagarParishadName">
-
-      </div>
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
-        <label class="form-label">City:</label>
-        <select [ngModelOptions]="{standalone: true}" class="form-select" id="CityID" [(ngModel)]="request.CityID">
-          <option value="0">--Select--</option>
-          <option *ngFor="let item of CityMasterDDLList" [value]="item.ID">{{item.Name}}</option>
-        </select>
-
-      </div>
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
-        <label class="form-label" for="Ward">Ward number:</label>
-        <input  class="form-control" type="text" id="Ward" placeholder="Enter Ward"
-               [(ngModel)]="request.Ward">
-      </div>
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
-        <label class="form-label">Parliament Area:</label>
-        <select [ngModelOptions]="{standalone: true}" class="form-select" id="ParliamentId"
-                [(ngModel)]="request.ParliamentId">
-          <option value="0">--Select--</option>
-          <option *ngFor="let item of ParliamentMasterList" [value]="item.ID">
-            {{item.Name}}
-          </option>
-        </select>
-      </div>
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
-        <label class="form-label">Assembly Area:</label>
-        <select [ngModelOptions]="{standalone: true}" class="form-select" id="AssemblyId" [(ngModel)]="request.AssemblyId">
-          <option value="0">--Select--</option>
-          <option *ngFor="let item of AssemblyMasterList" [value]="item.ID">{{item.Name}}</option>
-        </select>
-      </div>
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
-        <label class="form-label" for="InstitutePincode">Pincode:</label>
-        <input  class="form-control" type="text" id="pincode" placeholder="Enter Pincode"
-               (keypress)="numberOnly($event)" [(ngModel)]="request.Pincode">
-
-      </div>-->
-
-
-
-      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
         <button type="button" class="btn btn-info text-white" (click)="onSearchClick()"><i class="ti ti-search"></i>Search</button>
         <button type="button" (click)="onResetClick()" class="btn btn-danger mx-1"><i class="ti ti-refresh"></i>Reset</button>
 

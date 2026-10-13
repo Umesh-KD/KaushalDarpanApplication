@@ -17,6 +17,7 @@ import { EmitraRequestDetails, EmitraServiceAndFeeModel, EmitraServiceAndFeeRequ
 import { EmitraPaymentService } from '../../../Services/EmitraPayment/emitra-payment.service';
 import { ApplicationMessageDataModel } from '../../../Models/ApplicationMessageDataModel';
 import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
+import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
 
 @Component({
   selector: 'app-add-college-master',
@@ -64,6 +65,8 @@ export class AddCollegeMasterComponent implements OnInit {
   public collegeRequest = new CollegeMasterRequestModel();
   public emitraServiceAndFeeRequest = new EmitraServiceAndFeeRequestModel();
   public emitraServiceAndFeeResponse = new EmitraServiceAndFeeModel();
+  public requestSSoApi = new CommonVerifierApiDataModel();
+  public isSSOVisible: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -124,11 +127,12 @@ export class AddCollegeMasterComponent implements OnInit {
     await this.GetCouseType();
     await this.loadDropdownData('ManagementTypeCollege');
 
-    //if (this.collegeRequest.InstituteID > 0) {
-    //  await this.GetByID();
-    //}
+    if (this.collegeRequest.InstituteID > 0 || this.sSOLoginDataModel.InstituteID > 0) {
+     await this.GetByID();
+    }
+    
 
-    await this.GetByID();// InstituteId or SSOID
+    // await this.GetByID();// InstituteId or SSOID
     //set course type
     await this.ChangeCollegeType();
     //debugger
@@ -501,11 +505,15 @@ export class AddCollegeMasterComponent implements OnInit {
 
   async GetByID() {
     try {
+      debugger
       this.collegeRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.collegeRequest.SSOID = this.sSOLoginDataModel.SSOID;
       this.collegeRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.collegeRequest.RoleID = this.sSOLoginDataModel.RoleID;
-      this.collegeRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      if (this.collegeRequest.InstituteID <= 0) {
+        this.collegeRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      }
+      // this.collegeRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       
       //get
       await this.instituteService.GetByID(this.collegeRequest)
@@ -802,8 +810,61 @@ export class AddCollegeMasterComponent implements OnInit {
   }
 
 
+  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
+    if (SSOID == "") {
+      this.toastr.error("Please Enter SSOID", '', { timeOut: 5000 });
+      return;
+    }
+    const username = SSOID; // or hardcoded 'SIDDHA.AZAD'
+    const appName = 'madarsa.test';
+    const password = 'Test@1234';
+
+    /*const url = `https://ssotest.rajasthan.gov.in:4443/SSOREST/GetUserDetailJSON/${username}/${appName}/${password}`;*/
+
+    this.requestSSoApi.SSOID = username;
+    this.requestSSoApi.appName = appName;
+    this.requestSSoApi.password = password;
+
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        let response = JSON.parse(JSON.stringify(data));
+        if (response?.Data) {
+          debugger
+          let parsedData = JSON.parse(response.Data); // parse string inside Data
+          if (parsedData != null) {
+            // await this.DuplicateCheck(this.requestSSoApi.SSOID);
+            //this.formData.Displayname = parsedData.displayName
+            this.isSSOVisible = true;
+            // this.formData.Name = parsedData.displayName;
+            // this.formData.MobileNo = parsedData.mobile;
+            // this.formData.EmailID = parsedData.mailPersonal;
+            this.request.SSOID = parsedData.SSOID;
+            // this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.disable();
+
+          }
+          else {
+            this.toastr.error("Record Not Found", '', { timeOut: 5000 });
+            this.request.SSOID = "";
+            this.isSSOVisible = false;
+            return;
+          }
+
+          //alert("SSOID: " + parsedData.SSOID); // show SSOID in alert
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   async ResetControl() {
-    this.isSubmitted = false;
+    this.isSubmitted = false;    
     this.request = new CollegeMasterDataModels();
     this.instituteForm.reset();
     this.instituteForm.patchValue({
@@ -817,6 +878,23 @@ export class AddCollegeMasterComponent implements OnInit {
       ActiveStatus: 'true'
     });
   }
+
+ async ResetSSOID(){
+    this.isSSOVisible = false;
+    this.request.SSOID = "";
+    this.isSubmitted = false;    
+    this.request = new CollegeMasterDataModels();
+    this.instituteForm.reset();
+    this.instituteForm.patchValue({
+      institutionCategoryID: 0,
+      institutionManagementTypeID: 0,
+      divisionID: '0',
+      districtID: '0',
+      tehsilID: '0',
+      CollegeType: '0',
+      ActiveStatus: 'true'
+    });
+ }
 
   onCancel(): void {
     this.routers.navigate(['/collegemaster']);
