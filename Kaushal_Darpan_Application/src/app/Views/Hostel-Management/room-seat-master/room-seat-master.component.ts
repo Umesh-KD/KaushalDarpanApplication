@@ -48,6 +48,7 @@ export class RoomSeatMasterComponent {
   itemsPerPage: number = 50;
   paginatedHostelList: any[] = [];
   @ViewChild('hostelNameRef') hostelNameElement!: ElementRef;
+    MenuAllowedRoleList: any;
 
   constructor(
     private fb: FormBuilder,
@@ -65,8 +66,8 @@ export class RoomSeatMasterComponent {
 
   async ngOnInit() {
 
-
-
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
 
     this.groupForm = this.fb.group({
       ddlHostelID: ['', [DropdownValidators]],
@@ -77,7 +78,7 @@ export class RoomSeatMasterComponent {
     });
     //this.searchRequest.DepartmentID = 2;
     //await this.getHostelTypeList();
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+  
     await this.GetAllRoomSeatList();
     await this.GetHostelNameList();
     await this.GetRoomTypeList();
@@ -437,4 +438,27 @@ export class RoomSeatMasterComponent {
     this.groupForm.reset();
   }
 
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 }

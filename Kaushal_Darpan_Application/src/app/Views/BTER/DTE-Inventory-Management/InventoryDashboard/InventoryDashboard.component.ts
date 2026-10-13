@@ -25,6 +25,7 @@ import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 
 import { ItemsDataModel } from '../../../../Models/DTEInventory/DTETradeEquipmentsMappingData';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-InventoryDashboard',
@@ -60,6 +61,7 @@ export class InventoryDashboardComponent {
   public CategoryDDLList: any = [];
   public SearchItemReq = new DTEItemsSearchModel()
   CurrentAction: string = 'CategoryLIST';
+    MenuAllowedRoleList: any;
 
   constructor(
     private StaffDashService: StaffDashService,
@@ -72,6 +74,7 @@ export class InventoryDashboardComponent {
     private AdminDashDataService: AdminDashboardDataService,
     private dteItemUnitMasterService: DteItemUnitMasterService,
     private tradeEquipmentsMappingService: DteTradeEquipmentsMappingService,
+    private commonFunctionService: CommonFunctionService,
    
     private equipmentsService: DTEEquipmentsMasterService,
     private itemCategoriesService: DTEItemCategoriesMasterService,
@@ -81,6 +84,7 @@ export class InventoryDashboardComponent {
   async ngOnInit() {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     await this.GetDashboardData();
     await this.LoadDynamicReport('CategoryLIST');
     await this.GetEquipmentDDL();
@@ -357,6 +361,30 @@ export class InventoryDashboardComponent {
     });
 
     doc.save('InventoryDashBoard_Report.pdf');
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 }
