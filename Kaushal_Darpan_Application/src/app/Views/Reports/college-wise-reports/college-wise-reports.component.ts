@@ -10,6 +10,7 @@ import * as XLSX from 'xlsx';
 import { CollegesWiseExaminationRptSearchModel } from '../../../Models/CollegesWiseExaminationRptsModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-college-wise-reports',
@@ -49,17 +50,44 @@ export class CollegeWiseReportsComponent implements OnInit {
   public InstituteMasterList: any = [];
   public StreamMasterList: any = [];
   public SemesterMasterList: any = [];
+  public MenuAllowedRoleList: any = [];
 
   constructor(
     private loaderService: LoaderService, 
     private reportService: ReportService,
     private commonMasterService: CommonFunctionService,
+    private router: Router,
   ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     await this.GetMasterData();
     await this.GetAllData();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async GetMasterData() {

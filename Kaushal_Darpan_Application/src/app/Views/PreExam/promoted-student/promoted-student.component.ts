@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { EnumRole, EnumStatus, GlobalConstants, PromoteStatus } from '../../../Common/GlobalConstants';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../Common/appsetting.service';
@@ -60,6 +60,7 @@ export class PromotedStudentComponent {
   public _PromoteStatus = PromoteStatus;
 
   public PromoteStatusList: any[] = [];
+  public MenuAllowedRoleList: any[] = [];
 
   //end table feature default
 
@@ -73,7 +74,8 @@ export class PromotedStudentComponent {
     private Swal2: SweetAlert2,
     public appsettingConfig: AppsettingService,
     private activatedRoute: ActivatedRoute,
-    private menuService: MenuService
+    private menuService: MenuService,
+    private Router: Router,
   ) {
 
   }
@@ -81,11 +83,36 @@ export class PromotedStudentComponent {
   async ngOnInit() {
     //session
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.UserID = this.sSOLoginDataModel.UserID
 
     //load
     await this.GetDateConfig();
     await this.GetMasterData();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async GetMasterData() {

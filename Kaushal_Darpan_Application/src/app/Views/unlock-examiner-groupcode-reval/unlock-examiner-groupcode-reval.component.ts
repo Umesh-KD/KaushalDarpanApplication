@@ -14,6 +14,7 @@ import { LoaderService } from '../../Services/Loader/loader.service';
 import * as XLSX from 'xlsx';
 import { CommonFunctionHelper } from '../../Common/commonFunctionHelper';
 import { ExaminerService } from '../../Services/Examiner/examiner.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -57,6 +58,7 @@ export class UnlockExaminerGroupcodeRevalComponent {
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
 
+  public MenuAllowedRoleList: any[] = []
   constructor(private loaderService: LoaderService,
     private Swal2: SweetAlert2,
     private commonMasterService: CommonFunctionService,
@@ -64,7 +66,8 @@ export class UnlockExaminerGroupcodeRevalComponent {
     private fb: FormBuilder,
     public appsettingConfig: AppsettingService,
     private toastr: ToastrService,
-    public commonFunctionHelper: CommonFunctionHelper
+    public commonFunctionHelper: CommonFunctionHelper,
+    private routers: Router,
   ) { }
 
   async ngOnInit() {
@@ -89,10 +92,34 @@ export class UnlockExaminerGroupcodeRevalComponent {
     });
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     // load
     await this.getSemesterMaster();
     // await this.GetAllData();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async getSemesterMaster() {

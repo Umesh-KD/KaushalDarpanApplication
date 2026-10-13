@@ -13,7 +13,7 @@ import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserMasterService } from '../../../Services/UserMaster/user-master.service';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownValidators, notZeroValidator } from '../../../Services/CustomValidators/custom-validators.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
@@ -168,12 +168,14 @@ export class PreExamStudentExaminationComponent {
   formAction!: FormGroup;
   requestAction = new CampusPostMaster_Action();
   public RejectDocumentDetail: any = []
+  public MenuAllowedRoleList: any = []
 
   public UpdateOptionalAfterEligibleFG!: FormGroup;
   public updateOptionalAfterEligibleList: any = [];
   public updateOptionalChildAfterEligibleList: any = [];
   public alreadyAssignedOptionalSubject: any = [];
   public leftOutStudentMigrationCertificateDataModel = new LeftOutStudentMigrationCertificateDataModel();
+    MenuAllowedRoleList: any;
 
   constructor(private commonMasterService: CommonFunctionService,
     private preExamStudentExaminationService: PreExamStudentExaminationService,
@@ -189,7 +191,8 @@ export class PreExamStudentExaminationComponent {
     private http: HttpClient,
     private documentDetailsService: DocumentDetailsService,
     private smsMailService: SMSMailService,
-    public commonFunctionHelper: CommonFunctionHelper
+    public commonFunctionHelper: CommonFunctionHelper,
+    private routers: Router,
   ) {
 
   }
@@ -322,7 +325,7 @@ export class PreExamStudentExaminationComponent {
 
     this.requestStudent.QualificationDetails = [];
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     this.InstituteID = Number(this.activatedRoute.snapshot.paramMap.get('instituteId') ?? 0);
     //debugger
     // handle for found both
@@ -377,6 +380,30 @@ export class PreExamStudentExaminationComponent {
   get FormUEM() { return this.formUpdateEnrollmentNo.controls; }
   get _OptionalSubjectFormGroup() { return this.OptionalSubjectFormGroup.controls; }
   get FormAction() { return this.formAction.controls; }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
 
   setMinDate(): void {
     const today = new Date();
@@ -3241,6 +3268,30 @@ export class PreExamStudentExaminationComponent {
     ].join("/");
     //
     this.commonFunctionHelper.downloadFileFromServerFullPath(filefullpath);
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 }

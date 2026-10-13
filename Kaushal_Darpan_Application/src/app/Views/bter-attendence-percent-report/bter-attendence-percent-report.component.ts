@@ -8,7 +8,7 @@ import { jsPDF } from 'jspdf';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LeaveMasterSearchModel } from '../../Models/LeaveMasterDataModel';
 import { CommonDDLSubjectMasterModel } from '../../Models/CommonDDLSubjectMasterModel';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
@@ -19,7 +19,7 @@ import { CommonFunctionService } from '../../Services/CommonFunction/common-func
 import { AppsettingService } from '../../Common/appsetting.service';
 import { LoaderService } from '../../Services/Loader/loader.service';
 import { LeaveMasterService } from '../../Services/LeaveMaster/leave-master.service';
-import { GlobalConstants } from '../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
 @Component({
   selector: 'app-bter-attendence-percent-report',
   standalone: false,
@@ -73,6 +73,7 @@ export class BterAttendencePercentReportComponent {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   minEndDate: string | null = null;
+    MenuAllowedRoleList: any;
 
   constructor(private swat: SweetAlert2,
     private cdr: ChangeDetectorRef,
@@ -85,6 +86,7 @@ export class BterAttendencePercentReportComponent {
     public appsettingConfig: AppsettingService,
     private loaderService: LoaderService,
     private HrMasterService: LeaveMasterService,
+    private routers: Router,
 
   ) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -118,9 +120,9 @@ export class BterAttendencePercentReportComponent {
     };
   }
 
-  ngOnInit() {
+ async ngOnInit() {
 
-
+    await this.GetMenuPermission();
     this.TableForm = this.fb.group({
       SubjectID: ['', ],
       AttandanceTimeID: ['', ],
@@ -991,6 +993,30 @@ export class BterAttendencePercentReportComponent {
   async ResetRow() {
 
     this.TableForm.reset()
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 

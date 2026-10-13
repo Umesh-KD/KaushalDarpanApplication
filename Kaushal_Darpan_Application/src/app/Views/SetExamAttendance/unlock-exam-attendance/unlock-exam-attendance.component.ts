@@ -13,6 +13,7 @@ import { SetExamAttendanceService } from '../../../Services/SetExamAttendance/se
 import { StaffMasterService } from '../../../Services/StaffMaster/staff-master.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-unlock-exam-attendance',
@@ -34,18 +35,10 @@ export class UnlockExamAttendanceComponent {
   modalReference: NgbModalRef | undefined;
   public StaffMasterList: any = [];
   public InstituteMasterDDLList: any = []
+  public MenuAllowedRoleList: any = []
   public _GlobalConstants: any = GlobalConstants;
   request = new UnlockExamAttendanceDataModel();
 
-  async ngOnInit() {
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
-    this.searchRequest.action = "_getListForInvigilator";
-    this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID;
-    this.searchRequest.ShiftID = 0
-    this.getCenterMasterList()
-    this.GetExamShift()
-  }
   constructor(
     private loaderService: LoaderService, 
     private setExamAttendanceService: SetExamAttendanceService,
@@ -56,7 +49,42 @@ export class UnlockExamAttendanceComponent {
     public appsettingConfig: AppsettingService,
     private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
+    private routers: Router,
   ) { }
+
+  async ngOnInit() {
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
+    this.searchRequest.action = "_getListForInvigilator";
+    this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID;
+    this.searchRequest.ShiftID = 0
+    this.getCenterMasterList()
+    this.GetExamShift()
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
 
   async getCenterMasterList() {
     try {

@@ -53,6 +53,7 @@ export class emtrainingdetailshistoryComponent {
     modalReference: NgbModalRef | undefined;
     public ShowCheckBoxId: number = 0;
     @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
+      MenuAllowedRoleList: any;
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -86,6 +87,7 @@ export class emtrainingdetailshistoryComponent {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.Status = "0";
     
 
@@ -503,4 +505,29 @@ await this.staffServiceDetailsService
         `StaffDetailsCompletedTraining_${timestamp}.xlsx`
       );
     }
+
+    async GetMenuPermission() {
+
+      const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+      var request: any = {
+        FilterBy: baseRoute,
+        MasterCode: "GetAllowedRoleForMenu"
+      }
+
+      await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.MenuAllowedRoleList = data.Data
+
+          if (!this.MenuAllowedRoleList.some(
+            (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+          )) {
+            // Navigate to dashboard if RoleID is not allowed
+            this.routers.navigate(['/dashboard']);
+          }
+        }
+      })
+    }
+
 }

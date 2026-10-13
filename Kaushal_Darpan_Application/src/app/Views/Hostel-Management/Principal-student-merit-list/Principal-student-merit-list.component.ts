@@ -59,6 +59,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
   _EnumRole = EnumRole;
   _HostelStatus = HostelStatus;
   public showRegenerateMerit: boolean = false;
+    MenuAllowedRoleList: any;
 
   constructor(
     private toastr: ToastrService,
@@ -80,6 +81,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
     this.ReqId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.UserID = this.sSOLoginDataModel.UserID;
     
     if (this.sSOLoginDataModel.DepartmentID == 1) {
@@ -761,4 +763,29 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
     }
     console.log(selected);
   }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
 }

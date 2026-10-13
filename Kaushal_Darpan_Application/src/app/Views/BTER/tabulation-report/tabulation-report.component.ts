@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { EnumResultType, EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../Common/appsetting.service';
@@ -59,6 +59,7 @@ export class TabulationReportComponent {
 
   public ResultTypeList: any[] = [];
   public endTermFinYear: EndTermFinYearModel[] = [];
+  public MenuAllowedRoleList: any[] = [];
   public _EnumResultType = EnumResultType;
 
   constructor(private commonMasterService: CommonFunctionService,
@@ -71,7 +72,8 @@ export class TabulationReportComponent {
     public appsettingConfig: AppsettingService,
     private activatedRoute: ActivatedRoute,
     private menuService: MenuService,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private Router: Router,
   ) {
 
   }
@@ -83,7 +85,32 @@ export class TabulationReportComponent {
     //load
     //debugger
     this.request.InstituteId = this.sSOLoginDataModel.InstituteID;
+    await this.GetMenuPermission();
     await this.GetMasterData();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async GetMasterData() {
