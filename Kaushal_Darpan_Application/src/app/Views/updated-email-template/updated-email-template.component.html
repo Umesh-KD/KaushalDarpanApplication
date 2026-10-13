@@ -241,20 +241,23 @@
             </div>
 
             <div class="form-grid-3">
-              <mat-form-field appearance="outline" class="query-editor">
-                <mat-label>To Query</mat-label>
-                <textarea matInput rows="4" formControlName="ToQuery" placeholder="SELECT Email FROM Users WHERE ID = @ID"></textarea>
-              </mat-form-field>
 
               <mat-form-field appearance="outline" class="query-editor">
                 <mat-label>CC Query</mat-label>
-                <textarea matInput rows="4" formControlName="CcQuery" placeholder="SELECT TeamLeadEmail FROM ..."></textarea>
+                <textarea matInput rows="4" formControlName="CcQuery" placeholder="Enter email address..."></textarea>
               </mat-form-field>
+              <!-- placeholder="SELECT TeamLeadEmail FROM ..." -->
 
               <mat-form-field appearance="outline" class="query-editor">
                 <mat-label>BCC Query</mat-label>
-                <textarea matInput rows="4" formControlName="BccQuery" placeholder="SELECT AuditEmail FROM ..."></textarea>
+                <textarea matInput rows="4" formControlName="BccQuery" placeholder="Enter email address..."></textarea>
               </mat-form-field>
+
+              <mat-form-field appearance="outline" class="query-editor">
+                <mat-label>Test Data Query</mat-label>
+                <textarea matInput rows="4" formControlName="ToQuery" placeholder="SELECT Email FROM Users WHERE ID = @ID"></textarea>
+              </mat-form-field>
+
             </div>
           </mat-card>
         </div>
