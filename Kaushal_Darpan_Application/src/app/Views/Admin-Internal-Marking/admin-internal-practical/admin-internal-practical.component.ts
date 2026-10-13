@@ -28,6 +28,7 @@ export class AdminInternalPracticalComponent {
   public isSubmitted: boolean = false;
   public SemesterMasterList: any = [];
   public Branchlist: any = [];
+  public MenuAllowedRoleList: any = [];
   public InternalPracticalID: number | null = null;
   /*public TheoryMarksList: any = [];*/
   @ViewChildren('markInput') markInputs!: QueryList<ElementRef>;
@@ -86,7 +87,7 @@ export class AdminInternalPracticalComponent {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
-
+    await this.GetMenuPermission();
     this.InternalPracticalID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     console.log(this.InternalPracticalID)
     this.searchRequest.InternalPracticalID = this.InternalPracticalID;
@@ -732,5 +733,29 @@ export class AdminInternalPracticalComponent {
         nextInput.focus();
       }
     }
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 }
