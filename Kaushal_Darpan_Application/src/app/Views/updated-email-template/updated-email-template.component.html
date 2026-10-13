@@ -100,6 +100,16 @@
                       <button mat-icon-button type="button" color="accent" title="Preview Body" (click)="previewTemplateItem(item)">
                         <mat-icon>visibility</mat-icon>
                       </button>
+
+                      <button *ngIf="item.IsTestQueryAvailable == 1 || item.IsTestQueryAvailable == true"
+                              mat-icon-button 
+                              type="button" 
+                              class="btn-action-test" 
+                              title="Test Data Query" 
+                              (click)="sendTemplateEmail(item, true)">
+                        <mat-icon>play_circle</mat-icon>
+                      </button>
+
                     </td>
                   </tr>
 
