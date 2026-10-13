@@ -526,6 +526,7 @@ export class RevealuationComponent {
             this.SaveStudentRequest.StudentExamID = this.Request.StudentExamID;
             this.SaveStudentRequest.StudentType = this.Request.StudentType;
             this.SaveStudentRequest.PaymentAmount = totalFee;
+
             this.SaveStudentRequest.ItemList = this.SelectedItemDataList;
 
             this.loaderService.requestStarted();

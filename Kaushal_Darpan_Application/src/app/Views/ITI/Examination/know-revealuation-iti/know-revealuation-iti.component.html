@@ -127,7 +127,7 @@
                 <th class="text-left">Sno</th>
                 <th class="text-left">Subject Code</th>
                 <th class="text-left">Subject Name</th>
-                <!-- <th class="text-left">Obtained Marks</th> -->
+                 <th class="text-left">Remarks</th> 
                 <th class="text-left">File Document</th>
               </tr>
             </thead>
@@ -136,7 +136,7 @@
                 <td>{{idx+1}}</td>
                 <td>{{item.SubjectCode}}</td>
                 <td>{{item.SubjectName}}</td>
-                <!-- <td>{{item.ObtainedMarks}}</td> -->
+                <td>{{item.Remarks}}</td> 
                 <td>
                   <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                     <a *ngIf="item.UploadedCopy && item.UploadedCopy.trim() !== ''"
