@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { AppsettingService } from '../../../Common/appsetting.service';
@@ -56,6 +56,15 @@ export class DiplomaCertificateDownloadComponent {
   public EndTermList: any = [];
   public endTermFinYear: EndTermFinYearModel[] = [];
   public _EnumResultType = EnumResultType;
+  modalReference: NgbModalRef | undefined;
+  public txtAssignSRNO :  string = ''
+  public txtEditSrNo: string = ''
+  public txtChangeFromCertNo: string = ''
+  public txtChangeToCertNo: string = ''
+  public IsFinalSubmit :boolean = false
+
+  editSrNoModel: any = { StudentID: 0, SemesterID: 0, EndTermID: 0, ResultTypeID: 0, EditedSrno :""};
+
 
   constructor(private commonFunctionService: CommonFunctionService,
     private marksheetDownloadService: MarksheetDownloadService,
@@ -169,6 +178,7 @@ export class DiplomaCertificateDownloadComponent {
           data = JSON.parse(JSON.stringify(data));
 
           this.StudentList = data['Data'];
+          this.IsFinalSubmit = this.StudentList.length > 0 &&  this.StudentList.every((student: any) => student.IsFinalSubmit == 1);
           await this.createDynamicButtons(this.StudentList);
           //table feature load
           this.loadInTable();
@@ -430,5 +440,241 @@ export class DiplomaCertificateDownloadComponent {
     // update
     //this.downLoadFG.get('IsRevised')?.updateValueAndValidity();
     this.downLoadFG.get('EnrollmentNo')?.updateValueAndValidity();
+  }
+
+ OpenModelPopup(content: any)
+  {
+    this.txtAssignSRNO = '';
+    this.txtChangeFromCertNo = '';
+    this.txtChangeToCertNo = '';
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'lg', keyboard: true, centered: true });
+  }
+
+ async SubmitAssignSrNo()
+  {
+   if (this.txtAssignSRNO == '' || Number(this.txtAssignSRNO) <= 0) {
+     this.toastr.error("Please enter a valid Assign Sr.No. greater than 0.");
+      return;
+    }
+
+   try
+   {
+     let AssignSrNostudentDataList = this.StudentList.map((student: any) => ({
+       StartSRN: this.txtAssignSRNO,
+       SRN: student.SRN,
+       StudentID: student.StudentID,
+       InstituteCode: student.InstituteCode,
+       SemesterID: student.semesterid,
+       streamid: student.StreamID,
+       EndTermID: student.EndTermID,
+       StreamName: "",
+       StudentTypeID: student.studenttypeid,
+       EnrollmentNo: student.EnrollmentNo,
+       CourseType: student.CourseType,
+       ModifyBy: this.sSOLoginDataModel.UserID,
+       ResultTypeId: student.ResultTypeID,
+       RoleID: this.sSOLoginDataModel.RoleID,
+       EffectiveEndTermId: this.searchRequest.EffectiveFromEndTermId > 0 ? this.searchRequest.EffectiveFromEndTermId : student.EndTermID,
+     }));
+     
+     //console.log("AssingSrnoList", AssignSrNostudentDataList);
+     await this.reportService.AssignStudentSrNo_Bulk(AssignSrNostudentDataList)
+       .then(async (data: any) => {
+         data = JSON.parse(JSON.stringify(data));
+         console.log(data, "Data");
+         //
+         if (data.State == EnumStatus.Success)
+         {
+           this.toastr.success(data.Message);
+           this.modalService.dismissAll();
+         }
+         else if (data.State == EnumStatus.Warning)
+         {
+           this.toastr.warning(data.Message);
+         }
+         else
+         {
+           this.toastr.error(data.ErrorMessage);
+           console.log(data.ErrorMessage);
+         }
+         await this.getAllData();// refresh list
+       }, (error: any) => console.error(error)
+       );
+   }
+   catch (ex)
+   {
+     console.log(ex);
+   }
+  }
+
+ async BtnSaveMassChangeSrNo()
+  {
+   if (!this.txtAssignSRNO || Number(this.txtAssignSRNO) <= 0 || !this.txtChangeFromCertNo || Number(this.txtChangeFromCertNo) <= 0 || !this.txtChangeToCertNo || Number(this.txtChangeToCertNo) <= 0) {
+     this.toastr.error("Please fill in all required fields with values greater than 0.");
+     return;
+   }
+   try
+   {
+      const Obj =
+      {
+        SrNo: this.txtAssignSRNO,
+        DocSerialNoFrom: this.txtChangeFromCertNo,
+        DocSerialNoTo: this.txtChangeToCertNo,
+        RoleID: this.sSOLoginDataModel.RoleID,
+        UserID: this.sSOLoginDataModel.UserID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        CourseType: this.sSOLoginDataModel.Eng_NonEng,
+        SemesterID: this.searchRequest.SemesterID,       // filter semesterid
+        EndTermID: this.searchRequest.EndTermID,   // filter endtermid
+        EffectiveEndTermId: this.searchRequest.EffectiveFromEndTermId > 0 ? this.searchRequest.EffectiveFromEndTermId : this.searchRequest.EndTermID,
+      };
+
+     await this.reportService.MassChangeSrNo(Obj)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data, "Data");
+          //
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            this.modalService.dismissAll();
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.Message);
+            console.log(data.ErrorMessage);
+          }
+          else
+          {
+            this.toastr.error(data.ErrorMessage);
+          }
+          await this.getAllData();// refresh list
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+
+  }
+
+ OpenEditSrNoModel(content: any, _StudentID: number, _semesterid: number, _EndTermID: number, _ResultTypeID : number)
+  {
+    this.txtEditSrNo = '';
+    this.editSrNoModel = { StudentID: _StudentID, SemesterID: _semesterid, EndTermID: _EndTermID,  ResultTypeID: _ResultTypeID};
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
+  }
+
+ async BtnEditSrNoSave()
+ {
+   if (this.txtEditSrNo == '' || Number(this.txtEditSrNo) <= 0)
+    {
+      this.toastr.error("Please enter a valid Assign Sr.No. greater than 0.");
+      return;
+   }
+
+   try
+   {
+     const Obj =
+     {
+       StudentID: this.editSrNoModel.StudentID,
+       SemesterID: this.editSrNoModel.SemesterID,
+       EndTermID: this.editSrNoModel.EndTermID,
+       ResultTypeID: this.editSrNoModel.ResultTypeID,
+       SrNo: this.txtEditSrNo,
+       RoleID: this.sSOLoginDataModel.RoleID,
+       UserID: this.sSOLoginDataModel.UserID,
+       DepartmentID: this.sSOLoginDataModel.DepartmentID,
+       CourseType: this.sSOLoginDataModel.Eng_NonEng,
+       EffectiveEndTermId: this.searchRequest.EffectiveFromEndTermId > 0 ? this.searchRequest.EffectiveFromEndTermId : this.editSrNoModel.EndTermID,
+     };
+
+     await this.reportService.UpdateDiplomaCertificateSrNo(Obj)
+       .then(async (data: any) => {
+         data = JSON.parse(JSON.stringify(data));
+         console.log(data, "Data");
+         //
+         if (data.State == EnumStatus.Success) {
+           this.toastr.success(data.Message);
+           this.modalService.dismissAll();
+         }
+         else if (data.State == EnumStatus.Warning) {
+           this.toastr.warning(data.Message);
+           //console.log(data.ErrorMessage);
+         }
+         else {
+           this.toastr.error(data.ErrorMessage);
+         }
+         await this.getAllData();// refresh list
+       }, (error: any) => console.error(error)
+       );
+   }
+   catch (ex)
+   {
+     console.log(ex);
+   }
+  }
+
+ BtnFinalLock()
+ {
+   if (this.downLoadFG.invalid)
+   {
+     return;
+   }
+   const isAnyPending = this.StudentList.some((student: any) => student.SRNO == '');
+   if (isAnyPending)
+   {
+     this.toastr.warning("Please assign certificate serial numbers to all students before locking and submitting.");
+     return;
+   }
+
+   this.Swal2.Confirmation("Are you sure you want to proceed ? Once submitted, no further changes will be permitted.",
+     async (result: any) =>
+     {
+       //confirmed
+       if (result.isConfirmed)
+       {
+         this.searchRequest.EndTermID = this.searchRequest.EndTermID;
+         //this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+         this.searchRequest.FianancialYearID = this.searchRequest.FianancialYearID;
+         this.searchRequest.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
+         this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+         this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID;
+         this.searchRequest.EffectiveEndTermID = this.searchRequest.EffectiveFromEndTermId > 0 ? this.searchRequest.EffectiveFromEndTermId : this.searchRequest.EndTermID ;
+         
+
+         await this.reportService.LockStudentDiplomaCertificateSrNo(this.searchRequest)
+           .then(async (data: any) => {
+             data = JSON.parse(JSON.stringify(data));
+             console.log(data, "Data");
+             //
+             if (data.State == EnumStatus.Success) {
+               this.toastr.success(data.Message);
+               this.modalService.dismissAll();
+             }
+             else if (data.State == EnumStatus.Warning) {
+               this.toastr.warning(data.Message);
+               //console.log(data.ErrorMessage);
+             }
+             else {
+               this.toastr.error(data.ErrorMessage);
+             }
+             await this.getAllData();// refresh list
+           }, (error: any) => console.error(error)
+           );
+       }
+     });
+  }
+
+ CloseModalPopup()
+  {
+    this.modalService.dismissAll();
+  }
+
+ numberOnly(event: KeyboardEvent): boolean
+  {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
   }
 }

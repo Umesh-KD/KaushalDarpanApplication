@@ -55,7 +55,7 @@ export class ApproveIssuedItemsComponent {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   //end table feature default
-
+  AllEnumRole = EnumRole
   constructor(
     private toastr: ToastrService,
     private http: HttpClient,
@@ -81,7 +81,7 @@ export class ApproveIssuedItemsComponent {
     await this.GetCategoryDDL();
     await this.GetStaffDDL();
     await this.GetIssueItemsForApprove();
-    
+   
   }
 
   async GetIssueItemsForApprove() {    
@@ -94,7 +94,7 @@ export class ApproveIssuedItemsComponent {
       this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
       this.Searchrequest.OfficeID = this.sSOLoginDataModel.OfficeID;
       
-      if(this.sSOLoginDataModel.RoleID === EnumRole.BterLabIncharge){
+      if (this.sSOLoginDataModel.RoleID === EnumRole.BterLabIncharge || this.sSOLoginDataModel.RoleID === EnumRole.BTER_OfficerLabIncharge ){
         this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
       }
       await this.bterInventoryService.GetIssueItemsForApprove(this.Searchrequest).then((data: any) => {
@@ -102,7 +102,7 @@ export class ApproveIssuedItemsComponent {
         if (data.State === EnumStatus.Success) {
           this.ItemMasterList = data.Data;
           this.ItemMasterList.forEach((ele: any) => {
-            if(ele.IssueStatus === 1) {
+            if (ele.IssueStatus === 1 || ele.IssueStatus === 2 ) {
               ele.ApproveIssueQuantity = ele.Quantity 
             }            
           });
@@ -145,6 +145,54 @@ export class ApproveIssuedItemsComponent {
       })
 
       if(this.IssuedItemStatus == 3) {
+        selected.forEach((x: any) => {
+          x.ApproveIssueQuantity = 0
+        });
+      }
+
+      await this.bterInventoryService.ApproveIssuedItems(selected).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message, 'Success', {
+            toastClass: 'ngx-toastr my-success-toast'
+          });
+          await this.GetIssueItemsForApprove();
+        } else {
+          this.toastr.error(data.ErrorMessage, 'Error', {
+            toastClass: 'ngx-toastr my-error-toast'
+          });
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
+  //--------------New Added 20261007
+  async ApproveIssuedItemsByOfficerLabIncharge() {
+    try {
+      let selected = this.ItemMasterList.filter((x: any) => x.Selected);
+      if (selected.length === 0) {
+        this.toastr.warning("Please select at least one item to mark for approval.", "Warning", {
+          toastClass: "ngx-toastr my-warning-toast"
+        });
+        return;
+      }
+
+      if (this.IssuedItemStatus == 0) {
+        this.toastr.warning("Please select status.", "Warning", {
+          toastClass: "ngx-toastr my-warning-toast"
+        });
+        return;
+      }
+
+      selected.forEach((x: any) => {
+        x.UserID = this.sSOLoginDataModel.UserID
+        x.IssueStatus = this.IssuedItemStatus
+      })
+
+      if (this.IssuedItemStatus == 6) {
         selected.forEach((x: any) => {
           x.ApproveIssueQuantity = 0
         });

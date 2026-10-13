@@ -1,0 +1,524 @@
+
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">
+      Query & Request Submission
+    </h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">
+        Support
+      </a>
+
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">
+        chevron_right
+      </i>
+
+      <a href="javascript:void(0);"
+         class="text-sm font-medium text-slate-700"
+         aria-current="page">
+        Query & Request Submission
+      </a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <!-- Search Criteria / Add Request -->
+    <div class="mb-8">
+
+      <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">
+          <i class="ti ti-plus"></i>
+          Query & Request
+        </b>
+
+        <button
+          class="btn bg-info text-white"
+          type="button"
+          (click)="ViewandUpdate(MyModel_addRequest)">
+          <i class="ti ti-plus"></i>
+          Raise New Request
+        </button>
+      </div>
+
+      <!-- Search Fields -->
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Department
+          </label>
+
+          <select class="form-select" [(ngModel)]="searchRequest.DepartmentName">
+            <option value="">All Departments</option>
+            <option value="ITI">ITI</option>
+            <option value="BTER">BTER</option>
+            <option value="DTE">DTE</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Request Type
+          </label>
+
+          <select class="form-select" [(ngModel)]="searchRequest.RequestType">
+            <option value="">All Request Types</option>
+            <option value="Role Creation">Role Creation</option>
+            <option value="Role Modification">Role Modification</option>
+            <option value="Access Permission">Access Permission</option>
+            <option value="Technical Issue">Technical Issue</option>
+            <option value="New Feature">New Feature</option>
+            <option value="Data Correction">Data Correction</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Status
+          </label>
+
+          <select class="form-select" [(ngModel)]="searchRequest.Status">
+            <option value="">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search
+          </label>
+
+          <input
+            type="text"
+            class="form-input"
+            placeholder="Search request..."
+            [(ngModel)]="Table_SearchText"
+            (keyup)="loadInTable()" />
+        </div> -->
+
+        <div>
+          <button
+            class="btn bg-info text-white mt-6 me-1"
+            type="button"
+            (click)="GetRequestList()">
+            <i class="ti ti-search"></i>
+            Search
+          </button>
+
+          <button
+            class="btn bg-warning text-white mt-6 me-1"
+            type="button"
+            (click)="ResetSearch()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- Request List Header -->
+    <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">
+        <i class="ti ti-list"></i>
+        Request List
+      </b>
+
+      <a href="javascript:void(0);"
+         (click)="exportToExcel()"
+         class="btn bg-info btn-sm text-white">
+        <i class="ti ti-file-spreadsheet"></i>
+        Export Excel
+      </a>
+    </div>
+
+
+    <!-- Table Controls -->
+    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+
+      <div>
+        <select
+          id="ddlConter"
+          class="form-select couterDropDown"
+          [(ngModel)]="pageInTableSize"
+          (change)="loadInTable()">
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="50">50</option>
+          <option [ngValue]="100">100</option>
+          <option [ngValue]="500">500</option>
+          <option [ngValue]="1000">1000</option>
+        </select>
+      </div>
+
+    </div>
+
+
+    <!-- Request Table -->
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th width="80px" align="left">Sr. No.</th>
+            <th align="left">Requester Name</th>
+            <th align="left">Department</th>
+            <th align="left">Request Type</th>
+            <th align="left">Description</th>
+            <th align="left">Priority</th>
+            <th align="left">Status</th>
+            <th align="center" width="150">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData; let idx = index">
+
+            <td>{{ startInTableIndex + 1 + idx }}</td>
+
+            <td>{{ row.RequesterName || '-' }}</td>
+
+            <td>{{ row.DepartmentName || '-' }}</td>
+
+            <td>{{ row.RequestType || '-' }}</td>
+
+            <td>
+              <span [title]="row.RequestDescription">
+                {{ row.RequestDescription || '-' }}
+              </span>
+            </td>
+
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'bg-danger text-white': row.Priority === 'High',
+                  'bg-warning text-dark': row.Priority === 'Medium',
+                  'bg-success text-white': row.Priority === 'Low'
+                }"
+                 class="px-2 py-1 rounded-pill d-inline-block">
+                {{ row.Priority || '-' }}
+              </span>
+            </td>
+
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'bg-warning text-dark ': row.Status === 'Pending',
+                  'bg-info text-white ': row.Status === 'In Progress',
+                  'bg-success text-white ': row.Status === 'Resolved',
+                  'bg-danger text-white ': row.Status === 'Rejected'
+                }"
+                 class="px-2 py-1 rounded-pill d-inline-block">
+                {{ row.Status || 'Pending' }}
+              </span>
+            </td>
+
+            <td>
+              <div class="flex align-center justify-center actionBtns">
+
+                <a
+                  href="javascript:void(0);"
+                  title="Edit"
+                  (click)="ViewandUpdate(MyModel_addRequest, row.RequestID)">
+                  <i class="ti ti-pencil"></i>
+                </a>
+
+                <a
+                  href="javascript:void(0);"
+                  title="Delete"
+                  (click)="btnDelete_OnClick(row.RequestID)">
+                  <i class="ti ti-trash"></i>
+                </a>
+
+              </div>
+            </td>
+
+          </tr>
+
+          <tr *ngIf="paginatedInTableData.length === 0">
+            <td colspan="8" class="text-center">
+              No records found.
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+
+    <!-- Pagination -->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+
+      <span class="block">
+        Record {{ totalInTableRecord > 0 ? startInTableIndex + 1 : 0 }}
+        - {{ endInTableIndex }}
+        of {{ totalInTableRecord }}
+      </span>
+
+      <div class="paginationBoxItems flex items-center">
+
+        <button
+          type="button"
+          (click)="firstInTablePage()"
+          [disabled]="currentInTablePage == 1">
+          First
+        </button>
+
+        <button
+          type="button"
+          (click)="previousInTablePage()"
+          [disabled]="currentInTablePage == 1">
+          Previous
+        </button>
+
+        <input
+          type="number"
+          min="1"
+          [max]="totalInTablePage"
+          title="Enter page no."
+          [(ngModel)]="currentInTablePage"
+          [disabled]="totalInTablePage == 0"
+          (change)="randamInTablePage()" />
+
+        <span class="text-nowrap">
+          Page {{ currentInTablePage }} of {{ totalInTablePage }}
+        </span>
+
+        <button
+          type="button"
+          (click)="nextInTablePage()"
+          [disabled]="currentInTablePage == totalInTablePage || totalInTablePage == 0">
+          Next
+        </button>
+
+        <button
+          type="button"
+          (click)="lastInTablePage()"
+          [disabled]="currentInTablePage == totalInTablePage || totalInTablePage == 0">
+          Last
+        </button>
+
+      </div>
+    </div>
+    <!-- End Pagination -->
+
+  </div>
+</div>
+
+
+<!-- Add / Edit Query Request Modal -->
+<ng-template #MyModel_addRequest let-modal>
+  <div class="modal-content">
+
+    <div class="card">
+
+      <div class="card-header flex justify-between items-center">
+        <b>
+          <i class="fa fa-plus"></i>
+          {{ request?.RequestID > 0 ? 'Update Request' : 'Raise New Request' }}
+        </b>
+
+        <button
+          type="button"
+          class="btn bg-info text-white"
+          (click)="CloseModalPopup()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+
+      <div class="card-body">
+
+        <form [formGroup]="RequestFormGroup" (ngSubmit)="SaveData()">
+
+          <div class="mb-8">
+
+            <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+              <!-- Requester Name -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Requester Name
+                  <span class="StarMarking">*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="form-input"
+                  formControlName="RequesterName"
+                  maxlength="150"
+                  placeholder="Enter requester name" />
+
+                <div
+                  *ngIf="isSubmitted && form.RequesterName.errors"
+                  class="text-danger">
+                  <p *ngIf="form.RequesterName.errors?.required">
+                    This field is required!
+                  </p>
+                </div>
+              </div>
+
+
+              <!-- Department -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Department
+                  <span class="StarMarking">*</span>
+                </label>
+
+                <select class="form-select" formControlName="DepartmentName">
+                  <option value="">Choose Department</option>
+                  <option value="ITI">ITI</option>
+                  <option value="BTER">BTER</option>
+                  <option value="DTE">DTE</option>
+                  <option value="Other">Other</option>
+                </select>
+
+                <div
+                  *ngIf="isSubmitted && form.DepartmentName.errors"
+                  class="text-danger">
+                  <p *ngIf="form.DepartmentName.errors?.required">
+                    Please select a department!
+                  </p>
+                </div>
+              </div>
+
+
+              <!-- Request Type -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Request Type
+                  <span class="StarMarking">*</span>
+                </label>
+
+                <select class="form-select" formControlName="RequestType">
+                  <option value="">Choose Request Type</option>
+                  <option value="Role Creation">Role Creation</option>
+                  <option value="Role Modification">Role Modification</option>
+                  <option value="Access Permission">Access Permission</option>
+                  <option value="Technical Issue">Technical Issue</option>
+                  <option value="New Feature">New Feature</option>
+                  <option value="Data Correction">Data Correction</option>
+                  <option value="Other">Other</option>
+                </select>
+
+                <div
+                  *ngIf="isSubmitted && form.RequestType.errors"
+                  class="text-danger">
+                  <p *ngIf="form.RequestType.errors?.required">
+                    Please select a request type!
+                  </p>
+                </div>
+              </div>
+
+
+              <!-- Priority -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Priority
+                  <span class="StarMarking">*</span>
+                </label>
+
+                <select class="form-select" formControlName="Priority">
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+
+
+              <!-- Description -->
+              <div class="col-span-1 md:col-span-2 lg:col-span-3">
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Request Description
+                  <span class="StarMarking">*</span>
+                </label>
+
+                <textarea
+                  class="form-input"
+                  rows="4"
+                  formControlName="RequestDescription"
+                  maxlength="2000"
+                  placeholder="Describe your query or request">
+                </textarea>
+
+                <div
+                  *ngIf="isSubmitted && form.RequestDescription.errors"
+                  class="text-danger">
+                  <p *ngIf="form.RequestDescription.errors?.required">
+                    Request description is required!
+                  </p>
+                  <p *ngIf="form.RequestDescription.errors?.maxlength">
+                    Maximum 2000 characters are allowed.
+                  </p>
+                </div>
+              </div>
+
+
+              <!-- Status: Edit only -->
+              <div *ngIf="request?.RequestID > 0">
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Status
+                </label>
+
+                <select class="form-select" formControlName="Status">
+                  <option value="Pending">Pending</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Resolved">Resolved</option>
+                  <option value="Rejected">Rejected</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- Buttons -->
+          <div class="grid grid-cols-1 gap-3">
+            <div class="text-center">
+
+              <button
+                type="submit"
+                class="btn bg-info text-white mt-6"
+                [disabled]="isLoading">
+                {{ request?.RequestID > 0 ? 'Update Request' : 'Submit Request' }}
+              </button>
+
+              <button
+                type="button"
+                class="btn bg-danger text-white mt-6 ms-1"
+                (click)="ResetControl()">
+                <i class="ti ti-refresh"></i>
+                Reset
+              </button>
+
+              <button
+                type="button"
+                class="btn bg-secondary text-white mt-6 ms-1"
+                (click)="CloseModalPopup()">
+                Cancel
+              </button>
+
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+</ng-template>
+

@@ -24,11 +24,11 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff :</label>
           <!--<select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
-            (change)="GetTradeDDL()">
-      <option *ngFor="let item of staffDDLList" [value]="item.staffID">
-        {{ item.staffName }}
-      </option>
-    </select>-->
+                  (change)="GetTradeDDL()">
+            <option *ngFor="let item of staffDDLList" [value]="item.staffID">
+              {{ item.staffName }}
+            </option>
+          </select>-->
           <select class="form-select" [(ngModel)]="Searchrequest.staffID" name="staffID" (change)="GetAllData()">
             <option *ngFor="let s of staffDDLList" [value]="s.staffID">
               {{s.staffName}}
@@ -37,22 +37,22 @@
         </div>
 
         <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
-    <select class="form-select" id="TradeID" [(ngModel)]="Searchrequest.TradeId"
-            (change)="GetCategoryDDL()">
-      <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
-        {{ item.TradeName }}
-      </option>
-    </select>
-  </div>-->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
+          <select class="form-select" id="TradeID" [(ngModel)]="Searchrequest.TradeId"
+                  (change)="GetCategoryDDL()">
+            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
+              {{ item.TradeName }}
+            </option>
+          </select>
+        </div>-->
         <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category :</label>
-    <select class="form-select" id="ItemId" [(ngModel)]="Searchrequest.ItemId">
-      <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">
-        {{ item.Name }}
-      </option>
-    </select>
-  </div>-->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category :</label>
+          <select class="form-select" id="ItemId" [(ngModel)]="Searchrequest.ItemId">
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">
+              {{ item.Name }}
+            </option>
+          </select>
+        </div>-->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Category :
@@ -77,10 +77,13 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Issue Status:</label>
           <select class="form-select" id="IssueStatus" [(ngModel)]="Searchrequest.IssueStatus" (change)="GetAllData()">
             <option value="0">--- All ---</option>
-            <option value="1">Pending for Approve</option>
-            <option value="2">Approved</option>
-            <option value="3">Reject</option>
+            <option value="1">Pending for Approve at Store Incharge Lvl</option>
+            <option value="2">Approved by Store Incharge</option>
+            <option value="3">Rejected by Store Incharge</option>
             <option value="4">Returned</option>
+            <option *ngIf="this.sSOLoginDataModel.RoleID === AllEnumRole.BterLabIncharge || this.sSOLoginDataModel.RoleID === AllEnumRole.BTER_OfficerLabIncharge || this.sSOLoginDataModel.RoleID === AllEnumRole.BTER_StoreIncharge || this.sSOLoginDataModel.RoleID === AllEnumRole.HOD_Eng" value="5">Approved by Officer Lab-Incharge</option>
+            <option *ngIf="this.sSOLoginDataModel.RoleID === AllEnumRole.BterLabIncharge || this.sSOLoginDataModel.RoleID === AllEnumRole.BTER_OfficerLabIncharge || this.sSOLoginDataModel.RoleID === AllEnumRole.BTER_StoreIncharge || this.sSOLoginDataModel.RoleID === AllEnumRole.HOD_NonEng" value="6">Rejected by Officer Lab-Incharge</option>
+       
           </select>
         </div>
 
@@ -103,11 +106,11 @@
           <i class="ti ti-file-text"></i> Export PDF
         </a>
         <!--<a href="javascript:void(0);"
-     (click)="MarkForAuction()"
-     class="btn bg-info btn-sm text-white"
-     *ngIf="Searchrequest.status == 2">
-    <i class="ti ti-excel"></i> Mark for auction
-  </a>-->
+           (click)="MarkForAuction()"
+           class="btn bg-info btn-sm text-white"
+           *ngIf="Searchrequest.status == 2">
+          <i class="ti ti-excel"></i> Mark for auction
+        </a>-->
 
       </div>
     </div>
@@ -193,18 +196,36 @@
 
             <td align="left">
               <!-- <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
-                       'InvStatus-issued': item.IssueStatus === 2,
-                       'InvStatus-reject': item.IssueStatus === 3,
-                       'InvStatus-returned': item.IssueStatus === 4
-                     }">
-      {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' : item.IssueStatus ===4 ? 'Returned' : 'Unknown' }}
-    </span> -->
-              <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
-                                 'InvStatus-issued': item.IssueStatus === 2 && item.ReturnStatus === 0,
-                                 'InvStatus-reject': item.IssueStatus === 3,
-                                 'InvStatus-returned': item.IssueStatus === 2 && item.ReturnStatus === 1
-                               }">
-                {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2  && item.ReturnStatus === 0 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' :  item.IssueStatus ===2  && item.ReturnStatus === 1  ? 'Returned' : 'Unknown' }}
+                     'InvStatus-issued': item.IssueStatus === 2,
+                     'InvStatus-reject': item.IssueStatus === 3,
+                     'InvStatus-returned': item.IssueStatus === 4
+                   }">
+    {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' : item.IssueStatus ===4 ? 'Returned' : 'Unknown' }}
+  </span> -->
+              <!--<span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
+                     'InvStatus-issued': item.IssueStatus === 2 && item.ReturnStatus === 0,
+                     'InvStatus-reject': item.IssueStatus === 3,
+                     'InvStatus-returned': item.IssueStatus === 2 && item.ReturnStatus === 1
+                   }">-->
+              <!--{{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2  && item.ReturnStatus === 0 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' :  item.IssueStatus ===2  && item.ReturnStatus === 1  ? 'Returned' : 'Unknown' }}-->
+
+              <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1 || (item.IssueStatus === 2 && item.IssuedToType=='Lab') ,
+                   'InvStatus-issued': ((item.IssueStatus === 5 && item.IssuedToType=='Lab' && item.ReturnStatus === 0) || (item.IssueStatus === 2 && item.ReturnStatus === 0 && item.IssuedToType!='Lab')) ,
+                   'InvStatus-reject': item.IssueStatus === 3 || item.IssueStatus === 6 ,
+                   'InvStatus-returned': ((item.IssueStatus === 5 && item.ReturnStatus === 1 && item.IssuedToType=='Lab') || (item.IssueStatus === 2 && item.ReturnStatus === 1 && item.IssuedToType!='Lab'))
+                 }">
+
+
+                {{
+                item.IssueStatus === 1 ? 'Pending for approve at Store Incharge'
+                : item.IssueStatus ===2 && item.IssuedToType=='Lab'  ? 'Pending for Approve at Officer Lab-Incharge'
+                : item.IssueStatus ===2 && (item.IssuedToType !='Lab')  ? 'Issued'
+                : item.IssueStatus ===3 ? 'Reject by store incharge'
+                : item.IssueStatus ===5  && item.ReturnStatus === 0  ? 'Issued'
+                : item.IssueStatus ===5  && item.ReturnStatus === 1  ? 'Returned'
+                : item.IssueStatus ===6 ? 'Reject by Officer LabIncharge': 'Unknown'
+                }}
+
               </span>
             </td>
 
@@ -220,7 +241,7 @@
 
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
-            <td colspan="10">
+            <td colspan="17">
               No Record Found
             </td>
           </tr>
@@ -241,7 +262,7 @@
         <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
       </div>
       <div class="card-body">
-        <div class="mt-4">
+        <div class="mt-4 w-full max-h-[70vh] overflow-auto">
 
           <table class="w-full table-border" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
@@ -301,14 +322,14 @@
                   </span>
                 </td>
                 <td align="left">
-          
+
                   <!-- <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
-                     'InvStatus-issued': item.IssueStatus === 2,
-                     'InvStatus-reject': item.IssueStatus === 3,
-                     'InvStatus-returned': item.IssueStatus === 4
-                   }">
-    {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' : item.IssueStatus ===4 ? 'Returned' : 'Unknown' }}
-  </span> -->
+                                     'InvStatus-issued': item.IssueStatus === 2,
+                                     'InvStatus-reject': item.IssueStatus === 3,
+                                     'InvStatus-returned': item.IssueStatus === 4
+                                   }">
+                    {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' : item.IssueStatus ===4 ? 'Returned' : 'Unknown' }}
+                  </span> -->
                   <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
                        'InvStatus-issued': item.IssueStatus === 2 && item.ReturnStatus === 0,
                        'InvStatus-reject': item.IssueStatus === 3,
