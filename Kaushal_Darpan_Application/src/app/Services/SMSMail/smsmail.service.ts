@@ -95,4 +95,43 @@ export class SMSMailService
       ).toPromise();
   }
 
+
+  // Save a new query/request
+public async SaveEmailTemplate(request: any) {
+  const body = JSON.stringify(request);
+  return await this.http
+    .post(`${this.APIUrl}/SaveEmailTemplate`, body, this.headersOptions)
+    .pipe(
+      catchError(this.handleErrorObservable)
+    )
+    .toPromise();
+}
+
+public async GetEmailTemplateList(id: number = 0, searchText: string = ''){
+
+  const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    return await this.http.get(this.APIUrl + "/GetEmailTemplateList?id=" + id + "&searchText=" + searchText)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+
+
+}
+
+
+// 3. Send Email Dispatch
+public async SendEmail_New(request: any) {
+  const body = JSON.stringify(request);
+  return await this.http
+    .post(`${this.APIUrl}/SendEmail_New`, body, this.headersOptions)
+    .pipe(
+      catchError(this.handleErrorObservable)
+    )
+    .toPromise();
+}
+
 }

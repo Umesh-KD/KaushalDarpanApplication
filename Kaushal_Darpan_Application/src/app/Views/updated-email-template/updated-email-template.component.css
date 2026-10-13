@@ -223,3 +223,149 @@ h2 {
 .field-icon-subtle {
   color: #94a3b8;
 }
+
+
+
+/* Table & List Toolbar */
+.list-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.search-field {
+  width: 360px;
+  max-width: 100%;
+}
+
+.search-click-icon {
+  cursor: pointer;
+  color: #64748b;
+}
+
+.search-click-icon:hover {
+  color: #2563eb;
+}
+
+.toolbar-btns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.custom-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.custom-data-table th {
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.custom-data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.custom-data-table tr:hover td {
+  background-color: #f8fafc;
+}
+
+.code-pill {
+  font-family: monospace;
+  background-color: #f1f5f9;
+  color: #0f172a;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.font-medium {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.text-truncate-cell {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge-active {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.badge-inactive {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.badge-blue {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+}
+
+.badge-gray {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.action-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.empty-state-cell {
+  text-align: center;
+  padding: 48px 0;
+  color: #94a3b8;
+}
+
+.empty-state-cell mat-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 8px;
+}
+
+.btn-action-send {
+  color: #10b981; /* Green emerald accent */
+  transition: transform 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.btn-action-send:hover {
+  color: #059669;
+  transform: scale(1.1);
+  background-color: #ecfdf5;
+}
