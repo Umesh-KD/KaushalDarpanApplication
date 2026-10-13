@@ -892,7 +892,6 @@ export class AddCollegeMasterComponent implements OnInit {
       districtID: '0',
       tehsilID: '0',
       CollegeType: '0',
-      CourseType: '',
       ActiveStatus: 'true'
     });
  }
