@@ -50,5 +50,12 @@ export class BTERMasterService {
       ).toPromise();
   }
 
-  
+
+  public async GetBTERInstituteDtlsById(Id: number) {
+
+    return await this.http.get(this.APIUrl + "/Get_BTERInstituteDataByID/" + Id + "/", this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
