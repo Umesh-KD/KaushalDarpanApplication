@@ -16,6 +16,7 @@ import { MarksheetLetterSearchModel } from '../../../Models/MarksheetLetterDataM
 import { CollegesWiseReportsModel } from '../../../Models/CollegesWiseReportsModel';
 import { ExamResultStudentStaticsModel, ExamWiseStreamPapersReportModelModel, GetSessionalFailStudentReport, StudentAllMarksReportModel } from '../../../Models/GenerateAdmitCardDataModel';
 import { EndTermFinYearModel } from '../../../Models/CommonMasterDataModel';
+import { Router } from '@angular/router';
 
 export interface requestData {
   Action: string;
@@ -84,6 +85,7 @@ export class BterUFMReportsComponent implements OnInit {
   public StudentAllMarksReport: StudentAllMarksReportModel[] = [];
 
   public endTermFinYear: EndTermFinYearModel[] = [];
+  public MenuAllowedRoleList: any[] = [];
   public _EnumResultType = EnumResultType;
 
 
@@ -98,16 +100,42 @@ export class BterUFMReportsComponent implements OnInit {
     private http: HttpClient,
     private toastrService: ToastrService,
     private toastr: ToastrService,
-    private marksheetDownloadService: MarksheetDownloadService
+    private marksheetDownloadService: MarksheetDownloadService,
+    private Router: Router,
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.sSOLoginDataModel = this.ssoLoginUser;
+    await this.GetMenuPermission();
     this.filterModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.filterModel.EndTermID = 0;
     this.filterModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
 
-    this.loadMasterData();
+    await this.loadMasterData();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async loadMasterData() {

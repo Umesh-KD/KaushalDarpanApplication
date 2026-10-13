@@ -42,6 +42,7 @@ export class EmitraFeeTransactionHistoryComponent {
   public SemesterMasterDDLList: any = []
   public StreamMasterDDLList: any = []
   selectedItems: any[] = [];
+  MenuAllowedRoleList: any[] = [];
   masterSelected: boolean = false;
 
   //table feature default
@@ -75,6 +76,7 @@ export class EmitraFeeTransactionHistoryComponent {
   }
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     console.log("this.sSOLoginDataModel", this.sSOLoginDataModel);
 
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;;
@@ -86,6 +88,30 @@ export class EmitraFeeTransactionHistoryComponent {
     // await this.getStudentFeesTransactionHistoryList();
     await this.getSemesterMasterList()
     await this.getStreamMasterList()
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async getSemesterMasterList() {

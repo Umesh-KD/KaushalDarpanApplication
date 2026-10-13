@@ -78,6 +78,7 @@ export class TimeTableComponent implements OnInit {
   public TimeTableInvigilatorData: any = []
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
+  public MenuAllowedRoleList: any = [];
   public requestInvigilatorSSOID = new DDL_InvigilatorSSOID_DataModel()
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
   public PublishFileName:string=''
@@ -115,6 +116,30 @@ export class TimeTableComponent implements OnInit {
     await this.GetDateConfig();
   }
   get _InvigilatorFormGroup() { return this.InvigilatorFormGroup.controls; }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
 
   async ViewandUpdate(content: any, id: number)
   {

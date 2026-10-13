@@ -12,6 +12,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import { GetRollService } from '../../../Services/GenerateRoll/generate-roll.service';
 import { VerifyRollNumberList } from '../../../Models/GenerateRollDataModels';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-center-superintendent-allocation',
@@ -36,6 +37,7 @@ export class CenterSuperintendentAllocationComponent implements OnInit {
   isLoading: boolean = false;
   isSubmitted: boolean = false;
   assignedInstitutes: any = [];
+  MenuAllowedRoleList: any = [];
   assignedInstitutesReady: boolean = false;
   closeResult: string | undefined;
   Table_SearchText: string = '';
@@ -54,16 +56,43 @@ export class CenterSuperintendentAllocationComponent implements OnInit {
   _EnumRole = EnumRole;
 
   constructor(...args: unknown[]);
-  constructor() { }
+  constructor(
+    private routers: Router,
+  ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.request.ModifyBy = this.sSOLoginDataModel.UserID;
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
     await this.GetStatusCenterSuperintendent();
     await this.GetCenterMasterList();
 
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async GetCenterMasterList() {

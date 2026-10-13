@@ -11,6 +11,7 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import * as XLSX from 'xlsx';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-generate-cc-code',
@@ -35,6 +36,7 @@ export class GenerateCcCodeComponent {
   public request = new UpdateCCCodeDataModel();
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
+  public MenuAllowedRoleList: any = [];
   constructor(
     private commonMasterService: CommonFunctionService,
     private centerAllotmentService: CenterAllotmentService,
@@ -43,6 +45,7 @@ export class GenerateCcCodeComponent {
     private fb: FormBuilder,
     private modalService: NgbModal,
     private Swal2: SweetAlert2,
+    private Router: Router,
   ) {}
 
   async ngOnInit() {
@@ -61,12 +64,36 @@ export class GenerateCcCodeComponent {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     await this.GetCategory()
     await this.GetDistrictMasterList()
     await this.GetAllData()
     await this.GetDateConfig();
 
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   validateNumber(event: KeyboardEvent) {

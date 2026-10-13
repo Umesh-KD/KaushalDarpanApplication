@@ -84,6 +84,7 @@ export class CenterObserverComponent {
   public TimeTableInvigilatorData: any = []
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
+  public MenuAllowedRoleList: any = [];
   public requestInvigilatorSSOID = new DDL_InvigilatorSSOID_DataModel()
   public requestObs = new CenterObserverDataModel()
   isForwardToVerify: boolean = false
@@ -134,6 +135,7 @@ export class CenterObserverComponent {
       DeploymentDate: ['', Validators.required],
     });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     console.log("sSOLoginDataModel", this.sSOLoginDataModel)
     this.request.UserID = this.sSOLoginDataModel.UserID;
     this.UserID = this.sSOLoginDataModel.UserID;
@@ -147,6 +149,30 @@ export class CenterObserverComponent {
     await this.GetAllData();
   }
   get _InvigilatorFormGroup() { return this.InvigilatorFormGroup.controls; }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
 
   async getMasterData() {
     try {

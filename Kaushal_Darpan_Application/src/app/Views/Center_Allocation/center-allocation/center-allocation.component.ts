@@ -75,6 +75,7 @@ export class CenterAllocationComponent implements OnInit {
   public DistrictMasterList: any = []
   public InstituteMasterList: any = []
   BackupCenterMasterList: any[] = [];
+  MenuAllowedRoleList: any[] = [];
   /** Inserted by Angular inject() migration for backwards compatibility */
   constructor(...args: unknown[]);
   constructor() { }
@@ -101,6 +102,7 @@ export class CenterAllocationComponent implements OnInit {
       defaultOpen: false,
     };
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.request.ModifyBy = this.sSOLoginDataModel.UserID;
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -112,6 +114,30 @@ export class CenterAllocationComponent implements OnInit {
     this.UserID = this.sSOLoginDataModel.UserID;
     await this.GetDistrictMasterList();
     await this.ddlInstitute_Change()
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async ddlInstitute_Change() {
