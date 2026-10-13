@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { LoaderService } from '../../Services/Loader/loader.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SweetAlert2 } from '../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-updated-email-template',
@@ -11,13 +15,21 @@ export class UpdatedEmailTemplateComponent implements OnInit {
   templateForm!: FormGroup;
   isEditMode = false;
   submitted = false;
+  public isLoading: boolean = false;
+  // public isSubmitted: boolean = false;
   // Add these two properties:
+  
   openBraces = '{{';
   closeBraces = '}}';
   
   availableVariables: string[] = ['Name', 'ApplicationNo', 'Status', 'Date', 'ReferenceID', 'Email', 'Doc'];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder,
+      private toastr: ToastrService,      
+      private loaderService: LoaderService,
+      private formBuilder: FormBuilder,
+      private modalService: NgbModal,
+      private Swal2: SweetAlert2) {}
 
   ngOnInit(): void {
     this.createForm();
@@ -79,6 +91,57 @@ export class UpdatedEmailTemplateComponent implements OnInit {
       this.templateForm.markAllAsTouched();
       return;
     }
+
+    //  try {
+    
+    //       this.loaderService.requestStarted();
+    //       this.isLoading = true;
+    
+    //       let response: any;
+    //     debugger
+    //       // if (requestID > 0) {
+    
+    //       //   response =
+    //       //     await this.designationMasterService.UpdateRequest(payload);
+    
+    //       // } else {
+    
+    //       //   response =
+    //       //     await this.designationMasterService.SaveQueryRequest(payload);
+    
+    //       // }
+    
+    //       response =await this.designationMasterService.SaveQueryRequest(payload);
+    
+    //       const data = this.parseResponse(response);
+    
+    //       if (data.State === EnumStatus.Success) {
+    
+    //         this.toastr.success(
+    //           data.Message ||
+    //           (requestID > 0
+    //             ? 'Request updated successfully.'
+    //             : 'Request submitted successfully.')
+    //         );
+    
+    //         await this.CloseModalPopup();
+    //         await this.GetRequestList();
+    
+    //       } else {
+    
+    //         this.toastr.error(
+    //           data.ErrorMessage || data.Message || 'Unable to save request.'
+    //         );
+    
+    //       }
+    
+    //     } catch (error) {
+    
+    //       console.error('SaveData error:', error);
+    //       this.toastr.error('An error occurred while saving the request.');
+    
+    //     } 
+
     const request = this.templateForm.getRawValue();
     console.log('Email Template Request:', request);
   }
