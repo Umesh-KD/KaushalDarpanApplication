@@ -53,6 +53,7 @@ export class CreateHostelComponent   {
   SumofAvailableSeats: number = 0;
   HostelName: string = '';
   modalReference: NgbModalRef | undefined;
+    MenuAllowedRoleList: any;
 
   constructor(
     private fb: FormBuilder,
@@ -70,6 +71,9 @@ export class CreateHostelComponent   {
 
 
   async ngOnInit() {
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
+
     this.groupForm = this.fb.group({
       txtHostelName: ['', Validators.required],
       ddlHostelType: ['0', [DropdownValidators]],
@@ -78,8 +82,6 @@ export class CreateHostelComponent   {
       //txtPhoneNumber: [{ value: '' }, Validators.required],
       txtAddress: ['', Validators.required],
     });
-    
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.getHostelTypeList(); 
     await this.GetAllHostelList(); 
   }
@@ -471,6 +473,30 @@ export class CreateHostelComponent   {
   CloseModal_SeatIntake() {
     this.modalService.dismissAll();
     this.modalReference?.close();
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 }

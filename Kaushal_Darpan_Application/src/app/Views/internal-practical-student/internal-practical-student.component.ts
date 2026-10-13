@@ -75,6 +75,7 @@ export class InternalPracticalStudentComponent implements OnInit {
 
   public HodBranchlist: any[] = [];
   public hodRequestModel = new AdminUserSearchModel();
+    MenuAllowedRoleList: any;
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -93,6 +94,7 @@ export class InternalPracticalStudentComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
     //debugger
     this.InternalPracticalID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
@@ -815,6 +817,30 @@ export class InternalPracticalStudentComponent implements OnInit {
     catch (ex) {
       console.log(ex);
     }
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 }
