@@ -52,6 +52,8 @@ export class GrivienceSearchModel {
   public Action?: string = '';
   public StudentID: number = 0;
   public UserID: number = 0;
+  public FromDate :string=''
+  public ToDate :string=''
 }
 
 export class GrivienceResponseDataModel {
