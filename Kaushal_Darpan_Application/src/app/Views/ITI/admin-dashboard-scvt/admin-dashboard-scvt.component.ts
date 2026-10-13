@@ -81,7 +81,7 @@ export class AdminDashboardSCVTComponent {
             this.invigilatorRemuneretionlist = this.viewAdminDashboardList.filter(s => s.ListType == 'InvigilatorRemuneretion');
             this.ResultsList = this.viewAdminDashboardList.filter(s => s.ListType == 'Results');
             debugger
-            this.viewAdminDashboardListCitizenSuggestion = this.viewAdminDashboardList.filter(s => s.ListType == 'citizenQueryDetails');
+            this.viewAdminDashboardListCitizenSuggestion = this.viewAdminDashboardList.filter(s => s.ListType == 'CitizenSuggestion');
 
             //console.log(this.viewAdminDashboardListEnrollment, "EnrollmentType");
           }, (error: any) => console.error(error)
