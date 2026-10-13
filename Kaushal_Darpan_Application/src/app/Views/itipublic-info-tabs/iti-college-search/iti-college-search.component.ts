@@ -167,6 +167,7 @@ export class ItiCollegeSearchComponent {
     this.GetcOmmonData();
     this.GetStateMaterData();
     await this.ddlDistrict();
+    await this.Tradetype();
 
     /*await this.GetPanchayatSamiti('')*/
 
@@ -1111,6 +1112,13 @@ export class ItiCollegeSearchComponent {
       }
     }
   }
-
+  async Tradetype() {
+    await this.commonMasterService.GetCommonMasterData('EngNonTrade', this.request.TradeTypeID)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StreamMasterList = data['Data'];
+      }, (error: any) => console.error(error)
+      );
+  }
 
 }

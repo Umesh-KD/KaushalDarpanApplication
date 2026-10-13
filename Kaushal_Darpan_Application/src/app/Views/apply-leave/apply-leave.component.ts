@@ -136,7 +136,7 @@ export class ApplyLeaveComponent {
     //debugger
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData('LeaveTypeByStaffTypeID',this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.Eng_NonEng,this.sSOLoginDataModel.StaffTypeID)
+      await this.commonMasterService.GetCommonMasterData('LeaveTypeByStaffTypeID',this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.Eng_NonEng,this.sSOLoginDataModel.StaffTypeID??0)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.LeaveTypeList = data['Data'];
@@ -581,7 +581,8 @@ async calculateDays() {
     return false;
   }
 
-  
+
+
   // onInput(event: any): void {
   //   const inputValue = event.target.value;
 

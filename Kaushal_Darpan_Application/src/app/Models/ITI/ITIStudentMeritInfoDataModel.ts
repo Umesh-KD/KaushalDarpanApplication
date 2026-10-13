@@ -51,6 +51,9 @@ export class ITICollegeSearchModel
     public PageSize: number = 0;
     public InstituteID?: number = 0;
     public TradeID?: number = 0;
+  public TradeTypeID?: number = 0;
+  public ManagementTypeId?: number = 0;
+  public SchemeTypeID?: number = 0;
     public Action?: string = '';
   
   
