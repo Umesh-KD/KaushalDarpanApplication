@@ -7,7 +7,8 @@ import { SerialMasterBTERComponent } from './serial-master-bter/serial-master-bt
 import { AllotmentConfigurationBTERComponent } from './allotment-configuration-bter/allotment-configuration-bter.component';
 import { DateConfigurationBTERComponent } from './date-configuration-bter/date-configuration-bter.component';
 import { BterSignatureMasterComponent } from './signature-bter/bter-signature.component';
-import { EnumRole } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
+import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-master-configuration-bter',
@@ -20,6 +21,7 @@ export class MasterConfigurationBTERComponent {
   @ViewChild('tabContent', { read: ViewContainerRef }) tabContent!: ViewContainerRef;
   selectedTabIndex = 0;
   completedTabs = [false, true, false];
+  MenuAllowedRoleList: any[] = []
   public sSOLoginDataModel = new SSOLoginDataModel();
   tabs = [
 
@@ -33,7 +35,9 @@ export class MasterConfigurationBTERComponent {
   constructor(
     private resolver: ComponentFactoryResolver,
     private router: Router,
-    private cdr: ChangeDetectorRef)
+    private cdr: ChangeDetectorRef,
+    private commonMasterService: CommonFunctionService,
+  )
   { }
 
 
@@ -42,7 +46,7 @@ export class MasterConfigurationBTERComponent {
 
     debugger;
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     if (
       this.sSOLoginDataModel.RoleID == EnumRole.DTE || 
       this.sSOLoginDataModel.RoleID == EnumRole.DTENON || 
@@ -87,5 +91,29 @@ export class MasterConfigurationBTERComponent {
   public handleTabChange(index: number): void {
     this.completedTabs[index] = true
     this.selectTab(index); // Switch the tab
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 }

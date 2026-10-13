@@ -9,7 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonSubjectService } from '../../../Services/CommonSubjects/common-subjects.service';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
-import { EnumConfigurationType, EnumDepartment, EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumConfigurationType, EnumDepartment, EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 
 
 @Component({
@@ -23,6 +23,7 @@ export class CommonSubjectsComponent implements OnInit {
   public SemestarMasterDDLList: any = [];
   public SubjectMasterDDLList: any = [];
   public CommonSubjectList: any = [];
+  public MenuAllowedRoleList: any = [];
   public Table_SearchText: string = "";
   public searchRequest = new CommonSubjectMasterSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
@@ -30,6 +31,7 @@ export class CommonSubjectsComponent implements OnInit {
   public Message: string = '';
   public ErrorMessage: string = '';
   public IsCommonSubjectMasterDateOpen: number = 0;
+  _EnumRole = EnumRole;
 
   constructor(private commonMasterService: CommonFunctionService,
     private commonSubjectService: CommonSubjectService,
@@ -44,6 +46,7 @@ export class CommonSubjectsComponent implements OnInit {
   }
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
 
     await this.GetMasterDateConfigData();
     await this.GetSemestarMatserDDL();
@@ -98,6 +101,7 @@ export class CommonSubjectsComponent implements OnInit {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
     try {
       this.loaderService.requestStarted();
       await this.commonSubjectService.GetAllData(this.searchRequest)
@@ -185,5 +189,29 @@ export class CommonSubjectsComponent implements OnInit {
         this.IsCommonSubjectMasterDateOpen = data['Data'][0][EnumConfigurationType.Common_Subject_Master];
       }, (error: any) => console.error(error)
       );
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 }

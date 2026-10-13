@@ -1,6 +1,6 @@
 import { Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { CommonFunctionService } from '../../../Common/common';
@@ -50,6 +50,7 @@ export class AdminTheoryMarksUpdateRevalComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
   public TheoryMarksDetailList: TheoryMarksDataModels[] = []
   public TheoryMarksDashBoardCount: any[] = []
+  public MenuAllowedRoleList: any[] = []
   public IsCountShow: boolean = true
   public copyCheckerRequest = new CopyCheckerRequestModel();
   public perfactStudents: any = [];
@@ -89,12 +90,14 @@ export class AdminTheoryMarksUpdateRevalComponent {
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private router: ActivatedRoute,
-    private Swal2: SweetAlert2
+    private Swal2: SweetAlert2,
+    private routers: Router,
   ) { }
 
   async ngOnInit() {
     //debugger
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     await this.GetTheoryMarksDetailList();
   }
 
@@ -511,5 +514,29 @@ export class AdminTheoryMarksUpdateRevalComponent {
     }
 
     event.preventDefault();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 }

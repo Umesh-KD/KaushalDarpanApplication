@@ -222,7 +222,7 @@ export class AddCommonSubjectsComponent implements OnInit {
   async GetById() {
     try {
       this.loaderService.requestStarted();
-      await this.commonSubjectService.GetById(this.CommonSubjectId)
+      await this.commonSubjectService.GetById(this.CommonSubjectId, this.sSOLoginDataModel.RoleID)
         .then((data: any) => {
           
           data = JSON.parse(JSON.stringify(data));
@@ -265,6 +265,7 @@ export class AddCommonSubjectsComponent implements OnInit {
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.request.RoleID = this.sSOLoginDataModel.RoleID;
 
       var stm = this.request.commonSubjectDetails.filter(x => this.commonSubjectDetails.SubjectID)
       //child data process....

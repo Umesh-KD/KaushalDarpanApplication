@@ -7,7 +7,7 @@ import { CommonFunctionService } from '../../Services/CommonFunction/common-func
 import { LoaderService } from '../../Services/Loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
@@ -62,6 +62,7 @@ export class AllotedStudentVerifyComponent {
   public ExamStudentStatusList: any[] = [];
   public status: number = 0
   public FinancialYear: any = []
+  public MenuAllowedRoleList: any = []
   public isShowdrop: boolean = true
 
   public isLoading: boolean = false;
@@ -98,12 +99,14 @@ export class AllotedStudentVerifyComponent {
     private activatedRoute: ActivatedRoute,
     public appsettingConfig: AppsettingService,
     public allotedStudentVerifyService: AllotedStudentVerifyService,
+    private router: Router
   ) { }
 
   async ngOnInit() {
     debugger
     //session
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     // getting info from route and load data accordingly
     const status = Number(this.activatedRoute.snapshot.queryParamMap.get('status'));
     const tab = Number(this.activatedRoute.snapshot.queryParamMap.get('tab'));
@@ -115,6 +118,30 @@ export class AllotedStudentVerifyComponent {
     }
     //load data
     await this.GetMasterData();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async GetMasterData() {
