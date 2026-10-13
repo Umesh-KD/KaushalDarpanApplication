@@ -77,7 +77,7 @@
               </a>
             </li>
 
-          <li class="menu-item" *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.CandidateRole">
+            <li class="menu-item" *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.CandidateRole">
               <a routerLink="/CandidateApplicationList" (click)="js_SubMenu($event)" class="active group flex items-center gap-x-3.5 rounded-e-full px-4 py-2 text-sm font-medium text-default-700 transition-all hover:bg-default-100 hs-accordion-active:bg-default-100">
                 <i class="material-symbols-rounded font-light text-2xl transition-all group-hover:fill-1">dashboard</i>
                 <span class="menu-text"> Application List</span>
@@ -90,6 +90,15 @@
               <a routerLink="/ApplicationList" (click)="js_SubMenu($event)" class="group flex items-center gap-x-3.5 rounded-e-full px-4 py-2 text-sm font-medium text-default-700 transition-all hover:bg-default-100 hs-accordion-active:bg-default-100">
                 <i class="material-symbols-rounded font-light text-2xl transition-all group-hover:fill-1">dashboard</i>
                 <span class="menu-text"> Application List</span>
+              </a>
+
+            </li>
+
+            <li class="menu-item" *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.Student">
+
+              <a routerLink="/Grievance" (click)="js_SubMenu($event)" class="group flex items-center gap-x-3.5 rounded-e-full px-4 py-2 text-sm font-medium text-default-700 transition-all hover:bg-default-100 hs-accordion-active:bg-default-100">
+                <i class="material-symbols-rounded font-light text-2xl transition-all group-hover:fill-1">support_agent</i>
+                <span class="menu-text">Grievance</span>
               </a>
 
             </li>
@@ -162,36 +171,36 @@
 
 
 
-          
-              <li *ngIf="IsJailCollege" class="menu-item">
-                <a href="javascript:void(0);" (click)="js_SubMenu($event)"
-                   class="group flex items-center gap-x-3.5 rounded-e-full px-4 py-2 text-sm font-medium text-default-700 transition-all hover:bg-default-100 hs-accordion-active:bg-default-100">
-                  <i class="material-symbols-rounded font-light text-2xl transition-all group-hover:fill-1">fence</i>
-                  <span class="menu-text w-full flex justify-between items-center"> <span>Jail Admission</span> <i class="ti ti-chevron-down"></i></span>
-                </a>
-                <ul class="MainSubMenu">
 
-                  <li>
-                    <a class="sub-menu" (click)="js_SubMenuActive($event)"
-                       [routerLink]="['JailAdmissionApply']"><i class="ti ti-chevron-right"></i><span>Apply For Jail Admission</span></a>
-                  </li>
+            <li *ngIf="IsJailCollege" class="menu-item">
+              <a href="javascript:void(0);" (click)="js_SubMenu($event)"
+                 class="group flex items-center gap-x-3.5 rounded-e-full px-4 py-2 text-sm font-medium text-default-700 transition-all hover:bg-default-100 hs-accordion-active:bg-default-100">
+                <i class="material-symbols-rounded font-light text-2xl transition-all group-hover:fill-1">fence</i>
+                <span class="menu-text w-full flex justify-between items-center"> <span>Jail Admission</span> <i class="ti ti-chevron-down"></i></span>
+              </a>
+              <ul class="MainSubMenu">
 
-                  <li>
-                    <a class="sub-menu" (click)="js_SubMenuActive($event)"
-                       [routerLink]="['JailAdmissionAllotment',8]"><i class="ti ti-chevron-right"></i><span> 8th Jail Admission Reporting</span></a>
-                  </li>
-                  <li>
-                    <a class="sub-menu" (click)="js_SubMenuActive($event)"
-                       [routerLink]="['JailAdmissionAllotment10',10]"><i class="ti ti-chevron-right"></i><span> 10th Jail Admission Reporting</span></a>
-                  </li>
-                  <li>
-                    <a class="sub-menu" (click)="js_SubMenuActive($event)"
-                       [routerLink]="['JailAdmissionAllotment12',12]"><i class="ti ti-chevron-right"></i><span> 12th Jail Admission Reporting</span></a>
-                  </li>
+                <li>
+                  <a class="sub-menu" (click)="js_SubMenuActive($event)"
+                     [routerLink]="['JailAdmissionApply']"><i class="ti ti-chevron-right"></i><span>Apply For Jail Admission</span></a>
+                </li>
 
-                </ul>
-              </li>
-         
+                <li>
+                  <a class="sub-menu" (click)="js_SubMenuActive($event)"
+                     [routerLink]="['JailAdmissionAllotment',8]"><i class="ti ti-chevron-right"></i><span> 8th Jail Admission Reporting</span></a>
+                </li>
+                <li>
+                  <a class="sub-menu" (click)="js_SubMenuActive($event)"
+                     [routerLink]="['JailAdmissionAllotment10',10]"><i class="ti ti-chevron-right"></i><span> 10th Jail Admission Reporting</span></a>
+                </li>
+                <li>
+                  <a class="sub-menu" (click)="js_SubMenuActive($event)"
+                     [routerLink]="['JailAdmissionAllotment12',12]"><i class="ti ti-chevron-right"></i><span> 12th Jail Admission Reporting</span></a>
+                </li>
+
+              </ul>
+            </li>
+
 
 
           </ul>
