@@ -128,26 +128,26 @@ export class CitizenqueryDetailsComponent implements OnInit {
   }
 
   async commonIDFix() {
-    if (this.sSOLoginDataModel.DepartmentName === "ITI" && this.sSOLoginDataModel.InstituteID === 0) {
+    if (this.sSOLoginDataModel.DepartmentID ==2 && this.sSOLoginDataModel.InstituteID === 0) {
       const excludedIDs = [89, 87, 88,1331]; 
       this.QueryForMasterList = this.QueryForMasterList.filter(item => !excludedIDs.includes(item.ID));
       this.CommnID = 88;
       this.GetMasterSubDDL();
     }
-    else if (this.sSOLoginDataModel.DepartmentName === "BTER" && this.sSOLoginDataModel.InstituteID === 0) {
-      const excludedIDs = [88, 274, 87];
+    else if (this.sSOLoginDataModel.DepartmentID == 1 && this.sSOLoginDataModel.InstituteID === 0) {
+      const excludedIDs = [ 274, 310, 10399];
       this.QueryForMasterList = this.QueryForMasterList.filter(item => !excludedIDs.includes(item.ID));
       this.CommnID = 89;
       this.GetMasterSubDDL();
     }
-    else if (this.sSOLoginDataModel.DepartmentName === "ITI" && this.sSOLoginDataModel.InstituteID !== 0) {
+    else if (this.sSOLoginDataModel.DepartmentID == 2 && this.sSOLoginDataModel.InstituteID !== 0) {
       const excludedIDs = [87, 88, 89];
       this.QueryForMasterList = this.QueryForMasterList.filter(item => !excludedIDs.includes(item.ID));
       this.CommnID = 274;
       this.GetMasterSubDDL();
     }
-    else if (this.sSOLoginDataModel.DepartmentName === "BTER" && this.sSOLoginDataModel.InstituteID !== 0) {
-      const excludedIDs = [88,89, 274];
+    else if (this.sSOLoginDataModel.DepartmentID == 1 && this.sSOLoginDataModel.InstituteID !== 0) {
+     const excludedIDs = [ 274, 310, 10399];
       this.QueryForMasterList = this.QueryForMasterList.filter(item => !excludedIDs.includes(item.ID));
       this.CommnID = 87;
       this.GetMasterSubDDL();

@@ -49,6 +49,7 @@ export class AdminDashboardITIComponent implements OnInit
 
   public isprofile: number = 0;
   public DistrictMasterList: any = [];
+  public viewAdminDashboardListCitizenSuggestion: any = [];
   public DashBoardITIDispatchList: any[] = [];
   public Allotment1List: any[] = [];
   public Allotment2List: any[] = [];
@@ -132,6 +133,7 @@ export class AdminDashboardITIComponent implements OnInit
 
 
             this.viewJailApplicationCount = this.viewAdminDashboardList.filter(s => s.ListType == 'JailApplicationCount');
+            this.viewAdminDashboardListCitizenSuggestion = this.viewAdminDashboardList.filter(s => s.ListType == 'CitizenSuggestion');
 
             //console.log(this.viewAdminDashboardList, "DashBoo");
             //console.log(this.viewAdminDashboardListEnrollment, "EnrollmentType");

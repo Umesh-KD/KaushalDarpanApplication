@@ -27,6 +27,7 @@ export class AdminDashboardSCVTComponent {
   public ITIsWithNumberOfFormsPriorityList: any = [];
   public invigilatorRemuneretionlist: any = [];
   public ResultsList: any = [];
+  public viewAdminDashboardListCitizenSuggestion: any = [];
   public Table_SearchText: string = "";
   public searchRequest = new ITIAdminDashboardSearchModel();
 
@@ -79,6 +80,8 @@ export class AdminDashboardSCVTComponent {
             this.DashBoardITIDispatchList = this.viewAdminDashboardList.filter(s => s.ListType == 'ITIDispatch');
             this.invigilatorRemuneretionlist = this.viewAdminDashboardList.filter(s => s.ListType == 'InvigilatorRemuneretion');
             this.ResultsList = this.viewAdminDashboardList.filter(s => s.ListType == 'Results');
+            debugger
+            this.viewAdminDashboardListCitizenSuggestion = this.viewAdminDashboardList.filter(s => s.ListType == 'CitizenSuggestion');
 
             //console.log(this.viewAdminDashboardListEnrollment, "EnrollmentType");
           }, (error: any) => console.error(error)

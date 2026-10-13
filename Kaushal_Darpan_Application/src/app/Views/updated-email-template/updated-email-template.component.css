@@ -1,0 +1,382 @@
+:host {
+  display: block;
+  padding: 24px;
+  background-color: #f8fafc;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.template-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-icon {
+  color: #3b82f6;
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.subtitle {
+  margin: 4px 0 0 44px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Tabs & Cards */
+.styled-tab-group {
+  background: transparent;
+}
+
+::ng-deep .styled-tab-group .mat-mdc-tab-header {
+  background: #ffffff;
+  border-radius: 8px 8px 0 0;
+  border: 1px solid #e2e8f0;
+  border-bottom: none;
+}
+
+.tab-icon {
+  margin-right: 8px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.tab-body-pane {
+  padding: 24px 0;
+}
+
+.glass-card {
+  background: #ffffff;
+  border-radius: 0 0 12px 12px;
+  border: 1px solid #e2e8f0;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.mb-3 {
+  margin-bottom: 20px;
+}
+
+/* Titles */
+.section-title {
+  margin-bottom: 20px;
+}
+
+.section-title h4 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.section-hint {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.title-with-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-sql {
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* Grid Layouts */
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  align-items: center;
+}
+
+.form-grid-1 {
+  margin-top: 12px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.toggle-control-box {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;
+}
+
+.toggle-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+}
+
+/* Variable Chips */
+.variable-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 18px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 16px;
+}
+
+.var-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.chip-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.variable-chip {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: monospace;
+  font-weight: 600;
+  color: #2563eb;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.variable-chip:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  transform: translateY(-1px);
+}
+
+/* Code & Editor Areas */
+.editor-header-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.code-area-field textarea,
+.query-editor textarea {
+  font-family: "Fira Code", Monaco, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #0f172a;
+}
+
+.field-icon-subtle {
+  color: #94a3b8;
+}
+
+
+
+/* Table & List Toolbar */
+.list-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.search-field {
+  width: 360px;
+  max-width: 100%;
+}
+
+.search-click-icon {
+  cursor: pointer;
+  color: #64748b;
+}
+
+.search-click-icon:hover {
+  color: #2563eb;
+}
+
+.toolbar-btns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.custom-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.custom-data-table th {
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.custom-data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.custom-data-table tr:hover td {
+  background-color: #f8fafc;
+}
+
+.code-pill {
+  font-family: monospace;
+  background-color: #f1f5f9;
+  color: #0f172a;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.font-medium {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.text-truncate-cell {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge-active {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.badge-inactive {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.badge-blue {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+}
+
+.badge-gray {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.action-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.empty-state-cell {
+  text-align: center;
+  padding: 48px 0;
+  color: #94a3b8;
+}
+
+.empty-state-cell mat-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 8px;
+}
+
+.btn-action-send {
+  color: #10b981; /* Green emerald accent */
+  transition: transform 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.btn-action-send:hover {
+  color: #059669;
+  transform: scale(1.1);
+  background-color: #ecfdf5;
+}
+
+.btn-action-test {
+  color: #8b5cf6; /* Violet accent */
+  transition: transform 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.btn-action-test:hover {
+  color: #6d28d9;
+  transform: scale(1.1);
+  background-color: #f5f3ff;
+}
