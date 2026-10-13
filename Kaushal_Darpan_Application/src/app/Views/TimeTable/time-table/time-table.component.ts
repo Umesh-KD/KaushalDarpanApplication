@@ -81,6 +81,7 @@ export class TimeTableComponent implements OnInit {
   public requestInvigilatorSSOID = new DDL_InvigilatorSSOID_DataModel()
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
   public PublishFileName:string=''
+    MenuAllowedRoleList: any;
   constructor(
     private streamService: StreamMasterService, 
     private commonMasterService: CommonFunctionService,
@@ -101,6 +102,7 @@ export class TimeTableComponent implements OnInit {
 /*      InvigilatorID: ['', [DropdownValidators]],*/
     })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     console.log("sSOLoginDataModel", this.sSOLoginDataModel)
     this.request.UserID = this.sSOLoginDataModel.UserID;
     this.UserID = this.sSOLoginDataModel.UserID;
@@ -922,5 +924,29 @@ export class TimeTableComponent implements OnInit {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(blobUrl);
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }
