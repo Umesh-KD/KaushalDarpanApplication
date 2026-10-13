@@ -58,7 +58,8 @@ export class PaperCountReportComponent implements OnInit {
     private routers: ActivatedRoute,
     private modalService: NgbModal,
     private Swal2: SweetAlert2,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private router: Router,
   ) {
     
     this.repType = parseInt(this.routers.snapshot.paramMap.get('repType') ?? "0");
@@ -83,6 +84,7 @@ export class PaperCountReportComponent implements OnInit {
   EndTermList: any[] = [];
   ReportFlaglist: any[] = [];
   ReportTypelist: any[] = [];
+  MenuAllowedRoleList: any[] = [];
 
   async ngOnInit() {
     const controls = this.UniqueKeys.map(column => {
@@ -108,6 +110,7 @@ export class PaperCountReportComponent implements OnInit {
       Type: [this.repType],
     });
 
+    await this.GetMenuPermission();
     await this.loadReportType();
 
     await this.commonMasterService.SemesterMaster().then((data: any) => {
@@ -121,6 +124,30 @@ export class PaperCountReportComponent implements OnInit {
     }, (error: any) => console.error(error));
     this.SubmitData();
   } 
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
 
   async loadReportType() {
     this.ReportTypelist = [

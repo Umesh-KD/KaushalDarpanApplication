@@ -16,6 +16,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-theory-marks-rpt-view',
@@ -33,6 +34,7 @@ export class TheoryMarksRptViewComponent {
   public Branchlist: any = [];
   public CenterCodeList: any = [];
   public InstituteMasterDDLList: any = [];
+  public MenuAllowedRoleList: any = [];
   public _GlobalConstants: any = GlobalConstants;
 
   //table feature default
@@ -60,7 +62,8 @@ export class TheoryMarksRptViewComponent {
     public commonFunctionHelper: CommonFunctionHelper,
     private formBuilder: FormBuilder,
     private Swal2: SweetAlert2,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private routers: Router,
   ) {
   }
 
@@ -72,8 +75,33 @@ export class TheoryMarksRptViewComponent {
     //   this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
     // }
     this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
+    await this.GetMenuPermission();
     await this.GetMasterData();
     //await this.GetTheoryMarksDetailList();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async GetMasterData() {

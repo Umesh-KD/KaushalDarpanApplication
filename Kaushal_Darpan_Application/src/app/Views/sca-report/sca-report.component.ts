@@ -3,7 +3,7 @@ import { StudentCenteredActivitesModels, StudentCenteredActivitesSearchModel } f
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { StudentCenteredActivitesService } from '../../Services/Student Centered Activites/student-centered-activites.service';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderService } from '../../Services/Loader/loader.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DocumentDetailsService } from '../../Common/document-details';
@@ -14,7 +14,7 @@ import { DocumentDetailsModel } from '../../Models/DocumentDetailsModel';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import * as XLSX from 'xlsx';
 import { ReportService } from '../../Services/Report/report.service';
-import { EnumRole } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 @Component({
   selector: 'app-sca-report',
   standalone: false,
@@ -60,6 +60,7 @@ export class ScaReportComponent {
   public isAnyUFMSelected: boolean = false;
   public totalInTableRecord: number = 0;
   public DocumentList: DocumentDetailsModel[] = []
+  public MenuAllowedRoleList: any[] = []
   //end table feature default
 
   constructor(private commonMasterService: CommonFunctionService,
@@ -74,7 +75,8 @@ export class ScaReportComponent {
     private ReportService: ReportService,
     private documentDetailsService: DocumentDetailsService,
     private cdr: ChangeDetectorRef,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private Router: Router,
   ) {
   }
 
@@ -88,9 +90,34 @@ export class ScaReportComponent {
     this.searchRequest.StrKey = String(this.activatedRoute.snapshot.queryParamMap.get('strkey'));
 
     // load
+    await this.GetMenuPermission();
     await this.GetMasterData();
     await this.GetGradeList();
 
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async GetMasterData() {

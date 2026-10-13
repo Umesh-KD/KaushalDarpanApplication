@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -38,6 +38,7 @@ export class MarksheetLetterComponent {
   public ExamTypeList: any = [];
   public EndTermList: any = [];
   public endTermFinYear: any = [];
+  public MenuAllowedRoleList: any = [];
 
   _EnumResultType = EnumResultType
 
@@ -51,6 +52,7 @@ export class MarksheetLetterComponent {
     public appsettingConfig: AppsettingService,
     private http: HttpClient,
     private commonFunctionHelper: CommonFunctionHelper,
+    private routers: Router,
   ) { }
 
 
@@ -58,6 +60,7 @@ export class MarksheetLetterComponent {
     // this.searchRequest.DepartmentID = 2;
     //this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+   await this.GetMenuPermission();
     //console.log(this.sSOLoginDataModel);
     //await this.GetAllData();
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
@@ -71,6 +74,31 @@ export class MarksheetLetterComponent {
    await this.GetEndTermDLL();
 
   }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
+
 
   async GetInstituteListDDL() {
     try {

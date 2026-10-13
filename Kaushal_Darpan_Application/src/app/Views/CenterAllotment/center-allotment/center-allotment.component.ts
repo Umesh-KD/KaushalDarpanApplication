@@ -54,6 +54,8 @@ export class CenterAllotmentComponent implements OnInit {
   public request = new UpdateCCCodeDataModel();
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
+  public MenuAllowedRoleList: any = [];
+
   constructor(private commonMasterService: CommonFunctionService,
     private Router: Router,
     private centerAllotmentService: CenterAllotmentService,
@@ -80,12 +82,36 @@ export class CenterAllotmentComponent implements OnInit {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     await this.GetCategory()
     await this.GetDistrictMasterList()
     await this.GetAllData()
     await this.GetDateConfig();
 
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   validateIDLength(control: any) {

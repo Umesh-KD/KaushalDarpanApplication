@@ -9,6 +9,7 @@ import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { PlacementVerifiedStudentTPOSearchModel } from '../../../Models/PlacementVerifiedStudentTPOSearchModel';
 import { PlacementVerifiedStudentTPOResponseModel } from '../../../Models/PlacementVerifiedStudentTPOResponseModel';
 import { PlacementVerifiedStudentTPOService } from '../../../Services/PlacementVerifiedStudentTPO/placement-verified-student-tpo.service';
+import { EnumStatus } from '../../../Common/GlobalConstants';
 
 declare function tableToExcel(table: any, name: any, fileName: any): any;
 
@@ -34,22 +35,57 @@ export class PlacementVerifiedStudentTpoComponent implements OnInit {
   public CampusMasterList: any[] = [];
   public CampusWiseHiringRoleList: any[] = [];
   public FinancialYearList: any[] = [];
+  public MenuAllowedRoleList: any[] = [];
   public NoRangeList: any[] = [50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70];
   public searchRequest = new PlacementVerifiedStudentTPOSearchModel();
   public StudentList: PlacementVerifiedStudentTPOResponseModel[] = [];
 
-  constructor(private commonMasterService: CommonFunctionService, private Router: Router, private placementVerifiedStudentTPOService: PlacementVerifiedStudentTPOService, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private router: ActivatedRoute, private routers: Router, private fb: FormBuilder, private modalService: NgbModal) {
-  }
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private Router: Router, 
+    private placementVerifiedStudentTPOService: PlacementVerifiedStudentTPOService, 
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private formBuilder: FormBuilder, 
+    private router: ActivatedRoute, 
+    private routers: Router, 
+    private fb: FormBuilder, 
+    private modalService: NgbModal
+  ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     await this.GetCampusPostMasterDDL();
     await this.GetInstituteMasterDDL();
     await this.GetBranchMasterDDL();
     await this.GetFinancialYearDDL();
 
     //await this.GetAllData();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   //

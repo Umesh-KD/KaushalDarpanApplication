@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
@@ -57,6 +57,7 @@ export class MarksheetDownloadComponent {
   buttonGroups: any[] = [];
   downLoadFG!: FormGroup;
   public EndTermList: any = [];
+  public MenuAllowedRoleList: any = [];
 
   constructor(private commonFunctionService: CommonFunctionService,
     private marksheetDownloadService: MarksheetDownloadService,
@@ -71,6 +72,7 @@ export class MarksheetDownloadComponent {
     private http: HttpClient,
     private menuService: MenuService,
     private commonFunctionHelper: CommonFunctionHelper,
+    private routers: Router,
   ) {
   }
 
@@ -88,10 +90,34 @@ export class MarksheetDownloadComponent {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     // load
     await this.GetMasterDDL();
     await this.YearDropdownData();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async GetMasterDDL() {

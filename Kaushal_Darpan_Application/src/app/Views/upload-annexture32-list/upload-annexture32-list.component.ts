@@ -39,6 +39,7 @@ export class UploadAnnexture32ListComponent {
 
   public CommonSubjectYesNo: number = 1;
   public CommonSubjectDDLList: any[] = [];
+  public MenuAllowedRoleList: any[] = [];
   public _enumrole = EnumRole
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -60,16 +61,41 @@ export class UploadAnnexture32ListComponent {
 
 
     console.log(this.sSOLoginDataModel);
-    this.getSemesterMasterList();
-    this.getStreamMasterList();
-    this.getExamMasterList();
+    await this.GetMenuPermission();
+    await this.getSemesterMasterList();
+    await this.getStreamMasterList();
+    await this.getExamMasterList();
     if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
       this.isInstituteDisabled = true;
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
     }
     //this.getExaminerData();
     //this.getExamMasterList();//grid data
-    this.getExaminerData()
+    await this.getExaminerData()
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async getSemesterMasterList() {

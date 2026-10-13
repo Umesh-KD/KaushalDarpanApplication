@@ -21,6 +21,7 @@ import { RenumerationExaminerRevalService } from '../../Services/renumeration-ex
 })
 export class RenumerationExaminerRevalComponent implements OnInit {
   public Message: any = [];
+  public MenuAllowedRoleList: any = [];
   public State: number = -1;
   public isSubmitted: boolean = false;
   public sSOLoginDataModel = new SSOLoginDataModel();
@@ -39,10 +40,9 @@ export class RenumerationExaminerRevalComponent implements OnInit {
   closeResult: string | undefined;
 
   constructor(private commonMasterService: CommonFunctionService,
-    private router: Router,
+    private Router: Router,
     private toastr: ToastrService,
     private activatedRouter: ActivatedRoute,
-    private routers: Router,
     private Swal2: SweetAlert2,
     public appsettingConfig: AppsettingService,
     private renumerationExaminerRevalService: RenumerationExaminerRevalService,
@@ -59,7 +59,32 @@ export class RenumerationExaminerRevalComponent implements OnInit {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     // load
+    await this.GetMenuPermission();
     await this.GetAllData();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async TrackExaminerData(content: any) {
