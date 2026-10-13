@@ -173,7 +173,8 @@ const routes: Routes = [
       
       { path: 'AdmissionAllotmentReport', loadChildren: () => import('./Views/ITI/admission-allotment-report/admission-allotment-report.module').then(m => m.AdmissionAllotmentReportModule), title: 'Admission Allotment Report' },
       { path: 'DynamicLogsReport', loadChildren: () => import('./Views/BTER/bter-dynamic-report/bter-dynamic-report.module').then(m => m.BterDynamicReportModule), title: 'Bter Dynamic Report' },
-      
+      { path: 'Updated-Email-Template', loadChildren: () => import('./Views/updated-email-template/updated-email-template.module').then(m => m.UpdatedEmailTemplateModule), title: 'Email Template' },
+     
 
       // divya's Created Routes end
 
@@ -1962,6 +1963,7 @@ const routes: Routes = [
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\ITI\EmployeeDashboard', loadChildren: () => import('./Views/ITI/employee-dashboard/employee-dashboard.module').then(m => m.EmployeeDashboardModule) },
+  { path: 'Views\ITI\ITILeaveCredit', loadChildren: () => import('./Views/ITI/iti-leave-credit/iti-leave-credit.module').then(m => m.ItiLeaveCreditModule) },
 
 
  

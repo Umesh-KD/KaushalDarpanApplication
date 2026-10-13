@@ -81,53 +81,56 @@
       <table class="table table-border w-full" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-           
-            <th class="text-left">Sr. No.</th>    
-            <th class="text-left">Student Name</th>        
-            <th class="text-left">Father's Name</th>    
-            <th class="text-left">DOB</th>    
-            <th class="text-left">Stream</th>       
-            <th class="text-left">Application No</th>                      
-            <th class="text-left">Payment Status</th>   
-            <th class="text-left">Reval Status</th>  
+
+            <th class="text-left">Sr. No.</th>
+
+            <th class="text-left">Student Name</th>
+            <th class="text-left">Father's Name</th>
+            <th class="text-left">Roll No</th>
+            <!--<th class="text-left">DOB</th>-->
+            <th class="text-left">Stream</th>
+            <th class="text-left">Application No</th>
+            <th class="text-left">Payment Status</th>
+            <th class="text-left">Reval Status</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
         <!-- {{paginatedInTableData| json}} -->
         <tbody>
-          <tr *ngFor="let row of paginatedInTableData; let idx=index;" >
-           
-            <td>{{(startInTableIndex+1)+idx}}</td>    
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StudentName}}</td>  
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.FatherName}}</td>  
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.DOB | date:'yyyy-MM-dd'}}</td>  
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StreamName}}</td>        
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ApplicationNo}}</td>     
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.PaymentStatus}}</td>     
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.RevalStatus}}</td>  
+          <tr *ngFor="let row of paginatedInTableData; let idx=index;">
+
+            <td>{{(startInTableIndex+1)+idx}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StudentName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.FatherName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.RollNo}}</td>
+            <!--<td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.DOB | date:'yyyy-MM-dd'}}</td>-->
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StreamName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ApplicationNo}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.PaymentStatus}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.RevalStatus}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important">
-               
-                <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,row)" title="View Institute Option Details"><i
-                class="ti ti-list"></i> </a>
+
+                <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,row)" title="View Institute Option Details">
+                  <i class="ti ti-list"></i>
+                </a>
 
                 <!-- <a href="javascript:void(0)" (click)="redirectToEdit(row)" title="Edit Details">
-                  <i class="ti ti-pencil"></i>
-                </a> -->
+        <i class="ti ti-pencil"></i>
+      </a> -->
                 <!-- <a href="javascript:void(0)" (click)="redirectToPreview(row)" title="View Candidate Details">
-                  <i class="ti ti-eye"></i>
-                </a> -->
+        <i class="ti ti-eye"></i>
+      </a> -->
                 <!-- <a href="javascript:void(0)" (click)="OpenOTPModal_RejectApplication(row)" title="Reject Application">
-                  <i class="ti ti-x"></i>
-                </a> -->
-
+        <i class="ti ti-x"></i>
+      </a> -->
                 <!-- <a href="javascript:void(0)" *ngIf="row.IsFinalSubmit === 2 && row.IsMeritGenerated === 0"
-                    (click)="UnlockApplication_Counselling(row)" title="Unlock Application">
-                  <i class="ti ti-lock-open"></i>
-                </a> -->
+          (click)="UnlockApplication_Counselling(row)" title="Unlock Application">
+        <i class="ti ti-lock-open"></i>
+      </a> -->
               </div>
-             </td>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -204,7 +207,7 @@
 
 
                   <td>
-                    <input type="text" class="form-input" placeholder="Add Remark" id="Remark" (change)="AddRemark($event,row)">
+                    <input type="text" class="form-input"  [(ngModel)]="row.Remarks" placeholder="Add Remark" id="Remark" (change)="AddRemark($event,row)">
                   </td>
 
                   <!-- --------------------------------------------------------- -->
