@@ -21,6 +21,7 @@ import { bterCollegeSearchModel, ITICollegeSearchModel } from '../../../Models/I
 import { ITIsService } from '../../../Services/ITIs/itis.service';
 import { ITI_PlanningCollegesModel, ItiAffiliationList } from '../../../Models/ItiPlanningDataModel';
 import { CommonModule } from '@angular/common';
+import { BTERMasterService } from '../../../Services/BTER-Master/btermaster.service';
 
 
 
@@ -107,6 +108,7 @@ export class bterCollegeSearchComponent {
   public DISCOM: any = [];
   public oldDistrictID: number = 0;
   public oldeditDistrictID: number = 0;
+  BTERinstituteDataList: any = {};
 
   constructor(private loaderService: LoaderService, private commonservice: CommonFunctionService,
     private studentService: StudentService, private modalService: NgbModal, private toastrService: ToastrService, private documentDetailsService: DocumentDetailsService,
@@ -114,7 +116,8 @@ export class bterCollegeSearchComponent {
     private sweetAlert2: SweetAlert2, private formBuilder: FormBuilder,
     private appsettingConfig: AppsettingService,
     private commonMasterService: CommonFunctionService,
-    private ApplicationService: ITIsService
+    private ApplicationService: ITIsService,
+    private BTERMasterService: BTERMasterService,
 
   ) { }
 
@@ -729,9 +732,6 @@ export class bterCollegeSearchComponent {
     this.isVisibleList = true;
   }
 
-
-
-
   async ResetControl() {
     this.SemesterID = 0;
     this.StreamID = 0;
@@ -740,17 +740,6 @@ export class bterCollegeSearchComponent {
     this.request = new bterCollegeSearchModel();
     this.studentDetailsModel = new StudentDetailsModel();
   }
-
-  
-
- 
-  
-
-  
-
-
-
-
 
   async GetList() {
     try {
@@ -999,5 +988,34 @@ export class bterCollegeSearchComponent {
     this.totalInTableRecord = this.ITICollegeSearchList.length;
   }
 
+  async GetBTERInstituteDtlsById(ID: number) {
+    try
+    {
+      this.isVisibleSection = true;
+      this.isVisibleList = false;
+      this.requestPlaning.ItiAffiliationList = []
+      this.requestPlaning.ItiMembersModel = []
+      this.loaderService.requestStarted();
+      const data: any = await this.BTERMasterService.GetBTERInstituteDtlsById(ID);
+      const parsedData = JSON.parse(JSON.stringify(data));
+
+      if (parsedData['Data'] != null)
+      {
+        const parsedData = data?.Data ?? data ?? {};
+        const table1 = Array.isArray(parsedData.Table) ? parsedData.Table[0] ?? {} : {};
+        //const table2 = Array.isArray(parsedData.Table1) ? parsedData.Table1[0] ?? {} : {};
+        //this.BTERinstituteDataList = [...(table1 ?? []), ...(table2 ?? []) ];
+        this.BTERinstituteDataList = table1;
+        console.log(table1, "table1");
+      }
+   
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 2000);
+    }
+  }
 
 }
