@@ -2251,10 +2251,12 @@ export class PreExamStudentExaminationComponent {
     }
     catch (ex) {
       console.log(ex);
-    }
+    } 
   }
   checkStatusForOptional(status: number) {
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.Registrar) {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.Registrar
+      || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng
+    ) {
       return ([
         enumExamStudentStatus.SelectedForExamination,
         enumExamStudentStatus.VerifiedForExamination,
