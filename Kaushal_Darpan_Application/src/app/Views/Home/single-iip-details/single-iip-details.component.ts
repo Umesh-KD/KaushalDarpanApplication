@@ -31,6 +31,7 @@ export class SingleIIPDetailsComponent implements OnInit {
    @ViewChild(MatSort) sort!: MatSort;
   public CompanyID: number = 0;
   public routeId: number = 0;
+  public department: number = 0;
   public EventDetail: any = null;
   public PlacementCompanyList: any[] = [];
   public GetAllSignedCopyList: any = [];
@@ -59,9 +60,10 @@ export class SingleIIPDetailsComponent implements OnInit {
 
   async ngOnInit() {
     let id = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+    this.department = Number(this.activatedRoute.snapshot.queryParamMap.get('dept')?.toString());
     this.CompanyID = id;
   //  this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));.
-    this.sSOLoginDataModel.DepartmentID = 1;
+    this.sSOLoginDataModel.DepartmentID = this.department;
     //edit
     debugger
     if (this.CompanyID > 0) {
@@ -116,7 +118,7 @@ export class SingleIIPDetailsComponent implements OnInit {
 
   // get all data
   async GetAllPlacementCompany() {
-    this.searchRequest.DepartmentID = 1
+    this.searchRequest.DepartmentID = this.department
     try {
       this.loaderService.requestStarted();
       await this.homeService.GetAllPlacementCompany(this.searchRequest)

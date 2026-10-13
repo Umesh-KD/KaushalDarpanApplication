@@ -129,9 +129,10 @@
                    *ngIf="
                    company.Status == 'Approved'
                    &&
-                   ( sSOLoginDataModel.RoleID == _enumRole.IIPAdmin
-                     ||
-                    sSOLoginDataModel.RoleID == _enumRole.IIPIncharge
+                   ( sSOLoginDataModel.RoleID == _enumRole.IIPAdmin ||
+                    sSOLoginDataModel.RoleID == _enumRole.IIPIncharge || 
+                    sSOLoginDataModel.RoleID == _enumRole.ITI_IIP_Admin ||
+                    sSOLoginDataModel.RoleID == _enumRole.ITI_IIP_Incharge
                    )
                    "
                    [routerLink]="'/add-iip-events'" [queryParams]="{id:company.ID}">

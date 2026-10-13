@@ -163,8 +163,7 @@ export class CompanyEventSearchModel extends RequestBaseModel {
   public Remarks: string = ''
   public InstituteID: number=0
   public ApproveStatus: number=-1
-
-
+  public UserID: number=0
 }
 
 export class EventConsentActionDataModel {

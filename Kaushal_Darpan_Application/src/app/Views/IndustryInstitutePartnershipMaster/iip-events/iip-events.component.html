@@ -85,7 +85,7 @@
         <div class="flex gap-2">
 
           <a [routerLink]="['/event-consent-report']"
-             *ngIf="sSOLoginDataModel.RoleID == _enumRole.IIPAdmin"
+             *ngIf="sSOLoginDataModel.RoleID == _enumRole.IIPAdmin || sSOLoginDataModel.RoleID == _enumRole.ITI_IIP_Admin"
              class="inline-flex items-center btn bg-dark text-white btn-sm">
             <i class="ti ti-report"></i>
             Consent Report
@@ -110,7 +110,10 @@
           </select>
         </div>
         <div class="">
-          <button *ngIf="sSOLoginDataModel.RoleID == _enumRole.IIPAdmin" class="btn bg-success text-white" (click)="ApproveCompanyEvents()" type="button">Approve Event</button>
+          <button class="btn bg-success text-white" type="button"
+            *ngIf="sSOLoginDataModel.RoleID == _enumRole.IIPAdmin || sSOLoginDataModel.RoleID == _enumRole.ITI_IIP_Admin"  
+            (click)="ApproveCompanyEvents()">Approve Event
+          </button>
         </div>
         <div class=""></div>
         <div class="">
@@ -123,7 +126,9 @@
         <table class="table table-border w-full" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
-              <th class="text-left" *ngIf="searchRequest.ApproveStatus != 1 &&  sSOLoginDataModel.RoleID == _enumRole.IIPAdmin">
+              <th class="text-left" 
+                *ngIf="searchRequest.ApproveStatus != 1 && 
+                      (sSOLoginDataModel.RoleID == _enumRole.IIPAdmin || sSOLoginDataModel.RoleID == _enumRole.ITI_IIP_Admin)">
                 <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
               </th>
               <th>Sr. No.</th>
@@ -143,7 +148,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let row of CompanyEventsList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
-              <td *ngIf=" searchRequest.ApproveStatus != 1 && sSOLoginDataModel.RoleID == _enumRole.IIPAdmin">
+              <td *ngIf=" searchRequest.ApproveStatus != 1 && 
+                        (sSOLoginDataModel.RoleID == _enumRole.IIPAdmin || sSOLoginDataModel.RoleID == _enumRole.ITI_IIP_Admin)">
                 <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
                        #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"
                        *ngIf="row.intStatus != 1">
@@ -168,9 +174,11 @@
                       sSOLoginDataModel.RoleID == _enumRole.Principal ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree ||
-                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO
-                    || sSOLoginDataModel.RoleID == _enumRole.IIPIncharge
-                    || sSOLoginDataModel.RoleID == _enumRole.IIPAdmin )">
+                      sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO ||
+                      sSOLoginDataModel.RoleID == _enumRole.IIPIncharge ||
+                      sSOLoginDataModel.RoleID == _enumRole.IIPAdmin ||
+                      sSOLoginDataModel.RoleID == _enumRole.ITI_IIP_Incharge ||
+                      sSOLoginDataModel.RoleID == _enumRole.ITI_IIP_Admin)">
                     <i class="ti ti-eye"></i>
                   </a>
 
@@ -180,7 +188,9 @@
                       sSOLoginDataModel.RoleID == _enumRole.Principal ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree ||
-                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO || sSOLoginDataModel.RoleID == _enumRole.IIPIncharge) &&
+                      sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO || 
+                      sSOLoginDataModel.RoleID == _enumRole.IIPIncharge ||
+                      sSOLoginDataModel.RoleID == _enumRole.ITI_IIP_Incharge ) &&
                       row.CompanyStatus != 1">
                     <i class="ti ti-pencil"></i>
                   </a>
@@ -192,7 +202,9 @@
                       sSOLoginDataModel.RoleID == _enumRole.Principal ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree ||
-                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO || sSOLoginDataModel.RoleID == _enumRole.IIPIncharge) &&
+                      sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO || 
+                      sSOLoginDataModel.RoleID == _enumRole.IIPIncharge ||
+                      sSOLoginDataModel.RoleID == _enumRole.ITI_IIP_Incharge ) &&
                       row.CompanyStatus != 1">
                     <i class="ti ti-trash"></i>
                   </a>

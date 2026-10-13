@@ -10,7 +10,7 @@ import { IndustryInstitutePartnershipMasterService } from '../../../Services/Ind
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumDepartment, EnumStatus } from '../../../Common/GlobalConstants';
 import { Location } from '@angular/common';
 import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
 
@@ -176,11 +176,26 @@ if (this.PageMode == 'view') {
           }
         }, (error: any) => console.error(error));
 
-      await this.commonMasterService.Stream_InstituteIdWise(this.sSOLoginDataModel.DepartmentID,1,this.sSOLoginDataModel.EndTermID,this.sSOLoginDataModel.InstituteID,this.sSOLoginDataModel.FinancialYearID)
+        debugger
+      if(this.sSOLoginDataModel.DepartmentID == EnumDepartment.BTER){
+        await this.commonMasterService.Stream_InstituteIdWise(this.sSOLoginDataModel.DepartmentID,1,this.sSOLoginDataModel.EndTermID,this.sSOLoginDataModel.InstituteID,this.sSOLoginDataModel.FinancialYearID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.StreamMasterList = data['Data'];
         }, (error: any) => console.error(error));
+      }
+      if(this.sSOLoginDataModel.DepartmentID == EnumDepartment.ITI){
+        var body = {
+          MasterCode: "ITI_Trade_InstituteWise",
+          DepartmentID: this.sSOLoginDataModel.InstituteID
+        }
+        await this.commonMasterService.CommonMasterDataByAction(body)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StreamMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+      }
+      
     }
     catch (Ex) {
       console.log(Ex);
