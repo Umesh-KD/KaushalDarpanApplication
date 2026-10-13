@@ -365,6 +365,11 @@ export class ItiCollegeSearchComponent {
   onResetClick() {
     this.request.DistrictId = 0;
     this.request.DivisionId = 0;
+    this.request.TradeID = 0;
+    this.request.TradeTypeID = 0;
+    this.request.ManagementTypeId = 0;
+    this.request.SchemeTypeID = 0;
+    this.request.DivisionId = 0;
     this.request.SearchText = "";
     this.isVisibleSection = false;
     this.isVisibleList = false;
