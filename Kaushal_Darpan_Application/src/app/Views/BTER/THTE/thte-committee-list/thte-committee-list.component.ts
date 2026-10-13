@@ -15,6 +15,7 @@ import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
 import { CommitteeSearchModel } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-thte-committee-list',
@@ -43,6 +44,7 @@ export class THTECommitteeListComponent {
   public OTP: string = '';
   public GeneratedOTP: string = '';
   public MobileNo: string = '';
+    MenuAllowedRoleList: any;
  // private modalService = inject(NgbModal);
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -58,13 +60,14 @@ export class THTECommitteeListComponent {
     private http: HttpClient,
     private appsettingConfig: AppsettingService,
     public teacherHigherEducationApplicationService: TeacherHigherEducationApplicationService,
+    private routers: Router,
 
   ){}
 
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    
+    await this.GetMenuPermission();
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     await this.GetAllData()
@@ -478,5 +481,29 @@ export class THTECommitteeListComponent {
         }
       }
     });
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

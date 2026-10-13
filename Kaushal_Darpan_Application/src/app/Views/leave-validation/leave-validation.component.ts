@@ -33,6 +33,7 @@ export class LeaveValidationComponent {
   public isSubmitted: boolean = false;
   public Id:number=0
   formAction!: FormGroup;
+    MenuAllowedRoleList: any;
   constructor(
     private commonMasterService: CommonFunctionService,
     private LeaveService: LeaveMasterService,
@@ -51,6 +52,7 @@ export class LeaveValidationComponent {
         txtActionRemarks: ["", Validators.required],
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.Id = Number(this.activatedRoute.snapshot.paramMap.get('id') ?? .0)
     if (this.Id == 1) {
       this.searchRequest.Status = 'Approved'
@@ -259,6 +261,30 @@ export class LeaveValidationComponent {
       console.log(ex) 
 
     }
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 }

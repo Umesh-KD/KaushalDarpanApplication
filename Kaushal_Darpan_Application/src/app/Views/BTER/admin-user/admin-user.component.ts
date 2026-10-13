@@ -42,6 +42,7 @@ export class AdminUserComponent implements OnInit {
   public SubMasterList: any = []
   public _enumrole = EnumRole;
   public InstituteMasterDDLList: any = []
+    MenuAllowedRoleList: any;
 
   constructor(private commonMasterService: CommonFunctionService,
     private adminUserService: AdminUserService,
@@ -65,6 +66,7 @@ export class AdminUserComponent implements OnInit {
       });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.request.ModifyBy = this.sSOLoginDataModel.UserID
 
     // load
@@ -345,5 +347,29 @@ export class AdminUserComponent implements OnInit {
         control?.enable();
       }
     }
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }
