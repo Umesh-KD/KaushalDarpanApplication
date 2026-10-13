@@ -222,7 +222,7 @@ export class AddCommonSubjectsComponent implements OnInit {
   async GetById() {
     try {
       this.loaderService.requestStarted();
-      await this.commonSubjectService.GetById(this.CommonSubjectId, this.sSOLoginDataModel.RoleID)
+      await this.commonSubjectService.GetById(this.CommonSubjectId)
         .then((data: any) => {
           
           data = JSON.parse(JSON.stringify(data));
