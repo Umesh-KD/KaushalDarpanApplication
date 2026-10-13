@@ -35,6 +35,7 @@ export class DTEDashboardComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public searchRequest = new DTEApplicationDashboardDataModel();
   public DTEApplicationDashboardList: DTEDashboardModel[] = [];
+  public viewAdminDashboardListCitizenSuggestion: any[] = [];
   public lstAcedmicYear: any;
   public ApplicationList: any = []
   public _EnumDepartment = EnumDepartment;
@@ -232,6 +233,7 @@ export class DTEDashboardComponent {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
             this.DTEApplicationDashboardList = data['Data'];
+            this.viewAdminDashboardListCitizenSuggestion = data['Data'];
             console.log(this.DTEApplicationDashboardList,"DTEApplicationDashboardList")
           }
         }, (error: any) => console.error(error)
