@@ -44,7 +44,7 @@ export class MasterLayoutComponent implements OnInit {
   public fileUpload: any = {};
   public folder: string = "test";
   public InstituteName: string = "";
-  public OfficeName:string="";
+  public OfficeName: string = "";
   public _EnumRole = EnumRole;
   public HostelID: number = 0;
   public _EnumDepartment = EnumDepartment;
@@ -55,7 +55,7 @@ export class MasterLayoutComponent implements OnInit {
   public TermPart: number = 0;
   public DepartmentID: number = 0
   public ISEligiblecollege: boolean = true
-  public ISEligiblecollegeRemark:string=''
+  public ISEligiblecollegeRemark: string = ''
   //Manage Session
   idleState = 'Not started.';
   timedOut = false;
@@ -68,7 +68,7 @@ export class MasterLayoutComponent implements OnInit {
   searchTerm: string = '';
   AppLink: string = '';
   filterMenuData!: any;
-  isLockMenu:boolean = false;
+  isLockMenu: boolean = false;
   isMobileSubscription: Subscription | undefined;
   @ViewChild('htmlElement') htmlElement!: ElementRef;
   @ViewChild('mymodalSessionExpired') mymodalSessionExpired: TemplateRef<any> | undefined;
@@ -83,24 +83,24 @@ export class MasterLayoutComponent implements OnInit {
   public RequestBaseSearchModel = new RequestBaseModel();
   readonly APIUrl = this.appsettingConfig.apiURL + "SSO";
   constructor(
-    private breakpointObserver: BreakpointObserver, 
-    private el: ElementRef, 
-    @Inject(DOCUMENT) private document: Document, 
-    @Inject(PLATFORM_ID) private platformId: Object, 
-    private router: Router, 
+    private breakpointObserver: BreakpointObserver,
+    private el: ElementRef,
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private router: Router,
     private loaderService: LoaderService,
-    private sanitizer: DomSanitizer, 
+    private sanitizer: DomSanitizer,
     location: PlatformLocation,
-    private idle: Idle, 
-    private modalService: NgbModal, 
+    private idle: Idle,
+    private modalService: NgbModal,
     private commonFunctionService: CommonFunctionService,
-    private cookieService: CookieService, 
-    private menuService: MenuService, 
-    private http: HttpClient, 
-    private appsettingConfig: AppsettingService, 
+    private cookieService: CookieService,
+    private menuService: MenuService,
+    private http: HttpClient,
+    private appsettingConfig: AppsettingService,
     private renderer: Renderer2,
-    private ssologin: SSOLoginService, 
-    private menuFreeze: MenuFreezeService, 
+    private ssologin: SSOLoginService,
+    private menuFreeze: MenuFreezeService,
     private ITIAdminDashboardService: ITIAdminDashboardServiceService,
     private permissionService: MenuPermissionService,
 
@@ -173,34 +173,8 @@ export class MasterLayoutComponent implements OnInit {
     });
 
     //Added By rishi kapoor >> Manage Session
+    this.autoTimeoutLogout();
 
-    let st = Number(this.appsettingConfig.SessionTime)
-    this.idle.setIdle(st);
-    // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
-    this.idle.setTimeout(1);
-    // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
-    this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
-    this.idle.onIdleEnd.subscribe(() => (this.idleState = "No longer idle."));
-    this.idle.onTimeout.subscribe(() => {
-      //this.modalService.open('#mymodalSessionExpired', { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' });
-      this.modalService.open(this.mymodalSessionExpired, { size: 'sm', centered: true, backdrop: 'static', keyboard: false });
-      this.idleState = "Timed out!";
-      sessionStorage.removeItem('userid');
-      sessionStorage.removeItem('LoginID');
-      sessionStorage.clear();
-      localStorage.clear();
-      this.timedOut = true;
-    });
-    //
-    this.idle.onIdleStart.subscribe(
-      () => (this.idleState = "You've gone idle!")
-    );
-    this.idle.onTimeoutWarning.subscribe(
-      countdown =>
-        (this.idleState = "You will time out in " + countdown + " seconds!")
-    );
-    //
-    this.reset();
 
     //
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -223,7 +197,7 @@ export class MasterLayoutComponent implements OnInit {
     this.HostelID = this.sSOLoginDataModel.HostelID;
     this.InstituteName = this.sSOLoginDataModel.InstituteName;
     this.SessionTypeID = this.sSOLoginDataModel.SelectedValue;
-    this.OfficeName=this.sSOLoginDataModel.OfficeName;
+    this.OfficeName = this.sSOLoginDataModel.OfficeName;
 
     await this.GetUserRoleList();
 
@@ -275,7 +249,7 @@ export class MasterLayoutComponent implements OnInit {
   async ChangeRolenFY() {
     //debugger
     // set from session
-   
+
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.RoleID = this.sSOLoginDataModel.RoleID;
@@ -336,7 +310,7 @@ export class MasterLayoutComponent implements OnInit {
       }, 200);
     }
   }
-  
+
   reloadRoute() {
     const currentUrl = this.router.url;
 
@@ -420,8 +394,7 @@ export class MasterLayoutComponent implements OnInit {
   }
 
   // when role change
-  async loadMenuByRoleID(SeletedUserId: any)
-  {
+  async loadMenuByRoleID(SeletedUserId: any) {
     // filter by roleid
 
     var isShowHideButton = await this.ShowHideFinYearDDL();
@@ -449,7 +422,7 @@ export class MasterLayoutComponent implements OnInit {
     localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel))
     //redirect
     //window.open('/dashboard', "_self");
-   
+
     await this.ChangeRolenFY()
 
   }
@@ -496,7 +469,7 @@ export class MasterLayoutComponent implements OnInit {
         }
       }
     });
-    
+
     this.groupedMenuData = groupedData;
   }
 
@@ -528,10 +501,8 @@ export class MasterLayoutComponent implements OnInit {
     if (menuTextSpan) {
       const text = menuTextSpan.textContent?.trim();
 
-      if (this.sSOLoginDataModel.RoleID == EnumRole.DTETraing)
-      {
-        if (text === "Master")
-        {
+      if (this.sSOLoginDataModel.RoleID == EnumRole.DTETraing) {
+        if (text === "Master") {
           this.router.navigate(['/AdmissionMasterDashboard']);
         }
       }
@@ -555,10 +526,9 @@ export class MasterLayoutComponent implements OnInit {
   }
 
 
-  js_SubMenuActive(event: any): void
-  {
+  js_SubMenuActive(event: any): void {
 
-    console.log("event",event);
+    console.log("event", event);
 
     const clickedElement = event.target;
     const parentLi = clickedElement.closest('.menu-item');
@@ -756,7 +726,7 @@ export class MasterLayoutComponent implements OnInit {
           }
 
           // this.permissionService.setPermissions(this.filterMenuData);
-          
+
         }, error => console.error(error));
     }
 
@@ -766,7 +736,7 @@ export class MasterLayoutComponent implements OnInit {
   }
 
   //Load Menu
-  async LoadMenuStudent(UserID: number, RoleID: number,departmentid:number) {
+  async LoadMenuStudent(UserID: number, RoleID: number, departmentid: number) {
     try {
       let model: MenuByUserAndRoleWiseModel = {
         DepartmentID: departmentid,
@@ -920,8 +890,7 @@ export class MasterLayoutComponent implements OnInit {
     this.sSOLoginDataModel.SelectedValue = TypeID;
     this.commonFunctionService.setsSOLoginDataModel(this.sSOLoginDataModel);
     await this.loadMenuByRoleID(0);
-    if (TypeID == 2)
-    {
+    if (TypeID == 2) {
       this.sSOLoginDataModel.EndTermID = this.lstAcedmicYear[0].EndTermID;
       this.sSOLoginDataModel.FinancialYearID = this.lstAcedmicYear[0].YearID;
       this.commonFunctionService.setsSOLoginDataModel(this.sSOLoginDataModel);
@@ -988,7 +957,7 @@ export class MasterLayoutComponent implements OnInit {
     JailCollegeID.map((item: any) => {
       if (item === this.sSOLoginDataModel.InstituteID) {
 
-        if (this.sSOLoginDataModel.RoleID == 20 || this.sSOLoginDataModel.RoleID == 43 || this.sSOLoginDataModel.RoleID == EnumRole.AdmissionIncharges ) {
+        if (this.sSOLoginDataModel.RoleID == 20 || this.sSOLoginDataModel.RoleID == 43 || this.sSOLoginDataModel.RoleID == EnumRole.AdmissionIncharges) {
           this.IsJailCollege = true
         }
 
@@ -996,22 +965,50 @@ export class MasterLayoutComponent implements OnInit {
     })
   }
   async backtoSignOut() {
-  try {      
-    this.ssoToken = localStorage.getItem('authtoken');
-        console.log('ssoToken logout- ',this.ssoToken);
+    try {
+      this.ssoToken = localStorage.getItem('authtoken');
+      console.log('ssoToken logout- ', this.ssoToken);
 
-    sessionStorage.removeItem('UserID');
-    sessionStorage.removeItem('LoginID');
-    sessionStorage.clear();
-    localStorage.clear();
-    this.cookieService.set('LoginStatus', '');
-    this.cookieService.deleteAll(); 
-    this.loaderService.requestStarted();
+      sessionStorage.removeItem('UserID');
+      sessionStorage.removeItem('LoginID');
+      sessionStorage.clear();
+      localStorage.clear();
+      this.cookieService.set('LoginStatus', '');
+      this.cookieService.deleteAll();
+      this.loaderService.requestStarted();
+      const form = document.createElement('form');
+      form.method = 'POST';
+      //form.action = GlobalConstants.BacktoSSOURL_Logout?.toString();
+      form.action = "https://ssotest.rajasthan.gov.in/signout";
+      // form.action = this.appsettingConfig.BacktoSSOURL_Logout?.toString();
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'userdetails';
+      input.value = this.ssoToken;
+
+      form.appendChild(input);
+      document.body.appendChild(form);
+      console.log('form logout- ', form);
+
+      form.submit();
+
+    } catch (ex) {
+      console.error('SSO Logout Error:', ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+  backToSSONew() {
+    //this.ssotoken = this.cookieService.get('RAJSSO');    
+    this.ssoToken = localStorage.getItem('authtoken');
+    console.log('ssoToken master layout- ', this.ssoToken);
+
     const form = document.createElement('form');
     form.method = 'POST';
-    //form.action = GlobalConstants.BacktoSSOURL_Logout?.toString();
-    form.action="https://ssotest.rajasthan.gov.in/signout";
-    // form.action = this.appsettingConfig.BacktoSSOURL_Logout?.toString();
+    //form.action = GlobalConstants.BacktoSSOURL?.toString();
+    form.action = this.appsettingConfig.BacktoSSOURL?.toString();
+    console.log('Back to sso : ' + this.appsettingConfig.BacktoSSOURL?.toString());
+    //form.action="https://ssotest.rajasthan.gov.in/sso";
     const input = document.createElement('input');
     input.type = 'hidden';
     input.name = 'userdetails';
@@ -1019,86 +1016,58 @@ export class MasterLayoutComponent implements OnInit {
 
     form.appendChild(input);
     document.body.appendChild(form);
-   console.log('form logout- ',form);
+    console.log('form layout- ', form);
+
+    form.submit();
+  }
+  async backtoSignOutNew() {
+    //localStorage.setItem('authtoken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjAiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTUFIRU5EUkEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJTQUhVVE9OSyIsImp0aSI6IjkzZTEwODA3LTFkZGYtNDllOS05M2Y5LTMyZjVmZGE3OWQ0YiIsIlJvbGVJRHMiOiIiLCJSb2xlTmFtZXMiOiIiLCJleHAiOjE3NjYxMDE1NzksImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTIzMCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTIzMCJ9.yf4FTaYBSQu_iPWTfNOMV59Pj_0BfCuCKoh0b8L5e_w');
+    this.ssoToken = localStorage.getItem('authtoken');
+
+    // 1️⃣ Call backend (logging / audit)
+    if (this.ssoToken) {
+      await this.http.post(
+        this.APIUrl + '/SSOLogout_New',
+        this.ssoToken,
+        { headers: { 'Content-Type': 'application/json' } }
+      ).toPromise();
+    }
+
+    // 2️⃣ Clear browser storage
+    sessionStorage.clear();
+    localStorage.clear();
+    this.cookieService.deleteAll();
+
+    // 3️⃣ REAL SSO LOGOUT (browser redirect)
+    window.location.replace(
+      'https://ssotest.rajasthan.gov.in/signout'
+    );
+  }
+  backtoSignOutNew_17122025() {
+    //this.ssotoken = this.cookieService.get('RAJSSO');    
+    this.ssoToken = localStorage.getItem('authtoken');
+    console.log('ssoToken master layout- ', this.ssoToken);
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    //form.action = GlobalConstants.BacktoSSOURL?.toString();
+    form.action = this.appsettingConfig.BacktoSSOURL_Logout?.toString();
+    console.log('Logout to sso : ' + this.appsettingConfig.BacktoSSOURL_Logout?.toString());
+    //form.action="https://ssotest.rajasthan.gov.in/signout";
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'userdetails';
+    input.value = this.ssoToken;
+
+    form.appendChild(input);
+    document.body.appendChild(form);
+    console.log('form layout- ', form);
 
     form.submit();
 
-  } catch (ex) {
-    console.error('SSO Logout Error:', ex);
-  } finally {
-    this.loaderService.requestEnded();
-  }  
-}
-backToSSONew() {
-   //this.ssotoken = this.cookieService.get('RAJSSO');    
-    this.ssoToken = localStorage.getItem('authtoken');
-        console.log('ssoToken master layout- ',this.ssoToken);
-
-   const form = document.createElement('form');
-   form.method = 'POST';
-   //form.action = GlobalConstants.BacktoSSOURL?.toString();
-   form.action = this.appsettingConfig.BacktoSSOURL?.toString();
-   console.log('Back to sso : '+this.appsettingConfig.BacktoSSOURL?.toString());
-   //form.action="https://ssotest.rajasthan.gov.in/sso";
-   const input = document.createElement('input');
-   input.type = 'hidden';
-   input.name = 'userdetails';
-   input.value = this.ssoToken;
-
-   form.appendChild(input);
-   document.body.appendChild(form);
-   console.log('form layout- ',form);
-
-   form.submit();
- }
- async backtoSignOutNew() {
- //localStorage.setItem('authtoken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjAiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTUFIRU5EUkEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJTQUhVVE9OSyIsImp0aSI6IjkzZTEwODA3LTFkZGYtNDllOS05M2Y5LTMyZjVmZGE3OWQ0YiIsIlJvbGVJRHMiOiIiLCJSb2xlTmFtZXMiOiIiLCJleHAiOjE3NjYxMDE1NzksImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTIzMCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTIzMCJ9.yf4FTaYBSQu_iPWTfNOMV59Pj_0BfCuCKoh0b8L5e_w');
-  this.ssoToken = localStorage.getItem('authtoken');
-
-  // 1️⃣ Call backend (logging / audit)
-  if (this.ssoToken) {
-    await this.http.post(
-      this.APIUrl+'/SSOLogout_New',
-      this.ssoToken,
-      { headers: { 'Content-Type': 'application/json' } }
-    ).toPromise();
-  }
-
-  // 2️⃣ Clear browser storage
-  sessionStorage.clear();
-  localStorage.clear();
-  this.cookieService.deleteAll();
-
-  // 3️⃣ REAL SSO LOGOUT (browser redirect)
-  window.location.replace(
-    'https://ssotest.rajasthan.gov.in/signout'
-  );
-}
-backtoSignOutNew_17122025() {
-   //this.ssotoken = this.cookieService.get('RAJSSO');    
-    this.ssoToken = localStorage.getItem('authtoken');
-        console.log('ssoToken master layout- ',this.ssoToken);
-
-   const form = document.createElement('form');
-   form.method = 'POST';
-   //form.action = GlobalConstants.BacktoSSOURL?.toString();
-   form.action = this.appsettingConfig.BacktoSSOURL_Logout?.toString();
-   console.log('Logout to sso : '+this.appsettingConfig.BacktoSSOURL_Logout?.toString());
-   //form.action="https://ssotest.rajasthan.gov.in/signout";
-   const input = document.createElement('input');
-   input.type = 'hidden';
-   input.name = 'userdetails';
-   input.value = this.ssoToken;
-
-   form.appendChild(input);
-   document.body.appendChild(form);
-   console.log('form layout- ',form);
-
-   form.submit();
-
     sessionStorage.clear();
-  localStorage.clear();
-  this.cookieService.deleteAll();
+    localStorage.clear();
+    this.cookieService.deleteAll();
   }
 
   async DownloadApp() {
@@ -1113,7 +1082,7 @@ backtoSignOutNew_17122025() {
 
           data = JSON.parse(JSON.stringify(data));
           this.AppLink = data['Data'][0]['Link'];
-   
+
         }, (error: any) => console.error(error)
         );
     }
@@ -1127,27 +1096,24 @@ backtoSignOutNew_17122025() {
     }
   }
 
-  async ShowHideFinYearDDL(): Promise<number>
-  {
+  async ShowHideFinYearDDL(): Promise<number> {
     var Value = 0;
-    try
-    {
+    try {
       var data =
       {
         MasterCode: "ShowFinYearDDL",
         FilterBy: this.RoleID
       }
-  
+
       this.loaderService.requestStarted();
       await this.commonFunctionService.CommonMasterDataByAction(data)
         .then((data: any) => {
           Value = data['Data'][0]['ID']
 
         }, (error: any) => console.error(error)
-      );
+        );
     }
-    catch (ex)
-    {
+    catch (ex) {
       console.log(ex);
     }
     finally {
@@ -1160,6 +1126,80 @@ backtoSignOutNew_17122025() {
 
   async openAppLink() {
     window.open(this.AppLink, '_blank');
+  }
+
+  async autoTimeoutLogout_old() {
+    //let st = Number(this.appsettingConfig.SessionTime)
+    let st = Number(10)
+    this.idle.setIdle(st);
+    // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
+    this.idle.setTimeout(1);
+    // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
+    this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+    this.idle.onIdleEnd.subscribe(() => (this.idleState = "No longer idle."));
+    this.idle.onTimeout.subscribe(() => {
+      //this.modalService.open('#mymodalSessionExpired', { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' });
+      this.modalService.open(this.mymodalSessionExpired, { size: 'sm', centered: true, backdrop: 'static', keyboard: false });
+      this.idleState = "Timed out!";
+      sessionStorage.removeItem('userid');
+      sessionStorage.removeItem('LoginID');
+      sessionStorage.clear();
+      localStorage.clear();
+      this.timedOut = true;
+    });
+    //
+    this.idle.onIdleStart.subscribe(
+      () => (this.idleState = "You've gone idle!")
+    );
+    this.idle.onTimeoutWarning.subscribe(
+      countdown =>
+        (this.idleState = "You will time out in " + countdown + " seconds!")
+    );
+    //
+    this.reset();
+  }
+
+  async autoTimeoutLogout() {
+    //const idleSeconds = 10;  // Testing: 10 seconds
+    const idleSeconds = this.appsettingConfig.SessionTime; 
+    const timeoutSeconds = 1; // Timeout after another 1 second
+
+    this.idle.setIdle(idleSeconds);
+    this.idle.setTimeout(timeoutSeconds);
+    this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+
+    this.idle.onIdleEnd.subscribe(() => {
+      this.idleState = 'No longer idle.';
+    });
+
+    this.idle.onIdleStart.subscribe(() => {
+      this.idleState = "You've gone idle!";
+    });
+
+    this.idle.onTimeoutWarning.subscribe((countdown: number) => {
+      this.idleState =
+        'You will time out in ' + countdown + ' seconds!';
+    });
+
+    this.idle.onTimeout.subscribe(() => {
+      this.idleState = 'Timed out!';
+      this.timedOut = true;
+
+      // Clear authentication/session data.
+      sessionStorage.clear();
+      localStorage.removeItem('SSOLoginUser');
+
+      // Show the session-expired modal.
+      this.modalService.open(this.mymodalSessionExpired, {
+        size: 'sm',
+        centered: true,
+        backdrop: 'static',
+        keyboard: false
+      });
+    });
+
+    // IMPORTANT: Start the watcher.
+    this.idle.watch();
   }
 }
 

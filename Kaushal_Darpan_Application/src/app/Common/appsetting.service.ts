@@ -26,7 +26,7 @@ export class AppsettingService {
   public RPPRequstURL: string = "";
   public IsLocal: boolean = false;
   public SystemGeneratedPDFPathURL: string = "";
-  public SessionTime: number = 600;
+  public SessionTime: number = 1800; // seconds
 
 
   //Bter
