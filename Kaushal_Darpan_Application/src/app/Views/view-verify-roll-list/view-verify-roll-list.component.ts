@@ -13,7 +13,7 @@ import { ReportService } from '../../Services/Report/report.service';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-verify-roll-list',
@@ -78,6 +78,7 @@ export class ViewVerifyRollListComponent {
   public MobileNo: number = 0;
   public OTP: string = '';
   public GeneratedOTP: string = '';
+    MenuAllowedRoleList: any;
   constructor(
     private commonMasterService: CommonFunctionService,
     private GetRollService: GetRollService,
@@ -87,7 +88,8 @@ export class ViewVerifyRollListComponent {
     private getRollService: GetRollService,
     private sMSMailService: SMSMailService,
     private modalService: NgbModal,
-    private activeroute: ActivatedRoute
+    private activeroute: ActivatedRoute,
+    private router: Router
   ) { }
 
   async ngOnInit() {
@@ -96,6 +98,7 @@ export class ViewVerifyRollListComponent {
     this.sSOLoginDataModel = await JSON.parse(
       String(localStorage.getItem('SSOLoginUser'))
     );
+    await this.GetMenuPermission();
     let _status = Number(this.activeroute.snapshot.paramMap.get('id')?.toString());
     if (!isNaN(_status)) {
       this.Status = EnumEnrollNoStatus.Generated
@@ -731,4 +734,29 @@ export class ViewVerifyRollListComponent {
 
     this.modalService.dismissAll();
   }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
 }

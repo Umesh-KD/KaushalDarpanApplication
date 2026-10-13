@@ -18,6 +18,7 @@ import { UserRequestService } from '../../../Services/UserRequest/user-request.s
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { BTEREstablishManagementService } from '../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
 import { OfficeVacancyModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
+ 
 
 @Component({
   selector: 'app-bter-Sanctioned-posts',
@@ -70,10 +71,12 @@ export class bterSanctionedPostsComponent implements OnInit {
   public showJoiningStatusColumn: boolean = false;
 
   public BugetHeadList: any = [];
+    MenuAllowedRoleList: any;
   constructor(private commonMasterService: CommonFunctionService, 
     private toastr: ToastrService, private loaderService: LoaderService,
     public appsettingConfig: AppsettingService,
     private EstablishManagementService: BTEREstablishManagementService,
+    private router: Router,
 
 
   ) {
@@ -84,6 +87,7 @@ export class bterSanctionedPostsComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.BugetHeadList = [
       { ID: 1, Name: 'State Plan Budget' },
       { ID: 2, Name: 'Center Plan Budget' },
@@ -94,6 +98,30 @@ export class bterSanctionedPostsComponent implements OnInit {
     console.log(this.sSOLoginDataModel);
     this.GetStaffTypeData();
     await this.GetOfficeList();
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
   async ResetControl() {

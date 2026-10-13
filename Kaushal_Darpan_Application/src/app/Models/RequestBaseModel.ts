@@ -10,4 +10,6 @@ export class RequestBaseModel {
   public SchemeID?: number = 0;
 
   public ActionFlag?: string = '';
+  //public FromDate?: string = '';
+  //public ToDate?: string = '';
 }

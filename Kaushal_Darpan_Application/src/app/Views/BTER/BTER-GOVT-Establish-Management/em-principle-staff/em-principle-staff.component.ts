@@ -26,6 +26,7 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { AdminUserService } from '../../../../Services/BTERAdminUser/admin-user.service';
 import { AdminUserSearchModel } from '../../../../Models/AdminUserDataModel';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-em-principle-staff',
@@ -119,6 +120,7 @@ export class EMPrincipleStaffComponent {
   public IsNonGazetted: boolean = false;
 
   @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
+    MenuAllowedRoleList: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -135,6 +137,7 @@ export class EMPrincipleStaffComponent {
     private UserMasterService: UserMasterService,
     private appsettingConfig: AppsettingService,
     private adminUserService: AdminUserService,
+    private router: Router,
   ) {}
 
   async ngOnInit() {
@@ -256,6 +259,7 @@ export class EMPrincipleStaffComponent {
       txtRemark: ['', Validators.required]
     });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
 
     await this.GetStaffProfileStatusList();
@@ -2173,5 +2177,29 @@ async GetCategroyData() {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }
