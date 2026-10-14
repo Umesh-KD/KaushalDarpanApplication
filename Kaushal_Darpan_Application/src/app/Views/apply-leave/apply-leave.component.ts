@@ -183,7 +183,7 @@ export class ApplyLeaveComponent {
   async GetLeaveTypeFSF() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData('LeaveTypeFSF')
+      await this.commonMasterService.GetCommonMasterData('LeaveTypeFSF', 0, 0, this.sSOLoginDataModel.StaffTypeID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.LeaveTypeFSFList = data['Data'];
