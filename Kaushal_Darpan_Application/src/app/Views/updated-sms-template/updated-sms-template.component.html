@@ -78,13 +78,13 @@
           <tr>
             <th class="text-left">Sr. No.</th>
             <th class="text-left">Department</th>
-            <th class="text-left">Role</th>
-            <th class="text-left">Division</th>
-            <th class="text-left">District</th>
-            <th class="text-left">Management Type</th>
-            <th class="text-left">Institute</th>
-            <th class="text-left">SMS Text</th>
+            <!-- <th class="text-left">Role</th> -->
+            <!-- <th class="text-left">Division</th> -->
+            <!-- <th class="text-left">District</th> -->
+            <!-- <th class="text-left">Management Type</th> -->
+            <!-- <th class="text-left">Institute</th> -->            
             <th class="text-left">Template ID</th>
+            <th class="text-left">SMS Template</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -94,23 +94,23 @@
 
             <td>{{ idx + 1 }}</td>
             <td>{{ item.DepartmentName }}</td>
-            <td>{{ item.RoleName }}</td>
-            <td>{{ item.DivisionName }}</td>
-            <td>{{ item.DistrictName }}</td>
-            <td>{{ item.ManagementTypeName }}</td>
-            <td>{{ item.InstituteName }}</td>
+            <!-- <td>{{ item.RoleName }}</td> -->
+            <!-- <td>{{ item.DivisionName }}</td> -->
+            <!-- <td>{{ item.DistrictName }}</td> -->
+            <!-- <td>{{ item.ManagementTypeName }}</td> -->
+            <!-- <td>{{ item.InstituteName }}</td> -->
+            <td>{{ item.TemplateID }}</td>
             <td class="whitespace-normal break-words">
               {{ item.SMSText }}
-            </td>
-            <td>{{ item.TemplateID }}</td>
+            </td>            
 
             <td>
               <div class="flex items-center justify-center actionBtns">
-                <a href="javascript:void(0)"
+                <!-- <a href="javascript:void(0)"
                    title="Edit"
                    (click)="ViewandUpdate(MyModel_addHead, item)">
                   <i class="ti ti-pencil"></i>
-                </a>
+                </a> -->
 
                 <a href="javascript:void(0)"
                    title="Delete"

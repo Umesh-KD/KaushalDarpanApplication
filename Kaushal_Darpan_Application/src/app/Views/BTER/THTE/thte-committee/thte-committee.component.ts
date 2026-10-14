@@ -54,6 +54,7 @@ export class THTECommitteeComponent {
   _EnumInspectionDeploymentType = EnumInspectionDeploymentType;
 
   @Output() tabChange: EventEmitter<{ index: number, id: any }> = new EventEmitter<{ index: number, id: any }>();
+    MenuAllowedRoleList: any;
   constructor(
     private commonMasterService: CommonFunctionService,
     private menuService: MenuService,
@@ -83,6 +84,7 @@ export class THTECommitteeComponent {
       SSOID: ['', Validators.required],
     })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     // this.InspectionTeamID = this.activatedRoute.snapshot.queryParams['id'];
     // console.log("this.InspectionTeamID",this.InspectionTeamID)
     console.log(this.request.InspectionTeamName)
@@ -449,7 +451,29 @@ export class THTECommitteeComponent {
     }
   }
 
-  
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
 }
 

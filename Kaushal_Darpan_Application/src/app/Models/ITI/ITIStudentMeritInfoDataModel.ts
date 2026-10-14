@@ -50,11 +50,18 @@ export class ITICollegeSearchModel
     public PageNumber: number = 0;
     public PageSize: number = 0;
     public InstituteID?: number = 0;
+  public TehsilId?: number = 0;
     public TradeID?: number = 0;
   public TradeTypeID?: number = 0;
   public ManagementTypeId?: number = 0;
   public SchemeTypeID?: number = 0;
-    public Action?: string = '';
+  public Action?: string = '';
+  public UrbanRural: number = 0;
+
+  public PanchayatsamityId: number = 0;
+  public VillageId: number = 0;
+  public GrampanchayatId: number = 0;
+  
   
   
 }

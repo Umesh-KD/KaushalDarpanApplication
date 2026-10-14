@@ -88,7 +88,7 @@ export class ITIPublicInfoTabsComponent implements OnInit {
     this.tabs.push({ TabName: 'ITI College Search', TabNameHI: 'आईटीआई कॉलेज खोज', TabIcon: 'ti ti-license', component: ItiCollegeSearchComponent, DepartmentID: 2, HasLink: false });   
    // this.tabs.push({ TabName: 'Vacant Seat For Direct Admission', TabNameHI: 'डायरेक्ट एडमिशन हेतु रिक्त सीट', TabIcon: 'ti ti-license', component: ItiVacantSeatDirectAdmissionComponent, DepartmentID: 2, HasLink: false });
     this.tabs.push({ TabName: 'Download Application Form', TabNameHI: 'आवेदन पत्र डाउनलोड करें', TabIcon: 'ti ti-license', component: DownloadApplicationFormComponent, DepartmentID: 2, HasLink: false });
-    this.tabs.push({ TabName: 'ITI Trade Search', TabNameHI: 'आईटीआई ट्रेड खोज', TabIcon: 'ti ti-license', component: ItiTradeSearchComponent, DepartmentID: 2, HasLink: false });
+    /*this.tabs.push({ TabName: 'ITI Trade Search', TabNameHI: 'आईटीआई ट्रेड खोज', TabIcon: 'ti ti-license', component: ItiTradeSearchComponent, DepartmentID: 2, HasLink: false });*/
   }
   public ngAfterViewInit(): void {
 

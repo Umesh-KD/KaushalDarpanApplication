@@ -51,7 +51,7 @@ export class UsermanualComponent {
   ) { }
   async ngOnInit(){
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
+   // await this.GetMenuPermission();
       await this.GetUserManualList();
 
     this.UserManualForm = this.fb.group({
