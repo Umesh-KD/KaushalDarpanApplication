@@ -122,7 +122,7 @@ export class ItiCollegeSearchComponent {
   public Tehsillist: any = [];
   public DistrictMasterListPopup: any = [];
 
-
+  public GetCollegeTradeDataView: any[] = [];
   
 
 
@@ -413,9 +413,11 @@ export class ItiCollegeSearchComponent {
 
 
 
-
       this.isVisibleSection = true;
       this.isVisibleList = false;
+
+
+      this.getTradeList(ID);
       this.requestPlaning.ItiAffiliationList = []
       this.requestPlaning.ItiMembersModel = []
       this.loaderService.requestStarted();
@@ -491,7 +493,7 @@ export class ItiCollegeSearchComponent {
       });
       /*      this.request.InstituteManagementId=5*/
 
-      this.getTradeList(ID);
+  
 
       console.log(parsedData, "dsw");
     } catch (ex) {
@@ -1065,7 +1067,8 @@ export class ItiCollegeSearchComponent {
 
   //-----------------------------------TRADE SECTION START-----------------------------------------------
 
-  ngAfterViewInit() {
+  ngAfterViewInit()
+  {
     if (this.dataSource1) this.dataSource1.paginator = this.paginator1;
   }
 
@@ -1235,6 +1238,7 @@ export class ItiCollegeSearchComponent {
 
   async  getTradeList(CollegeID :number)
   {
+    this.GetCollegeTradeDataView = [];
 
     this.requestTrade.InstituteID = CollegeID;
     this.requestTrade.Action = '_getTradebyCollege';
@@ -1250,16 +1254,27 @@ export class ItiCollegeSearchComponent {
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         debugger
-        this.GetCollegeTradeData = data.Data;
-        // this.GetBranchSectionData=this.GetBranchSectionData.filter((item:any)=>item.createdby==this.sSOLoginDataModel.UserID)
-        //this.GetCollegeTradeData = this.GetCollegeTradeData.filter((item: any) => item.CreatedBy == this.sSOLoginDataModel.UserID)
-        // this.GetCollegeTradeData = data.Data
-        this.totalRecord1 = data['Data'].length;
-        console.log(this.GetCollegeTradeData)
-        this.initTable1(this.GetCollegeTradeData);
+        this.GetCollegeTradeDataView = data.Data;
+       
+       
       }, (error: any) => console.error(error)
       );
 
+  }
+
+
+  maskMobileNumber(mobile: string | number | null | undefined): string {
+    if (mobile === null || mobile === undefined || String(mobile).trim() === '') {
+      return '';
+    }
+
+    const number = String(mobile).trim();
+
+    if (number.length !== 10) {
+      return number;
+    }
+
+    return '******' + number.slice(-4);
   }
 
 

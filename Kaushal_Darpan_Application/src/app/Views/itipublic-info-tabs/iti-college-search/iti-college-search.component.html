@@ -663,19 +663,19 @@
         <div class="row gy-3">
 
 
-          <div class="col-lg-4 col-md-6">
+          <!--<div class="col-lg-4 col-md-6">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Ownership: </label>
-            <select disabled class="form-select" name="TrustSociety" id="TrustSociety" [(ngModel)]="requestPlaning.OwnerShipID">
+            <select disabled class="form-select" name="TrustSociety" id="TrustSociety" [(ngModel)]="requestPlaning.OwnerShipID">-->
               <!--<option value="0">--Select--</option>-->
-              <option value="1">Rented.</option>
+              <!--<option value="1">Rented.</option>
               <option value="2">Own</option>
 
             </select>
 
-          </div>
+          </div>-->
 
 
-          <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.OwnerShipID==1">
+          <!--<div class="col-lg-4 col-md-6" *ngIf="requestPlaning.OwnerShipID==1">
             <label for="ApplicationId" class="form-label">Date of Agreement (Lease deed)  </label>
             <input disabled type="text" class="form-input form-control" id="ApplicationId" [value]="requestPlaning.AgreementLeaseDate | date:'dd-MM-yyyy'">
 
@@ -699,10 +699,10 @@
               Registration State:
             </label>
             <select disabled class="form-select" id="ddlState" name="State"
-                    [(ngModel)]="requestPlaning.InstituteStateID" (change)="ddlState_Change2()">
+                    [(ngModel)]="requestPlaning.InstituteStateID" (change)="ddlState_Change2()">-->
 
               <!--<option value="0">Select State</option>-->
-              <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+              <!--<option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
 
             </select>
 
@@ -712,12 +712,12 @@
               Registration District:
             </label>
             <select disabled class="form-select" id="ddlDistrict" name="District"
-                    [(ngModel)]="requestPlaning.PropDistrictID">
+                    [(ngModel)]="requestPlaning.PropDistrictID">-->
               <!--<option value="0">Select District</option>-->
-              <option *ngFor="let item of DistrictMasterList3" [value]="item.ID">{{item.Name}}</option>
+              <!--<option *ngFor="let item of DistrictMasterList3" [value]="item.ID">{{item.Name}}</option>
             </select>
 
-          </div>
+          </div>-->
 
           <!--<div class="">
       <label class="text-gray-800 text-sm font-medium inline-block mb-1"> {{ requestPlaning.OwnerShipID == 1 ? 'Rented' : 'Owned Property' }}Document (Lease deed)  </label>
@@ -971,10 +971,23 @@
           <b class="text-1xl-5"><i class="ti ti-phone"></i>Contact Details</b>
         </div>
         <div class="row gy-3">
-          <div class="col-lg-4 col-md-6">
+          <!--<div class="col-lg-4 col-md-6">
             <label for="ApplicationId" class="form-label">Contact No:</label>
             <input disabled (keypress)="numberOnly($event)" type="text" class="form-input form-control" id="ApplicationId" maxlength="10" [(ngModel)]="requestPlaning.ContactNo">
+          </div>-->
+
+          <div class="col-lg-4 col-md-6">
+            <label for="ContactNo" class="form-label">Contact No:</label>
+
+            <input type="text"
+                   class="form-input form-control"
+                   id="ContactNo"
+                   [value]="maskMobileNumber(requestPlaning.ContactNo)"
+                   disabled
+                   maxlength="10">
           </div>
+         
+
           <div class="col-lg-4 col-md-6">
             <label class="form-label" for="Ward">Email:</label>
             <input disabled class="form-input form-control" type="text" id="Ward"
@@ -1062,63 +1075,53 @@
             <b class="text-1xl-5">
               <i class="ti ti-tool"></i> Trade List
             </b>
-           
-          
-          </div>
-          <table mat-table [dataSource]="dataSource1" class="mat-elevation-z8" style="width: 100%;">
-            <ng-container matColumnDef="SNo">
-              <th mat-header-cell *matHeaderCellDef class="text-start">S. No.</th>
-              <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
-            </ng-container>
-            <ng-container matColumnDef="TradeName">
-              <th mat-header-cell *matHeaderCellDef class="text-start"> Trade Name </th>
-              <td mat-cell *matCellDef="let element"> {{element.TradeName}} </td>
-            </ng-container>
-            <ng-container matColumnDef="TradeType">
-              <th mat-header-cell *matHeaderCellDef class="text-start"> Trade Type </th>
-              <td mat-cell *matCellDef="let element"> {{element.TradeType}} </td>
-            </ng-container>
-            <ng-container matColumnDef="TradeScheme">
-              <th mat-header-cell *matHeaderCellDef class="text-start"> Trade Scheme </th>
-              <td mat-cell *matCellDef="let element"> {{element.TradeScheme}} </td>
-            </ng-container>
-            <ng-container matColumnDef="DurationYear">
-              <th mat-header-cell *matHeaderCellDef class="text-start"> DurationYear </th>
-              <td mat-cell *matCellDef="let element"> {{element.DurationYear }} </td>
-            </ng-container>
-            <ng-container matColumnDef="Fee">
-              <th mat-header-cell *matHeaderCellDef class="text-start"> Fee </th>
-              <td mat-cell *matCellDef="let element"> {{element.Fee }} </td>
-            </ng-container>
-            <!--<ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Actions </th>
-        <td mat-cell *matCellDef="let element">
-          <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-            <a href="javascript:void(0)" (click)="EditBranchSectionData(MyModel_EditBranchSectionData,element)"
-               title="View"><i class="ti ti-eye"></i> </a>
 
-            <a href="javascript:void(0);" (click)="AddStaffData(MyModel_EdiDetailsStaff,element)"
-               class="btn bg-info btn-sm text-white">
-              <i class="ti ti-user"></i>
-            </a>
-          </div>
-        </td>
-      </ng-container>-->
-            <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
-          </table>
 
-          <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord1 == 0">
-            No Record Found
           </div>
-          <mat-paginator #paginator1 [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+        
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover align-middle w-100">
+
+              <thead class="table-light">
+                <tr>
+                  <th class="text-start">S. No.</th>
+                  <th class="text-start">Trade Name</th>
+                  <th class="text-start">Trade Type</th>
+                  <th class="text-start">Trade Scheme</th>
+                  <th class="text-start">Duration Year</th>
+                  <th class="text-start">Fee</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let element of GetCollegeTradeDataView; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ element.TradeName }}</td>
+                  <td>{{ element.TradeType }}</td>
+                  <td>{{ element.TradeScheme }}</td>
+                  <td>{{ element.DurationYear }}</td>
+                  <td>{{ element.Fee }}</td>
+                </tr>
+
+                <tr *ngIf="!GetCollegeTradeDataView || GetCollegeTradeDataView.length === 0">
+                  <td colspan="6" class="text-center text-muted py-3">
+                    No records found
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+         
+
+        
           <!--<div class="text-center flex items-center justify-center" style="margin-top:50px">
-      <button type="button" id="btnSave" (click)="SaveData_EditDetails()"
-              class="btn bg-info text-white">
-        <i class="ti ti-device-floppy"></i> Submit
-      </button>
-      <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button>
-    </div>-->
+    <button type="button" id="btnSave" (click)="SaveData_EditDetails()"
+            class="btn bg-info text-white">
+      <i class="ti ti-device-floppy"></i> Submit
+    </button>
+    <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button>
+  </div>-->
         </div>
 
 
@@ -1210,9 +1213,7 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
         </table>
 
-        <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord1 == 0">
-          No Record Found
-        </div>
+       
         <mat-paginator #paginator1 [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
         <!--<div class="text-center flex items-center justify-center" style="margin-top:50px">
           <button type="button" id="btnSave" (click)="SaveData_EditDetails()"
