@@ -9,7 +9,8 @@
 <app-nodal-dashboard *ngIf="this.sSOLoginDataModel.RoleID == 180 || this.sSOLoginDataModel.RoleID == 181 || this.sSOLoginDataModel.RoleID == 182 || this.sSOLoginDataModel.RoleID == 183 ||this.sSOLoginDataModel.RoleID == 184"></app-nodal-dashboard>
 <app-dte-nodal-dashboard *ngIf="this.sSOLoginDataModel.RoleID == 185 || this.sSOLoginDataModel.RoleID == 186 || this.sSOLoginDataModel.RoleID == 187 || this.sSOLoginDataModel.RoleID == 188 || this.sSOLoginDataModel.RoleID == 189"></app-dte-nodal-dashboard>
 
-<app-bter-dashboard *ngIf="this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon"></app-bter-dashboard>
+<!--<app-bter-dashboard *ngIf="this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon"></app-bter-dashboard>-->
+<app-bter-dashboard *ngIf="this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon || this.sSOLoginDataModel.RoleID ==_EnumRole.DTE"></app-bter-dashboard> <!--// new role added 20261014-->
 <app-placement-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.AdminNodel || this.sSOLoginDataModel.RoleID == _EnumRole.TPO"></app-placement-dashboard>
 <app-principle-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Principal || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNonDegree"></app-principle-dashboard>
 
@@ -28,15 +29,14 @@
 <!--<app-college-master *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Principal || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon"></app-college-master>-->
 <app-student-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Student"></app-student-dashboard>
 <app-copy-checker-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Examiner || this.sSOLoginDataModel.RoleID == _EnumRole.Examiner_NonEng"></app-copy-checker-dashboard>
-<app-dte-dashboard 
-   *ngIf="this.sSOLoginDataModel.RoleID ==_EnumRole.DTE || 
-         this.sSOLoginDataModel.RoleID ==_EnumRole.DTELateral || 
-         this.sSOLoginDataModel.RoleID ==_EnumRole.DTENON || 
-         this.sSOLoginDataModel.RoleID == 80 || 
+<app-dte-dashboard *ngIf="
+         this.sSOLoginDataModel.RoleID ==_EnumRole.DTELateral ||
+         this.sSOLoginDataModel.RoleID ==_EnumRole.DTENON ||
+         this.sSOLoginDataModel.RoleID == 80 ||
          this.sSOLoginDataModel.RoleID ==81 ||
          this.sSOLoginDataModel.RoleID ==_EnumRole.DIRECTOR ||
          this.sSOLoginDataModel.RoleID ==_EnumRole.HO_DTE">
-</app-dte-dashboard>
+</app-dte-dashboard>  <!--this.sSOLoginDataModel.RoleID ==_EnumRole.DTE ||-->
 <app-emitra-dashboard *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.Emitra"></app-emitra-dashboard>
 <app-verifier-dashboard *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.BTERVerifier || this.sSOLoginDataModel.RoleID==_EnumRole.BTERVerifierDiplomaNonENG || this.sSOLoginDataModel.RoleID==_EnumRole.BTERVerifierDiplomaLaterl || this.sSOLoginDataModel.RoleID==_EnumRole.BTERVerifierDegreeNonEngg || this.sSOLoginDataModel.RoleID==_EnumRole.BTERVerifierDegreeLateral || this.sSOLoginDataModel.RoleID==_EnumRole.ITI_Verifier"></app-verifier-dashboard>
 <app-college-dashboard *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.collegeNodel"></app-college-dashboard>
@@ -88,7 +88,7 @@
 
 <app-iip-dashboard *ngIf="this.sSOLoginDataModel.RoleID== _EnumRole.IIPAdmin || this.sSOLoginDataModel.RoleID== _EnumRole.IIPIncharge"></app-iip-dashboard>
 
-<app-instructor-dashboard  *ngIf="this.sSOLoginDataModel.RoleID== _EnumRole.ITI_Instructor" ></app-instructor-dashboard>
+<app-instructor-dashboard *ngIf="this.sSOLoginDataModel.RoleID== _EnumRole.ITI_Instructor"></app-instructor-dashboard>
 
 
 
@@ -156,8 +156,8 @@ this.sSOLoginDataModel.RoleID== _EnumRole.ITIPrivateTeacher
 <app-ITI-Planning-Dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITIPlanningAdmin
  || this.sSOLoginDataModel.RoleID == _EnumRole.ITIBuildingAdmin"> </app-ITI-Planning-Dashboard>
 
-<app-employee-dashboard  *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Employee" ></app-employee-dashboard>
-<app-post-planning-dashboard-iti  *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.DTE_TrainingT2_establishment" ></app-post-planning-dashboard-iti>
+<app-employee-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Employee"></app-employee-dashboard>
+<app-post-planning-dashboard-iti *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.DTE_TrainingT2_establishment"></app-post-planning-dashboard-iti>
 
 <!--ITI END-->
 }
