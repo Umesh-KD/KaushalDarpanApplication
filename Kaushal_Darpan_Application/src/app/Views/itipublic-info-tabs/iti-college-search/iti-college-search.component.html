@@ -353,7 +353,7 @@
             <th class="text-left">College Code</th>
             <th class="text-left">Division</th>
             <th class="text-left">District</th>
-            <th align="center" width="200">Action</th>
+            <th class="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -366,7 +366,7 @@
 
             <td>
               <div class="flex align-items-center justify-content-center actionBtns" style="gap: 10px;">
-                <button type="button" (click)="GetById(row.CollegeId)" class="btn btn-info text-white gap-2">View</button>
+                <button type="button" title="View Details" (click)="GetById(row.CollegeId)" class="btn btn-info text-white gap-2">  <i class="ti ti-eye"></i></button>
                 <!--<a  href="javascript:void(0);" title="View" (click)="onCheckData(row)"><i class="ti ti-eye"></i></a>-->
                 <a href="javascript:void(0)" class="btn btn-info  text-white" (click)="EditData(MyModel_EdiDetails,row)" title="Trade List">
                   <i class="ti ti-list"></i>
@@ -398,7 +398,7 @@
 
         <div class="mb-8">
           <div class="d-flex justify-content-between align-items-center mb-3  p-2 bg-info-subtle">
-            <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute Details</b>
+            <b class="text-1xl-5"><i class="ti ti-school"></i>Institute Details</b>
             <!--<a *ngIf="requestPlaning.Status != 1  && sSOLoginDataModel.RoleID != _enumrole.DTETraing" (click)="downloadPDF()" href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i>Download Pdf</a>-->
             <a href="javascript:void(0);" (click)="BackSide()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
           </div>
@@ -433,10 +433,10 @@
 
 
           </div>
-          <div class="d-flex justify-content-between align-items-center  mt-4 mb-3 p-2 bg-info-subtle">
+          <!--<div style="display:none" class="d-flex justify-content-between align-items-center  mt-4 mb-3 p-2 bg-info-subtle">
             <b class="text-1xl-5"><i class="ti ti-plus"></i>Management Details</b>
-          </div>
-          <div class="row gy-3">
+          </div>-->
+          <div class="row gy-3" style="display:none">
 
 
             <div class="col-lg-4 col-md-6">
@@ -520,24 +520,24 @@
 
 
             <!--<div *ngIf="requestPlaning.InstituteManagementId==5">
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Registration Document  </label>
-              <div class="flex fileUploader">
-                <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                       id="RegFileName" type="file" (change)="onFilechange($event,'RegFileName')" />
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Registration Document  </label>
+        <div class="flex fileUploader">
+          <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                 id="RegFileName" type="file" (change)="onFilechange($event,'RegFileName')" />
 
-                <label for="RegFileName">
-                  <span>Choose File</span>
-                  {{ requestPlaning.RegDisFileName === '' ? 'No File Chosen' : requestPlaning.RegDisFileName }}
-                </label>
-                <div class="flex">
-                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.RegFileName}}"
-                     *ngIf="this.requestPlaning.RegFileName  !=''"
-                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+          <label for="RegFileName">
+            <span>Choose File</span>
+            {{ requestPlaning.RegDisFileName === '' ? 'No File Chosen' : requestPlaning.RegDisFileName }}
+          </label>
+          <div class="flex">
+            <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.RegFileName}}"
+               *ngIf="this.requestPlaning.RegFileName  !=''"
+               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
 
-                </div>
+          </div>
 
-              </div>
-            </div>-->
+        </div>
+      </div>-->
 
           </div>
 
@@ -550,11 +550,11 @@
 
 
 
-        <div class="d-flex justify-content-between align-items-center mb-3  mt-4 p-2 bg-info-subtle hide-in-pdf">
-          <b class="text-1xl-5"><i class="ti ti-plus"></i>Member Of Trust/Society</b>
-        </div>
+        <!--<div  class="d-flex justify-content-between align-items-center mb-3  mt-4 p-2 bg-info-subtle hide-in-pdf">
+    <b class="text-1xl-5"><i class="ti ti-plus"></i>Member Of Trust/Society</b>
+  </div>-->
 
-        <div *ngIf="requestPlaning.InstituteManagementId==5  " class="row gy-3 hide-in-pdf ">
+        <div style="display:none" *ngIf="requestPlaning.InstituteManagementId==5  " class="row gy-3 hide-in-pdf ">
           <div class="col-lg-4 col-md-6" *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 && requestPlaning.InstituteManagementId==5 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 && requestPlaning.InstituteManagementId==5">
             <label for="ApplicationId" class="form-label">Member Name</label>
             <input disabled type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="member.MemberName">
@@ -582,31 +582,31 @@
 
 
           <!--<div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1   ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 ">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ID Proof </label>
-            <div class="flex fileUploader">
-              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                     id="IDFileName" type="file" (change)="onFilechange($event,'IDFileName')" />
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ID Proof </label>
+      <div class="flex fileUploader">
+        <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+               id="IDFileName" type="file" (change)="onFilechange($event,'IDFileName')" />
 
-              <label for="IDFileName">
-                <span>Choose File</span>
-                {{ member.IDdis_Filename === '' ? 'No File Chosen' : member.IDdis_Filename }}
-              </label>
-              <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + member.IDFileName}}"
-                   *ngIf="this.member.IDFileName  !=''"
-                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+        <label for="IDFileName">
+          <span>Choose File</span>
+          {{ member.IDdis_Filename === '' ? 'No File Chosen' : member.IDdis_Filename }}
+        </label>
+        <div class="flex">
+          <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + member.IDFileName}}"
+             *ngIf="this.member.IDFileName  !=''"
+             class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
 
-              </div>
+        </div>
 
-            </div>
-          </div>-->
+      </div>
+    </div>-->
           <!--<div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1   ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1  " class="pt-30">
-            <button (click)="AddChoice()" type="button" class="btn bg-primary text-white">
-              <i class="ti ti-plus"></i> Add
-              More
-            </button>
+      <button (click)="AddChoice()" type="button" class="btn bg-primary text-white">
+        <i class="ti ti-plus"></i> Add
+        More
+      </button>
 
-          </div>-->
+    </div>-->
           <!--<div *ngIf="this.Type!=1"></div>-->
 
           <div class="col-lg-4 col-md-6">
@@ -624,24 +624,24 @@
 
 
           <!--<div class="mt-4">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Upload Document </label>
-            <div class="flex fileUploader">
-              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                     id="MemberIdProofName" type="file" (change)="onFilechange($event,'MemberIdProofName')" />
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Upload Document </label>
+      <div class="flex fileUploader">
+        <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+               id="MemberIdProofName" type="file" (change)="onFilechange($event,'MemberIdProofName')" />
 
-              <label for="MemberIdProofName">
-                <span>Choose File</span>
-                {{ requestPlaning.MemberIdDisProofName === '' ? 'No File Chosen' : requestPlaning.MemberIdDisProofName }}
-              </label>
-              <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.MemberIdProofName}}"
-                   *ngIf="this.requestPlaning.MemberIdProofName  !=''"
-                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+        <label for="MemberIdProofName">
+          <span>Choose File</span>
+          {{ requestPlaning.MemberIdDisProofName === '' ? 'No File Chosen' : requestPlaning.MemberIdDisProofName }}
+        </label>
+        <div class="flex">
+          <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.MemberIdProofName}}"
+             *ngIf="this.requestPlaning.MemberIdProofName  !=''"
+             class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
 
-              </div>
+        </div>
 
-            </div>
-          </div>-->
+      </div>
+    </div>-->
 
 
         </div>
@@ -657,7 +657,7 @@
 
 
         <div class="d-flex justify-content-between align-items-center mb-3 p-2  mt-4 bg-info-subtle">
-          <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute Address</b>
+          <b class="text-1xl-5"><i class="ti ti-map-pin-check"></i>&nbsp;Institute Address</b>
         </div>
 
         <div class="row gy-3">
@@ -720,24 +720,24 @@
           </div>
 
           <!--<div class="">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> {{ requestPlaning.OwnerShipID == 1 ? 'Rented' : 'Owned Property' }}Document (Lease deed)  </label>
-            <div class="flex fileUploader">
-              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                     id="AgreementFileName" type="file" (change)="onFilechange($event,'AgreementFileName')" />
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1"> {{ requestPlaning.OwnerShipID == 1 ? 'Rented' : 'Owned Property' }}Document (Lease deed)  </label>
+      <div class="flex fileUploader">
+        <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+               id="AgreementFileName" type="file" (change)="onFilechange($event,'AgreementFileName')" />
 
-              <label for="AgreementFileName">
-                <span>Choose File</span>
-                {{ requestPlaning.AgreementDisFileName === '' ? 'No File Chosen' : requestPlaning.AgreementDisFileName }}
-              </label>
-              <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.AgreementFileName}}"
-                   *ngIf="this.requestPlaning.AgreementFileName  !=''"
-                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+        <label for="AgreementFileName">
+          <span>Choose File</span>
+          {{ requestPlaning.AgreementDisFileName === '' ? 'No File Chosen' : requestPlaning.AgreementDisFileName }}
+        </label>
+        <div class="flex">
+          <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.AgreementFileName}}"
+             *ngIf="this.requestPlaning.AgreementFileName  !=''"
+             class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
 
-              </div>
+        </div>
 
-            </div>
-          </div>-->
+      </div>
+    </div>-->
 
 
 
@@ -861,122 +861,114 @@
           </div>
 
 
-          <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.PropUrbanRural==75">
-            <label class="form-label">Administrative Body:</label>
-            <select disabled class="form-select" id="Administrative" [(ngModel)]="requestPlaning.AdministrativeBodyId">
-              <!--<option value="0">Select Administrative Body</option>-->
-              <option value="1">Cantonment Board</option>
-              <option value="2">Nagar Nigam</option>
-              <option value="3">Nagar Palika</option>
-              <option value="4">Nagar Parishad</option>
-            </select>
+          <!--<div class="col-lg-4 col-md-6" *ngIf="requestPlaning.PropUrbanRural==75">
+      <label class="form-label">Administrative Body:</label>
+      <select disabled class="form-select" id="Administrative" [(ngModel)]="requestPlaning.AdministrativeBodyId">-->
+          <!--<option value="0">Select Administrative Body</option>-->
+          <!--<option value="1">Cantonment Board</option>
+        <option value="2">Nagar Nigam</option>
+        <option value="3">Nagar Palika</option>
+        <option value="4">Nagar Parishad</option>
+      </select>
 
-          </div>
-
-
+    </div>-->
           <!--<label for="CantonmentBoard">CantonmentBoard Name:</label>
-            <input class="form-input" type="text" id="CantonmentBoard"
-                   placeholder="Enter CantonmentBoard Name" [(ngModel)]="requestPlaning.CantonmentBoardName">
-            <div *ngIf="isSubmitted && instituteForm.get('CantonmentBoard').errors" class="text-danger">
-              <p *ngIf="instituteForm.get('CantonmentBoard').errors.required">
-                <i aria-hidden="true"></i>This field is
-                required.
-              </p>
-            </div>
-          </div>-->
+      <input class="form-input" type="text" id="CantonmentBoard"
+             placeholder="Enter CantonmentBoard Name" [(ngModel)]="requestPlaning.CantonmentBoardName">
+      <div *ngIf="isSubmitted && instituteForm.get('CantonmentBoard').errors" class="text-danger">
+        <p *ngIf="instituteForm.get('CantonmentBoard').errors.required">
+          <i aria-hidden="true"></i>This field is
+          required.
+        </p>
+      </div>
+    </div>-->
           <!--<div *ngIf="requestPlaning.AdministrativeId == 2 && requestPlaning.UrbanRural==75">
-            <label for="NagarNigam">Nagar Nigam Name:</label>
-            <input class="form-input" type="text" id="NagarNigam"
-                   placeholder="Enter NagarNigam Name" [(ngModel)]="requestPlaning.NagarNigamName">
-            <div *ngIf="isSubmitted && instituteForm.get('NagarNigam').errors" class="text-danger">
-              <p *ngIf="instituteForm.get('NagarNigam').errors.required">
-                <i aria-hidden="true"></i>This field is
-                required.
-              </p>
-            </div>
-          </div>-->
+      <label for="NagarNigam">Nagar Nigam Name:</label>
+      <input class="form-input" type="text" id="NagarNigam"
+             placeholder="Enter NagarNigam Name" [(ngModel)]="requestPlaning.NagarNigamName">
+      <div *ngIf="isSubmitted && instituteForm.get('NagarNigam').errors" class="text-danger">
+        <p *ngIf="instituteForm.get('NagarNigam').errors.required">
+          <i aria-hidden="true"></i>This field is
+          required.
+        </p>
+      </div>
+    </div>-->
           <!--<div *ngIf="requestPlaning.AdministrativeId == 3 && requestPlaning.UrbanRural==75">
-            <label for="NagarPalika">Nagar Palika Name:</label>
-            <input class="form-input" type="text" id="NagarPalika"
-                   placeholder="Enter NagarPalika Name" [(ngModel)]="requestPlaning.NagarPalikaName">
-            <div *ngIf="isSubmitted && instituteForm.get('NagarPalika').errors" class="text-danger">
-              <p *ngIf="instituteForm.get('NagarPalika').errors.required">
-                <i aria-hidden="true"></i>This field is
-                required.
-              </p>
-            </div>
-          </div>-->
+      <label for="NagarPalika">Nagar Palika Name:</label>
+      <input class="form-input" type="text" id="NagarPalika"
+             placeholder="Enter NagarPalika Name" [(ngModel)]="requestPlaning.NagarPalikaName">
+      <div *ngIf="isSubmitted && instituteForm.get('NagarPalika').errors" class="text-danger">
+        <p *ngIf="instituteForm.get('NagarPalika').errors.required">
+          <i aria-hidden="true"></i>This field is
+          required.
+        </p>
+      </div>
+    </div>-->
           <!--<div *ngIf="requestPlaning.AdministrativeId == 4 && requestPlaning.UrbanRural==75">
-            <label for="NagarParishad">Nagar Parishad Name:</label>
-            <input class="form-input" type="text" id="NagarParishad"
-                   placeholder="Enter NagarParishad Name" [(ngModel)]="requestPlaning.NagarParishadName">
-            <div *ngIf="isSubmitted && instituteForm.get('NagarParishad').errors" class="text-danger">
-              <p *ngIf="instituteForm.get('NagarParishad').errors.required">
-                <i aria-hidden="true"></i>This field is
-                required.
-              </p>
-            </div>
-          </div>-->
+      <label for="NagarParishad">Nagar Parishad Name:</label>
+      <input class="form-input" type="text" id="NagarParishad"
+             placeholder="Enter NagarParishad Name" [(ngModel)]="requestPlaning.NagarParishadName">
+      <div *ngIf="isSubmitted && instituteForm.get('NagarParishad').errors" class="text-danger">
+        <p *ngIf="instituteForm.get('NagarParishad').errors.required">
+          <i aria-hidden="true"></i>This field is
+          required.
+        </p>
+      </div>
+    </div>-->
+          <!--<div class="col-lg-4 col-md-6">
+      <label class="form-label" for="Ward">Ward number:</label>
+      <input disabled class="form-input form-control" type="text" id="Ward"
+             [(ngModel)]="requestPlaning.WardNo">
 
+    </div>-->
+          <!--<div class="col-lg-4 col-md-6">
+      <label class="form-label" for="Ward">Khasra no/Khata No:</label>
+      <input disabled class="form-input form-control" type="text" id="Ward"
+             [(ngModel)]="requestPlaning.KhasraKhataNo">
 
-          <div class="col-lg-4 col-md-6">
-            <label class="form-label" for="Ward">Ward number:</label>
-            <input disabled class="form-input form-control" type="text" id="Ward"
-                   [(ngModel)]="requestPlaning.WardNo">
+    </div>-->
+          <!--<div class="col-lg-4 col-md-6">
+      <label class="form-label" for="Ward">Rakba (Bigha/Yard):</label>
+      <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
+             [(ngModel)]="requestPlaning.BighaYard">
 
-          </div>
-
-          <div class="col-lg-4 col-md-6">
-            <label class="form-label" for="Ward">Khasra no/Khata No:</label>
-            <input disabled class="form-input form-control" type="text" id="Ward"
-                   [(ngModel)]="requestPlaning.KhasraKhataNo">
-
-          </div>
-
-          <div class="col-lg-4 col-md-6">
-            <label class="form-label" for="Ward">Rakba (Bigha/Yard):</label>
-            <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
-                   [(ngModel)]="requestPlaning.BighaYard">
-
-          </div>
-
+    </div>-->
           <!--<div class="">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Lat/Long* (along with college gate photo)  </label>
-            <div class="flex fileUploader">
-              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                     id="LatLongFileName" type="file" (change)="onFilechange($event,'LatLongFileName')" />
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Lat/Long* (along with college gate photo)  </label>
+      <div class="flex fileUploader">
+        <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+               id="LatLongFileName" type="file" (change)="onFilechange($event,'LatLongFileName')" />
 
-              <label for="LatLongFileName">
-                <span>Choose File</span>
-                {{ requestPlaning.LatLongDisFileName === '' ? 'No File Chosen' : requestPlaning.LatLongDisFileName }}
-              </label>
-              <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.LatLongFileName}}"
-                   *ngIf="this.requestPlaning.LatLongFileName  !=''"
-                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+        <label for="LatLongFileName">
+          <span>Choose File</span>
+          {{ requestPlaning.LatLongDisFileName === '' ? 'No File Chosen' : requestPlaning.LatLongDisFileName }}
+        </label>
+        <div class="flex">
+          <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.LatLongFileName}}"
+             *ngIf="this.requestPlaning.LatLongFileName  !=''"
+             class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
 
-              </div>
+        </div>
 
-            </div>
-          </div>-->
+      </div>
+    </div>-->
+          <!--<div class="col-lg-4 col-md-6">
+      <label class="form-label" for="Ward">Latitude:</label>
+      <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
+             [(ngModel)]="requestPlaning.Latitude">
 
-          <div class="col-lg-4 col-md-6">
-            <label class="form-label" for="Ward">Latitude:</label>
-            <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
-                   [(ngModel)]="requestPlaning.Latitude">
 
+    </div>
 
-          </div>
-
-          <div class="col-lg-4 col-md-6">
-            <label class="form-label" for="Ward">Longitude:</label>
-            <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
-                   [(ngModel)]="requestPlaning.Longitude">
-          </div>
+    <div class="col-lg-4 col-md-6">
+      <label class="form-label" for="Ward">Longitude:</label>
+      <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
+             [(ngModel)]="requestPlaning.Longitude">
+    </div>-->
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-3 p-2  mt-4 bg-info-subtle">
-          <b class="text-1xl-5"><i class="ti ti-plus"></i>Contact Details</b>
+          <b class="text-1xl-5"><i class="ti ti-phone"></i>Contact Details</b>
         </div>
         <div class="row gy-3">
           <div class="col-lg-4 col-md-6">
@@ -991,7 +983,7 @@
           <div class="col-lg-4 col-md-6">
             <label class="form-label" for="Ward">Alternate Email:</label>
             <input disabled class="form-input form-control" type="text" id="Ward"
-                  [(ngModel)]="requestPlaning.AlternateEmail">
+                   [(ngModel)]="requestPlaning.AlternateEmail">
           </div>
           <div class="col-lg-4 col-md-6">
             <label class="form-label" for="Ward">Website:</label>
@@ -1000,10 +992,10 @@
           </div>
         </div>
 
-        <div class="d-flex justify-content-between align-items-center mb-3  mt-4 p-2  mt-4 bg-info-subtle">
-          <b class="text-1xl-5"><i class="ti ti-plus"></i>Electrical load details</b>
-        </div>
-        <div class="row gy-3">
+        <!--<div style="display:none" class="d-flex justify-content-between align-items-center mb-3  mt-4 p-2  mt-4 bg-info-subtle">
+    <b class="text-1xl-5"><i class="ti ti-plus"></i>Electrical load details</b>
+  </div>-->
+        <div style="display:none" class="row gy-3">
           <div class="col-lg-4 col-md-6">
             <label class="form-label" for="Ward">Consumer Name:</label>
             <input disabled class="form-input form-control" type="text" id="Ward"
@@ -1045,50 +1037,117 @@
                    [(ngModel)]="requestPlaning.SubDivOffice">
           </div>
           <!--<div class="">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Upload Last Month Bill  </label>
-            <div class="flex fileUploader">
-              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                     id="Bill_Filename" type="file" (change)="onFilechange($event,'Bill_Filename')" />
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Upload Last Month Bill  </label>
+      <div class="flex fileUploader">
+        <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+               id="Bill_Filename" type="file" (change)="onFilechange($event,'Bill_Filename')" />
 
-              <label for="Bill_Filename">
-                <span>Choose File</span>
-                {{ requestPlaning.Bill_DisFilename === '' ? 'No File Chosen' : requestPlaning.Bill_DisFilename }}
-              </label>
-              <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.Bill_Filename}}"
-                   *ngIf="this.requestPlaning.Bill_Filename  !=''"
-                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+        <label for="Bill_Filename">
+          <span>Choose File</span>
+          {{ requestPlaning.Bill_DisFilename === '' ? 'No File Chosen' : requestPlaning.Bill_DisFilename }}
+        </label>
+        <div class="flex">
+          <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.Bill_Filename}}"
+             *ngIf="this.requestPlaning.Bill_Filename  !=''"
+             class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
 
-              </div>
+        </div>
 
-            </div>
-          </div>-->
+      </div>
+    </div>-->
         </div>
-        <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="d-flex justify-content-between align-items-center mb-3 p-2 bg-info-subtle  mt-4 hide-in-pdf">
-          <b class="text-1xl-5"><i class="ti ti-plus"></i>Affiliation Details </b>
+        <br />
+        <div class="">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-info-subtle">
+            <b class="text-1xl-5">
+              <i class="ti ti-tool"></i> Trade List
+            </b>
+           
+          
+          </div>
+          <table mat-table [dataSource]="dataSource1" class="mat-elevation-z8" style="width: 100%;">
+            <ng-container matColumnDef="SNo">
+              <th mat-header-cell *matHeaderCellDef class="text-start">S. No.</th>
+              <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+            </ng-container>
+            <ng-container matColumnDef="TradeName">
+              <th mat-header-cell *matHeaderCellDef class="text-start"> Trade Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.TradeName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="TradeType">
+              <th mat-header-cell *matHeaderCellDef class="text-start"> Trade Type </th>
+              <td mat-cell *matCellDef="let element"> {{element.TradeType}} </td>
+            </ng-container>
+            <ng-container matColumnDef="TradeScheme">
+              <th mat-header-cell *matHeaderCellDef class="text-start"> Trade Scheme </th>
+              <td mat-cell *matCellDef="let element"> {{element.TradeScheme}} </td>
+            </ng-container>
+            <ng-container matColumnDef="DurationYear">
+              <th mat-header-cell *matHeaderCellDef class="text-start"> DurationYear </th>
+              <td mat-cell *matCellDef="let element"> {{element.DurationYear }} </td>
+            </ng-container>
+            <ng-container matColumnDef="Fee">
+              <th mat-header-cell *matHeaderCellDef class="text-start"> Fee </th>
+              <td mat-cell *matCellDef="let element"> {{element.Fee }} </td>
+            </ng-container>
+            <!--<ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+            <a href="javascript:void(0)" (click)="EditBranchSectionData(MyModel_EditBranchSectionData,element)"
+               title="View"><i class="ti ti-eye"></i> </a>
+
+            <a href="javascript:void(0);" (click)="AddStaffData(MyModel_EdiDetailsStaff,element)"
+               class="btn bg-info btn-sm text-white">
+              <i class="ti ti-user"></i>
+            </a>
+          </div>
+        </td>
+      </ng-container>-->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+          </table>
+
+          <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord1 == 0">
+            No Record Found
+          </div>
+          <mat-paginator #paginator1 [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+          <!--<div class="text-center flex items-center justify-center" style="margin-top:50px">
+      <button type="button" id="btnSave" (click)="SaveData_EditDetails()"
+              class="btn bg-info text-white">
+        <i class="ti ti-device-floppy"></i> Submit
+      </button>
+      <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button>
+    </div>-->
         </div>
-        <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="row gy-3 hide-in-pdf">
-          <div class="col-lg-4 col-md-6">
-            <label for="ApplicationId" class="form-label">Order No</label>
-            <input disabled type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="addmore.OrderNo">
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <label for="ApplicationId" class="form-label">Order Date</label>
-            <input disabled type="text" class="form-input form-control" id="ApplicationId" [value]="addmore.OrderDate | date:'dd-MM-yyyy'">
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <label for="ApplicationId" class="form-label">With Effect From:</label>
-            <input disabled type="text" class="form-input form-control" id="ApplicationId" [value]="addmore.EffectFrom | date:'dd-MM-yyyy'">
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <label for="ApplicationId" class="form-label">Page No (as per affiliation order):</label>
-            <input disabled (keypress)="numberOnly($event)" type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="addmore.PageNo">
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <label for="ApplicationId" class="form-label">Serial No (as per affiliation order):</label>
-            <input disabled (keypress)="numberOnly($event)" type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="addmore.SerialNo">
-          </div>
-        </div>
+
+
+
+        <!--<div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="d-flex justify-content-between align-items-center mb-3 p-2 bg-info-subtle  mt-4 hide-in-pdf">
+    <b class="text-1xl-5"><i class="ti ti-plus"></i>Affiliation Details </b>
+  </div>
+  <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="row gy-3 hide-in-pdf">
+    <div class="col-lg-4 col-md-6">
+      <label for="ApplicationId" class="form-label">Order No</label>
+      <input disabled type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="addmore.OrderNo">
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <label for="ApplicationId" class="form-label">Order Date</label>
+      <input disabled type="text" class="form-input form-control" id="ApplicationId" [value]="addmore.OrderDate | date:'dd-MM-yyyy'">
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <label for="ApplicationId" class="form-label">With Effect From:</label>
+      <input disabled type="text" class="form-input form-control" id="ApplicationId" [value]="addmore.EffectFrom | date:'dd-MM-yyyy'">
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <label for="ApplicationId" class="form-label">Page No (as per affiliation order):</label>
+      <input disabled (keypress)="numberOnly($event)" type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="addmore.PageNo">
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <label for="ApplicationId" class="form-label">Serial No (as per affiliation order):</label>
+      <input disabled (keypress)="numberOnly($event)" type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="addmore.SerialNo">
+    </div>
+  </div>-->
       </div>
     </div>
   </div>
