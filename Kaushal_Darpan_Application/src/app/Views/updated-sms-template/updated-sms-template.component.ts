@@ -79,6 +79,7 @@ export class UpdatedSMSTemplateComponent implements OnInit {
 
     // Initialize Reactive Form
     this.SMSTemplateForm = this.formBuilder.group({
+      ID: [''],
 
       DepartmentID: ['0', Validators.required],
 
@@ -139,7 +140,7 @@ export class UpdatedSMSTemplateComponent implements OnInit {
   // =====================================================
 
   async ViewandUpdate(content: any, item?: any): Promise<void> {
-
+    debugger
     this.isSubmitted = false;
     this.isEditMode = !!item;
 
@@ -163,16 +164,36 @@ export class UpdatedSMSTemplateComponent implements OnInit {
       this.request = { ...item };
 
       this.SMSTemplateForm.patchValue({
+        ID: item.AID ?? '',
         DepartmentID: item.DepartmentID ?? '',
-        RoleID: item.RoleID ?? '',
         DivisionID: item.DivisionID ?? '',
-        DistrictID: item.DistrictID ?? '',
         ManagementTypeID: item.ManagementTypeID ?? '',
-        InstituteID: item.InstituteID ?? '',
         SMSText: item.SMSText ?? '',
         TemplateID: item.TemplateID ?? ''
       });
+
+      
+    await this.GetRoleList(0,this.SMSTemplateForm.get('DepartmentID')?.value);
+    this.SMSTemplateForm.patchValue({
+        RoleID: item.RoleID ?? '',
+      });
+
+    if(this.SMSTemplateForm.get('DivisionID')?.value){
+      await this.onDivisionChange();
+      this.SMSTemplateForm.patchValue({
+        DistrictID: item.DistrictID ?? '',
+      });
     }
+
+    if(this.SMSTemplateForm.get('ManagementTypeID')?.value){      
+      await this.GetInstituteList();
+      this.SMSTemplateForm.patchValue({
+          InstituteID: item.InstituteID ?? '',
+        });
+    }
+
+    }
+
 
     this.modalReference = this.modalService.open(content, {
       backdrop: 'static',
@@ -329,11 +350,19 @@ debugger
   // LOAD ROLE DROPDOWN
   // =====================================================
 
-    async GetRoleList( event: any) {
+    async GetRoleList( event: any,DepartmentID: number = 0){
     try {
     debugger
     this.SMSTemplateForm.get('RoleID')?.setValue(''); // Reset RoleID when Department changes
-    const departmentID = event.target.value;
+    // const departmentID = this.SMSTemplateForm.get('DepartmentID')?.value;
+    let departmentID = 0;
+    if (DepartmentID === 0) {
+         departmentID = event.target.value;
+    }
+    else{
+       departmentID = DepartmentID;
+    }
+
     // const departmentID = this.SMSTemplateForm.get('DepartmentID')?.value;
     this._SMSTemplateForm['RoleID'].setValue('');
       this.loaderService.requestStarted();
@@ -342,6 +371,8 @@ debugger
         this.RoleMasterList = data.Data;
         console.log("RoleMasterList", this.RoleMasterList);
       })
+
+
     } catch (error) {
       console.error(error);
     } finally {
