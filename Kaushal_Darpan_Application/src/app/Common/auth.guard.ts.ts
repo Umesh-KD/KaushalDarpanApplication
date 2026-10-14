@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
     if (this.authService.isLoggedIn()) {
       return true;
     } else {
-      this.router.navigate(['/login']);
+      window.location.href = 'https://sso.rajasthan.gov.in/signin';
       return false;
     }
   }
