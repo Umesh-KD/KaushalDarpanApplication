@@ -8,9 +8,9 @@ import { jsPDF } from 'jspdf';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppsettingService } from '../../../../Common/appsetting.service';
-import { GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { AttendanceServiceService } from '../../../../Services/AttendanceServices/attendance-service.service';
 import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
@@ -51,6 +51,7 @@ export class StudentAttendanceComponent implements OnInit {
   SemesterMasterDDL: any[] = [];
   SubjectMasterDDL: any[] = [];
   GetSectionData: any[] = [];
+  MenuAllowedRoleList: any[] = [];
   subjectsearch = new CommonDDLSubjectMasterModel()
   StudentAttandanceTimeDDL: any[] = [];
   DayList: any[] = [];
@@ -100,7 +101,7 @@ export class StudentAttendanceComponent implements OnInit {
     public appsettingConfig: AppsettingService,
     private loaderService: LoaderService,
     private HrMasterService: LeaveMasterService,
-
+    private routers: Router,
   ) {
 
   }
@@ -130,6 +131,7 @@ export class StudentAttendanceComponent implements OnInit {
 
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     // Access the route parameters
     this.sectionId = this.route.snapshot.paramMap.get('sectionId') ?? '';
     this.streamId = parseInt(this.route.snapshot.paramMap.get('streamId') ?? "0");
@@ -257,6 +259,30 @@ export class StudentAttendanceComponent implements OnInit {
 
   }
   get formTable() { return this.TableForm.controls; }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
 
   async getMasterData() {
     try {

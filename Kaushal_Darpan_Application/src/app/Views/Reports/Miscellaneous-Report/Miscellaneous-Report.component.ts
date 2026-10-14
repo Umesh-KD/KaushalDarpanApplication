@@ -66,6 +66,7 @@ export class MiscellaneousReportComponent implements OnInit {
     private modalService: NgbModal,
     private Swal2: SweetAlert2,
     private reportService: ReportService,
+    private Router: Router,
   ) {
 
     this.repType = parseInt(this.routers.snapshot.paramMap.get('repType') ?? "0");
@@ -90,6 +91,7 @@ export class MiscellaneousReportComponent implements OnInit {
   EndTermList: any[] = [];
   ReportFlaglist: any[] = [];
   ReportTypelist: any[] = [];
+  MenuAllowedRoleList: any[] = [];
 
 
   
@@ -100,7 +102,7 @@ export class MiscellaneousReportComponent implements OnInit {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     this.groupForm = this.fb.group({
       displayColumns: [''],
       StateId: [''],
@@ -120,7 +122,7 @@ export class MiscellaneousReportComponent implements OnInit {
       SchemeID: ['0'],
     });
 
-   
+   await this.GetMenuPermission();
 
     await this.loadReportType();
 
@@ -134,6 +136,30 @@ export class MiscellaneousReportComponent implements OnInit {
       this.EndTermList = data['Data'];
     }, (error: any) => console.error(error));
 
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
 

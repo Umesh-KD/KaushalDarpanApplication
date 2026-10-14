@@ -11,6 +11,7 @@ import * as XLSX from 'xlsx';
 import { BTERSeatsDistributionsService } from '../../../../Services/BTER/Seats-Distributions/seats-distributions.service';
 import { BTERCollegeBranchModel, BTERSeatsDistributionsDataModels } from '../../../../Models/BTER/BTERSeatsDistributions';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-seat-intakes-list',
@@ -38,6 +39,7 @@ export class SeatIntakesListComponent implements OnInit {
   public CollegesListAll: any = [];
   public BranchList: any = [];
   public SeatIntakeDataExcel: any = [];
+  _EnumRole=EnumRole;
 
   pageNo: any = 1;
   pageSize: any = 50;
@@ -52,6 +54,7 @@ export class SeatIntakesListComponent implements OnInit {
 
 
   public DateConfigSetting: any = [];
+  public MenuAllowedRoleList: any = [];
 
 
 
@@ -77,7 +80,7 @@ export class SeatIntakesListComponent implements OnInit {
     private Swal2: SweetAlert2,
     private SeatsDistributionsService: BTERSeatsDistributionsService,
     private commonMasterService: CommonFunctionService,
-
+    private router: Router,
   ) { }
 
   async ngOnInit() {
@@ -94,6 +97,8 @@ export class SeatIntakesListComponent implements OnInit {
       });
 
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    
+    await this.GetMenuPermission();
     if (this.SSOLoginDataModel.Eng_NonEng == EnumCourseType.Lateral) {
       this.request.StreamTypeId = EnumCourseType.Engineering
     } else {
@@ -560,6 +565,30 @@ export class SeatIntakesListComponent implements OnInit {
       //this.pageNo = this.pageNo - 1;
       this.onSearch(3)
     }
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.SSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
 }

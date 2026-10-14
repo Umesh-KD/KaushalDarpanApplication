@@ -91,6 +91,7 @@ export class EnrolledStudentVerificationComponent {
 
   public enrolledPromotedStudentRequest = new EnrolledPromotedStudentModel();
   public enrolledPromotedStudentList: any[] = [];
+  public MenuAllowedRoleList: any[] = [];
 
   public ValidParamTab: any[] = [1, 2, 3, 4];
   public ParamTab: number = 0;
@@ -106,7 +107,7 @@ export class EnrolledStudentVerificationComponent {
   ) { }
 
   async ngOnInit() {
-
+    await this.GetMenuPermission();
     // get key by param
     this.ParamTab = Number(this.activatedRoute.snapshot.queryParamMap.get("tab") ?? 0);
     if (!this.ValidParamTab.includes(this.ParamTab)) {
@@ -119,6 +120,30 @@ export class EnrolledStudentVerificationComponent {
 
     //load data
     await this.GetMasterData();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async GetMasterData() {

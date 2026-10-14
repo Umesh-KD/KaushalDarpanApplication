@@ -14,6 +14,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { of } from "rxjs";
 import { jsPDF } from 'jspdf';
 import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-student-profile-download',
@@ -29,6 +30,7 @@ export class StudentProfileDownloadComponent implements AfterViewInit {
   StudentExamsPapersList: any = [];
   STUFFPapersList : any = [];
   public StudentDetails: any[] = [];
+  public MenuAllowedRoleList: any[] = [];
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   constructor(
     private loaderService: LoaderService,
@@ -39,7 +41,8 @@ export class StudentProfileDownloadComponent implements AfterViewInit {
     private fb: FormBuilder,
     private reportService: ReportService,
     private http: HttpClient,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private routers: Router,
   ) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 }
@@ -50,12 +53,38 @@ export class StudentProfileDownloadComponent implements AfterViewInit {
     this.searchForm = this.fb.group({
       EnrollmentNo: ['', Validators.required],
     });
+    await this.GetMenuPermission();
     this.commonMasterService.StudentExamsPapers()
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StudentExamsPapersList = data['Data'];
       }, (error: any) => console.error(error));
   }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
+
   onSubmit() {
     if (this.searchForm.valid) {
       /*EE20240002/009*/

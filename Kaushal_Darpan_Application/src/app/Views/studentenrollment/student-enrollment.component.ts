@@ -10,7 +10,7 @@ import { LoaderService } from '../../Services/Loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserMasterService } from '../../Services/UserMaster/user-master.service';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OptionalSubjectRequestModel, PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../Models/PreExamStudentDataModel';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { SubjectSearchModel } from '../../Models/SubjectMasterDataModel';
@@ -127,6 +127,7 @@ export class StudentEnrollmentComponent {
   //end table feature default
 
   public SubCasteCategoryADDLList: any[] = [];
+  public MenuAllowedRoleList: any[] = [];
   @ViewChild('MyModel_Action') myModalTemplate!: TemplateRef<any>;
   public IsRejectAtBter: boolean = false;
   public IsFormActionSubmitted: boolean = false;
@@ -146,7 +147,8 @@ export class StudentEnrollmentComponent {
     private http: HttpClient,
     private documentDetailsService: DocumentDetailsService,
     private sMSMailService: SMSMailService,
-    private preExamStudentExaminationService: PreExamStudentExaminationService
+    private preExamStudentExaminationService: PreExamStudentExaminationService,
+    private router: Router,
   ) { }
 
   async ngOnInit() {
@@ -223,6 +225,7 @@ export class StudentEnrollmentComponent {
       })
     this.requestStudent.QualificationDetails = [];
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     /*this.statusID = Number(this.activatedRoute.snapshot.queryParamMap.get('status')?.toString());*/
     let statusID = Number(this.activatedRoute.snapshot.queryParamMap.get("status")?.toString());
     let currentTab = Number(this.activatedRoute.snapshot.queryParamMap.get("tab")?.toString());
@@ -257,6 +260,31 @@ export class StudentEnrollmentComponent {
   get EditStudentDataform() { return this.EditStudentDataFormGroup.controls; }
   get FormUEM() { return this.formUpdateEnrollmentNo.controls; }
   get FormAction() { return this.formAction.controls; }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
+
   showImageDeleteButton() {
     //debugger
     if (this.request.StudentFilterStatusId == this._enumExamStudentStatus.Addimited || this.request.StudentFilterStatusId == 0) {

@@ -18,6 +18,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ExaminerStaticReportFeedbackDataModel, ExaminerStaticReportSearchModel } from '../../../Models/BTER/StaticsReportDataModel';
 import { ToastrService } from 'ngx-toastr';
 import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-statics-report-provide-by-examiner',
@@ -62,6 +63,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
   public requestMarksData = new ExaminerStaticReportSearchModel();
 
   public MarksDataList: any = [];
+  public MenuAllowedRoleList: any = [];
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
 
@@ -74,6 +76,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     public commonFunctionHelper: CommonFunctionHelper,
+    public routers: Router,
   ) {}
 
   async ngOnInit() {
@@ -93,9 +96,34 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
     });
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     await this.getTodayDate();
     await this.loadMasterData();
     await this.GetAllData();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async getTodayDate() {

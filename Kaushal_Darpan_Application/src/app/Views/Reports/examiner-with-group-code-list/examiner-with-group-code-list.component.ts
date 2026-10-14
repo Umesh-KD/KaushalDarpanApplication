@@ -19,6 +19,7 @@ import { ExaminerStaticReportFeedbackDataModel } from '../../../Models/BTER/Stat
 import { ToastrService } from 'ngx-toastr';
 import { ExaminerwithGroupcodeModel } from '../../../Models/MiscellaneousModel';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-examiner-with-group-code-list',
@@ -69,6 +70,8 @@ export class ExaminerWithGroupCodeListComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
 
+  MenuAllowedRoleList: any[] = []
+
   constructor(private loaderService: LoaderService,
     private reportService: ReportService,
     private Swal2:SweetAlert2,
@@ -78,6 +81,7 @@ export class ExaminerWithGroupCodeListComponent implements OnInit {
     private http: HttpClient,
     private modalService: NgbModal,
     private toastr: ToastrService,
+    private router: Router,
   ) {}
 
   async ngOnInit() {
@@ -108,9 +112,34 @@ export class ExaminerWithGroupCodeListComponent implements OnInit {
     });
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     await this.getTodayDate();
     await this.loadMasterData();
     // await this.GetAllData();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async getTodayDate() {

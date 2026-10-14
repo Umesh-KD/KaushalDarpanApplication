@@ -31,6 +31,8 @@ export class BterDynamicReportComponent implements OnInit {
   public RequestData = new RequestBaseModel();
   public ApprovedStatus: string = "0";
   public ActionType = '';
+  public FromDate = '';
+  public ToDate = '';
   //public columns:TableColumn[]=[];
 
   constructor(private commonMasterService: CommonFunctionService, private ReportService: ReportService,
@@ -195,18 +197,22 @@ tableConfig: TableConfig = {
   async GetAllData() {
     try {
       this.loaderService.requestStarted();
-      this.RequestData.RoleID = this.sSOLoginDataModel.RoleID;
-      this.RequestData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.RequestData.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
-      this.RequestData.InstituteId = this.sSOLoginDataModel.InstituteID;
-      this.RequestData.ActionFlag = this.ActionType;
+      var obj = {
+        RoleID: this.sSOLoginDataModel.RoleID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
+        InstituteId: this.sSOLoginDataModel.InstituteID,
+        ActionFlag: this.ActionType,
+        FromDate: this.FromDate,
+        ToDate: this.ToDate
+      };
 
       // let obj = {
       //   FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
       //   Action:this.ActionType
       // }
       this.loaderService.requestStarted();
-      await this.ReportService.GetBterdynamicReport(this.RequestData).then((data: any) => {
+      await this.ReportService.GetBterdynamicReport(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.BterDynamicDataList = data.Data;
         console.log(this.BterDynamicDataList)
@@ -225,6 +231,8 @@ tableConfig: TableConfig = {
   // get all data
   async ClearSearchData() {
     this.ActionType = '';
+    this.FromDate = '';
+    this.ToDate = '';
     await this.GetAllData();
   }
 

@@ -7,11 +7,12 @@ import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-boo
 import { EnumDeploymentStatus, EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { ToastrService } from 'ngx-toastr';
 import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-verify-center-observer-deployment',
@@ -33,6 +34,7 @@ export class VerifyCenterObserverDeploymentComponent {
   public _GlobalConstants = GlobalConstants
   public _EnumRole = EnumRole;
   public TimeTableDates: any = []
+  public MenuAllowedRoleList: any = []
   public allowedDates: string[] = []
   VerifyDeploymentForm!: FormGroup;
   isForwardToVerify: boolean = false
@@ -70,6 +72,8 @@ export class VerifyCenterObserverDeploymentComponent {
     private route: ActivatedRoute,
     private appsettingConfig: AppsettingService,
     private fb: FormBuilder,
+    private Router: Router,
+    private commonMasterService: CommonFunctionService,
   ) {}
 
   async ngOnInit() {
@@ -78,10 +82,35 @@ export class VerifyCenterObserverDeploymentComponent {
       Status: [{ value: '', disabled: true },]
     })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.Status = Number(this.route.snapshot.paramMap.get('id')?.toString());
     this.searchRequest.Status = this.Status
     this.GetAllDataForVerify()
     this.GetTimeTableDates()
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   ResetControl() {

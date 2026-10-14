@@ -80,6 +80,7 @@ export class CollegeRollListAdmitCardComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
   MapKeyEng: number = 1;
   public DateConfigSetting: any = [];
+  public MenuAllowedRoleList: any = [];
 
   pageNo: any = 1;
   pageSize: any = 50;
@@ -95,7 +96,7 @@ export class CollegeRollListAdmitCardComponent {
 
   constructor(private commonMasterService: CommonFunctionService, private Router: Router,
     private collegeService: CollegeMasterService, private toastr: ToastrService, private loaderService: LoaderService,
-    private formBuilder: FormBuilder, private router: ActivatedRoute, private routers: Router, private _fb: FormBuilder,
+    private formBuilder: FormBuilder, private router: ActivatedRoute, private _fb: FormBuilder,
     private modalService: NgbModal, private Swal2: SweetAlert2, private appsettingConfig: AppsettingService,
     private getRollService: GetRollService,
     private reportService: ReportService,
@@ -104,12 +105,8 @@ export class CollegeRollListAdmitCardComponent {
   }
 
   async ngOnInit() {
-
-
-
-
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     this.statusID = Number(this.router.snapshot.paramMap.get('id'));
     this.request.UserID = this.sSOLoginDataModel.UserID;
     this.UserID = this.sSOLoginDataModel.UserID;
@@ -126,6 +123,30 @@ export class CollegeRollListAdmitCardComponent {
     await this.GetCollegeMasterList(1);
 
     await this.GetPrintRollAdmitCardSetting();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   // Method to handle the cancel button click

@@ -19,6 +19,7 @@ import { TheoryMarksService } from '../../../Services/TheoryMarks/theory-marks.s
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ufm-student-report',
@@ -63,6 +64,7 @@ export class UFMStudentReportComponent {
   public State: number = -1;
   public Message: any = [];
   public ErrorMessage: any = [];
+  public MenuAllowedRoleList: any = [];
 
   constructor(private loaderService: LoaderService,
     private reportService: ReportService,
@@ -74,6 +76,7 @@ export class UFMStudentReportComponent {
     private TheoryMarksService: TheoryMarksService,
     public appsettingConfig: AppsettingService,
     public commonFunctionHelper: CommonFunctionHelper,
+    public routers: Router,
   ) { }
 
   async ngOnInit() {
@@ -87,10 +90,34 @@ export class UFMStudentReportComponent {
     });
     // session
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     // load
     await this.GetAllData();
     await this.GetUFMCategoryTypeList();
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   exportToExcel() {

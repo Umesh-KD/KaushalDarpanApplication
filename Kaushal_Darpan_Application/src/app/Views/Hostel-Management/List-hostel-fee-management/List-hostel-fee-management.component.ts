@@ -12,6 +12,7 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 import { HostelManagmentService } from '../../../Services/HostelManagment/HostelManagment.service';
 import { StudentRequestService } from '../../../Services/StudentRequest/student-request.service';
 import { HostelFeeModel } from '../../../Models/Hostel-Management/HostelManagmentDataModel';
+import { EnumStatus } from '../../../Common/GlobalConstants';
 
 @Component({
   selector: 'app-List-hostel-fee-management',
@@ -43,6 +44,7 @@ export class ListhostelfeemanagementComponent {
   public requestFormGroup!: FormGroup;
   public Table_SearchText: string = "";
   sSOLoginDataModel = new SSOLoginDataModel();
+    MenuAllowedRoleList: any;
   constructor(
     private commonMasterService: CommonFunctionService,
     private _HostelManagmentService: HostelManagmentService,
@@ -61,6 +63,7 @@ export class ListhostelfeemanagementComponent {
   {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.requestFormGroup = this.formBuilder.group({
       Cautionfee: ['', Validators.required],
       HostelFee: ['', Validators.required]
@@ -136,6 +139,30 @@ export class ListhostelfeemanagementComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 

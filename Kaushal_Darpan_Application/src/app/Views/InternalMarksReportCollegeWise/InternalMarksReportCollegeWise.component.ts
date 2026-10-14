@@ -49,6 +49,7 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
   public Message: any = [];
   public ErrorMessage: any = [];
   public SemesterMasterList: any = [];
+  public MenuAllowedRoleList: any = [];
 
 
   constructor(
@@ -72,6 +73,7 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
     // set college
     this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
 
+    await this.GetMenuPermission();
     await this.GetSessionYear();
     await this.GetInstituteList();
     await this.GetBranchList();
@@ -80,6 +82,29 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
     // await this.GetEligibleStudentListData(1);
   }
 
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
 
 
   exportToExcel(): void {

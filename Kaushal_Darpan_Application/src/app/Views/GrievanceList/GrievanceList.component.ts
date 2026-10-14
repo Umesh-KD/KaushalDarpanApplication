@@ -26,7 +26,8 @@ import { AppsettingService } from '../../Common/appsetting.service';
 export class GrievanceListComponent implements OnInit {
 
   GrievanceFormGroup!: FormGroup;
-  
+  public FromDate: string = ''
+  public ToDate: string = ''
   public sSOLoginDataModel = new SSOLoginDataModel();
   public request = new GrievanceDataModel();
   public Responserequest = new GrivienceResponseDataModel();
@@ -84,7 +85,9 @@ export class GrievanceListComponent implements OnInit {
         SubjectRelated: ['', []],
         ddlFinancialYearID: ['', []],
         ddlAllotmentId: ['', []],
-        ddlStatusID: ['', []]
+        ddlStatusID: ['', []],
+        ToDate: ['', []],
+        FromDate: ['', []]
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.loadDropdownData('FinancialYears');
@@ -226,6 +229,8 @@ export class GrievanceListComponent implements OnInit {
 
       this.SearchRequest.RoleID = this.sSOLoginDataModel.RoleID;
       this.SearchRequest.UserID = this.sSOLoginDataModel.UserID;
+      this.SearchRequest.FromDate = this.FromDate
+      this.SearchRequest.ToDate = this.ToDate
 
       await this._GrievanceService.GetGrievanceData(this.SearchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));

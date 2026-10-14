@@ -67,6 +67,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   public HodBranchlist: any[] = [];
   public hodRequestModel = new AdminUserSearchModel();
   public IsAnnexure32Uploaded: boolean = false;
+    MenuAllowedRoleList: any;
   constructor(private commonMasterService: CommonFunctionService,
     private SCAService: StudentCenteredActivitesService,
     private toastr: ToastrService,
@@ -85,6 +86,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
     this.isStatus = Number(
       this.activatedRoute.snapshot.paramMap.get('Status')
@@ -608,5 +610,29 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.route.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.route.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

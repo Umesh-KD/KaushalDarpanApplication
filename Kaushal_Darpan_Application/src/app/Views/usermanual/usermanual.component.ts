@@ -10,6 +10,7 @@ import { RoleMasterService } from '../../Services/RoleMaster/role-master.service
 import { RoleSearchModel } from '../../Models/RoleMasterDataModel';
 import { EnumStatus } from '../../Common/GlobalConstants';
 import { UploadFileModel } from '../../Models/UploadFileModel';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-usermanual',
@@ -34,6 +35,7 @@ export class UsermanualComponent {
 
   public UserManualFileName = '';
   public UserManualDisplayFileName = '';
+    MenuAllowedRoleList: any;
 
 
   constructor(
@@ -43,11 +45,13 @@ export class UsermanualComponent {
     private appsettingConfig: AppsettingService,
     private fb: FormBuilder, 
     private modalService: NgbModal, 
-    private roleMasterService:RoleMasterService,
+    private roleMasterService: RoleMasterService,
+    private routers: Router,
     
   ) { }
   async ngOnInit(){
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+   // await this.GetMenuPermission();
       await this.GetUserManualList();
 
     this.UserManualForm = this.fb.group({
@@ -434,5 +438,29 @@ async onUserManualFileChange(event: any) {
 
   }
 
-}
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 }

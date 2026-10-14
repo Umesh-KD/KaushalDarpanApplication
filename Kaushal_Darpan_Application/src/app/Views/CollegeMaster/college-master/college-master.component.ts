@@ -51,6 +51,7 @@ export class CollegeMasterComponent implements OnInit {
   public Type1List: any = []
   public Type2List: any = []
   public originalCollegeMasterList: any = []
+  public MenuAllowedRoleList: any = []
   public searchRequest = new CollegeMasterSearchModel();
   public statusID: number = 0
   public _EnumRole = EnumRole
@@ -90,12 +91,9 @@ export class CollegeMasterComponent implements OnInit {
   }
 
   async ngOnInit() {
-
-
-
-
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
+    
     this.statusID = Number(this.router.snapshot.paramMap.get('id'));
     this.request.UserID = this.sSOLoginDataModel.UserID;
     this.UserID = this.sSOLoginDataModel.UserID;
@@ -647,6 +645,30 @@ export class CollegeMasterComponent implements OnInit {
     link.href = fileUrl;
     link.download = fileName;
     link.click();
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
 }

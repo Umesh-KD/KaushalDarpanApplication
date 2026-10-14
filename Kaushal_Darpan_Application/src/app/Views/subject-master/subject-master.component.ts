@@ -44,6 +44,7 @@ export class SubjectMasterComponent {
   public BranchesMasterList: any = []
   public SemesterMasterList: any = []
   public ParentSubjectList: any = []
+  public MenuAllowedRoleList: any = []
   public showDropdown = false;  // Controls dropdown visibility
   public isShowInput = false
   public ParentList: any = []
@@ -122,6 +123,7 @@ export class SubjectMasterComponent {
         chkActiveStatus: ['true'],
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.request.Modify = this.sSOLoginDataModel.UserID;
 
     await this.GetSubjectCategoryList();
@@ -883,5 +885,28 @@ async onCickAddSubjectDetails(){
   }
 }
   
+async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
 
 }
