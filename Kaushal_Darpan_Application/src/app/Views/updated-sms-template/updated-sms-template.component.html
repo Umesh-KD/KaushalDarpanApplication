@@ -93,7 +93,7 @@
           <tr *ngFor="let item of SMSTemplateDataList; let idx = index">
 
             <td>{{ idx + 1 }}</td>
-            <td>{{ item.DepartmentName }}</td>
+            <td>{{ item.DepartmentID==1 ?'BTER':item.DepartmentID==2 ?'ITI':'DCE' }}</td>
             <!-- <td>{{ item.RoleName }}</td> -->
             <!-- <td>{{ item.DivisionName }}</td> -->
             <!-- <td>{{ item.DistrictName }}</td> -->
@@ -112,11 +112,23 @@
                   <i class="ti ti-pencil"></i>
                 </a> -->
 
-                <a href="javascript:void(0)"
+                <!-- <a href="javascript:void(0)"
                    title="Delete"
                    (click)="onDeleteClick(item)">
                   <i class="ti ti-trash"></i>
-                </a>
+                </a> -->
+
+                 <!-- Send SMS -->
+                <button
+                  type="button"
+                  class="btn bg-info text-white"
+                  title="Send SMS using this template"
+                  (click)="SendMessage_TemplateWise(item.TemplateID)"
+                  [disabled]="!item.TemplateID">
+                  <i class="ti ti-send"></i>
+                  Send SMS
+                </button>
+
               </div>
             </td>
 
@@ -327,19 +339,19 @@
               <textarea
                 class="form-input resize-none w-full"
                 rows="4"
-                placeholder="Enter SMS text (maximum 199 characters)"
+                placeholder="Enter SMS text (maximum 250 characters)"
                 formControlName="SMSText"
-                maxlength="199"></textarea>
+                maxlength="200"></textarea>
 
               <div class="flex justify-between items-center mt-1">
                 <small class="text-gray-500">
-                  Maximum 199 characters allowed.
+                  Maximum 200 characters allowed.
                 </small>
 
                 <small
                   [class.text-red-500]="
-                    (SMSTemplateForm.get('SMSText')?.value?.length || 0) >= 199">
-                  {{ SMSTemplateForm.get('SMSText')?.value?.length || 0 }}/199
+                    (SMSTemplateForm.get('SMSText')?.value?.length || 0) >= 200">
+                  {{ SMSTemplateForm.get('SMSText')?.value?.length || 0 }}/200
                 </small>
               </div>
 

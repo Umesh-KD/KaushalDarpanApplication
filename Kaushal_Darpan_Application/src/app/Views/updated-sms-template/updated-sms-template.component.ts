@@ -96,7 +96,7 @@ export class UpdatedSMSTemplateComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.maxLength(199)
+          Validators.maxLength(200)
         ]
       ],
 
@@ -236,7 +236,7 @@ async GetSMSTemplateData(): Promise<void> {
     this.isLoading = true;
 
     const searchText = this.searchText || '';
-
+    debugger
     const response = await this.SMSMailService.GetSMSTemplateList(
       0,
       searchText
@@ -264,6 +264,39 @@ async GetSMSTemplateData(): Promise<void> {
   }
 }
 
+
+async SendMessage_TemplateWise(templateID: string): Promise<void> {
+  if (!templateID) {
+    this.toastr.error('Template ID is missing.');
+    return;
+  }
+debugger
+  try {
+    this.loaderService.requestStarted();
+
+    const response = await this.SMSMailService.SendMessage_TemplateWise(
+      templateID
+    );
+
+    const data = this.parseResponse(response);
+
+    if (data.State === EnumStatus.Success) {
+      this.toastr.success(data.Message || 'SMS processing completed.');
+      await this.GetSMSTemplateData();
+    } else {
+      this.toastr.error(
+        data.ErrorMessage || data.Message || 'Unable to send SMS.'
+      );
+    }
+
+  } catch (error) {
+    console.error('SendMessage_TemplateWise error:', error);
+    this.toastr.error('An error occurred while sending SMS.');
+
+  } finally {
+    this.loaderService.requestEnded();
+  }
+}
 
 
 

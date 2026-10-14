@@ -63,13 +63,13 @@ export class StaffTrainingConsentComponent {
       this.CompanyEventsList = [];
       this.searchRequest.CompanyID = this.CompanyID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       if (this.sSOLoginDataModel.RoleID == 3) {
         this.searchRequest.StaffID = this.sSOLoginDataModel.StudentID;
       } else {
         this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
       }
 
-      debugger
       await this.industryInstitutePartnershipMasterService.GetCompanyEventsStaff(this.searchRequest)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
