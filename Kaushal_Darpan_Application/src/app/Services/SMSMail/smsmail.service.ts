@@ -134,4 +134,15 @@ public async SendEmail_New(request: any) {
     .toPromise();
 }
 
+
+public async SaveSMSTemplate(request: any) {
+  const body = JSON.stringify(request);
+  return await this.http
+    .post(`${this.APIUrl}/SaveSMSTemplate`, body, this.headersOptions)
+    .pipe(
+      catchError(this.handleErrorObservable)
+    )
+    .toPromise();
+}
+
 }

@@ -1,0 +1,373 @@
+
+<!-- Page Header -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">
+      SMS Template Master
+    </h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0)"
+         class="text-sm font-medium text-slate-700">
+        Dashboard
+      </a>
+
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">
+        chevron_right
+      </i>
+
+      <a href="javascript:void(0)"
+         class="text-sm font-medium text-slate-700"
+         aria-current="page">
+        SMS Template Master
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- SMS Template List -->
+<div class="card">
+  <div class="card-body p-5" style="min-height: 400px;">
+
+    <div class="mb-4">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">
+          <i class="ti ti-list"></i> SMS Template List
+        </b>
+
+        <button
+          type="button"
+          class="btn bg-info text-white"
+          (click)="ViewandUpdate(MyModel_addHead)">
+          <i class="ti ti-plus"></i> Add SMS Template
+        </button>
+      </div>
+    </div>
+
+    <!-- Search / Page Size -->
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4
+                lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+      <div>
+        <select id="ddlCounter" class="form-select">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+
+      <div></div>
+      <div></div>
+
+      <div>
+        <input
+          type="text"
+          class="form-input"
+          placeholder="Search SMS templates..."
+          [(ngModel)]="searchText">
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+
+        <thead class="bg-light/40 border-b border-gray-100
+                      dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">Department</th>
+            <th class="text-left">Role</th>
+            <th class="text-left">Division</th>
+            <th class="text-left">District</th>
+            <th class="text-left">Management Type</th>
+            <th class="text-left">Institute</th>
+            <th class="text-left">SMS Text</th>
+            <th class="text-left">Template ID</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of SMSTemplateDataList; let idx = index">
+
+            <td>{{ idx + 1 }}</td>
+            <td>{{ item.DepartmentName }}</td>
+            <td>{{ item.RoleName }}</td>
+            <td>{{ item.DivisionName }}</td>
+            <td>{{ item.DistrictName }}</td>
+            <td>{{ item.ManagementTypeName }}</td>
+            <td>{{ item.InstituteName }}</td>
+            <td class="whitespace-normal break-words">
+              {{ item.SMSText }}
+            </td>
+            <td>{{ item.TemplateID }}</td>
+
+            <td>
+              <div class="flex items-center justify-center actionBtns">
+                <a href="javascript:void(0)"
+                   title="Edit"
+                   (click)="ViewandUpdate(MyModel_addHead, item)">
+                  <i class="ti ti-pencil"></i>
+                </a>
+
+                <a href="javascript:void(0)"
+                   title="Delete"
+                   (click)="onDeleteClick(item)">
+                  <i class="ti ti-trash"></i>
+                </a>
+              </div>
+            </td>
+
+          </tr>
+
+          <tr *ngIf="!SMSTemplateDataList || SMSTemplateDataList.length === 0">
+            <td colspan="10" class="text-center p-4">
+              No SMS templates found.
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Add / Edit SMS Template Modal -->
+<ng-template #MyModel_addHead let-modal>
+  <div class="modal-content">
+
+    <div class="card">
+
+      <div class="card-header flex justify-between items-center">
+        <b>
+          <i class="fa fa-plus"></i>
+          {{ isEditMode ? 'Update SMS Template' : 'Add SMS Template' }}
+        </b>
+
+        <button
+          type="button"
+          class="btn bg-info text-white"
+          (click)="CloseModalPopup()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+
+      <div class="card-body">
+
+        <form [formGroup]="SMSTemplateForm"
+              (ngSubmit)="SaveSMSTemplate()">
+
+          <div class="grid 2xl:grid-cols-2 xl:grid-cols-2
+                      lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
+
+            <!-- Department -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Department <span class="text-red-500">*</span>
+              </label>
+              <select class="form-select" formControlName="DepartmentID" (change)="GetRoleList($event)">
+                  <option value="0">-- Select Department --</option>
+                  <option value="{{_EnumDepartment.BTER}}">BTER</option>
+                  <option value="{{_EnumDepartment.ITI}}  ">ITI</option>
+                  <option value="{{_EnumDepartment.DCE}}  ">DCE</option>
+                </select>
+
+              <small class="text-red-500"
+                *ngIf="SMSTemplateForm.get('DepartmentID')?.touched &&
+                       SMSTemplateForm.get('DepartmentID')?.invalid">
+                Please select a department.
+              </small>
+            </div>
+
+            <!-- Role -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Role <span class="text-red-500">*</span>
+              </label>
+              <select class="form-select" formControlName="RoleID" >
+                <option value="">-- Select Role --</option>
+                <option *ngFor="let item of RoleMasterList"
+                        [value]="item.ID">
+                  {{ item.Name }}
+                </option>
+              </select>
+            </div>
+            
+            <!-- <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Role <span class="text-red-500">*</span>
+              </label>
+
+              <select
+                class="form-select"
+                formControlName="RoleID"
+                (change)="GetRoleList($event)">
+
+                <option value="">-- Select Role --</option>
+
+                <option *ngFor="let item of RoleMasterList" [value]="item.ID">
+                  {{ item.Name }}
+                </option>
+              </select>
+            </div> -->
+
+
+            <!-- Division -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Division
+              </label>
+
+              <select class="form-select" formControlName="DivisionID" (change)="onDivisionChange()">
+                <option value="0">-- Select Division --</option>
+                <option *ngFor="let item of DivisionMasterList"
+                        [value]="item.ID">
+                  {{ item.Name }}
+                </option>
+              </select>
+              <!-- <div *ngIf="isSubmitted && instituteForm.get('divisionID').errors" class="text-danger">
+                <p *ngIf="!instituteForm.get('divisionID').errors.required">
+                  <i aria-hidden="true"></i>This field is
+                  required.
+                </p>
+              </div> -->
+            </div>
+
+
+            <!-- District -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                District
+              </label>
+
+              <select class="form-select" formControlName="DistrictID">
+                <option value="">-- Select District --</option>
+                <option *ngFor="let item of DistrictMasterList"
+                        [value]="item.ID">
+                  {{ item.Name }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Management Type -->
+            <!-- <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Management Type
+              </label>
+
+              <select class="form-select" formControlName="ManagementTypeID">
+                <option value="">-- Select Management Type --</option>
+                <option *ngFor="let item of ManagementTypeList"
+                        [value]="item.ManagementTypeID">
+                  {{ item.ManagementTypeName }}
+                </option>
+              </select>
+            </div> -->
+
+            <div>
+              <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-1">Management Type </label>
+              <select class="form-select" name="ManagementTypeID" id="ManagementTypeID" 
+                      formControlName="ManagementTypeID" (change)="GetInstituteList()">
+
+                <option value="0">--Choose Option--</option>
+                <option *ngFor="let item of ManagementTypeList" value="{{item.InstitutionManagementTypeID}}">
+                  {{item.InstitutionManagementType}}
+                </option>
+              </select>
+              <!-- <div *ngIf="isSubmitted&&_OptionsFormGroup.ManagementTypeID.errors" class="text-danger">
+                <p *ngIf="!_OptionsFormGroup.ManagementTypeID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div> -->
+            </div>
+
+            <!-- Institute -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Institute
+              </label>
+
+              <select class="form-select" formControlName="InstituteID" >
+                <option value="">-- Select Institute --</option>
+                <option *ngFor="let item of filteredInstituteList"
+                        [value]="item.InstituteID">
+                  {{ item.InstituteName }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Template ID -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Template ID <span class="text-red-500">*</span>
+              </label>
+
+              <input
+                type="text"
+                class="form-input"
+                placeholder="Enter SMS Template ID"
+                formControlName="TemplateID"
+                maxlength="50">
+
+              <small class="text-red-500"
+                *ngIf="SMSTemplateForm.get('TemplateID')?.touched &&
+                       SMSTemplateForm.get('TemplateID')?.invalid">
+                Please enter the template ID.
+              </small>
+            </div>
+
+            <!-- SMS Text -->
+            <div class="2xl:col-span-2 xl:col-span-2 lg:col-span-2 md:col-span-2">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                SMS Text <span class="text-red-500">*</span>
+              </label>
+
+              <textarea
+                class="form-input resize-none w-full"
+                rows="4"
+                placeholder="Enter SMS text (maximum 199 characters)"
+                formControlName="SMSText"
+                maxlength="199"></textarea>
+
+              <div class="flex justify-between items-center mt-1">
+                <small class="text-gray-500">
+                  Maximum 199 characters allowed.
+                </small>
+
+                <small
+                  [class.text-red-500]="
+                    (SMSTemplateForm.get('SMSText')?.value?.length || 0) >= 199">
+                  {{ SMSTemplateForm.get('SMSText')?.value?.length || 0 }}/199
+                </small>
+              </div>
+
+              <small class="text-red-500"
+                *ngIf="SMSTemplateForm.get('SMSText')?.touched &&
+                       SMSTemplateForm.get('SMSText')?.invalid">
+                SMS text is required and must be less than 200 characters.
+              </small>
+            </div>
+
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex justify-center gap-3 mt-6">
+            <button type="submit" class="btn bg-info text-white">
+              {{ isEditMode ? 'Update' : 'Submit' }}
+            </button>
+
+            <button
+              type="button"
+              class="btn bg-warning text-white"
+              (click)="CloseModalPopup()">
+              Cancel
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>
