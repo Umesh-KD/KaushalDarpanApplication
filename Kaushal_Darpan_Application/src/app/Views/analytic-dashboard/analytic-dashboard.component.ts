@@ -235,6 +235,77 @@ public studentCategoryData: ChartConfiguration<'doughnut'>['data'] = {
     }
   };
 
+instituteDistributionChartData: ChartConfiguration<'bar'>['data'] = {
+  labels: [],
+  datasets: [
+    {
+      label: 'Institutions',
+      data: [],
+      backgroundColor: '#008F83',
+      hoverBackgroundColor: '#00796B',
+      borderRadius: 6,
+      borderSkipped: false,
+      barPercentage: 0.65,
+      categoryPercentage: 0.8
+    }
+  ]
+};
+
+instituteDistributionChartOptions: ChartOptions<'bar'> = {
+  responsive: true,
+  maintainAspectRatio: false,
+
+  // Vertical bars
+  indexAxis: 'x',
+
+  plugins: {
+    legend: {
+      display: false
+    },
+    tooltip: {
+      enabled: true,
+      callbacks: {
+        label: (context) =>
+          `Institutions: ${context.parsed.y}`
+      }
+    }
+  },
+
+  scales: {
+    x: {
+      grid: {
+        display: false
+      },
+      ticks: {
+        color: '#666666',
+        autoSkip: false,
+        maxRotation: 45,
+        minRotation: 0
+      },
+      border: {
+        display: true
+      }
+    },
+
+    y: {
+      beginAtZero: true,
+      grace: '5%',
+      ticks: {
+        precision: 0,
+        color: '#666666'
+      },
+      grid: {
+        color: '#E0E0E0'
+      },
+      title: {
+        display: true,
+        text: 'Number of Institutions',
+        color: '#555555'
+      }
+    }
+  }
+};
+
  
   constructor(
     private analyticDashboardService: AnalyticDashboardService,
@@ -259,6 +330,7 @@ public studentCategoryData: ChartConfiguration<'doughnut'>['data'] = {
       this.GenderRationList=data.Data["Table6"]
 
       this.setGenderRatioChartData();
+      this.updateInstituteDistributionChart();
       this.setVacancyChartData();
       this.setEnrollmentChartData();
       this.setBranchPassPercentageChartData();
@@ -434,4 +506,28 @@ setInstituteDistributionChart(): void {
     )
   );
 }
+
+
+updateInstituteDistributionChart(): void {
+  this.instituteDistributionChartData = {
+    labels: this.InstituteDistributionList.map(
+      item => item.DistrictName
+    ),
+    datasets: [
+      {
+        label: 'Institutions',
+        data: this.InstituteDistributionList.map(
+          item => Number(item.InstituteCount)
+        ),
+        backgroundColor: '#008F83',
+        hoverBackgroundColor: '#00796B',
+        borderRadius: 6,
+        borderSkipped: false,
+        barPercentage: 0.65,
+        categoryPercentage: 0.8
+      }
+    ]
+  };
+}
+
 }
