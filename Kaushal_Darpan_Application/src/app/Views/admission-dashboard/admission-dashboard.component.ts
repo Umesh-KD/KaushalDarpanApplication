@@ -413,6 +413,7 @@ export class AdmissionDashboardComponent {
       this.CompanyEventsList = [];
 
       this.searchRequest2.RoleID = this.sSOLoginDataModel.RoleID;
+      // this.searchRequest2.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       if (this.sSOLoginDataModel.RoleID == 3) {
         this.searchRequest2.StaffID = this.sSOLoginDataModel.StudentID;
       } else {
