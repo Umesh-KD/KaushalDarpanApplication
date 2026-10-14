@@ -1,122 +1,131 @@
 <div class="dashboard-container">
-    <!-- Header Title -->
-    <div class="dashboard-header">
-        <!--<span class="sub-title">DASHBOARD 1</span>-->
-        <h1>Dashboard (State Level)</h1>
+  <!-- Header Title -->
+  <div class="dashboard-header">
+    <!--<span class="sub-title">DASHBOARD 1</span>-->
+    <h1>Dashboard (State Level)</h1>
+  </div>
+
+  <!-- Top Metric KPI Cards -->
+  <div class="kpi-banner">
+    <div class="kpi-card gold">
+      <h2>{{ UpperTilesData?.[0]?.TotalInstitutions | number }}</h2>
+      <p>Total Institutions</p>
     </div>
 
-    <!-- Top Metric KPI Cards -->
-    <div class="kpi-banner">
-        <div class="kpi-card gold">
-  <h2>{{ UpperTilesData?.[0]?.TotalInstitutions | number }}</h2>
-  <p>Total Institutions</p>
-</div>
-
-<div class="kpi-card blue">
-  <h2>{{ UpperTilesData?.[0]?.TotalStudents | number }}</h2>
-  <p>Total Students</p>
-</div>
-
-<div class="kpi-card teal">
-  <h2>{{ UpperTilesData?.[0]?.TotalStaff | number }}</h2>
-  <p>Total Staff</p>
-</div>
-
-<div class="kpi-card gold">
-  <h2>{{ UpperTilesData?.[0]?.PlacementPercentage }}%</h2>
-  <p>Placement %</p>
-</div>
-
-<div class="kpi-card muted-blue">
-  <h2>{{ UpperTilesData?.[0]?.TotalActiveUsers | number }}</h2>
-  <p>Active Users Today</p>
-</div>
+    <div class="kpi-card blue">
+      <h2>{{ UpperTilesData?.[0]?.TotalStudents | number }}</h2>
+      <p>Total Students</p>
     </div>
 
-    <!-- Row 1 Charts -->
-    <div class="chart-row">
-        <!-- Institution Distribution (District-wise) -->
+    <div class="kpi-card teal">
+      <h2>{{ UpperTilesData?.[0]?.TotalStaff | number }}</h2>
+      <p>Total Staff</p>
+    </div>
 
-<div class="chart-card">
-  <h3>Institution Distribution (District-wise)</h3>
+    <div class="kpi-card gold">
+      <h2>{{ UpperTilesData?.[0]?.PlacementPercentage }}%</h2>
+      <p>Placement %</p>
+    </div>
 
-  <div class="bar-chart-vertical-list">
-    <div
-      class="bar-row"
-      *ngFor="let item of InstituteDistributionList"
-    >
-      <span class="label">{{ item.DistrictName }}</span>
-
-      <div class="bar-track">
-        <div
-          class="bar-fill"
-          [style.width.%]="(item.InstituteCount / maxInstituteCount) * 100"
-        ></div>
-      </div>
-
-      <span class="value">{{ item.InstituteCount }}</span>
+    <div class="kpi-card muted-blue">
+      <h2>{{ UpperTilesData?.[0]?.TotalActiveUsers | number }}</h2>
+      <p>Active Users Today</p>
     </div>
   </div>
+
+  <!-- Row 1 Charts -->
+  <div class="chart-row_1">
+    <!-- Institution Distribution (District-wise) -->
+
+    <div class="chart-card_1">
+      <h3>Institution Distribution (District-wise)</h3>
+
+      <div class="chart-container_1">
+    <canvas
+      baseChart
+      [data]="instituteDistributionChartData"
+      [options]="instituteDistributionChartOptions"
+      [type]="'bar'">
+    </canvas>
+  </div>
+
+      <!-- <div class="bar-chart-vertical-list">
+        <div class="bar-row" *ngFor="let item of InstituteDistributionList">
+          <span class="label">{{ item.DistrictName }}</span>
+
+          <div class="bar-track">
+            <div class="bar-fill" [style.width.%]="(item.InstituteCount / maxInstituteCount) * 100"></div>
+          </div>
+
+          <span class="value">{{ item.InstituteCount }}</span>
+        </div>
+      </div> -->
+    </div>
+
+
+    <!-- Enrolment Year Wise (Line Chart) -->
+    <div class="chart-card">
+      <h3>Enrolment year wise</h3>
+      <div class="chart-wrapper">
+        <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="'line'">
+        </canvas>
+      </div>
+    </div>
+
+    
+  </div>
+
+
+  <!-- Row 2 Charts -->
+  <div class="chart-row">
+
+    <!-- Gender Ratio -->
+    <div class="chart-card">
+      <h3>Gender Ratio</h3>
+
+      <div class="chart-wrapper doughnut-container">
+        <canvas baseChart [data]="genderRatioData" [options]="doughnutChartOptions" [type]="'doughnut'">
+        </canvas>
+
+        <div class="center-text">100%</div>
+      </div>
+    </div>
+
+    <!-- Student Category Distribution (Doughnut Chart) -->
+<div class="chart-card">
+<h3>Student Category Distribution</h3>
+<div class="chart-wrapper doughnut-container">
+<canvas baseChart [data]="studentCategoryData" [options]="doughnutChartOptions" [type]="'doughnut'">
+</canvas>
+<div class="center-text">100</div>
+</div>
+</div>
+ 
+
+    <!-- Pass Percentage (Branch-wise) -->
+    <div class="chart-card">
+      <h3>Pass Percentage (Branch-wise)</h3>
+
+      <div class="chart-wrapper">
+        <canvas baseChart [data]="branchPassPercentageData" [options]="branchPassPercentageOptions" [type]="'bar'">
+        </canvas>
+      </div>
+    </div>
+
+    <!-- Vacancy Position -->
+    
+
+  </div>
+<div class="chart-row">
+  <div class="chart-card">
+      <h3>Vacancy Position</h3>
+
+      <div class="chart-wrapper">
+        <canvas baseChart [data]="vacancyPositionData" [options]="vacancyPositionOptions" [type]="'bar'">
+        </canvas>
+      </div>
+    </div>
 </div>
 
-
-        <!-- Enrolment Year Wise (Line Chart) -->
-        <div class="chart-card">
-            <h3>Enrolment year wise</h3>
-            <div class="chart-wrapper">
-                <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="'line'">
-                </canvas>
-            </div>
-        </div>
-
-        <!-- Student Category Distribution (Doughnut Chart) -->
-        <div class="chart-card">
-            <h3>Student Category Distribution</h3>
-            <div class="chart-wrapper doughnut-container">
-                <canvas baseChart [data]="studentCategoryData" [options]="doughnutChartOptions" [type]="'doughnut'">
-                </canvas>
-                <div class="center-text">100</div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Row 2 Charts -->
-    <div class="chart-row">
-
-        <!-- Gender Ratio -->
-        <div class="chart-card">
-            <h3>Gender Ratio</h3>
-
-            <div class="chart-wrapper doughnut-container">
-                <canvas baseChart [data]="genderRatioData" [options]="doughnutChartOptions" [type]="'doughnut'">
-                </canvas>
-
-                <div class="center-text">100%</div>
-            </div>
-        </div>
-
-        <!-- Pass Percentage (Branch-wise) -->
-        <div class="chart-card">
-            <h3>Pass Percentage (Branch-wise)</h3>
-
-            <div class="chart-wrapper">
-                <canvas baseChart [data]="branchPassPercentageData" [options]="branchPassPercentageOptions"
-                    [type]="'bar'">
-                </canvas>
-            </div>
-        </div>
-
-        <!-- Vacancy Position -->
-        <div class="chart-card">
-            <h3>Vacancy Position</h3>
-
-            <div class="chart-wrapper">
-                <canvas baseChart [data]="vacancyPositionData" [options]="vacancyPositionOptions" [type]="'bar'">
-                </canvas>
-            </div>
-        </div>
-
-    </div>
 
 </div>

@@ -107,6 +107,8 @@ export class EnrolledStudentVerificationComponent {
   ) { }
 
   async ngOnInit() {
+    //session
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetMenuPermission();
     // get key by param
     this.ParamTab = Number(this.activatedRoute.snapshot.queryParamMap.get("tab") ?? 0);
@@ -114,9 +116,6 @@ export class EnrolledStudentVerificationComponent {
       this.router.navigate(['/**']);
       return;
     }
-
-    //session
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     //load data
     await this.GetMasterData();
