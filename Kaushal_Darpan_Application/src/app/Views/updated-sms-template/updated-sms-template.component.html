@@ -106,11 +106,11 @@
 
             <td>
               <div class="flex items-center justify-center actionBtns">
-                <!-- <a href="javascript:void(0)"
+                <a href="javascript:void(0)"
                    title="Edit"
                    (click)="ViewandUpdate(MyModel_addHead, item)">
-                  <i class="ti ti-pencil"></i>
-                </a> -->
+                  <i class="ti ti-pencil "></i>
+                </a>
 
                 <!-- <a href="javascript:void(0)"
                    title="Delete"
@@ -179,11 +179,11 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Department <span class="text-red-500">*</span>
               </label>
-              <select class="form-select" formControlName="DepartmentID" (change)="GetRoleList($event)">
+              <select class="form-select" formControlName="DepartmentID" (change)="GetRoleList($event,0)">
                   <option value="0">-- Select Department --</option>
-                  <option value="{{_EnumDepartment.BTER}}">BTER</option>
-                  <option value="{{_EnumDepartment.ITI}}  ">ITI</option>
-                  <option value="{{_EnumDepartment.DCE}}  ">DCE</option>
+                  <option value="1">BTER</option>
+                  <option value="2">ITI</option>
+                  <option value="3">DCE</option>
                 </select>
 
               <small class="text-red-500"
