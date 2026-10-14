@@ -120,7 +120,10 @@ export class ItiCollegeSearchComponent {
 
   public totalRecord1: number = 0;
   public Tehsillist: any = [];
+  public DistrictMasterListPopup: any = [];
 
+  public GetCollegeTradeDataView: any[] = [];
+  
 
 
   @ViewChild('paginator1') paginator1!: MatPaginator;
@@ -299,6 +302,29 @@ export class ItiCollegeSearchComponent {
     }
   }
 
+  async ddlDivision_ChangePopup() {
+    debugger
+    try {
+    
+        await this.commonMasterService.DistrictMaster_DivisionIDWise(this.requestPlaning.InstituteDivisionID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictMasterList1 = data['Data'];
+          }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  
+
   async ddlDistrict_Change() {
     
 
@@ -384,9 +410,14 @@ export class ItiCollegeSearchComponent {
 
   async GetById(ID: number) {
     try {
-      
+
+
+
       this.isVisibleSection = true;
       this.isVisibleList = false;
+
+
+      this.getTradeList(ID);
       this.requestPlaning.ItiAffiliationList = []
       this.requestPlaning.ItiMembersModel = []
       this.loaderService.requestStarted();
@@ -401,6 +432,7 @@ export class ItiCollegeSearchComponent {
         this.requestPlaning.InstituteDivisionID = parsedData['Data']["InstituteDivisionID"]
         this.oldeditDistrictID = this.oldDistrictID;
         await this.ddlDivision_Change()
+        await this.ddlDivision_ChangePopup()
         this.requestPlaning.PropDistrictID = parsedData['Data']["PropDistrictID"]       
         await this.ddlDistrict_Change()
 
@@ -438,8 +470,7 @@ export class ItiCollegeSearchComponent {
       if (this.requestPlaning.PropUrbanRural == 76) {
 
 
-        
-        this.villageMaster()
+       
       }
 
       
@@ -461,6 +492,8 @@ export class ItiCollegeSearchComponent {
         }
       });
       /*      this.request.InstituteManagementId=5*/
+
+  
 
       console.log(parsedData, "dsw");
     } catch (ex) {
@@ -1034,7 +1067,8 @@ export class ItiCollegeSearchComponent {
 
   //-----------------------------------TRADE SECTION START-----------------------------------------------
 
-  ngAfterViewInit() {
+  ngAfterViewInit()
+  {
     if (this.dataSource1) this.dataSource1.paginator = this.paginator1;
   }
 
@@ -1201,5 +1235,51 @@ export class ItiCollegeSearchComponent {
       this.villageMaster();
     }
   }
+
+  async  getTradeList(CollegeID :number)
+  {
+    this.GetCollegeTradeDataView = [];
+
+    this.requestTrade.InstituteID = CollegeID;
+    this.requestTrade.Action = '_getTradebyCollege';
+    //await this.ApplicationService.ItiSearchCollege(this.request)
+    //  .then((data: any) => {
+    //    data = JSON.parse(JSON.stringify(data));
+    //    this.ITICollegeSearchList = data['Data'];
+    //    this.loadInTable();
+    //    console.log(this.ITICollegeSearchList, "ITICollegeSearchList")
+    //  }, error => console.error(error));
+
+    await this.ApplicationService.ITISearchCollegeTrade(this.requestTrade)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        debugger
+        this.GetCollegeTradeDataView = data.Data;
+       
+       
+      }, (error: any) => console.error(error)
+      );
+
+  }
+
+
+  maskMobileNumber(mobile: string | number | null | undefined): string {
+    if (mobile === null || mobile === undefined || String(mobile).trim() === '') {
+      return '';
+    }
+
+    const number = String(mobile).trim();
+
+    if (number.length !== 10) {
+      return number;
+    }
+
+    return '******' + number.slice(-4);
+  }
+
+
+
+
+
 
 }

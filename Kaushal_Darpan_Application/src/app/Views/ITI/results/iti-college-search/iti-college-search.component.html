@@ -270,11 +270,11 @@
 
 
    
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4 hide-in-pdf ">
+    <div style="display:none" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4 hide-in-pdf ">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>Member Of Trust/Society</b>
     </div>
    
-      <div *ngIf="request.InstituteManagementId==5  " class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 hide-in-pdf ">
+      <div  style="display:none" *ngIf="request.InstituteManagementId==50" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 hide-in-pdf ">
         <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 && request.InstituteManagementId==5 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 && request.InstituteManagementId==5">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Member Name</label>
           <input type="text" disabled class="form-input disabled" id="ApplicationId"  [(ngModel)]="member.MemberName" placeholder="Enter Member Name">
@@ -483,7 +483,7 @@
         </div>
 
 
-        <div *ngIf="request.PropUrbanRural==75">
+        <!--<div *ngIf="request.PropUrbanRural==75">
           <label>Administrative Body:</label>
           <select disabled class="form-select disabled" id="Administrative" [(ngModel)]="request.AdministrativeBodyId">
             <option value="0">Select Administrative Body</option>
@@ -529,7 +529,7 @@
           <input (keypress)="numberOnly($event)" disabled class="form-input disabled" type="text" id="Ward" placeholder="Enter Longitude"
                  [(ngModel)]="request.Longitude"> 
 
-        </div>
+        </div>-->
 
       </div>
 
@@ -569,10 +569,10 @@
 
       </div>
 
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+      <div style="display:none" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Electrical load details</b>
       </div>
-      <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+      <div  style="display:none" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
 
 
         <div>
