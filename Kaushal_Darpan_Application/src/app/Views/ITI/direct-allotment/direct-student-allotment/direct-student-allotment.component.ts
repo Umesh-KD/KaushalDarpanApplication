@@ -321,7 +321,7 @@ export class VerifyStudentAllotComponent {
           else
           {
 
-            this.Swal2.Confirmation("No Application Found", async (result: any) => {
+            this.Swal2.Confirmation("No application found. The trainee has either not submitted an application or has withdrawn the admission.", async (result: any) => {
               if (result.isConfirmed)
               {
 

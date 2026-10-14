@@ -161,4 +161,22 @@ public async GetSMSTemplateList(id: number = 0, searchText: string = ''){
 }
 
 
+
+SendMessage_TemplateWise(templateID: string) {
+  debugger
+  return this.http.post(
+    this.APIUrl + '/SendMessage_TemplateWise',
+    null,
+    {
+      ...this.headersOptions,
+      params: {
+        templateID: templateID
+      }
+    }
+  ).pipe(
+    catchError(this.handleErrorObservable)
+  ).toPromise();
+}
+
+
 }
