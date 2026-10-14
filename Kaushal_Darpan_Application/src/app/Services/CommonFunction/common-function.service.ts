@@ -2645,5 +2645,15 @@ export class CommonFunctionService {
 
 
 
+  public async GetTehsilMasterByDistrinct(DistrictID: number = 0) {
+
+    return await this.http.get(this.APIUrl + '/GetTehsilMasterByDistrict/' + DistrictID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
 }
 

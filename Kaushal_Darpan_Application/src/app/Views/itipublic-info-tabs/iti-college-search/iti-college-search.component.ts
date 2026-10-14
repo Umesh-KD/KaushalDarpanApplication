@@ -116,7 +116,11 @@ export class ItiCollegeSearchComponent {
   public DISCOM: any = [];
   public oldDistrictID: number = 0;
   public oldeditDistrictID: number = 0;
+
+
   public totalRecord1: number = 0;
+  public Tehsillist: any = [];
+
 
 
   @ViewChild('paginator1') paginator1!: MatPaginator;
@@ -1124,6 +1128,78 @@ export class ItiCollegeSearchComponent {
         this.StreamMasterList = data['Data'];
       }, (error: any) => console.error(error)
       );
+  }
+
+
+  async GetTehsilBYDistrict(DistrictID: any) {
+    try {
+
+      let obj =
+      {
+        MasterCode: 'GetTehsilBYDistrict',
+        DistrictID: DistrictID
+      };
+
+      this.loaderService.requestStarted();
+
+      await this.commonMasterService.CommonMasterDataByAction(obj)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.Tehsillist = data['Data'];
+        }, error => console.error(error));
+
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+
+  trackById(index: number, item: any): number {
+    return item.ID;
+  }
+
+  onUrbanRuralChange(value: number | string): void {
+    // Reset dependent dropdowns
+    this.request.PanchayatsamityId = 0;
+    this.request.GrampanchayatId = 0;
+    this.request.VillageId = 0;
+
+    this.GramPanchayatList = [];
+    this.VillageMasterList = [];
+
+    // Load the relevant data only when Rural is selected
+    if (+value === 76) {
+      // Call your Panchayat Samiti loading method here
+      // only if the list is not already loaded.
+    }
+  }
+
+  onPanchayatSamitiChange(value: number | string): void {
+    this.request.GrampanchayatId = 0;
+    this.request.VillageId = 0;
+
+    this.GramPanchayatList = [];
+    this.VillageMasterList = [];
+
+    if (+value > 0) {
+      // Call your existing Gram Panchayat API here.
+    }
+  }
+
+  onGramPanchayatChange(value: number | string): void {
+    this.request.VillageId = 0;
+    this.VillageMasterList = [];
+
+    if (+value > 0) {
+      this.villageMaster();
+    }
   }
 
 }

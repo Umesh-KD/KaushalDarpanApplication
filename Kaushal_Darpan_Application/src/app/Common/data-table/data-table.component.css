@@ -1074,3 +1074,52 @@ table {
         box-shadow 180ms ease;
 }
  
+
+
+/* -----------------------header untransparent resolved--------------------- */
+
+
+/* =========================================
+   DATATABLE - OPAQUE STICKY HEADER FIX
+   ========================================= */
+
+/* Header row */
+.datatable-container .mat-mdc-header-row {
+    background-color: #f8fafc !important;
+}
+
+/* Every header cell */
+.datatable-container .mat-mdc-header-cell {
+    background-color: #f8fafc !important;
+    background-image: none !important;
+    opacity: 1 !important;
+    position: sticky;
+    z-index: 10;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Angular Material sticky header cells */
+.datatable-container .mat-mdc-header-cell.mat-mdc-table-sticky {
+    background-color: #f8fafc !important;
+    opacity: 1 !important;
+    z-index: 20 !important;
+}
+
+/* Keep the fixed Action header opaque */
+.datatable-container .action-header {
+    background-color: #f8fafc !important;
+    z-index: 30 !important;
+}
+
+/* Keep header content above the background */
+.datatable-container .datatable-header-content {
+    position: relative;
+    z-index: 1;
+    background-color: transparent;
+}
+
+/* Optional: subtle separation between header and rows */
+.datatable-container .mat-mdc-header-row {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}

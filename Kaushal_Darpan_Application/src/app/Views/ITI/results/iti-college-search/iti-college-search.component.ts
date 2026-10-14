@@ -77,6 +77,10 @@ export class ItiCollegeSearchComponent implements OnInit {
   public DISCOM: any = [];
   public VillageList: any = [];
   public DistrictMasterList3: any = [];
+
+  public Tehsillist: any = [];
+
+  
   public request = new ITI_PlanningCollegesModel();
   public addmore = new ItiAffiliationList();
   public _enumrole = EnumRole;
@@ -784,6 +788,37 @@ export class ItiCollegeSearchComponent implements OnInit {
     this.isVisibleSection = false;
     this.isVisibleList = true;
 
+  }
+
+
+
+  async GetTehsilBYDistrict(DistrictID: any)
+  {
+    try
+    {
+
+      let obj =
+      {
+        MasterCode: 'GetTehsilBYDistrict',
+        DistrictID: DistrictID
+      };
+
+      this.loaderService.requestStarted();
+
+      await this.commonMasterService.CommonMasterDataByAction(obj)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.Tehsillist = data['Data'];
+        }, error => console.error(error));
+
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 
 }

@@ -127,7 +127,7 @@ export class AddCollegeMasterComponent implements OnInit {
     await this.GetCouseType();
     await this.loadDropdownData('ManagementTypeCollege');
 
-    if (this.collegeRequest.InstituteID > 0 || this.sSOLoginDataModel.InstituteID > 0) {
+    if (this.collegeRequest.InstituteID > 0 ) {
      await this.GetByID();
     }
     
@@ -510,9 +510,7 @@ export class AddCollegeMasterComponent implements OnInit {
       this.collegeRequest.SSOID = this.sSOLoginDataModel.SSOID;
       this.collegeRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.collegeRequest.RoleID = this.sSOLoginDataModel.RoleID;
-      if (this.collegeRequest.InstituteID <= 0) {
-        this.collegeRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      }
+      this.collegeRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       // this.collegeRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       
       //get

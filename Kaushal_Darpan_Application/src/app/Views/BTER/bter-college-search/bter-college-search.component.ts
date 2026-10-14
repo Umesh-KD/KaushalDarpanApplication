@@ -143,18 +143,12 @@ export class bterCollegeSearchComponent {
 
     /*await this.GetById(261);*/
     await this.GetInstituteCategoryList();
-    this.GetcOmmonData();
-    this.GetStateMaterData();
+    await this.GetcOmmonData();
+    await this.GetStateMaterData();
     await this.ddlDistrict();
+    await this.GetStreamMasterDDL();
 
-    /*await this.GetPanchayatSamiti('')*/
-
-
-
-
-
-
-  
+    /*await this.GetPanchayatSamiti('')*/ 
 
   }
 
@@ -350,6 +344,8 @@ export class bterCollegeSearchComponent {
     this.isVisibleSection = false;
     this.isVisibleList = false;
     this.ValidationMessage = "";
+    this.request = new bterCollegeSearchModel();
+    this.GetStreamMasterDDL();
     this.ddlDistrict();
  
   }
@@ -714,18 +710,17 @@ export class bterCollegeSearchComponent {
 
   async onSearchClick() {
    
-    if (
-      this.request.SearchText == "" &&
-      this.request.DivisionId == 0 &&
-      this.request.DistrictId == 0
-    ) {
+    // if (
+    //   this.request.DivisionId == 0 &&
+    //   this.request.DistrictId == 0
+    // ) {
       
-      this.ValidationMessage = "Please enter Search Text or select Division or District.";
-      this.ITICollegeSearchList = [];
-      this.paginatedInTableData = [];
-      return;
+    //   this.ValidationMessage = "Please enter Search Text or select Division or District.";
+    //   this.ITICollegeSearchList = [];
+    //   this.paginatedInTableData = [];
+    //   return;
       
-    }
+    // }
     this.ValidationMessage = "";
     await this.GetList();
     this.isVisibleSection = false;
@@ -763,6 +758,21 @@ export class bterCollegeSearchComponent {
     }
   }
 
+  async Streamtype() {
+    await this.GetStreamMasterDDL();
+  }
+
+  async GetStreamMasterDDL() {
+    try {
+      await this.commonMasterService.StreamMaster(1 ,this.request.StreamTypeID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StreamMasterList = data.Data;
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   async GetAllDataActionWise() {
     this.collegeMerit8 = [];
     this.collegeMerit10 = [];
@@ -775,7 +785,7 @@ export class bterCollegeSearchComponent {
     this.isShowGrid = true;
     this.searchRequest.action = "_getstudentmeritdata";
     this.searchRequest.DepartmentID = 2;
-    this.request = new ITICollegeSearchModel()
+    this.request = new bterCollegeSearchModel()
 
     try {
       this.loaderService.requestStarted();
