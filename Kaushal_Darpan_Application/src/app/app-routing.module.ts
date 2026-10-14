@@ -1843,6 +1843,8 @@ const routes: Routes = [
       { path: 'Email-Template', loadChildren: () => import('./Views/email-template/email-template.module').then(m => m.EmailTemplateModule), title: 'Email Template' },
       { path: 'GrevianceMapping', loadChildren: () => import('./Views/greviance-mapping/greviance-mapping.module').then(m => m.GrevianceMappingModule) },
       { path: 'analytic-dashboard', loadChildren: () => import('./Views/analytic-dashboard/analytic-dashboard.module').then(m => m.AnalyticDashboardModule) },
+      { path: 'TableauExamReport', loadChildren: () => import('./Views/tableau-exam-report/tableau-exam-report.module').then(m => m.TableauExamReportModule) },
+
     ]
   },
 
