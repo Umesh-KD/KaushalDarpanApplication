@@ -742,18 +742,18 @@ export class ItiCollegeSearchComponent {
 
   async onSearchClick() {
    
-    if (
-      this.request.SearchText == "" &&
-      this.request.DivisionId == 0 &&
-      this.request.DistrictId == 0
-    ) {
+    //if (
+    //  this.request.SearchText == "" &&
+    //  this.request.DivisionId == 0 &&
+    //  this.request.DistrictId == 0
+    //) {
       
-      this.ValidationMessage = "Please enter Search Text or select Division or District.";
-      this.ITICollegeSearchList = [];
-      this.paginatedInTableData = [];
-      return;
+    //  this.ValidationMessage = "Please enter Search Text or select Division or District.";
+    //  this.ITICollegeSearchList = [];
+    //  this.paginatedInTableData = [];
+    //  return;
       
-    }
+    //}
     this.ValidationMessage = "";
     await this.GetList();
     this.isVisibleSection = false;
