@@ -339,19 +339,19 @@
               <textarea
                 class="form-input resize-none w-full"
                 rows="4"
-                placeholder="Enter SMS text (maximum 199 characters)"
+                placeholder="Enter SMS text (maximum 250 characters)"
                 formControlName="SMSText"
-                maxlength="199"></textarea>
+                maxlength="200"></textarea>
 
               <div class="flex justify-between items-center mt-1">
                 <small class="text-gray-500">
-                  Maximum 199 characters allowed.
+                  Maximum 200 characters allowed.
                 </small>
 
                 <small
                   [class.text-red-500]="
-                    (SMSTemplateForm.get('SMSText')?.value?.length || 0) >= 199">
-                  {{ SMSTemplateForm.get('SMSText')?.value?.length || 0 }}/199
+                    (SMSTemplateForm.get('SMSText')?.value?.length || 0) >= 200">
+                  {{ SMSTemplateForm.get('SMSText')?.value?.length || 0 }}/200
                 </small>
               </div>
 

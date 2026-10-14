@@ -96,7 +96,7 @@ export class UpdatedSMSTemplateComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.maxLength(199)
+          Validators.maxLength(200)
         ]
       ],
 
