@@ -39,7 +39,7 @@
 
       <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
         <label class="form-label">District</label>
-        <select class="form-select" id="DistrictId" [(ngModel)]="request.DivisionId" (change)="ddlDistrict_Change()">
+        <select class="form-select" id="DistrictId" [(ngModel)]="request.DistrictId"  >
           <option value="0">--Select--</option>
           <option *ngFor="let item of DistrictMasterList" [value]="item.ID">
             {{item.Name}}
