@@ -49,6 +49,7 @@ export class UpdatedSMSTemplateComponent implements OnInit {
   public Message: any = [];
   public ErrorMessage: any = [];
   public _EnumDepartment = EnumDepartment;
+  public isLoading: boolean = false;
 
   // Modal
   public modalReference: NgbModalRef | undefined;
@@ -83,11 +84,11 @@ export class UpdatedSMSTemplateComponent implements OnInit {
 
       RoleID: ['0', Validators.required],
 
-      DivisionID: ['0', Validators.required],
+      DivisionID: ['0'],
 
-      DistrictID: ['0', Validators.required],
+      DistrictID: ['0'],
 
-      ManagementTypeID: ['0', Validators.required],
+      ManagementTypeID: ['0'],
 
       InstituteID: [''],
 
@@ -215,38 +216,56 @@ export class UpdatedSMSTemplateComponent implements OnInit {
   // GET SMS TEMPLATE LIST
   // =====================================================
 
-  async GetSMSTemplateData(): Promise<void> {
-
-    try {
-
-      this.loaderService.requestStarted();
-
-      /*
-        TODO: Connect your SMS Template List API here.
-
-        Example response mapping:
-
-        if (data.State === EnumStatus.Success) {
-          this.SMSTemplateDataList = data.Data || [];
-        } else {
-          this.toastr.error(data.ErrorMessage);
-        }
-      */
-
-      // Keep the list empty until the actual API is connected.
-      this.SMSTemplateDataList = this.SMSTemplateDataList || [];
-
-    } catch (error) {
-
-      console.error('Error loading SMS templates:', error);
-      this.toastr.error('Unable to load SMS templates.');
-
-    } finally {
-
-      this.loaderService.requestEnded();
-
+  private parseResponse(response: any): any {
+    if (response == null) {
+      return {};
     }
+    if (typeof response === 'string') {
+      try {
+        return JSON.parse(response);
+      } catch {
+        return {};
+      }
+    }
+    return response;
   }
+
+async GetSMSTemplateData(): Promise<void> {
+  try {
+    this.loaderService.requestStarted();
+    this.isLoading = true;
+
+    const searchText = this.searchText || '';
+
+    const response = await this.SMSMailService.GetSMSTemplateList(
+      0,
+      searchText
+    );
+
+    const data = this.parseResponse(response);
+
+    if (data.State === EnumStatus.Success) {
+      this.SMSTemplateDataList = data.Data || [];
+    } else {
+      this.SMSTemplateDataList = [];
+      this.toastr.error(
+        data.ErrorMessage || 'Failed to load SMS templates.'
+      );
+    }
+
+  } catch (error) {
+    console.error('GetSMSTemplateData error:', error);
+    this.SMSTemplateDataList = [];
+    this.toastr.error('Failed to load SMS templates.');
+
+  } finally {
+    this.isLoading = false;
+    this.loaderService.requestEnded();
+  }
+}
+
+
+
 
   // =====================================================
   // LOAD DEPARTMENT DROPDOWN
@@ -467,9 +486,10 @@ export class UpdatedSMSTemplateComponent implements OnInit {
       // console.log("formdata in institute", this.formData)
       try {
         debugger
-        const departmentID=this.SMSTemplateForm.get('DepartmentID')?.value;
-        const managementTypeID=this.SMSTemplateForm.get('ManagementTypeID')?.value;
-        const selectedDistrictID = this.SMSTemplateForm.get('DistrictID')?.value;
+        let departmentID=this.SMSTemplateForm.get('DepartmentID')?.value;
+        let managementTypeID=this.SMSTemplateForm.get('ManagementTypeID')?.value;
+        let selectedDistrictID = this.SMSTemplateForm.get('DistrictID')?.value;
+        console.log("selectedDistrictID", selectedDistrictID, "departmentID", departmentID, "managementTypeID", managementTypeID)
         // this.collegeSearchRequest.College_TypeID = this.formData.College_TypeID
         // this.collegeSearchRequest.DistrictID = this.formData.DistrictID
         // this.collegeSearchRequest.ApplicationID = this.formData.ApplicationID
@@ -491,7 +511,23 @@ export class UpdatedSMSTemplateComponent implements OnInit {
         this.InstituteList = data.Data;
         console.log("InstituteMasterDDLList", this.InstituteList);
 
-        this.filteredInstituteList = this.InstituteList.filter((item: any) => item.DistrictId == selectedDistrictID);
+        // this.filteredInstituteList = this.InstituteList.filter((item: any) => Number(item.DistrictID) == selectedDistrictID);
+         if (data?.Data) {
+            this.InstituteList = data.Data;
+
+            this.filteredInstituteList = this.InstituteList.filter(
+              (item: any) =>
+                Number(item.DistrictID) === Number(selectedDistrictID)
+            );
+
+            console.log('Selected District ID:', selectedDistrictID);
+            console.log('All Institutes:', this.InstituteList);
+            console.log('Filtered Institutes:', this.filteredInstituteList);
+          } else {
+            this.InstituteList = [];
+            this.filteredInstituteList = [];
+        }
+
       })
       } catch (error) {
         console.error(error)
@@ -510,16 +546,41 @@ export class UpdatedSMSTemplateComponent implements OnInit {
 
     this.isSubmitted = true;
     debugger
-    if (this.SMSTemplateForm.invalid) {
 
-      this.SMSTemplateForm.markAllAsTouched();
-
+    if(this.SMSTemplateForm.get('DepartmentID')?.value === '0' || this.SMSTemplateForm.get('DepartmentID')?.value === '') {
       this.toastr.error(
-        'Please fill in all required fields correctly.'
+        'Please select department.'
       );
-
       return;
     }
+    if(this.SMSTemplateForm.get('RoleID')?.value === '0' || this.SMSTemplateForm.get('RoleID')?.value === '') {
+      this.toastr.error(
+        'Please select Role.'
+      );
+      return;
+    }
+    if(this.SMSTemplateForm.get('TemplateID')?.value === '0' || this.SMSTemplateForm.get('TemplateID')?.value === '') {
+      this.toastr.error(
+        'Please select Template.'
+      );
+      return;
+    }
+    if(this.SMSTemplateForm.get('SMSText')?.value === '0' || this.SMSTemplateForm.get('SMSText')?.value === '') {
+      this.toastr.error(
+        'Please enter SMS texts.'
+      );
+      return;
+    }
+    //     if (this.SMSTemplateForm.invalid) {
+
+    //   this.SMSTemplateForm.markAllAsTouched();
+
+    //   this.toastr.error(
+    //     'Please fill in all required fields correctly.'
+    //   );
+
+    //   return;
+    // }
 
     this.loaderService.requestStarted();
 
@@ -557,9 +618,9 @@ export class UpdatedSMSTemplateComponent implements OnInit {
 
       console.log('SMS Template Request:', this.request);
 
-      this.toastr.info(
-        'Form validated. Connect the SMS Template Save API to persist the data.'
-      );
+      // this.toastr.info(
+      //   'Form validated. Connect the SMS Template Save API to persist the data.'
+      // );
 
     } catch (error) {
 

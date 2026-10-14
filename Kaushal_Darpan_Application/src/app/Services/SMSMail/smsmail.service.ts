@@ -145,4 +145,20 @@ public async SaveSMSTemplate(request: any) {
     .toPromise();
 }
 
+
+public async GetSMSTemplateList(id: number = 0, searchText: string = ''){
+
+  const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    return await this.http.get(this.APIUrl + "/GetSMSTemplateList?id=" + id + "&searchText=" + searchText)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+
+}
+
+
 }

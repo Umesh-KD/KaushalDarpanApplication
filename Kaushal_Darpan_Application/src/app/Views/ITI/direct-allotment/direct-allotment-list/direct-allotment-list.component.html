@@ -84,7 +84,7 @@
                 <!--<a [routerLink]="'/ITIIMCVerifyStudentPhone/' + item.ApplicationID" title="Edit"><i class="ti ti-pencil"></i></a>-->
                 <!--<a href="javascript:void(0)" title="Download"><i class="ti ti-download"></i></a>-->
                 <a href="javascript:void(0)" (click)="GetAllotmentReceipt(item.AllotmentId)" title="Download Reciept"><i class="ti ti-download"></i></a>
-                <a   href="javascript:void(0);" (click)="RevertAllotment(item.ApplicationID, item.CollegeTradeID, item.AllotedCategory)" title="Revert Application"><i class="ti ti-arrow-back-up"></i></a>
+                <a *ngIf="item.IsRevert==1"  href="javascript:void(0);" (click)="RevertAllotment(item.ApplicationID, item.CollegeTradeID, item.AllotedCategory)" title="Revert Application"><i class="ti ti-arrow-back-up"></i></a>
               </div>
             </td>
           </tr>
