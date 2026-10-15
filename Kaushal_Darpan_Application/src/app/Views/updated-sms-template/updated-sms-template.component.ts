@@ -143,7 +143,10 @@ export class UpdatedSMSTemplateComponent implements OnInit {
     debugger
     this.isSubmitted = false;
     this.isEditMode = !!item;
-
+    if(item.IsSend){
+      this.toastr.error('This template has already been sent and cannot be edited.');
+      return;
+    }
     // Reset Form
     this.SMSTemplateForm.reset({
       DepartmentID: '',
@@ -264,7 +267,7 @@ async GetSMSTemplateData(): Promise<void> {
     );
 
     const data = this.parseResponse(response);
-
+debugger
     if (data.State === EnumStatus.Success) {
       this.SMSTemplateDataList = data.Data || [];
     } else {
