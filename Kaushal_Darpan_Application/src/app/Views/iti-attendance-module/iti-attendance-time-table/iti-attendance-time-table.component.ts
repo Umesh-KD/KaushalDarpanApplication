@@ -13,7 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { AttendanceServiceService } from '../../../Services/AttendanceServices/attendance-service.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
@@ -58,6 +58,7 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   selectedCenters: any[] = [];   // ngModel binding
+    MenuAllowedRoleList: any;
   constructor(
     private attendanceServiceService: AttendanceServiceService,
     private fb: FormBuilder,
@@ -71,7 +72,7 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
     this.getMasterData();
   }
 
-  ngOnInit() {    
+ async ngOnInit() {    
     this.TableForm = this.fb.group({
       SubjectID: [0, Validators.required],
       StreamID: [0, Validators.required],
@@ -87,6 +88,7 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
       SubjectIDs: [[]] // multiple select → always array
 
     });
+    await this.GetMenuPermission();
     this.GetAttendanceTimeTable();
     this.GetStaff_InstituteWise();
     this.getMasterData();
@@ -661,4 +663,29 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
       x.Name.toLowerCase().includes(search)
     );
   }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
 }
