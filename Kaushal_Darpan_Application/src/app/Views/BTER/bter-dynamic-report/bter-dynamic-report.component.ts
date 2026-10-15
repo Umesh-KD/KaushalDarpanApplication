@@ -30,6 +30,7 @@ export class BterDynamicReportComponent implements OnInit {
   public requestObj= new RequestBaseModel();
   public RequestData = new RequestBaseModel();
   public ApprovedStatus: string = "0";
+  public TotalLoginCount: number = 0;
   public ActionType = '';
   public FromDate = '';
   public ToDate = '';
@@ -191,7 +192,10 @@ tableConfig: TableConfig = {
 
   async onActionTypeChange(event: any) {
     debugger
+    this.TotalLoginCount=0
     this.ActionType = event.target.value;
+
+    
     this.GetAllData();
   }
   async GetAllData() {
@@ -215,6 +219,9 @@ tableConfig: TableConfig = {
       await this.ReportService.GetBterdynamicReport(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.BterDynamicDataList = data.Data;
+      
+          this.GetTodayLogin()
+        
         console.log(this.BterDynamicDataList)
       }, (error: any) => console.error(error))
     }
@@ -228,11 +235,47 @@ tableConfig: TableConfig = {
     }
   }
 
+  async GetTodayLogin() {
+    try {
+      this.loaderService.requestStarted();
+      var obj = {
+        RoleID: this.sSOLoginDataModel.RoleID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
+        InstituteId: this.sSOLoginDataModel.InstituteID,
+        ActionFlag: 'GetTodayLogin',
+        FromDate: this.FromDate,
+        ToDate: this.ToDate
+      };
+
+      // let obj = {
+      //   FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
+      //   Action:this.ActionType
+      // }
+      this.loaderService.requestStarted();
+      await this.ReportService.GetBterdynamicReport(obj).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.TotalLoginCount = data['Data'][0]['TotalLoginCount'];
+        console.log(this.BterDynamicDataList)
+      }, (error: any) => console.error(error))
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
   // get all data
   async ClearSearchData() {
     this.ActionType = '';
     this.FromDate = '';
     this.ToDate = '';
+    this.TotalLoginCount=0
     await this.GetAllData();
   }
 
