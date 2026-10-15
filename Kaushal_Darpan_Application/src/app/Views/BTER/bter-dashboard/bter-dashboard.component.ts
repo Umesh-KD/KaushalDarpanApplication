@@ -40,7 +40,7 @@ export class BterDashboardComponent {
   }
 
   ngOnInit() {
-    debugger;
+    //debugger;
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     if (this.sSOLoginDataModel != null) {
       this.GetAllData();
@@ -48,7 +48,7 @@ export class BterDashboardComponent {
   }
 
   async GetAllData() {
-    debugger;
+    //debugger;
     this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -75,7 +75,7 @@ export class BterDashboardComponent {
     try {
 
       this.loaderService.requestStarted();
-      debugger;
+      //debugger;
       await this.AdminDashDataService.GetAdminDashData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
