@@ -12,7 +12,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
-const routes: Routes = [{ path: '', component: ItiCollegeSearchComponent }];
+/*const routes: Routes = [{ path: '', component: ItiCollegeSearchComponent }];*/
 @NgModule({
   declarations: [
     /*    KnowMeritITIComponent*/
@@ -27,7 +27,7 @@ const routes: Routes = [{ path: '', component: ItiCollegeSearchComponent }];
     FormsModule,
     TableSearchFilterModule,
     ReactiveFormsModule,
-    RouterModule.forChild(routes),
+
     NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
   ], providers: [TableSearchFilterModule]
 })
