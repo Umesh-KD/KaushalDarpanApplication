@@ -15,6 +15,8 @@ import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { ActivatedRoute, Router } from '@angular/router';
+
 @Component({
   selector: 'app-user-request-list-transfer',
   standalone: false,
@@ -50,6 +52,7 @@ export class UserRequestListTransferComponent {
   _EnumTransferStatus = EnumTransferStatus;
   @ViewChild('MyModel_ReplayQuery') MyModel_ReplayQuery: any;
   closeResult: string | undefined;
+    MenuAllowedRoleList: any;
 
   constructor(
     private commonMasterService: CommonFunctionService, 
@@ -60,7 +63,7 @@ export class UserRequestListTransferComponent {
     private userRequestService: UserRequestService, 
     private fb: FormBuilder, 
     public appsettingConfig: AppsettingService,
-    public http: HttpClient,
+    public http: HttpClient, private routers: Router
   ) { }
 
   async ngOnInit() {
@@ -71,6 +74,7 @@ export class UserRequestListTransferComponent {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
 
     await this.GetStatusList();
     await this.GetLevelList();
@@ -595,5 +599,30 @@ export class UserRequestListTransferComponent {
     });
 
     doc.save('UserRequestList.pdf');
+  }
+
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }
