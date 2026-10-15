@@ -2206,6 +2206,12 @@ export class ReportService {
       ).toPromise();
   }
 
+  public async GetPlacementdynamicReport(searchRequest: any) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetPlacementdynamicReport`, body, this.headersOptions)
+      .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
   
 }
 
