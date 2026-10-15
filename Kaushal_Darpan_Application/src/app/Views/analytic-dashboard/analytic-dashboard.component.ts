@@ -1,35 +1,48 @@
-import { Component } from '@angular/core';
-import { AnalyticDashboardService } from '../../Services/AnalyticDashboard/analytic-dashboard.service';
-import { ChartConfiguration, ChartOptions, ChartType } from 'chart.js';
+import { Component, OnInit } from '@angular/core';
 import {
-  Chart,
-  LinearScale,
-  CategoryScale,
-  BarController,
-  BarElement,
-  LineController,
-  LineElement,
-  PointElement,
-  ArcElement,
-  DoughnutController,
-  Tooltip,
-  Legend
+  Chart, ChartConfiguration, ChartOptions,
+  LinearScale, CategoryScale, BarController, BarElement, LineController, LineElement,
+  PointElement, ArcElement, DoughnutController, Tooltip, Legend, Filler
 } from 'chart.js';
 import { AdminDashboardDataService } from '../../Services/AdminDashboard/admin-dashboard-data.service';
 
 Chart.register(
-  LinearScale,
-  CategoryScale,
-  BarController,
-  BarElement,
-  LineController,
-  LineElement,
-  PointElement,
-  ArcElement,
-  DoughnutController,
-  Tooltip,
-  Legend
+  LinearScale, CategoryScale, BarController, BarElement, LineController, LineElement,
+  PointElement, ArcElement, DoughnutController, Tooltip, Legend, Filler
 );
+
+type Row = Record<string, any>;
+type LegendItem = { label: string; color: string };
+
+const TEAL = '#00897b';
+const BLUE = '#176087';
+const PALETTE = ['#176087', '#00897b', '#e67e22', '#d4ac0d', '#102a43', '#8e44ad', '#16a085', '#c0392b'];
+
+const num = (v: unknown): number => Number(v) || 0;
+
+/** Minimum pixel width per bar/label so the chart scrolls horizontally when data grows. */
+const PX_PER_ITEM = { institute: 30, pass: 44, vacancy: 80, enrolment: 24 };
+
+/** Shared bar options; each chart only passes what differs. */
+function barOptions(yTitle: string, overrides: { yMax?: number; tooltip?: any; legend?: boolean; rotate?: number } = {}): ChartOptions<'bar'> {
+  const { yMax, tooltip, legend = false, rotate = 45 } = overrides;
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: legend, position: 'bottom' }, tooltip },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { autoSkip: false, maxRotation: rotate, minRotation: 0 }
+      },
+      y: {
+        beginAtZero: true,
+        ...(yMax ? { max: yMax, ticks: { stepSize: 20, callback: (v) => `${v}%` } } : { ticks: { precision: 0 } }),
+        title: { display: true, text: yTitle }
+      }
+    }
+  };
+}
 
 @Component({
   selector: 'app-analytic-dashboard',
@@ -37,497 +50,160 @@ Chart.register(
   templateUrl: './analytic-dashboard.component.html',
   styleUrl: './analytic-dashboard.component.css'
 })
-export class AnalyticDashboardComponent {
-  dashboardData: any = null;
+export class AnalyticDashboardComponent implements OnInit {
+  UpperTilesData: Row[] = [];
 
-  UpperTilesData: any[] = []
-  InstituteDistributionList: any[] = []
-  BranchPassPerList: any[] = []
-  VacancyList: any[] = []
-  EnrollmentYearStudentList: any[] = []
-  StudentCategoryList: any[] = []
-  GenderRationList: any[] = []
+  // Dynamic min-widths (px) for horizontally scrollable charts
+  instituteWidth = 0;
+  passWidth = 0;
+  vacancyWidth = 0;
+  enrolmentWidth = 0;
 
-  public maxInstituteCount = 0;
+  genderLegend: LegendItem[] = [];
+  categoryLegend: LegendItem[] = [];
 
-  // --- Line Chart: Enrolment Year Wise ---
-  public lineChartData: ChartConfiguration<'line'>['data'] = {
-  labels: [],
-  datasets: [
-    {
-      data: [],
-      label: 'Enrolment Year Wise',
-      borderColor: '#00897b',
-      backgroundColor: 'rgba(0, 137, 123, 0.1)',
-      fill: true,
-      tension: 0.1,
-      pointBackgroundColor: '#00897b',
-      pointRadius: 4
-    }
-  ]
-};
-  public lineChartOptions: ChartOptions<'line'> = {
-  responsive: true,
-  maintainAspectRatio: false,
-  scales: {
-    y: {
-      beginAtZero: true,
-      ticks: {
-        precision: 0
-      },
-      title: {
-        display: true,
-        text: 'Total Students'
-      }
-    },
-    x: {
-      title: {
-        display: true,
-        text: 'Academic Year'
-      }
-    }
-  },
-  plugins: {
-    legend: {
-      display: false
-    }
-  }
-};
- 
-  // --- Doughnut Chart 1: Student Category Distribution ---
-private studentCategoryColors: string[] = [
-  '#176087',
-  '#00897b',
-  '#e67e22',
-  '#d4ac0d',
-  '#102a43',
-  '#8e44ad',
-  '#16a085',
-  '#c0392b'
-];
+  // ---------- Chart data ----------
+  instituteChartData: ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
+  lineChartData: ChartConfiguration<'line'>['data'] = { labels: [], datasets: [] };
+  genderChartData: ChartConfiguration<'doughnut'>['data'] = { labels: [], datasets: [] };
+  categoryChartData: ChartConfiguration<'doughnut'>['data'] = { labels: [], datasets: [] };
+  passChartData: ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
+  vacancyChartData: ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
 
-public studentCategoryData: ChartConfiguration<'doughnut'>['data'] = {
-  labels: [],
-  datasets: [
-    {
-      data: [],
-      backgroundColor: this.studentCategoryColors
+  // ---------- Chart options ----------
+  instituteChartOptions = barOptions('Number of Institutions', {
+    tooltip: { callbacks: { label: (c: any) => `Institutions: ${c.parsed.y}` } }
+  });
+
+  passChartOptions = barOptions('Pass Percentage (%)', {
+    yMax: 100,
+    rotate: 35,
+    tooltip: { callbacks: { label: (c: any) => `Pass Percentage: ${c.parsed.y}%` } }
+  });
+
+  vacancyChartOptions = barOptions('Number of Posts', {
+    legend: true,
+    rotate: 45,
+    tooltip: { mode: 'index', intersect: false }
+  });
+
+  lineChartOptions: ChartOptions<'line'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, ticks: { precision: 0 }, title: { display: true, text: 'Total Students' } },
+      x: { title: { display: true, text: 'Academic Year' } }
     }
-  ]
-};
- 
-  // --- Doughnut Chart 2: Gender Ratio ---
-  public genderRatioData: ChartConfiguration<'doughnut'>['data'] = {
-    labels: [],
-    datasets: [{
-      data: [],
-      backgroundColor: ['#176087', '#e67e22', '#00897b']
-    }]
   };
- 
-  public doughnutChartOptions: ChartOptions<'doughnut'> = {
+
+  // Legend is rendered in HTML (Tailwind) so the layout stays responsive
+  doughnutOptions: ChartOptions<'doughnut'> = {
     responsive: true,
     maintainAspectRatio: false,
     cutout: '70%',
-    plugins: {
-      legend: { position: 'right' }
-    }
+    plugins: { legend: { display: false } }
   };
 
-  // 1. Branch-wise Pass Percentage Chart
-  public branchPassPercentageData: ChartConfiguration<'bar'>['data'] = {
-  labels: [],
-  datasets: [
-    {
-      label: 'Pass Percentage',
-      data: [],
-      backgroundColor: '#00897b',
-      borderRadius: 5,
-      barThickness: 24
-    }
-  ]
-};
+  constructor(private dashboardService: AdminDashboardDataService) {}
 
-  public branchPassPercentageOptions: ChartOptions<'bar'> = {
-  responsive: true,
-  maintainAspectRatio: false,
-  indexAxis: 'x',
-  plugins: {
-    legend: {
-      display: false
-    },
-    tooltip: {
-      callbacks: {
-        label: (context) =>
-          `Pass Percentage: ${context.parsed.y}%`
-      }
-    }
-  },
-  scales: {
-    y: {
-      beginAtZero: true,
-      min: 0,
-      max: 100,
-      ticks: {
-        stepSize: 20,
-        callback: (value) => `${value}%`
-      },
-      title: {
-        display: true,
-        text: 'Pass Percentage (%)'
-      }
-    },
-    x: {
-      ticks: {
-        autoSkip: false,
-        maxRotation: 35,
-        minRotation: 0
-      }
-    }
-  }
-};
-
-  // 2. Vacancy Position Chart
-  public vacancyPositionData: ChartConfiguration<'bar'>['data'] = {
-    labels: [],
-    datasets: [
-      {
-        label: 'Total Vacancy',
-        data: [],
-        backgroundColor: '#176087',
-        borderRadius: 4
-      },
-    ]
-  };
-
-  public vacancyPositionOptions: ChartOptions<'bar'> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: true,
-        position: 'bottom'
-      },
-      tooltip: {
-        mode: 'index',
-        intersect: false
-      }
-    },
-    scales: {
-      x: {
-        stacked: false,
-        ticks: {
-          autoSkip: false,
-          maxRotation: 30,
-          minRotation: 0
-        }
-      },
-      y: {
-        beginAtZero: true,
-        ticks: {
-          precision: 0
-        },
-        title: {
-          display: true,
-          text: 'Number of Posts'
-        }
-      }
-    }
-  };
-
-instituteDistributionChartData: ChartConfiguration<'bar'>['data'] = {
-  labels: [],
-  datasets: [
-    {
-      label: 'Institutions',
-      data: [],
-      backgroundColor: '#008F83',
-      hoverBackgroundColor: '#00796B',
-      borderRadius: 6,
-      borderSkipped: false,
-      barPercentage: 0.65,
-      categoryPercentage: 0.8
-    }
-  ]
-};
-
-instituteDistributionChartOptions: ChartOptions<'bar'> = {
-  responsive: true,
-  maintainAspectRatio: false,
-
-  // Vertical bars
-  indexAxis: 'x',
-
-  plugins: {
-    legend: {
-      display: false
-    },
-    tooltip: {
-      enabled: true,
-      callbacks: {
-        label: (context) =>
-          `Institutions: ${context.parsed.y}`
-      }
-    }
-  },
-
-  scales: {
-    x: {
-      grid: {
-        display: false
-      },
-      ticks: {
-        color: '#666666',
-        autoSkip: false,
-        maxRotation: 45,
-        minRotation: 0
-      },
-      border: {
-        display: true
-      }
-    },
-
-    y: {
-      beginAtZero: true,
-      grace: '5%',
-      ticks: {
-        precision: 0,
-        color: '#666666'
-      },
-      grid: {
-        color: '#E0E0E0'
-      },
-      title: {
-        display: true,
-        text: 'Number of Institutions',
-        color: '#555555'
-      }
-    }
-  }
-};
-
- 
-  constructor(
-    private analyticDashboardService: AnalyticDashboardService,
-    private AdminDashboardDataService: AdminDashboardDataService,
-  ) {}
- 
-  async ngOnInit() {
-    await this.GetAnalyticDashboard();
-    
+  async ngOnInit(): Promise<void> {
+    await this.loadDashboard();
   }
 
-  async GetAnalyticDashboard() {
-    const searchRequest: any = {}
-    await this.AdminDashboardDataService.GetExecutiveDashboard_StateLevel_Web(searchRequest).then((data: any) => {
-      this.dashboardData = data.Data;
-      this.UpperTilesData=data.Data["Table"]
-      this.InstituteDistributionList=data.Data["Table1"]
-      this.BranchPassPerList=data.Data["Table2"]
-      this.VacancyList=data.Data["Table3"]
-      this.EnrollmentYearStudentList=data.Data["Table4"]
-      this.StudentCategoryList=data.Data["Table5"]
-      this.GenderRationList=data.Data["Table6"]
+  private async loadDashboard(): Promise<void> {
+    try {
+      const res: any = await this.dashboardService.GetExecutiveDashboard_StateLevel_Web({});
+      const d = res?.Data ?? {};
 
-      this.setGenderRatioChartData();
-      this.updateInstituteDistributionChart();
-      this.setVacancyChartData();
-      this.setEnrollmentChartData();
-      this.setBranchPassPercentageChartData();
-      this.setInstituteDistributionChart();
-      this.setStudentCategoryChartData();
-    })
+      this.UpperTilesData = d['Table'] ?? [];
+      this.buildInstituteChart(d['Table1'] ?? []);
+      this.buildPassChart(d['Table2'] ?? []);
+      this.buildVacancyChart(d['Table3'] ?? []);
+      this.buildEnrollmentChart(d['Table4'] ?? []);
+      this.buildCategoryChart(d['Table5'] ?? []);
+      this.buildGenderChart(d['Table6'] ?? []);
+    } catch (err) {
+      console.error('Failed to load analytic dashboard', err);
+    }
   }
 
-  setVacancyChartData(): void {
-    if (!this.VacancyList?.length) {
-      this.vacancyPositionData = {
-        labels: [],
-        datasets: [{
-          label: 'Total Vacancy',
-          data: [],
-          backgroundColor: '#176087',
-          borderRadius: 4
-        }]
-      };
-      return;
-    }
-
-    this.vacancyPositionData = {
-      labels: this.VacancyList.map(
-        (item: any) => item.PostName
-      ),
+  private buildInstituteChart(rows: Row[]): void {
+    this.instituteChartData = {
+      labels: rows.map(r => r['DistrictName']),
       datasets: [{
-        label: 'Total Vacancy',
-        data: this.VacancyList.map(
-          (item: any) => Number(item.TotalVacancy) || 0
-        ),
-        backgroundColor: '#176087',
-        borderRadius: 4
-      }]
-    };
-  }
-
-  setGenderRatioChartData(): void {
-    if (!this.GenderRationList?.length) {
-      this.genderRatioData = {
-        labels: [],
-        datasets: [{
-          data: [],
-          backgroundColor: []
-        }]
-      };
-      return;
-    }
-
-    this.genderRatioData = {
-      labels: this.GenderRationList.map(
-        (item: any) => `${item.GenderName} (${item.Percentage}%)`
-      ),
-      datasets: [{
-        data: this.GenderRationList.map(
-          (item: any) => Number(item.Percentage) || 0
-        ),
-        backgroundColor: ['#176087', '#00897b', '#e67e22']
-      }]
-    };
-  }
-
-  setEnrollmentChartData(): void {
-  if (!this.EnrollmentYearStudentList?.length) {
-    this.lineChartData = {
-      labels: [],
-      datasets: [{
-        data: [],
-        label: 'Enrolment Year Wise',
-        borderColor: '#00897b',
-        backgroundColor: 'rgba(0, 137, 123, 0.1)',
-        fill: true,
-        tension: 0.1,
-        pointBackgroundColor: '#00897b',
-        pointRadius: 4
-      }]
-    };
-    return;
-  }
-
-  this.lineChartData = {
-    labels: this.EnrollmentYearStudentList.map(
-      (item: any) => item.AcademicYear
-    ),
-    datasets: [{
-      data: this.EnrollmentYearStudentList.map(
-        (item: any) => Number(item.TotalStudents) || 0
-      ),
-      label: 'Total Students',
-      borderColor: '#00897b',
-      backgroundColor: 'rgba(0, 137, 123, 0.1)',
-      fill: true,
-      tension: 0.1,
-      pointBackgroundColor: '#00897b',
-      pointRadius: 4
-    }]
-  };
-}
-
-setBranchPassPercentageChartData(): void {
-  if (!this.BranchPassPerList?.length) {
-    this.branchPassPercentageData = {
-      labels: [],
-      datasets: [
-        {
-          label: 'Pass Percentage',
-          data: [],
-          backgroundColor: '#00897b',
-          borderRadius: 5,
-          barThickness: 24
-        }
-      ]
-    };
-    return;
-  }
-
-  this.branchPassPercentageData = {
-    labels: this.BranchPassPerList.map(
-      (item: any) => item.StreamCode
-    ),
-    datasets: [
-      {
-        label: 'Pass Percentage',
-        data: this.BranchPassPerList.map(
-          (item: any) => Number(item.PassPercentage) || 0
-        ),
-        backgroundColor: '#00897b',
-        borderRadius: 5,
-        barThickness: 24
-      }
-    ]
-  };
-}
-
-setStudentCategoryChartData(): void {
-  if (!this.StudentCategoryList?.length) {
-    this.studentCategoryData = {
-      labels: [],
-      datasets: [
-        {
-          data: [],
-          backgroundColor: []
-        }
-      ]
-    };
-    return;
-  }
-
-  this.studentCategoryData = {
-  labels: this.StudentCategoryList.map(
-    (item: any) => item.CategoryName
-  ),
-  datasets: [
-    {
-      data: this.StudentCategoryList.map(
-        (item: any) => Number(item.Percentage) || 0
-      ),
-      backgroundColor: this.studentCategoryColors
-    }
-  ]
-};
-}
-
-setInstituteDistributionChart(): void {
-  if (!this.InstituteDistributionList?.length) {
-    this.maxInstituteCount = 0;
-    return;
-  }
-
-  this.maxInstituteCount = Math.max(
-    ...this.InstituteDistributionList.map(
-      (item: any) => Number(item.InstituteCount) || 0
-    )
-  );
-}
-
-
-updateInstituteDistributionChart(): void {
-  this.instituteDistributionChartData = {
-    labels: this.InstituteDistributionList.map(
-      item => item.DistrictName
-    ),
-    datasets: [
-      {
         label: 'Institutions',
-        data: this.InstituteDistributionList.map(
-          item => Number(item.InstituteCount)
-        ),
+        data: rows.map(r => num(r['InstituteCount'])),
         backgroundColor: '#008F83',
         hoverBackgroundColor: '#00796B',
         borderRadius: 6,
         borderSkipped: false,
-        barPercentage: 0.65,
-        categoryPercentage: 0.8
-      }
-    ]
-  };
-}
+        maxBarThickness: 14
+      }]
+    };
+    this.instituteWidth = rows.length * PX_PER_ITEM.institute;
+  }
 
+  private buildPassChart(rows: Row[]): void {
+    this.passChartData = {
+      labels: rows.map(r => r['StreamCode']),
+      datasets: [{
+        label: 'Pass Percentage',
+        data: rows.map(r => num(r['PassPercentage'])),
+        backgroundColor: TEAL,
+        borderRadius: 4,
+        maxBarThickness: 20
+      }]
+    };
+    this.passWidth = rows.length * PX_PER_ITEM.pass;
+  }
+
+  private buildVacancyChart(rows: Row[]): void {
+    this.vacancyChartData = {
+      labels: rows.map(r => r['PostName']),
+      datasets: [{
+        label: 'Total Vacancy',
+        data: rows.map(r => num(r['TotalVacancy'])),
+        backgroundColor: BLUE,
+        borderRadius: 4,
+        maxBarThickness: 20
+      }]
+    };
+    this.vacancyWidth = rows.length * PX_PER_ITEM.vacancy;
+  }
+
+  private buildEnrollmentChart(rows: Row[]): void {
+    this.lineChartData = {
+      labels: rows.map(r => r['AcademicYear']),
+      datasets: [{
+        label: 'Total Students',
+        data: rows.map(r => num(r['TotalStudents'])),
+        borderColor: TEAL,
+        backgroundColor: 'rgba(0, 137, 123, 0.1)',
+        fill: true,
+        tension: 0.1,
+        pointBackgroundColor: TEAL,
+        pointRadius: 4
+      }]
+    };
+    this.enrolmentWidth = rows.length * PX_PER_ITEM.enrolment;
+  }
+
+  private buildGenderChart(rows: Row[]): void {
+    const labels = rows.map(r => `${r['GenderName']} (${r['Percentage']}%)`);
+    this.genderChartData = {
+      labels,
+      datasets: [{ data: rows.map(r => num(r['Percentage'])), backgroundColor: PALETTE }]
+    };
+    this.genderLegend = labels.map((label, i) => ({ label, color: PALETTE[i % PALETTE.length] }));
+  }
+
+  private buildCategoryChart(rows: Row[]): void {
+    const labels = rows.map(r => r['CategoryName']);
+    this.categoryChartData = {
+      labels,
+      datasets: [{ data: rows.map(r => num(r['Percentage'])), backgroundColor: PALETTE }]
+    };
+    this.categoryLegend = labels.map((label, i) => ({ label, color: PALETTE[i % PALETTE.length] }));
+  }
 }

@@ -38,7 +38,7 @@ import { ItiTradeSearchComponent } from './iti-trade-search/iti-trade-search.com
     UpwardMomentITIComponent,
     KnowMeritITIComponent,
     ItiGeneralInstructionsComponent,
-    ItiCollegeSearchComponent,
+    
     ItiVacantSeatDirectAdmissionComponent,
     DownloadApplicationFormComponent,
     ItiTradeSearchComponent

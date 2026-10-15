@@ -146,7 +146,7 @@ export class bterCollegeSearchComponent {
     await this.GetcOmmonData();
     await this.GetStateMaterData();
     await this.ddlDistrict();
-    await this.GetStreamMasterDDL();
+    //await this.GetStreamMasterDDL();
 
     /*await this.GetPanchayatSamiti('')*/ 
 
@@ -759,7 +759,16 @@ export class bterCollegeSearchComponent {
   }
 
   async Streamtype() {
-    await this.GetStreamMasterDDL();
+    this.StreamMasterList = [];
+    if (this.request.StreamTypeID == 0)
+    {
+      this.request.StreamID = 0;
+    } 
+    if(this.request.StreamTypeID > 0)
+    {
+      await this.GetStreamMasterDDL();
+    }
+    
   }
 
   async GetStreamMasterDDL() {

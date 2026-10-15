@@ -143,44 +143,41 @@ export class LoaderInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    //// --- Check if request URL ends with '/firequery' ---
-    //if (req.url.toLowerCase().endsWith('/file-upload')) {
-    //  let key = this.activatedRoute.snapshot.queryParamMap.get('kufa')?.toString();
-    //  if (key != EnumOpenURLKey.UploadFile) {
-    //    // Redirect to error page
-    //    this.router.navigate(['/error']);
+    // Get the current Angular frontend URL
+    const frontendUrl = window.location.href;
 
-    //    // Cancel the request
-    //    return EMPTY; // Use EMPTY instead of new Observable()
-    //  }
-    //}
-
+    // Add frontend URL to the API request
+    const modifiedReq = req.clone({
+      setHeaders: {
+        'X-Frontend-Url': frontendUrl
+      }
+    });
 
     const internalReferrer = this.referrerService.getPreviousUrl();
     const currentReferrer = this.referrerService.getCurrentUrl();
 
     const currentUrl = this.extractFirstPath(currentReferrer);
     const referrerUrl = this.extractFirstPath(internalReferrer);
+
     if (this.shouldCheckAccess(currentUrl)) {
       if (!this.isMenuMatched(currentUrl)) {
-        //console.warn('Access Denied: Current URL not in user menu.');
         if (!referrerUrl || !this.isMenuMatched(referrerUrl)) {
-          //this.toastr.error("⚠️ Access Denied. Please contact your administrator for permission.");
-          //this.router.navigateByUrl("404");
+          // Existing access-denied logic
         }
       }
     }
 
-    if (req.headers.has('no-loader')) {
-      return next.handle(req);
+    if (modifiedReq.headers.has('no-loader')) {
+      return next.handle(modifiedReq);
     }
 
     this.totalRequests++;
     this.loaderService.show();
-    //debugger;
-    return next.handle(req).pipe(
+
+    return next.handle(modifiedReq).pipe(
       mergeMap(event => {
-        if (event instanceof HttpResponse && event.body?.Data === GlobalConstants.UN_AUTH_ROLE) {
+        if (event instanceof HttpResponse &&
+          event.body?.Data === GlobalConstants.UN_AUTH_ROLE) {
           this.router.navigate(['/**']);
           return of();
         }
