@@ -274,7 +274,7 @@
       </mat-tab>
 
       <!-- ================= TAB 4: Attachments ================= -->
-      <mat-tab>
+      <!-- <mat-tab>
         <ng-template mat-tab-label>
           <mat-icon class="tab-icon">attach_file</mat-icon>
           Attachments
@@ -295,7 +295,154 @@
             </mat-form-field>
           </mat-card>
         </div>
+      </mat-tab> -->
+      <!-- ================= TAB 4: Attachments ================= -->
+      <!-- >>> CHANGED SECTION START: Replaced text input with table uploader <<< -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">attach_file</mat-icon>
+          Attachments
+        </ng-template>
+
+        <div class="tab-body-pane">
+          <mat-card class="glass-card">
+            <div class="section-title">
+              <h4>Static & Path Attachments</h4>
+              <span class="section-hint">Upload a document to the server to attach it to this email template.</span>
+            </div>
+
+            <!-- Hidden input maintaining FormControl binding for form submission -->
+            <input type="hidden" formControlName="EmailAttachment" />
+
+            <!-- Uploader Table matching reference UI -->
+            <div class="table-responsive border border-gray-200 rounded-lg mt-3">
+              <table class="w-full text-sm text-left text-gray-700">
+                <thead class="text-xs uppercase bg-gray-50 text-gray-600 border-b">
+                  <tr>
+                    <th scope="col" class="p-3 w-10 text-center">
+                      <input type="checkbox" class="rounded border-gray-300" />
+                    </th>
+                    <th scope="col" class="p-3 w-1/4">Select File</th>
+                    <th scope="col" class="p-3 w-1/4">Status / Progress</th>
+                    <th scope="col" class="p-3 w-44 text-center">Actions</th>
+                    <th scope="col" class="p-3">File Name</th>
+                    <th scope="col" class="p-3 w-24 text-center">Preview</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="bg-white border-b hover:bg-gray-50">
+                    <!-- Checkbox -->
+                    <td class="p-3 text-center align-middle">
+                      <input type="checkbox" class="rounded border-gray-300" />
+                    </td>
+
+                    <!-- Browse File -->
+                    <td class="p-3 align-middle">
+                      <div class="flex items-center space-x-2">
+                        <label for="attachmentFileInput" class="cursor-pointer px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded shadow-sm">
+                          Browse...
+                        </label>
+                        <input id="attachmentFileInput" type="file" class="hidden" (change)="onAttachmentSelected($event)" />
+                        <span class="text-xs text-gray-500 truncate max-w-[130px]" [title]="selectedAttachmentFile?.name || 'No file chosen'">
+                          {{ selectedAttachmentFile ? selectedAttachmentFile.name : 'No file chosen' }}
+                        </span>
+                      </div>
+                    </td>
+
+                    <!-- Upload Status & Animated Progress Banner -->
+                    <td class="p-3 align-middle">
+                      <!-- 1. Completed State -->
+                      <div *ngIf="uploadStatus === 'completed'" 
+                          class="w-full bg-emerald-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full text-center shadow-sm flex items-center justify-center gap-1.5 animate-fade-in">
+                        <i class="ti ti-check text-sm font-bold"></i>
+                        <span>Upload completed</span>
+                      </div>
+
+                      <!-- 2. Animated Uploading State -->
+                      <div *ngIf="uploadStatus === 'uploading'" class="w-full">
+                        <div class="relative w-full h-6 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden p-0.5 border border-blue-200">
+                          <!-- Animated Striped Barber-Pole Bar -->
+                          <div class="h-full rounded-full animated-stripes text-[11px] text-white flex items-center justify-center font-semibold tracking-wide shadow">
+                            <svg class="animate-spin -ml-1 mr-2 h-3.5 w-3.5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                            Uploading...
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- 3. Idle / Pending State -->
+                      <div *ngIf="uploadStatus === 'idle'" class="w-full bg-gray-100 text-gray-500 text-xs py-1.5 px-3 rounded-full text-center border border-dashed border-gray-300 flex items-center justify-center gap-1">
+                        <i class="ti ti-clock text-xs"></i>
+                        <span>{{ templateForm.get('EmailAttachment')?.value ? 'File Attached' : 'Pending Upload' }}</span>
+                      </div>
+                    </td>
+
+                    <!-- Action Buttons -->
+                    <td class="p-3 align-middle text-center">
+                      <div class="inline-flex space-x-2">
+                        <!-- <button 
+                          type="button" 
+                          (click)="uploadAttachmentToServer('Attachment')"
+                          [disabled]="!selectedAttachmentFile || uploadStatus === 'uploading' || uploadStatus === 'completed'"
+                          class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-sky-500 hover:bg-sky-600 rounded disabled:opacity-40 disabled:cursor-not-allowed">
+                          <i class="ti ti-upload mr-1"></i> Upload
+                        </button> -->
+                        <button 
+                          type="button" 
+                          (click)="uploadAttachmentToServer('Attachment')"
+                          [disabled]="!selectedAttachmentFile || uploadStatus === 'uploading' || uploadStatus === 'completed'"
+                          class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-sky-500 hover:bg-sky-600 rounded disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+                          <i [ngClass]="uploadStatus === 'uploading' ? 'ti ti-loader animate-spin' : 'ti ti-upload'" class="mr-1"></i>
+                          {{ uploadStatus === 'uploading' ? 'Uploading...' : 'Upload' }}
+                        </button>
+                        
+                        <button 
+                          type="button" 
+                          (click)="cancelAttachmentUpload()"
+                          [disabled]="!selectedAttachmentFile && !templateForm.get('EmailAttachment')?.value"
+                          class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-red-500 hover:bg-red-600 rounded disabled:opacity-40 disabled:cursor-not-allowed">
+                          <i class="ti ti-ban mr-1"></i> Cancel
+                        </button>
+                      </div>
+                    </td>
+
+                    <!-- File Name / Path -->
+                    <td class="p-3 align-middle text-xs font-medium text-gray-800">
+                      {{ uploadedDocDisplayName ? uploadedDocDisplayName : (templateForm.get('EmailAttachment')?.value || (selectedAttachmentFile ? selectedAttachmentFile.name : '-')) }}
+                    </td>
+
+                    <!-- Preview Thumbnail -->
+                    <td class="p-3 align-middle text-center">
+                      <div *ngIf="templateForm.get('EmailAttachment')?.value" class="flex justify-center items-center">
+                        <a [href]="appsettingConfig?.StaticFileRootPathURL + '/' + templateForm.get('EmailAttachment')?.value" target="_blank" class="block border rounded p-1 hover:border-blue-400 bg-white">
+                          <ng-container *ngIf="isImageFile(templateForm.get('EmailAttachment')?.value); else fileIcon">
+                            <img [src]="appsettingConfig?.StaticFileRootPathURL + '/' + templateForm.get('EmailAttachment')?.value" 
+                                 alt="Thumbnail" class="h-9 w-9 object-cover rounded" />
+                          </ng-container>
+                          <ng-template #fileIcon>
+                            <mat-icon class="text-red-500">picture_as_pdf</mat-icon>
+                          </ng-template>
+                        </a>
+                      </div>
+                      <span *ngIf="!templateForm.get('EmailAttachment')?.value" class="text-xs text-gray-400">-</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="mt-3">
+              <span class="text-xs text-gray-500">
+                * Note: Uploading will automatically bind the uploaded server path to this template's <strong>EmailAttachment</strong> property. If left empty, the engine falls back to checking dynamic queries.
+              </span>
+            </div>
+          </mat-card>
+        </div>
       </mat-tab>
+      <!-- >>> CHANGED SECTION END <<< -->
+    
     </mat-tab-group>
   </form>
 </div>
