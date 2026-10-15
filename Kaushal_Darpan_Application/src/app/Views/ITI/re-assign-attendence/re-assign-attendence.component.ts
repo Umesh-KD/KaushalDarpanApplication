@@ -59,8 +59,9 @@ export class ReAssignAttendenceComponent {
   isAllSelected: boolean = false;
   centerSearchText = '';
   selectedCenters: any[] = [];  
-  filteredCenterList: any[] = [];  
-    MenuAllowedRoleList: any;
+  filteredCenterList: any[] = [];
+
+  public MenuAllowedRoleList: any = [];
   constructor(
     private attendanceServiceService: AttendanceServiceService,
     private fb: FormBuilder,
