@@ -85,6 +85,8 @@
             <!-- <th class="text-left">Institute</th> -->            
             <th class="text-left">Template ID</th>
             <th class="text-left">SMS Template</th>
+            <th class="text-left">Total SMS</th>
+            <th class="text-left">SMS Sent</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -103,7 +105,8 @@
             <td class="whitespace-normal break-words">
               {{ item.SMSText }}
             </td>            
-
+            <td>{{ item.TotalSMS }}</td>
+            <td>{{ item.SMSSentCount }}</td>
             <td>
               <!-- (click)="ViewandUpdate(MyModel_addHead, item)" -->
               <div class="flex items-center justify-center actionBtns">
@@ -132,7 +135,6 @@
 
               </div>
             </td>
-
           </tr>
 
           <tr *ngIf="!SMSTemplateDataList || SMSTemplateDataList.length === 0">

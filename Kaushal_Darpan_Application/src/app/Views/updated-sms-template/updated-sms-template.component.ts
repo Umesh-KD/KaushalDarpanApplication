@@ -79,7 +79,7 @@ export class UpdatedSMSTemplateComponent implements OnInit {
 
     // Initialize Reactive Form
     this.SMSTemplateForm = this.formBuilder.group({
-      ID: [''],
+      ID: ['0'],
 
       DepartmentID: ['0', Validators.required],
 
@@ -143,7 +143,7 @@ export class UpdatedSMSTemplateComponent implements OnInit {
     debugger
     this.isSubmitted = false;
     this.isEditMode = !!item;
-    if(item.IsSend){
+    if(item && item.IsSend){
       this.toastr.error('This template has already been sent and cannot be edited.');
       return;
     }
@@ -163,9 +163,7 @@ export class UpdatedSMSTemplateComponent implements OnInit {
 
     // Edit Existing Template
     if (item) {
-
       this.request = { ...item };
-
       this.SMSTemplateForm.patchValue({
         ID: item.AID ?? '',
         DepartmentID: item.DepartmentID ?? '',
@@ -648,6 +646,10 @@ debugger
 
     //   return;
     // }
+
+    if(this.SMSTemplateForm.get('ID')==null || this.SMSTemplateForm.get('ID')==undefined || this.SMSTemplateForm.get('ID')?.value==null || this.SMSTemplateForm.get('ID')?.value==undefined || this.SMSTemplateForm.get('ID')?.value==''){
+      this.SMSTemplateForm.get('ID')?.setValue(0);
+    }
 
     this.loaderService.requestStarted();
 

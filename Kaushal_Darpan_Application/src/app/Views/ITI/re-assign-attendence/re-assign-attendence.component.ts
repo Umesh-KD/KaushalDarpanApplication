@@ -95,7 +95,7 @@ export class ReAssignAttendenceComponent {
       AttendanceEndDate:[''],
       AttendanceStartDate:[''],
     });
-    await this.GetMenuPermission();
+    
     this.GetAttendanceTimeTable();
     this.GetStaff_InstituteWise();
   }
@@ -758,8 +758,11 @@ export class ReAssignAttendenceComponent {
     );
   }
 
+
   async GetMenuPermission() {
+
     const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
     var request: any = {
       FilterBy: baseRoute,
       MasterCode: "GetAllowedRoleForMenu"
