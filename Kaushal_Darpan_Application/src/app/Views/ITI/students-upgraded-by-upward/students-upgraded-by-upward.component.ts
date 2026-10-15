@@ -68,10 +68,8 @@ export class StudentUpgradedByUpwardComponent
   TotalPages: any = 0;
   AllotmentKey: string = "";
   public isprofile: number = 0;
-
-  public MenuAllowedRoleList: any = [];
-
   public shiftUnitRequest = new SearchSlidingModel()
+    MenuAllowedRoleList: any;
 
   constructor(
     private fb: FormBuilder,
@@ -103,6 +101,8 @@ export class StudentUpgradedByUpwardComponent
       txtReportingRemark: ['']
     });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
+
     if ((this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || EnumRole.Principal_NCVT)) {
       await this.CheckProfileStatus();
       if (this.isprofile == 0) {
@@ -111,10 +111,7 @@ export class StudentUpgradedByUpwardComponent
         }, 'OK', false);
 
       }
-
     }
-
-     await this.GetMenuPermission();
     //this.AllotmentKey = "FIRST NODAL REPORTING";
     this.request.CreatedBy = this.sSOLoginDataModel.UserID;
     this.request.ModifyBy = this.sSOLoginDataModel.UserID;
@@ -1024,7 +1021,9 @@ export class StudentUpgradedByUpwardComponent
   }
 
   async GetMenuPermission() {
-    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
     var request: any = {
       FilterBy: baseRoute,
       MasterCode: "GetAllowedRoleForMenu"
@@ -1039,10 +1038,9 @@ export class StudentUpgradedByUpwardComponent
           (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
         )) {
           // Navigate to dashboard if RoleID is not allowed
-          this.router.navigate(['/dashboard']);
+          this.Router.navigate(['/dashboard']);
         }
       }
     })
   }
-
 }

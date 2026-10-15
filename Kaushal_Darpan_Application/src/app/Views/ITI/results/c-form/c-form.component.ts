@@ -23,6 +23,7 @@ import { ItiGetResultDataModel } from '../../../../Models/ITI/ITI_ResultModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-c-form',
@@ -77,6 +78,7 @@ export class CFormComponent implements OnInit {
   resultReGenerateForm!: FormGroup;
 
   requestModel: ItiGetResultDataModel = new ItiGetResultDataModel();
+    MenuAllowedRoleList: any;
 
 
   constructor(
@@ -92,7 +94,8 @@ export class CFormComponent implements OnInit {
     private itiResultService: ITIResultService,
     private http: HttpClient,
     private menuService: MenuService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private routers: Router
   ) {
     // Get user data from localStorage
 
@@ -100,6 +103,7 @@ export class CFormComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     // Get URL parameter
     this.activatedRoute.paramMap.subscribe((params) => {
       this.url = params.get('url');
@@ -644,7 +648,29 @@ debugger
     return Array.from(unique.values());
   }
 
+  async GetMenuPermission() {
 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
 }
 

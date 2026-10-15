@@ -76,20 +76,15 @@ export class ItiAttendencePercentComponent {
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+    MenuAllowedRoleList: any;
 
-
-
-  public MenuAllowedRoleList: any = [];
   constructor(
     private attendanceServiceService: AttendanceServiceService,
     private fb: FormBuilder,
     private http: HttpClient, private route: ActivatedRoute,  
     private commonMasterService: CommonFunctionService,
-    private toastr: ToastrService,
-    public appsettingConfig: AppsettingService,
-        private router: Router,
-
-  ) {
+    private toastr: ToastrService, private router: Router,
+    public appsettingConfig: AppsettingService) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     this.InstituteID = this.sSOLoginDataModel.InstituteID
@@ -103,7 +98,6 @@ export class ItiAttendencePercentComponent {
     this.AttendanceStartDate = this.route.snapshot.paramMap.get('AttendanceStartDate') ?? "";
     this.AttendanceEndDate = this.route.snapshot.paramMap.get('AttendanceEndDate') ?? "0";
 
-    this.GetMenuPermission();
     this.getMasterData();
   
 
@@ -125,6 +119,7 @@ export class ItiAttendencePercentComponent {
       InstituteID: [''],
 
     });
+   await this.GetMenuPermission();
    if (this.sSOLoginDataModel.InstituteID == 0) {
      await this.GetInstituteList()
    }
@@ -721,9 +716,10 @@ export class ItiAttendencePercentComponent {
     })
   }
 
-
   async GetMenuPermission() {
+
     const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
     var request: any = {
       FilterBy: baseRoute,
       MasterCode: "GetAllowedRoleForMenu"
@@ -743,6 +739,5 @@ export class ItiAttendencePercentComponent {
       }
     })
   }
-
 
 }
