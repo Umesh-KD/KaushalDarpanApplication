@@ -1,122 +1,108 @@
-<div class="dashboard-container">
-    <!-- Header Title -->
-    <div class="dashboard-header">
-        <!--<span class="sub-title">DASHBOARD 1</span>-->
-        <h1>Dashboard (State Level)</h1>
+<div class="dashboard-page p-3 sm:p-5">
+
+  <!-- Header -->
+  <h1 class="mb-5 text-2xl text-slate-800">Dashboard (State Level)</h1>
+
+  <!-- KPI banner -->
+  <div class="kpi-banner mb-6 shadow">
+    <div class="kpi-card kpi-gold">
+      <h2>{{ UpperTilesData?.[0]?.TotalInstitutions | number }}</h2>
+      <p>Total Institutions</p>
     </div>
-
-    <!-- Top Metric KPI Cards -->
-    <div class="kpi-banner">
-        <div class="kpi-card gold">
-  <h2>{{ UpperTilesData?.[0]?.TotalInstitutions | number }}</h2>
-  <p>Total Institutions</p>
-</div>
-
-<div class="kpi-card blue">
-  <h2>{{ UpperTilesData?.[0]?.TotalStudents | number }}</h2>
-  <p>Total Students</p>
-</div>
-
-<div class="kpi-card teal">
-  <h2>{{ UpperTilesData?.[0]?.TotalStaff | number }}</h2>
-  <p>Total Staff</p>
-</div>
-
-<div class="kpi-card gold">
-  <h2>{{ UpperTilesData?.[0]?.PlacementPercentage }}%</h2>
-  <p>Placement %</p>
-</div>
-
-<div class="kpi-card muted-blue">
-  <h2>{{ UpperTilesData?.[0]?.TotalActiveUsers | number }}</h2>
-  <p>Active Users Today</p>
-</div>
+    <div class="kpi-card kpi-blue">
+      <h2>{{ UpperTilesData?.[0]?.TotalStudents | number }}</h2>
+      <p>Total Students</p>
     </div>
-
-    <!-- Row 1 Charts -->
-    <div class="chart-row">
-        <!-- Institution Distribution (District-wise) -->
-
-<div class="chart-card">
-  <h3>Institution Distribution (District-wise)</h3>
-
-  <div class="bar-chart-vertical-list">
-    <div
-      class="bar-row"
-      *ngFor="let item of InstituteDistributionList"
-    >
-      <span class="label">{{ item.DistrictName }}</span>
-
-      <div class="bar-track">
-        <div
-          class="bar-fill"
-          [style.width.%]="(item.InstituteCount / maxInstituteCount) * 100"
-        ></div>
-      </div>
-
-      <span class="value">{{ item.InstituteCount }}</span>
+    <div class="kpi-card kpi-teal">
+      <h2>{{ UpperTilesData?.[0]?.TotalStaff | number }}</h2>
+      <p>Total Staff</p>
+    </div>
+    <div class="kpi-card kpi-gold">
+      <h2>{{ UpperTilesData?.[0]?.PlacementPercentage }}%</h2>
+      <p>Placement %</p>
+    </div>
+    <div class="kpi-card kpi-muted">
+      <h2>{{ UpperTilesData?.[0]?.TotalActiveUsers | number }}</h2>
+      <p>Active Users Today</p>
     </div>
   </div>
-</div>
 
-
-        <!-- Enrolment Year Wise (Line Chart) -->
-        <div class="chart-card">
-            <h3>Enrolment year wise</h3>
-            <div class="chart-wrapper">
-                <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="'line'">
-                </canvas>
-            </div>
+  <!-- ROW 1: Institution distribution (2) + Enrolment year wise (1) -->
+  <div class="row-2-1 mb-5">
+    <div class="min-w-0 rounded-md bg-white p-4 shadow-sm">
+      <h3 class="mb-4 text-center text-base font-semibold text-slate-800">Institution Distribution (District-wise)</h3>
+      <div class="chart-scroll overflow-x-auto">
+        <div class="chart-h-md w-full" [style.min-width.px]="instituteWidth">
+          <canvas baseChart [data]="instituteChartData" [options]="instituteChartOptions" type="bar"></canvas>
         </div>
-
-        <!-- Student Category Distribution (Doughnut Chart) -->
-        <div class="chart-card">
-            <h3>Student Category Distribution</h3>
-            <div class="chart-wrapper doughnut-container">
-                <canvas baseChart [data]="studentCategoryData" [options]="doughnutChartOptions" [type]="'doughnut'">
-                </canvas>
-                <div class="center-text">100</div>
-            </div>
-        </div>
+      </div>
     </div>
 
-
-    <!-- Row 2 Charts -->
-    <div class="chart-row">
-
-        <!-- Gender Ratio -->
-        <div class="chart-card">
-            <h3>Gender Ratio</h3>
-
-            <div class="chart-wrapper doughnut-container">
-                <canvas baseChart [data]="genderRatioData" [options]="doughnutChartOptions" [type]="'doughnut'">
-                </canvas>
-
-                <div class="center-text">100%</div>
-            </div>
+    <div class="min-w-0 rounded-md bg-white p-4 shadow-sm">
+      <h3 class="mb-4 text-center text-base font-semibold text-slate-800">Enrolment year wise</h3>
+      <div class="chart-scroll overflow-x-auto">
+        <div class="chart-h-md w-full" [style.min-width.px]="enrolmentWidth">
+          <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" type="line"></canvas>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <!-- Pass Percentage (Branch-wise) -->
-        <div class="chart-card">
-            <h3>Pass Percentage (Branch-wise)</h3>
-
-            <div class="chart-wrapper">
-                <canvas baseChart [data]="branchPassPercentageData" [options]="branchPassPercentageOptions"
-                    [type]="'bar'">
-                </canvas>
-            </div>
+  <!-- ROW 2: Gender Ratio + Student Category (1:1, legend on the right) -->
+  <div class="mb-5 grid grid-cols-1 gap-5 lg:grid-cols-2">
+    <div class="min-w-0 rounded-md bg-white p-4 shadow-sm">
+      <h3 class="mb-4 text-center text-base font-semibold text-slate-800">Gender Ratio</h3>
+      <div class="flex flex-row items-center justify-center gap-4 py-2">
+        <div class="relative h-48 w-48 shrink-0">
+          <canvas baseChart [data]="genderChartData" [options]="doughnutOptions" type="doughnut"></canvas>
+          <div class="pointer-events-none absolute inset-0 flex items-center justify-center text-xl font-bold text-slate-800">100%</div>
         </div>
-
-        <!-- Vacancy Position -->
-        <div class="chart-card">
-            <h3>Vacancy Position</h3>
-
-            <div class="chart-wrapper">
-                <canvas baseChart [data]="vacancyPositionData" [options]="vacancyPositionOptions" [type]="'bar'">
-                </canvas>
-            </div>
-        </div>
-
+        <ul class="min-w-0 space-y-1 text-sm text-slate-600">
+          @for (item of genderLegend; track item.label) {
+            <li class="flex items-center gap-2">
+              <span class="legend-swatch" [style.background]="item.color"></span>{{ item.label }}
+            </li>
+          }
+        </ul>
+      </div>
     </div>
 
+    <div class="min-w-0 rounded-md bg-white p-4 shadow-sm">
+      <h3 class="mb-4 text-center text-base font-semibold text-slate-800">Student Category Distribution</h3>
+      <div class="flex flex-row items-center justify-center gap-4 py-2">
+        <div class="relative h-48 w-48 shrink-0">
+          <canvas baseChart [data]="categoryChartData" [options]="doughnutOptions" type="doughnut"></canvas>
+          <div class="pointer-events-none absolute inset-0 flex items-center justify-center text-xl font-bold text-slate-800">100</div>
+        </div>
+        <ul class="min-w-0 space-y-1 text-sm text-slate-600">
+          @for (item of categoryLegend; track item.label) {
+            <li class="flex items-center gap-2">
+              <span class="legend-swatch" [style.background]="item.color"></span>{{ item.label }}
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 3: Pass % + Vacancy (1:1, taller, scrollable) -->
+  <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+    <div class="min-w-0 rounded-md bg-white p-4 shadow-sm">
+      <h3 class="mb-4 text-center text-base font-semibold text-slate-800">Pass Percentage (Branch-wise)</h3>
+      <div class="chart-scroll overflow-x-auto">
+        <div class="chart-h-lg w-full" [style.min-width.px]="passWidth">
+          <canvas baseChart [data]="passChartData" [options]="passChartOptions" type="bar"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="min-w-0 rounded-md bg-white p-4 shadow-sm">
+      <h3 class="mb-4 text-center text-base font-semibold text-slate-800">Vacancy Position</h3>
+      <div class="chart-scroll overflow-x-auto">
+        <div class="chart-h-lg w-full" [style.min-width.px]="vacancyWidth">
+          <canvas baseChart [data]="vacancyChartData" [options]="vacancyChartOptions" type="bar"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

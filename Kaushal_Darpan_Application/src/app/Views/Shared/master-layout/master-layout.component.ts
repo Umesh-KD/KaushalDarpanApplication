@@ -82,6 +82,7 @@ export class MasterLayoutComponent implements OnInit {
   public SessionTypeID: number = 0;    // new added 05082025
   public RequestBaseSearchModel = new RequestBaseModel();
   readonly APIUrl = this.appsettingConfig.apiURL + "SSO";
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private el: ElementRef,
@@ -144,6 +145,7 @@ export class MasterLayoutComponent implements OnInit {
     });
     return params;
   }
+
   reset() {
     /*this.idle.watch();*/
     this.idleState = 'Started.';
@@ -784,7 +786,7 @@ export class MasterLayoutComponent implements OnInit {
         }
         else {
           //window.location.href = 'https://sso.rajasthan.gov.in/'
-          window.location.replace('https://ssotest.rajasthan.gov.in');
+          window.location.replace(this.appsettingConfig.BacktoSSOURL?.toString());
         }
       // await this.loaderService.requestStarted();
       //await this.menuService.SSOLogout(this.appsettingConfig.BacktoSSOURL_Logout?.toString());
@@ -803,8 +805,8 @@ export class MasterLayoutComponent implements OnInit {
     localStorage.clear();
     try {
       this.loaderService.requestStarted();
-      //await this.menuService.BackToSSO(this.appsettingConfig.BacktoSSOURL?.toString());
-      await this.menuService.BackToSSO("https://ssotest.rajasthan.gov.in/sso");
+      await this.menuService.BackToSSO(this.appsettingConfig.BacktoSSOURL?.toString());
+      //await this.menuService.BackToSSO("https://ssotest.rajasthan.gov.in/sso");
       this.modalService.dismissAll();
     }
     catch (Ex) {
@@ -838,6 +840,7 @@ export class MasterLayoutComponent implements OnInit {
 
     this.applyCSSClassBasedOnRole(this.DepartmentID);
   }
+
   private applyCSSClassBasedOnRole(DepartmentID: number) {
     this.renderer.removeClass(document.body, 'ITIPortal');
     this.renderer.removeClass(document.body, 'BTER');
@@ -964,6 +967,7 @@ export class MasterLayoutComponent implements OnInit {
       }
     })
   }
+
   async backtoSignOut() {
     try {
       this.ssoToken = localStorage.getItem('authtoken');
@@ -998,6 +1002,7 @@ export class MasterLayoutComponent implements OnInit {
       this.loaderService.requestEnded();
     }
   }
+
   backToSSONew() {
     //this.ssotoken = this.cookieService.get('RAJSSO');    
     this.ssoToken = localStorage.getItem('authtoken');
@@ -1043,6 +1048,7 @@ export class MasterLayoutComponent implements OnInit {
       'https://ssotest.rajasthan.gov.in/signout'
     );
   }
+
   backtoSignOutNew_17122025() {
     //this.ssotoken = this.cookieService.get('RAJSSO');    
     this.ssoToken = localStorage.getItem('authtoken');

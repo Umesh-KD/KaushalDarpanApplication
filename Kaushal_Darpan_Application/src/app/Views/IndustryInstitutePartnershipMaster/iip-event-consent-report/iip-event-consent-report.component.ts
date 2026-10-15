@@ -130,6 +130,7 @@ export class IIPEventConsentReportComponent {
 
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID; 
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID; 
       this.searchRequest.Action = "GetAllConsentData";
      // //debugger
       await this.industryInstitutePartnershipMasterService.GetIIPEventConsentReportData(this.searchRequest)

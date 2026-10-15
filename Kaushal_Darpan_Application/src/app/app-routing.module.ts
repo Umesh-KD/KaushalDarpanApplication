@@ -32,7 +32,10 @@ const routes: Routes = [
       { path: 'MainItiInstructorForm', loadChildren: () => import('./Views/ITI/ITI_Instructor/main-iti-instructor-form/main-iti-instructor-form.module').then(m => m.MainItiInstructorFormModule) },
       { path: 'iti-Examination-public-info', loadChildren: () => import('./Views/iti-Examination-public-info/iti-Examination-public-info.module').then(m => m.ITIExaminationPublicInfoModule) },
       { path: 'InstructorTab', loadChildren: () => import('./Views/ITI/instructor-tab/instructor-tab.module').then(m => m.InstructorTabModule) },
+      { path: 'iti-college-search', loadChildren: () => import('./Views/itipublic-info-tabs/iti-college-search/iti-college-search.module').then(m => m.ItiCollegeSearchModule) },
       /* { path: 'itipublicinfotabs', loadChildren: () => import('./Views/itipublic-info-tabs/itipublic-info-tabs.module').then(m => m.ITIPublicInfoTabsModule) }*/
+
+
 
     ]
   },
@@ -49,7 +52,10 @@ const routes: Routes = [
 
       { path: 'dtepublicinfotabs', loadChildren: () => import('./Views/dtepublic-info-tabs/dtepublic-info-tabs.module').then(m => m.DTEPublicInfoTabsModule) },
       { path: 'SearchResult', loadChildren: () => import('./Views/Home/search-result/search-result.module').then(m => m.SearchResultModule), title: 'Search Result' },
-
+      {
+        path: 'bter-college-search', loadComponent: () => import('./Views/BTER/bter-college-search/bter-college-search.component')
+          .then(m => m.bterCollegeSearchComponent)
+      }
     ]
   },
 
@@ -1843,6 +1849,8 @@ const routes: Routes = [
       { path: 'Email-Template', loadChildren: () => import('./Views/email-template/email-template.module').then(m => m.EmailTemplateModule), title: 'Email Template' },
       { path: 'GrevianceMapping', loadChildren: () => import('./Views/greviance-mapping/greviance-mapping.module').then(m => m.GrevianceMappingModule) },
       { path: 'analytic-dashboard', loadChildren: () => import('./Views/analytic-dashboard/analytic-dashboard.module').then(m => m.AnalyticDashboardModule) },
+      { path: 'TableauExamReport', loadChildren: () => import('./Views/tableau-exam-report/tableau-exam-report.module').then(m => m.TableauExamReportModule) },
+
     ]
   },
 

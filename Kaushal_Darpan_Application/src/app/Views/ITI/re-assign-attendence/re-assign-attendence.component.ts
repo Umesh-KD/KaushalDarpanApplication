@@ -59,11 +59,8 @@ export class ReAssignAttendenceComponent {
   isAllSelected: boolean = false;
   centerSearchText = '';
   selectedCenters: any[] = [];  
-  filteredCenterList: any[] = [];
-
-
-  public MenuAllowedRoleList: any = [];
-
+  filteredCenterList: any[] = [];  
+    MenuAllowedRoleList: any;
   constructor(
     private attendanceServiceService: AttendanceServiceService,
     private fb: FormBuilder,
@@ -74,12 +71,10 @@ export class ReAssignAttendenceComponent {
     private router: Router,
     public appsettingConfig: AppsettingService) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
-     this.GetMenuPermission();
-     this.getMasterData();
+    this.getMasterData();
   }
 
-  ngOnInit() {
+ async ngOnInit() {
     this.TableForm = this.fb.group({
       SubjectID: [0, Validators.required],
       StreamID: [0, Validators.required],
@@ -97,6 +92,7 @@ export class ReAssignAttendenceComponent {
       AttendanceEndDate:[''],
       AttendanceStartDate:[''],
     });
+    await this.GetMenuPermission();
     this.GetAttendanceTimeTable();
     this.GetStaff_InstituteWise();
   }
@@ -759,10 +755,10 @@ export class ReAssignAttendenceComponent {
     );
   }
 
+  async GetMenuPermission() {
 
-  async GetMenuPermission()
-  {
     const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
     var request: any = {
       FilterBy: baseRoute,
       MasterCode: "GetAllowedRoleForMenu"
@@ -782,5 +778,4 @@ export class ReAssignAttendenceComponent {
       }
     })
   }
-
 }

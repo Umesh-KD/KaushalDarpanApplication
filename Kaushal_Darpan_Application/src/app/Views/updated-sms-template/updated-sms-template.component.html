@@ -9,7 +9,7 @@
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0)"
          class="text-sm font-medium text-slate-700">
-        Dashboard
+        Communication Templates
       </a>
 
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">
@@ -105,12 +105,13 @@
             </td>            
 
             <td>
+              <!-- (click)="ViewandUpdate(MyModel_addHead, item)" -->
               <div class="flex items-center justify-center actionBtns">
-                <!-- <a href="javascript:void(0)"
-                   title="Edit"
+                <a href="javascript:void(0)"
+                   title="Edit"                   
                    (click)="ViewandUpdate(MyModel_addHead, item)">
-                  <i class="ti ti-pencil"></i>
-                </a> -->
+                  <i class="ti ti-pencil "></i>
+                </a>
 
                 <!-- <a href="javascript:void(0)"
                    title="Delete"
@@ -124,7 +125,7 @@
                   class="btn bg-info text-white"
                   title="Send SMS using this template"
                   (click)="SendMessage_TemplateWise(item.TemplateID)"
-                  [disabled]="!item.TemplateID">
+                  [disabled]="!item.TemplateID  || item.IsSend">
                   <i class="ti ti-send"></i>
                   Send SMS
                 </button>
@@ -179,11 +180,11 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Department <span class="text-red-500">*</span>
               </label>
-              <select class="form-select" formControlName="DepartmentID" (change)="GetRoleList($event)">
+              <select class="form-select" formControlName="DepartmentID" (change)="GetRoleList($event,0)">
                   <option value="0">-- Select Department --</option>
-                  <option value="{{_EnumDepartment.BTER}}">BTER</option>
-                  <option value="{{_EnumDepartment.ITI}}  ">ITI</option>
-                  <option value="{{_EnumDepartment.DCE}}  ">DCE</option>
+                  <option value="1">BTER</option>
+                  <option value="2">ITI</option>
+                  <option value="3">DCE</option>
                 </select>
 
               <small class="text-red-500"

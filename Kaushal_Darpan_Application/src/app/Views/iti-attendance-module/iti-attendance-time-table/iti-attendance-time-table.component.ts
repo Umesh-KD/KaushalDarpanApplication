@@ -34,14 +34,7 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
   SemesterMasterDDL: any[] = [];
   StreamMasterDDL: any[] = [];
   filteredCenterList: any[] = [];
-
   shiftddl: any[] = [];
-
-
-  public MenuAllowedRoleList: any = [];
-
-
-
   filterData: any[] = [];
   private _liveAnnouncer = inject(LiveAnnouncer);
   dataSource = new MatTableDataSource<any>([]);
@@ -65,6 +58,7 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   selectedCenters: any[] = [];   // ngModel binding
+    MenuAllowedRoleList: any;
   constructor(
     private attendanceServiceService: AttendanceServiceService,
     private fb: FormBuilder,
@@ -75,12 +69,10 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
     private router: Router,
     public appsettingConfig: AppsettingService) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
-    this.GetMenuPermission();
     this.getMasterData();
   }
 
-  ngOnInit() {    
+ async ngOnInit() {    
     this.TableForm = this.fb.group({
       SubjectID: [0, Validators.required],
       StreamID: [0, Validators.required],
@@ -96,6 +88,7 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
       SubjectIDs: [[]] // multiple select → always array
 
     });
+    await this.GetMenuPermission();
     this.GetAttendanceTimeTable();
     this.GetStaff_InstituteWise();
     this.getMasterData();
@@ -672,7 +665,9 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
   }
 
   async GetMenuPermission() {
+
     const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
     var request: any = {
       FilterBy: baseRoute,
       MasterCode: "GetAllowedRoleForMenu"
@@ -692,4 +687,5 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
       }
     })
   }
+
 }
