@@ -13,7 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { AttendanceServiceService } from '../../../Services/AttendanceServices/attendance-service.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
@@ -59,7 +59,11 @@ export class ReAssignAttendenceComponent {
   isAllSelected: boolean = false;
   centerSearchText = '';
   selectedCenters: any[] = [];  
-  filteredCenterList: any[] = [];  
+  filteredCenterList: any[] = [];
+
+
+  public MenuAllowedRoleList: any = [];
+
   constructor(
     private attendanceServiceService: AttendanceServiceService,
     private fb: FormBuilder,
@@ -70,7 +74,9 @@ export class ReAssignAttendenceComponent {
     private router: Router,
     public appsettingConfig: AppsettingService) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.getMasterData();
+
+     this.GetMenuPermission();
+     this.getMasterData();
   }
 
   ngOnInit() {
@@ -752,4 +758,29 @@ export class ReAssignAttendenceComponent {
       x.Name.toLowerCase().includes(search)
     );
   }
+
+
+  async GetMenuPermission()
+  {
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
 }

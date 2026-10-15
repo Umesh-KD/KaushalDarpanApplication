@@ -36,6 +36,8 @@ export class iipeventsComponent {
   public IndustryInstitutePartnershipMasterList: IndustryInstitutePartnershipMasterDataModels[] = [];
   public AllInTableSelect: boolean = false;
 
+  public MenuAllowedRoleList: any = [];
+
   constructor(
     private commonMasterService: CommonFunctionService, 
     private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
@@ -55,6 +57,8 @@ export class iipeventsComponent {
     this.CompanyID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
 
     debugger
+
+    this.GetMenuPermission();
      this.searchRequest.EventStatus = Number(
     this.activatedRoute.snapshot.queryParamMap.get('EventStatus')
   );
@@ -249,6 +253,28 @@ export class iipeventsComponent {
           })
         } catch (error) {
           console.error(error)
+        }
+      }
+    })
+  }
+
+  async GetMenuPermission() {
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
         }
       }
     })

@@ -11,7 +11,7 @@ import { EnumStatus } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-college-seat-intakes-admission-list',
@@ -39,6 +39,8 @@ export class CollegeSeatIntakesAdmissionListComponent {
   public DivisionMasterList: any = [];
   public uniqueTradeIds: any = [];
   public filteredTradeList: any = [];
+
+  public MenuAllowedRoleList: any = [];
 
   public Table_SearchText: string = '';
   public SeatIntakeIDnew: number = 0;
@@ -68,7 +70,8 @@ export class CollegeSeatIntakesAdmissionListComponent {
     private ItiSeatIntakeService: ItiSeatIntakeService,
     private Swal2: SweetAlert2,
     private modalService: NgbModal,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private Routers: Router, 
   ) { }
 
   async ngOnInit() {
@@ -93,6 +96,8 @@ export class CollegeSeatIntakesAdmissionListComponent {
     }
     this.searchRequest.SanctionedID = -2;
 
+
+    await this.GetMenuPermission()
     await this.GetDropdownData()
     await this.GetTradeAndColleges()
 
@@ -724,6 +729,29 @@ export class CollegeSeatIntakesAdmissionListComponent {
       this.pageInTableSize = this?.totalInTableRecord?.toString() ?? "50"; // reset pagination
       this.loadInTable();
     }
+  }
+
+
+  async GetMenuPermission() {
+    const baseRoute = this.Routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.SSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 }

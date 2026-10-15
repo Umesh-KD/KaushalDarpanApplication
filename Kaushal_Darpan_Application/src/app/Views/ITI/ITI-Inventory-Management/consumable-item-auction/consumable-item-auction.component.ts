@@ -48,6 +48,8 @@ export class ConsumableItemAuctionComponent {
   public EquipmentsDDLList: any = [];
   public TradeDDLList: any = [];
   public CollegeDDLList: any = [];
+  public MenuAllowedRoleList: any = [];
+
   public ConsumableAuctionedItemData: any = [];
   EnumRole = EnumRole;
   minDate: string = '';
@@ -82,6 +84,9 @@ export class ConsumableItemAuctionComponent {
 
     const today = new Date();
     this.minDate = today.toISOString().split('T')[0];
+
+
+    await this.GetMenuPermission();
 
     await this.GetEquipmentDDL();
     //await this.GetTradeDDL();
@@ -420,6 +425,29 @@ export class ConsumableItemAuctionComponent {
 
   async CloseModalPopup_AuctionedHistory() {
     this.modalService.dismissAll();
+  }
+
+
+  async GetMenuPermission() {
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 }

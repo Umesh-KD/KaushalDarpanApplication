@@ -68,6 +68,9 @@ export class StudentUpgradedByUpwardComponent
   TotalPages: any = 0;
   AllotmentKey: string = "";
   public isprofile: number = 0;
+
+  public MenuAllowedRoleList: any = [];
+
   public shiftUnitRequest = new SearchSlidingModel()
 
   constructor(
@@ -108,7 +111,10 @@ export class StudentUpgradedByUpwardComponent
         }, 'OK', false);
 
       }
+
     }
+
+     await this.GetMenuPermission();
     //this.AllotmentKey = "FIRST NODAL REPORTING";
     this.request.CreatedBy = this.sSOLoginDataModel.UserID;
     this.request.ModifyBy = this.sSOLoginDataModel.UserID;
@@ -1015,6 +1021,28 @@ export class StudentUpgradedByUpwardComponent
         console.log(Ex);
       }
     }
+  }
+
+  async GetMenuPermission() {
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 }
