@@ -632,6 +632,7 @@ export class CommonFunctionService {
   public async UploadDocument(file: any, model: UploadFileModel | null = null) {
     //formdata
     ;
+    debugger
     const formData = new FormData();
     formData.append("file", file);
     formData.append("FolderName", model?.FolderName ?? "");

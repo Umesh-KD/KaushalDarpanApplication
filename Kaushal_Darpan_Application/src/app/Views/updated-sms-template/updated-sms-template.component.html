@@ -105,9 +105,10 @@
             </td>            
 
             <td>
+              <!-- (click)="ViewandUpdate(MyModel_addHead, item)" -->
               <div class="flex items-center justify-center actionBtns">
                 <a href="javascript:void(0)"
-                   title="Edit"
+                   title="Edit"                   
                    (click)="ViewandUpdate(MyModel_addHead, item)">
                   <i class="ti ti-pencil "></i>
                 </a>
@@ -124,7 +125,7 @@
                   class="btn bg-info text-white"
                   title="Send SMS using this template"
                   (click)="SendMessage_TemplateWise(item.TemplateID)"
-                  [disabled]="!item.TemplateID">
+                  [disabled]="!item.TemplateID  || item.IsSend">
                   <i class="ti ti-send"></i>
                   Send SMS
                 </button>

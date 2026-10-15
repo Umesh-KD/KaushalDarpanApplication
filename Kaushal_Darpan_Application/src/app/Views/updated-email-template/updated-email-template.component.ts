@@ -7,6 +7,8 @@ import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { EnumStatus } from '../../Common/GlobalConstants';
+import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
+import { AppsettingService } from '../../Common/appsetting.service';
 
 @Component({
   selector: 'app-updated-email-template',
@@ -31,6 +33,10 @@ export class UpdatedEmailTemplateComponent implements OnInit {
   openBraces = '{{';
   closeBraces = '}}';
 
+  public selectedAttachmentFile: File | null = null;
+  public uploadStatus: 'idle' | 'uploading' | 'completed' = 'idle';
+  public uploadedDocDisplayName: string = '';
+
   availableVariables: string[] = ['Name', 'ApplicationNo', 'Status', 'Date', 'ReferenceID', 'Email', 'Doc'];
 
   constructor(
@@ -39,7 +45,9 @@ export class UpdatedEmailTemplateComponent implements OnInit {
     private loaderService: LoaderService,
     private modalService: NgbModal,
     private Swal2: SweetAlert2,
-    private SMSMailService: SMSMailService
+    private SMSMailService: SMSMailService,
+    private commonMasterService: CommonFunctionService,
+    public appsettingConfig: AppsettingService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -363,4 +371,90 @@ async sendTemplateEmail(item: any, isTest: boolean = false) {
   testEmail(): void {
     console.log('Sending Test Payload:', this.templateForm.getRawValue());
   }
+
+
+  // 1. File Selection Handler
+  onAttachmentSelected(event: any): void {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastr.error('Select only JPEG, JPG, PNG, or PDF file');
+      event.target.value = null;
+      return;
+    }
+
+    if (file.size > 2000000) {
+      this.toastr.error('Select file less than 2MB');
+      event.target.value = null;
+      return;
+    }
+
+    this.selectedAttachmentFile = file;
+    this.uploadStatus = 'idle';
+  }
+
+  // 2. Upload to Server & Bind Path to templateForm
+  async uploadAttachmentToServer(type: string): Promise<void> {
+    if (!this.selectedAttachmentFile) {
+      this.toastr.warning('Please select a file first.');
+      return;
+    }
+
+    try {
+      this.uploadStatus = 'uploading';
+      this.loaderService.requestStarted();
+      debugger
+      const res = await this.commonMasterService.UploadDocument(this.selectedAttachmentFile);
+      const data = typeof res === 'string' ? JSON.parse(res) : res;
+
+      if (data['State'] === EnumStatus.Success) {
+        this.uploadedDocDisplayName = data['Data'][0]['Dis_FileName'];
+        const serverFileName = data['Data'][0]['FileName'];
+
+        // Automatically patch the server path into your reactive form control
+        this.templateForm.patchValue({
+          EmailAttachment: serverFileName
+        });
+
+        this.uploadStatus = 'completed';
+        this.toastr.success(data['Message'] || 'Attachment uploaded successfully');
+      } else if (data['State'] === EnumStatus.Error) {
+        this.uploadStatus = 'idle';
+        this.toastr.error(data['ErrorMessage']);
+      } else if (data['State'] === EnumStatus.Warning) {
+        this.uploadStatus = 'idle';
+        this.toastr.warning(data['ErrorMessage']);
+      }
+    } catch (error) {
+      this.uploadStatus = 'idle';
+      console.error(error);
+      this.toastr.error('Failed to upload attachment.');
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+  // 3. Clear & Reset Attachment State
+  cancelAttachmentUpload(): void {
+    this.selectedAttachmentFile = null;
+    this.uploadStatus = 'idle';
+    this.uploadedDocDisplayName = '';
+    this.templateForm.patchValue({ EmailAttachment: '' });
+
+    const fileInput = document.getElementById('attachmentFileInput') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  }
+
+  // 4. File Type Check for Image Previews
+  isImageFile(filename: string): boolean {
+    if (!filename) return false;
+    const ext = filename.split('.').pop()?.toLowerCase() || '';
+    return ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext);
+  }
+
+
 }
