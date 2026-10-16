@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../../Common/appsetting.service';
@@ -63,6 +63,7 @@ export class CollegeBudgetListComponent {
   public TotalUtilizedBudget: number = 0;
   public CommonFile: any;
   public CommonFileName: any;
+    MenuAllowedRoleList: any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -80,6 +81,7 @@ export class CollegeBudgetListComponent {
     public ReportServices: ReportService,
     private formBuilder: FormBuilder,
     private Swal2: SweetAlert2,
+    private router: Router
   ) {
     // Get user data from localStorage
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -92,7 +94,7 @@ export class CollegeBudgetListComponent {
       Remark: ['', Validators.required],
 
     })
-
+    await this.GetMenuPermission();
     await this.GetList();
   }
 
@@ -515,5 +517,29 @@ export class CollegeBudgetListComponent {
   getRemainingAmount(): number {
     const totalUtilized = this.BudgetUtilizationsList?.reduce((sum, item) => sum + (item.UtilizationAmount || 0),0) || 0;
     return (this.ColegeAmount || 0) - totalUtilized;
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

@@ -12,6 +12,7 @@ import { ITIInventoryService } from '../../../../Services/ITI/ITIInventory/iti-i
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-handover-inventory-items-iti',
@@ -30,6 +31,8 @@ export class HandoverInventoryItemsITIComponent {
   public HandoverItemsList: any = [];
   public TradeDDLList: any = [];
 
+  public MenuAllowedRoleList: any = [];
+
   public Table_SearchText: string = '';
 
   constructor(
@@ -43,10 +46,14 @@ export class HandoverInventoryItemsITIComponent {
     private documentDetailsService: DocumentDetailsService,
     public appsettingConfig: AppsettingService,
     private Swal2: SweetAlert2,
+    private commonFunctionService: CommonFunctionService
+
   ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+    await this.GetMenuPermission();
     await this.GetTradeDDL();
     await this.GetStaffDDL_ToHandover();
   }
@@ -201,5 +208,27 @@ export class HandoverInventoryItemsITIComponent {
     catch (Ex) {
       console.log(Ex);
     }
+  }
+
+  async GetMenuPermission() {
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

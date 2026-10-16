@@ -29,6 +29,7 @@ import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
 import { toString } from '@ng-bootstrap/ng-bootstrap/util/util';
 import { CampusPostMaster_Action } from '../../Models/CampusPostDataModel';
 import { PreExamStudentExaminationService } from '../../Services/PreExamStudent/pre-exam-student-examination.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -449,6 +450,9 @@ export class StudentEnrollmentComponent {
 
   async btn_SearchClick() {
     this.isSubmitted = true;
+    if(this.request.MobileNo.length < 10 && this.request.MobileNo.length > 0){
+      this.toastr.error("Mobile number should be 10 digits.");
+    }
     if (this.SearchStudentDataFormGroup.invalid) {
       return
     }
@@ -483,7 +487,13 @@ export class StudentEnrollmentComponent {
             this.AllInTableSelect = false;
             this.PreExamStudentData = data['Data'];
             console.log(this.PreExamStudentData, "lisssstDataaa")
-
+            // Show popup when no records are found
+            Swal.fire({
+              icon: 'info',
+              title: 'No Record Found',
+              text: 'No student records found.',
+              confirmButtonText: 'OK'
+            });
             //table feature load
             this.loadInTable();
             //end table feature load
@@ -2164,4 +2174,33 @@ export class StudentEnrollmentComponent {
       console.log(ex);
     }
   }
+
+  validateApplicationNo(event: Event): void {
+  const input = event.target as HTMLInputElement;
+
+  // Allow only letters and numbers
+  input.value = input.value.replace(/[^a-zA-Z0-9]/g, '');
+
+  this.request.ApplicationNo = input.value;
+}
+
+
+  validateNumber(event: KeyboardEvent) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
+    if (!/^[0-9]$/.test(event.key) && !allowedKeys.includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  
+validateName(event: Event): void {
+  const input = event.target as HTMLInputElement;
+
+  // Allow only letters and spaces
+  input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
+
+  this.request.Name = input.value;
+}
+
+
 }

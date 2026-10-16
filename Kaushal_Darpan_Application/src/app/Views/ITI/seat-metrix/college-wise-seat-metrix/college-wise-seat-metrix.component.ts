@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
 import { ToastrService } from 'ngx-toastr';
@@ -53,6 +53,8 @@ export class CollegeWiseSeatMetrixComponent {
   public TradeNamePop: string = '';
   public TradeSchemeNamePop: string = '';
 
+  public MenuAllowedRoleList: any = [];
+
   public OTP: string = '';
   public GeneratedOTP: string = '';
   public MobileNo: string = '';
@@ -104,6 +106,7 @@ export class CollegeWiseSeatMetrixComponent {
     private modalService: NgbModal,
     private sMSMailService: SMSMailService,
     private seatMatrixService: SeatMatrixService,
+    private Routers: Router
   ) { }
 
 
@@ -122,6 +125,9 @@ export class CollegeWiseSeatMetrixComponent {
     this.searchRequest.FinancialYearID = this.SSOLoginDataModel.FinancialYearID;
     console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
 
+
+
+    await this.GetMenuPermission();
     await this.GetdateConfigSetting();
     this.searchRequest.SeatStatus = 2;
     await this.GetTradeAndColleges(1)
@@ -1452,5 +1458,27 @@ export class CollegeWiseSeatMetrixComponent {
     })
   }
 
+  async GetMenuPermission()
+  {
+    const baseRoute = this.Routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.SSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
 }

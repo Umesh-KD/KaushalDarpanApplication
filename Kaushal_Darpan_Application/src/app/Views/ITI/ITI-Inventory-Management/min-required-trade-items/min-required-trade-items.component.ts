@@ -40,7 +40,11 @@ export class MinRequiredTradeItemsComponent {
   public EquipmentsDDLList: any = [];
   public TradeDDLList: any = [];
   public CollegeDDLList: any = [];
-  public ItemtypeList:any[]=[];
+  public ItemtypeList: any[] = [];
+
+  public MenuAllowedRoleList: any = [];
+
+
   EnumRole = EnumRole;
   public request = new ItemsDataModels();
   constructor(
@@ -56,10 +60,14 @@ export class MinRequiredTradeItemsComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+
+
     this.UserID = this.sSOLoginDataModel.UserID;    
     console.log('Role:'+this.sSOLoginDataModel.RoleID)
     this.searchReq.CollegeId = this.sSOLoginDataModel.InstituteID;
     // await this.GetEquipmentDDL();
+    await this.GetMenuPermission();
     await this.GetTradeDDL();
     await this.GetCollegeDDL();
     await this.GetMinRequiredItem_ITI_INV();
@@ -242,6 +250,29 @@ export class MinRequiredTradeItemsComponent {
 
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     XLSX.writeFile(wb, `MinRequiredItemsList_${timestamp}.xlsx`);
+  }
+
+
+  async GetMenuPermission() {
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 }

@@ -45,7 +45,8 @@ export class InternalSlidingComponent implements OnInit {
   public InternalSlidingList: any = [];
   public InternalSlidingUnitList: any = [];
   public ShowInternalSlidingList: StudentSlidingdataModel[] = [];
-  public sSOLoginDataModel = new SSOLoginDataModel();;
+  public sSOLoginDataModel = new SSOLoginDataModel();MenuAllowedRoleList: any;
+;
   public requestSeats = new ITISeatsDistributionsDataModels();
   public IsPublishSeatMetrix: boolean = false;
   public DateConfigSetting: any = [];
@@ -74,6 +75,7 @@ export class InternalSlidingComponent implements OnInit {
   async ngOnInit() {
     this.searchRequest.TradeLevel = parseInt(this.route.snapshot.paramMap.get('id'));
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     if ((this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || EnumRole.Principal_NCVT)) {
       await this.CheckProfileStatus();
       if (this.isprofile == 0) {
@@ -645,4 +647,27 @@ export class InternalSlidingComponent implements OnInit {
     }
   }
 
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 }

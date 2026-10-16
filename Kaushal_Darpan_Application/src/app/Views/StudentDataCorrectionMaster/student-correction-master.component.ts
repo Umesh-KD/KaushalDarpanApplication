@@ -8,7 +8,7 @@ import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompan
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EnumRole } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { ITIStudentEnrollmentService } from '../../Services/ITI/ITIstudentenrollment/itistudent-enrollment.service';
 import { ItiDataMasterService } from '../../Services/ITI/ITIDataMaster/iti-datamaster.service';
 import { ITIStudentCorrectionMasterSearchModel } from '../../Models/StudentMasterModels';
@@ -39,6 +39,7 @@ export class StudentCorrectionMasterComponent implements OnInit {
   TotalPages: any = 0;
   sortColumn: string = "";
   sortOrder: string = "";
+    MenuAllowedRoleList: any;
 
   constructor(
     private commonMasterService: CommonFunctionService, 
@@ -52,7 +53,8 @@ export class StudentCorrectionMasterComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-   
+    await this.GetMenuPermission();
+
    // this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
     await this.GetStudentCorrectionListData(1);
   }
@@ -259,7 +261,29 @@ export class StudentCorrectionMasterComponent implements OnInit {
     }
   }
 
+  async GetMenuPermission() {
 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
 
   // sortData(sortColumn: string) {

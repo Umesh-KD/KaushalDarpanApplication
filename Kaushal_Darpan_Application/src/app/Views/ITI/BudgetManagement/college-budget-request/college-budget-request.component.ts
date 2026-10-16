@@ -28,6 +28,7 @@ export class CollegeBudgetRequestComponent implements OnInit {
   public isLoading: boolean = false;
   public file!: File;
   public Uploadfile: string = '';
+    MenuAllowedRoleList: any;
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -38,7 +39,7 @@ export class CollegeBudgetRequestComponent implements OnInit {
     private appsettingConfig: AppsettingService,
        ) { }
 
-  ngOnInit() {
+ async ngOnInit() {
     // ✅ Initialize the form BEFORE it's used
     this.BudgetRequestForm = this.formBuilder.group({
       Amount: ['', Validators.required],
@@ -49,6 +50,7 @@ export class CollegeBudgetRequestComponent implements OnInit {
     const storedData = localStorage.getItem('SSOLoginUser');
     if (storedData) {
       this.ssoLoginDataModel = JSON.parse(storedData);
+      await this.GetMenuPermission();
     }
   }
 
@@ -188,5 +190,29 @@ export class CollegeBudgetRequestComponent implements OnInit {
     if (parts.length > 2) {
       input.value = parts[0] + '.' + parts.slice(1).join('');
     }
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.ssoLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

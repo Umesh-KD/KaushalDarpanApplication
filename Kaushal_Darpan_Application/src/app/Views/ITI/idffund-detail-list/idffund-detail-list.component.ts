@@ -8,6 +8,7 @@ import { IDfFundSearchDetailsModel } from '../../../Models/ITI/IDfFundDetailsMod
 import { Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import { Injectable } from '@angular/core';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 
 @Injectable({
   providedIn: 'root'
@@ -36,11 +37,15 @@ export class IDFFundDetailListComponent implements OnInit {
   public sSOLoginDataModel = new SSOLoginDataModel();
   searchRequest = new IDfFundSearchDetailsModel();
   FundDetailsList: any = [];
+
+
+  public MenuAllowedRoleList: any = [];
   constructor(private _ITIIIPManageService: ITIIIPManageService,
     private loaderService: LoaderService,
     private toastr: ToastrService,
     private encryptionService: EncryptionService,
-    private router: Router
+    private router: Router,
+    private commonFunctionService: CommonFunctionService
   ) {
 
   }
@@ -48,6 +53,8 @@ export class IDFFundDetailListComponent implements OnInit {
   async ngOnInit()
   {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+    this.GetMenuPermission();
     this.GetAllData();
   }
 
@@ -85,6 +92,27 @@ export class IDFFundDetailListComponent implements OnInit {
     this.router.navigate(['/addidffund'], { queryParams: { FundID: encryptedId } });
   }
 
+  async GetMenuPermission() {
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
 
 }

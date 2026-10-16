@@ -99,6 +99,7 @@ export class UserRequestListComponent implements OnInit {
   public endInTableIndex: number = 0;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
+    MenuAllowedRoleList: any;
 
   constructor(
     private commonMasterService: CommonFunctionService, 
@@ -143,6 +144,7 @@ export class UserRequestListComponent implements OnInit {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.GetRoleID = this.sSOLoginDataModel.RoleID;    
 
     this.QueryReqFormGroup = this.formBuilder.group({
@@ -1167,5 +1169,29 @@ export class UserRequestListComponent implements OnInit {
     doc.save('UserRequests.pdf');
   }
 
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
 }

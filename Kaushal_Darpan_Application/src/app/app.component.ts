@@ -1,7 +1,11 @@
-import { Component, HostListener, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReferrerService } from './Services/referrer.service';
 import { UpdateService } from './Services/update.service';
+import { Subscription } from 'rxjs';
+import { enableDevToolsRestriction } from './Common/devtools-restriction';
+import { DevelopertoolnotopenService } from './Services/security/developertoolnotopen.service';
+
 
 @Component({
     selector: 'app-root',
@@ -10,13 +14,19 @@ import { UpdateService } from './Services/update.service';
     encapsulation: ViewEncapsulation.None,
     standalone: false
 })
-export class AppComponent {
+
+export class AppComponent implements OnInit, OnDestroy {
   title = 'Kaushal_Darpan';
   private previousRoute: string = '';            // internal "referrer"
   private currentRoute: string = '';
 
+  private configSubscription?: Subscription;
 
-  constructor(private router: Router, private referrerService: ReferrerService, private updateService: UpdateService) {
+
+  constructor(private router: Router,
+    private referrerService: ReferrerService,
+    private updateService: UpdateService,
+    private developertoolnotopenService: DevelopertoolnotopenService) {
     this.currentRoute = this.router.url;
     this.referrerService.setCurrentUrl(this.router.url);
     this.router.events.subscribe(event => {
@@ -67,5 +77,32 @@ export class AppComponent {
   //  }
   //}
 //});
-//  }
+  //  }
+
+  ngOnInit(): void {
+    //debugger;
+    this.configSubscription =
+      this.developertoolnotopenService.getDevToolsConfig().subscribe({
+        next: (config) => {
+          if (!config.enableDevTools) {
+            // if ip whitelisted, do not enable the restriction script
+            enableDevToolsRestriction();
+          }
+        },
+        error: (error) => {
+          // Fail closed for this deterrent: if the configuration
+          // cannot be loaded, enable the restriction script.
+          console.error(
+            'Unable to retrieve security configuration.',
+            error
+          );
+          // if failed to load config, enable the restriction script
+          enableDevToolsRestriction();
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.configSubscription?.unsubscribe();
+  }
 }

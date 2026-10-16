@@ -46,6 +46,7 @@ export class DirectAllotmentListComponent {
   public isAdmission:number=0
   public DateConfigSetting: any = [];
   AllotmentKey: string = "";
+    MenuAllowedRoleList: any;
   constructor(
     private commonMasterService: CommonFunctionService,
     private ReportService: ReportService,
@@ -69,6 +70,7 @@ export class DirectAllotmentListComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     if ((this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || EnumRole.Principal_NCVT)) {
     await  this.CheckProfileStatus();
       if (this.isprofile == 0) {
@@ -314,7 +316,29 @@ export class DirectAllotmentListComponent {
     ]);
   }
 
+  async GetMenuPermission() {
 
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
 
 

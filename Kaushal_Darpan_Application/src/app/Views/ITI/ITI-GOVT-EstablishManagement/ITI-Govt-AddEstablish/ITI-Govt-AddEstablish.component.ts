@@ -90,6 +90,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   public DesignationMasterDDLList: any = [];
   public _EnumEMProfileStatus = EnumEMProfileStatus;
   public tradeSearchRequest = new ItiTradeSearchModel()
+    MenuAllowedRoleList: any;
   constructor(private commonMasterService: CommonFunctionService, private Staffservice: ITIGovtEMStaffMaster, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
     private ITICollegeTradeService: ItiSeatIntakeService
   ) {
@@ -100,6 +101,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.GetRoleID = this.sSOLoginDataModel.RoleID;
 
     this.StaffMasterFormGroup = this.formBuilder.group({
@@ -1931,4 +1933,28 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     this.formData.DesignationID = selectedValue;
   }
 
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 }

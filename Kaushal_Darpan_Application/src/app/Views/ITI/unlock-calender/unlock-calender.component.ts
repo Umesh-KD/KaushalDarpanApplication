@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ItiCollegesSearchModel, ItiTradeSearchModel } from '../../../Models/CommonMasterDataModel';
 import { BranchStreamTypeWiseSearchModel } from '../../../Models/BTER/BTERSeatsDistributions';
 import { PublicInfoDataModel } from '../../../Models/PublicInfoDataModel';
-import { PublicAddType } from '../../../Common/GlobalConstants';
+import { EnumStatus, PublicAddType } from '../../../Common/GlobalConstants';
 import { CalendarEventModel, CalendarEventModelITI } from '../../../Models/StaffMasterDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { ItiSeatIntakeService } from '../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
@@ -66,6 +66,10 @@ export class UnlockCalenderComponent {
   public eventsList: CalendarEventModelITI[] = [];
   public eventsSearch = new CalendarEventModelITI();
 
+
+
+  public MenuAllowedRoleList: any = [];
+
   constructor(
     private commonFunctionService: CommonFunctionService,
     private formBuilder: FormBuilder,
@@ -85,6 +89,8 @@ export class UnlockCalenderComponent {
 
   async ngOnInit() {
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+    await this.GetMenuPermission();
     await this.initializeToday();
     let events = await this.generateMonthDays(this.year, this.month);
     this.events = events;
@@ -515,5 +521,28 @@ export class UnlockCalenderComponent {
     const past7Only = new Date(past7Days.getFullYear(), past7Days.getMonth(), past7Days.getDate());
 
     return checkDate >= past7Only && checkDate <= todayOnly;
+  }
+
+
+  async GetMenuPermission() {
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.SSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

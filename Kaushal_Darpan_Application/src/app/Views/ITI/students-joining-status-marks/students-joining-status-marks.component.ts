@@ -68,6 +68,7 @@ export class StudentsJoiningStatusMarksComponent {
   AllotmentKey: string = "";
   public isprofile: number = 0;
   public shiftUnitRequest = new SearchSlidingModel()
+    MenuAllowedRoleList: any;
 
   constructor(
     private fb: FormBuilder,
@@ -99,6 +100,7 @@ export class StudentsJoiningStatusMarksComponent {
       txtReportingRemark: ['']
     });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     if ((this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || EnumRole.Principal_NCVT)) {
       await this.CheckProfileStatus();
       if (this.isprofile == 0) {
@@ -1014,4 +1016,27 @@ export class StudentsJoiningStatusMarksComponent {
     }
   }
 
+  async GetMenuPermission() {
+
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 }
