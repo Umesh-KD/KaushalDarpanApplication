@@ -19,3 +19,41 @@
   visibility: visible;
   position: relative;
 }
+
+
+.an-btn {
+  --bg: #dbeafe;      /* initial background */
+  --border: #93c5fd;  /* border */
+  --text: #1e3a8a;    /* text + icon color */
+  --solid: #2563eb;   /* hover background */
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.an-btn i { color: inherit; font-size: 20px; }
+
+.an-btn:hover {
+  background-color: var(--solid);
+  border-color: var(--solid);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+.an-blue   { --bg:#dbeafe; --border:#93c5fd; --text:#1e3a8a; --solid:#2563eb; }
+.an-green  { --bg:#d1fae5; --border:#6ee7b7; --text:#065f46; --solid:#059669; }
+.an-violet { --bg:#ede9fe; --border:#c4b5fd; --text:#4c1d95; --solid:#7c3aed; }
+.an-amber  { --bg:#fef3c7; --border:#fcd34d; --text:#78350f; --solid:#d97706; }
+.an-rose   { --bg:#ffe4e6; --border:#fda4af; --text:#881337; --solid:#e11d48; }

@@ -65,6 +65,7 @@ import { PostPlanningDashboardITIModule } from '../ITI/post-planning-dashboard-i
 import { AnalyticDashboardModule } from '../analytic-dashboard/analytic-dashboard.module';
 import { AdmissionDashboardModule } from '../admission-dashboard/admission-dashboard.module';
 
+import { CommitteeInchargeDashboardModule } from '../../Views/committee-incharge-dashboard/committee-incharge-dashboard.module';
 /// work here 
 
 
@@ -129,6 +130,8 @@ import { AdmissionDashboardModule } from '../admission-dashboard/admission-dashb
     AnalyticDashboardModule,
     AdmissionDashboardModule
 
+    PostPlanningDashboardITIModule,
+    CommitteeInchargeDashboardModule
     
     
   ]
