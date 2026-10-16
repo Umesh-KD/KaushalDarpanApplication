@@ -9,6 +9,8 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { EnumStatus } from '../../../../Common/GlobalConstants';
 import { PayLevelMasterDataModel } from '../../../../Models/BTER/PayLevelMasterDataModel';
+import { Router } from '@angular/router';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-pay-level-master',
@@ -23,6 +25,7 @@ export class PayLevelMasterComponent {
   public request = new PayLevelMasterDataModel();
 
   public PayLevelMasterData: any = [];
+  public MenuAllowedRoleList: any = [];
 
   modalReference: NgbModalRef | undefined;
   public isSubmitted: boolean = false
@@ -34,7 +37,9 @@ export class PayLevelMasterComponent {
     private loaderService: LoaderService,
     private toastr: ToastrService,
     public appsettingConfig: AppsettingService,
-    private payLevelMasterService: PayLevelMasterService
+    private payLevelMasterService: PayLevelMasterService,
+    private routers: Router,
+    private commonMasterService: CommonFunctionService,
   ){}
 
   async ngOnInit() {
@@ -43,10 +48,35 @@ export class PayLevelMasterComponent {
     })
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     await this.GetPayLevelMasterData();
   }
 
   get _PayLevelMasterForm() { return this.PayLevelMasterForm.controls; }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
 
   async ViewandUpdate(content: any, id : number = 0) {
     if(id > 0) {
