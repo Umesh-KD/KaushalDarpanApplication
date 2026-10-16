@@ -170,8 +170,6 @@ export class BterStudentAttendenceReportComponent {
   }
   get formTable() { return this.TableForm.controls; }
 
-
-
   DayListBind() {
 
     this.DayList = [
