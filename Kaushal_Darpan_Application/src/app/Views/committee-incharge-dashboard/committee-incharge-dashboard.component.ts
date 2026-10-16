@@ -28,8 +28,11 @@ export class CommitteeInchargeDashboardComponent {
   public viewAdminDashboardListOther: StudentExamDetails[] = [];
   public viewAdminDashboardListCitizenSuggestion: StudentExamDetails[] = [];
   public RevaluationTilesList: StudentExamDetails[] = [];
+  public marqueList: any[] = [];
   public Table_SearchText: string = "";
   public searchRequest = new AdminDashboardSearchModel();
+
+  marqueeMessage: string = '';
   constructor(
     private AdminDashDataService: AdminDashboardDataService,
     private loaderService: LoaderService,
@@ -66,6 +69,10 @@ export class CommitteeInchargeDashboardComponent {
           data = JSON.parse(JSON.stringify(data));
 
           this.viewAdminDashboardList = data['Data'];
+          this.viewAdminDashboardList= this.viewAdminDashboardList.filter(s => s.ListType === 'tile');
+          //this.marqueeMessage = data['Data'][3]?.TotalText;
+          this.marqueList = data['Data'].filter((s: any) => s.ListType === 'marque')
+          this.marqueeMessage = this.marqueList[0].TotalText;
 
           console.log(this.viewAdminDashboardList, "viewAdminDashboardList")
 
