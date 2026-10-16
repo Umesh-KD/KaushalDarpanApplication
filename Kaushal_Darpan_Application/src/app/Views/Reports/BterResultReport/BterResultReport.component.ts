@@ -20,6 +20,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { empty } from 'rxjs';
 
+
 @Component({
   selector: 'app-BterResultReport',
   standalone: false,
@@ -59,6 +60,7 @@ export class BterResultReportComponent implements OnInit {
   ssoLoginUser = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
+    MenuAllowedRoleList: any;
   constructor(
     private fb: FormBuilder,
     private commonMasterService: CommonFunctionService,
@@ -66,7 +68,7 @@ export class BterResultReportComponent implements OnInit {
     private loaderService: LoaderService,
     private routers: ActivatedRoute,
     private modalService: NgbModal,
-    private Swal2: SweetAlert2,
+    private Swal2: SweetAlert2, private router: Router,
     private reportService: ReportService,
   ) {
 
@@ -123,7 +125,7 @@ export class BterResultReportComponent implements OnInit {
     });
 
    
-
+    await this.GetMenuPermission();
     await this.loadReportType();
 
     await this.commonMasterService.SemesterMaster().then((data: any) => {
@@ -406,5 +408,29 @@ export class BterResultReportComponent implements OnInit {
 
     const fileName = `Check_Merit_List_${todayDate}.xlsx`;
     XLSX.writeFile(wb, fileName);
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

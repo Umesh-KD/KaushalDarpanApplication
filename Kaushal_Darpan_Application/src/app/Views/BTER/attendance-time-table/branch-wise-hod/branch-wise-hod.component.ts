@@ -69,7 +69,7 @@ export class BranchWiseHodComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
+    
     this.searchRequestGuestStaffProfileSearchModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequestGuestStaffProfileSearchModel.SSOID = this.sSOLoginDataModel.SSOID;
     this.searchRequestGuestStaffProfileSearchModel.RoleID = this.sSOLoginDataModel.RoleID;
@@ -85,9 +85,9 @@ export class BranchWiseHodComponent {
         MailPersonal: ['', []],
         MobileNo: ['', []]
       });
-
+    await this.GetMenuPermission();
     await this.GetBranchHODApplyList();
-
+    
     if (this.ApplyList.length > 0) {
       this.createSemesterStreamMap();
     }

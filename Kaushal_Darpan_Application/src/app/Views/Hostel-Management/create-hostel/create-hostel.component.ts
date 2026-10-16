@@ -72,7 +72,7 @@ export class CreateHostelComponent   {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
+    
 
     this.groupForm = this.fb.group({
       txtHostelName: ['', Validators.required],
@@ -82,6 +82,7 @@ export class CreateHostelComponent   {
       //txtPhoneNumber: [{ value: '' }, Validators.required],
       txtAddress: ['', Validators.required],
     });
+    await this.GetMenuPermission();
     await this.getHostelTypeList(); 
     await this.GetAllHostelList(); 
   }
