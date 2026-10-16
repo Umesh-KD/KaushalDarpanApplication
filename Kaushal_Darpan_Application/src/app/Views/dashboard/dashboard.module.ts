@@ -128,7 +128,7 @@ import { CommitteeInchargeDashboardModule } from '../../Views/committee-incharge
     InstructorDashboardModule,
     PostPlanningDashboardITIModule,
     AnalyticDashboardModule,
-    AdmissionDashboardModule
+    AdmissionDashboardModule,
 
     PostPlanningDashboardITIModule,
     CommitteeInchargeDashboardModule
