@@ -7,9 +7,10 @@
 
   <select aria-label="Dashboard role"
           [(ngModel)]="selectedRole"
+          [disabled]="sSOLoginDataModel.RoleID!=17"
           (ngModelChange)="onRoleChange()">
-    <option value="university">University Admin</option>
-    <option value="college">College Admin / Principal</option>
+    <option value="university">Admin</option>
+    <option value="college">Principal</option>
   </select>
 </header>
 
@@ -17,76 +18,61 @@
   <div class="filters">
     <h3 class="section-title">Performance Overview</h3>
 
-    <div class="filter-control">
+    <div *ngIf="selectedRole=='college'" class="filter-control">
       <label for="collegeFilter">College:</label>
 
       <select id="collegeFilter"
               [(ngModel)]="selectedCollege"
               (ngModelChange)="onCollegeChange()"
-              [disabled]="selectedRole === 'college'">
-        <option value="all">All Colleges</option>
-        <option value="engineering">Engineering College</option>
-        <option value="medical">Medical College</option>
-        <option value="arts">Arts &amp; Science College</option>
+            [disabled]="sSOLoginDataModel.RoleID!=17">
+        <option [ngValue]="0">All Colleges</option>
+        <option *ngFor="let item of InstituteMasterList" [ngValue]="item.InstituteID">
+          {{ item.InstituteName }}
+        </option>
       </select>
     </div>
   </div>
 
   <!-- Dashboard KPI cards -->
   <section class="kpis">
-    <article class="card">
-      <div class="kpi-label">Total Bed Capacity</div>
-      <div class="kpi-value blue">
-        {{ dashboard.capacity | number }}
-      </div>
-      <div class="kpi-note">Approved operational beds</div>
-    </article>
+    <article class="card" *ngFor="let item of dashboardData">
+      <div class="kpi-label">{{ item.TotalText }}</div>
 
-    <article class="card">
-      <div class="kpi-label">Occupied Beds</div>
-      <div class="kpi-value green">
-        {{ dashboard.occupied | number }}
+      <div class="kpi-value" [ngClass]="kpiColor[item.ListType]">
+        {{ item.TotalCount | number }}
       </div>
-      <div class="kpi-note">{{ occupancyPercentage }}% occupancy</div>
-    </article>
 
-    <article class="card">
-      <div class="kpi-label">Fee Collection</div>
-      <div class="kpi-value">{{ dashboard.feeRate }}%</div>
-      <div class="kpi-note">Of fees due for the period</div>
-    </article>
-
-    <article class="card">
-      <div class="kpi-label">Open Complaints</div>
-      <div class="kpi-value orange">
-        {{ dashboard.openComplaints | number }}
+      <div class="kpi-note">
+        <ng-container *ngIf="item.ListType === 'TotalBedOccupied'; else normalNote">
+          {{ occupancyPercentage }}% of capacity occupied
+        </ng-container>
+        <ng-template #normalNote>{{ kpiNote[item.ListType] }}</ng-template>
       </div>
-      <div class="kpi-note">Awaiting resolution</div>
     </article>
   </section>
 
   <!-- Charts -->
   <section class="charts">
     <article class="card chart-card">
-      <h3>Bed Occupancy</h3>
-      <p>Occupied beds versus vacant beds</p>
+      <h3>Student Occupancy</h3>
+      <p>Students allotted versus vacant seats</p>
       <div class="chart-wrap">
         <canvas #occupancyCanvas></canvas>
       </div>
     </article>
 
     <article class="card chart-card">
-      <h3>Fee Collection Trend</h3>
-      <p>Monthly fees billed and collected (₹ lakh)</p>
+      <h3>Hostel Occupancy</h3>
+      <p>Total seats versus students occupied, by hostel</p>
       <div class="chart-wrap">
         <canvas #feeCanvas></canvas>
       </div>
     </article>
 
     <article class="card chart-card">
-      <h3>Occupancy by College</h3>
-      <p>Percentage of operational beds occupied</p>
-      <div class="chart-wrap">
+      <h3>Student Application Status</h3>
+      <p>Students by hostel application stage</p>
+      <div class="chart-wrap" [style.height.px]="statusChartHeight">
         <canvas #collegeCanvas></canvas>
       </div>
     </article>
@@ -102,45 +88,35 @@
 
   <!-- Performance table -->
   <section class="card performance-card">
-    <h3 class="section-title">Hostel Performance Summary</h3>
+    <h3 class="section-title">Hostel College Summary</h3>
 
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>College / Hostel</th>
+            <th>College</th>
             <th>Capacity</th>
             <th>Occupied</th>
             <th>Occupancy</th>
-            <th>Fee Collection</th>
-            <th>Open Complaints</th>
-            <th>Performance</th>
+     <th>Performance</th>
+           
+
           </tr>
         </thead>
 
         <tbody>
-          <tr *ngFor="
-              let college of tableRows;
-              trackBy: trackByCollege
-            ">
-            <td>{{ college.name }}</td>
-            <td>{{ college.capacity | number }}</td>
-            <td>{{ college.occupied | number }}</td>
-            <td>{{ college.occupancy }}%</td>
-            <td>{{ college.fee }}%</td>
-            <td>{{ college.complaints }}</td>
+          <tr *ngFor="let row of tableRows; trackBy: trackByCollege">
+            <td>{{ row.name }}</td>
+            <td>{{ row.capacity | number }}</td>
+            <td>{{ row.occupied | number }}</td>
+            <td>{{ row.occupancy }}%</td>
             <td>
-              <span class="status"
-                    [ngClass]="college.statusClass">
-                {{ college.status }}
-              </span>
+              <span class="status" [ngClass]="row.statusClass">{{ row.status }}</span>
             </td>
           </tr>
 
           <tr *ngIf="tableRows.length === 0">
-            <td colspan="7" class="empty-state">
-              No hostel records available.
-            </td>
+            <td colspan="5" class="empty-state">No hostel records available.</td>
           </tr>
         </tbody>
       </table>
