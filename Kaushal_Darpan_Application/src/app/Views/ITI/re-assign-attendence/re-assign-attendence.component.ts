@@ -59,8 +59,9 @@ export class ReAssignAttendenceComponent {
   isAllSelected: boolean = false;
   centerSearchText = '';
   selectedCenters: any[] = [];  
-  filteredCenterList: any[] = [];  
-    MenuAllowedRoleList: any;
+  filteredCenterList: any[] = [];
+
+  public MenuAllowedRoleList: any = [];
   constructor(
     private attendanceServiceService: AttendanceServiceService,
     private fb: FormBuilder,
@@ -71,7 +72,9 @@ export class ReAssignAttendenceComponent {
     private router: Router,
     public appsettingConfig: AppsettingService) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.getMasterData();
+
+     this.GetMenuPermission();
+     this.getMasterData();
   }
 
  async ngOnInit() {
@@ -92,7 +95,7 @@ export class ReAssignAttendenceComponent {
       AttendanceEndDate:[''],
       AttendanceStartDate:[''],
     });
-    await this.GetMenuPermission();
+    
     this.GetAttendanceTimeTable();
     this.GetStaff_InstituteWise();
   }
@@ -754,6 +757,7 @@ export class ReAssignAttendenceComponent {
       x.Name.toLowerCase().includes(search)
     );
   }
+
 
   async GetMenuPermission() {
 

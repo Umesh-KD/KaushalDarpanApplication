@@ -12,7 +12,7 @@ import { BTERSeatsDistributionsService } from '../../../Services/BTER/Seats-Dist
 import { BTERCollegeBranchModel, BTERSeatsDistributionsDataModels } from '../../../Models/BTER/BTERSeatsDistributions';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { PublicInfoDataModel } from '../../../Models/PublicInfoDataModel';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppsettingService } from '../../../Common/appsetting.service';
 
 @Component({
@@ -55,9 +55,7 @@ export class ListPublicInfoComponent implements OnInit {
 
 
   public DateConfigSetting: any = [];
-
-
-
+  public MenuAllowedRoleList: any = [];
   public PublicInfoList: any = []
 
   //table feature default
@@ -82,7 +80,7 @@ export class ListPublicInfoComponent implements OnInit {
     private commonMasterService: CommonFunctionService,
     private routers: ActivatedRoute,
     public appsettingConfig: AppsettingService,  
-
+    public Router: Router,
   ) { }
 
   async ngOnInit() {
@@ -96,6 +94,7 @@ export class ListPublicInfoComponent implements OnInit {
       });
 
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.request.CourseTypeId = this.SSOLoginDataModel.Eng_NonEng
     this.request.CreatedBy = this.SSOLoginDataModel.UserID;
     this.request.IPAddress = "";
@@ -104,6 +103,29 @@ export class ListPublicInfoComponent implements OnInit {
     this.onSearch(1);
   }
 
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.SSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
 
   async onSearch(i: any) {
 

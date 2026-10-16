@@ -156,7 +156,7 @@ export class UploadAnnexture32ListComponent {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
-    this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+    this.searchRequest.InstituteID = this.searchRequest.InstituteID > 0 ? this.searchRequest.InstituteID : this.sSOLoginDataModel.InstituteID;
 
     try {
       await this.ScholarshipService.GetUploadAnnexture32(this.searchRequest).then((data: any) => {

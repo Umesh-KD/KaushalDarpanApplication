@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserMasterService } from '../../../../Services/UserMaster/user-master.service';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { AppsettingService } from '../../../../Common/appsetting.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReportService } from '../../../../Services/Report/report.service';
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
@@ -56,6 +56,8 @@ export class StudentExaminationITIComponent
   public StudentProfileDetailsData: any = [];
   public Student_QualificationDetailsData: any = [];
   public documentDetails: DocumentDetailsModel[] = [];
+
+  public MenuAllowedRoleList: any = [];
 
   public settingsMultiselect: object = {};
   public commonSubjectDetails: CommonSubjectDetailsMasterModel[] = [];
@@ -138,6 +140,8 @@ export class StudentExaminationITIComponent
 
   public AttendancePercentage: string = '';
   public PendingCollegeFeeStatus: number = 0
+
+
   //closeResult: string | undefined;
   //modalReference: NgbModalRef | undefined;
   @ViewChild('modal_StudentStatusHistory') modal_StudentStatusHistory: any; item: any;
@@ -155,7 +159,9 @@ export class StudentExaminationITIComponent
     private reportService: ReportService,
     private http: HttpClient,
     private studentService: ApplicationStatusService,
-    private documentDetailsService: DocumentDetailsService
+    private documentDetailsService: DocumentDetailsService,
+    private Routers: Router
+   
   ) {
   }
 
@@ -2102,4 +2108,25 @@ export class StudentExaminationITIComponent
     this.requestUpdateEnrollmentNo = new ITIExamination_UpdateEnrollmentNoModel()
   }
 
+    async GetMenuPermission() {
+      const baseRoute = this.Routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 }

@@ -13,7 +13,7 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
-import { EnumConfigurationType, EnumDepartment, EnumRole } from '../../../../Common/GlobalConstants';
+import { EnumConfigurationType, EnumDepartment, EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import { ItiApplicationFormService } from '../../../../Services/ItiApplicationForm/iti-application-form.service';
 import { ItiApplicationSearchmodel } from '../../../../Models/ItiApplicationPreviewDataModel';
 import { DateConfigurationModel } from '../../../../Models/DateConfigurationDataModels';
@@ -54,6 +54,7 @@ export class ITIGOVTEMPersonalDetailsApplicationFormTabComponent implements OnIn
     ] as { TabName: string; TabNameHI: string; component: Type<any>, TabIcon: string }[];
 
     public SSOLoginDataModel = new SSOLoginDataModel();
+    MenuAllowedRoleList: any;
   constructor(
     private resolver: ComponentFactoryResolver,
     private router: Router,
@@ -70,7 +71,7 @@ export class ITIGOVTEMPersonalDetailsApplicationFormTabComponent implements OnIn
   async ngOnInit(){
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     console.log("SSOLoginDataModel", this.SSOLoginDataModel)
-
+    await this.GetMenuPermission();
     //this.ApplicationID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     //console.log(this.ApplicationID)
     //alert()
@@ -218,5 +219,28 @@ export class ITIGOVTEMPersonalDetailsApplicationFormTabComponent implements OnIn
       console.log(Ex);
     }
   }
-    
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.SSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 }

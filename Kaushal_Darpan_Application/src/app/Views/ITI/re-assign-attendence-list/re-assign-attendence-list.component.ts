@@ -10,13 +10,14 @@ import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { AttendanceServiceService } from '../../../Services/AttendanceServices/attendance-service.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { StaffMasterDDLDataModel } from '../../../Models/CenterObserverDataModel';
+ 
 interface DynamicColumn {
   originalKey: string;
   dayType: string;
@@ -74,13 +75,14 @@ export class ReAssignAttendenceListComponent {
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+    MenuAllowedRoleList: any;
 
   constructor(
     private attendanceServiceService: AttendanceServiceService,
     private fb: FormBuilder,
     private http: HttpClient, private route: ActivatedRoute,
     private commonMasterService: CommonFunctionService,
-    private toastr: ToastrService,
+    private toastr: ToastrService, private router: Router,
     public appsettingConfig: AppsettingService) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.InstituteID = this.sSOLoginDataModel.InstituteID
@@ -119,6 +121,7 @@ export class ReAssignAttendenceListComponent {
       SSOID:[''],
       InstituteID:['']
     });
+   await this.GetMenuPermission();
    if (this.sSOLoginDataModel.InstituteID == 0) {
      await this.GetInstituteList()
    }
@@ -784,6 +787,30 @@ export class ReAssignAttendenceListComponent {
       }
 
       //this.ExaminerDDL = [{ StaffID: 1, Name: 'Staff 1', SSOID: 'Staff1' },{ StaffID: 2, Name: 'Staff 2', SSOID: 'Staff2' },{ StaffID: 3, Name: 'Staff 3', SSOID: 'Staff3' }];
+    })
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
     })
   }
 

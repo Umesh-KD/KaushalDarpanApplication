@@ -14,89 +14,182 @@
   visibility: visible;
   position: relative;
 }
-.notice-bar {
+
+.enrollment-highlight-card {
+  height: calc(100% - 24px);
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #20b899;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #ffffff, #f8fffc);
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.05);
+  transition: transform 0.25s ease,
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.enrollment-highlight-card:hover {
+  transform: translateY(-5px);
+  border-left-color: #059669;
+  box-shadow: 0 10px 24px rgba(16, 185, 129, 0.15);
+}
+
+.enrollment-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.enrollment-icon {
   display: flex;
   align-items: center;
-  margin: 0 0 16px 0;
-  background: linear-gradient(90deg, #fdecec 0%, #ffffff 100%);
-  border: 1px solid #f5c2c2;
-  border-left: 4px solid #e57373;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(229, 115, 115, 0.15);
-  overflow: hidden;
-  height: 42px;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #d1fae5;
+  color: #059669;
+  font-size: 28px;
+}
+
+.enrollment-badge {
+  padding: 5px 9px;
+  border-radius: 20px;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.enrollment-caption {
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.6;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.enrollment-count {
+  margin-bottom: 20px;
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.enrollment-view-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 7px;
+  background: #20b899;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.25s ease;
+}
+
+.enrollment-view-btn:hover {
+  background: #059669;
+  color: #ffffff;
+}
+
+.enrollment-view-btn i {
+  transition: transform 0.25s ease;
+}
+
+.enrollment-view-btn:hover i {
+  transform: translateX(3px);
+}
+tice-bar {
+    display: flex;
+    align-items: center;
+    margin: 0 0 16px 0;
+    background: linear-gradient(90deg, #fdecec 0%, #ffffff 100%);
+    border: 1px solid #f5c2c2;
+    border-left: 4px solid #e57373;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(229, 115, 115, 0.15);
+    overflow: hidden;
+    height: 42px;
 }
 
 .notice-badge {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 100%;
-  padding: 0 16px;
-  background: #e57373;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 1px;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 100%;
+    padding: 0 16px;
+    background: #e57373;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
 .pulse-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: #fff;
-  animation: pulse 1.4s infinite;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #fff;
+    animation: pulse 1.4s infinite;
 }
 
 @keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.8);
-  }
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.8);
+    }
 
-  70% {
-    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
-  }
+    70% {
+        box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+    }
 
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-  }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
 }
 
 .notice-window {
-  flex: 1;
-  overflow: hidden;
-  white-space: nowrap;
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .notice-track {
-  display: inline-flex;
-  animation: scroll-left 25s linear infinite;
+    display: inline-flex;
+    animation: scroll-left 25s linear infinite;
 }
 
 .notice-window:hover .notice-track {
-  animation-play-state: paused;
+    animation-play-state: paused;
 }
 
 .notice-text {
-  padding: 0 60px;
-  color: #b23b3b;
-  font-size: 15px;
-  font-weight: 600;
+    padding: 0 60px;
+    color: #b23b3b;
+    font-size: 15px;
+    font-weight: 600;
 }
 
 @keyframes scroll-left {
-  from {
-    transform: translateX(0);
-  }
+    from {
+        transform: translateX(0);
+    }
 
-  to {
-    transform: translateX(-50%);
-  }
+    to {
+        transform: translateX(-50%);
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .notice-track {
-    animation: none;
-  }
+    .notice-track {
+        animation: none;
+    }
 }
+

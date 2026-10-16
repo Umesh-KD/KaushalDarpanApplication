@@ -12,7 +12,7 @@ import { BudgetDistributedService } from '../../../../Services/BudgetDistributed
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { AppsettingService } from '../../../../Common/appsetting.service';
-
+ 
 @Component({
   selector: 'app-budget-request-status',
   templateUrl: './budget-request-status.component.html',
@@ -36,6 +36,7 @@ export class BudgetRequestStatusComponent
   closeResult: string | undefined;
   public RequestAmountDetail: number = 0;
   public _EnumBugetStatus = EnumBugetStatus;
+    MenuAllowedRoleList: any;
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -47,10 +48,11 @@ export class BudgetRequestStatusComponent
   ) { }
 
 
-  ngOnInit() {    
+ async ngOnInit() {    
     const storedData = localStorage.getItem('SSOLoginUser');
     if (storedData) {
       this.ssoLoginDataModel = JSON.parse(storedData);
+      await this.GetMenuPermission();
     }
     this.GetReportAllData();
   }
@@ -182,5 +184,29 @@ export class BudgetRequestStatusComponent
     if (this.BudgetModelStatus.StatusId == EnumBugetStatus.Rejected) {
       this.BudgetModelStatus.ApprovedAmount = 0;
     }
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.ssoLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

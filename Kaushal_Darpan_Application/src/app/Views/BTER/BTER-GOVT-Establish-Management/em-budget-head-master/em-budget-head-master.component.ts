@@ -14,6 +14,7 @@ import { ITIBudgetCreateService } from '../../../../Services/ITI/ITIBudgetCreate
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-em-budget-head-master',
@@ -30,6 +31,7 @@ export class EMBudgetHeadMasterComponent {
 
   public UCHeadDataList: any = [];
   public ddlBudgetTypeList: any = [];
+  public MenuAllowedRoleList: any = [];
 
   modalReference: NgbModalRef | undefined;
   public isSubmitted: boolean = false
@@ -45,6 +47,7 @@ export class EMBudgetHeadMasterComponent {
     private ItiBGTHeadmasterServices: ITI_BGTHeadmasterService,
     private budgetCreateService: ITIBudgetCreateService,
     private bterEstablishManagementService: BTEREstablishManagementService,
+    private routers: Router
   ) {}
 
   async ngOnInit() {
@@ -55,11 +58,35 @@ export class EMBudgetHeadMasterComponent {
     })
     this.request.BudgetTypeID = 0
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     await this.GetBudgetHeadMasterData_EM();
   }
 
   get _BGTHeadForm() { return this.BGTHeadForm.controls; }
 
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
   async ViewandUpdate(content: any, id : number = 0) {
     if(id > 0) {
       await this.GetBudgetHeadById_EM(id);

@@ -27,7 +27,7 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Application No</label>
             <input class="form-input" type="text" id="ApplicationNo" [(ngModel)]="request.ApplicationNo"
-                   formControlName="ApplicationNo">
+                   formControlName="ApplicationNo" (input)="validateApplicationNo($event)"  maxlength="20">
           </div>
 
           <div>
@@ -96,7 +96,7 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name</label>
             <input class="form-input" type="text" id="StudentExamName" [(ngModel)]="request.Name"
-                   formControlName="txtStudentName">
+                   formControlName="txtStudentName"   (input)="validateName($event)">
           </div>
 
           <div>
@@ -112,7 +112,7 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Mobile</label>
             <input class="form-input" type="text" id="StudentExamMobile" [(ngModel)]="request.MobileNo"
-                   formControlName="txtMobileNo">
+                   formControlName="txtMobileNo" maxlength="10" minlength="10" (keypress)="validateNumber($event)">
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ABC ID</label>
@@ -132,7 +132,6 @@
             </select>
           </div>
         
-
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
             <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
@@ -258,6 +257,11 @@
           </tr>
         </thead>
         <tbody>
+          <tr *ngIf="!PreExamStudentData || PreExamStudentData.length === 0">
+            <td colspan="100%" class="text-center py-4 text-gray-500">
+              No Record Found
+            </td>
+          </tr>
           <tr *ngFor="let row of paginatedInTableData; let idx=index;">
             <td>
               <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
@@ -321,6 +325,7 @@
               </span>
             </td>
           </tr>
+
         </tbody>
       </table>
     </div>

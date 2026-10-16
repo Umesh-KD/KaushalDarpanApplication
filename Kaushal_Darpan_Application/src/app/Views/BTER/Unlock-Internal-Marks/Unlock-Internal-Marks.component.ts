@@ -8,7 +8,7 @@ import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import * as XLSX from 'xlsx';
 import { InternalPracticalStudentService } from '../../../Services/InternalPracticalStudent/internal-practical-assessment-student.service';
 import { UnlockInternalMarksModel, updateUnlockInternalMarksModel } from '../../../Models/TheoryMarksDataModels';
-
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-Unlock-Internal-Marks',
   standalone: false,
@@ -35,17 +35,19 @@ export class UnlockInternalMarksComponent {
   UnlockInternalMarksRequest = new updateUnlockInternalMarksModel();
   sSOLoginDataModel = new SSOLoginDataModel();
   public InstituteMasterList: any = [];
+     public MenuAllowedRoleList: any =[];
 
 
   constructor(
     private loaderService: LoaderService,
     private UnlockInternalMarks: InternalPracticalStudentService,
-    private Swal2: SweetAlert2,
+    private Swal2: SweetAlert2, private routers: Router,
     private commonMasterService: CommonFunctionService    
   ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     await this.InstituteMaster();
     await this.GetUnlockInternalMarksList();
   }
@@ -154,4 +156,27 @@ export class UnlockInternalMarksComponent {
     return _isAllFinalSubmit;
   }
 
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 }
