@@ -9,6 +9,8 @@ import { CreateGuestRoomDataModel, GuestRoomSearchModel } from '../../../Models/
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-Create-GuestRoom',
@@ -40,22 +42,25 @@ export class CreateGuestRoomComponent {
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  public MenuAllowedRoleList: any=[];
 
   constructor(
     private fb: FormBuilder,
     private _GuestRoomManagmentService: GuestRoomManagmentService,
-    private toastr: ToastrService,
+    private toastr: ToastrService, private routers: Router, private commonMasterService: CommonFunctionService,
     private loaderService: LoaderService
   ) { }
 
   async ngOnInit() {
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    
     this.groupForm = this.fb.group({
       txtGuestHouseName: ['', Validators.required],
       //txtPhoneNumber: ['', Validators.required],
       txtAddress: ['', Validators.required],
       txtPhoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
     });
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     //this.searchRequest.DepartmentID = 2;
     await this.GetAllGuestRoomList(); 
   }
@@ -197,5 +202,29 @@ export class CreateGuestRoomComponent {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }
