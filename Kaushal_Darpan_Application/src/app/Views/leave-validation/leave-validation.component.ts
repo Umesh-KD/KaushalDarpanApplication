@@ -52,7 +52,7 @@ export class LeaveValidationComponent {
         txtActionRemarks: ["", Validators.required],
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
+    // await this.GetMenuPermission();
     this.Id = Number(this.activatedRoute.snapshot.paramMap.get('id') ?? .0)
     if (this.Id == 1) {
       this.searchRequest.Status = 'Approved'
