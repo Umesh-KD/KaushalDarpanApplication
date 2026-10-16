@@ -114,7 +114,7 @@ export class BterRoomUtilizationComponent {
 
 
  async ngOnInit() {
-    await this.GetMenuPermission();
+   
     this.filterData = [];
     this.filterModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.filterModel.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -130,6 +130,7 @@ export class BterRoomUtilizationComponent {
       AttendanceStartDate: [''],
       AttendanceEndDate: ['']
     });
+   await this.GetMenuPermission();
     this.DayListBind();
 
     this.getMasterData();

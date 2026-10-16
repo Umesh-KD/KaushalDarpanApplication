@@ -102,7 +102,7 @@ export class MiscellaneousReportComponent implements OnInit {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
+   
     this.groupForm = this.fb.group({
       displayColumns: [''],
       StateId: [''],

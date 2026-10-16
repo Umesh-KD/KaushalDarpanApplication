@@ -11,7 +11,7 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
-
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-examiner-report-and-marks-tracking',
   standalone: false,
@@ -51,12 +51,14 @@ export class ExaminerReportAndMarksTrackingComponent implements OnInit {
   Table_SearchText: string = '';
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
+    MenuAllowedRoleList: any;
 
   constructor(private loaderService: LoaderService, private reportService: ReportService, private commonMasterService: CommonFunctionService,
-    private fb: FormBuilder, public appsettingConfig: AppsettingService, private http: HttpClient) { }
+    private fb: FormBuilder, public appsettingConfig: AppsettingService, private http: HttpClient ,private routers: Router,) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.GetAllData();
   }
 
@@ -321,5 +323,29 @@ export class ExaminerReportAndMarksTrackingComponent implements OnInit {
   generateFileName(extension: string): string {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
     return `file_${timestamp}.${extension}`;
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

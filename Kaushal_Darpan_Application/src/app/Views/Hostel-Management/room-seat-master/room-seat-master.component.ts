@@ -67,7 +67,7 @@ export class RoomSeatMasterComponent {
   async ngOnInit() {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
+   
 
     this.groupForm = this.fb.group({
       ddlHostelID: ['', [DropdownValidators]],
@@ -78,7 +78,7 @@ export class RoomSeatMasterComponent {
     });
     //this.searchRequest.DepartmentID = 2;
     //await this.getHostelTypeList();
-  
+    await this.GetMenuPermission();
     await this.GetAllRoomSeatList();
     await this.GetHostelNameList();
     await this.GetRoomTypeList();
