@@ -3,7 +3,7 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import { GetAdmitCardService } from '../../../../Services/GenerateAdmitCard/generateAdmitCard.service';
 
 import { ReportService } from '../../../../Services/Report/report.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EnumStatus } from '../../../../Common/GlobalConstants';
@@ -12,6 +12,7 @@ import { ITIStudentEnrollmentService } from '../../../../Services/ITI/ITIstudent
 import { ChunksSearchModel } from '../../../../Models/StudentMasterModels';
 import { DataPagingListModel, NCVTChunkInfoDataModelDataPagingList } from '../../../../Models/DataPagingListModel';
 import { ToastrService } from 'ngx-toastr';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 
 
 @Component({
@@ -29,17 +30,21 @@ export class UploadNcvtDataComponent implements OnInit
   masterSelected: boolean = false;
   IsAadharData: number = 0;
   public PostData: NCVTChunkInfoDataModelDataPagingList[] = []
-
+  public MenuAllowedRoleList: any = [];
 
   constructor(private loaderService: LoaderService, private itigenrateenrollservice: ITIStudentEnrollmentService
     ,
-    private activatedRoute: ActivatedRoute, private reportService: ReportService, private toastrService: ToastrService, 
+    private activatedRoute: ActivatedRoute, private reportService: ReportService, private toastrService: ToastrService,
+    private routers: Router, private commonMasterService: CommonFunctionService
     )
   { }
 
-  ngOnInit()
+  async ngOnInit()
   {
-      this.GetAllData();
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetAllData();
+    await this.GetMenuPermission();
+
   }
 
   async GetAllData()
@@ -153,6 +158,30 @@ export class UploadNcvtDataComponent implements OnInit
   // Example filter function
   filterSelectedItems() {
     this.listDataPaging = this.listDataPaging.filter(item => item.IsSelected);
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 

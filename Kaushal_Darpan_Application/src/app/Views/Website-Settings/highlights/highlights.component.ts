@@ -13,6 +13,7 @@ import { RequestBaseModel } from '../../../Models/RequestBaseModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MatSort } from '@angular/material/sort';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-highlights',
@@ -41,6 +42,7 @@ export class HighlightsComponent {
   modalReference: NgbModalRef | undefined;
   @ViewChild(MatSort) sort!: MatSort;
   closeResult: string | undefined;
+  public MenuAllowedRoleList: any = [];
   constructor(
     private formBuilder: FormBuilder,
     private loaderService: LoaderService,
@@ -50,6 +52,8 @@ export class HighlightsComponent {
     private websiteSettingsService: WebsiteSettingsService,
     public appsettingConfig: AppsettingService,
     private modalService: NgbModal,
+    private routers: Router
+
   ) { }
 
   async ngOnInit() {
@@ -70,6 +74,8 @@ export class HighlightsComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.todayDate = new Date().toISOString().substring(0, 16);
 
+
+    await this.GetMenuPermission();
     await this.GetDynamicUploadTypeDDL();
     await this.GetLateralCourse();
     await this.GetViewTypeDDL();
@@ -591,4 +597,29 @@ export class HighlightsComponent {
       selected.length === this.PostList.length
     );
   }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
 }

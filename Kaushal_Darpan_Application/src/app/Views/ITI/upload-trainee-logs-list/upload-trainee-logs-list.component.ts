@@ -61,6 +61,8 @@ export class UploadTraineeLogsListComponent {
   public ErrorMessage: string = '';
   //end table feature default
 
+  public MenuAllowedRoleList: any = [];
+
   constructor(
     private commonFunctionService: CommonFunctionService,
     private loaderService: LoaderService,
@@ -79,6 +81,8 @@ export class UploadTraineeLogsListComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+    await this.GetMenuPermission();
     await this.GetUploadedTraineeLogsData();
     // await this.GetTradeList();
   }
@@ -342,6 +346,30 @@ calculateInTableTotalPage() {
         this.isLoading = false;
       }, 200);
     }
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 
