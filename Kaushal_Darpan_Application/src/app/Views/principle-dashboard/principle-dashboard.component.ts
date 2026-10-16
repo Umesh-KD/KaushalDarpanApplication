@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+  import { Component } from '@angular/core';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { StaffDashService } from '../../Services/StaffDashboard/staff-dashboard.service';
 import { ToastrService } from 'ngx-toastr';
@@ -8,13 +8,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StaffDashboardSearchModel } from '../../Models/StaffDashboardDataModel';
 import { CollegeMasterService } from '../../Services/CollegeMaster/college-master.service';
-import { EnumEMProfileStatus, EnumRole } from '../../Common/GlobalConstants';
+import { EnumDepartment, EnumEMProfileStatus, EnumRole } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { StaffMasterSearchModel } from '../../Models/StaffMasterDataModel';
 import { StaffMasterService } from '../../Services/StaffMaster/staff-master.service';
 import { MenuFreezeService } from '../../Services/menu-freeze/menu-freeze.service';
 import { AdminDashboardDataService } from '../../Services/AdminDashboard/admin-dashboard-data.service';
 import { EM_JDTEDashboardSearchModel } from '../../Models/AdminDashboardDataModel';
+import { DateConfigurationModel } from '../../Models/DateConfigurationDataModels';
+import { DateConfigService } from '../../Services/DateConfiguration/date-configuration.service';
 
 @Component({
   selector: 'app-principle-dashboard',
@@ -25,6 +27,7 @@ import { EM_JDTEDashboardSearchModel } from '../../Models/AdminDashboardDataMode
 export class PrincipleDashboardComponent {
   public viewPlacementDashboardList: any = [];
   public InventoryList: any = [];
+  marqueeMessage: string = '';
   public Table_SearchText: string = "";
   public viewAdminDashboardList: any[] = [];
   public viewJDTEStaffDetailList: any[] = [];
@@ -35,6 +38,7 @@ export class PrincipleDashboardComponent {
   public viewAdminDashboardListLeave: any[] = [];
   public viewAdminDashboardAllotment: any[] = [];
   public StaffMasterList: any[] = [];
+  dateConfiguration = new DateConfigurationModel();
   public RevaluationTilesList: any[] = [];
   public sSOLoginDataModel = new SSOLoginDataModel();
   public State: number = 0;
@@ -45,6 +49,14 @@ export class PrincipleDashboardComponent {
   public staffSearchRequest = new StaffMasterSearchModel();
 
   isProfileComplete: boolean = false;
+  private readonly dateMessages: { [key: number]: string } = {
+    1: 'ADMISSION IS LIVE NOW - APPLY TODAY',
+    2: 'ENROLLMENT IS OPEN NOW',
+    3: 'EXAMINATION FORM IS OPEN NOW',
+    4: 'ENROLLMENT FEE PAYMENT IS OPEN NOW',
+    5: 'EXAMINATION FEE PAYMENT IS OPEN NOW',
+    6: 'REVAL IS OPEN NOW - APPLY TODAY'
+  };
   constructor(
     private StaffDashService: StaffDashService,
     private toastr: ToastrService,
@@ -55,6 +67,7 @@ export class PrincipleDashboardComponent {
     private menuFreeze: MenuFreezeService,
     private router: Router,
     private AdminDashDataService: AdminDashboardDataService,
+    private dateMasterService: DateConfigService
   ) { }
 
   async ngOnInit() {
@@ -68,40 +81,45 @@ debugger
       if (this.StaffMasterList.length > 0) {
         debugger
         let status = this.StaffMasterList[0].ProfileStatus;
-        if (status == EnumEMProfileStatus.Pending || status == EnumEMProfileStatus.Completed || status == EnumEMProfileStatus.Revert) {
-          this.menuFreeze.freezeMenus();
-          if(status == EnumEMProfileStatus.Revert)
-          {
-            this.sweetAlert2.Confirmation("Your Profile Reverted please Complete your profile Again?", async (result: any) => {
-              // window.open("/bter-em-add-staff-details", "_Self")
-              this.router.navigateByUrl('/bter-em-add-staff-details');
-            }, 'OK', false);
-          }
-          else
-          {
-            this.sweetAlert2.Confirmation("Your Profile Is not completed please Complete your profile?", async (result: any) => {
-              // window.open("/bter-em-add-staff-details", "_Self")
-              this.router.navigateByUrl('/bter-em-add-staff-details');
-            }, 'OK', false);
-          }
+        //if (status == EnumEMProfileStatus.Pending || status == EnumEMProfileStatus.Completed || status == EnumEMProfileStatus.Revert) {
+        //  this.menuFreeze.freezeMenus();
+        //  if(status == EnumEMProfileStatus.Revert)
+        //  {
+        //    this.sweetAlert2.Confirmation("Your Profile Reverted please Complete your profile Again?", async (result: any) => {
+        //      // window.open("/bter-em-add-staff-details", "_Self")
+        //      this.router.navigateByUrl('/bter-em-add-staff-details');
+        //    }, 'OK', false);
+        //  }
+        //  else
+        //  {
+        //    this.sweetAlert2.Confirmation("Your Profile Is not completed please Complete your profile?", async (result: any) => {
+        //      // window.open("/bter-em-add-staff-details", "_Self")
+        //      this.router.navigateByUrl('/bter-em-add-staff-details');
+        //    }, 'OK', false);
+        //  }
 
-        }
-        else {
+        //}
+        //else {
           
-          await this.CheckProfileStatus();
-          if (this.isProfileComplete == false) {
-            this.sweetAlert2.Confirmation("College Profile Is not completed please Complete college profile?", async (result: any) => {
-              window.open("/updatecollegemaster/" + this.sSOLoginDataModel.InstituteID, "_Self")
-            }, 'OK', false);
+        //  await this.CheckProfileStatus();
+        //  if (this.isProfileComplete == false) {
+        //    this.sweetAlert2.Confirmation("College Profile Is not completed please Complete college profile?", async (result: any) => {
+        //      window.open("/updatecollegemaster/" + this.sSOLoginDataModel.InstituteID, "_Self")
+        //    }, 'OK', false);
 
-          }
-        }
+        //  }
+        //}
       }
       await this.GetAllData();
       await this.GetEMAllData();
+      await this.GetDateDataList();
+
+      
     }
 
   }
+
+
 
   async CheckProfileStatus() {
     try {
@@ -262,4 +280,32 @@ debugger
       }, 200);
     }
   }
+
+
+  async GetDateDataList() {
+    try {
+      this.dateConfiguration.DepartmentID = EnumDepartment.BTER;
+      this.dateConfiguration.SSOID = this.sSOLoginDataModel != null ? this.sSOLoginDataModel.SSOID : "";
+
+      await this.dateMasterService.GetDateDataList(this.dateConfiguration)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          debugger
+          const openTypeIds: number[] = (data?.Data || [])
+            .filter((d: any) => d.DepartmentID == EnumDepartment.BTER && d.IsDateOpen == 1)
+            .map((d: any) => Number(d.TypeID));
+
+          // keep a fixed order (Admission, Examination, Reval) and avoid duplicates
+          this.marqueeMessage = [1,2,3, 4,,5, 6]
+            .filter(id => openTypeIds.includes(id))
+            .map(id => this.dateMessages[id])
+            .join('   |   ');
+
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
 }
