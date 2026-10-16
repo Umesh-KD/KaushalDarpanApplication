@@ -61,7 +61,7 @@ export class InventoryDashboardComponent {
   public CategoryDDLList: any = [];
   public SearchItemReq = new DTEItemsSearchModel()
   CurrentAction: string = 'CategoryLIST';
-    MenuAllowedRoleList: any;
+   public MenuAllowedRoleList: any;
 
   constructor(
     private StaffDashService: StaffDashService,
