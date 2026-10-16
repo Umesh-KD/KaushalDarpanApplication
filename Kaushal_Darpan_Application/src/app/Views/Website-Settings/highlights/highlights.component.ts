@@ -43,6 +43,7 @@ export class HighlightsComponent {
   modalReference: NgbModalRef | undefined;
   @ViewChild(MatSort) sort!: MatSort;
   closeResult: string | undefined;
+  
   constructor(
     private formBuilder: FormBuilder,
     private loaderService: LoaderService,
@@ -619,4 +620,5 @@ export class HighlightsComponent {
       selected.length === this.PostList.length
     );
   }
+
 }

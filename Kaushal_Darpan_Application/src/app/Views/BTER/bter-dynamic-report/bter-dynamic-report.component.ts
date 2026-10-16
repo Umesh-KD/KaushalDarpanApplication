@@ -176,7 +176,6 @@ export class BterDynamicReportComponent implements OnInit {
     })
   }
 
-
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
