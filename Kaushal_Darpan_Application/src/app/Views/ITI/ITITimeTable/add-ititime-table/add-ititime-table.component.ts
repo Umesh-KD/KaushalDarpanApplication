@@ -64,6 +64,7 @@ export class AddITITimeTableComponent {
     public AddedChoices: any = []
     public SelectedTradeMasterList: any = []
     public SelectedSubjectList: any = []
+  public MenuAllowedRoleList: any = []
     public settingsMultiselect: object = {};
     public settingsMultiselector: object = {};
     isEditMode: boolean = false;
@@ -89,6 +90,7 @@ export class AddITITimeTableComponent {
       private cdr: ChangeDetectorRef,
       private TimeTableService: TimeTableService,
       private Swal2: SweetAlert2,
+      private routers: Router
     ) { }
 
     async ngOnInit() {
@@ -144,7 +146,7 @@ export class AddITITimeTableComponent {
       //   TradeID: ['',],
       //   SubjectName :['',]
       // })
-
+      await this.GetMenuPermission();
       await this.GetITITradeNameDDl();
       await this.GetPaperList();
       await this.GetSemesterList()
@@ -166,6 +168,43 @@ export class AddITITimeTableComponent {
     get _TimeTableForm() { return this.ITITimeTableForm.controls; }
     get _TradeSubjectFormGroup() { return this.TradeSubjectFormGroup.controls; }
 
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
+
+  }
 
     async GetExamShift() {
       try {

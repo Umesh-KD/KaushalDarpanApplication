@@ -16,6 +16,7 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
 import autoTable from 'jspdf-autotable';
 import jsPDF from 'jspdf';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-iti-inspection',
@@ -44,7 +45,7 @@ export class ITIInspectionComponent {
   public OTP: string = '';
   public GeneratedOTP: string = '';
   public MobileNo: string = '';
-
+  public MenuAllowedRoleList: any = [];
   _EnumRole = EnumRole
  // private modalService = inject(NgbModal);
   constructor(
@@ -60,6 +61,8 @@ export class ITIInspectionComponent {
     private sMSMailService: SMSMailService,
     private http: HttpClient,
     private appsettingConfig: AppsettingService,
+    private routers: Router,
+
   ){}
 
 
@@ -67,9 +70,32 @@ export class ITIInspectionComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));    
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    await this.GetMenuPermission();
     this.GetAllData()
   }
+  async GetMenuPermission() {
 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
   async ResetControl() {
     this.searchRequest = new ITI_InspectionSearchModel();
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID

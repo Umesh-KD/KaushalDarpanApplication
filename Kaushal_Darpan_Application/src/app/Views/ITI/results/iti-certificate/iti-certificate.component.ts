@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -56,6 +56,7 @@ export class ItiCertificateComponent implements OnInit {
   public Table_SearchText: string = "";
   public isSubmitted: boolean = false;
   public isVisibleList: boolean = false;
+  public MenuAllowedRoleList: any = [];
   constructor(
     private activatedRoute: ActivatedRoute,
     private resultService: ResultService,
@@ -70,6 +71,7 @@ export class ItiCertificateComponent implements OnInit {
     private menuService: MenuService,
     public ReportServices: ReportService,
     private formBuilder: FormBuilder,
+    private routers: Router
   ) {
     // Get user data from localStorage
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -84,7 +86,7 @@ export class ItiCertificateComponent implements OnInit {
  
 
     })
-
+    await this.GetMenuPermission();
   }
 
   async GetList() {
@@ -369,6 +371,43 @@ export class ItiCertificateComponent implements OnInit {
     }
   }
 
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
+
+  }
 
 
 }

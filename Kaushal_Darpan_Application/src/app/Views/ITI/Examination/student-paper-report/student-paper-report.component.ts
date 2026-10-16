@@ -11,6 +11,7 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { ItiTheoryMarksService } from '../../../../Services/ITI/ItiTheoryMarks/Iti-theory-marks.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-student-paper-report',
   standalone: false,
@@ -39,6 +40,10 @@ export class StudentPaperReportComponent {
   public endInTableIndex: number = 0;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
+  public MenuAllowedRoleList: any = [];
+
+
+
   //end table feature default
 
   constructor(
@@ -47,6 +52,7 @@ export class StudentPaperReportComponent {
     private commonMasterService: CommonFunctionService,
     private reportService: ReportService,
     public appsettingConfig: AppsettingService,
+    private routers: Router,
     private http: HttpClient) {
   }
 
@@ -56,6 +62,7 @@ export class StudentPaperReportComponent {
     //   this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
     // }
     this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
+    await this.GetMenuPermission();
     await this.GetMasterData();
     await this.GetItiTrade()
     // await this.GetTheoryMarksDetailList();
@@ -347,5 +354,27 @@ export class StudentPaperReportComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
     return `file_${timestamp}.${extension}`;
   }
+  async GetMenuPermission() {
 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 }

@@ -36,6 +36,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
   StreamMasterList: any = [];
   lstAcedmicYear: any = [];
   CenterMasterList: any = [];
+  MenuAllowedRoleList: any = [];
   showPassword: boolean = false;
   ExamList: any = [];
   PaperMasterList: any[] = [];
@@ -73,7 +74,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     private documentDetailsService: DocumentDetailsService, private swal: SweetAlert2) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetAllPaperUploadData();
-
+    this.GetMenuPermission();
   }
 
   async ngOnInit()
@@ -717,6 +718,43 @@ async  fillEditData(editData: any) {
       .split(',')
       .map((x: string) => Number(x.trim()))
       .filter((x: number) => !isNaN(x));
+  }
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
+
   }
 
 

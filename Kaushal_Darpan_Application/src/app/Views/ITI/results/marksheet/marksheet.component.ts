@@ -18,6 +18,7 @@ import { ItiApplicationSearchmodel } from "../../../../Models/ItiApplicationPrev
 import { StudentMarksheetSearchModel } from "../../../../Models/OnlineMarkingReportDataModel";
 import { DropdownValidators } from "../../../../Services/CustomValidators/custom-validators.service";
 import { ITIStateTradeCertificateSearchModel } from "../../../../Models/TheoryMarksDataModels";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-marksheet',
@@ -33,6 +34,7 @@ export class marksheetDownloadComponent implements AfterViewInit {
   searchForm!: FormGroup;
   tooltipText = signal(''); 
   StudentExamsPapersList: any = [];
+  public MenuAllowedRoleList: any = [];
   STUFFPapersList : any = [];
   public StudentDetails: any[] = [];
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
@@ -70,7 +72,8 @@ export class marksheetDownloadComponent implements AfterViewInit {
     private reportService: ReportService,
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
-    public ReportServices: ReportService
+    public ReportServices: ReportService,
+    private routers: Router
   ) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 }
@@ -82,7 +85,7 @@ export class marksheetDownloadComponent implements AfterViewInit {
       RollNo: ['', Validators.required],
       DOB: ['', Validators.required],
     });
-
+    await this.GetMenuPermission();
     //this.MarksheetSearch.ExamYearID = 1;
    
   } 
@@ -462,6 +465,28 @@ export class marksheetDownloadComponent implements AfterViewInit {
       }, 200);
     }
   }
+  async GetMenuPermission() {
 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 }
 
