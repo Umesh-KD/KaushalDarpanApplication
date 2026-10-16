@@ -37,6 +37,8 @@ export class ITIAdminUserComponent {
   public ErrorMessage: string = '';
   public DisplayCollegeName: string = '';
 
+  public MenuAllowedRoleList: any = [];
+
 
   public AdminUserFormGroup!: FormGroup;
   public AdminUserList: any = [];
@@ -70,6 +72,9 @@ export class ITIAdminUserComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.ModifyBy = this.sSOLoginDataModel.UserID
+
+
+    await this.GetMenuPermission();
     await this.GetAllData();
     await this.GetAllDataITI();
 
@@ -406,6 +411,31 @@ export class ITIAdminUserComponent {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'PrinciaplList.xlsx');
+  }
+
+  async GetMenuPermission()
+  {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 

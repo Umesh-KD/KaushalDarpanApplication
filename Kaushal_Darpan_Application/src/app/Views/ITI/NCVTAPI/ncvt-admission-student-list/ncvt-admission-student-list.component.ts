@@ -34,6 +34,7 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
   public ApprovedStatus: string = "0";
   _EnumRole = EnumRole;
 
+
   // pagination
   pageNo: any = 1;
   pageSize: any = 50;

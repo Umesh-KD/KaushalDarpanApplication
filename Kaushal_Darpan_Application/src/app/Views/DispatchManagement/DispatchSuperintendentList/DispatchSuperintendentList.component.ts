@@ -16,6 +16,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import { ReportService } from '../../../Services/Report/report.service';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
+import {  Router } from '@angular/router';
 
 @Component({
   selector: 'app-DispatchSuperintendentList',
@@ -69,6 +70,7 @@ export class DispatchSuperintendentListComponent implements OnInit {
   public IsBtn: boolean = false;
   public statusCh: number = 0;
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
+    MenuAllowedRoleList: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -80,7 +82,7 @@ export class DispatchSuperintendentListComponent implements OnInit {
     private Swal2: SweetAlert2,
     private encryptionService: EncryptionService,
     private appsettingConfig: AppsettingService,
-    private http: HttpClient,
+    private http: HttpClient, private routers: Router,
     private reportService: ReportService
   ) { }
 
@@ -133,6 +135,7 @@ export class DispatchSuperintendentListComponent implements OnInit {
       });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
 
     this.GetStatusType()
     this.statusCh = 0;
@@ -594,6 +597,30 @@ export class DispatchSuperintendentListComponent implements OnInit {
     this.childComponent.onVerified.subscribe(() => {
       this.CheckOtpAfterSave();
       console.log("otp verified on the page")
+    })
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
     })
   }
 
