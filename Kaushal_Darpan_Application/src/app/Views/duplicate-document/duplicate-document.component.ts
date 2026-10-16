@@ -65,6 +65,7 @@ export class DuplicateDocumentComponent implements OnInit {
   sortOrder: string = "";
   closeResult: string | undefined;
   formAction!: FormGroup;
+  public MenuAllowedRoleList: any=[];
 
   constructor(
     private commonMasterService: CommonFunctionService, 
@@ -90,7 +91,7 @@ export class DuplicateDocumentComponent implements OnInit {
         txtActionRemarks: ['', Validators.required],
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-   
+    await this.GetMenuPermission();
     // this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
     await this.GetDocumentTypeDDL();
     this.searchRequest.DocumentID = 3;
@@ -551,6 +552,30 @@ export class DuplicateDocumentComponent implements OnInit {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(blobUrl);
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
   // sortData(sortColumn: string) {
