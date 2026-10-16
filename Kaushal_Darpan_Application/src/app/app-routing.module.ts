@@ -1851,6 +1851,7 @@ const routes: Routes = [
       { path: 'GrevianceMapping', loadChildren: () => import('./Views/greviance-mapping/greviance-mapping.module').then(m => m.GrevianceMappingModule) },
       { path: 'analytic-dashboard', loadChildren: () => import('./Views/analytic-dashboard/analytic-dashboard.module').then(m => m.AnalyticDashboardModule) },
       { path: 'TableauExamReport', loadChildren: () => import('./Views/tableau-exam-report/tableau-exam-report.module').then(m => m.TableauExamReportModule) },
+      { path: 'Hostel-Management-Dashboard', loadChildren: () => import('./Views/analytic-dashboardNew/hostel-management-dashboard/hostel-management-dashboard.module').then(m => m.HostelManagementDashboardModule) },
 
     ]
   },
@@ -1974,7 +1975,7 @@ const routes: Routes = [
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\ITI\EmployeeDashboard', loadChildren: () => import('./Views/ITI/employee-dashboard/employee-dashboard.module').then(m => m.EmployeeDashboardModule) },
   { path: 'Views\ITI\ITILeaveCredit', loadChildren: () => import('./Views/ITI/iti-leave-credit/iti-leave-credit.module').then(m => m.ItiLeaveCreditModule) },
-
+ 
 
  
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
