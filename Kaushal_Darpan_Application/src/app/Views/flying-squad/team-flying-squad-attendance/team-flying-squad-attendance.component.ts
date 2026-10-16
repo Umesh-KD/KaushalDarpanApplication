@@ -12,9 +12,9 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { HttpClient } from '@angular/common/http';
 import jsPDF from 'jspdf';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import * as XLSX from 'xlsx';
-
+ 
 @Component({
   selector: 'app-team-flying-squad-attendance',
   standalone: false,
@@ -42,6 +42,7 @@ export class AddTeamFlyingSquadAttendanceComponent implements OnInit {
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+    MenuAllowedRoleList: any;
 
   constructor(
     private fb: FormBuilder,
@@ -60,7 +61,8 @@ export class AddTeamFlyingSquadAttendanceComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
+  async ngOnInit()  {
+    await this.GetMenuPermission();
     this.getFlyingSquad();
   }
 
@@ -187,5 +189,30 @@ export class AddTeamFlyingSquadAttendanceComponent implements OnInit {
   openModalPhoto(photo: string) {
     const mapUrl = `${this.appsettingConfig.StaticFileRootPathURL}${photo}`;
     window.open(mapUrl, '_blank');
+  }
+
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

@@ -18,6 +18,7 @@ import * as XLSX from 'xlsx';
 import Swal from 'sweetalert2';
 import { Acedmic } from '../../../Models/AcedmicInterface';
 import { MenuService } from '../../../Services/Menu/menu.service';
+ 
 
 @Component({
   selector: 'app-add-flying-squad',
@@ -59,6 +60,7 @@ export class AddFlyingSquadComponent {
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+    MenuAllowedRoleList: any;
   constructor(private fb: FormBuilder,
     
     private http: HttpClient,
@@ -85,6 +87,8 @@ export class AddFlyingSquadComponent {
     this.FlyingTeamSquadForm = this.fb.group({
       TeamName: ['']
     });
+  
+    await this.GetMenuPermission();
     await this.getMasterData();
     
     await this.getFlyingTeamSquad();
@@ -521,6 +525,30 @@ export class AddFlyingSquadComponent {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 }

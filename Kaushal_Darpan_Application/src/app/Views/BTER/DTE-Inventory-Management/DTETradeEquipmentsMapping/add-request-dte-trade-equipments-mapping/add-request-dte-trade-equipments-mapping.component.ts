@@ -102,10 +102,7 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
     private modalService: NgbModal) { }
 
   async ngOnInit() {
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
-    this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
-    this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+
     this.RequestFormGroup = this.formBuilder.group({
       txtQuantity: ['', [Validators.required, Validators.pattern(GlobalConstants.AllowNumbersPattern),]],
       ddlEquipmentsId: ['', [DropdownValidators]],
@@ -131,6 +128,11 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
       txtTradeName: ['', [Validators.required, Validators.pattern(GlobalConstants.NameNoNumbersPattern),]],
       txtTradeCode: ['', [Validators.required, Validators.pattern(GlobalConstants.AllowNumbersPattern),]],
     });
+
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
+    this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
+    this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
 
     this.TE_MappingId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
    
