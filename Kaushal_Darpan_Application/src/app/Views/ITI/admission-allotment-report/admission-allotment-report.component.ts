@@ -12,6 +12,7 @@ import { TableColumn } from '../../../../app/Common/data-table/DatatableModels/t
 import { TableConfig } from '../../../Common/data-table/DatatableModels/table-config.model';
 import { ActionType } from '../../../Common/data-table/DatatableModels/table-action.model';
 import { AppsettingService } from '../../../Common/appsetting.service';
+import { EnumStatus } from '../../../Common/GlobalConstants';
 
 @Component({
     selector: 'app-admission-allotment-report',
@@ -20,7 +21,8 @@ import { AppsettingService } from '../../../Common/appsetting.service';
     standalone: false
 })
 
-export class AdmissionAllotmentReportComponent implements OnInit {
+export class AdmissionAllotmentReportComponent implements OnInit
+{
   public AdmissionAllotmentDataList: any[] = [];
   public AdmissionAllotmentData_ddl: any[] = [];
   public Table_SearchText: string = "";
@@ -29,6 +31,7 @@ export class AdmissionAllotmentReportComponent implements OnInit {
   public ApprovedStatus: string = "0";
   public ActionType = '';
   //public columns:TableColumn[]=[];
+  public MenuAllowedRoleList: any = [];
 
   constructor(private commonMasterService: CommonFunctionService, private ReportService: ReportService,
     private toastr: ToastrService, private loaderService: LoaderService, private Swal2: SweetAlert2, private Router: Router, private router: ActivatedRoute,public appsettingConfig: AppsettingService,) {
@@ -149,6 +152,34 @@ tableConfig: TableConfig = {
     this.ActionType = '';
     await this.GetAllData();
   }
+
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
+
+
 
 
   // ------------------------------------------dynamic table portion----------------------------

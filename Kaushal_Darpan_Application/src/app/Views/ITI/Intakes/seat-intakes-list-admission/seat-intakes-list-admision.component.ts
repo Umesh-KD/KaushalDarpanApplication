@@ -11,7 +11,7 @@ import { EnumStatus } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-seat-intakes-list-admission',
@@ -66,6 +66,8 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   missingData: any[] = [];
   //end table feature default
 
+  public MenuAllowedRoleList: any = [];
+
   constructor(
     private formBuilder: FormBuilder,
     private commonFunctionService: CommonFunctionService,
@@ -74,7 +76,9 @@ export class SeatIntakesListAdmissionComponent implements OnInit
     private ItiSeatIntakeService: ItiSeatIntakeService,
     private Swal2: SweetAlert2,
     private modalService: NgbModal,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private routers: Router
+
   ) { }
 
   async ngOnInit() {
@@ -108,6 +112,9 @@ export class SeatIntakesListAdmissionComponent implements OnInit
 
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
+
+
+    await  this.GetMenuPermission();
 
     this.searchRequest.SanctionedID = 1;
 
@@ -1042,5 +1049,33 @@ debugger
   //     console.error('Error fetching data:', error);
   //   }
   // }
+
+
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any =
+    {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.SSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
 }

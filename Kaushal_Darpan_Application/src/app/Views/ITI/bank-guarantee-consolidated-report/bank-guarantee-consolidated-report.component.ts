@@ -10,6 +10,8 @@ import { HttpClient } from '@angular/common/http';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { EnumStatus } from '../../../Common/GlobalConstants';
 @Component({
   selector: 'app-bank-guarantee-consolidated-report',
   standalone: false,
@@ -19,6 +21,9 @@ import * as XLSX from 'xlsx';
 export class BankGuaranteeConsolidatedReportComponent {
 reportList: any[] = [];
 
+
+  public MenuAllowedRoleList: any = [];
+
 searchRequest: any = {
   id: 0,
   action: '_getAllData',
@@ -27,7 +32,9 @@ searchRequest: any = {
 };
 
 FinancialYearList: any[] = [];
-CollegeList: any[] = [];
+  CollegeList: any[] = [];
+
+  sSOLoginDataModel = new SSOLoginDataModel();
 
  constructor(
     private formBuilder: FormBuilder,
@@ -45,7 +52,10 @@ CollegeList: any[] = [];
 async ngOnInit() {
 
   // await this.GetFinancialYearDDL();
+  this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
+  await this.GetMenuPermission();
+  
    await this.GetPrivateITICollege();
 
   await this.GetBankGuaranteeConsolidatedReport();
@@ -169,5 +179,30 @@ public AllCompanyMasterList: any[] = [];
     const fileName = `BankGuaranteeConsolidatedReport_${date}_${time}.xlsx`;
 
     XLSX.writeFile(wb, fileName);
+  }
+
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }
