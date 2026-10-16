@@ -43,6 +43,7 @@ export class SeatsDistributionsListComponent {
   public endInTableIndex: number = 0;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
+  public MenuAllowedRoleList: any = [];
   //end table feature default
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -53,15 +54,22 @@ export class SeatsDistributionsListComponent {
     private router: Router,
     private routers: ActivatedRoute,
     private modalService: NgbModal,
-    private Swal2: SweetAlert2) {
+    private Swal2: SweetAlert2
+
+  )
+  {
   }
 
 
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+
+    await this.GetMenuPermission();
     this.getSeatsDistributionsList();
     await this.GetRemarkMasterListDDL();
 
@@ -226,6 +234,30 @@ export class SeatsDistributionsListComponent {
     this.startInTableIndex = 0;
     this.endInTableIndex = 0;
     this.totalInTableRecord = this.SeatsDistributionsList.length;
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 

@@ -52,6 +52,9 @@ export class ITICollageTradeComponent {
 
   public DataExcel: any = [];
 
+
+  public MenuAllowedRoleList: any = [];
+
   pageNo: any = 1;
   pageSize: any = 50;
   isPre: boolean = false;
@@ -68,6 +71,8 @@ export class ITICollageTradeComponent {
     private Swal2: SweetAlert2,
     private route: ActivatedRoute,
     private modalService: NgbModal,
+    private routers: Router
+
   ) { }
 
 
@@ -77,6 +82,7 @@ export class ITICollageTradeComponent {
     //this.searchRequest.TradeLevelId = String(this.route.snapshot.paramMap.get('id')?.toString());
     this.searchRequest.TradeLevelId = "0";
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
     this.searchRequest.FinancialYearID = this.SSOLoginDataModel.FinancialYearID;
     console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
     await this.GetTradeAndColleges(1)
@@ -389,6 +395,30 @@ export class ITICollageTradeComponent {
       //this.pageNo = this.pageNo - 1;
       this.GetTradeAndColleges(3)
     }
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 
