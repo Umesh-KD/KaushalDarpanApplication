@@ -299,8 +299,8 @@ debugger
 
           // keep a fixed order (Admission, Examination, Reval) and avoid duplicates
           this.marqueeMessage = [1,2,3, 4,,5, 6]
-            .filter(id => openTypeIds.includes(id))
-            .map(id => this.dateMessages[id])
+            .filter((id: any) => openTypeIds.includes(id))
+            .map((id: any) => this.dateMessages[id])
             .join('   |   ');
 
         }, error => console.error(error));

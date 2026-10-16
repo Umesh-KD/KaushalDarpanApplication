@@ -29,6 +29,7 @@ export class BterDashboardComponent {
   public viewAdminDashboardListOther: StudentExamDetails[] = [];
   public viewAdminDashboardListCitizenSuggestion: StudentExamDetails[] = [];
   public RevaluationTilesList: StudentExamDetails[] = [];
+  public PendingTaskTilesList: StudentExamDetails[] = [];
   public Table_SearchText: string = "";
   public searchRequest = new AdminDashboardSearchModel();
   private userDataSubscription!: Subscription;
@@ -94,6 +95,7 @@ export class BterDashboardComponent {
           this.viewAdminDashboardListCitizenSuggestion = this.viewAdminDashboardList.filter(s => s.ListType === 'CitizenSuggestion');
           
           this.RevaluationTilesList = this.viewAdminDashboardList.filter(s => s.ListType === 'Revaluation');
+          this.PendingTaskTilesList = this.viewAdminDashboardList.filter(s => s.ListType === 'PendingTilesList');
         }, (error: any) => console.error(error)
         );
 

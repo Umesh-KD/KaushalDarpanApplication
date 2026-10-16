@@ -4,32 +4,156 @@
   </div>
 </div>
 
+
+<!-- Page Title End -->
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event"
+  data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true"
+  aria-controls="multiCollapseExample1" *ngIf="PendingTaskTilesList?.length>0">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Pending Tasks</b> 
+
+  <div class="flex items-center gap-3">
+
+    <a routerLink="/TableauExamReport" (click)="$event.stopPropagation()" class="an-btn an-green"
+      *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Admin||sSOLoginDataModel.RoleID==_EnumRole.AdminNon">
+      <i class="material-symbols-rounded">bar_chart</i>
+      <span>Exam Analytics</span>
+      <i class="material-symbols-rounded">arrow_forward</i>
+    </a>
+
+    <a routerLink="/result-analytics-tab" (click)="$event.stopPropagation()" class="an-btn an-violet"
+      *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Admin||sSOLoginDataModel.RoleID==_EnumRole.AdminNon">
+      <i class="material-symbols-rounded">query_stats</i>
+      <span>Result Analytics</span>
+      <i class="material-symbols-rounded">arrow_forward</i>
+    </a>
+
+    <a routerLink="/student-lifecycle-analytics-tab" (click)="$event.stopPropagation()" class="an-btn an-amber"
+      *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Admin||sSOLoginDataModel.RoleID==_EnumRole.AdminNon">
+      <i class="material-symbols-rounded">school</i>
+      <span>Student Lifecycle Analytics</span>
+      <i class="material-symbols-rounded">arrow_forward</i>
+    </a>
+
+    <a routerLink="/executive-analytics-tab" (click)="$event.stopPropagation()" class="an-btn an-rose"
+      *ngIf="sSOLoginDataModel.RoleID==_EnumRole.DTE">
+      <i class="material-symbols-rounded">monitoring</i>
+      <span>Executive Analytics</span>
+      <i class="material-symbols-rounded">arrow_forward</i>
+    </a>
+  </div>
+</div>
+
+<div class="mb-3">
+
+  <div class="grid grid-cols-1 gap-5 md:grid-cols-3 lg:grid-cols-4">
+
+    <ng-container *ngFor="let item of PendingTaskTilesList; let i = index">
+
+      <div *ngIf="item.Menu == 'enr'" class="group relative h-full overflow-hidden rounded-xl
+             border border-gray-200 border-l-4 bg-white
+             shadow-sm transition-all duration-300
+             hover:-translate-y-1 hover:shadow-lg bg-emerald-500">
+        <div class="p-5">
+
+          <!-- Caption and Icon Row -->
+          <div class="mb-3 flex items-start justify-between gap-3">
+
+            <!-- Caption: Left -->
+            <h6 class="min-w-0 flex-1 break-words text-left text-xs
+             font-bold uppercase leading-5 tracking-wide">
+              {{ item.TotalText }}
+            </h6>
+
+            <!-- Icon: Upper Right -->
+            <span class="material-symbols-rounded flex h-12 w-12 shrink-0
+             items-center justify-center rounded-xl bg-gray-100
+             text-3xl transition-transform duration-300
+             group-hover:scale-110">
+              {{ item.SRC }}
+            </span>
+
+          </div>
+
+          <!-- Count: Below Caption -->
+          <h3 class="mb-5 text-left text-3xl font-extrabold
+           leading-tight tracking-tight" [ngClass]="item.TextColorCSS" data-plugin="counterup">
+            {{ item.TotalCount }}
+          </h3>
+
+          <!-- View All Button -->
+          <a [routerLink]="['/' + item.URL]" [queryParams]="{ status: item.Status }" class="flex w-full items-center justify-center gap-2
+           rounded-lg px-4 py-2 text-xs font-semibold
+           text-white transition-all duration-300
+           hover:brightness-90 bg-emerald-500">
+
+            View All
+            <i class="ti ti-chevron-right transition-transform
+              duration-300 group-hover:translate-x-1"></i>
+          </a>
+
+        </div>
+      </div>
+
+
+
+      <div *ngIf="item.Menu == 'exam' || item.Menu == 'other'" class="group relative h-full overflow-hidden rounded-xl
+             border border-gray-200 border-l-4 bg-white
+             shadow-sm transition-all duration-300
+             hover:-translate-y-1 hover:shadow-lg bg-emerald-500">
+        <div class="p-5">
+
+          <!-- Caption and Icon Row -->
+          <div class="mb-3 flex items-start justify-between gap-3">
+
+            <!-- Caption: Left -->
+            <h6 class="min-w-0 flex-1 break-words text-left text-xs
+             font-bold uppercase leading-5 tracking-wide">
+              {{ item.TotalText }}
+            </h6>
+
+            <!-- Icon: Upper Right -->
+            <span class="material-symbols-rounded flex h-12 w-12 shrink-0
+             items-center justify-center rounded-xl bg-gray-100
+             text-3xl transition-transform duration-300
+             group-hover:scale-110">
+              {{ item.SRC }}
+            </span>
+
+          </div>
+
+          <!-- Count: Below Caption -->
+          <h3 class="mb-5 text-left text-3xl font-extrabold
+           leading-tight tracking-tight" [ngClass]="item.TextColorCSS" data-plugin="counterup">
+            {{ item.TotalCount }}
+          </h3>
+
+          <!-- View All Button -->
+          <a routerLink="/{{[item.URL + '/' + item.Status]}}" class="flex w-full items-center justify-center gap-2
+           rounded-lg px-4 py-2 text-xs font-semibold
+           text-white transition-all duration-300
+           hover:brightness-90 bg-emerald-500">
+
+            View All
+            <i class="ti ti-chevron-right transition-transform
+              duration-300 group-hover:translate-x-1"></i>
+          </a>
+
+        </div>
+      </div>
+
+    </ng-container>
+  </div>
+
+</div>
+
+
+
 <div class="flex justify-between flex-wrap items-center gap-2 mb-3 p-3 py-2 bg-light w-full pointer-event"
-     data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3"
-     aria-expanded="true" aria-controls="multiCollapseExample3">
+  data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
+  aria-controls="multiCollapseExample3">
 
   <b class="text-1xl-5"><i class="ti ti-list"></i> Enrollment</b>
 
-  <!-- action buttons grouped on the right -->
-  <div class="flex items-center gap-3">
-    <a routerLink="/analytic-dashboard"
-       (click)="$event.stopPropagation()"
-       class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-success rounded-lg shadow-sm
-              transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:opacity-90 focus:outline-none">
-      <i class="material-symbols-rounded text-xl">analytics</i>
-      <span>Analytic Dashboard</span>
-      <i class="material-symbols-rounded text-lg">arrow_forward</i>
-    </a>
-
-    <a routerLink="/TableauExamReport"
-       (click)="$event.stopPropagation()"
-       class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-success rounded-lg shadow-sm
-              transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:opacity-90 focus:outline-none">
-      <i class="material-symbols-rounded text-xl">analytics</i>
-      <span>New Dashboard</span>
-      <i class="material-symbols-rounded text-lg">arrow_forward</i>
-    </a>
-  </div>
 </div>
 
 <div class="collapse multi-collapse show" id="multiCollapseExample3">
@@ -40,7 +164,8 @@
           <span class="material-symbols-rounded float-end text-3xl text-default-400">{{ stat.SRC }}</span>
           <h6 class="text-muted text-sm uppercase">{{ stat.TotalText }}</h6>
           <h3 class="text-2xl mb-3" data-plugin="counterup">{{ stat.TotalCount }}</h3>
-          <a [routerLink]="['/' + stat.URL]" [queryParams]="{ status: stat.Status }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          <a [routerLink]="['/' + stat.URL]" [queryParams]="{ status: stat.Status }"
+            class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
             View All <i class="ti ti-chevron-right"></i>
           </a>
         </div>
@@ -53,16 +178,20 @@
 {
 
 <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event">
-  <b class="text-1xl-5" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample2"><i class="ti ti-list"></i> Examination</b>
-  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample2"><i class="ti ti-chevron-down"></i></button>
+  <b class="text-1xl-5" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="true"
+    aria-controls="multiCollapseExample2"><i class="ti ti-list"></i> Examination</b>
+  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2"
+    aria-expanded="true" aria-controls="multiCollapseExample2"><i class="ti ti-chevron-down"></i></button>
   <div class="flex flex-row gap-2">
     <div class="form-check form-check-inline">
-      <input class="form-check-input  me-2" type="radio" name="examType" id="semester" [value]=0 [(ngModel)]="searchRequest.IsYearly" (change)="GetAllData()">
+      <input class="form-check-input  me-2" type="radio" name="examType" id="semester" [value]=0
+        [(ngModel)]="searchRequest.IsYearly" (change)="GetAllData()">
       <label class="form-check-label" for="semester">Semester</label>
     </div>
 
     <div class="form-check form-check-inline ms-3 ">
-      <input class="form-check-input me-2" type="radio" name="examType" id="yearly" [value]=1 [(ngModel)]="searchRequest.IsYearly" (change)="GetAllData()">
+      <input class="form-check-input me-2" type="radio" name="examType" id="yearly" [value]=1
+        [(ngModel)]="searchRequest.IsYearly" (change)="GetAllData()">
       <label class="form-check-label" for="yearly">Yearly</label>
     </div>
   </div>
@@ -89,13 +218,15 @@
           </button>-->
           @if(stat.URL.toLowerCase()=='published-roll-no')
           {
-          <a [routerLink]="['/published-roll-no']" [queryParams]="{ Status: 213 }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          <a [routerLink]="['/published-roll-no']" [queryParams]="{ Status: 213 }"
+            class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
             View All <i class="ti ti-chevron-right"></i>
           </a>
           }
           @else
           {
-          <a routerLink="/{{[stat.URL + '/' + stat.Status]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          <a routerLink="/{{[stat.URL + '/' + stat.Status]}}"
+            class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
             View All <i class="ti ti-chevron-right"></i>
           </a>
           }
@@ -106,8 +237,12 @@
   </div>
 </div>
 
-<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3">
-  <b class="text-1xl-5"><i class="ti ti-list"></i> Revaluation</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3"><i class="ti ti-chevron-down"></i></button>
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event"
+  data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
+  aria-controls="multiCollapseExample3">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Revaluation</b> <button class="btn btn-primary" type="button"
+    data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
+    aria-controls="multiCollapseExample3"><i class="ti ti-chevron-down"></i></button>
 </div>
 
 <div class="collapse multi-collapse show" id="multiCollapseExample3">
@@ -118,7 +253,8 @@
           <span class="material-symbols-rounded float-end text-3xl text-default-400">{{ stat.SRC }}</span>
           <h6 class="text-muted text-sm uppercase">{{ stat.TotalText }}</h6>
           <h3 class="text-2xl mb-3" data-plugin="counterup">{{ stat.TotalCount }}</h3>
-          <a routerLink="/{{[stat.URL]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          <a routerLink="/{{[stat.URL]}}"
+            class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
             View All <i class="ti ti-chevron-right"></i>
           </a>
         </div>
@@ -127,8 +263,12 @@
   </div>
 </div>
 
-<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3">
-  <b class="text-1xl-5"><i class="ti ti-list"></i> OtherType</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3"><i class="ti ti-chevron-down"></i></button>
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event"
+  data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
+  aria-controls="multiCollapseExample3">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> OtherType</b> <button class="btn btn-primary" type="button"
+    data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
+    aria-controls="multiCollapseExample3"><i class="ti ti-chevron-down"></i></button>
 </div>
 
 <div class="collapse multi-collapse show" id="multiCollapseExample3">
@@ -139,7 +279,8 @@
           <span class="material-symbols-rounded float-end text-3xl text-default-400">{{ stat.SRC }}</span>
           <h6 class="text-muted text-sm uppercase">{{ stat.TotalText }}</h6>
           <h3 class="text-2xl mb-3" data-plugin="counterup">{{ stat.TotalCount }}</h3>
-          <a routerLink="/{{[stat.URL + '/' + stat.Status]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          <a routerLink="/{{[stat.URL + '/' + stat.Status]}}"
+            class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
             View All <i class="ti ti-chevron-right"></i>
           </a>
         </div>
@@ -147,7 +288,7 @@
     </div>
   </div>
 </div>
-  }
+}
 @if(this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon){
 
 <!-- <div class="flex items-center justify-between flex-wrap">
@@ -156,8 +297,12 @@
   </div>
 </div> -->
 
-<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample5" aria-expanded="true" aria-controls="multiCollapseExample5">
-  <b class="text-1xl-5"><i class="ti ti-list"></i> Examination</b> <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample5" aria-expanded="true" aria-controls="multiCollapseExample5"><i class="ti ti-chevron-down"></i></button>
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event"
+  data-bs-toggle="collapse" data-bs-target="#multiCollapseExample5" aria-expanded="true"
+  aria-controls="multiCollapseExample5">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Examination</b> <button class="btn btn-primary" type="button"
+    data-bs-toggle="collapse" data-bs-target="#multiCollapseExample5" aria-expanded="true"
+    aria-controls="multiCollapseExample5"><i class="ti ti-chevron-down"></i></button>
 </div>
 <div class="collapse multi-collapse show" id="multiCollapseExample5">
   <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
@@ -179,13 +324,15 @@
           </button>-->
           @if(stat.URL=="published-roll-no")
           {
-          <a [routerLink]="'/published-roll-no'" [queryParams]="{Status:213,tab:4}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          <a [routerLink]="'/published-roll-no'" [queryParams]="{Status:213,tab:4}"
+            class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
             View All <i class="ti ti-chevron-right"></i>
           </a>
           }
           @else
           {
-          <a routerLink="/{{[stat.URL + '/' + stat.Status]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          <a routerLink="/{{[stat.URL + '/' + stat.Status]}}"
+            class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
             View All <i class="ti ti-chevron-right"></i>
           </a>
           }
@@ -218,13 +365,15 @@
           </button>-->
           @if(stat.URL.toLowerCase()=='published-roll-no')
           {
-          <a [routerLink]="['/IssueTracker']" [queryParams]="{ Status: 1 }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          <a [routerLink]="['/IssueTracker']" [queryParams]="{ Status: 1 }"
+            class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
             View All <i class="ti ti-chevron-right"></i>
           </a>
           }
           @else
           {
-          <a routerLink="/{{[stat.URL + '/' + stat.Status]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          <a routerLink="/{{[stat.URL + '/' + stat.Status]}}"
+            class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
             View All <i class="ti ti-chevron-right"></i>
           </a>
           }
@@ -235,8 +384,12 @@
   </div>
 </div>
 
-<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3">
-  <b class="text-1xl-5"><i class="ti ti-list"></i> Revaluation</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3"><i class="ti ti-chevron-down"></i></button>
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event"
+  data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
+  aria-controls="multiCollapseExample3">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Revaluation</b> <button class="btn btn-primary" type="button"
+    data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
+    aria-controls="multiCollapseExample3"><i class="ti ti-chevron-down"></i></button>
 </div>
 
 <div class="collapse multi-collapse show" id="multiCollapseExample3">
@@ -247,7 +400,8 @@
           <span class="material-symbols-rounded float-end text-3xl text-default-400">{{ stat.SRC }}</span>
           <h6 class="text-muted text-sm uppercase">{{ stat.TotalText }}</h6>
           <h3 class="text-2xl mb-3" data-plugin="counterup">{{ stat.TotalCount }}</h3>
-          <a routerLink="/{{[stat.URL]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          <a routerLink="/{{[stat.URL]}}"
+            class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
             View All <i class="ti ti-chevron-right"></i>
           </a>
         </div>
@@ -260,16 +414,20 @@
 @if(this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.DTE)
 {
 <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event">
-  <b class="text-1xl-5" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample2"><i class="ti ti-list"></i> Examination</b>
-  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample2"><i class="ti ti-chevron-down"></i></button>
+  <b class="text-1xl-5" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="true"
+    aria-controls="multiCollapseExample2"><i class="ti ti-list"></i> Examination</b>
+  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2"
+    aria-expanded="true" aria-controls="multiCollapseExample2"><i class="ti ti-chevron-down"></i></button>
   <div class="flex flex-row gap-2">
     <div class="form-check form-check-inline">
-      <input class="form-check-input  me-2" type="radio" name="examType" id="semester" [value]=0 [(ngModel)]="searchRequest.IsYearly" (change)="GetAllData()">
+      <input class="form-check-input  me-2" type="radio" name="examType" id="semester" [value]=0
+        [(ngModel)]="searchRequest.IsYearly" (change)="GetAllData()">
       <label class="form-check-label" for="semester">Semester</label>
     </div>
 
     <div class="form-check form-check-inline ms-3 ">
-      <input class="form-check-input me-2" type="radio" name="examType" id="yearly" [value]=1 [(ngModel)]="searchRequest.IsYearly" (change)="GetAllData()">
+      <input class="form-check-input me-2" type="radio" name="examType" id="yearly" [value]=1
+        [(ngModel)]="searchRequest.IsYearly" (change)="GetAllData()">
       <label class="form-check-label" for="yearly">Yearly</label>
     </div>
   </div>
@@ -296,13 +454,15 @@
           </button>-->
           @if(stat.URL.toLowerCase()=='published-roll-no')
           {
-          <a [routerLink]="['/published-roll-no']" [queryParams]="{ Status: 213 }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          <a [routerLink]="['/published-roll-no']" [queryParams]="{ Status: 213 }"
+            class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
             View All <i class="ti ti-chevron-right"></i>
           </a>
           }
           @else
           {
-          <a routerLink="/{{[stat.URL + '/' + stat.Status]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          <a routerLink="/{{[stat.URL + '/' + stat.Status]}}"
+            class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
             View All <i class="ti ti-chevron-right"></i>
           </a>
           }

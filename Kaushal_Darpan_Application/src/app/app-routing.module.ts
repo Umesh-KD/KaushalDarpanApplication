@@ -134,7 +134,7 @@ const routes: Routes = [
         path: 'index', loadChildren: () => import('./Views/Home/home/home.module').then(m => m.HomeModule), title: 'Placement'
       },
 
-      // divya 
+      // temp
       {
         path: 'ITIallpost', loadChildren: () => import('./Views/Home/iti-all-post/iti-all-post.module').then(m => m.ITIAllPostModule), title: 'All Campus List'
       },
@@ -173,7 +173,7 @@ const routes: Routes = [
       { path: 'designationmaster', loadChildren: () => import('./Views/designation-master/designation-master.routing.module').then(m => m.DesignationRoutingModule), title: 'Designation Master' },
 
 
-      // divya's Created Routes start
+      // temp's Created Routes start
       
       { path: 'QueryRequestSubmission', loadChildren: () => import('./Views/QueryRequestSubmission/query-request-submission.routing.module').then(m => m.QueryRequestSubmissionModule), title: 'Query & Request Submission' },
       
@@ -182,9 +182,9 @@ const routes: Routes = [
       { path: 'Updated-Email-Template', loadChildren: () => import('./Views/updated-email-template/updated-email-template.module').then(m => m.UpdatedEmailTemplateModule), title: 'Email Template' },
       { path: 'Updated-SMS-Template', loadChildren: () => import('./Views/updated-sms-template/updated-sms-template.module').then(m => m.UpdatedSMSTemplateModule), title: 'SMS Template' },
       { path: 'PlacementDynamicReport', loadChildren: () => import('./Views/BTER/placement-dynamic-report/placement-dynamic-report.module').then(m => m.PlacementDynamicReportModule), title: 'Placement Dynamic Report' },
-                
+      { path: 'InventoryMasterDashboard', loadChildren: () => import('./Views/inventory-master-dashboard/inventory-dashboard.module').then(m => m.InventoryDashboardModule), title:'Inventory Master Dashboard' },                
 
-      // divya's Created Routes end
+      // temp's Created Routes end
 
       { path: 'levelmaster', loadChildren: () => import('./Views/level-master/level-master.routing.module').then(m => m.LevelRoutingModule), title: 'Level Master' },
       { path: 'CenterCreate', loadChildren: () => import('./Views/CenterAllotment/center-allotment/center-allotment.routing.module').then(m => m.CenterAllotmentRoutingModule), title: 'Create Center' },
@@ -1850,7 +1850,10 @@ const routes: Routes = [
       { path: 'Email-Template', loadChildren: () => import('./Views/email-template/email-template.module').then(m => m.EmailTemplateModule), title: 'Email Template' },
       { path: 'GrevianceMapping', loadChildren: () => import('./Views/greviance-mapping/greviance-mapping.module').then(m => m.GrevianceMappingModule) },
       { path: 'analytic-dashboard', loadChildren: () => import('./Views/analytic-dashboard/analytic-dashboard.module').then(m => m.AnalyticDashboardModule) },
-      { path: 'TableauExamReport', loadChildren: () => import('./Views/tableau-exam-report/tableau-exam-report.module').then(m => m.TableauExamReportModule) },
+      { path: 'TableauExamReport', loadChildren: () => import('./Views/Tableau-Analytics/tableau-exam-report/tableau-exam-report.module').then(m => m.TableauExamReportModule) },
+      { path: 'result-analytics-tab', loadChildren: () => import('./Views/Tableau-Analytics/tableau-result-analytics/tableau-result-analytics.module').then(m => m.TableauResultAnalyticsModule) },
+      { path: 'student-lifecycle-analytics-tab', loadChildren: () => import('./Views/Tableau-Analytics/tableau-student-lifecycle-analytics/tableau-student-lifecycle-analytics.module').then(m => m.TableauStudentLifecycleAnalyticsModule) },
+      { path: 'executive-analytics-tab', loadChildren: () => import('./Views/Tableau-Analytics/tableau-executive-analytics/tableau-executive-analytics.module').then(m => m.TableauExecutiveAnalyticsModule) },
       { path: 'Hostel-Management-Dashboard', loadChildren: () => import('./Views/analytic-dashboardNew/hostel-management-dashboard/hostel-management-dashboard.module').then(m => m.HostelManagementDashboardModule) },
 
     ]
