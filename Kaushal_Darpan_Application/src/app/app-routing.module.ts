@@ -1850,7 +1850,10 @@ const routes: Routes = [
       { path: 'Email-Template', loadChildren: () => import('./Views/email-template/email-template.module').then(m => m.EmailTemplateModule), title: 'Email Template' },
       { path: 'GrevianceMapping', loadChildren: () => import('./Views/greviance-mapping/greviance-mapping.module').then(m => m.GrevianceMappingModule) },
       { path: 'analytic-dashboard', loadChildren: () => import('./Views/analytic-dashboard/analytic-dashboard.module').then(m => m.AnalyticDashboardModule) },
-      { path: 'TableauExamReport', loadChildren: () => import('./Views/tableau-exam-report/tableau-exam-report.module').then(m => m.TableauExamReportModule) },
+      { path: 'TableauExamReport', loadChildren: () => import('./Views/Tableau-Analytics/tableau-exam-report/tableau-exam-report.module').then(m => m.TableauExamReportModule) },
+      { path: 'result-analytics-tab', loadChildren: () => import('./Views/Tableau-Analytics/tableau-result-analytics/tableau-result-analytics.module').then(m => m.TableauResultAnalyticsModule) },
+      { path: 'student-lifecycle-analytics-tab', loadChildren: () => import('./Views/Tableau-Analytics/tableau-student-lifecycle-analytics/tableau-student-lifecycle-analytics.module').then(m => m.TableauStudentLifecycleAnalyticsModule) },
+      { path: 'executive-analytics-tab', loadChildren: () => import('./Views/Tableau-Analytics/tableau-executive-analytics/tableau-executive-analytics.module').then(m => m.TableauExecutiveAnalyticsModule) },
       { path: 'Hostel-Management-Dashboard', loadChildren: () => import('./Views/analytic-dashboardNew/hostel-management-dashboard/hostel-management-dashboard.module').then(m => m.HostelManagementDashboardModule) },
 
     ]
