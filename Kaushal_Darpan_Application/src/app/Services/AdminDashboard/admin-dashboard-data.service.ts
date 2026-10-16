@@ -143,4 +143,13 @@ export class AdminDashboardDataService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetBterHostelHouseDashboard(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetBterHostelHouseDashboard", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
