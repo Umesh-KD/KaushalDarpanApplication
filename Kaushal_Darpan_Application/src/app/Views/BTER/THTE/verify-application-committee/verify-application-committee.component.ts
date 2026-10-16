@@ -77,6 +77,11 @@ export class VerifyApplicationCommitteeComponent {
 
     await this.GetCommitteeListDDL();
     await this.GetStatusData();
+    const StatusID = Number(this.activatedRoute.snapshot.queryParamMap.get('status')?.toString());
+    if (StatusID >= 0) {
+      this.searchRequest.status = StatusID;
+      this.ApplicationList_ForCommittee_THTE()
+    }
   }
 
 

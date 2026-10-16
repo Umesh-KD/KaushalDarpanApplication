@@ -136,6 +136,14 @@ export class AdminDashboardDataService {
       ).toPromise();
   }
 
+  public async GetCommitteeInchargeDashData(searchRequest: AdminDashboardSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetCommitteeInchargeDashData", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetBterHostelHouseDashboard(searchRequest: any) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(this.APIUrl + "/GetBterHostelHouseDashboard", body, this.headersOptions)

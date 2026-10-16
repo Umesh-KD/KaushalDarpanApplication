@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { DTESearchTradeEquipmentsMapping, DTETradeEquipmentsMappingData, ItemsDataModel } from '../../../Models/DTEInventory/DTETradeEquipmentsMappingData';
+import { DTESearchTradeEquipmentsMapping, DTETradeEquipmentsMappingData, InventoryDashDynamicDataModel, ItemsDataModel } from '../../../Models/DTEInventory/DTETradeEquipmentsMappingData';
 import { DTEItemCategoriesDataModels } from '../../../Models/DTEInventory/DTEItemCategoriesDataModels';
 
 
@@ -128,5 +128,17 @@ export class DteTradeEquipmentsMappingService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  // -------------------Inventory dynamic dashborad apis---------------------
+
+  public async GetInventoryDynamicDashData(request: InventoryDashDynamicDataModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/GetInventoryDynamicDashData', request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 }

@@ -1,3 +1,5 @@
+import { RequestBaseModel } from "../RequestBaseModel";
+
 export class DTETradeEquipmentsMappingData {
   public TE_MappingId: number = 0;
   public TradeId: number = 0;
@@ -85,4 +87,13 @@ export class ItemsDataModel {
   public EquipmentId: number = 0;
   public InstituteId: number = 0;
   public RoleId: number = 0;
+}
+
+
+export class InventoryDashDynamicDataModel {
+  public Action: string = '';
+  public CategoryId: number = 0;
+  public EquipmentId: number = 0;
+  public InstituteID: number = 0;
+  public RoleID: number = 0;
 }

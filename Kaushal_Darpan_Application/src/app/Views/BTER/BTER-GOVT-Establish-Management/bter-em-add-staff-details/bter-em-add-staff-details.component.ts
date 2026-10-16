@@ -225,7 +225,7 @@ export class BterEMAddStaffDetailsComponent {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
+    // await this.GetMenuPermission();
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
 
     this.userID = this.sSOLoginDataModel.UserID;

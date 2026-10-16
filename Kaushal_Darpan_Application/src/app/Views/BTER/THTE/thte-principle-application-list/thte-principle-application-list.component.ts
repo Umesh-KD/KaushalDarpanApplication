@@ -50,7 +50,8 @@ export class THTEPrincipleApplicationListComponent {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   public DateConfigSetting: any = [];
-    MenuAllowedRoleList: any;
+  public MenuAllowedRoleList: any=[];
+  public CommitteeEndDate: string = '';      
   //end table feature default
 
   constructor(
@@ -66,7 +67,8 @@ export class THTEPrincipleApplicationListComponent {
     private router: Router,
   ) { }
 
-  async ngOnInit () { 
+  async ngOnInit() {
+    debugger;
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetMenuPermission();
     await this.GetStatusData();
@@ -125,6 +127,12 @@ export class THTEPrincipleApplicationListComponent {
       return;
     }
 
+    if (this.status == 1341 &&( this.CommitteeEndDate == "" || this.CommitteeEndDate== undefined) )
+    {
+      this.toastr.warning('Please select End date.');
+      return;
+    }
+
     let dyMsg = '';
     if(this.status == 1341) {
       dyMsg = "Approve";
@@ -179,7 +187,8 @@ export class THTEPrincipleApplicationListComponent {
         x.ModifyBy = this.sSOLoginDataModel.UserID,
         x.status = this.status,
         x.Remark = remark,
-        x.RoleID = this.sSOLoginDataModel.RoleID
+          x.RoleID = this.sSOLoginDataModel.RoleID
+        x.PrincipalCommitteeEndDate = this.CommitteeEndDate
       })
 
       await this.teacherHigherEducationApplicationVerificationService.UpdateApplicationStatus_Principle_THTE(selected)
@@ -426,5 +435,16 @@ export class THTEPrincipleApplicationListComponent {
         }
       }
     })
+  }
+
+
+  onEndDateChange(newValue: string)
+  {
+    this.CommitteeEndDate = newValue;
+  }
+
+  DdlStatusChange()
+  {
+    this.CommitteeEndDate = '';
   }
 }

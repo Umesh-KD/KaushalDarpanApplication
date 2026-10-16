@@ -25,6 +25,7 @@
 <app-inspection-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.InspectionManager "></app-inspection-dashboard>
 
 <app-acp-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ACP || this.sSOLoginDataModel.RoleID == _EnumRole.ACP_NonEng"></app-acp-dashboard>
+<app-committee-incharge-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Committee_Incharge"></app-committee-incharge-dashboard>  <!--// Principal Committe Incharge-->
 <app-store-keeper-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.StoreKeeper "></app-store-keeper-dashboard>
 <!--<app-college-master *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Principal || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon"></app-college-master>-->
 <app-student-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Student"></app-student-dashboard>
