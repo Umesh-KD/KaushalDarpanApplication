@@ -30,38 +30,58 @@ export class RoomAvailabilityComponent {
   public RoomAvailabiltiesList:any = [];
 
   public GuestHouseNameList: any = [];
+  public MenuAllowedRoleList: any = [];
 
   constructor(
     private loaderService: LoaderService,
-    private activatedRoute: ActivatedRoute, private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute, 
+    private route: ActivatedRoute,
     private guestRoomManagementService: GuestRoomManagmentService,
+    private commonMasterService: CommonFunctionService,
+    private routers: Router,
   ) { }
 
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
-
+    await this.GetMenuPermission();
     this.route.queryParams.subscribe(async params => {
-
-      const guestHouseId = params?.['GuestHouseIDs'];
-
-      
+      const guestHouseId = params?.['GuestHouseIDs'];      
       if (guestHouseId !== null && guestHouseId !== undefined && guestHouseId !== '') {
         this.GuestHouseID = Number(guestHouseId);
         await this.GetGuestHouseRoomAvailabilityData();
       } else {
         this.GuestHouseID = 0; 
-      }
-
-      
+      }      
     });
 
     await this.GetGuestHouseNameList();
     await this.GetGuestHouseRoomAvailabilityData();
+  }
 
+  async GetMenuPermission() {
 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
   async GetGuestHouseNameList() {
