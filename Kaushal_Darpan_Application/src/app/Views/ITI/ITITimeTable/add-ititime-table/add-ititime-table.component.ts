@@ -146,7 +146,7 @@ export class AddITITimeTableComponent {
       //   TradeID: ['',],
       //   SubjectName :['',]
       // })
-      await this.GetMenuPermission();
+ /*     await this.GetMenuPermission();*/
       await this.GetITITradeNameDDl();
       await this.GetPaperList();
       await this.GetSemesterList()

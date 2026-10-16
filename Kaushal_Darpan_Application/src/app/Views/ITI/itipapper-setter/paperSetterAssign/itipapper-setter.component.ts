@@ -94,7 +94,7 @@ export class ITIPapperSetterComponent
     this.PaperFormGroup.get('TradeSchemeId')?.disable();
 
    
-    await this.GetMenuPermission();
+/*    await this.GetMenuPermission();*/
    
   
 

@@ -74,7 +74,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     private documentDetailsService: DocumentDetailsService, private swal: SweetAlert2) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetAllPaperUploadData();
-    this.GetMenuPermission();
+/*    this.GetMenuPermission();*/
   }
 
   async ngOnInit()
