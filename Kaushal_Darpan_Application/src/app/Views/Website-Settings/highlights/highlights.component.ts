@@ -13,7 +13,7 @@ import { RequestBaseModel } from '../../../Models/RequestBaseModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MatSort } from '@angular/material/sort';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-highlights',
@@ -37,12 +37,13 @@ export class HighlightsComponent {
   DynamicContentData: any = [];
   StaffTypeList: any = [];
   DocumentCategory: any = [];
+  MenuAllowedRoleList: any = [];
   Table_SearchText: string = '';
   IsPrivate: boolean = false
   modalReference: NgbModalRef | undefined;
   @ViewChild(MatSort) sort!: MatSort;
   closeResult: string | undefined;
-    MenuAllowedRoleList: any;
+  
   constructor(
     private formBuilder: FormBuilder,
     private loaderService: LoaderService,
@@ -51,7 +52,8 @@ export class HighlightsComponent {
     private toastr: ToastrService,
     private websiteSettingsService: WebsiteSettingsService,
     public appsettingConfig: AppsettingService,
-    private modalService: NgbModal, private routers: Router
+    private modalService: NgbModal,
+    private routers: Router
   ) { }
 
   async ngOnInit() {
@@ -89,6 +91,30 @@ export class HighlightsComponent {
   }
 
   get _HighlightsFromGroup() { return this.HighlightsFromGroup.controls; }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
 
   async GetStaffTypeData() {
 
@@ -595,27 +621,4 @@ export class HighlightsComponent {
     );
   }
 
-  async GetMenuPermission() {
-
-    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
-
-    var request: any = {
-      FilterBy: baseRoute,
-      MasterCode: "GetAllowedRoleForMenu"
-    }
-
-    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
-      if (data.State == EnumStatus.Success) {
-        this.MenuAllowedRoleList = data.Data
-
-        if (!this.MenuAllowedRoleList.some(
-          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
-        )) {
-          // Navigate to dashboard if RoleID is not allowed
-          this.routers.navigate(['/dashboard']);
-        }
-      }
-    })
-  }
 }

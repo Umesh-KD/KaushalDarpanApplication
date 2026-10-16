@@ -67,6 +67,7 @@ export class DTEHostelInstituteMappingComponent {
   InstituteSearchText = '';
   filteredInstituteList: any[] = [];
   public InstituteMasterDDLList: any = []
+  public MenuAllowedRoleList: any = []
   selected: any[] = [];
   public isAllSelected: boolean = false;
 
@@ -89,11 +90,10 @@ export class DTEHostelInstituteMappingComponent {
   async ngOnInit() {
     this.groupForm = this.fb.group({
       txtHostelName: ['', Validators.required],
-
-
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     await this.getHostelTypeList();
     await this.GetAllddlHostelList();
     await this.GetMasterData();
@@ -101,15 +101,37 @@ export class DTEHostelInstituteMappingComponent {
     this.GetMasterData();
     this.route.queryParams.subscribe(params => {
       if (params['id']) {
-
         this.mappingId = +params['id'];
-
         this.GetHostelInstituteMappingByID(this.mappingId);
-
       }
     });
 
   }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
   async getHostelTypeList() {
     try {
       await this.commonMasterService.GetCommonMasterDDLByType('HostelType')

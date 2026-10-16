@@ -36,6 +36,7 @@ export class PrincipleDashboardComponent {
   public viewAdminDashboardAllotment: any[] = [];
   public StaffMasterList: any[] = [];
   public RevaluationTilesList: any[] = [];
+  public PendingTilesList: any[] = [];
   public sSOLoginDataModel = new SSOLoginDataModel();
   public State: number = 0;
   public SuccessMessage: string = '';
@@ -156,6 +157,7 @@ debugger
 
           this.InventoryList = this.viewPlacementDashboardList.filter((e: any) => e.ListType == 'inventory')
           this.RevaluationTilesList = this.viewPlacementDashboardList.filter((e: any) => e.ListType == 'Revaluation')
+          this.PendingTilesList = this.viewPlacementDashboardList.filter((e: any) => e.ListType == 'pendingtile')
 
           console.log(this.viewPlacementDashboardList);
         }, (error: any) => console.error(error)

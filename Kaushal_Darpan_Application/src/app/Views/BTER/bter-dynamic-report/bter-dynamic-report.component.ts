@@ -16,48 +16,54 @@ import { RequestBaseModel } from '../../../Models/RequestBaseModel';
 import { EnumStatus } from '../../../Common/GlobalConstants';
 
 @Component({
-    selector: 'app-bter-dynamic-report',
-    templateUrl: './bter-dynamic-report.component.html',
-    styleUrls: ['./bter-dynamic-report.component.css'],
-    standalone: false
+  selector: 'app-bter-dynamic-report',
+  templateUrl: './bter-dynamic-report.component.html',
+  styleUrls: ['./bter-dynamic-report.component.css'],
+  standalone: false
 })
 
 export class BterDynamicReportComponent implements OnInit {
   public BterDynamicDataList: any[] = [];
   public BterDynamicData_ddl: any[] = [];
+  public MenuAllowedRoleList: any[] = [];
   public Table_SearchText: string = "";
   public searchRequest = new CompanyMasterSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
-  public requestObj= new RequestBaseModel();
+  public requestObj = new RequestBaseModel();
   public RequestData = new RequestBaseModel();
   public ApprovedStatus: string = "0";
   public TotalLoginCount: number = 0;
   public ActionType = '';
   public FromDate = '';
   public ToDate = '';
-  public  MenuAllowedRoleList: any;
   //public columns:TableColumn[]=[];
 
-  constructor(private commonMasterService: CommonFunctionService, private ReportService: ReportService,
-    private toastr: ToastrService, private loaderService: LoaderService, private Swal2: SweetAlert2, private Router: Router, private router: ActivatedRoute,public appsettingConfig: AppsettingService,) {
+  constructor(
+    private commonMasterService: CommonFunctionService,
+    private ReportService: ReportService,
+    private toastr: ToastrService,
+    private loaderService: LoaderService, 
+    private Swal2: SweetAlert2, 
+    private Router: Router, 
+    private router: ActivatedRoute, 
+    public appsettingConfig: AppsettingService,
+  ) { }
 
-  }
+  // -------------------------------------------------------dynamic table portion---------------------------------------------------------------------
 
-// -------------------------------------------------------dynamic table portion---------------------------------------------------------------------
+  tableConfig: TableConfig = {
 
-tableConfig: TableConfig = {
-
-  //  showExport: false,  //for showing excel button, default true
-  //  showColumnCustomizer: false, //for showing column customizer button,default true
-  // showSerialNo: false, //for showing serial no. default true
-   unwantedColumns: [  
-        'id',     
-        'AcademicYearID',
-        'CollegeId'
+    //  showExport: false,  //for showing excel button, default true
+    //  showColumnCustomizer: false, //for showing column customizer button,default true
+    // showSerialNo: false, //for showing serial no. default true
+    unwantedColumns: [
+      'id',
+      'AcademicYearID',
+      'CollegeId'
     ],
     // showExport: false,   //default true 
     columns: [
-    {
+      {
         dataField: 'ProfileImage',
 
         displayField: 'ProfileImage',
@@ -80,28 +86,28 @@ tableConfig: TableConfig = {
 
           hoverZoom: true,
 
-          basePath: this.appsettingConfig.StaticFileRootPathURL ,
+          basePath: this.appsettingConfig.StaticFileRootPathURL,
 
-          defaultImage: this.appsettingConfig.StaticFileRootPathURL 
+          defaultImage: this.appsettingConfig.StaticFileRootPathURL
         },
       },
-      
-    {
-        dataField: 'Division',       
+
+      {
+        dataField: 'Division',
         // visible: false,    //to show in list view
         lockVisibility: true   // to lock in customize column dropdown
-    },
-    {
-      dataField: 'ActiveStatus',
-      displayField: 'Status',
-      type: 'badge',
-      // align: 'center'
-      sortable: true,
-      align: 'center',
-      width: '130px'
+      },
+      {
+        dataField: 'ActiveStatus',
+        displayField: 'Status',
+        type: 'badge',
+        // align: 'center'
+        sortable: true,
+        align: 'center',
+        width: '130px'
 
-    },
-    {
+      },
+      {
         dataField: 'ModifyDate',
         displayField: 'Modify Date',
         type: 'date',
@@ -109,8 +115,8 @@ tableConfig: TableConfig = {
         align: 'center',
         width: '150px',
         format: 'dd/MM/yyyy  hh:mm:ss a'
-    },    
-    {
+      },
+      {
         dataField: 'CreatedDate',
         displayField: 'Created Date',
         type: 'date',
@@ -118,24 +124,24 @@ tableConfig: TableConfig = {
         align: 'center',
         width: '150px',
         format: 'dd/MM/yyyy  hh:mm:ss a'
-    },
-    
-  ],
+      },
 
-  badgeConfig: [
-    { value: 'Active', text: 'Active', cssClass: 'badge bg-success text-white' },
-    { value: 'Inactive', text: 'Inactive', cssClass: 'badge bg-danger text-white' },
-    { value: 1, text: 'Active', cssClass: 'badge bg-success text-white' },
-    { value: 0, text: 'Inactive', cssClass: 'badge bg-danger text-white' },
-    { value: true, text: 'Active', cssClass: 'badge bg-success text-white' },
-    { value: false, text: 'Inactive', cssClass: 'badge bg-danger text-white' }
-  ]
+    ],
 
-
-};
+    badgeConfig: [
+      { value: 'Active', text: 'Active', cssClass: 'badge bg-success text-white' },
+      { value: 'Inactive', text: 'Inactive', cssClass: 'badge bg-danger text-white' },
+      { value: 1, text: 'Active', cssClass: 'badge bg-success text-white' },
+      { value: 0, text: 'Inactive', cssClass: 'badge bg-danger text-white' },
+      { value: true, text: 'Active', cssClass: 'badge bg-success text-white' },
+      { value: false, text: 'Inactive', cssClass: 'badge bg-danger text-white' }
+    ]
 
 
-// ----------------------------------------------------------dynamic table portion-----------------------------------------------------
+  };
+
+
+  // ----------------------------------------------------------dynamic table portion-----------------------------------------------------
 
 
 
@@ -173,7 +179,7 @@ tableConfig: TableConfig = {
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','TradeId','AcademicYearID'
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID', 'TradeId', 'AcademicYearID'
     ];
     const filteredData = this.BterDynamicDataList.map((item: any) => {
       const filteredItem: any = {};
@@ -218,10 +224,10 @@ tableConfig: TableConfig = {
 
   async onActionTypeChange(event: any) {
     debugger
-    this.TotalLoginCount=0
+    this.TotalLoginCount = 0
     this.ActionType = event.target.value;
 
-    
+
     this.GetAllData();
   }
   async GetAllData() {
@@ -245,9 +251,9 @@ tableConfig: TableConfig = {
       await this.ReportService.GetBterdynamicReport(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.BterDynamicDataList = data.Data;
-      
-          this.GetTodayLogin()
-        
+
+        this.GetTodayLogin()
+
         console.log(this.BterDynamicDataList)
       }, (error: any) => console.error(error))
     }
@@ -301,7 +307,7 @@ tableConfig: TableConfig = {
     this.ActionType = '';
     this.FromDate = '';
     this.ToDate = '';
-    this.TotalLoginCount=0
+    this.TotalLoginCount = 0
     await this.GetAllData();
   }
 

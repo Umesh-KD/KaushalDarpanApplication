@@ -26,6 +26,7 @@ export class BranchesMasterComponent implements OnInit {
   public isSubmitted: boolean = false;
   public isUpdate: boolean = false
   public StreamMasterList: any = [];
+  public MenuAllowedRoleList: any = [];
   public UserID: number = 0;
   searchText: string = '';
   public isDisabledGrid: boolean = false;
@@ -56,6 +57,7 @@ export class BranchesMasterComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.request.UserID = this.sSOLoginDataModel.UserID;
     this.UserID = this.sSOLoginDataModel.UserID;
     await this.GetStreamMasterList();
@@ -64,6 +66,31 @@ export class BranchesMasterComponent implements OnInit {
     //wait this.StreamMasterList
 
   }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
+  }
+
   async GetStreamMasterList() {
     
     try {
