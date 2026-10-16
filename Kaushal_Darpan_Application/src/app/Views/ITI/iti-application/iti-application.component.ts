@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
@@ -60,6 +60,8 @@ export class ItiApplicationComponent {
   //end table feature default
   ManagementTypeId: number = 0;
 
+  public MenuAllowedRoleList: any = [];
+
   pageNo: any = 1;
   pageSize: any = 50;
   isPre: boolean = false;
@@ -80,16 +82,22 @@ export class ItiApplicationComponent {
     private reportService: ReportService,
     public appsettingConfig: AppsettingService,
     private http: HttpClient,
+    private routers: Router
   ) { }
 
 
   async ngOnInit() {
     this.searchRequest.DepartmentID = EnumDepartment.ITI;
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+   await this.GetMenuPermission();
+   
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
     this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+
+
     this.GetMasterData();
     this.UrlStatus = Number(this.route.snapshot.paramMap.get('id'));
     console.log("UrlStatus", this.UrlStatus);
@@ -468,6 +476,30 @@ export class ItiApplicationComponent {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'Download-ITI-Application.xlsx');
+  }
+
+  async GetMenuPermission()
+  {
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    var request: any =
+    {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 

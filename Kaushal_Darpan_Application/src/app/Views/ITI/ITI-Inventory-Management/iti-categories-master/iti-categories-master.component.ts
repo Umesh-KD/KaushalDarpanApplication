@@ -9,6 +9,7 @@ import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants'
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { DTEItemCategoriesDataModels } from '../../../../Models/DTEInventory/DTEItemCategoriesDataModels';
 import { ITIInventoryService } from '../../../../Services/ITI/ITIInventory/iti-inventory.service';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-iti-categories-master',
@@ -31,6 +32,7 @@ export class ITICategoriesMasterComponent {
   public ItemCategoryId: number = 0;
   public Table_SearchText: string = "";
   public CategoriesMasterList: any = [];
+  public MenuAllowedRoleList: any = [];
 
 
   constructor(
@@ -40,7 +42,10 @@ export class ITICategoriesMasterComponent {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private routers: Router,
-    private Swal2: SweetAlert2) { }
+    private Swal2: SweetAlert2,
+    private commonMasterService: CommonFunctionService
+
+  ) { }
 
 
   async ngOnInit() {
@@ -51,6 +56,8 @@ export class ITICategoriesMasterComponent {
 
     this.ItemCategoryId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+    await this.GetMenuPermission();
     this.UserID = this.sSOLoginDataModel.UserID;
     await this.GetAllData();
     if (this.ItemCategoryId > 0) {
@@ -224,5 +231,30 @@ export class ITICategoriesMasterComponent {
       this.ItemCategoryId = ItemCategoryId;
       await this.GetByID(this.ItemCategoryId);
     }
+  }
+
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

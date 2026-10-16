@@ -64,6 +64,7 @@ export class ItiPlaningDetailsComponent implements OnInit {
   public CollegeMasterList: any = [];
   public TradeMasterList: any = [];
 
+  public MenuAllowedRoleList: any = [];
   constructor(
     private activatedRoute: ActivatedRoute,
     private resultService: ResultService,

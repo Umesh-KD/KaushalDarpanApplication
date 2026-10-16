@@ -10,6 +10,7 @@ import { CommitteeSearchModel } from '../../../../Models/TeacherHigherEducationA
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dte-committe-list',
@@ -22,6 +23,7 @@ export class DTECommitteListComponent {
   _EnumDeploymentStatus = EnumDeploymentStatus
   searchRequest = new CommitteeSearchModel();
   InspectionData: any = [];
+  MenuAllowedRoleList: any = [];
   InspectionTeamID: number = 0
   public request = new ITI_InspectionDataModel();
   public requestMember = new InspectionMemberDetailsDataModel();
@@ -47,15 +49,40 @@ export class DTECommitteListComponent {
     private Swal2: SweetAlert2,
     private appsettingConfig: AppsettingService,
     public teacherHigherEducationApplicationService: TeacherHigherEducationApplicationService,
-
+    private router: Router,
   ) { }
 
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.GetMenuPermission()
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.THTE_GetDTECommitteeList()
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
   async THTE_GetDTECommitteeList() {

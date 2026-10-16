@@ -92,9 +92,6 @@ import * as XLSX from 'xlsx';
     await this.GetMenuPermission();
     this.Status = "0";
 
-    debugger
-
-
     await this.commonFunctionService.GetCommonMasterDDLByType('StaffTrainingStatus')
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -192,6 +189,8 @@ import * as XLSX from 'xlsx';
     
     }
 
+
+  
     async StaffTrainingDetailsNewTraining_Search(statusID: number) {
     
       this.statusID = statusID;

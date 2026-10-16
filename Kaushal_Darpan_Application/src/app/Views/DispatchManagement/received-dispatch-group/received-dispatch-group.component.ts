@@ -8,7 +8,7 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 import { DispatchService } from '../../../Services/Dispatch/Dispatch.service';
 import { ToastrService } from 'ngx-toastr';
 import { EnumCourseType, EnumDepartment, EnumLateralCourse, EnumStatus, EnumDispatchDDlValue, GlobalConstants } from '../../../Common/GlobalConstants';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { max } from 'rxjs';
 import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
@@ -68,6 +68,7 @@ export class ReceivedDispatchGroupComponent {
   public IsBtn: boolean = false;
   public statusCh: number = 0;
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
+    MenuAllowedRoleList: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -80,7 +81,7 @@ export class ReceivedDispatchGroupComponent {
     private encryptionService: EncryptionService,
     private reportService: ReportService,
     private appsettingConfig: AppsettingService,
-    private http: HttpClient,
+    private http: HttpClient, private routers: Router
   ) { }
 
   async ngOnInit() {
@@ -131,7 +132,7 @@ export class ReceivedDispatchGroupComponent {
       });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     this.GetStatusType()
     this.Searchrequest.Status = 29;
   }
@@ -477,5 +478,30 @@ export class ReceivedDispatchGroupComponent {
       console.log("otp verified on the page")
     })
   }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
 
 }

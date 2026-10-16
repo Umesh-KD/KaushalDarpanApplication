@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import * as XLSX from 'xlsx';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-bter-Reval-Report',
@@ -31,6 +32,7 @@ export class bterRevalReportComponent {
   public DepartmentID: number = 0;
   public IsReval: boolean = false;
   public SemestarMasterDDLList: any[] = [];
+    MenuAllowedRoleList: any;
 
   constructor(
     public appsettingConfig: AppsettingService,
@@ -38,14 +40,14 @@ export class bterRevalReportComponent {
     private reportService: ReportService,
     private commonMasterService: CommonFunctionService,
     private toastrService: ToastrService,
-    private http: HttpClient,
+    private http: HttpClient, private routers: Router,
     private revaluationService: RevaluationService) {
 
   }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     await this.GetSemestarMatserDDL();
     await this.GetAllData();
   }
@@ -179,6 +181,31 @@ export class bterRevalReportComponent {
     XLSX.writeFile(wb, 'RevalReport.xlsx');
   }
 
+
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
 
 

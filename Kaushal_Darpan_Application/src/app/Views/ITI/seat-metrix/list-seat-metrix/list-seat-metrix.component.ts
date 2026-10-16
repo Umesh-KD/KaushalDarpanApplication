@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
 import { ToastrService } from 'ngx-toastr';
@@ -93,9 +93,11 @@ export class ListSeatMetrixComponent {
   isPublishing: boolean = false;
   showTradeLevelError: boolean = false;
 
+  public MenuAllowedRoleList: any = [];
 
 
-  constructor(
+  constructor
+    (
     private formBuilder: FormBuilder,
     private commonFunctionService: CommonFunctionService,
     private toastr: ToastrService,
@@ -106,6 +108,8 @@ export class ListSeatMetrixComponent {
     private modalService: NgbModal,
     private sMSMailService: SMSMailService,
     private seatMatrixService: SeatMatrixService,
+    private routers: Router
+
   ) { }
 
 
@@ -121,6 +125,9 @@ export class ListSeatMetrixComponent {
 
 
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+
+    await this.GetMenuPermission();
     this.searchRequest.FinancialYearID = this.SSOLoginDataModel.FinancialYearID;
     console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
     await this.GetAllotmentMaster();
@@ -1467,5 +1474,32 @@ export class ListSeatMetrixComponent {
           this.isPublishing = false;
         }
       });
+  }
+
+
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any =
+    {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.SSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

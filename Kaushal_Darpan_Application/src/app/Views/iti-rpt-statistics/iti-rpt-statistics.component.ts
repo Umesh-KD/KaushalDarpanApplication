@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { ItiRptAdmissionSeatOfferedService } from '../../Services/iti-rpt-admission-seat-offered/iti-rpt-admission-seat-offered.service';
+import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
+import { Router } from '@angular/router';
+import { EnumStatus } from '../../Common/GlobalConstants';
+import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 
 @Component({
   selector: 'app-iti-rpt-statistics',
@@ -8,10 +12,18 @@ import { ItiRptAdmissionSeatOfferedService } from '../../Services/iti-rpt-admiss
   styleUrl: './iti-rpt-statistics.component.css'
 })
 export class ItiRptStatisticsComponent {
-
+  public MenuAllowedRoleList: any = [];
   data: any[] = [];
 
-constructor(private itiService: ItiRptAdmissionSeatOfferedService) {}
+  public sSOLoginDataModel = new SSOLoginDataModel();
+  constructor(
+    private itiService: ItiRptAdmissionSeatOfferedService,
+    private commonMasterService: CommonFunctionService,
+    private routers: Router
+
+  )
+
+  { }
 
 async ngOnInit() {
   await this.loadData();
@@ -22,7 +34,10 @@ async ngOnInit() {
     this.data = res;
   } catch (error) {
     console.error(error);
-  }
+    }
+
+
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 }
 
 async downloadPDF() {
@@ -85,7 +100,34 @@ async downloadPDF() {
     } catch (error) {
       console.error(error);
     }
+
   }
+
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
 
 }
 function saveAs(blob: any, arg1: string) {

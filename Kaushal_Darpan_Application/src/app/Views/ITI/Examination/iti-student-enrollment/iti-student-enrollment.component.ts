@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../../Common/appsetting.service';
@@ -118,6 +118,8 @@ export class ItiStudentEnrollmentComponent
 
   public SubCasteCategoryADDLList: any[] = [];
 
+  public MenuAllowedRoleList: any = [];
+
   constructor(private commonMasterService: CommonFunctionService,
     private studentExaminationITIService: StudentExaminationITIService,
     private loaderService: LoaderService,
@@ -130,7 +132,8 @@ export class ItiStudentEnrollmentComponent
     public appsettingConfig: AppsettingService,
     private reportService: ReportService,
     private http: HttpClient,
-    private documentDetailsService: DocumentDetailsService
+    private documentDetailsService: DocumentDetailsService,
+    private routers: Router
   ) {
   }
 
@@ -208,6 +211,8 @@ export class ItiStudentEnrollmentComponent
     console.log(this.sSOLoginDataModel, 'this.sSOLoginDataModel')
     console.log(this.request.InstituteID, 'this.request.InstituteID')
 
+
+
     if (this.sSOLoginDataModel.RoleID == EnumRole.Principal) {
       this.isShowdrop = true;
 
@@ -216,7 +221,10 @@ export class ItiStudentEnrollmentComponent
       this.isShowdrop = false;
       this.SearchStudentDataFormGroup.get('ddlInstituteID')?.enable();
     }
-    await this.GetMasterData();
+
+
+    await this.GetMenuPermission();
+     await this.GetMasterData();
     await this.StreamMaster();
   }
   get EditStudentDataform() { return this.EditStudentDataFormGroup.controls; }
@@ -1392,4 +1400,28 @@ export class ItiStudentEnrollmentComponent
     }
   }
   //end document
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
 }

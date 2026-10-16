@@ -64,6 +64,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
     ];
     public GetTransfercateList: any = [];
     public ItiCollegesListAll: any = [];
+    public MenuAllowedRoleList: any = [];
     public SearchCategoryID: number = 0;
     public SearchInstituteID: number = 0;
     public SearchEmployeeType: number = 0;
@@ -118,7 +119,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.Status = "0";
-
+    await this.GetMenuPermission();
 
     await this.commonFunctionService.InstituteMaster(1, 1, this.sSOLoginDataModel.EndTermID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
@@ -263,6 +264,29 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
     
     }
 
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
     async EM_TransferSystem_GetData_Search(statusID: number) {
       
       this.statusID = statusID;

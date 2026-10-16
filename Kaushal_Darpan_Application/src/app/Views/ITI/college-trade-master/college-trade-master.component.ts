@@ -55,6 +55,10 @@ export class CollegeTradeMasterComponent {
   public TradeSchemeNamePop: string = '';
 
   public DataExcel: any = [];
+  public MenuAllowedRoleList: any = [];
+
+
+
 
   pageNo: any = 1;
   pageSize: any = 50;
@@ -84,6 +88,8 @@ export class CollegeTradeMasterComponent {
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.searchRequest.FinancialYearID = this.SSOLoginDataModel.FinancialYearID;
     console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
+
+    await this.GetMenuPermission();
     await this.GetTradeAndColleges(1)
     await this.MasterFilterList();
     this.getITICollege();
@@ -472,5 +478,29 @@ export class CollegeTradeMasterComponent {
         SanctionedID: sanctionedId
       }
     });
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.SSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

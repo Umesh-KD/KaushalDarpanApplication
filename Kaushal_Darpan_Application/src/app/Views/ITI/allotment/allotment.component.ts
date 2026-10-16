@@ -16,7 +16,7 @@ import { Observable, interval, Subscription, map, of } from 'rxjs';
 import { OptionsDetailsDataModel } from '../../../Models/ITIFormDataModel';
 import { BTERAllotmentdataModel, BTERSearchModel } from '../../../Models/BTER/BTERAllotmentDataModel';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ITIAllotmentService } from '../../../Services/ITI/ITIAllotment/itiallotment.service';
 import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 import { ItiSeatIntakeService } from '../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
@@ -88,6 +88,8 @@ export class AllotmentComponent implements OnInit {
 
   public transactionDatacoloumn: any;
 
+  public MenuAllowedRoleList: any = [];
+
   getKeys() {
 
   }
@@ -105,7 +107,11 @@ export class AllotmentComponent implements OnInit {
     private sMSMailService: SMSMailService,
     private route: ActivatedRoute,
     private ITICollegeTradeService: ItiSeatIntakeService,
-    private Swal2: SweetAlert2) {
+    private Swal2: SweetAlert2,
+    private routers: Router
+
+
+  ) {
 
   }
 
@@ -113,6 +119,8 @@ export class AllotmentComponent implements OnInit {
     this.searchRequest.TradeLevel = parseInt(this.route.snapshot.paramMap.get('id') ?? "0");
     this.request.TradeLevel = this.searchRequest.TradeLevel;
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+
     this.request.EndTermId = this.sSOLoginDataModel.EndTermID;
     this.searchRequest.EndTermId = this.sSOLoginDataModel.EndTermID;
 
@@ -123,6 +131,7 @@ export class AllotmentComponent implements OnInit {
         AllotmentId: ['']
       })
 
+    this.GetMenuPermission();
     this.GetDateConfig();
     this.getTradeScheme();
     this.getITICollege();
@@ -893,5 +902,29 @@ export class AllotmentComponent implements OnInit {
       this.toastr.warning('Valid Trade Lavel And Allotment Type');
     }
 
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

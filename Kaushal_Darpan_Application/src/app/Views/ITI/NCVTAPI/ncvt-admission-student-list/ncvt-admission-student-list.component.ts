@@ -34,6 +34,7 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
   public ApprovedStatus: string = "0";
   _EnumRole = EnumRole;
 
+
   // pagination
   pageNo: any = 1;
   pageSize: any = 50;
@@ -371,7 +372,8 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
 
     const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
 
-    var request: any = {
+    var request: any =
+    {
       FilterBy: baseRoute,
       MasterCode: "GetAllowedRoleForMenu"
     }

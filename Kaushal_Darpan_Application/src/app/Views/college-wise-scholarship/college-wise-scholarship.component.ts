@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AddCollegeWiseScholarshipModel, CollegeWiseScholarshipSearchModel } from '../../Models/CollegeWiseScholarshipModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EnumStatus } from '../../Common/GlobalConstants';
 @Component({
     selector: 'college-wise-scholarship',
     templateUrl: './college-wise-scholarship.component.html',
@@ -25,7 +26,8 @@ export class CollegeWiseScholarshipComponent implements OnInit {
   // public instituteId:int=0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
-    public mode:string='manual';
+  public mode: string = 'manual';
+  public MenuAllowedRoleList: any = [];
 
   // pagination
    pageNo: any = 1;
@@ -70,6 +72,11 @@ SelectedStudent:any = {};
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+
+
+    await this.GetMenuPermission();
+
     this.schemeTypes = await this.getSchemeList();
     this.scholarshipTypes = await this.getScholershiptype();
 
@@ -525,6 +532,30 @@ SelectedStudent:any = {};
           this.loaderService.requestEnded()
         }, 200);
       }
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
     }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
 }
