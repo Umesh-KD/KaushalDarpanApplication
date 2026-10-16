@@ -48,6 +48,7 @@ export class GrievanceComponent implements OnInit {
   public ResponseList: any = [];
   public FeeForTypeList: any = [];
   public IssueTypeList: any = [];
+  public MenuAllowedRoleList: any = [];
 
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
@@ -95,6 +96,7 @@ export class GrievanceComponent implements OnInit {
       })
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.loadDropdownData('QueryFor');
     this.loadDropdownData('Grievance Category');
     this.GetGrievanceData();
@@ -110,6 +112,31 @@ export class GrievanceComponent implements OnInit {
   }
 
   get form() { return this.GrievanceFormGroup.controls; }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
   // Load data for dropdown based on MasterCode
   loadDropdownData(MasterCode: string): void {
     this.commonMasterService.GetCommonMasterData(MasterCode, this.sSOLoginDataModel.DepartmentID).then((data: any) => {
