@@ -60,7 +60,6 @@ export class LeaveValidationComponent {
       this.searchRequest.Status = 'Pending'
     }
     await this.GetcompanyMatserDDL();
-
     await this.GetAllData();
 
   }
