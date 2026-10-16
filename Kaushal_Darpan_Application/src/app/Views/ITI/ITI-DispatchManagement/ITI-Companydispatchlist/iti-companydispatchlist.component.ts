@@ -45,6 +45,7 @@ export class ITICompanydispatchlistComponent {
 
   public CommonSubjectYesNo: number = 1;
   public CommonSubjectDDLList: any[] = [];
+  public MenuAllowedRoleList: any[] = [];
   public _enumrole = EnumRole
   public State: number = -1;
   public Message: any = [];
@@ -79,6 +80,7 @@ export class ITICompanydispatchlistComponent {
 
    // this.getInstituteMasterList();
    // this.GetStatusType()
+    this.GetMenuPermission()
     this.getgroupData()
     this.collegeId = 0;
 
@@ -159,7 +161,29 @@ export class ITICompanydispatchlistComponent {
 
 
   }
+  async GetMenuPermission() {
 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
 
   

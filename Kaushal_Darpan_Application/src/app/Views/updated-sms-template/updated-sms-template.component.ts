@@ -12,6 +12,7 @@ import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { LoaderService } from '../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-updated-sms-template',
@@ -48,6 +49,7 @@ export class UpdatedSMSTemplateComponent implements OnInit {
   public State: number = -1;
   public Message: any = [];
   public ErrorMessage: any = [];
+  public MenuAllowedRoleList: any = [];
   public _EnumDepartment = EnumDepartment;
   public isLoading: boolean = false;
 
@@ -72,7 +74,8 @@ export class UpdatedSMSTemplateComponent implements OnInit {
     public appsettingConfig: AppsettingService,
     private Swal2: SweetAlert2,
     private commonMasterService: CommonFunctionService,
-    private SMSMailService: SMSMailService
+    private SMSMailService: SMSMailService,
+    private router: Router,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -80,35 +83,14 @@ export class UpdatedSMSTemplateComponent implements OnInit {
     // Initialize Reactive Form
     this.SMSTemplateForm = this.formBuilder.group({
       ID: ['0'],
-
       DepartmentID: ['0', Validators.required],
-
       RoleID: ['0', Validators.required],
-
       DivisionID: ['0'],
-
       DistrictID: ['0'],
-
       ManagementTypeID: ['0'],
-
       InstituteID: [''],
-
-      SMSText: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(200)
-        ]
-      ],
-
-      TemplateID: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(50)
-        ]
-      ]
-
+      SMSText: ['',[Validators.required, Validators.maxLength(200)]],
+      TemplateID: ['', [Validators.required, Validators.maxLength(50)]]
     });
 
     // Get Logged-in User Details
@@ -117,7 +99,7 @@ export class UpdatedSMSTemplateComponent implements OnInit {
     if (loginData) {
       this.sSOLoginDataModel = JSON.parse(loginData);
     }
-
+    await this.GetMenuPermission();
     // Load Initial Data
     await this.GetSMSTemplateData();
 
@@ -128,6 +110,30 @@ export class UpdatedSMSTemplateComponent implements OnInit {
     // await this.GetDistrictMasterList();
     await this.GetManagementTypeList();
     await this.GetInstituteList();
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
   // Convenient Form Controls Accessor

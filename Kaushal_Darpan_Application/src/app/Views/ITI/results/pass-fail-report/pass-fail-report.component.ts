@@ -17,6 +17,7 @@ import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { ItiApplicationSearchmodel } from "../../../../Models/ItiApplicationPreviewDataModel";
 import { StudentMarksheetSearchModel } from "../../../../Models/OnlineMarkingReportDataModel";
 import { DropdownValidators } from "../../../../Services/CustomValidators/custom-validators.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-pass-fail-report',
@@ -35,6 +36,7 @@ export class passfailreportDownloadComponent implements AfterViewInit {
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   public MarksheetSearch = new StudentMarksheetSearchModel();
   public State: number = -1;
+  public MenuAllowedRoleList: any = [];
   public Message: any = [];
   public ErrorMessage: any = [];
   public GetStudentITI_MarksheetList: any[] = [];
@@ -69,7 +71,8 @@ export class passfailreportDownloadComponent implements AfterViewInit {
     private fb: FormBuilder,
     private reportService: ReportService,
     private http: HttpClient,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private routers: Router
   ) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
   }
@@ -85,7 +88,7 @@ export class passfailreportDownloadComponent implements AfterViewInit {
     //this.MarksheetSearch.ExamYearID = 1;
 
     //await this.GetITIStudent_PassDataList();
-
+    await this.GetMenuPermission();
   }
 
   async onSubmit() {
@@ -259,5 +262,31 @@ export class passfailreportDownloadComponent implements AfterViewInit {
     this.endInTableIndex = 0;
     //this.totalInTableRecord = this.GetStudentITI_MarksheetList.length;
   }
+
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
 }
 

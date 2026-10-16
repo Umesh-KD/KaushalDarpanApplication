@@ -50,6 +50,7 @@ export class PaperSetterAssignListComponent {
 
   ProfesorList: any = [];
   AllAssignListDataArray: any[] = [];
+  MenuAllowedRoleList: any[] = [];
 
   pdfUrl: string | null = null;
   safePdfUrl: SafeResourceUrl | null = null;
@@ -89,7 +90,7 @@ export class PaperSetterAssignListComponent {
     this.request.Endtermid = this.SSOLoginDataModel.EndTermID;
     this.request.FYID = this.SSOLoginDataModel.FinancialYearID;
 
-   
+    await this.GetMenuPermission();
     //this.GetTradeAndColleges()
     this.GetAllPaperSeterAssignList();
     //console.log(this.PaperFormGroup.get('TraderSchemeId')?.value, "TraderSchemeId");
@@ -379,5 +380,45 @@ export class PaperSetterAssignListComponent {
     this.isImage = false;
     this.isError = false;
   }
+
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.SSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
+
+  }
+
 
 }

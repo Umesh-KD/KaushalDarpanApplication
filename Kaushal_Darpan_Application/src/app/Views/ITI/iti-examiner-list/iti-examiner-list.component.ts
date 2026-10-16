@@ -47,6 +47,7 @@ export class ItiExaminerListComponent implements OnInit {
   public tbl_txtSearch: string = '';
   public Table_SearchText: string = '';
   public DistrictList: any = [];
+  public MenuAllowedRoleList: any = [];
   public ExaminerBundlelist: any = [];
   public requestSSoApi = new CommonVerifierApiDataModel();
   //public GenderList: any = [];
@@ -83,6 +84,7 @@ export class ItiExaminerListComponent implements OnInit {
     private encryptionService: EncryptionService,
     private itiexaminerservice: ItiExaminerService,
     private appsettingConfig: AppsettingService,
+
     private http: HttpClient,
     private Swal2: SweetAlert2) {
   }
@@ -94,9 +96,13 @@ export class ItiExaminerListComponent implements OnInit {
     //this.request.UserID = this.sSOLoginDataModel.UserID;
     //await this.GetCenterMasterList();
     this.UserID = this.sSOLoginDataModel.UserID;
+
+    await this.GetMenuPermission();
+
     await this.GetItiExaminerMasterList();
 
     this.GetMasterData();
+
 
     //await this.commonMasterService.GetCommonMasterData('Gender')
     //  .then((data: any) => {
@@ -850,4 +856,27 @@ export class ItiExaminerListComponent implements OnInit {
     return `file_${timestamp}.${extension}`;
   }
 
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 }

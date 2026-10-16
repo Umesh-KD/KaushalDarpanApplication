@@ -13,6 +13,8 @@ import { ITISerialMasterComponent } from './serial-master/iti-serial-master.comp
 import { ITIDateConfigurationComponent } from './date-configuration/iti-date-configuration.component';
 import { ITISignatureMasterComponent } from './signature/iti-signature.component';
 import { ContentVisiblityConfigurationComponent } from './content-visiblity-configuration/content-visiblity-configuration.component';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { EnumStatus } from '../../../../Common/GlobalConstants';
 
 
 @Component({
@@ -22,7 +24,7 @@ import { ContentVisiblityConfigurationComponent } from './content-visiblity-conf
   standalone:false
 })
 export class ITIMasterConfigurationComponent {
-
+  public MenuAllowedRoleList: any = [];
   @ViewChild('tabContent', { read: ViewContainerRef }) tabContent!: ViewContainerRef;
   selectedTabIndex = 0;
   completedTabs = [false, true, false];
@@ -42,12 +44,16 @@ export class ITIMasterConfigurationComponent {
   constructor(
     private resolver: ComponentFactoryResolver,
     private router: Router,
-    private cdr: ChangeDetectorRef)
+    private cdr: ChangeDetectorRef, private routers: Router,
+
+    private commonMasterService: CommonFunctionService,
+ )
   { }
 
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
   }
 
   ngAfterViewInit(): void {
@@ -80,4 +86,44 @@ export class ITIMasterConfigurationComponent {
     this.completedTabs[index] = true
     this.selectTab(index); // Switch the tab
   }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
+
+  }
+
+
 }

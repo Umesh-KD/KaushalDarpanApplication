@@ -14,6 +14,7 @@ import { DownloadnRollNoModel } from '../../../Models/GenerateRollDataModels';
 import { ITITimeTableService } from '../../../Services/ITI/ITITimeTable/ititime-table.service';
 import { ITITimeTableSearchModel } from '../../../Models/ITI/ITITimeTableModels';
 import { SweetAlert2 } from '../../../Common/SweetAlert2'
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-iti-admitcard-and-roll-no-bulk-generate',
@@ -24,11 +25,17 @@ import { SweetAlert2 } from '../../../Common/SweetAlert2'
 export class ITIAdmitcardAndRollNoBulkGenerateComponent {
 
   constructor(private loaderService: LoaderService, private getAdmitCardService: GetAdmitCardService, private activatedRoute: ActivatedRoute,
-    private reportService: ReportService, private toastrService: ToastrService, private appsettingConfig: AppsettingService, private ITITimeTableService: ITITimeTableService,
+    private reportService: ReportService, private toastrService:
+      ToastrService, private appsettingConfig: AppsettingService, private ITITimeTableService: ITITimeTableService,
+    private routers: Router,
+
+    private commonMasterService: CommonFunctionService,
+   
     private swat: SweetAlert2,
     private http: HttpClient, private route: Router) { }
   sSOLoginDataModel = new SSOLoginDataModel();
   public ITITimeTableList: any = [];
+  public MenuAllowedRoleList: any = [];
   public SSOLoginDataModel = new SSOLoginDataModel()
   public GenerateAdmitCardsearchRequest = new GenerateAdmitCardSearchModel();
   public GenerateRollNosearchRequest = new DownloadnRollNoModel();
@@ -41,6 +48,7 @@ export class ITIAdmitcardAndRollNoBulkGenerateComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.MenuAllowedRoleList()
     await this.GetITITimeTableList()
   }
 
@@ -186,5 +194,27 @@ export class ITIAdmitcardAndRollNoBulkGenerateComponent {
       }, 200);
     }
   }
+  async GetMenuPermission() {
 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 }

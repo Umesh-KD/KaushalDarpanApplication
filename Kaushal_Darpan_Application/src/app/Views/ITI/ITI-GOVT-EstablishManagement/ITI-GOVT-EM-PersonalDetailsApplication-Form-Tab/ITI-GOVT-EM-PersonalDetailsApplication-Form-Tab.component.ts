@@ -40,6 +40,7 @@ export class ITIGOVTEMPersonalDetailsApplicationFormTabComponent implements OnIn
   dateConfiguration = new DateConfigurationModel();
   public AdmissionDateList: any = []
   public CheckUserID: number = 0
+
   completedTabs = [true, false, false]; // Keep track of completed tabs
   tabs =
     [

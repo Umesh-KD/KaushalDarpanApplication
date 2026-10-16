@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { ItiTheoryMarksService } from '../../../Services/ITI/ItiTheoryMarks/Iti-theory-marks.service';
 import { CenterStudentSearchModel } from '../../../Models/ITITheoryMarksDataModel';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-center-trade-student-report',
   standalone: false,
@@ -28,7 +29,7 @@ export class CenterTradeStudentReportComponent {
   public Branchlist: any = [];
   public InstituteMasterDDLList: any = [];
   public CenterDDLlist: any = [];
-
+  public MenuAllowedRoleList: any = [];
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
   public currentInTablePage: number = 1;
@@ -48,6 +49,7 @@ export class CenterTradeStudentReportComponent {
     private commonMasterService: CommonFunctionService,
     private reportService: ReportService,
     public appsettingConfig: AppsettingService,
+    private routers: Router,
     private http: HttpClient) {
   }
 
@@ -60,7 +62,7 @@ export class CenterTradeStudentReportComponent {
       this.searchRequest.CenterID = this.sSOLoginDataModel.InstituteID
     }
     this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID;
-
+    await this.GetMenuPermission();
     await this.GetMasterData();
     await this.GetItiTrade()
     await this.Centerlist()
@@ -374,4 +376,45 @@ export class CenterTradeStudentReportComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
     return `Admitcard_${timestamp}.${extension}`;
   }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
+
+  }
+
+
+
 }

@@ -90,7 +90,7 @@ export class BterAttendencePercentReportComponent {
 
   ) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+  
 
     this.RoleID = this.sSOLoginDataModel.RoleID
     this.UserID = this.sSOLoginDataModel.UserID
@@ -122,7 +122,7 @@ export class BterAttendencePercentReportComponent {
 
  async ngOnInit() {
 
-    await this.GetMenuPermission();
+ 
     this.TableForm = this.fb.group({
       SubjectID: ['', ],
       AttandanceTimeID: ['', ],
@@ -135,7 +135,7 @@ export class BterAttendencePercentReportComponent {
       AttendanceStartDate: [this.selectedRange?.start],
       AttendanceEndDate: [this.selectedRange?.end]
     });
-
+  
     this.getSubjectMasterDDL(this.streamId, this.semesterId);
     this.GetStudentAttandanceTimeDDL();
     this.GetStaffLeaveAllData();
@@ -155,7 +155,7 @@ export class BterAttendencePercentReportComponent {
         this.getData();
       }
     }, 1000);
-
+   await this.GetMenuPermission();
     //const defaultTime = this.StudentAttandanceTimeDDL.find(x => x.Name === '09:00:00 - 10:00:00');
     //if (!this.TableForm.get('AttandanceTimeID')?.value && defaultTime) {
     //  this.TableForm.patchValue({ AttandanceTimeID: defaultTime.ID });

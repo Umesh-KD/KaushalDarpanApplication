@@ -9,6 +9,7 @@ import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { EnumStatus } from '../../Common/GlobalConstants';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { AppsettingService } from '../../Common/appsetting.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-updated-email-template',
@@ -26,6 +27,7 @@ export class UpdatedEmailTemplateComponent implements OnInit {
   selectedTabIndex: number = 0; // 0: Directory Tab, 1: General Settings, 2: Body, etc.
   searchKeyword: string = '';
   templateList: any[] = [];
+  MenuAllowedRoleList: any[] = [];
 
   public sSOLoginDataModel = new SSOLoginDataModel();
 
@@ -47,7 +49,9 @@ export class UpdatedEmailTemplateComponent implements OnInit {
     private Swal2: SweetAlert2,
     private SMSMailService: SMSMailService,
     private commonMasterService: CommonFunctionService,
-    public appsettingConfig: AppsettingService
+    public appsettingConfig: AppsettingService,
+    private router: Router,
+
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -61,8 +65,33 @@ export class UpdatedEmailTemplateComponent implements OnInit {
     } catch (error) {
       console.error('Error reading logged-in user:', error);
     }
-
+    
+    await this.GetMenuPermission();
     await this.GetTemplateList();
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
   createForm(): void {

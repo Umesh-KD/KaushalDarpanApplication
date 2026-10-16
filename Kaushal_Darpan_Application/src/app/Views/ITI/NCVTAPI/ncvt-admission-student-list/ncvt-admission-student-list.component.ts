@@ -372,7 +372,8 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
 
     const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
 
-    var request: any = {
+    var request: any =
+    {
       FilterBy: baseRoute,
       MasterCode: "GetAllowedRoleForMenu"
     }

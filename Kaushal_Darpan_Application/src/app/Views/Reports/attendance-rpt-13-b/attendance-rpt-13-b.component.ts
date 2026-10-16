@@ -12,7 +12,7 @@ import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { ActivatedRoute } from '@angular/router';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-attendance-rpt-13-b',
   standalone: false,
@@ -27,9 +27,10 @@ export class AttendanceRpt13BComponent {
   isSubmitted: boolean = false
   CenterId: number = 0
   CSId: number = 0
+    MenuAllowedRoleList: any;
 
   constructor(
-    private commonMasterService: CommonFunctionService,
+    private commonMasterService: CommonFunctionService, private routers: Router,
     private reportService: ReportService,
     private appsettingConfig: AppsettingService,
     private http: HttpClient,
@@ -48,6 +49,7 @@ export class AttendanceRpt13BComponent {
     this.CenterId = Number( this.activateRoute.snapshot.queryParamMap.get('centerid'));
     this.CSId = Number( this.activateRoute.snapshot.queryParamMap.get('csid'));
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID
     this.getMasterData();
    
@@ -149,4 +151,29 @@ export class AttendanceRpt13BComponent {
     return `Attendance_13_B_${formattedDate}_${instituteCode}`;
 
   }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
 }

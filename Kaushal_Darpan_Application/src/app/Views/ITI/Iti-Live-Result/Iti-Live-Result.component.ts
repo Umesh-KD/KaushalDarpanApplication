@@ -9,6 +9,8 @@ import { ExamLiveResultModel } from '../../../Models/ITI/ITI_ResultModel';
 import { ITIResultService } from '../../../Services/ITIResult/iti-result.service';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
+import { Router } from '@angular/router';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-Iti-Live-Result',
@@ -41,20 +43,25 @@ export class ItiLiveResultComponent {
   public showResendButton: boolean = false;
   timeLeft: number = GlobalConstants.DefaultTimerOTP;
   private interval: any;
-
+  public MenuAllowedRoleList: any = [];
   constructor(
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private Swal2: SweetAlert2,
     private itiResult: ITIResultService,
     private modalService: NgbModal,
-    private sMSMailService: SMSMailService,  
+    private sMSMailService: SMSMailService,
+    private routers: Router,
+
+    private commonMasterService: CommonFunctionService,
+
   ) {
 
   }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     await this.getliveResultData();
   }
 
@@ -135,6 +142,43 @@ export class ItiLiveResultComponent {
     await this.LiveResult();
 
     });
+  }
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
+
   }
 
 

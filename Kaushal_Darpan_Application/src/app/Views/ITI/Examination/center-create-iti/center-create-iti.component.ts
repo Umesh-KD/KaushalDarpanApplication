@@ -32,6 +32,7 @@ export class CenterCreateITIComponent implements OnInit {
   public DistrictMasterList: any = [];
   public State: number = -1;
   public CategoryList: any = []
+  public MenuAllowedRoleList: any = []
   public UserID: number = 0;
   public searchText: string = '';
   public tbl_txtSearch: string = '';
@@ -69,6 +70,7 @@ export class CenterCreateITIComponent implements OnInit {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
+    await this.GetMenuPermission()
     await this.GetCategory()
     await this.GetDistrictMasterList()
     await this.GetAllData()
@@ -347,6 +349,43 @@ export class CenterCreateITIComponent implements OnInit {
 
   get totalInTableSelected(): number {
     return this.CenterAllotList.filter(x => x.Marked)?.length;
+  }
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
+
   }
 
 }

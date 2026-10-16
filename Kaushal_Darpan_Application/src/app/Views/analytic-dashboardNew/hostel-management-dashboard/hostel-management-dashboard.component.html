@@ -1,0 +1,153 @@
+
+<header class="dashboard-header">
+  <div class="header-content">
+    <h2>Hostel Management Dashboard</h2>
+    <p>Analytical insights • Academic Year 2026–27</p>
+  </div>
+
+  <select aria-label="Dashboard role"
+          [(ngModel)]="selectedRole"
+          (ngModelChange)="onRoleChange()">
+    <option value="university">University Admin</option>
+    <option value="college">College Admin / Principal</option>
+  </select>
+</header>
+
+<main class="dashboard-main">
+  <div class="filters">
+    <h3 class="section-title">Performance Overview</h3>
+
+    <div class="filter-control">
+      <label for="collegeFilter">College:</label>
+
+      <select id="collegeFilter"
+              [(ngModel)]="selectedCollege"
+              (ngModelChange)="onCollegeChange()"
+              [disabled]="selectedRole === 'college'">
+        <option value="all">All Colleges</option>
+        <option value="engineering">Engineering College</option>
+        <option value="medical">Medical College</option>
+        <option value="arts">Arts &amp; Science College</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Dashboard KPI cards -->
+  <section class="kpis">
+    <article class="card">
+      <div class="kpi-label">Total Bed Capacity</div>
+      <div class="kpi-value blue">
+        {{ dashboard.capacity | number }}
+      </div>
+      <div class="kpi-note">Approved operational beds</div>
+    </article>
+
+    <article class="card">
+      <div class="kpi-label">Occupied Beds</div>
+      <div class="kpi-value green">
+        {{ dashboard.occupied | number }}
+      </div>
+      <div class="kpi-note">{{ occupancyPercentage }}% occupancy</div>
+    </article>
+
+    <article class="card">
+      <div class="kpi-label">Fee Collection</div>
+      <div class="kpi-value">{{ dashboard.feeRate }}%</div>
+      <div class="kpi-note">Of fees due for the period</div>
+    </article>
+
+    <article class="card">
+      <div class="kpi-label">Open Complaints</div>
+      <div class="kpi-value orange">
+        {{ dashboard.openComplaints | number }}
+      </div>
+      <div class="kpi-note">Awaiting resolution</div>
+    </article>
+  </section>
+
+  <!-- Charts -->
+  <section class="charts">
+    <article class="card chart-card">
+      <h3>Bed Occupancy</h3>
+      <p>Occupied beds versus vacant beds</p>
+      <div class="chart-wrap">
+        <canvas #occupancyCanvas></canvas>
+      </div>
+    </article>
+
+    <article class="card chart-card">
+      <h3>Fee Collection Trend</h3>
+      <p>Monthly fees billed and collected (₹ lakh)</p>
+      <div class="chart-wrap">
+        <canvas #feeCanvas></canvas>
+      </div>
+    </article>
+
+    <article class="card chart-card">
+      <h3>Occupancy by College</h3>
+      <p>Percentage of operational beds occupied</p>
+      <div class="chart-wrap">
+        <canvas #collegeCanvas></canvas>
+      </div>
+    </article>
+
+    <article class="card chart-card">
+      <h3>Complaint Status</h3>
+      <p>Current complaints by workflow status</p>
+      <div class="chart-wrap">
+        <canvas #complaintCanvas></canvas>
+      </div>
+    </article>
+  </section>
+
+  <!-- Performance table -->
+  <section class="card performance-card">
+    <h3 class="section-title">Hostel Performance Summary</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>College / Hostel</th>
+            <th>Capacity</th>
+            <th>Occupied</th>
+            <th>Occupancy</th>
+            <th>Fee Collection</th>
+            <th>Open Complaints</th>
+            <th>Performance</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="
+              let college of tableRows;
+              trackBy: trackByCollege
+            ">
+            <td>{{ college.name }}</td>
+            <td>{{ college.capacity | number }}</td>
+            <td>{{ college.occupied | number }}</td>
+            <td>{{ college.occupancy }}%</td>
+            <td>{{ college.fee }}%</td>
+            <td>{{ college.complaints }}</td>
+            <td>
+              <span class="status"
+                    [ngClass]="college.statusClass">
+                {{ college.status }}
+              </span>
+            </td>
+          </tr>
+
+          <tr *ngIf="tableRows.length === 0">
+            <td colspan="7" class="empty-state">
+              No hostel records available.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Hostel Management Analytics • Demonstration data only
+</footer>

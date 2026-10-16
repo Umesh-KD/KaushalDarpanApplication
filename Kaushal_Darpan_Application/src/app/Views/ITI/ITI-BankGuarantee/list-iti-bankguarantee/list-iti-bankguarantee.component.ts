@@ -61,6 +61,8 @@ export class listitibankguaranteeComponent {
   modalReference: NgbModalRef | undefined;
   public bankGuaranteeFormGroup!: FormGroup;
 
+  public MenuAllowedRoleList: any = [];
+
 
 
   //end table feature default
@@ -76,7 +78,8 @@ export class listitibankguaranteeComponent {
     private modalService: NgbModal,
     public appsettingConfig: AppsettingService,
     private fb: FormBuilder,
-    private Swal2: SweetAlert2) {
+    private Swal2: SweetAlert2
+  ) {
   }
 
   async ngOnInit()
@@ -84,7 +87,12 @@ export class listitibankguaranteeComponent {
     this.sSOLoginDataModel.RoleID;
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+
+    this.GetMenuPermission();
+
     this.bankGuaranteeFormGroup = this.fb.group({
+
       //status: ['1', Validators.required],  
       Remarks: ['', DropdownValidatorsString1],
       OrderNo: ['', Validators.required],
@@ -705,5 +713,29 @@ export class listitibankguaranteeComponent {
     doc.save('ITI Bank Guarantee List.pdf');
   }
 
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
 }

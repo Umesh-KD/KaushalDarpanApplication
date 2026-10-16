@@ -52,14 +52,15 @@ export class CreateGuestRoomComponent {
   ) { }
 
   async ngOnInit() {
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
+    
     this.groupForm = this.fb.group({
       txtGuestHouseName: ['', Validators.required],
       //txtPhoneNumber: ['', Validators.required],
       txtAddress: ['', Validators.required],
       txtPhoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
     });
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     //this.searchRequest.DepartmentID = 2;
     await this.GetAllGuestRoomList(); 
   }

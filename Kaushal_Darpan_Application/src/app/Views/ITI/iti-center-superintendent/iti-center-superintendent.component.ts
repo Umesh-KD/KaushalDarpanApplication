@@ -18,6 +18,7 @@ import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 import * as XLSX from 'xlsx';
 import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-iti-center-superintendent',
   standalone: false,
@@ -32,6 +33,7 @@ export class ItiCenterSuperintendentComponent {
   public Isverifed: boolean = false
   GetRollService = inject(GetRollService);
   centerCreation = inject(CenterAllotmentService);
+  routers = inject(Router);
   toastr = inject(ToastrService);
   loaderService = inject(LoaderService);
   modalService = inject(NgbModal);
@@ -56,6 +58,7 @@ export class ItiCenterSuperintendentComponent {
   request = new CenterAllocationtDataModels();
   sSOLoginDataModel = new SSOLoginDataModel();
   BackupCenterMasterList: any[] = [];
+  MenuAllowedRoleList: any[] = [];
   SelectCenterMaster: any;
   GetStatusCenterSuperintendentData: any;
   UserID: number = 0;
@@ -75,7 +78,8 @@ export class ItiCenterSuperintendentComponent {
     this.request.ModifyBy = this.sSOLoginDataModel.UserID;
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
- /*   this.GetStatusCenterSuperintendent();*/
+    /*   this.GetStatusCenterSuperintendent();*/
+    await this.GetMenuPermission();
     await this.GetCenterMasterList();
 
   }
@@ -593,6 +597,44 @@ export class ItiCenterSuperintendentComponent {
       }, 200);
     }
 
+
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
 
   }
 

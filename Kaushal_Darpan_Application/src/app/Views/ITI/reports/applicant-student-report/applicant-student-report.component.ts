@@ -63,6 +63,8 @@ export class ApplicantStudentReportComponent {
   public selectedCollegeId: number = 0;
   public collegeSearchRequest: any = {};
 
+  public MenuAllowedRoleList: any = [];
+
   constructor(
     private loaderService: LoaderService,
     private commonMasterService: CommonFunctionService,
@@ -82,6 +84,8 @@ export class ApplicantStudentReportComponent {
   async ngOnInit() {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+    await this.GetMenuPermission();
     await this.GetAllotedSeatByCollegeList();
     await this.GetTradeListDDL();
 
@@ -283,6 +287,30 @@ export class ApplicantStudentReportComponent {
 
 
     }, 400); // 300–500ms is ideal
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
 

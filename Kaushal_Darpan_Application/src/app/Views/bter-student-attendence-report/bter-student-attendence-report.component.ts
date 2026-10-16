@@ -129,7 +129,7 @@ export class BterStudentAttendenceReportComponent {
 
  async ngOnInit() {
 
-    await this.GetMenuPermission();
+  
     this.TableForm = this.fb.group({
       SubjectID: ['',],
       AttandanceTimeID: ['' ],
@@ -153,6 +153,7 @@ export class BterStudentAttendenceReportComponent {
       SemesterID: this.semesterId,
       SectionID: this.sectionId,
     });
+   await this.GetMenuPermission();
     setTimeout(() => {
       if (this.semesterId > 0) {
         this.TableForm.patchValue({
@@ -161,7 +162,7 @@ export class BterStudentAttendenceReportComponent {
         this.getData();
       }
     }, 1000);
-
+   
     //const defaultTime = this.StudentAttandanceTimeDDL.find(x => x.Name === '09:00:00 - 10:00:00');
     //if (!this.TableForm.get('AttandanceTimeID')?.value && defaultTime) {
     //  this.TableForm.patchValue({ AttandanceTimeID: defaultTime.ID });
@@ -169,8 +170,6 @@ export class BterStudentAttendenceReportComponent {
 
   }
   get formTable() { return this.TableForm.controls; }
-
-
 
   DayListBind() {
 

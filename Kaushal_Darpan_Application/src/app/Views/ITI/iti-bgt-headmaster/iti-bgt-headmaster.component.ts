@@ -27,6 +27,7 @@ import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { ITI_BGT_HeadMasterDataModel, ITI_BGT_HeadMasterSearchModel } from "../../../Models/ITI/ItiBGTHeadMasterDataModel";
 import { ITI_BGTHeadmasterService } from "../../../Services/ITI/ITI_BGT_Headmaster/ITI_BGTHeadmaster.Service";
 import { SweetAlert2 } from "../../../Common/SweetAlert2";
+import { Router } from "@angular/router";
 @Component({
   selector: 'app-marksheet',
   standalone: false,
@@ -55,6 +56,7 @@ export class ItiBGTHeadmasterComponent{
   public ErrorMessage: any = [];
   public GetInstructorDataList: any[] = [];
   public paginatedInTableData: any[] = [];//copy of main data
+  public MenuAllowedRoleList: any[] = [];//copy of main data
   public currentInTablePage: number = 1;
   public pageInTableSize: string = "50";
   public totalInTablePage: number = 0;
@@ -100,6 +102,7 @@ export class ItiBGTHeadmasterComponent{
     private ItiBGTHeadmasterServices: ITI_BGTHeadmasterService,
     private modalService: NgbModal,
     private Swal2: SweetAlert2,
+    private routers: Router
   ) 
   {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -128,7 +131,7 @@ export class ItiBGTHeadmasterComponent{
     this.InstructorSearch.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.InstructorSearch.Uid = '';
     this.InstructorSearch.Name = '';
-  
+    await this.GetMenuPermission();
   //  await this.GetItiInstructorData();
     await this.getBGTHeadmasterData();
 
@@ -375,6 +378,43 @@ export class ItiBGTHeadmasterComponent{
       });
   }
 
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
+
+  }
 
 
 }
