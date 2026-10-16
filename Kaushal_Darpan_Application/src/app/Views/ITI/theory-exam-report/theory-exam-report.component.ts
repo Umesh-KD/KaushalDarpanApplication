@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { ItiTheoryMarksService } from '../../../Services/ITI/ItiTheoryMarks/Iti-theory-marks.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-theory-exam-report',
@@ -25,6 +26,7 @@ export class TheoryExamReportComponent {
 
   sSOLoginDataModel = new SSOLoginDataModel();
   public TheoryMarksRptDataList: any = [];
+  public MenuAllowedRoleList: any = [];
   public SemesterMasterList: any = [];
   public StudentDetailsModelList: any = [];
   public Branchlist: any = [];
@@ -51,6 +53,7 @@ export class TheoryExamReportComponent {
     private commonMasterService: CommonFunctionService,
     private reportService: ReportService,
     public appsettingConfig: AppsettingService,
+    private routers: Router,
     private http: HttpClient, private modalService: NgbModal) {
   }
 
@@ -71,6 +74,7 @@ export class TheoryExamReportComponent {
     };
 
     this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
+    await this.GetMenuPermission();
     await this.GetMasterData();
     await this.GetItiTrade()
     // await this.GetTheoryMarksDetailList();
@@ -398,7 +402,29 @@ export class TheoryExamReportComponent {
 
   }
 
+  async GetMenuPermission() {
 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
 
 }

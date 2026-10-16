@@ -5,6 +5,9 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { ReportService } from '../../../Services/Report/report.service';
 import { MarksheetCorrectionHistoryModel } from '../../../Models/CollegesWiseReportsModel';
+import { Router } from '@angular/router';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { EnumStatus } from '../../../Common/GlobalConstants';
 
 @Component({
   selector: 'marksheet-correction-history-report',
@@ -15,7 +18,7 @@ import { MarksheetCorrectionHistoryModel } from '../../../Models/CollegesWiseRep
 export class MarksheetCorrectionHistoryReportComponent implements OnInit {
 
   marksheetCorrectionHistoryList:any[] = [];
-
+  public MenuAllowedRoleList: any = [];
   isLoading: boolean = false;
 
   searchRequest = {
@@ -25,10 +28,15 @@ export class MarksheetCorrectionHistoryReportComponent implements OnInit {
 
   constructor(
     private reportService: ReportService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private routers: Router,
+
+    private commonMasterService: CommonFunctionService,
+
   ) { }
 
   ngOnInit(): void {
+/*    this.GetMenuPermission();*/
     this.getMarksheetCorrectionHistory();
   }
 
@@ -141,4 +149,29 @@ export class MarksheetCorrectionHistoryReportComponent implements OnInit {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     doc.save(`Marksheet_Correction_History_${timestamp}.pdf`);
   }
+
+  //async GetMenuPermission() {
+
+  //  const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+  //  var request: any = {
+  //    FilterBy: baseRoute,
+  //    MasterCode: "GetAllowedRoleForMenu"
+  //  }
+
+  //  await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+  //    data = JSON.parse(JSON.stringify(data));
+  //    if (data.State == EnumStatus.Success) {
+  //      this.MenuAllowedRoleList = data.Data
+
+  //      if (!this.MenuAllowedRoleList.some(
+  //        (item: any) => Number(item.RoleID) == Number(this.ss.RoleID)
+  //      )) {
+  //        // Navigate to dashboard if RoleID is not allowed
+  //        this.routers.navigate(['/dashboard']);
+  //      }
+  //    }
+  //  })
+  //}
+
 }

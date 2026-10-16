@@ -19,7 +19,7 @@ import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 import { ItiAssignExaminerService } from '../../../Services/ITIAssignExaminer/iti-assign-examiner.service';
 import { ItiAssignExaminerSearchModel, ITIPracticalExaminerSearchFilters } from '../../../Models/ITI/AssignExaminerDataModel';
 import { ReportService } from '../../../Services/Report/report.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
 import { BlankReportModel } from '../../../Models/ExamMasterDataModel';
 import { UploadFileModel } from '../../../Models/UploadFileModel';
@@ -54,6 +54,7 @@ export class CenterPracticalExaminerComponent {
   closeResult: string | undefined;
   Table_SearchText: string = '';
   AssignExaminerMasterList: any[] = [];
+  MenuAllowedRoleList: any[] = [];
   BackupCenterMasterList: any[] = [];
   searchRequest = new ItiAssignExaminerSearchModel();
   UploadRequest = new ITIPracticalExaminerSearchFilters();
@@ -76,7 +77,9 @@ export class CenterPracticalExaminerComponent {
     private documentDetailsService: DocumentDetailsService,     
     private reportservice: ReportService,     
     private loaderService: LoaderService,     
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private routers: Router
+
   ) { }
   _EnumRole = EnumRole;
   async ngOnInit() {
@@ -90,6 +93,7 @@ export class CenterPracticalExaminerComponent {
     this.request.CourseTypeID = this.CourseType;
 
     /*   this.GetStatusCenterSuperintendent();*/
+    await this.GetMenuPermission();
     await this.GetAssignexaminer();
 
   }
@@ -447,5 +451,27 @@ debugger
         }, 200);
       }
     }
+  async GetMenuPermission() {
 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 }

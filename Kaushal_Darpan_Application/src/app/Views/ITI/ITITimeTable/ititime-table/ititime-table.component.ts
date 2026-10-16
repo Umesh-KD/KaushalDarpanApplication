@@ -57,6 +57,7 @@ export class ITITimeTableComponent {
   public SearchTimeTableList: any = []
   serchrequest = new InvigilatorSSOIDList();
   public StreamMasterList: any = [];
+  public MenuAllowedRoleList: any = [];
   public ExamShiftList: any = [];
   public PaperList: any = [];
   public SubjectList: any = [];
@@ -87,7 +88,8 @@ export class ITITimeTableComponent {
     private reportService: ReportService,
     private appsettingConfig: AppsettingService,
     private http: HttpClient,
-    private centerAllocationService: ITICenterAllocationService
+    private centerAllocationService: ITICenterAllocationService,
+    private routers: Router
   ) { }
 
   async ngOnInit() {
@@ -98,6 +100,7 @@ export class ITITimeTableComponent {
     console.log("sSOLoginDataModel", this.sSOLoginDataModel)
     this.request.UserID = this.sSOLoginDataModel.UserID;
     this.UserID = this.sSOLoginDataModel.UserID;
+    await this.GetMenuPermission();
     await this.GetITITimeTableList();
     await this.GetStreamMasterList()
     await this.GetExamShift()
@@ -106,7 +109,44 @@ export class ITITimeTableComponent {
     await this.getMasterData()
   }
 
-  
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
+
+  }
+
 
   get _InvigilatorFormGroup() { return this.InvigilatorFormGroup.controls; }
 

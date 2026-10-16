@@ -16,6 +16,8 @@ import { ReportService } from '../../../Services/Report/report.service';
 import { ItiTradeService } from '../../../Services/iti-trade/iti-trade.service';
 import * as XLSX from 'xlsx';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { EnumStatus } from '../../../Common/GlobalConstants';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-iit-paper-upload-report',
@@ -37,6 +39,7 @@ export class IitPaperUploadReportComponent {
   public InstituteMasterDDLList: any = [];
   public CenterDDLlist: any = [];
   public TimeTableList: any = [];
+  public MenuAllowedRoleList: any = [];
 
 
   public UserID: number = 0;
@@ -63,14 +66,14 @@ export class IitPaperUploadReportComponent {
     private appsettingConfig: AppsettingService,
     private http: HttpClient,
     private centerAllocationService: ITICenterAllocationService,
-
+    private routers: Router,
     private apiService: ItiTradeService,
   ) { }
 
   async ngOnInit() {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     await this.GetITIPaperUpload_Reports();
     await this.Centerlist();
     await this.loadDropdownData("TimeTableList");
@@ -199,5 +202,29 @@ export class IitPaperUploadReportComponent {
       }
     });
 
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

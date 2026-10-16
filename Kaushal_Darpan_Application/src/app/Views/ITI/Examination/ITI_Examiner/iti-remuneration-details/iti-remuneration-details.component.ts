@@ -10,6 +10,7 @@ import { ReportService } from '../../../../../Services/Report/report.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { EnumStatus, EnumRemunerationStatus, GlobalConstants } from '../../../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
+import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
 @Component({
   selector: 'app-iti-remuneration-details',
   templateUrl: './iti-remuneration-details.component.html',
@@ -29,6 +30,7 @@ export class ItiRemunerationDetailsComponent {
   public closeResult: string | undefined;
   public isSubmitted: boolean = false;
   public RenumerationExaminerList: any = [];
+  public MenuAllowedRoleList: any = [];
   public pdfUrl: SafeResourceUrl | null = null;
   public showPdfModal = false;
   public forwardflag = false;
@@ -45,6 +47,7 @@ export class ItiRemunerationDetailsComponent {
     private reportService: ReportService,
     private sanitizer: DomSanitizer,
     private appsettingConfig: AppsettingService,
+    private commonMasterService: CommonFunctionService,
 
   ) {}
 
@@ -60,7 +63,7 @@ export class ItiRemunerationDetailsComponent {
       console.log('URL Param:', this.ExaminerID);
       console.log('Status Param:', this.ExamTypeID);
     });
-
+    await this.GetMenuPermission()
     this.GetItiAppointExaminerDetails();
   }
 
@@ -254,5 +257,27 @@ export class ItiRemunerationDetailsComponent {
       console.log(ex);
     }
   }
+  async GetMenuPermission() {
 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.ssoLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 }

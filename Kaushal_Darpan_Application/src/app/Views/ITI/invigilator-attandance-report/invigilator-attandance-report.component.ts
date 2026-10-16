@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { ItiTheoryMarksService } from '../../../Services/ITI/ItiTheoryMarks/Iti-theory-marks.service';
 import { ITIPaperUploadSearchModel } from '../../../Models/DocumentDetailsModel';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-invigilator-attandance-report',
@@ -31,7 +32,7 @@ export class InvigilatorAttandanceReportComponent {
   public CenterDDLlist: any = [];
 
   
-
+  public MenuAllowedRoleList: any = [];
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
   public currentInTablePage: number = 1;
@@ -51,11 +52,13 @@ export class InvigilatorAttandanceReportComponent {
     private commonMasterService: CommonFunctionService,
     private reportService: ReportService,
     public appsettingConfig: AppsettingService,
+    private routers: Router,
     private http: HttpClient) {
   }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.GetMenuPermission();
     this.Centerlist();
    
   }
@@ -285,5 +288,30 @@ export class InvigilatorAttandanceReportComponent {
       }, 200);
     }
   }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
 
 }
