@@ -1,8 +1,25 @@
+<div class="notice-bar" *ngIf="marqueeMessage">
+  <div class="notice-badge">
+    <span class="pulse-dot"></span>
+    LIVE
+  </div>
+
+  <div class="notice-window">
+    <div class="notice-track">
+      <span class="notice-text">{{ marqueeMessage }}</span>
+      <!-- duplicate for a seamless loop -->
+      <span class="notice-text" aria-hidden="true">{{ marqueeMessage }}</span>
+    </div>
+  </div>
+</div>
+
+
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
     <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
   </div>
 </div>
+
 <!-- Page Title End -->
 <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event"
   data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true"

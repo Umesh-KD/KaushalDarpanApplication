@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ItiTradeService } from '../../../../app/Services/iti-trade/iti-trade.service';
 import { SSOLoginDataModel } from '../../../../app/Models/SSOLoginDataModel';
 import { EnumStatus } from '../../../../app/Common/GlobalConstants';
+import { CommonFunctionService } from '../../../../app/Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-admission-master-dashboard',
@@ -49,13 +50,16 @@ export class AdmissionMasterDashboardComponent implements OnInit
     public DashboardCountList: any = []
 
   public planningChartData: any[] = [];
+  public MenuAllowedRoleList: any = [];
+
 planningChartOptions: Highcharts.Options = {};
 updatePlanningFlag = false;
   constructor(
     private _ITIAdminDashboardServiceService: ITIAdminDashboardServiceService,
     private loaderService: LoaderService,
     private router: Router,
-    private itiTradeService: ItiTradeService
+    private itiTradeService: ItiTradeService,
+    private commonMasterService: CommonFunctionService
 
   )
   {
@@ -64,6 +68,9 @@ updatePlanningFlag = false;
 
   async ngOnInit(): Promise<void>
   {
+
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.GetMenuPermission();
     this.loadPieChart();
     this.FillBarChart();
     this.loadPlanningChart();
@@ -380,6 +387,33 @@ console.log( 'chart data in load planning',this.planningChartData);
 debugger
   this.updatePlanningFlag = true;
 }
+
+
+  async GetMenuPermission()
+  {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
 
 
 }
