@@ -404,6 +404,7 @@ export class MasterLayoutComponent implements OnInit {
 
     //debugger
     var r = this.lstUserRole.filter((x: any) => x.RoleID == this.RoleID)[0];
+    debugger;
     this.sSOLoginDataModel.RoleID = this.RoleID;
     this.sSOLoginDataModel.InstituteID = r?.['InstituteID'];
     this.sSOLoginDataModel.InstituteName = r?.['InstituteName'];
