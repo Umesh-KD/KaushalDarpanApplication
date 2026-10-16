@@ -10,6 +10,11 @@ import {
 } from '@angular/core';
 
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { ITIAdminDashboardServiceService } from '../../../Services/ITI-Admin-Dashboard-Service/iti-admin-dashboard-service.service';
+import { AdminDashboardDataService } from '../../../Services/AdminDashboard/admin-dashboard-data.service';
+import { EnumRole } from '../../../Common/GlobalConstants';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 
 Chart.register(...registerables);
 
@@ -45,26 +50,41 @@ interface DashboardData {
 export class HostelManagementDashboardComponent implements AfterViewInit, OnDestroy {
   @ViewChild('occupancyCanvas')
   occupancyCanvas!: ElementRef<HTMLCanvasElement>;
-
+  public dashboardData:any[]=[]
   @ViewChild('feeCanvas')
   feeCanvas!: ElementRef<HTMLCanvasElement>;
 
   @ViewChild('collegeCanvas')
   collegeCanvas!: ElementRef<HTMLCanvasElement>;
-
+  public complaintData: any[] = [];
   @ViewChild('complaintCanvas')
   complaintCanvas!: ElementRef<HTMLCanvasElement>;
-
+  public sSOLoginDataModel = new SSOLoginDataModel();
   selectedRole = 'university';
-  selectedCollege = 'all';
-
+  selectedCollege = 0
+  public feeTrend: any[] = [];
+  public statusData: any[] = [];
   occupancyChart?: Chart;
+  public collegeData: any[] = [];
+  public InstituteMasterList: any[] = [];
   feeChart?: Chart;
   collegeChart?: Chart;
   complaintChart?: Chart;
-
+  public kpi = { capacity: 0, occupied: 0, feePending: 0, openComplaints: 0 };
   readonly months = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  readonly kpiColor: Record<string, string> = {
+    TotalBedCapacity: 'blue',
+    TotalBedOccupied: 'green',
+    TotalFeePending: '',
+    OpenComplain: 'orange'
+  };
 
+  readonly kpiNote: Record<string, string> = {
+    TotalBedCapacity: 'Total seats across all rooms',
+    TotalBedOccupied: '',                       // shows occupancy % from the template
+    TotalFeePending: 'Awaiting payment',
+    OpenComplain: 'Awaiting resolution'
+  };
   readonly datasets: Record<string, DashboardData> = {
     all: {
       capacity: 12500,
@@ -177,44 +197,97 @@ export class HostelManagementDashboardComponent implements AfterViewInit, OnDest
 
   constructor(
     private zone: NgZone,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dashboardservice: AdminDashboardDataService,
+    private commonMasterService: CommonFunctionService
   ) { }
 
+
+  async ngOnInit() {
+
+      this.sSOLoginDataModel = JSON.parse(localStorage.getItem('SSOLoginUser') || 'null');
+
+    if (this.sSOLoginDataModel.RoleID == 7) {
+      this.selectedRole ='college'
+    }
+    this.selectedCollege = this.sSOLoginDataModel.InstituteID
+      // load the date config first, then the dashboard data (or run together with Promise.all)
+  
+    await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, 0)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+
+       
+          this.InstituteMasterList = data['Data'];
+          //this.request.InstituteID = 0
+        
+      }, (error: any) => console.error(error));
+        this.getdashdata()
+    
+
+}
+
+  async getdashdata() {
+    try {
+      const obj = {
+        RoleID: this.sSOLoginDataModel.RoleID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        InstituteID: this.selectedCollege,
+        UserID: this.sSOLoginDataModel.UserID,
+        FinancialYearID: this.sSOLoginDataModel.FinancialYearID
+      };
+
+      const data: any = await this.dashboardservice.GetBterHostelHouseDashboard(obj);
+
+      // works for DataSet ({ Table: [...] }) and for a plain DataTable (array)
+      const rows: any[] = data?.Data?.Table ?? (Array.isArray(data?.Data) ? data.Data : []);
+      this.dashboardData = rows;
+
+      this.statusData = data?.Data?.Table2 ?? [];
+      this.complaintData = data?.Data?.Table3 ?? [];
+      this.collegeData = data?.Data?.Table4 ?? [];
+      const val = (type: string) =>
+        Number(rows.find(r => r.ListType === type)?.TotalCount ?? 0);
+
+      this.kpi = {
+        capacity: val('TotalBedCapacity'),
+        occupied: val('TotalBedOccupied'),
+        feePending: val('TotalFeePending'),
+        openComplaints: val('OpenComplain')
+      };
+      this.feeTrend = data?.Data?.Table1 ?? [];
+      this.updateCharts();          // refresh the doughnut with real values
+      this.cdr.markForCheck();
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
   get dashboard(): DashboardData {
     return this.datasets[this.selectedCollege] ?? this.datasets['all'];
   }
 
   get occupancyPercentage(): number {
-    const data = this.dashboard;
-
-    return data.capacity
-      ? Math.round((data.occupied / data.capacity) * 100)
+    return this.kpi.capacity
+      ? Math.round((this.kpi.occupied / this.kpi.capacity) * 100)
       : 0;
   }
 
-  get tableRows(): Array<College & {
-    occupancy: number;
-    status: string;
-    statusClass: string;
+  get tableRows(): Array<{
+    name: string; capacity: number; occupied: number;
+    occupancy: number; status: string; statusClass: string;
   }> {
-    return this.dashboard.colleges.map(college => {
-      const occupancy = college.capacity
-        ? Math.round((college.occupied / college.capacity) * 100)
-        : 0;
+    return this.collegeData.map(r => {
+      const occupancy = Number(r.OccupancyPercent);
 
       let status = 'Attention';
       let statusClass = 'danger';
-
-      if (occupancy >= 90 && college.fee >= 90) {
-        status = 'Good';
-        statusClass = 'good';
-      } else if (occupancy >= 75) {
-        status = 'Needs Review';
-        statusClass = 'warning';
-      }
+      if (occupancy >= 90) { status = 'Good'; statusClass = 'good'; }
+      else if (occupancy >= 75) { status = 'Needs Review'; statusClass = 'warning'; }
 
       return {
-        ...college,
+        name: r.CollegeName,
+        capacity: Number(r.TotalSeats),
+        occupied: Number(r.StudentsOccupied),
         occupancy,
         status,
         statusClass
@@ -228,15 +301,40 @@ export class HostelManagementDashboardComponent implements AfterViewInit, OnDest
       this.updateCharts();
     });
   }
-
+  get statusChartHeight(): number {
+    return Math.max(300, this.statusData.length * 34);
+  }
   onCollegeChange(): void {
+    this.getdashdata()
     this.updateCharts();
   }
+  private statusColor(name: string): string {
+    const n = (name || '').toLowerCase();
+    if (/reject|withdraw|deallocat|objection/.test(n)) return '#ef4444';
+    if (/alloted|approved|published final/.test(n)) return '#10b981';
+    if (/applied|uploaded|provisional/.test(n)) return '#3b82f6';
+    return '#f59e0b';
+  }
 
+  // draws the number at the end of each bar (also shows 0)
+  private readonly valueLabels = {
+    id: 'valueLabels',
+    afterDatasetsDraw: (chart: any) => {
+      const ctx = chart.ctx;
+      ctx.save();
+      ctx.font = '600 12px sans-serif';
+      ctx.fillStyle = '#334155';
+      ctx.textBaseline = 'middle';
+      chart.getDatasetMeta(0).data.forEach((bar: any, i: number) => {
+        ctx.fillText(String(chart.data.datasets[0].data[i] ?? 0), bar.x + 6, bar.y);
+      });
+      ctx.restore();
+    }
+  };
   onRoleChange(): void {
     this.selectedCollege =
-      this.selectedRole === 'college' ? 'engineering' : 'all';
-
+      this.selectedRole === 'college' ? 1 : 0;
+    this.getdashdata()
     this.cdr.markForCheck();
     this.updateCharts();
   }
@@ -267,7 +365,7 @@ export class HostelManagementDashboardComponent implements AfterViewInit, OnDest
       {
         type: 'doughnut',
         data: {
-          labels: ['Occupied', 'Vacant'],
+          labels: ['Students Occupied', 'Seats Vacant'],
           datasets: [{
             data: [0, 0],
             backgroundColor: ['#2563eb', '#e2e8f0'],
@@ -291,27 +389,21 @@ export class HostelManagementDashboardComponent implements AfterViewInit, OnDest
     this.feeChart = new Chart(
       this.feeCanvas.nativeElement,
       {
-        type: 'line',
+        type: 'bar',
         data: {
-          labels: this.months,
+          labels: [],
           datasets: [
             {
-              label: 'Billed',
+              label: 'Total Seats',
               data: [],
-              borderColor: '#94a3b8',
               backgroundColor: '#94a3b8',
-              tension: 0.25,
-              pointRadius: 2,
-              borderWidth: 2
+              borderRadius: 3
             },
             {
-              label: 'Collected',
+              label: 'Students Occupied',
               data: [],
-              borderColor: '#059669',
-              backgroundColor: '#059669',
-              tension: 0.25,
-              pointRadius: 2,
-              borderWidth: 2
+              backgroundColor: '#2563eb',
+              borderRadius: 3
             }
           ]
         },
@@ -326,10 +418,10 @@ export class HostelManagementDashboardComponent implements AfterViewInit, OnDest
           scales: {
             y: {
               beginAtZero: true,
-              ticks: { maxTicksLimit: 6 }
+              ticks: { maxTicksLimit: 6, precision: 0 }
             }
           }
-        } as ChartConfiguration<'line'>['options']
+        } as ChartConfiguration<'bar'>['options']
       }
     );
 
@@ -340,30 +432,31 @@ export class HostelManagementDashboardComponent implements AfterViewInit, OnDest
         data: {
           labels: [],
           datasets: [{
-            label: 'Occupancy %',
+            label: 'Students',
             data: [],
-            backgroundColor: '#3b82f6',
-            borderRadius: 3,
-            barThickness: 20
+            backgroundColor: [],
+            borderRadius: 4,
+            maxBarThickness: 18
           }]
         },
         options: {
           ...commonOptions,
           indexAxis: 'y',
-          plugins: {
-            legend: { display: false }
-          },
+          plugins: { legend: { display: false } },
           scales: {
             x: {
               beginAtZero: true,
-              max: 100,
-              ticks: {
-                maxTicksLimit: 6,
-                callback: value => `${value}%`
-              }
+              grace: '10%',
+              grid: { color: '#eef2f7' },
+              ticks: { maxTicksLimit: 6, precision: 0 }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { autoSkip: false, font: { size: 12 } }   // show every status name
             }
           }
-        } as ChartConfiguration<'bar'>['options']
+        } as ChartConfiguration<'bar'>['options'],
+        plugins: [this.valueLabels]
       }
     );
 
@@ -401,39 +494,40 @@ export class HostelManagementDashboardComponent implements AfterViewInit, OnDest
     const data = this.dashboard;
 
     if (this.occupancyChart) {
-      this.occupancyChart.data.datasets[0].data = [...data.occupancy];
+      this.occupancyChart.data.datasets[0].data = [
+        this.kpi.occupied,
+        Math.max(this.kpi.capacity - this.kpi.occupied, 0)
+      ];
       this.occupancyChart.update('none');
     }
 
     if (this.feeChart) {
-      this.feeChart.data.datasets[0].data = [...data.feeBilled];
-      this.feeChart.data.datasets[1].data = [...data.feeCollected];
+      this.feeChart.data.labels = this.feeTrend.map(r => r.HostelName);
+      this.feeChart.data.datasets[0].data = this.feeTrend.map(r => Number(r.TotalSeats));
+      this.feeChart.data.datasets[1].data = this.feeTrend.map(r => Number(r.StudentsOccupied));
       this.feeChart.update('none');
     }
 
     if (this.collegeChart) {
-      this.collegeChart.data.labels = data.colleges.map(c => c.name);
-      this.collegeChart.data.datasets[0].data = data.colleges.map(c =>
-        Math.min(
-          100,
-          Math.round((c.occupied / c.capacity) * 100)
-        )
-      );
+      this.collegeChart.data.labels = this.statusData.map(r => r.StatusName);
+      this.collegeChart.data.datasets[0].data = this.statusData.map(r => Number(r.TotalStudents));
+      (this.collegeChart.data.datasets[0] as any).backgroundColor =
+        this.statusData.map(r => this.statusColor(r.StatusName));
       this.collegeChart.update('none');
+      this.collegeChart.resize();      // needed because the card height changes with the data
     }
 
     if (this.complaintChart) {
-      this.complaintChart.data.datasets[0].data = [
-        ...data.complaintStatus
-      ];
+      this.complaintChart.data.labels = this.complaintData.map(r => r.StatusName);
+      this.complaintChart.data.datasets[0].data = this.complaintData.map(r => Number(r.TotalComplaints));
       this.complaintChart.update('none');
     }
 
     this.cdr.markForCheck();
   }
 
-  trackByCollege(index: number, college: College): string {
-    return college.name;
+  trackByCollege(index: number, row: any): string {
+    return row.name;
   }
 
   private destroyCharts(): void {
@@ -451,6 +545,9 @@ export class HostelManagementDashboardComponent implements AfterViewInit, OnDest
   ngOnDestroy(): void {
     this.destroyCharts();
   }
+
+
+
 }
 
 

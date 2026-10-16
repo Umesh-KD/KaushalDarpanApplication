@@ -4,7 +4,8 @@
 
 <app-dashboard-issue-tracker *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Developer"></app-dashboard-issue-tracker>
 
-
+<app-analytic-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.PolytechnicSuperAdmin "></app-analytic-dashboard>
+<app-admission-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITISuperAdmin "></app-admission-dashboard>
 
 <app-nodal-dashboard *ngIf="this.sSOLoginDataModel.RoleID == 180 || this.sSOLoginDataModel.RoleID == 181 || this.sSOLoginDataModel.RoleID == 182 || this.sSOLoginDataModel.RoleID == 183 ||this.sSOLoginDataModel.RoleID == 184"></app-nodal-dashboard>
 <app-dte-nodal-dashboard *ngIf="this.sSOLoginDataModel.RoleID == 185 || this.sSOLoginDataModel.RoleID == 186 || this.sSOLoginDataModel.RoleID == 187 || this.sSOLoginDataModel.RoleID == 188 || this.sSOLoginDataModel.RoleID == 189"></app-dte-nodal-dashboard>
@@ -159,6 +160,11 @@ this.sSOLoginDataModel.RoleID== _EnumRole.ITIPrivateTeacher
 
 <app-employee-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Employee"></app-employee-dashboard>
 <app-post-planning-dashboard-iti *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.DTE_TrainingT2_establishment"></app-post-planning-dashboard-iti>
+
+
+{{_EnumRole.PolytechnicSuperAdmin}}
+{{this.sSOLoginDataModel.RoleID}}
+
 
 <!--ITI END-->
 }

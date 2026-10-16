@@ -235,13 +235,15 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
             const SSOID = res.Data?.SSOID;
             const UserIDs = res.Data?.UserIDs;
             const DepartmentIDs = res.Data?.DepartmentIDs;
-            if (DepartmentIDs.split(',').length == 1)
+            debugger;
+            if (DepartmentIDs.split(',').length == 1 || UserIDs.split(',')[0] == 5160)
             { // run as it is
               await this.Citizenlogin(this.Username);
             }
             else
             {// choose department
               // show department selection popup and choose departmentid
+              
               this.openUserDepartmentModal(this.modal_MultiDepartment);
             }
           }

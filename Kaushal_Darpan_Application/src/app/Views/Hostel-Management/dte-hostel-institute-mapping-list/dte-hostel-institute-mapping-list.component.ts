@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { CommonFunctionService } from '../../../Common/common';
+
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { HostelManagmentService } from '../../../Services/HostelManagment/HostelManagment.service';
 import { LoaderService } from '../../../Services/Loader/loader.service';
@@ -11,6 +11,7 @@ import { StudentRequestService } from '../../../Services/StudentRequest/student-
 import { HostelInstituteMappingModel } from '../../../Models/Hostel-Management/HostelManagmentDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { EnumStatus } from '../../../Common/GlobalConstants';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-dte-hostel-institute-mapping-list',
@@ -65,6 +66,7 @@ export class DteHostelInstituteMappingListComponent {
 
   async GetMenuPermission() {
 
+    debugger
     const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
 
     var request: any = {
