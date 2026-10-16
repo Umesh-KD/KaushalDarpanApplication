@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { EnumRole, EnumOffice } from '../../../../Common/GlobalConstants';
+import { EnumRole, EnumOffice, EnumStatus } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { BTER_EM_StaffListSearchModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -12,7 +12,7 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-establishment-report-bter',
@@ -42,6 +42,7 @@ export class EstablishmentReportBTERComponent {
   public InstituteMasterDDLList:any[]=[]
   public StateMasterList: any[] = [];
   public DistrictMasterDDL: any = [];
+  public MenuAllowedRoleList: any = [];
 
   public Table_SearchText: string = '';
   public act: string = '';
@@ -68,10 +69,12 @@ export class EstablishmentReportBTERComponent {
     private toastr: ToastrService,
     private modalService: NgbModal,
     private activatedRoute: ActivatedRoute,
+    private routers: Router,
   ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.act = this.activatedRoute.snapshot.queryParamMap.get("act")?.toString() || '';
     this.status = Number(this.activatedRoute.snapshot.queryParamMap.get("status")?.toString()) || 0;
 
@@ -85,6 +88,30 @@ export class EstablishmentReportBTERComponent {
     await this.GetPayLevelDDL();
     await this.BTER_EM_GetStaffList();
     await this.getInstituteMasterList();
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
   async setOfficeOnLoad() {
