@@ -74,6 +74,7 @@ tableConfig: TableConfig = {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     await this.GetAdmissionAllotment_ddl();
     await this.GetAllData();
   }
@@ -156,7 +157,7 @@ tableConfig: TableConfig = {
 
   async GetMenuPermission() {
 
-    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
 
     var request: any = {
       FilterBy: baseRoute,
@@ -172,7 +173,7 @@ tableConfig: TableConfig = {
           (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
         )) {
           // Navigate to dashboard if RoleID is not allowed
-          this.router.navigate(['/dashboard']);
+          this.Router.navigate(['/dashboard']);
         }
       }
     })
