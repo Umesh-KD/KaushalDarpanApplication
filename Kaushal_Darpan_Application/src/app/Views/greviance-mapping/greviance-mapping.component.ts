@@ -43,6 +43,7 @@ export class GrevianceMappingComponent {
   public LevelMasterList: any = [];
   public DepartmentList: any = [];
   public DesignationMasterList: any = [];
+  public MenuAllowedRoleList: any = [];
   public Table_SearchText: string = '';
   public _enumRole = EnumRole
 
@@ -64,7 +65,7 @@ export class GrevianceMappingComponent {
         chkActiveStatus: ['true'],
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    
+    await this.GetMenuPermission();
     this.request.ModifyBy = this.sSOLoginDataModel.UserID;
     this.UserID = this.sSOLoginDataModel.UserID;
     this.loadDropdownData('QueryFor');
@@ -72,6 +73,29 @@ export class GrevianceMappingComponent {
   }
   get form() { return this.RoleMasterFormGroup.controls; }
 
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
   async GetRoleMasterList() {
     try {

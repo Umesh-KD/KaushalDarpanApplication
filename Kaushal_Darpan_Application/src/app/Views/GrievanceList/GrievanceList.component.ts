@@ -44,6 +44,7 @@ export class GrievanceListComponent implements OnInit {
   public GrivienceList: any[] = [];
   public StatusList: any = [];
   public ResponseList: any = [];
+  public MenuAllowedRoleList: any = [];
 
   _EnumGrievanceStaus = EnumGrievanceStaus;
   _EnumRole = EnumRole;
@@ -90,6 +91,7 @@ export class GrievanceListComponent implements OnInit {
         FromDate: ['', []]
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.loadDropdownData('FinancialYears');
     this.loadDropdownData('AllotmentType');
 
@@ -119,6 +121,30 @@ export class GrievanceListComponent implements OnInit {
 
   get form() { return this.GrievanceFormGroup.controls; }
   // Load data for dropdown based on MasterCode
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
   loadDropdownData(MasterCode: string): void {
     this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {

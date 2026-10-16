@@ -63,6 +63,7 @@ export class UserMasterOfficeWiseComponent {
   public DistrictMasterList: IDistrictMaster_StateIDWiseDataModel[] = []
   public StateMasterList: IStateMasterDataModel[] = []
   public InstituteMasterList: any = [];
+  public MenuAllowedRoleList: any = [];
 
 
   constructor(private commonMasterService: CommonFunctionService, private Router: Router, private assignRoleRightsService: AssignRoleRightsService,
@@ -99,6 +100,7 @@ export class UserMasterOfficeWiseComponent {
         chkActiveStatus: ['true'],
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     console.log("sSOLoginDataModel", this.sSOLoginDataModel);
     this.request.ModifyBy = this.sSOLoginDataModel.UserID;
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
@@ -110,6 +112,29 @@ export class UserMasterOfficeWiseComponent {
   }
   get _UserMasterFormGroup() { return this.UserMasterFormGroup.controls; }
 
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
   async GetMasterData() {
     try {
       this.loaderService.requestStarted();

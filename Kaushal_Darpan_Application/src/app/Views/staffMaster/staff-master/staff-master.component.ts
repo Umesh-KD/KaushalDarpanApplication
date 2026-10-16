@@ -11,6 +11,7 @@ import { AssignRoleRightsModel } from '../../../Models/UserMasterDataModel';
 import { EnumDepartment, EnumRole, EnumStatus, EnumStatusOfStaff, GlobalConstants } from '../../../Common/GlobalConstants';
 import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
     selector: 'app-staff-master',
     templateUrl: './staff-master.component.html',
@@ -50,6 +51,7 @@ export class StaffMasterComponent implements OnInit {
   public isLoading: boolean = false;
   _enumDepartment = EnumDepartment
   public StaffSubjectListModel: StaffSubjectList[] = [];
+  public MenuAllowedRoleList: any;
 
 
   constructor(
@@ -60,12 +62,12 @@ export class StaffMasterComponent implements OnInit {
     private toastr: ToastrService,
     private modalService: NgbModal,
     private sMSMailService: SMSMailService,
-    public appsettingConfig: AppsettingService,
+    public appsettingConfig: AppsettingService, private routers: Router,
   ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     await this.GetStateMaterData();
     await this.GetRoleMasterData();
     await this.GetDesignationMasterData();
@@ -780,6 +782,30 @@ export class StaffMasterComponent implements OnInit {
     else {
       this.toastr.warning('Please Enter OTP');
     }
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
   
 }

@@ -25,6 +25,7 @@ export class DesignationMasterComponent implements OnInit {
   public isSubmitted: boolean = false;
   public DesignationMasterList: any = [];
   public StaffTypeList: any = [];
+  public MenuAllowedRoleList: any = [];
   public UserID: number = 0;
   searchText: string = ''; // This is for search input
   Table_SearchText: string = ''; // Add this property
@@ -76,13 +77,37 @@ export class DesignationMasterComponent implements OnInit {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    
+    await this.GetMenuPermission();
     await this.GetStaffTypeData();
     await this.GetDesignationMasterList();
   }
 
   get form() {
     return this.DesignationMasterFormGroup.controls;
+  }
+
+  async GetMenuPermission() {
+ 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+ 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+ 
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data =  JSON.parse(JSON.stringify(data));
+      if(data.State == EnumStatus.Success){
+        this.MenuAllowedRoleList=data.Data
+ 
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }      
+    })
   }
 
   async GetDesignationMasterList() {

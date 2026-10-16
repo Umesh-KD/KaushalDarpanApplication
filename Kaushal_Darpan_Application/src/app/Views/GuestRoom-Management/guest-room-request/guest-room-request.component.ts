@@ -93,6 +93,7 @@ export class GuestRoomRequestComponent {
   emitraRequest = new EmitraRequestDetails();
   public PaymentDetailtList: any = [];
   public GenderList: any = [];
+  public MenuAllowedRoleList: any = [];
   public isMarksheet: boolean = false;
   public isMigration: boolean = false;
   public smsSendGuestHouseName: string = '';
@@ -111,7 +112,8 @@ export class GuestRoomRequestComponent {
     private sMSMailService: SMSMailService,
     private emitraPaymentService: EmitraPaymentService,
     private applyDuplicateDocService: ApplyDuplicateDocService,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private routers: Router,
   ) { }
 
 
@@ -144,6 +146,7 @@ export class GuestRoomRequestComponent {
       });
     
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     this.searchRequestGuestStaffProfileSearchModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequestGuestStaffProfileSearchModel.SSOID = this.sSOLoginDataModel.SSOID;
     await this.GetGenderList();
@@ -168,6 +171,30 @@ export class GuestRoomRequestComponent {
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 
   async commonMaster() {

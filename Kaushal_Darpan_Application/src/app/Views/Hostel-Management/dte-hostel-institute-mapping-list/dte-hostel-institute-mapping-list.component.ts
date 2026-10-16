@@ -10,6 +10,7 @@ import { LoaderService } from '../../../Services/Loader/loader.service';
 import { StudentRequestService } from '../../../Services/StudentRequest/student-request.service';
 import { HostelInstituteMappingModel } from '../../../Models/Hostel-Management/HostelManagmentDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { EnumStatus } from '../../../Common/GlobalConstants';
 
 @Component({
   selector: 'app-dte-hostel-institute-mapping-list',
@@ -24,6 +25,7 @@ export class DteHostelInstituteMappingListComponent {
   public Message: any = [];
   public ErrorMessage: any = [];
   public HostelInstituteMappingList: any = [];
+  public MenuAllowedRoleList: any = [];
   HostelInstituteMappingRequest = new HostelInstituteMappingModel()
 
   public IsShowAddButton: boolean = true;
@@ -56,17 +58,34 @@ export class DteHostelInstituteMappingListComponent {
     });
   }
   async ngOnInit() {
-
-
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetMenuPermission();
     await this.GetAllHostelInstituteMappingList();
-
-
   }
 
+  async GetMenuPermission() {
 
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
 
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
   async GetAllHostelInstituteMappingList() {
     try {
