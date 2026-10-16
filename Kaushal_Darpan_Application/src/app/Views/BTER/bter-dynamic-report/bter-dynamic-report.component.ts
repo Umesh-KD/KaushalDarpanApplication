@@ -13,6 +13,7 @@ import { TableConfig } from '../../../Common/data-table/DatatableModels/table-co
 import { ActionType } from '../../../Common/data-table/DatatableModels/table-action.model';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { RequestBaseModel } from '../../../Models/RequestBaseModel';
+import { EnumStatus } from '../../../Common/GlobalConstants';
 
 @Component({
     selector: 'app-bter-dynamic-report',
@@ -34,6 +35,7 @@ export class BterDynamicReportComponent implements OnInit {
   public ActionType = '';
   public FromDate = '';
   public ToDate = '';
+  public  MenuAllowedRoleList: any;
   //public columns:TableColumn[]=[];
 
   constructor(private commonMasterService: CommonFunctionService, private ReportService: ReportService,
@@ -139,10 +141,34 @@ tableConfig: TableConfig = {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     await this.GetAdmissionAllotment_ddl();
     await this.GetAllData();
   }
 
+  async GetMenuPermission() {
+
+    const baseRoute = this.Router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.Router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
   exportToExcel(): void {
     const unwantedColumns = [
