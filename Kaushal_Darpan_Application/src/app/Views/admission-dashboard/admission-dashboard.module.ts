@@ -16,6 +16,6 @@ import { HighchartsChartModule } from 'highcharts-angular';
     AdmissionDashboardRoutingModule,
     FormsModule,
     HighchartsChartModule
-  ]
+  ], exports: [AdmissionDashboardComponent] 
 })
 export class AdmissionDashboardModule { }

@@ -14,6 +14,6 @@ import { BaseChartDirective } from 'ng2-charts';
     AnalyticDashboardRoutingModule,
     LoaderModule,
     BaseChartDirective
-  ]
+  ], exports: [AnalyticDashboardComponent] 
 })
 export class AnalyticDashboardModule { }

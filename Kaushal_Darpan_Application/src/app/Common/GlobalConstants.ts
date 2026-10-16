@@ -260,6 +260,13 @@ export enum EnumRole {
 
   ITI_IIP_Incharge = 283,
   ITI_IIP_Admin = 282,
+
+    ITISuperAdmin = 285,
+    PolytechnicSuperAdmin = 284
+}
+
+export enum EnumUser {
+  SuperAdmin = 5910
 }
 
 export enum DuplicateDocumentType {

@@ -7,7 +7,7 @@ import { LoaderService } from '../../Services/Loader/loader.service';
 import { SSOLoginService } from '../../Services/SSOLogin/ssologin.service';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EnumStatus, EnumRole, EnumDepartment } from '../../Common/GlobalConstants';
+import { EnumStatus, EnumRole, EnumDepartment, EnumUser } from '../../Common/GlobalConstants';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { UserRequestModel } from '../../Models/UserRequestDataModel';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
@@ -451,7 +451,8 @@ export class LoginComponent implements OnInit {
             const SSOID = res.Data?.SSOID;
             const UserIDs = res.Data?.UserIDs;
             const DepartmentIDs = res.Data?.DepartmentIDs;
-            if (DepartmentIDs.split(',').length == 1) { // run as it is
+            debugger;
+            if (DepartmentIDs.split(',').length == 1 || UserIDs.split(',')[0] == EnumUser.SuperAdmin) { // run as it is
               await this.Login();
             }
             else {// choose department

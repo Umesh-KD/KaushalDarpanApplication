@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild, Renderer2, ElementRef, Inject, PLATFORM_ID, signal, inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { EnumDepartment, EnumEmitraService, EnumRole, GlobalConstants, JailCollegeID } from '../../../Common/GlobalConstants';
+import { EnumDepartment, EnumEmitraService, EnumRole, EnumUser, GlobalConstants, JailCollegeID } from '../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 /*import { MenuService } from '../../../Services/Menu/menu.service';*/
@@ -405,6 +405,10 @@ export class MasterLayoutComponent implements OnInit {
     //debugger
     var r = this.lstUserRole.filter((x: any) => x.RoleID == this.RoleID)[0];
     debugger;
+    //superadmin
+    if (r.UserID == EnumUser.SuperAdmin) {
+      this.sSOLoginDataModel.DepartmentID = this.RoleID == EnumRole.PolytechnicSuperAdmin ? 1 : 2;
+    }
     this.sSOLoginDataModel.RoleID = this.RoleID;
     this.sSOLoginDataModel.InstituteID = r?.['InstituteID'];
     this.sSOLoginDataModel.InstituteName = r?.['InstituteName'];
