@@ -135,4 +135,12 @@ export class AdminDashboardDataService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetCommitteeInchargeDashData(searchRequest: AdminDashboardSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetCommitteeInchargeDashData", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

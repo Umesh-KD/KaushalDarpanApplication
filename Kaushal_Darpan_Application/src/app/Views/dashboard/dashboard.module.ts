@@ -62,7 +62,7 @@ import { IipDashboardModule } from '../IIPCompnyMaster/iip-dashboard/iip-dashboa
 import { InstructorDashboardModule } from '../../../Views/ITI/instructor-dashboard/instructor-dashboard.module';
 import { PostPlanningDashboardITIComponent } from '../ITI/post-planning-dashboard-iti/post-planning-dashboard-iti.component';
 import { PostPlanningDashboardITIModule } from '../ITI/post-planning-dashboard-iti/post-planning-dashboard-iti.module';
-
+import { CommitteeInchargeDashboardModule } from '../../Views/committee-incharge-dashboard/committee-incharge-dashboard.module';
 /// work here 
 
 
@@ -123,7 +123,8 @@ import { PostPlanningDashboardITIModule } from '../ITI/post-planning-dashboard-i
     EmployeeDashboardModule,
     IipDashboardModule,
     InstructorDashboardModule,
-    PostPlanningDashboardITIModule
+    PostPlanningDashboardITIModule,
+    CommitteeInchargeDashboardModule
     
     
   ]
