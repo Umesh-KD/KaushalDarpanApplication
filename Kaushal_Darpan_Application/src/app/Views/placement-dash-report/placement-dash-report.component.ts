@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import * as XLSX from 'xlsx';
 import { StudentExamDetails } from '../../Models/DashboardCardModel';
-import { EnumRole } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { PlacementReportService } from '../../Services/PlacementReport/PlacementReport.service';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { PlacementReportHistorySearchModels, PlacementReportSearchModels } from '../../Models/PlacementDashReportModel';
@@ -38,6 +38,7 @@ export class PlacementDashReportComponent implements OnInit {
   id: any;
   _EnumRole = EnumRole;
   InstituteMasterList: any = [];
+  MenuAllowedRoleList: any = [];
   SemesterMasterList: any = [];
   CampusMasterList: any = [];
   public FinancialYearList: any = []
@@ -58,7 +59,7 @@ export class PlacementDashReportComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private commonMasterService: CommonFunctionService,
     private modalService: NgbModal,
-
+    private router: Router,
   ) {
   }
 
@@ -69,6 +70,7 @@ export class PlacementDashReportComponent implements OnInit {
     });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+    // await this.GetMenuPermission();
     await this.GetMasterDDL();
     this.GetAllData();
     this.GetCampusPostMasterDDL();
@@ -88,6 +90,31 @@ export class PlacementDashReportComponent implements OnInit {
       }, (error: any) => console.error(error));
 
   }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.router.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
   async GetCampusPostMasterDDL() {
     //debugger
     try {
