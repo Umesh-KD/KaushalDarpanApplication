@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../../Common/appsetting.service';
@@ -41,6 +41,7 @@ export class ITIStudentDetailsRevisedResultComponent {
   modalReference: NgbModalRef | undefined;
   public requestObs = new CenterObserverDataModel()
   public _GlobalConstants = GlobalConstants
+  public MenuAllowedRoleList: any = [];
   public _EnumRole = EnumRole;
   public paginatedInTableData: any[] = [];
   public currentInTablePage: number = 1;
@@ -104,6 +105,7 @@ export class ITIStudentDetailsRevisedResultComponent {
     public ItiResultDownloadService: ITICollegeMarksheetDownloadService,
     public ReportServices: ReportService,
     private service: StudentExaminationITIService,
+    private routers: Router
   ) { }
 
   async ngOnInit() {
@@ -134,6 +136,7 @@ export class ITIStudentDetailsRevisedResultComponent {
       this.requestStudentRevisedModel.InstituteId = Number(this.sSOLoginDataModel.InstituteID);
     }
 
+    await this.GetMenuPermission();
     await this.GetITICollegeStudent_Marksheet();
     this.collegeDropDown = this.GetStudentITI_MarksheetList;
 
@@ -949,7 +952,29 @@ export class ITIStudentDetailsRevisedResultComponent {
       });
     }
   }
+  async GetMenuPermission() {
 
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
   async OnRequestchange() {
     //debugger;

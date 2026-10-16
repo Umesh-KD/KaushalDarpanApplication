@@ -38,6 +38,7 @@ export class ITIPapperSetterComponent
   public PaperFormGroup!: FormGroup;
   public DistrictMasterList: any = [];
   public AddProfessorList: any = [];
+  public MenuAllowedRoleList: any = [];
   public SSOLoginDataModel = new SSOLoginDataModel()
    Dis_AadharPhoto = '';
   GuideLineDoc = '';
@@ -93,7 +94,7 @@ export class ITIPapperSetterComponent
     this.PaperFormGroup.get('TradeSchemeId')?.disable();
 
    
-   
+/*    await this.GetMenuPermission();*/
    
   
 
@@ -708,7 +709,7 @@ export class ITIPapperSetterComponent
   //  else if (this.request.PapperSubmitionLastDate === '') {
   //    this.toastr.error("Please Select Papper Submition Last Date.");
   //    return false;
-  //  } 
+  //  }
 
   //  else if (this.request.PaperCodeName === '') {
   //    this.toastr.error("Please Enter Papper Code/Name.");
@@ -733,10 +734,34 @@ export class ITIPapperSetterComponent
   //  else if (this.request.PapperSetterListModel.length == 0) {
   //    this.toastr.error("Please Add Professor List");
   //    return false;
-      
+
   //  }
 
   //  return true;
   //}
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonFunctionService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.SSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
 
 }  

@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../../Common/appsetting.service';
@@ -14,6 +14,7 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SMSMailService } from '../../../../Services/SMSMail/smsmail.service';
 import { StudentMarksheetSearchModel } from '../../../../Models/OnlineMarkingReportDataModel';
 import { ReportService } from '../../../../Services/Report/report.service';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 
 
 @Component({
@@ -30,7 +31,8 @@ export class ITIResultComponent {
   closeResult: string | undefined;
   // CenterObserverTeamID: number = 0
   modalReference: NgbModalRef | undefined;
-   public requestObs = new CenterObserverDataModel()
+  public requestObs = new CenterObserverDataModel()
+  public MenuAllowedRoleList: any = [];
   // public _EnumDeploymentStatus = EnumDeploymentStatus;
   //public Status: number = 0           // 1 for varify observer deployment and 2 for Generate Order for deployment
   public _GlobalConstants = GlobalConstants
@@ -84,6 +86,8 @@ export class ITIResultComponent {
     private Swal2: SweetAlert2,
     private itiResultService: ITIResultService,
     private fb: FormBuilder, private reportService: ReportService,
+    private routers: Router,
+    private commonMasterService: CommonFunctionService,
   ) {}
 
   async ngOnInit() {
@@ -92,6 +96,7 @@ export class ITIResultComponent {
     //   Status: [{ value: '', disabled: true },]
     // })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     console.log(this.sSOLoginDataModel);
     this.MobileNo = Number(this.sSOLoginDataModel.Mobileno);
     this.requestModel.UserID = Number(this.sSOLoginDataModel.UserID);
@@ -748,6 +753,43 @@ export class ITIResultComponent {
       }, 200);
     }
   }
- 
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
+
+  }
+
 
 }

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { BudgetDistributedService } from '../../../../Services/BudgetDistributed/budget-distributed.service';
@@ -21,7 +21,7 @@ export class BudgetMasterComponent {
   public sSOLoginDataModel = new SSOLoginDataModel()
 
   public BudgetDataList: any = []
-
+  public MenuAllowedRoleList: any = [];
   constructor(
     private activatedRoute: ActivatedRoute,
     private toastr: ToastrService,
@@ -32,11 +32,13 @@ export class BudgetMasterComponent {
     private formBuilder: FormBuilder,
     private budgetCreateService: ITIBudgetCreateService,
     private budgetDistributedService: BudgetDistributedService,
+    private routers: Router
   ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetBudgetData();
+    await this.GetMenuPermission();
   }
 
   async GetBudgetData() {
@@ -57,4 +59,42 @@ export class BudgetMasterComponent {
       console.error(error);
     }
   }
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
+
+  }
+
 }

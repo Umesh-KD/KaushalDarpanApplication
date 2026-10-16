@@ -36,6 +36,7 @@ export class GenerateRollnumberITIComponent {
   public Table_SearchText: any = '';
   public StudentList: ITIGenerateRollData[] = []
   public InstituteMasterList: any = []
+  public MenuAllowedRoleList: any = []
   public isSubmitted: boolean = false;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public searchRequest = new ITIGenerateRollSearchModel()
@@ -91,6 +92,7 @@ export class GenerateRollnumberITIComponent {
     console.log("sSOLoginDataModel", this.sSOLoginDataModel);
 
     this.searchRequest.StreamID = 0;
+    this.GetMenuPermission();
     this.getSemesterMasterList();
     this.getStreamMasterList();
     this.ddlStream_Change()
@@ -560,5 +562,42 @@ export class GenerateRollnumberITIComponent {
     }
   }
 
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
+
+  }
 
 }

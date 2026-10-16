@@ -4,6 +4,10 @@ import { ReportService } from '../../../Services/Report/report.service';
 import * as XLSX from 'xlsx';
 import { TableConfig } from '../../../Common/data-table/DatatableModels/table-config.model';
 import { TableColumn } from '../../../Common/data-table/DatatableModels/table-column.model';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { Router } from '@angular/router';
+import { CommonFunctionService } from '../../../Common/common';
+import { EnumStatus } from '../../../Common/GlobalConstants';
 interface ReportFilters {
   AcedemicYearID: number;
   ShowTradeDuration: boolean;
@@ -24,6 +28,9 @@ export class AdmissionDynamicReportComponent {
   columns: string[] = [];
   isLoading = false;
   excludedColumns: string[] = [];
+  public sSOLoginDataModel = new SSOLoginDataModel();
+  public MenuAllowedRoleList: any = [];
+
   filters: ReportFilters = {
     AcedemicYearID: 30,
     ShowTradeDuration: false,
@@ -50,7 +57,7 @@ export class AdmissionDynamicReportComponent {
   // Everything else discovered on the response row is appended after these, in the order the SP returns them.
   private pinnedColumnOrder = ['Level', 'Trade Duration', 'Trade Scheme'];
 
-  constructor(private itiRptAdmissionSeatOfferedService: ReportService) { }
+  constructor(private itiRptAdmissionSeatOfferedService: ReportService, private routers: Router, private commonMasterService: CommonFunctionService) { }
 
 
   tableConfig: TableConfig = {
@@ -84,8 +91,13 @@ export class AdmissionDynamicReportComponent {
     ]
   };
 
-  async ngOnInit() {
+  async ngOnInit()
+  {
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+    await this.GetMenuPermission();
     await this.loadData();
+
   }
 
   // Called by each toggle/select in the template
@@ -256,6 +268,30 @@ export class AdmissionDynamicReportComponent {
 
     return orderedKeys;
   }
+
+  async GetMenuPermission()
+  {
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
+  }
+
 
 
 

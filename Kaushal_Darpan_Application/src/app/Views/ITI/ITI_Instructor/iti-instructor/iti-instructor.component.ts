@@ -113,7 +113,7 @@ export class ItiInstructorComponent{
   collegeDropDown: any = [];
   closeResult: string | undefined;
   districtDropDown: any = [];
-
+  public MenuAllowedRoleList: any = [];
   constructor(
     private loaderService: LoaderService,
     private ApplicationService: ItiApplicationFormService,
@@ -130,7 +130,9 @@ export class ItiInstructorComponent{
     private modalService: NgbModal,
     private Staffservice: ITIGovtEMStaffMaster,
     private ITICollegeTradeService: ItiSeatIntakeService,
-    public swat: SweetAlert2
+    public swat: SweetAlert2,
+
+
   ) 
   {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -162,7 +164,7 @@ export class ItiInstructorComponent{
       ddlHostel: [''],
       Shift: ['']
     })
-  
+    await this.GetMenuPermission();
     await this.GetItiInstructorDatas();
     await this.StaffLevelType();
     await this.GetTechnicianDll();
@@ -171,6 +173,43 @@ export class ItiInstructorComponent{
     await this.GetStaffTypeData();
 
     //await this.ItiShiftUnitDDL(ID: number);
+
+  }
+  async GetMenuPermission() {
+
+    const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.router.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
 
   }
 

@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { ItiMeritSearchModel } from '../../../../Models/ITI/ItiMerit';
@@ -50,6 +50,10 @@ export class ItiMeritComponent implements OnInit {
   MeritPublishKey: string = "";
   public MobileNo: string = '';
   public DateConfigSetting: any = [];
+
+  public MenuAllowedRoleList: any = [];
+
+
   public MeritMaster = [
 /*    { Id: 1, Name: "First Allotment Provisional Merit ", GenerateKey: "GENERATE FIRST PROVISIONAL MERIT", PublishKey: "PUBLISH FIRST PROVISIONAL MERIT" },*/
     { Id: 4, Name: "First Allotment Final Merit", GenerateKey: "GENERATE FIRST FINAL MERIT", PublishKey: "PUBLISH FINAL MERIT" },
@@ -68,7 +72,8 @@ export class ItiMeritComponent implements OnInit {
     private http: HttpClient,
     private modalService: NgbModal,
     private sMSMailService: SMSMailService,
-    private itiMeritService: ItiMeritService
+    private itiMeritService: ItiMeritService,
+    private routers: Router
   ) {}
 
 
@@ -85,6 +90,8 @@ export class ItiMeritComponent implements OnInit {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.searchRequest.Class = this.route.snapshot.paramMap.get('id')?.toString();
+
+    await this.GetMenuPermission();
 
     await this.GetDataConfigData(); 
 
@@ -532,5 +539,28 @@ export class ItiMeritComponent implements OnInit {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  async GetMenuPermission()
+  {
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }

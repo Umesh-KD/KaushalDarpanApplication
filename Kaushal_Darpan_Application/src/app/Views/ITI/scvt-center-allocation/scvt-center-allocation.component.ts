@@ -32,6 +32,7 @@ export class ScvtCenterAllocationComponent {
   public CenterMasterList: ITICenterAllocationtDataModels[] = [];
   public MapingInstList:any[]=[]
   public Branchlist:any[]=[]
+  public MenuAllowedRoleList:any[]=[]
   public InstituteMasterDDLList:any[]=[]
   public UserID: number = 0;
   searchText: string = '';
@@ -70,7 +71,8 @@ export class ScvtCenterAllocationComponent {
     private activatedRoute: ActivatedRoute,
     private _fb: FormBuilder,
     private modalService: NgbModal,
-    private Swal2: SweetAlert2
+    private Swal2: SweetAlert2,
+    private routers: Router
   ) { }
 
   async ngOnInit() {
@@ -101,6 +103,7 @@ export class ScvtCenterAllocationComponent {
 
 
 
+    await this.GetMenuPermission();
     await this.GetCenterMasterList();
     this.UserID = this.sSOLoginDataModel.UserID;
     this.ddlInstitute_Change()
@@ -765,6 +768,43 @@ export class ScvtCenterAllocationComponent {
   }
 
 
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+
+      FilterBy: baseRoute,
+
+      MasterCode: "GetAllowedRoleForMenu"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+
+      data = JSON.parse(JSON.stringify(data));
+
+      if (data.State == EnumStatus.Success) {
+
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+
+        )) {
+
+          // Navigate to dashboard if RoleID is not allowed
+
+          this.routers.navigate(['/dashboard']);
+
+        }
+
+      }
+
+    })
+
+  }
 
 
 }
