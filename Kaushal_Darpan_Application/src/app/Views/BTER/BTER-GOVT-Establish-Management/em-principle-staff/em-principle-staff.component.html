@@ -1244,7 +1244,8 @@
               <tr>
                 <th class="text-left">S No</th>
                 <th class="text-left">Name</th>
-                <th class="text-left">Designation</th>
+                <th class="text-left"> Old Designation</th>
+                <th class="text-left"> Current Designation</th>
                 <th class="text-left">Status</th>
                 <th class="text-left">Remark</th>
                 <th class="text-left">Date</th>
@@ -1256,6 +1257,7 @@
                 <td align="left">{{idx+1}}</td>
                 <td align="left">{{ row.DisplayName }}</td>
                 <td align="left">{{ row.Designation }}</td>
+                <td align="left">{{ row.CurrentDesignation }}</td>
                 <td align="left">{{ row.UserProfileStatus }}</td>
                 <td align="left">{{ row.Remarks}}</td>
                 <td align="left">{{ row.CreatedDate || '-' }}</td>
