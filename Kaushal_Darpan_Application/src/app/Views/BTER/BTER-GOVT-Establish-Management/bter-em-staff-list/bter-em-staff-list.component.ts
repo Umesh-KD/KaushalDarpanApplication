@@ -1387,12 +1387,13 @@ debugger
   }
 
   async onEditGuestHouse(model: any, row: any) {
+    debugger;
     try {
       await this.GetGuestHouseNameList();
       await this.GetStaff_GuestHouseIDs(row.StaffID, row.StaffUserID, row.RoleID);
       this.guestHouseSaveRequest.StaffID = row.StaffID;
       this.guestHouseSaveRequest.StaffUserID = row.StaffUserID;
-      this.guestHouseSaveRequest.RoleID = row.RoleID;
+      this.guestHouseSaveRequest.RoleIDs = row.RoleID;
       this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static',});
     }
     catch (Ex) {

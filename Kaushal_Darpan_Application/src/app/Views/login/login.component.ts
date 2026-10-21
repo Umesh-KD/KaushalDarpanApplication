@@ -296,7 +296,7 @@ export class LoginComponent implements OnInit {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-
+          debugger
           if (this.State == EnumStatus.Success)
           {
             this.sSOLoginDataModel = data['Data'];
@@ -324,7 +324,10 @@ export class LoginComponent implements OnInit {
             if (this.sSOLoginDataModel.RoleID == this._EnumRole.CandidateRole) {
               this.routers.navigate(['/CandidateApplicationList']);
             }
-            else
+            else if(![
+              EnumRole.Admin, EnumRole.AdminNon, EnumRole.DTE, EnumRole.DTENON,
+              EnumRole.JDConfidential_Eng, EnumRole.JDConfidential_NonEng, EnumRole.Registrar, EnumRole.Registrar_NonEng
+            ].includes(this.sSOLoginDataModel.RoleID))
             {
               //redirect
               //window.open('/dashboard', "_self");
@@ -332,6 +335,8 @@ export class LoginComponent implements OnInit {
               
              //this.routers.navigate(['/dashboard']);              
 
+            } else {
+              this.routers.navigate(['/dashboard']);
             }
           }
           else {

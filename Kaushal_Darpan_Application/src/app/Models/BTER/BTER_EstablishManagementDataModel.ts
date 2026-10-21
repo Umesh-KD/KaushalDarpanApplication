@@ -674,6 +674,7 @@ export class StaffGuestHouseSearchModel extends RequestBaseModel {
   public StaffUserID?: number = 0
   public ModifyBy?: number = 0
   public StaffGuestHouseIDs?: string = ''
+  public RoleIDs?: string = ''
 }
 
 export class BTER_DesignationWiseBranchDataModel {

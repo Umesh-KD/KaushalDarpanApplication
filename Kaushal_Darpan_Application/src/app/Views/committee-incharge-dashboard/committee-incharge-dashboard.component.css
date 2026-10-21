@@ -180,6 +180,7 @@ tice-bar {
 
 .notice-window {
   flex: 1;
+  min-width: 0;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -279,8 +280,10 @@ tice-bar {
 }
 
 .notice-track {
-  display: inline-flex;
+  display: flex;
+  width: max-content;
   animation: scroll-left 25s linear infinite;
+  will-change: transform;
 }
 
 .notice-window:hover .notice-track {
@@ -288,7 +291,8 @@ tice-bar {
 }
 
 .notice-text {
-  padding: 0 60px;
+  flex: 0 0 auto;
+  padding: 0 30px;
   color: #b23b3b;
   font-size: 15px;
   font-weight: 600;
@@ -296,7 +300,7 @@ tice-bar {
 
 @keyframes scroll-left {
   from {
-    transform: translateX(0);
+    transform: translateX(100%);
   }
 
   to {
@@ -309,11 +313,3 @@ tice-bar {
     animation: none;
   }
 }
-
-
-
-
-
-
-
-

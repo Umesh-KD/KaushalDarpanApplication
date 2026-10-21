@@ -47,6 +47,7 @@ export class AdmissionDashboardComponent {
     '#DC2626', // EX
     '#8B5CF6'  // WID_DIV
   ];
+    MenuAllowedRoleList: any;
   constructor(
     private toastr: ToastrService,
     private loaderService: LoaderService,
@@ -118,6 +119,7 @@ export class AdmissionDashboardComponent {
 
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMenuPermission();
     debugger
     await this.CheckProfileStatus();
     //if (this.StaffMasterList.length > 0) {
@@ -747,5 +749,29 @@ export class AdmissionDashboardComponent {
     }
 
     return ((count / total) * 100).toFixed(2) + '%';
+  }
+
+  async GetMenuPermission() {
+
+    const baseRoute = this.routers.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
+
+    var request: any = {
+      FilterBy: baseRoute,
+      MasterCode: "GetAllowedRoleForMenu"
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
+        if (!this.MenuAllowedRoleList.some(
+          (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
+        )) {
+          // Navigate to dashboard if RoleID is not allowed
+          this.routers.navigate(['/dashboard']);
+        }
+      }
+    })
   }
 }
