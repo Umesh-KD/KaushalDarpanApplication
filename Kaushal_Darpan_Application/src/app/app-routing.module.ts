@@ -470,6 +470,7 @@ const routes: Routes = [
       { path: 'citizensuggestion', loadChildren: () => import('./Views/Citizen-Suggestion/citizen-suggestion/citizen-suggestion.module').then(m => m.CitizenSuggestionModule), title: 'Citizen Suggestion' },
       { path: 'citizenQueryDetails', loadChildren: () => import('./Views/Citizen-Suggestion/citizenquery-details/citizenquery-details.module').then(m => m.CitizenqueryDetailsModule), title: 'Citizen Query Details' },
       { path: 'citizenQueryDetails/:id', loadChildren: () => import('./Views/Citizen-Suggestion/citizenquery-details/citizenquery-details.module').then(m => m.CitizenqueryDetailsModule), title: 'Citizen Query Details' },
+      { path: 'citizenQueryDetails/:id/:status', loadChildren: () => import('./Views/Citizen-Suggestion/citizenquery-details/citizenquery-details.module').then(m => m.CitizenqueryDetailsModule), title: 'Citizen Query Details' },
       { path: 'dtedashboard', loadChildren: () => import('./Views/dte-dashboard/dte-dashboard.module').then(m => m.DTEDashboardModule), title: 'DTE Dashboard' },
       { path: 'date-wise-attendance-report', loadChildren: () => import('./Views/Reports/date-wise-attendance-report/date-wise-attendance-report.module').then(m => m.DateWiseAttendanceReportModule) },
       { path: 'reports/:id', loadChildren: () => import('./Views/Reports/reports/reports.module').then(m => m.ReportsModule), title: 'Reports' },
