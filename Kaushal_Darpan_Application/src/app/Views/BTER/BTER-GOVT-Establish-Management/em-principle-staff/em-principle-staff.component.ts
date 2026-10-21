@@ -118,7 +118,8 @@ export class EMPrincipleStaffComponent {
   public IsHideShow: boolean = false
   public allSelected: boolean = false;
   public IsNonGazetted: boolean = false;
-
+  public IsSSoidexist: boolean = false;
+  private readonly defaultStatus = -1;    // set the value you want when the URL has no status
   @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
     MenuAllowedRoleList: any;
 
@@ -137,6 +138,7 @@ export class EMPrincipleStaffComponent {
     private UserMasterService: UserMasterService,
     private appsettingConfig: AppsettingService,
     private adminUserService: AdminUserService,
+    private route: ActivatedRoute,
     private router: Router,
   ) {}
 
@@ -258,7 +260,12 @@ export class EMPrincipleStaffComponent {
       ddlStatus: [0, [DropdownValidators]],
       txtRemark: ['', Validators.required]
     });
+
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+    this.searchRequest.ProfileStatus = this.resolveStatus();
+
     await this.GetMenuPermission();
     this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
 
@@ -304,69 +311,109 @@ export class EMPrincipleStaffComponent {
       }, 200);
     }
   }
+  private resolveStatus(): number {
+    const raw = this.route.snapshot.paramMap.get('status');
+
+    // "0" is a valid value, so only reject null / undefined / empty / non-numeric
+    if (raw === null || raw === undefined || raw.trim() === '' || isNaN(Number(raw))) {
+      return this.defaultStatus;
+    }
+    return Number(raw);
+  }
 
 
-  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {    
-    if (SSOID == "") {
+  async checkssoid(SSOID:string='') {
+
+
+    var obj = {
+      MasterCode: "CheckSsoidExistEstablishment",
+      FilterBy: SSOID,
+      CollegeID: this.sSOLoginDataModel.InstituteID
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(obj).then(async (data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      console.log(data);
+      let response1 = JSON.parse(JSON.stringify(data));
+
+      const status = response1?.Data?.[0]?.Status;
+      this.IsSSoidexist = status !== null && status !== undefined && Number(status) === 1;
+      
+    });
+
+  }
+
+  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
+
+    if (!SSOID || SSOID.trim() === "") {
       this.toastr.error("Please Enter SSOID");
       return;
     }
 
-    const username = SSOID; 
-    const appName = 'madarsa.test';
-    const password = 'Test@1234';
+    // 1. find out whether this SSOID is already mapped (do NOT hardcode false)
+    await this.checkssoid(SSOID)
 
-    this.requestSSoApi.SSOID = username;
-    this.requestSSoApi.appName = appName;
-    this.requestSSoApi.password = password;
+    // 2. if mapped, ask first; Cancel stops everything
+    if (this.IsSSoidexist) {
+      const ok = await this.confirmAsync(
+        `Staff already mapped. Kindly assign additional charge or role. Do you want to continue?`
+      );
+      if (!ok) return;
+    }
+
+    // 3. OK, or not mapped: fetch the SSO details
+    await this.fetchSSODetails(SSOID);
+  }
+
+  private confirmAsync(message: string): Promise<boolean> {
+    return new Promise(resolve => {
+      this.Swal2.Confirmation(message, async (result: any) => {
+        resolve(!!result?.isConfirmed);
+      });
+    });
+  }
+
+  private async fetchSSODetails(SSOID: string): Promise<void> {
+    this.requestSSoApi.SSOID = SSOID;
+    this.requestSSoApi.appName = 'madarsa.test';
+    this.requestSSoApi.password = 'Test@1234';
+
     try {
-
       this.loaderService.requestStarted();
       this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
-      await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        console.log(data);
-        let response = JSON.parse(JSON.stringify(data));
-        if (response?.Data) {
 
-          let parsedData = JSON.parse(response.Data); // parse string inside Data
-          if (parsedData != null) {
-            // await this.DuplicateCheck(this.requestSSoApi.SSOID);    
-            //this.formData.Displayname = parsedData.displayName
-            this.isSSOVisible = true;
-            this.formData.Displayname = parsedData.displayName;
-            this.formData.MobileNo = parsedData.mobile;
-            this.formData.Mailpersonal = parsedData.mailPersonal;
-            this.formData.SSOID = parsedData.SSOID;
-            this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.disable();
-            if (parsedData.designation != null) {
-              this.GetDesignationID = this.PostList.find((item: any) =>
-                item.Name?.toLowerCase().trim() === parsedData.designation?.toLowerCase().trim()
-              )?.ID ?? 0;
+      const data: any = await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi);
+      const response = JSON.parse(JSON.stringify(data));
 
-              this.formData.DesignationID = this.GetDesignationID;
-              
+      if (response?.Data) {
+        const parsedData = JSON.parse(response.Data);
 
-            }
-            else {
-              this.formData.DesignationID = 0;
-            }
+        if (parsedData != null) {
+          this.isSSOVisible = true;
+          this.formData.Displayname = parsedData.displayName;
+          this.formData.MobileNo = parsedData.mobile;
+          this.formData.Mailpersonal = parsedData.mailPersonal;
+          this.formData.SSOID = parsedData.SSOID;
+          this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.disable();
+
+          if (parsedData.designation != null) {
+            this.GetDesignationID = this.PostList.find((item: any) =>
+              item.Name?.toLowerCase().trim() === parsedData.designation?.toLowerCase().trim()
+            )?.ID ?? 0;
+            this.formData.DesignationID = this.GetDesignationID;
+          } else {
+            this.formData.DesignationID = 0;
           }
-          else {
-            this.toastr.error("Record Not Found", '', { timeOut: 5000 });
-            this.formData.SSOID = "";
-            this.isSSOVisible = false;
-            return;
-          }
-
+        } else {
+          this.toastr.error("Record Not Found", '', { timeOut: 5000 });
+          this.formData.SSOID = "";
+          this.isSSOVisible = false;
         }
-      });
+      }
     } catch (error) {
       console.error(error);
     } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
+      setTimeout(() => this.loaderService.requestEnded(), 200);
     }
   }
 
@@ -947,7 +994,15 @@ async GetTechnicianDll() {
           console.log(data);
 
           if (data.State == EnumStatus.Success) {
-            this.toastr.success(data.Message)
+            debugger
+            if (this.IsSSoidexist == true) {
+              this.toastr.success("Staff details are updated. ")
+  
+            } else {
+
+              this.toastr.success(data.Message)
+    
+            }
             await this.ResetControls();
             await this.GetAllData();
 
@@ -976,6 +1031,7 @@ async GetTechnicianDll() {
 
   ResetControls() {
     this.isSubmitted = false;
+    this.IsSSoidexist = false;
     this.formData = new BTER_EM_AddStaffBasicDetailDataModel();
 
     const btnSave = document.getElementById('btnSave');
@@ -1019,6 +1075,7 @@ async GetTechnicianDll() {
     this.searchRequest.FilterStaffTypeID = 0;
     this.searchRequest.FilterSSOID = "";
     this.searchRequest.FilterName = "";
+    this.IsSSoidexist = false;
     this.searchRequest = new BTER_EM_StaffMasterSearchModel();
     await this.GetAllData();
   }
