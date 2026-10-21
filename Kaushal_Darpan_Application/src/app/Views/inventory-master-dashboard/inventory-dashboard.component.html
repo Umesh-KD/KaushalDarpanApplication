@@ -42,7 +42,7 @@
       <div class="ia-kpi">
         <span class="ia-kpi-label">Requests</span>
         <span class="ia-kpi-num">{{ formatNumber(kpi.requests) }}</span>
-        <span class="ia-kpi-sub">total requests raised (status = 1)</span>
+        <span class="ia-kpi-sub">total requests raised</span>
       </div>
 
       <div class="ia-kpi">
@@ -54,13 +54,13 @@
       <div class="ia-kpi">
         <span class="ia-kpi-label">Approved</span>
         <span class="ia-kpi-num">{{ formatNumber(kpi.approved) }}</span>
-        <span class="ia-kpi-sub">approved requests (status = 2)</span>
+        <span class="ia-kpi-sub">approved requests</span>
       </div>
 
       <div class="ia-kpi">
         <span class="ia-kpi-label">Rejected</span>
         <span class="ia-kpi-num" [class.ia-bad]="kpi.rejected > 0">{{ formatNumber(kpi.rejected) }}</span>
-        <span class="ia-kpi-sub">rejected requests (status = 3)</span>
+        <span class="ia-kpi-sub">rejected requests</span>
       </div>
     </div>
 
@@ -119,7 +119,7 @@
       </div>
     </section>
 
-    <!-- 4. MOVED TO THE END: Equipment Distribution (Category-wise) -->
+    <!-- 4. Equipment Distribution (Category-wise) at the End -->
     <section class="ia-section" id="category-equipment-section" *ngIf="canView.categoryEquipmentBar">
       <div class="ia-card">
         <h3 class="text-center">Equipment Distribution (Category-wise)</h3>
@@ -136,6 +136,5 @@
         </div>
       </div>
     </section>
-
   </div>
 </div>
