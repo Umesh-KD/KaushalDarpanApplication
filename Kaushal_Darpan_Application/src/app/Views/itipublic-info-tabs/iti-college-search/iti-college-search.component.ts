@@ -392,7 +392,8 @@ export class ItiCollegeSearchComponent {
 
   }
 
-  onResetClick() {
+  onResetClick()
+  {
     this.request.DistrictId = 0;
     this.request.DivisionId = 0;
     this.request.TradeID = 0;
@@ -401,11 +402,14 @@ export class ItiCollegeSearchComponent {
     this.request.SchemeTypeID = 0;
     this.request.DivisionId = 0;
     this.request.SearchText = "";
+
     this.isVisibleSection = false;
     this.isVisibleList = false;
     this.ValidationMessage = "";
+
+    this.request.TehsilId = 0;
+    this.request.TradeID = 0;
     this.ddlDistrict();
- 
   }
 
   async GetById(ID: number) {
@@ -672,7 +676,8 @@ export class ItiCollegeSearchComponent {
 
   async GetGramPanchayatSamiti() {
     try {
-      if (this.requestPlaning.PropUrbanRural == 75) {
+      if (this.requestPlaning.PropUrbanRural == 75)
+      {
         this.requestPlaning.GramPanchayatSamiti = 0
         return
       }
