@@ -58,6 +58,20 @@
           </select>
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            From Date:
+          </label>
+          <input type="date" class="form-input" [(ngModel)]="searchRequest.FromDate">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            To Date: 
+          </label>
+          <input type="date" class="form-input"  [(ngModel)]="searchRequest.ToDate" >
+        </div>
+
       </div>
       <div class="justify-center flex mt-6">
         <button type="button" class="btn bg-info text-white me-1" (click)="GetAllData()">Search</button>

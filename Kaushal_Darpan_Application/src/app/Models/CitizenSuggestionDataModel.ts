@@ -52,6 +52,8 @@ export class SearchRequest {
   public QueryAging: number = 0;
   public RoleID: number = 0;
   public CitizenQueryStatus: number = 0;
+  public FromDate: string = ''
+  public ToDate: string = ''
 }
 
 export class UserRatingDataModel {

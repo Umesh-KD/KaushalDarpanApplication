@@ -52,7 +52,17 @@ export interface InventoryRequest {
 }
 
 export interface ChartPermissions {
-  kpiTiles: boolean;
+  
+  // Individual Tile Flags
+  categoriesTile: boolean;
+  itemsTile: boolean;
+  requestsTile: boolean;
+  unitsRequestedTile: boolean;
+  approvedTile: boolean;
+  rejectedTile: boolean;
+
+  // Chart Flags
+  // kpiTiles: boolean;
   categoryEquipmentBar: boolean;
   categoryDonut: boolean;
   equipmentDonut: boolean;
@@ -86,7 +96,13 @@ export class InventoryDashboardComponent implements OnInit, AfterViewInit, OnDes
 
   // Initialized strictly to false
   canView: ChartPermissions = {
-    kpiTiles: false,
+    categoriesTile: false,
+    itemsTile: false,
+    requestsTile: false,
+    unitsRequestedTile: false,
+    approvedTile: false,
+    rejectedTile: false,
+    // kpiTiles: false,
     categoryEquipmentBar: false,
     categoryDonut: false,
     equipmentDonut: false,
@@ -238,7 +254,7 @@ export class InventoryDashboardComponent implements OnInit, AfterViewInit, OnDes
     }
   }
 
-  async loadTilesCount(): Promise<void> {
+ async loadTilesCount(): Promise<void> {
     try {
       this.loaderService.requestStarted();
       const roleId = this.getRoleId();
@@ -249,7 +265,7 @@ export class InventoryDashboardComponent implements OnInit, AfterViewInit, OnDes
       request.EquipmentId = 0;
       request.RoleID = roleId;
       request.InstituteID = this.getInstituteId();
-debugger
+
       const response: any = await this.tradeEquipmentsMappingService.GetInventoryDynamicDashData(request);
       if (response && (response.State === 1 || response.State === 'Success' || response.State === true || response.state === 1)) {
         const list = response.Data?.TilesCount || response.Data || [];
@@ -270,44 +286,23 @@ debugger
           return Number(val) === 1 || val === true || String(val).toLowerCase() === 'true';
         };
 
-        const sqlReturnedFlags = row.canViewKpiTiles !== undefined || row.CanViewKpiTiles !== undefined;
+        this.canView = {
+          // KPI Tile Flags from SQL
+          categoriesTile: checkFlag(row.canViewCategoriesTile, row.CanViewCategoriesTile),
+          itemsTile: checkFlag(row.canViewItemsTile, row.CanViewItemsTile),
+          requestsTile: checkFlag(row.canViewRequestsTile, row.CanViewRequestsTile),
+          unitsRequestedTile: checkFlag(row.canViewUnitsRequestedTile, row.CanViewUnitsRequestedTile),
+          approvedTile: checkFlag(row.canViewApprovedTile, row.CanViewApprovedTile),
+          rejectedTile: checkFlag(row.canViewRejectedTile, row.CanViewRejectedTile),
 
-        if (sqlReturnedFlags) {
-          this.canView = {
-            kpiTiles: checkFlag(row.canViewKpiTiles, row.CanViewKpiTiles),
-            categoryEquipmentBar: checkFlag(row.canViewCategoryEquipmentBar, row.CanViewCategoryEquipmentBar),
-            categoryDonut: checkFlag(row.canViewCategoryDonut, row.CanViewCategoryDonut),
-            equipmentDonut: checkFlag(row.canViewEquipmentDonut, row.CanViewEquipmentDonut),
-            monthlyIssued: checkFlag(row.canViewMonthlyIssued, row.CanViewMonthlyIssued),
-            requestStatus: checkFlag(row.canViewRequestStatus, row.CanViewRequestStatus),
-            topRequestedItems: checkFlag(row.canViewTopRequestedItems, row.CanViewTopRequestedItems)
-          };
-
-          // Safe fallback for configured allowed roles if flags were not populated
-          const allFlagsZero = !Object.values(this.canView).some(v => v === true);
-          if (allFlagsZero && [7, 13, 17].includes(roleId)) {
-            this.canView = {
-              kpiTiles: true,
-              categoryEquipmentBar: true,
-              categoryDonut: true,
-              equipmentDonut: true,
-              monthlyIssued: true,
-              requestStatus: true,
-              topRequestedItems: true
-            };
-          }
-        } else {
-          const isAllowed = [7, 13, 17].includes(roleId);
-          this.canView = {
-            kpiTiles: isAllowed,
-            categoryEquipmentBar: isAllowed,
-            categoryDonut: isAllowed,
-            equipmentDonut: isAllowed,
-            monthlyIssued: isAllowed,
-            requestStatus: isAllowed,
-            topRequestedItems: isAllowed
-          };
-        }
+          // Chart Flags from SQL
+          categoryEquipmentBar: checkFlag(row.canViewCategoryEquipmentBar, row.CanViewCategoryEquipmentBar),
+          categoryDonut: checkFlag(row.canViewCategoryDonut, row.CanViewCategoryDonut),
+          equipmentDonut: checkFlag(row.canViewEquipmentDonut, row.CanViewEquipmentDonut),
+          monthlyIssued: checkFlag(row.canViewMonthlyIssued, row.CanViewMonthlyIssued),
+          requestStatus: checkFlag(row.canViewRequestStatus, row.CanViewRequestStatus),
+          topRequestedItems: checkFlag(row.canViewTopRequestedItems, row.CanViewTopRequestedItems)
+        };
       } else {
         this.resetPermissionsToFalse();
       }
@@ -321,7 +316,12 @@ debugger
 
   private resetPermissionsToFalse(): void {
     this.canView = {
-      kpiTiles: false,
+      categoriesTile: false,
+      itemsTile: false,
+      requestsTile: false,
+      unitsRequestedTile: false,
+      approvedTile: false,
+      rejectedTile: false,
       categoryEquipmentBar: false,
       categoryDonut: false,
       equipmentDonut: false,
@@ -800,7 +800,7 @@ debugger
     const el = this.chartStatusRef?.nativeElement;
     if (!el) return;
 
-    const fixedStatuses = ['Issued', 'Approved', 'Request', 'Rejected'];
+    const fixedStatuses = [ 'Approved', 'Pending Request', 'Rejected'];
     const rows = fixedStatuses.map(status => {
       const match = this.statusMixData.find(s => s.StatusName.toLowerCase() === status.toLowerCase());
       const count = match ? match.TotalCount : 0;
