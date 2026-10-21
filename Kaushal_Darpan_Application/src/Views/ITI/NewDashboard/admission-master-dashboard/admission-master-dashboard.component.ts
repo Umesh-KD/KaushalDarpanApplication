@@ -35,7 +35,7 @@ export class AdmissionMasterDashboardComponent implements OnInit
   public NonEngineeringTrades: any;
   public TotalTrades: any;
 
-
+  public MenuAllowedRoleList : any[] = [];
 
 
   public AffiliatedInstitutes: any;
@@ -50,8 +50,6 @@ export class AdmissionMasterDashboardComponent implements OnInit
     public DashboardCountList: any = []
 
   public planningChartData: any[] = [];
-  public MenuAllowedRoleList: any = [];
-
 planningChartOptions: Highcharts.Options = {};
 updatePlanningFlag = false;
   constructor(
@@ -59,7 +57,7 @@ updatePlanningFlag = false;
     private loaderService: LoaderService,
     private router: Router,
     private itiTradeService: ItiTradeService,
-    private commonMasterService: CommonFunctionService
+    private commonMasterService: CommonFunctionService,
 
   )
   {
@@ -67,15 +65,20 @@ updatePlanningFlag = false;
   }
 
   async ngOnInit(): Promise<void>
+
+
   {
 
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.GetMenuPermission();
-    this.loadPieChart();
-    this.FillBarChart();
+   this.sSOLoginDataModel =  JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+
+     this.loadPieChart();
+     this.FillBarChart();
     this.loadPlanningChart();
+    await this.GetMenuPermission();
     await this.GetAllData();
     await this.GetDTEDashboard();
+
   }
 
   async GetAllData()
@@ -386,11 +389,10 @@ console.log( 'chart data in load planning',this.planningChartData);
     console.log('planning chart options',this.planningChartOptions);
 debugger
   this.updatePlanningFlag = true;
-}
+  }
 
 
-  async GetMenuPermission()
-  {
+  async GetMenuPermission() {
 
     const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
 
@@ -401,7 +403,8 @@ debugger
 
     await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
-      if (data.State == EnumStatus.Success) {
+      if (data.State == EnumStatus.Success)
+      {
         this.MenuAllowedRoleList = data.Data
 
         if (!this.MenuAllowedRoleList.some(
@@ -413,6 +416,7 @@ debugger
       }
     })
   }
+
 
 
 

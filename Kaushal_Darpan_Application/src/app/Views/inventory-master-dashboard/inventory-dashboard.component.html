@@ -1,140 +1,153 @@
-<div class="ia-root">
-  <div class="ia">
-    <!-- Header -->
-    <header class="ia-head">
-      <h1 id="top">Inventory analytics</h1>
-      <p class="ia-take">
-        <span class="ia-t-scope">{{ kpi.categoryScope }}</span>:
-        <span>{{ formatNumber(kpi.requests) }}</span> requests for
-        <span>{{ formatNumber(kpi.units_requested) }}</span> units,
-        <span>{{ formatNumber(kpi.approved) }}</span> approved, and
-        <span [class.ia-bad]="kpi.rejected > 0">{{ formatNumber(kpi.rejected) }}</span> rejected.
-      </p>
-    </header>
 
-    <!-- Category Filters -->
-    <div class="ia-filters">
-      <label class="ia-field">Category
-        <select [(ngModel)]="selectedCategoryId" (ngModelChange)="onCategoryChange()" aria-label="Category">
-          <option [ngValue]="0">All categories</option>
-          <option *ngFor="let c of categories" [ngValue]="c.ItemCategoryID">
-            {{ c.CategoryName }}
-          </option>
-        </select>
-      </label>
-      <button class="ia-btn" type="button" (click)="resetFilters()">Reset</button>
-    </div>
-
-    <!-- 1. KPI Metric Cards -->
-    <div class="ia-kpis" >
-      <div class="ia-kpi" *ngIf="canView.categoriesTile">
-        <span class="ia-kpi-label">Categories</span>
-        <span class="ia-kpi-num">{{ formatNumber(kpi.categories) }}</span>
-        <span class="ia-kpi-sub">in the catalogue</span>
+<div class="card">
+  <div class="ia-root">
+    <div class="ia">
+      <!-- Header -->
+      <!-- <header class="ia-head">
+        <h1 id="top">Inventory analytics</h1>
+        <p class="ia-take">
+          <span class="ia-t-scope">{{ kpi.categoryScope }}</span>:
+          <span>{{ formatNumber(kpi.requests) }}</span> requests for
+          <span>{{ formatNumber(kpi.units_requested) }}</span> units,
+          <span>{{ formatNumber(kpi.approved) }}</span> approved, and
+          <span [class.ia-bad]="kpi.rejected > 0">{{ formatNumber(kpi.rejected) }}</span> rejected.
+        </p>
+      </header> -->
+      <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+        <div>
+          <h1 class="text-slate-900 text-lg font-medium mb-2"> Inventory analytics</h1>
+          <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+            <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Inventory</a>
+            <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+            <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Inventory analytics</a>
+          </div>
+        </div>
       </div>
 
-      <div class="ia-kpi" *ngIf="canView.itemsTile">
-        <span class="ia-kpi-label">Items</span>
-        <span class="ia-kpi-num">{{ formatNumber(kpi.items) }}</span>
-        <span class="ia-kpi-sub">distinct equipment</span>
+      <!-- Category Filters -->
+      <div class="ia-filters">
+        <label class="ia-field">Category
+          <select [(ngModel)]="selectedCategoryId" (ngModelChange)="onCategoryChange()" aria-label="Category">
+            <option [ngValue]="0">All categories</option>
+            <option *ngFor="let c of categories" [ngValue]="c.ItemCategoryID">
+              {{ c.CategoryName }}
+            </option>
+          </select>
+        </label>
+        <button class="ia-btn" type="button" (click)="resetFilters()">Reset</button>
       </div>
 
-      <div class="ia-kpi" *ngIf="canView.requestsTile">
-        <span class="ia-kpi-label">Requests</span>
-        <span class="ia-kpi-num">{{ formatNumber(kpi.requests) }}</span>
-        <span class="ia-kpi-sub">total requests raised</span>
+      <!-- 1. KPI Metric Cards -->
+      <div class="ia-kpis" >
+        <div class="ia-kpi" *ngIf="canView.categoriesTile">
+          <span class="ia-kpi-label">Categories</span>
+          <span class="ia-kpi-num">{{ formatNumber(kpi.categories) }}</span>
+          <span class="ia-kpi-sub">in the catalogue</span>
+        </div>
+
+        <div class="ia-kpi" *ngIf="canView.itemsTile">
+          <span class="ia-kpi-label">Items</span>
+          <span class="ia-kpi-num">{{ formatNumber(kpi.items) }}</span>
+          <span class="ia-kpi-sub">distinct equipment</span>
+        </div>
+
+        <div class="ia-kpi" *ngIf="canView.requestsTile">
+          <span class="ia-kpi-label">Requests</span>
+          <span class="ia-kpi-num">{{ formatNumber(kpi.requests) }}</span>
+          <span class="ia-kpi-sub">total requests raised</span>
+        </div>
+
+        <div class="ia-kpi" *ngIf="canView.unitsRequestedTile">
+          <span class="ia-kpi-label">Units requested</span>
+          <span class="ia-kpi-num">{{ formatNumber(kpi.units_requested) }}</span>
+          <span class="ia-kpi-sub">sum of quantities</span>
+        </div>
+
+        <div class="ia-kpi" *ngIf="canView.approvedTile">
+          <span class="ia-kpi-label">Approved</span>
+          <span class="ia-kpi-num">{{ formatNumber(kpi.approved) }}</span>
+          <span class="ia-kpi-sub">approved requests</span>
+        </div>
+
+        <div class="ia-kpi" *ngIf="canView.rejectedTile">
+          <span class="ia-kpi-label">Rejected</span>
+          <span class="ia-kpi-num" [class.ia-bad]="kpi.rejected > 0">{{ formatNumber(kpi.rejected) }}</span>
+          <span class="ia-kpi-sub">rejected requests</span>
+        </div>
       </div>
 
-      <div class="ia-kpi" *ngIf="canView.unitsRequestedTile">
-        <span class="ia-kpi-label">Units requested</span>
-        <span class="ia-kpi-num">{{ formatNumber(kpi.units_requested) }}</span>
-        <span class="ia-kpi-sub">sum of quantities</span>
-      </div>
+      <!-- 2. Donut Charts Section (Item & Equipment Overview) -->
+      <section class="ia-section" id="distribution" *ngIf="canView.categoryDonut || canView.equipmentDonut">
+        <h2>Item & Equipment Overview</h2>
+        <div class="ia-grid ia-grid-2col">
+          <!-- Category Donut -->
+          <div class="ia-card" *ngIf="canView.categoryDonut">
+            <h3 class="text-center">Category Distribution</h3>
+            <div class="ia-chart-donut-container">
+              <canvas #categoryDonutCanvas></canvas>
+              <div *ngIf="categoryDonutData.length === 0" class="ia-empty-overlay">
+                No categories found
+              </div>
+            </div>
+          </div>
 
-      <div class="ia-kpi" *ngIf="canView.approvedTile">
-        <span class="ia-kpi-label">Approved</span>
-        <span class="ia-kpi-num">{{ formatNumber(kpi.approved) }}</span>
-        <span class="ia-kpi-sub">approved requests</span>
-      </div>
-
-      <div class="ia-kpi" *ngIf="canView.rejectedTile">
-        <span class="ia-kpi-label">Rejected</span>
-        <span class="ia-kpi-num" [class.ia-bad]="kpi.rejected > 0">{{ formatNumber(kpi.rejected) }}</span>
-        <span class="ia-kpi-sub">rejected requests</span>
-      </div>
-    </div>
-
-    <!-- 2. Donut Charts Section (Item & Equipment Overview) -->
-    <section class="ia-section" id="distribution" *ngIf="canView.categoryDonut || canView.equipmentDonut">
-      <h2>Item & Equipment Overview</h2>
-      <div class="ia-grid ia-grid-2col">
-        <!-- Category Donut -->
-        <div class="ia-card" *ngIf="canView.categoryDonut">
-          <h3 class="text-center">Category Distribution</h3>
-          <div class="ia-chart-donut-container">
-            <canvas #categoryDonutCanvas></canvas>
-            <div *ngIf="categoryDonutData.length === 0" class="ia-empty-overlay">
-              No categories found
+          <!-- Equipment Donut -->
+          <div class="ia-card" *ngIf="canView.equipmentDonut">
+            <h3 class="text-center">Equipment Distribution</h3>
+            <div class="ia-chart-donut-container">
+              <canvas #equipmentDonutCanvas></canvas>
+              <div *ngIf="equipmentDonutData.length === 0" class="ia-empty-overlay">
+                No equipments found
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- Equipment Donut -->
-        <div class="ia-card" *ngIf="canView.equipmentDonut">
-          <h3 class="text-center">Equipment Distribution</h3>
-          <div class="ia-chart-donut-container">
-            <canvas #equipmentDonutCanvas></canvas>
-            <div *ngIf="equipmentDonutData.length === 0" class="ia-empty-overlay">
-              No equipments found
+      <!-- 3. Demand Charts Section -->
+      <section class="ia-section" id="demand" *ngIf="canView.monthlyIssued || canView.requestStatus || canView.topRequestedItems">
+        <h2>Demand</h2>
+        <div class="ia-grid">
+          <!-- Items issued per month -->
+          <div class="ia-card" *ngIf="canView.monthlyIssued">
+            <h3>Items issued per month</h3>
+            <p class="ia-note">Total items issued in each month.</p>
+            <div class="ia-chart" #chartMonthly></div>
+          </div>
+
+          <!-- Request status -->
+          <div class="ia-card" *ngIf="canView.requestStatus">
+            <h3>Request status</h3>
+            <p class="ia-note">Where requests stand today.</p>
+            <div class="ia-chart" #chartStatus></div>
+          </div>
+
+          <!-- Most requested items -->
+          <div class="ia-card" *ngIf="canView.topRequestedItems">
+            <h3>Most requested items</h3>
+            <p class="ia-note">Total units requested per item.</p>
+            <div class="ia-chart" #chartTop></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Equipment Distribution (Category-wise) at the End -->
+      <section class="ia-section" id="category-equipment-section" *ngIf="canView.categoryEquipmentBar">
+        <div class="ia-card">
+          <h3 class="text-center">Equipment Distribution (Category-wise)</h3>
+          <p class="ia-note text-center">Number of equipment registered under each category.</p>
+          
+          <div class="ia-bar-scroll-wrapper">
+            <div class="ia-bar-scroll-inner">
+              <canvas #categoryEquipmentBarCanvas></canvas>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- 3. Demand Charts Section -->
-    <section class="ia-section" id="demand" *ngIf="canView.monthlyIssued || canView.requestStatus || canView.topRequestedItems">
-      <h2>Demand</h2>
-      <div class="ia-grid">
-        <!-- Items issued per month -->
-        <div class="ia-card" *ngIf="canView.monthlyIssued">
-          <h3>Items issued per month</h3>
-          <p class="ia-note">Total items issued in each month.</p>
-          <div class="ia-chart" #chartMonthly></div>
-        </div>
-
-        <!-- Request status -->
-        <div class="ia-card" *ngIf="canView.requestStatus">
-          <h3>Request status</h3>
-          <p class="ia-note">Where requests stand today.</p>
-          <div class="ia-chart" #chartStatus></div>
-        </div>
-
-        <!-- Most requested items -->
-        <div class="ia-card" *ngIf="canView.topRequestedItems">
-          <h3>Most requested items</h3>
-          <p class="ia-note">Total units requested per item.</p>
-          <div class="ia-chart" #chartTop></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. Equipment Distribution (Category-wise) at the End -->
-    <section class="ia-section" id="category-equipment-section" *ngIf="canView.categoryEquipmentBar">
-      <div class="ia-card">
-        <h3 class="text-center">Equipment Distribution (Category-wise)</h3>
-        <p class="ia-note text-center">Number of equipment registered under each category.</p>
-        
-        <div class="ia-bar-scroll-wrapper">
-          <div class="ia-bar-scroll-inner">
-            <canvas #categoryEquipmentBarCanvas></canvas>
+          <div *ngIf="categoryEquipmentBarData.length === 0" class="ia-fail">
+            No equipment or category data found.
           </div>
         </div>
-
-        <div *ngIf="categoryEquipmentBarData.length === 0" class="ia-fail">
-          No equipment or category data found.
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </div>
 </div>
