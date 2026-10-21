@@ -497,6 +497,7 @@ export class CitizenqueryDetailsComponent implements OnInit {
       'PolytechnicID',
       'SubjectId',
       'CommnID',
+      'RTS'
     ];
     const filteredData = this.QueryMasterList.map((item: any) => {
       const filteredItem: any = {};
