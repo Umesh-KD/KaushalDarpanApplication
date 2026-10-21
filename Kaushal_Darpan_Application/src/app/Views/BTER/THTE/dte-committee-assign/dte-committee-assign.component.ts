@@ -49,6 +49,7 @@ export class DTECommitteeAssignComponent {
   Dis_CommitteeDocs: string = ''
   CommitteeDocs: string = ''
   DTECommitteID: number = 0;
+  public CommitteeEndDate: string = '';     
 
   @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
   //table feature default
@@ -176,6 +177,12 @@ export class DTECommitteeAssignComponent {
       return;
     }
 
+    if (this.CommitteeEndDate == "" || this.CommitteeEndDate == undefined)
+    {
+      this.toastr.warning('Please select End date.');
+      return;
+    }
+
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
 
     // await for open model
@@ -199,7 +206,8 @@ export class DTECommitteeAssignComponent {
         x.RoleID = this.sSOLoginDataModel.RoleID,
         x.CommitteeDocs = this.CommitteeDocs,
         x.Dis_CommitteeDocs = this.Dis_CommitteeDocs  ,
-        x.DTECommitteID = this.DTECommitteID
+          x.DTECommitteID = this.DTECommitteID,
+          x.DTECommitteeEndDate = this.CommitteeEndDate
       })
 
       await this.teacherHigherEducationApplicationVerificationService.DTECommitteeAssign_THTE(selected)
@@ -212,6 +220,7 @@ export class DTECommitteeAssignComponent {
           this._DTEGenrateOrder.RoleID = this.sSOLoginDataModel.RoleID;
           this.status = 0;
           this.DTECommitteID = 0;
+          this.CommitteeEndDate = '';
           await this.ApplicationList_ForPrinciple_THTE();
         }
       })
@@ -452,5 +461,9 @@ export class DTECommitteeAssignComponent {
     this.childComponentViewStaffProfile.StaffID = StaffID;
     this.childComponentViewStaffProfile.UserID = UserID;
     await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
+  }
+
+  onEndDateChange(newValue: string) {
+    this.CommitteeEndDate = newValue;
   }
 }
