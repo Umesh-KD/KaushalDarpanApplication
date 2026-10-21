@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { InventoryDashDynamicDataModel } from '../../Models/DTEInventory/DTETradeEquipmentsMappingData';
+import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 
 export interface Category { 
   ItemCategoryID: number;
@@ -51,7 +52,17 @@ export interface InventoryRequest {
 }
 
 export interface ChartPermissions {
-  kpiTiles: boolean;
+  
+  // Individual Tile Flags
+  categoriesTile: boolean;
+  itemsTile: boolean;
+  requestsTile: boolean;
+  unitsRequestedTile: boolean;
+  approvedTile: boolean;
+  rejectedTile: boolean;
+
+  // Chart Flags
+  // kpiTiles: boolean;
   categoryEquipmentBar: boolean;
   categoryDonut: boolean;
   equipmentDonut: boolean;
@@ -80,15 +91,24 @@ export class InventoryDashboardComponent implements OnInit, AfterViewInit, OnDes
   private categoryEquipmentBarInstance: Chart<'bar'> | null = null;
   private resizeTimer: any;
 
-  // Controlled dynamically from the TilesCount SQL response
+  // Strongly typed SSO Data Model instance
+  public sSOLoginDataModel = new SSOLoginDataModel();
+
+  // Initialized strictly to false
   canView: ChartPermissions = {
-    kpiTiles: true,
-    categoryEquipmentBar: true,
-    categoryDonut: true,
-    equipmentDonut: true,
-    monthlyIssued: true,
-    requestStatus: true,
-    topRequestedItems: true
+    categoriesTile: false,
+    itemsTile: false,
+    requestsTile: false,
+    unitsRequestedTile: false,
+    approvedTile: false,
+    rejectedTile: false,
+    // kpiTiles: false,
+    categoryEquipmentBar: false,
+    categoryDonut: false,
+    equipmentDonut: false,
+    monthlyIssued: false,
+    requestStatus: false,
+    topRequestedItems: false
   };
 
   categories: Category[] = [];
@@ -117,8 +137,6 @@ export class InventoryDashboardComponent implements OnInit, AfterViewInit, OnDes
     { request_id: 'REQ-003', request_date: '2026-05-09', department: 'Academics', item: 'Monitor', category: 'furniture', quantity: '3', unit: 'inch', status: 'Issued' }
   ];
 
-  sSOLoginDataModel: any = {};
-
   donutColors: string[] = [
     '#176982', '#028090', '#F26419', '#F6AE2D', 
     '#33658A', '#86BBD8', '#2F4858', '#E71D36', '#7209B7'
@@ -146,12 +164,12 @@ export class InventoryDashboardComponent implements OnInit, AfterViewInit, OnDes
   ) { }
 
   async ngOnInit(): Promise<void> {
-    const storedUser = localStorage.getItem('currentUser') || localStorage.getItem('ssoData');
-    if (storedUser) {
+    const rawSSOUser = localStorage.getItem('SSOLoginUser');
+    if (rawSSOUser) {
       try {
-        this.sSOLoginDataModel = JSON.parse(storedUser);
+        this.sSOLoginDataModel = await JSON.parse(String(rawSSOUser));
       } catch (e) {
-        console.error('Failed to parse SSO data', e);
+        console.error('Failed to parse SSOLoginUser', e);
       }
     }
 
@@ -172,21 +190,18 @@ export class InventoryDashboardComponent implements OnInit, AfterViewInit, OnDes
   }
 
   private getInstituteId(): number {
-    return Number(this.sSOLoginDataModel?.InstituteID || this.sSOLoginDataModel?.InstituteId || 0);
+    return Number(this.sSOLoginDataModel.InstituteID || 0);
   }
 
   private getRoleId(): number {
-    return Number(this.sSOLoginDataModel?.RoleID || this.sSOLoginDataModel?.RoleId || 0);
+    return Number(this.sSOLoginDataModel.RoleID || 0);
   }
 
-  /**
-   * Loads tiles count & permissions first, then loads only the charts allowed by SQL
-   */
   async loadAllDashboardData(): Promise<void> {
-    // 1. Fetch TilesCount which now includes the canView flags
+    // 1. Fetch TilesCount & role permission flags from SQL
     await this.loadTilesCount();
 
-    // 2. Load chart datasets based on the flags returned from SQL
+    // 2. Fetch data only for charts authorized by SQL flags
     const chartTasks: Promise<any>[] = [];
 
     if (this.canView.monthlyIssued) {
@@ -239,18 +254,16 @@ export class InventoryDashboardComponent implements OnInit, AfterViewInit, OnDes
     }
   }
 
-  /**
-   * Action = 'TilesCount'
-   * Extracts KPIs and visibility flags simultaneously
-   */
-  async loadTilesCount(): Promise<void> {
+ async loadTilesCount(): Promise<void> {
     try {
       this.loaderService.requestStarted();
+      const roleId = this.getRoleId();
+
       const request = new InventoryDashDynamicDataModel();
       request.Action = 'TilesCount';
       request.CategoryId = this.selectedCategoryId;
       request.EquipmentId = 0;
-      request.RoleID = this.getRoleId();
+      request.RoleID = roleId;
       request.InstituteID = this.getInstituteId();
 
       const response: any = await this.tradeEquipmentsMappingService.GetInventoryDynamicDashData(request);
@@ -258,33 +271,64 @@ export class InventoryDashboardComponent implements OnInit, AfterViewInit, OnDes
         const list = response.Data?.TilesCount || response.Data || [];
         const row = Array.isArray(list) ? (list[0] || {}) : list;
 
-        // KPI Counts
         this.kpi = {
           categoryScope: this.selectedCategoryName,
-          categories: Number(row.CategoriesCount || 0),
-          items: Number(row.ItemsCount || 0),
-          requests: Number(row.TotalRequests || 0),
-          units_requested: Number(row.UnitsRequested || 0),
-          approved: Number(row.TotalApproved || 0),
-          rejected: Number(row.TotalRejected || 0)
+          categories: Number(row.CategoriesCount || row.categoriesCount || 0),
+          items: Number(row.ItemsCount || row.itemsCount || 0),
+          requests: Number(row.TotalRequests || row.totalRequests || 0),
+          units_requested: Number(row.UnitsRequested || row.unitsRequested || 0),
+          approved: Number(row.TotalApproved || row.totalApproved || 0),
+          rejected: Number(row.TotalRejected || row.totalRejected || 0)
         };
 
-        // Visibility flags directly from the SQL columns
-        this.canView = {
-          kpiTiles: row.canViewKpiTiles != null ? Number(row.canViewKpiTiles) === 1 : true,
-          categoryEquipmentBar: row.canViewCategoryEquipmentBar != null ? Number(row.canViewCategoryEquipmentBar) === 1 : true,
-          categoryDonut: row.canViewCategoryDonut != null ? Number(row.canViewCategoryDonut) === 1 : true,
-          equipmentDonut: row.canViewEquipmentDonut != null ? Number(row.canViewEquipmentDonut) === 1 : true,
-          monthlyIssued: row.canViewMonthlyIssued != null ? Number(row.canViewMonthlyIssued) === 1 : true,
-          requestStatus: row.canViewRequestStatus != null ? Number(row.canViewRequestStatus) === 1 : true,
-          topRequestedItems: row.canViewTopRequestedItems != null ? Number(row.canViewTopRequestedItems) === 1 : true
+        const checkFlag = (val1: any, val2: any): boolean => {
+          const val = val1 !== undefined ? val1 : val2;
+          return Number(val) === 1 || val === true || String(val).toLowerCase() === 'true';
         };
+
+        this.canView = {
+          // KPI Tile Flags from SQL
+          categoriesTile: checkFlag(row.canViewCategoriesTile, row.CanViewCategoriesTile),
+          itemsTile: checkFlag(row.canViewItemsTile, row.CanViewItemsTile),
+          requestsTile: checkFlag(row.canViewRequestsTile, row.CanViewRequestsTile),
+          unitsRequestedTile: checkFlag(row.canViewUnitsRequestedTile, row.CanViewUnitsRequestedTile),
+          approvedTile: checkFlag(row.canViewApprovedTile, row.CanViewApprovedTile),
+          rejectedTile: checkFlag(row.canViewRejectedTile, row.CanViewRejectedTile),
+
+          // Chart Flags from SQL
+          categoryEquipmentBar: checkFlag(row.canViewCategoryEquipmentBar, row.CanViewCategoryEquipmentBar),
+          categoryDonut: checkFlag(row.canViewCategoryDonut, row.CanViewCategoryDonut),
+          equipmentDonut: checkFlag(row.canViewEquipmentDonut, row.CanViewEquipmentDonut),
+          monthlyIssued: checkFlag(row.canViewMonthlyIssued, row.CanViewMonthlyIssued),
+          requestStatus: checkFlag(row.canViewRequestStatus, row.CanViewRequestStatus),
+          topRequestedItems: checkFlag(row.canViewTopRequestedItems, row.CanViewTopRequestedItems)
+        };
+      } else {
+        this.resetPermissionsToFalse();
       }
     } catch (ex) {
       console.error('Error loading tiles count and flags:', ex);
+      this.resetPermissionsToFalse();
     } finally {
       this.loaderService.requestEnded();
     }
+  }
+
+  private resetPermissionsToFalse(): void {
+    this.canView = {
+      categoriesTile: false,
+      itemsTile: false,
+      requestsTile: false,
+      unitsRequestedTile: false,
+      approvedTile: false,
+      rejectedTile: false,
+      categoryEquipmentBar: false,
+      categoryDonut: false,
+      equipmentDonut: false,
+      monthlyIssued: false,
+      requestStatus: false,
+      topRequestedItems: false
+    };
   }
 
   async loadMonthlyChartData(): Promise<void> {
@@ -756,7 +800,7 @@ export class InventoryDashboardComponent implements OnInit, AfterViewInit, OnDes
     const el = this.chartStatusRef?.nativeElement;
     if (!el) return;
 
-    const fixedStatuses = ['Issued', 'Approved', 'Request', 'Rejected'];
+    const fixedStatuses = [ 'Approved', 'Pending Request', 'Rejected'];
     const rows = fixedStatuses.map(status => {
       const match = this.statusMixData.find(s => s.StatusName.toLowerCase() === status.toLowerCase());
       const count = match ? match.TotalCount : 0;
@@ -871,7 +915,7 @@ export class InventoryDashboardComponent implements OnInit, AfterViewInit, OnDes
         .attr('dy', '0.35em')
         .attr('font-size', '12px')
         .attr('fill', 'var(--color-fg-muted)')
-        .text((d:any) => d.valueText);
+        .text((d: any) => d.valueText);
     });
 
     g.on('mousemove', (event, d) => self.showTooltip(box, event, d.label, d.tip))

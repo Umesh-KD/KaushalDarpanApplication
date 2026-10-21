@@ -1244,6 +1244,7 @@
               <tr>
                 <th class="text-left">S No</th>
                 <th class="text-left">Name</th>
+                <th class="text-left">Designation</th>
                 <th class="text-left">Status</th>
                 <th class="text-left">Remark</th>
                 <th class="text-left">Date</th>
@@ -1254,9 +1255,10 @@
               <tr *ngFor="let row of UserProfileStatusHistoryList; let idx=index;  ">
                 <td align="left">{{idx+1}}</td>
                 <td align="left">{{ row.DisplayName }}</td>
+                <td align="left">{{ row.Designation }}</td>
                 <td align="left">{{ row.UserProfileStatus }}</td>
                 <td align="left">{{ row.Remarks}}</td>
-                <td align="left">{{ row.CreatedDate | date: 'dd-MM-yyyy'}}</td>
+                <td align="left">{{ row.CreatedDate || '-' }}</td>
 
               </tr>
               <tr *ngIf="UserProfileStatusHistoryList?.length==0">

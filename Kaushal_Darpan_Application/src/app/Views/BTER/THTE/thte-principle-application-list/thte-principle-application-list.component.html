@@ -84,13 +84,6 @@
                class="form-input w-full"
                [(ngModel)]="CommitteeEndDate"
                (change)="onEndDateChange($event.target.value)" />
-
-        <div *ngIf="isSubmitted && LaboratoryRequestFormGroup.get('txtName')?.errors"
-             class="text-danger">
-          <p *ngIf="LaboratoryRequestFormGroup.get('txtName')?.errors?.required">
-            Laboratory Name is required.
-          </p>
-        </div>
       </div>
 
       <!-- Save Button -->

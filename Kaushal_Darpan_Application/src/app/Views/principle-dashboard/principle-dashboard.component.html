@@ -69,7 +69,7 @@
           </h3>
 
           <!-- View All Button -->
-          <a [routerLink]="item.URL == 'principledashreport' ? ['/', item.URL, item.Menu | lowercase] : ['/' + item.URL]"  
+          <a [routerLink]="item.URL == 'principledashreport' || item.URL == 'bter-em-add-staff-principle' ? ['/', item.URL, item.Menu | lowercase] : ['/' + item.URL]"  
             class="flex w-full items-center justify-center gap-2
            rounded-lg px-4 py-2 text-xs font-semibold
            text-white transition-all duration-300
@@ -79,6 +79,9 @@
             <i class="ti ti-chevron-right transition-transform
               duration-300 group-hover:translate-x-1"></i>
           </a>
+
+
+
 
         </div>
       </div>

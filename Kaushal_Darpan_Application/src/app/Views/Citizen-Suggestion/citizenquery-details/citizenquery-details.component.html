@@ -58,6 +58,20 @@
           </select>
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            From Date:
+          </label>
+          <input type="date" class="form-input" [(ngModel)]="searchRequest.FromDate">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            To Date: 
+          </label>
+          <input type="date" class="form-input"  [(ngModel)]="searchRequest.ToDate" >
+        </div>
+
       </div>
       <div class="justify-center flex mt-6">
         <button type="button" class="btn bg-info text-white me-1" (click)="GetAllData()">Search</button>
@@ -105,8 +119,8 @@
             <th class="text-left">Created Date</th>
             <th class="text-left">Query Aging Days</th>
             <th class="text-left">Status</th>
-            <th class="text-left"> User Rating</th>
-            <th class="text-left"> Rating Remarks</th>
+            <!--<th class="text-left"> User Rating</th>
+            <th class="text-left"> Rating Remarks</th>-->
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -137,7 +151,7 @@
 
 
             <!-- <td>{{ query.UserRating != 0 ? query.UserRating : 'Not Rated' }}</td> -->
-            <td>
+            <!--<td>
               <div class="col-lg-12 col-md-12 col-sm-12 col-12 mb-3 starFlexBox flex mt-3" fxLayout="row" fxLayoutAlign="start center">
                 <div *ngFor="let star of stars; let i = index">
                   <mat-icon [ngClass]="[star.class]">
@@ -146,7 +160,7 @@
                 </div>
               </div>
             </td>
-            <td>{{ query.RatingRemark }}</td>
+            <td>{{ query.RatingRemark }}</td>-->
             <td>
               <!--<button class="btn bg-info text-white" type="button" (click)="ReplayQueryUpdate(MyModel_ReplayQuery,query.Pk_ID)">Reply</button>-->
               <button class="btn bg-info text-white" type="button"
