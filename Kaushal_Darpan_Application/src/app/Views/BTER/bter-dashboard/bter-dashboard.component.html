@@ -14,32 +14,40 @@
   <div class="flex items-center gap-3">
 
     <a routerLink="/TableauExamReport" (click)="$event.stopPropagation()" class="an-btn an-green"
-      *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Admin||sSOLoginDataModel.RoleID==_EnumRole.AdminNon">
+       *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Admin||sSOLoginDataModel.RoleID==_EnumRole.AdminNon">
       <i class="material-symbols-rounded">bar_chart</i>
       <span>Exam Analytics</span>
       <i class="material-symbols-rounded">arrow_forward</i>
     </a>
 
     <a routerLink="/result-analytics-tab" (click)="$event.stopPropagation()" class="an-btn an-violet"
-      *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Admin||sSOLoginDataModel.RoleID==_EnumRole.AdminNon">
+       *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Admin||sSOLoginDataModel.RoleID==_EnumRole.AdminNon">
       <i class="material-symbols-rounded">query_stats</i>
       <span>Result Analytics</span>
       <i class="material-symbols-rounded">arrow_forward</i>
     </a>
 
     <a routerLink="/student-lifecycle-analytics-tab" (click)="$event.stopPropagation()" class="an-btn an-amber"
-      *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Admin||sSOLoginDataModel.RoleID==_EnumRole.AdminNon">
+       *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Admin||sSOLoginDataModel.RoleID==_EnumRole.AdminNon">
       <i class="material-symbols-rounded">school</i>
       <span>Student Lifecycle Analytics</span>
       <i class="material-symbols-rounded">arrow_forward</i>
     </a>
 
     <a routerLink="/executive-analytics-tab" (click)="$event.stopPropagation()" class="an-btn an-rose"
-      *ngIf="sSOLoginDataModel.RoleID==_EnumRole.DTE">
+       *ngIf="sSOLoginDataModel.RoleID==_EnumRole.DTE">
       <i class="material-symbols-rounded">monitoring</i>
       <span>Executive Analytics</span>
       <i class="material-symbols-rounded">arrow_forward</i>
     </a>
+
+    <a routerLink="/Hostel-Management-Dashboard" (click)="$event.stopPropagation()" class="an-btn an-amber"
+       *ngIf="sSOLoginDataModel.RoleID==_EnumRole.DTE || sSOLoginDataModel.RoleID==_EnumRole.Principal">
+      <i class="material-symbols-rounded">monitoring</i>
+      <span>Hostel Analytics</span>
+      <i class="material-symbols-rounded">arrow_forward</i>
+    </a>
+
   </div>
 </div>
 
