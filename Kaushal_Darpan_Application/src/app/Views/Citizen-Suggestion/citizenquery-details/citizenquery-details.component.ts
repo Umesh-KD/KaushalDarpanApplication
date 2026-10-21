@@ -56,7 +56,7 @@ export class CitizenqueryDetailsComponent implements OnInit {
   DistrictMasterList: any[] = [];
   TehsilMasterList: any[] = [];
   CitizenQueryStatusList: any[] = [];
-
+  QueryStatus: number = 0;
   public ProfileLists: any = {};
 
   stars = [
@@ -82,6 +82,7 @@ export class CitizenqueryDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.CommnID = this.activatedRoute.snapshot.paramMap.get('id');
+    this.QueryStatus = Number(this.activatedRoute.snapshot.paramMap.get('status') || 0);
     // form group
     this.QueryReqFormGroup = this.formBuilder.group({
       Replay: ['', Validators.required],
@@ -94,7 +95,10 @@ export class CitizenqueryDetailsComponent implements OnInit {
     this.ID = Number(
       this.activatedRoute.snapshot.queryParamMap.get('PK_ID')?.toString()
     );
-    
+    debugger
+    if(this.QueryStatus > 0) {
+      this.searchRequest.CitizenQueryStatus = this.QueryStatus;
+    }
     this.Request.ModifyBy = this.sSOLoginDataModel.UserID;
     await this.GetMenuPermission();
     await this.setCommIDRoleWise();
