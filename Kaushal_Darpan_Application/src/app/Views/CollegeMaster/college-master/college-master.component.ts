@@ -125,26 +125,69 @@ export class CollegeMasterComponent implements OnInit {
     this.GetCollegeMasterList(1);
   }
 
+ /* ---------------OLD Comment 20261021---------*/
+  //exportToExcel(): void {
+  //  const unwantedColumns = [
+  //    'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+  //    'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID'
+  //  ];
+  //  const filteredData = this.CollegeMasterList.map((item: any) => {
+  //    const filteredItem: any = {};
+  //    Object.keys(item).forEach(key => {
+  //      if (!unwantedColumns.includes(key)) {
+  //        filteredItem[key] = item[key];
+  //      }
+  //    });
+  //    return filteredItem;
+  //  });
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  //  XLSX.writeFile(wb, 'CollegeMasterListData.xlsx');
+  //}
 
+
+  /* ---------------New Added UI Column Downloaded in Excel 20261021---------*/
   exportToExcel(): void {
-    const unwantedColumns = [
-      'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID'
+    const ExcelColumns = [
+      { key: 'SrNo', header: 'Sr. No.' },
+      { key: 'InstituteCode', header: 'Institute Code' },
+      { key: 'InstituteNameEnglish', header: 'Name' },
+      { key: 'ManagementType', header: 'Management Type' },
+      { key: 'Email', header: 'Email' },
+      { key: 'SSOID', header: 'SSOID' },
+      ...(this.statusID != 0  ? [{ key: 'IssuedCertificate', header: 'Issue Certificate' }]
+        : []),
+      { key: 'Status', header: 'Status' }
     ];
-    const filteredData = this.CollegeMasterList.map((item: any) => {
-      const filteredItem: any = {};
-      Object.keys(item).forEach(key => {
-        if (!unwantedColumns.includes(key)) {
-          filteredItem[key] = item[key];
-        }
-      });
-      return filteredItem;
+
+    const filteredData = this.CollegeMasterList.map(
+      (item: any, index: number) => {
+        const row: any = {};
+
+        ExcelColumns.forEach(col => {
+          if (col.key === 'SrNo') {
+            row[col.header] =
+              (this.pageSize * (this.pageNo - 1)) + index + 1;
+          } else {
+            row[col.header] = item[col.key] ?? '';
+          }
+        });
+
+        return row;
+      }
+    );
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData, {
+      header: ExcelColumns.map(col => col.header)
     });
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
     XLSX.writeFile(wb, 'CollegeMasterListData.xlsx');
   }
+
 
   onSearchClick() {
 
