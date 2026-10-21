@@ -75,4 +75,5 @@ export class bterCollegeSearchModel
     public ManagementTypeId: number = 0;
     public StreamTypeID: number = 0;
     public StreamID: number = 0;
+  public TehsilId: number = 0;
 }
