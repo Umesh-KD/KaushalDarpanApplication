@@ -358,6 +358,7 @@ const routes: Routes = [
       { path: 'ItiStudentEnrollment', loadChildren: () => import('./Views/ITI/Examination/iti-student-enrollment/iti-student-enrollment.module').then(m => m.ItiStudentEnrollmentModule), title: 'Student Enrollment' },
       { path: 'studentenrollmentreport', loadChildren: () => import('./Views/Reports/student-enrollment-Report/student-enrollment-report.module').then(m => m.StudentEnrollmentReportModule), title: 'Student Enrollment Report' },
       { path: 'studentexaminationreport', loadChildren: () => import('./Views/Reports/pre-exam-student-examination-report/pre-exam-student-examination-report.module').then(m => m.PreExamStudentExaminationReportModule), title: 'Pre Exam Student Examination Report' },
+      { path: 'studentexaminationreport/:id', loadChildren: () => import('./Views/Reports/pre-exam-student-examination-report/pre-exam-student-examination-report.module').then(m => m.PreExamStudentExaminationReportModule), title: 'Pre Exam Student Examination Report' },
       { path: 'revoke-partially-detained-student', loadChildren: () => import('./Views/PreExam/revoke-partially-detained-students/revoke-partially-detained-students.module').then(m => m.RevokePartiallyDetainedStudentsModule), title: 'Revoke Partially Detained Students' },
 
       //{ path: 'studentenrollment/:id', loadChildren: () => import('./Views/reports/studentenrollmentreport/student-enrollment-report.module').then(m => m.StudentEnrollmentReportModule), title: 'ITI Student Enrollment' },
@@ -1232,6 +1233,7 @@ const routes: Routes = [
       { path: 'bter-em-stafflist', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-staff-list/bter-em-staff-list.module').then(m => m.BTEREMStaffListModule), title: 'Staff List' },
       { path: 'bter-em-add-staff', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/add-staff-initial-details/add-staff-initial-details.module').then(m => m.AddStaffInitialDetailsModule), title: 'Add Staff' },
       { path: 'bter-em-add-staff-principle', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-principle-staff/em-principle-staff.module').then(m => m.EMPrincipleStaffModule), title: 'Add Staff' },
+      { path: 'bter-em-add-staff-principle/:status', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-principle-staff/em-principle-staff.module').then(m => m.EMPrincipleStaffModule), title: 'Add Staff' },
       { path: 'bter-em-add-staff-details', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-add-staff-details/bter-em-add-staff-details.module').then(m => m.BterEMAddStaffDetailsModule), title: 'Add Staff' },
       { path: 'em-budget-head', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-budget-head-master/em-budget-head-master.module').then(m => m.EMBudgetHeadMasterModule), title: 'Establishment BGT Head' },
       { path: 'em-add-training-details', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-add-training-details/em-add-training-details.module').then(m => m.EMAddTrainingDetailsModule), title: 'Training Details' },

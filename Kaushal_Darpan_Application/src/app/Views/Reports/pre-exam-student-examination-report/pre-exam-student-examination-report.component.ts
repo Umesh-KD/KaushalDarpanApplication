@@ -143,6 +143,7 @@ export class PreExamStudentExaminationReportComponent {
   public minDate: string = '';
   public settingsMultiselector: object = {};
   modalRef!: NgbModalRef;
+  RouteStatus: number = 0
 
   public IsYearly: boolean = false;
   public _enumStudentType = EnumStudentType;
@@ -285,6 +286,9 @@ export class PreExamStudentExaminationReportComponent {
       })
     this.requestStudent.QualificationDetails = [];
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+      debugger
+    this.RouteStatus = Number(this.activatedRoute.snapshot.paramMap.get('id') || 0);
+    if(this.RouteStatus > 0) this.request.StudentFilterStatusId = this.RouteStatus
 
     this.statusID = Number(this.activatedRoute.snapshot.queryParamMap.get('status')?.toString());
     if (this.statusID > 0) {

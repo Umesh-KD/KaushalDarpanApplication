@@ -800,7 +800,7 @@ export class InventoryDashboardComponent implements OnInit, AfterViewInit, OnDes
     const el = this.chartStatusRef?.nativeElement;
     if (!el) return;
 
-    const fixedStatuses = ['Issued', 'Approved', 'Request', 'Rejected'];
+    const fixedStatuses = [ 'Approved', 'Pending Request', 'Rejected'];
     const rows = fixedStatuses.map(status => {
       const match = this.statusMixData.find(s => s.StatusName.toLowerCase() === status.toLowerCase());
       const count = match ? match.TotalCount : 0;

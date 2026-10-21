@@ -1,7 +1,8 @@
+
 <div class="ia-root">
   <div class="ia">
     <!-- Header -->
-    <header class="ia-head">
+    <!-- <header class="ia-head">
       <h1 id="top">Inventory analytics</h1>
       <p class="ia-take">
         <span class="ia-t-scope">{{ kpi.categoryScope }}</span>:
@@ -10,7 +11,17 @@
         <span>{{ formatNumber(kpi.approved) }}</span> approved, and
         <span [class.ia-bad]="kpi.rejected > 0">{{ formatNumber(kpi.rejected) }}</span> rejected.
       </p>
-    </header>
+    </header> -->
+    <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+      <div>
+        <h1 class="text-slate-900 text-lg font-medium mb-2"> Inventory analytics</h1>
+        <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+          <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Inventory</a>
+          <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+          <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Inventory analytics</a>
+        </div>
+      </div>
+    </div>
 
     <!-- Category Filters -->
     <div class="ia-filters">
