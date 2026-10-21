@@ -26,38 +26,38 @@
     </div>
 
     <!-- 1. KPI Metric Cards -->
-    <div class="ia-kpis" *ngIf="canView.kpiTiles">
-      <div class="ia-kpi">
+    <div class="ia-kpis" >
+      <div class="ia-kpi" *ngIf="canView.categoriesTile">
         <span class="ia-kpi-label">Categories</span>
         <span class="ia-kpi-num">{{ formatNumber(kpi.categories) }}</span>
         <span class="ia-kpi-sub">in the catalogue</span>
       </div>
 
-      <div class="ia-kpi">
+      <div class="ia-kpi" *ngIf="canView.itemsTile">
         <span class="ia-kpi-label">Items</span>
         <span class="ia-kpi-num">{{ formatNumber(kpi.items) }}</span>
         <span class="ia-kpi-sub">distinct equipment</span>
       </div>
 
-      <div class="ia-kpi">
+      <div class="ia-kpi" *ngIf="canView.requestsTile">
         <span class="ia-kpi-label">Requests</span>
         <span class="ia-kpi-num">{{ formatNumber(kpi.requests) }}</span>
         <span class="ia-kpi-sub">total requests raised</span>
       </div>
 
-      <div class="ia-kpi">
+      <div class="ia-kpi" *ngIf="canView.unitsRequestedTile">
         <span class="ia-kpi-label">Units requested</span>
         <span class="ia-kpi-num">{{ formatNumber(kpi.units_requested) }}</span>
         <span class="ia-kpi-sub">sum of quantities</span>
       </div>
 
-      <div class="ia-kpi">
+      <div class="ia-kpi" *ngIf="canView.approvedTile">
         <span class="ia-kpi-label">Approved</span>
         <span class="ia-kpi-num">{{ formatNumber(kpi.approved) }}</span>
         <span class="ia-kpi-sub">approved requests</span>
       </div>
 
-      <div class="ia-kpi">
+      <div class="ia-kpi" *ngIf="canView.rejectedTile">
         <span class="ia-kpi-label">Rejected</span>
         <span class="ia-kpi-num" [class.ia-bad]="kpi.rejected > 0">{{ formatNumber(kpi.rejected) }}</span>
         <span class="ia-kpi-sub">rejected requests</span>
