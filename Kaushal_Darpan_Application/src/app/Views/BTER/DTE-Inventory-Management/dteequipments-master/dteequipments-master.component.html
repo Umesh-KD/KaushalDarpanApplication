@@ -209,8 +209,10 @@
                         _EnumRole.DTEDegreeCourse2ndYear == getRoleID || 
                         _EnumRole.DTEDegreeCourse1stYear == getRoleID ||
                         _EnumRole.DIRECTOR == getRoleID" 
-                  (click)="btnDelete_OnClick(item.EquipmentsId)"><i class="ti ti-ban"></i>
+                  (click)="btnDelete_OnClick(item.EquipmentsId)"><i class="fa" [ngClass]="item.ActiveStatus == 1 ? 'fa-remove ' : 'fa-check '"></i>
                 </a>
+
+                <!-- <i class="fa" [ngClass]="item.ActiveStatus == 1 ? 'fa-remove text-danger' : 'fa-check text-success'"></i> -->
               </div>
             </td>
           </tr>

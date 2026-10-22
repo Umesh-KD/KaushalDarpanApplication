@@ -112,6 +112,7 @@ export class DteEquipmentsMasterComponent {
   async saveData() {
     debugger
     this.isSubmitted = true;
+    this.request.UnitId = this.EquipmentsRequestFormGroup.value.UnitId;
     if (this.EquipmentsRequestFormGroup.invalid) {
       return console.log("Form is invalid, cannot submit")
     }
