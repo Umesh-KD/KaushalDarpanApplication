@@ -909,4 +909,125 @@ async GetMenuPermission() {
     })
   }
 
+ 
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection === 'asc' ? '&uarr;' : '&darr;';
+  }
+
+  sortData_OLD(column: string): void {
+    if (this.sortInTableColumn === column) {
+      this.sortInTableDirection =
+        this.sortInTableDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortInTableColumn = column;
+      this.sortInTableDirection = 'asc';
+    }
+
+    const direction = this.sortInTableDirection === 'asc' ? 1 : -1;
+
+    this.paginatedInTableData.sort((a: any, b: any) => {
+      const valueA = a[column];
+      const valueB = b[column];
+
+      if (valueA == null && valueB == null) return 0;
+      if (valueA == null) return 1;
+      if (valueB == null) return -1;
+
+      let result: number;
+
+      if (column === 'CreatedDate' || column === 'ModifyDate') {
+        result = new Date(valueA).getTime() - new Date(valueB).getTime();
+      } else if (column === 'SubjectCredits') {
+        result = Number(valueA) - Number(valueB);
+      } else if (column === 'IsParent') {
+        result = Number(valueA) - Number(valueB);
+      } else {
+        result = String(valueA).localeCompare(
+          String(valueB),
+          undefined,
+          { numeric: true, sensitivity: 'base' }
+        );
+      }
+
+      return result * direction;
+    });
+  }
+
+
+  sortData(column: string): void {
+    if (this.sortInTableColumn === column) {
+      this.sortInTableDirection =
+        this.sortInTableDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortInTableColumn = column;
+      this.sortInTableDirection = 'asc';
+    }
+
+    const direction = this.sortInTableDirection === 'asc' ? 1 : -1;
+
+    this.paginatedInTableData.sort((a: any, b: any) => {
+      const valueA = a[column];
+      const valueB = b[column];
+
+      // Null values always at the end
+      if (valueA == null && valueB == null) return 0;
+      if (valueA == null) return 1;
+      if (valueB == null) return -1;
+
+      let result = 0;
+
+      // Dynamic number sorting
+      if (
+        typeof valueA === 'number' &&
+        typeof valueB === 'number'
+      ) {
+        result = valueA - valueB;
+      }
+      // Dynamic boolean sorting
+      else if (
+        typeof valueA === 'boolean' &&
+        typeof valueB === 'boolean'
+      ) {
+        result = Number(valueA) - Number(valueB);
+      }
+      // Dynamic date sorting
+      else if (
+        this.isValidDate(valueA) &&
+        this.isValidDate(valueB)
+      ) {
+        result =
+          new Date(valueA).getTime() -
+          new Date(valueB).getTime();
+      }
+      // Dynamic string sorting
+      else {
+        result = String(valueA).localeCompare(
+          String(valueB),
+          undefined,
+          {
+            numeric: true,
+            sensitivity: 'base'
+          }
+        );
+      }
+
+      return result * direction;
+    });
+  }
+
+  private isValidDate(value: any): boolean {
+    if (typeof value !== 'string' || !value.trim()) {
+      return false;
+    }
+
+    // Avoid treating ordinary numeric strings as dates
+    if (!isNaN(Number(value))) {
+      return false;
+    }
+
+    const timestamp = Date.parse(value);
+
+    return !isNaN(timestamp);
+  }
+
 }

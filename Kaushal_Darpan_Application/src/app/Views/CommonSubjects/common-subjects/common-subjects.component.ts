@@ -225,7 +225,7 @@ export class CommonSubjectsComponent implements OnInit {
     return this.sortInTableDirection === 'asc' ? '&uarr;' : '&darr;';
   }
 
-  sortData(column: string): void {
+  sortData_OLD(column: string): void {
     if (this.sortInTableColumn === column) {
       this.sortInTableDirection =
         this.sortInTableDirection === 'asc' ? 'desc' : 'asc';
@@ -264,5 +264,121 @@ export class CommonSubjectsComponent implements OnInit {
       return result * direction;
     });
   }
+
+
+
+  sortData(column: string): void
+  {
+    if (this.sortInTableColumn === column)
+    {
+      this.sortInTableDirection =
+        this.sortInTableDirection === 'asc' ? 'desc' : 'asc';
+    } else
+    {
+      this.sortInTableColumn = column;
+      this.sortInTableDirection = 'asc';
+    }
+
+    const direction = this.sortInTableDirection === 'asc' ? 1 : -1;
+    const dateColumns = ['CreatedDate', 'ModifyDate'];
+    const parseDate = (value: any): number | null =>
+    {
+      if (value == null || value === '') {
+        return null;
+      }
+
+      if (value instanceof Date)
+      {
+        const timestamp = value.getTime();
+        return Number.isFinite(timestamp) ? timestamp : null;
+      }
+
+      if (typeof value === 'number')
+      {
+        return Number.isFinite(value) ? value : null;
+      }
+
+      const str = String(value).trim();
+
+      // DD-MM-YYYY or DD-MM-YYYY HH:mm:ss
+      // Also supports DD/MM/YYYY and optional seconds
+      const match = str.match( /^(\d{1,2})[-/](\d{1,2})[-/](\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?$/ );
+
+      if (match)
+      {
+        const [,day,month,year,hours = '00',minutes = '00', seconds = '00'] = match;
+        const d = Number(day);
+        const m = Number(month);
+        const y = Number(year);
+        const h = Number(hours);
+        const min = Number(minutes);
+        const s = Number(seconds);
+
+        // Validate date and time components
+        if (m < 1 || m > 12 || d < 1 || d > 31 || h > 23 || min > 59 || s > 59)
+        {
+          return null;
+        }
+
+        const date = new Date(y, m - 1, d, h, min, s);
+
+        // Reject invalid calendar dates such as 31-02-2025
+        if (date.getFullYear() !== y || date.getMonth() !== m - 1 || date.getDate() !== d)
+        {
+          return null;
+        }
+        return date.getTime();
+      }
+
+      // Fallback for ISO formats, e.g. 2025-12-22T14:29:50
+      const timestamp = Date.parse(str);
+      return Number.isFinite(timestamp) ? timestamp : null;
+    };
+
+    this.CommonSubjectList.sort((a: any, b: any) =>
+    {
+      const valueA = a?.[column];
+      const valueB = b?.[column];
+      const emptyA = valueA == null || valueA === '';
+      const emptyB = valueB == null || valueB === '';
+
+      // Keep empty values at the bottom in both directions
+      if (emptyA && emptyB) return 0;
+      if (emptyA) return 1;
+      if (emptyB) return -1;
+
+      let result = 0;
+
+      if (dateColumns.includes(column))
+      {
+        const dateA = parseDate(valueA);
+        const dateB = parseDate(valueB);
+
+        // Invalid dates go to the bottom
+        if (dateA === null && dateB === null) return 0;
+        if (dateA === null) return 1;
+        if (dateB === null) return -1;
+
+        result = dateA - dateB;
+      } else if (typeof valueA === 'number' && typeof valueB === 'number')
+      {
+        result = valueA - valueB;
+      }
+      else
+      {
+        result = String(valueA).localeCompare( String(valueB), undefined,  {
+            numeric: true,
+            sensitivity: 'base'
+          }
+        );
+      }
+
+      return result * direction;
+    });
+  }
+
+
+
+
 
 }

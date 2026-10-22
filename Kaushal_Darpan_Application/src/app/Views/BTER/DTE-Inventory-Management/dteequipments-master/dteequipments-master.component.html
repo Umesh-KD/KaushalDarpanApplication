@@ -142,15 +142,44 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr. No.</th>
-            <th class="text-left">Category</th>
-            <th class="text-left">Name</th>
-            <th class="text-left">IsConsumable</th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('ItemCategoryName')">
+              Category
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='ItemCategoryName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('Name')">
+              Name
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Name'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('IsConsumable')">
+              IsConsumable
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='IsConsumable'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('CreatedBy')">
+              Created By
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='CreatedBy'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('CreatedAt')">
+              Created At
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='CreatedAt'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('ModifyBy')">
+              Modify By
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='ModifyBy'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('ModifyAt')">
+              Modify At
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='ModifyAt'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>      
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('Status')">
+              Status
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Status'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>     
             <!-- <th class="text-left">Specification</th> -->
             <th class="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of EquipmentsMasterList  | tableSearchFilter:Table_SearchText;let idx=index;">
+          <tr *ngFor="let item of paginatedInTableData | tableSearchFilter:Table_SearchText   ;let idx=index;">
             <td align="left">{{idx+1}}</td>
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.Name}}</td>
@@ -160,12 +189,17 @@
                 {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
               </span>
             </td>
+            <td align="left">{{item.CreatedBy}}</td>
+            <td align="left">{{item.CreatedAt | date:'dd-MM-yy'}}</td>
+            <td align="left">{{item.ModifyBy}}</td>
+            <td align="left">{{item.ModifyAt | date:'dd-MM-yy'}}</td>
+            <td align="left">{{item.Status }}</td>
 
             <!-- <td align="left">{{item.Specification}}</td> -->
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0)" (click)="btnEdit_OnClick(item.EquipmentsId)" title="Edit"><i class="ti ti-pencil"></i></a>
-                <a href="javascript:void(0)" title="Delete"
+                <a href="javascript:void(0)" title="InActive"
                   *ngIf="_EnumRole.DTELateral == getRoleID || 
                         _EnumRole.AdminNon == getRoleID || 
                         _EnumRole.Admin == getRoleID || 
@@ -175,13 +209,27 @@
                         _EnumRole.DTEDegreeCourse2ndYear == getRoleID || 
                         _EnumRole.DTEDegreeCourse1stYear == getRoleID ||
                         _EnumRole.DIRECTOR == getRoleID" 
-                  (click)="btnDelete_OnClick(item.EquipmentsId)"><i class="ti ti-trash"></i>
+                  (click)="btnDelete_OnClick(item.EquipmentsId)"><i class="fa" [ngClass]="item.ActiveStatus == 1 ? 'fa-remove ' : 'fa-check '"></i>
                 </a>
+
+                <!-- <i class="fa" [ngClass]="item.ActiveStatus == 1 ? 'fa-remove text-danger' : 'fa-check text-success'"></i> -->
               </div>
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+    <!-- Pagination -->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage" [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
     </div>
   </div>
 </div>

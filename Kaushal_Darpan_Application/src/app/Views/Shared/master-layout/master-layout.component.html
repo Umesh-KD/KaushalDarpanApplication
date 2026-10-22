@@ -159,7 +159,7 @@
                   <ng-container *ngFor="let submenu of menu.children; trackBy: trackIndex">
                     <li>
                       <a class="sub-menu" *ngIf="submenu?.OnSelect" (click)="js_SubMenuActive($event)"
-                         [routerLink]="[parseUrl(submenu.OnSelect)?.path]"
+                         [routerLink]="[parseUrl(submenu.OnSelect)?.path]" 
                          [queryParams]="parseUrl(submenu.OnSelect)?.queryParams"><i class="ti ti-chevron-right"></i><span>{{submenu.MenuName}}</span></a>
                     </li>
                   </ng-container>
