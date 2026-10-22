@@ -228,7 +228,7 @@ export class JailAdmissionReportingComponent {
           //this.request.SeatMetrixId = data['Data'].Table[0].SeatMetrixId;
           debugger
           if (this.request.ApplicationID == null || this.request.ApplicationID == 0 || this.request.ApplicationID == undefined) {
-            this.toastr.warning("No Data Found")
+            this.toastr.warning("No Record Found")
             if (this.searchRequest.TradeLevel == 8) {
               this.Router.navigate(['/JailAdmissionAllotment', 8]);
             } else if (this.searchRequest.TradeLevel == 10) {

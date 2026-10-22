@@ -155,7 +155,7 @@
             </td>
 
           </tr>
-          <tr *ngIf="attendanceFormData?.length === 0"><td colspan="15"> No Record Found</td></tr>
+          <tr *ngIf="attendanceFormData?.length === 0"><td colspan="15">No Record Found</td></tr>
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </tbody>

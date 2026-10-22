@@ -124,7 +124,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="!childDataMap[row.UserID]?.length">
-                        <td colspan="10" class="text-center">No Data Found</td>
+                        <td colspan="10" class="text-center">No Record Found</td>
                       </tr>
                       <ng-container *ngFor="let child1 of childDataMap[row.UserID]; let i = index">
                         <tr *ngIf="expandedChild === child1.UserID">
@@ -169,7 +169,7 @@
                                       </td>
                                     </tr>
                                     <tr *ngIf="!childDataMapZ[child1.UserID]?.length">
-                                      <td colspan="11" class="text-center">No Data Found</td>
+                                      <td colspan="11" class="text-center">No Record Found</td>
                                     </tr>
 
 
@@ -259,7 +259,7 @@
 
 
     <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
-      No Record Found
+     No Record Found
     </div>
    
     <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[50, 80, 90, 100, 500, 1000]"

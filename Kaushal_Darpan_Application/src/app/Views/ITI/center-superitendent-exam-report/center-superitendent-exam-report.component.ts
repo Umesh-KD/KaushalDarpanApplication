@@ -533,7 +533,7 @@ validateSchedule(index: number) {
         .then((data: any) => {
             //data=JSON.parse(JSON.stringify(data));
             if(data['Data'] === null){
-             this.toastr.error('No data found for the given ID');
+             this.toastr.error('No Record Found for the given ID');
               this.router.navigate(['center-superitendent-exam-report']);
             }
             data = data['Data'] || [];;
