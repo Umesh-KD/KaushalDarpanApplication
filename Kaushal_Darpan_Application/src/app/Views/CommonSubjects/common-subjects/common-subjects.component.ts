@@ -214,4 +214,55 @@ export class CommonSubjectsComponent implements OnInit {
       }      
     })
   }
+
+
+  sortColumn: string = '';
+  sortDirection: boolean = true;
+  sortInTableDirection: 'asc' | 'desc' = 'asc';
+  sortInTableColumn = '';
+
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection === 'asc' ? '&uarr;' : '&darr;';
+  }
+
+  sortData(column: string): void {
+    if (this.sortInTableColumn === column) {
+      this.sortInTableDirection =
+        this.sortInTableDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortInTableColumn = column;
+      this.sortInTableDirection = 'asc';
+    }
+
+    const direction = this.sortInTableDirection === 'asc' ? 1 : -1;
+
+    this.CommonSubjectList.sort((a: any, b: any) => {
+      const valueA = a[column];
+      const valueB = b[column];
+
+      if (valueA == null) return 1;
+      if (valueB == null) return -1;
+
+      let result: number;
+
+      if (column === 'CreatedDate' || column === 'ModifyDate') {
+        const dateA = new Date(valueA).getTime();
+        const dateB = new Date(valueB).getTime();
+
+        result = dateA - dateB;
+      } else {
+        result = String(valueA).localeCompare(
+          String(valueB),
+          undefined,
+          {
+            numeric: true,
+            sensitivity: 'base'
+          }
+        );
+      }
+
+      return result * direction;
+    });
+  }
+
 }
