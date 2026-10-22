@@ -47,6 +47,7 @@ export class EstablishmentReportBTERComponent {
   public Table_SearchText: string = '';
   public act: string = '';
   public status: number = 0;
+  public profileStatus: number = 0;
 
   //table feature default
   modalReference: NgbModalRef | undefined;
@@ -77,7 +78,11 @@ export class EstablishmentReportBTERComponent {
     await this.GetMenuPermission();
     this.act = this.activatedRoute.snapshot.queryParamMap.get("act")?.toString() || '';
     this.status = Number(this.activatedRoute.snapshot.queryParamMap.get("status")?.toString()) || 0;
+    this.profileStatus = Number(this.activatedRoute.snapshot.queryParamMap.get("profileStatus")?.toString()) || 0;
 
+    if(!(this.profileStatus == null || this.profileStatus == undefined )){
+      this.searchRequest.ProfileStatus = this.profileStatus;
+    }
     await this.setOfficeOnLoad();
     await this.GetDDLMasterData();
     await this.GetStaffProfileStatusList();
