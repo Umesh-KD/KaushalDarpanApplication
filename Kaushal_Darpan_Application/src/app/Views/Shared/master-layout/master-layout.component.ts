@@ -278,14 +278,14 @@ export class MasterLayoutComponent implements OnInit {
     // Force reload route, no browser refresh
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
-    this.router.navigate(['/dashboard']);
+   // this.router.navigate(['/dashboard']);
 
     // comment bcz other page open on different role
     //this.reloadRoute()
 
-    //this.router.navigate(['/dashboard']).then(() => {
-    //  window.location.reload();
-    //});
+    this.router.navigate(['/dashboard']).then(() => {
+      window.location.reload();
+    });
   }
 
 
@@ -298,7 +298,6 @@ export class MasterLayoutComponent implements OnInit {
           console.log(data);
           this.ISEligiblecollegeRemark = data['Data'][0]?.ISEligiblecollegeRemark;
           this.ISEligiblecollege = data['Data'][0]?.ISEligiblecollege;
-
 
         }, (error: any) => console.error(error)
         );
@@ -535,28 +534,36 @@ export class MasterLayoutComponent implements OnInit {
 
   js_SubMenuActive(event: any): void {
 
-    console.log("event", event);
+    const clickedElement = event.target as HTMLElement;
+    const child = clickedElement.closest('.sub-menu');
 
-    const clickedElement = event.target;
+    // Remove active class from all menu links
+    const allLinks = this.el.nativeElement.querySelectorAll(
+      '.admin-menu a.active, .admin-menu .sub-menu.active'
+    );
+
+    allLinks.forEach((link: HTMLElement) => {
+      link.classList.remove('active');
+    });
+
+    // Add active class only to clicked submenu
+    if (child) {
+      child.classList.add('active');
+    }
+
+    // Expand clicked parent menu
     const parentLi = clickedElement.closest('.menu-item');
+
     if (parentLi) {
-      const allLis = this.el.nativeElement.querySelectorAll('li');
+      const allLis = this.el.nativeElement.querySelectorAll('li.menu-item');
 
       allLis.forEach((li: HTMLElement) => {
         li.classList.remove('showChildMenu');
       });
+
       parentLi.classList.add('showChildMenu');
     }
-    const child = clickedElement.closest('.sub-menu');;
-    if (child) {
-      const allLis = this.el.nativeElement.querySelectorAll('.sub-menu');
-      allLis.forEach((a: HTMLElement) => {
-        a.classList.remove('active');
-      });
-      child.classList.add('active');
-    }
   }
-
   toggleMenu(event: any): void {
     const bodyElement = this.document.body;
     const htmlElement = this.document.documentElement;
