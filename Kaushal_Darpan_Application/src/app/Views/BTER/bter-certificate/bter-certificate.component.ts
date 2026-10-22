@@ -317,7 +317,7 @@ export class BterCertificateComponent implements OnInit {
       if (data && data.Data) {
         this.downloadBase64PDF(data.Data, `${this.ActionDynamic}.pdf`);
       } else {
-        this.toastrService.error('Data not found');
+        this.toastrService.error('No Record Found');
       }
     } catch (ex) {
       console.error(ex);
@@ -342,7 +342,7 @@ export class BterCertificateComponent implements OnInit {
       if (data && data.Data) {
         this.downloadBase64PDF(data.Data, `${this.ActionDynamic}_bulk.pdf`);
       } else {
-        this.toastrService.error('Data not found');
+        this.toastrService.error('No Record Found');
       }
     } catch (ex) {
       console.error(ex);
@@ -363,7 +363,7 @@ export class BterCertificateComponent implements OnInit {
       if (data && data.Data) {
         this.downloadBase64PDF(data.Data, `${this.ActionDynamic}.pdf`);
       } else {
-        this.toastrService.error('Data not found');
+        this.toastrService.error('No Record Found');
       }
     } catch (ex) {
       console.error(ex);
@@ -385,7 +385,7 @@ export class BterCertificateComponent implements OnInit {
       if (data && data.Data) {
         this.downloadBase64PDF(data.Data, `${this.ActionDynamic}.pdf`);
       } else {
-        this.toastrService.error('Data not found');
+        this.toastrService.error('No Record Found');
       }
     } catch (ex) {
       console.error(ex);
@@ -408,7 +408,7 @@ export class BterCertificateComponent implements OnInit {
       if (data && data.Data) {
         this.downloadBase64PDF(data.Data, `${this.ActionDynamic}.pdf`);
       } else {
-        this.toastrService.error('Data not found');
+        this.toastrService.error('No Record Found');
       }
     } catch (ex) {
       console.error(ex);
@@ -433,7 +433,7 @@ export class BterCertificateComponent implements OnInit {
       if (data && data.Data) {
         this.downloadBase64PDF(data.Data, `${this.ActionDynamic}_bulkPrePrinted.pdf`);
       } else {
-        this.toastrService.error('Data not found');
+        this.toastrService.error('No Record Found');
       }
     } catch (ex) {
       console.error(ex);

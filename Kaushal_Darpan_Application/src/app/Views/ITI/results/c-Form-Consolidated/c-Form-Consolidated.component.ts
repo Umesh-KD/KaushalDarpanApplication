@@ -164,7 +164,7 @@ export class cFormConsolidatedComponent implements OnInit {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
           if(data.Data==null || data.Data.Table1==null || data.Data.Table1.length==0){
-              this.toastr.error("No Data Found");
+              this.toastr.error("No Record Found");
               return;
             }
           else{

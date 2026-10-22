@@ -172,7 +172,7 @@ export class EnrollmentCancelationVerifyComponent {
       if (data && data.Data) {
         this.downloadBase64PDF(data.Data, `${this.ActionDynamic}.pdf`);
       } else {
-        this.toastr.error('Data not found');
+        this.toastr.error('No Record Found');
       }
     } catch (ex) {
       console.error(ex);

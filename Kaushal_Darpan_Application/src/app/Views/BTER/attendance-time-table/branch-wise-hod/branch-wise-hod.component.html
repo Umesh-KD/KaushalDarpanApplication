@@ -221,7 +221,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
       <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord == 0">
-        No Record Found
+       No Record Found
       </div>
       <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
     </div>
@@ -305,7 +305,7 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
         </table>
         <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord1 == 0">
-          No Record Found
+         No Record Found
         </div>
         <mat-paginator #paginator1 [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
 

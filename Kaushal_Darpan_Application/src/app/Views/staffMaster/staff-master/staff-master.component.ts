@@ -28,6 +28,7 @@ export class StaffMasterComponent implements OnInit {
   public BranchesMasterList: any = [];
   public SubjectMasterDDL: any = [];
   public DistrictMasterList: any = [];
+  public PostList:any=[];
   public sSOLoginDataModel = new SSOLoginDataModel();
   public stateID: number = 0;
   public StaffMasterList: any = [];
@@ -89,7 +90,8 @@ export class StaffMasterComponent implements OnInit {
           this.StateMasterList = data['Data'];
           console.log(this.StateMasterList);
         }, error => console.error(error));
-    }
+
+      }
     catch (Ex) {
       console.log(Ex);
     }

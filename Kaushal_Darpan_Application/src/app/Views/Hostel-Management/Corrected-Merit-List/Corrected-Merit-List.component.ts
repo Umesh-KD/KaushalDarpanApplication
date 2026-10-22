@@ -364,7 +364,7 @@ export class CorrectedMeritListComponent {
       return;
     }
     if(this.StudentReqListList?.length == 0) {
-      this.toastr.error("No data found");
+      this.toastr.error("No Record Found");
       return;
     }
     try {
