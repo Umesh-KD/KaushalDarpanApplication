@@ -156,6 +156,10 @@ export class CollegeMasterComponent implements OnInit {
       { key: 'ManagementType', header: 'Management Type' },
       { key: 'Email', header: 'Email' },
       { key: 'SSOID', header: 'SSOID' },
+      { key: 'CreatedByName', header: 'Created By' },
+      { key: 'CreatedDate', header: 'Created Date' },
+      { key: 'ModifyByName', header: 'Modify By' },
+      { key: 'ModifyDate', header: 'Modify Date' },
       ...(this.statusID != 0  ? [{ key: 'IssuedCertificate', header: 'Issue Certificate' }]
         : []),
       { key: 'Status', header: 'Status' }

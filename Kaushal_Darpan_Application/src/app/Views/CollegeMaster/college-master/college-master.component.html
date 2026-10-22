@@ -2,12 +2,12 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Institutes</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">College Master</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Institutes</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">College Master</a>
     </div>
   </div>
 </div>
@@ -68,6 +68,21 @@
         </div>
 
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Modified From Date
+          </label>
+          <input type="date" class="form-input" [(ngModel)]="searchRequest.FromDate">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Modified To Date
+          </label>
+          <input type="date" class="form-input" [(ngModel)]="searchRequest.ToDate">
+        </div>
+
+
+        <div>
           <button type="button" class="btn bg-info text-white mt-6 mx-1" (click)="GetCollegeMasterList(1)">Search</button>
           <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
 
@@ -109,6 +124,10 @@
             <th>Management Type</th>
             <th>Email</th>
             <th>SSOID</th>
+            <th>Created By</th>
+            <th>Created Date</th>
+            <th>Modify By</th>
+            <th>Modify Date</th>
             <th *ngIf="this.statusID!=0">Issue Certificate</th>
             <th>Status</th>
             <!--<th class="text-center">Action</th>-->
@@ -130,20 +149,24 @@
               {{college.SSOID}}
             </td>
 
-            
+            <td align="left">{{college.CreatedByName}}</td>
+            <td align="left">{{college.CreatedDate}}</td>
+            <td align="left">{{college.ModifyByName}}</td>
+            <td align="left">{{college.ModifyDate}}</td>
+
             <td *ngIf="this.statusID!=0" class="text-center">{{college.IssuedCertificate}}</td>
             <!--<td>
 
-              <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">-->
-                <!--<label class="block">Status</label>-->
-                <!--<label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
-                  <input class="sr-only peer" type="checkbox" id="Active" [checked]="college.Status == 1" (change)="onToggleChange(college.CollegeStreamId, college.Status)">
-                  <span class="toggleIcon">
-                    <span class="toggleTitle">{{ college.Status == 1 ? '' : '' }}</span>
-                  </span>
-                </label>
-              </div>            
-            </td>-->
+    <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">-->
+            <!--<label class="block">Status</label>-->
+            <!--<label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+        <input class="sr-only peer" type="checkbox" id="Active" [checked]="college.Status == 1" (change)="onToggleChange(college.CollegeStreamId, college.Status)">
+        <span class="toggleIcon">
+          <span class="toggleTitle">{{ college.Status == 1 ? '' : '' }}</span>
+        </span>
+      </label>
+    </div>
+  </td>-->
             <td align="center">
               <div class="flex align-center justify-center actionBtns">
                 <a href="javascript:void(0);" title="Inactive Institute" (click)="btnActive_OnClick(college.InstituteID)">
