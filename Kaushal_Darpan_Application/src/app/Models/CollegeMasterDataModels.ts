@@ -57,6 +57,8 @@ export class CollegeMasterSearchModel extends RequestBaseModel {
   public ManagementType:number=0
   public DistrictId:number=0
   public SSOID: string = '';
+  public FromDate: string = '';
+  public ToDate: string = '';
   
 }
 
