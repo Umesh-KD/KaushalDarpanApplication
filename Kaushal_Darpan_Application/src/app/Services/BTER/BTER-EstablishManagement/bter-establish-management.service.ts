@@ -181,6 +181,17 @@ export class BTEREstablishManagementService {
       ).toPromise();
   }
 
+  public async UserProfileStatusHistoryLog(request: Bter_Govt_EM_UserRequestHistoryListSearchDataModel) {
+
+    const headers = { 'content-type': 'application/json' }
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/UserProfileStatusHistoryLog', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 
   public async Bter_GOVT_EM_ApproveRejectStaff(searchRequest: RequestUpdateStatus) {
     var body = JSON.stringify(searchRequest);

@@ -88,6 +88,7 @@ export class EMPrincipleStaffComponent {
   public PostBudgetHeadList: any = [];
   public AssignedRoleRights: any = [];
   public ChildPostServiceTypeDDL: any = [];
+  public UserProfileStatusHistoryLog: any = [];
   public PostServiceTypeDDL: any = [];
   public StaffProfileStatusList: any = [];
 
@@ -1070,6 +1071,12 @@ async GetTechnicianDll() {
     }
   }
 
+
+
+
+
+
+
   async ResetControlFilter() {
     this.isSubmitted = false;   
     this.searchRequest.FilterStaffTypeID = 0;
@@ -1636,6 +1643,36 @@ async GetCategroyData() {
       }, 200);
     }
   }
+
+  async onUserProfileStatusHistoryLog(model: any, StaffUserID: number) {
+
+    try {
+      this.loaderService.requestStarted();
+      this.searchRequestUserProfileStatus.StaffID = StaffUserID;
+
+      this.searchRequestUserProfileStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      await this.bterEstablishManagementService.UserProfileStatusHistoryLog(this.searchRequestUserProfileStatus)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.UserProfileStatusHistoryLog = data.Data;
+
+
+        }, (error: any) => console.error(error))
+
+      console.log(StaffUserID, "modal");
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
 
   CloseModalProfileStatuslist() {
     this.modalService.dismissAll();
