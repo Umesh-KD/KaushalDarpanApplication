@@ -511,7 +511,7 @@ export class DuplicateDocumentComponent implements OnInit {
           if (data && data.Data) {
             this.downloadBase64PDF(data.Data, `${this.searchRequest1.Action}.pdf`);
           } else {
-            this.toastr.error('Data not found');
+            this.toastr.error('No Record Found');
           }
         } catch (ex) {
           console.error(ex);

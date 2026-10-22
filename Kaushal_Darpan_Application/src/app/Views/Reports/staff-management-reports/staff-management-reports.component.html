@@ -130,7 +130,7 @@
                         <td class="p-1 border">{{ child.ProfileStatus }}</td>
                       </tr>
                       <tr *ngIf="!childDataMap[row.UserID]?.length">
-                        <td colspan="10" class="text-center">No Data Found</td>
+                        <td colspan="10" class="text-center">No Record Found</td>
                       </tr>
                     </tbody>
                   </table>
@@ -145,7 +145,7 @@
 
 
     <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
-      No Record Found
+     No Record Found
     </div>
     <!-- Pagination Controls -->
     <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"

@@ -185,7 +185,7 @@ export class UndertakingByExminerComponent implements OnInit {
         });
       }
       else{
-        this.toastr.error('No data found for the provided SSO ID', 'Error');
+        this.toastr.error('No Record Found for the provided SSO ID', 'Error');
         this.UndertakingExminerForm.patchValue({
           Name: '',
           Designation: '',

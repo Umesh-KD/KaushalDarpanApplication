@@ -490,7 +490,7 @@ export class TeacherHigherEducationApplicationComponent {
           await this.getAppliedCoursesByIDDDLFill();
 
         } else {
-          this.toastr.error('Data not found.');
+          this.toastr.error('No Record Found.');
         }
       } else {
         this.toastr.error(this.Message);

@@ -2,12 +2,12 @@
   <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Intakes</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">College Branches</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
+      <a routerLink="#" class="text-sm font-medium text-slate-700">Masters</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/BTERSeatIntakesList" class="text-sm font-medium text-slate-700" aria-current="page">Intakes</a>
+      <a routerLink="/BTERSeatIntakesList" class="text-sm font-medium text-slate-700" aria-current="page">College Branches</a>
     </div>
   </div>
 </div>
@@ -130,76 +130,210 @@
       </div>
     </div>
     <div class="overflow-x-auto mt-3">
-        <table class="table table-border w-full table-auto " cellpadding="5">
-          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-            <tr>
-              <th class="text-left">#</th>
+      <!--<table class="table table-border w-full table-auto " cellpadding="5">
+    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+      <tr>
+        <th class="text-left">#</th>
 
-              <th align="left">Institute Name</th>
-              <!--<th align="left">Institute Code</th>-->
-              <th align="left">Stream Name</th>
-              <!--<th align="left">Stream Code</th>-->
-              <th align="left">Stream Type</th>
-              <th align="left">Shift Name</th>
-              <th align="left">Total Seats</th>
-              <th align="left">Admission Seats</th>
-              <th class="text-left">Status</th>
-
-
+        <th align="left">Institute Name</th>-->
+      <!--<th align="left">Institute Code</th>-->
+      <!--<th align="left">Stream Name</th>-->
+      <!--<th align="left">Stream Code</th>-->
+      <!--<th align="left">Stream Type</th>
+      <th align="left">Shift Name</th>
+      <th align="left">Total Seats</th>
+      <th align="left">Admission Seats</th>
+      <th class="text-left">Status</th>
 
 
-              <th style="width: 80px;">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let row of CollegeBranchesList | tableSearchFilter:Table_SearchText; let idx=index;">
-              <td >{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
-              <td align="left">({{row.InstituteCode}}){{row.InstituteNameEnglish}}</td>
-              <!--<td align="left">{{row.InstituteCode}}</td>-->
+
+
+      <th style="width: 80px;">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of CollegeBranchesList | tableSearchFilter:Table_SearchText; let idx=index;">
+      <td >{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+      <td align="left">({{row.InstituteCode}}){{row.InstituteNameEnglish}}</td>-->
+      <!--<td align="left">{{row.InstituteCode}}</td>-->
+      <!--<td align="left">({{row.StreamCode}}){{row.StreamName}}</td>-->
+      <!--<td align="left">{{row.StreamCode}}</td>-->
+      <!--<td align="left">{{row.StreamTypeName}}</td>
+  <td align="left">{{row.ShiftName}}</td>
+  <td align="left">{{row.TotalSeats}}</td>
+  <td align="left">{{row.AdmissionSeats}}</td>
+
+  <td align="left">-->
+      <!--<div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3" *ngIf="DateConfigSetting[0][BranchMapKeyEng]==1">-->
+      <!--<label class="block">Status</label>-->
+      <!--<label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+      <input class="sr-only peer" type="checkbox" id="Active" [checked]="row.ActiveStatus == 1" (change)="onToggleChange(row.CollegeStreamId, row.ActiveStatus)">
+      <span class="toggleIcon">
+        <span class="toggleTitle">{{ row.ActiveStatus == 1 ? '' : '' }}</span>
+      </span>
+    </label>
+  </div>-->
+      <!--<div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">-->
+      <!--<label class="block">Status</label>-->
+      <!--<label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+      <input class="sr-only peer" type="checkbox" id="Active" [checked]="row.ActiveStatus == 1" (change)="onToggleChange(row.CollegeStreamId, row.ActiveStatus)">
+      <span class="toggleIcon">
+        <span class="toggleTitle">{{ row.ActiveStatus == 1 ? '' : '' }}</span>
+      </span>
+    </label>
+  </div>-->
+      <!--<div *ngIf="DateConfigSetting[0][BranchMapKeyEng]!=1">
+    {{ row.ActiveStatus == 1 ? 'Active' : 'In Active' }}
+  </div>-->
+      <!--</td>
+  <td>-->
+      <!--<div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important" *ngIf="DateConfigSetting[0][BranchMapKeyEng]==1">
+    <a href="javascript:void(0);" title="Edit" [routerLink]="'/BTERAddSeatIntakes'" [queryParams]="{id:row.CollegeStreamId}"><i class="ti ti-pencil"></i></a>
+    <a href="javascript:void(0);" title="Delete" (click)="DeleteById(row.CollegeStreamId)"><i class="ti ti-trash"></i></a>
+  </div>-->
+      <!--<div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important" >
+            <a href="javascript:void(0);" title="Edit" [routerLink]="'/BTERAddSeatIntakes'" [queryParams]="{id:row.CollegeStreamId}"><i class="ti ti-pencil"></i></a>
+            <a href="javascript:void(0);" title="Delete" (click)="DeleteById(row.CollegeStreamId)"><i class="ti ti-trash"></i></a>
+          </div>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>-->
+
+
+
+
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">#</th>
+
+            <th class="text-left cursorHand" (click)="sortData('InstituteNameEnglish')">
+              Institute Name
+              <span class="shortingSpan"
+                    [innerHTML]="sortInTableColumn == 'InstituteNameEnglish' ? sortInTableDirectionAero : '&uarr;'"></span>
+            </th>
+
+            <th class="text-left cursorHand" (click)="sortData('StreamName')">
+              Stream Name
+              <span class="shortingSpan"
+                    [innerHTML]="sortInTableColumn == 'StreamName' ? sortInTableDirectionAero : '&uarr;'"></span>
+            </th>
+
+            <th class="text-left cursorHand" (click)="sortData('StreamTypeName')">
+              Stream Type
+              <span class="shortingSpan"
+                    [innerHTML]="sortInTableColumn == 'StreamTypeName' ? sortInTableDirectionAero : '&uarr;'"></span>
+            </th>
+
+            <th class="text-left cursorHand" (click)="sortData('ShiftName')">
+              Shift Name
+              <span class="shortingSpan"
+                    [innerHTML]="sortInTableColumn == 'ShiftName' ? sortInTableDirectionAero : '&uarr;'"></span>
+            </th>
+
+            <th class="text-left cursorHand" (click)="sortData('TotalSeats')">
+              Total Seats
+              <span class="shortingSpan"
+                    [innerHTML]="sortInTableColumn == 'TotalSeats' ? sortInTableDirectionAero : '&uarr;'"></span>
+            </th>
+
+            <th class="text-left cursorHand" (click)="sortData('AdmissionSeats')">
+              Admission Seats
+              <span class="shortingSpan"
+                    [innerHTML]="sortInTableColumn == 'AdmissionSeats' ? sortInTableDirectionAero : '&uarr;'"></span>
+            </th>
+            <th class="text-left cursorHand" (click)="sortData('CreatedByName')">
+              Created By
+              <span class="shortingSpan"
+                    [innerHTML]="sortInTableColumn == 'CreatedByName' ? sortInTableDirectionAero : '&uarr;'"></span>
+            </th>
+
+            <th class="text-left cursorHand" (click)="sortData('CreatedDate')">
+              Created Date
+              <span class="shortingSpan"
+                    [innerHTML]="sortInTableColumn == 'CreatedDate' ? sortInTableDirectionAero : '&uarr;'"></span>
+            </th>
+
+            <th class="text-left cursorHand" (click)="sortData('ModifyByName')">
+              Modify By
+              <span class="shortingSpan"
+                    [innerHTML]="sortInTableColumn == 'ModifyByName' ? sortInTableDirectionAero : '&uarr;'"></span>
+            </th>
+
+            <th class="text-left cursorHand" (click)="sortData('ModifyDate')">
+              Modify Date
+              <span class="shortingSpan"
+                    [innerHTML]="sortInTableColumn == 'ModifyDate' ? sortInTableDirectionAero : '&uarr;'"></span>
+            </th>
+
+            <th class="text-left">Status</th>
+
+            <th style="width: 80px;">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of CollegeBranchesList | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td>{{(pageSize * (pageNo - 1)) + (idx + 1)}}</td>
+
+            <td align="left">({{row.InstituteCode}}){{row.InstituteNameEnglish}}</td>
+
             <td align="left">({{row.StreamCode}}){{row.StreamName}}</td>
-              <!--<td align="left">{{row.StreamCode}}</td>-->
-              <td align="left">{{row.StreamTypeName}}</td>
-              <td align="left">{{row.ShiftName}}</td>
-              <td align="left">{{row.TotalSeats}}</td>
-              <td align="left">{{row.AdmissionSeats}}</td>
 
-              <td align="left">
-                <!--<div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3" *ngIf="DateConfigSetting[0][BranchMapKeyEng]==1">-->
-                  <!--<label class="block">Status</label>-->
-                  <!--<label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
-                    <input class="sr-only peer" type="checkbox" id="Active" [checked]="row.ActiveStatus == 1" (change)="onToggleChange(row.CollegeStreamId, row.ActiveStatus)">
-                    <span class="toggleIcon">
-                      <span class="toggleTitle">{{ row.ActiveStatus == 1 ? '' : '' }}</span>
-                    </span>
-                  </label>
-                </div>-->
-                <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
-                  <!--<label class="block">Status</label>-->
-                  <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
-                    <input class="sr-only peer" type="checkbox" id="Active" [checked]="row.ActiveStatus == 1" (change)="onToggleChange(row.CollegeStreamId, row.ActiveStatus)">
-                    <span class="toggleIcon">
-                      <span class="toggleTitle">{{ row.ActiveStatus == 1 ? '' : '' }}</span>
-                    </span>
-                  </label>
-                </div>
-                <!--<div *ngIf="DateConfigSetting[0][BranchMapKeyEng]!=1">
-                  {{ row.ActiveStatus == 1 ? 'Active' : 'In Active' }}
-                </div>-->
-              </td>
-              <td>
-                <!--<div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important" *ngIf="DateConfigSetting[0][BranchMapKeyEng]==1">
-                  <a href="javascript:void(0);" title="Edit" [routerLink]="'/BTERAddSeatIntakes'" [queryParams]="{id:row.CollegeStreamId}"><i class="ti ti-pencil"></i></a>
-                  <a href="javascript:void(0);" title="Delete" (click)="DeleteById(row.CollegeStreamId)"><i class="ti ti-trash"></i></a>
-                </div>-->
-                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important" >
-                  <a href="javascript:void(0);" title="Edit" [routerLink]="'/BTERAddSeatIntakes'" [queryParams]="{id:row.CollegeStreamId}"><i class="ti ti-pencil"></i></a>
-                  <a href="javascript:void(0);" title="Delete" (click)="DeleteById(row.CollegeStreamId)"><i class="ti ti-trash"></i></a>
-                </div>
-              </td>
-            </tr>
+            <td align="left">{{row.StreamTypeName}}</td>
 
-          </tbody>
-        </table>
+            <td align="left">{{row.ShiftName}}</td>
+
+            <td align="left">{{row.TotalSeats}}</td>
+
+            <td align="left">{{row.AdmissionSeats}}</td>
+            <td align="left">{{row.CreatedByName}}</td>
+            <td align="left">{{row.CreatedDate}}</td>
+            <td align="left">{{row.ModifyByName}}</td>
+            <td align="left">{{row.ModifyDate}}</td>
+
+            <td align="left">
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+                <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                  <input class="sr-only peer"
+                         type="checkbox"
+                         id="Active"
+                         [checked]="row.ActiveStatus == 1"
+                         (change)="onToggleChange(row.CollegeStreamId, row.ActiveStatus)">
+                  <span class="toggleIcon">
+                    <span class="toggleTitle">{{ row.ActiveStatus == 1 ? '' : '' }}</span>
+                  </span>
+                </label>
+              </div>
+            </td>
+
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto"
+                   style="width:auto !important">
+                <a href="javascript:void(0);"
+                   title="Edit"
+                   [routerLink]="'/BTERAddSeatIntakes'"
+                   [queryParams]="{id:row.CollegeStreamId}">
+                  <i class="ti ti-pencil"></i>
+                </a>
+
+                <a href="javascript:void(0);"
+                   title="Delete"
+                   (click)="DeleteById(row.CollegeStreamId)">
+                  <i class="ti ti-trash"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+
+
+
     </div>
     <!--pagination-->
     <div class="p-3 paginationBox flex items-center justify-end w-full">

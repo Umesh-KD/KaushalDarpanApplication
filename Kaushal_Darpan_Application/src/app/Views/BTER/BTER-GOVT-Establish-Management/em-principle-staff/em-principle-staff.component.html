@@ -444,16 +444,16 @@
                   <i class="ti ti-trash"></i>
                 </a>
 
-                <a href="javascript:void(0);" title="View" 
-                  *ngIf="!row.Role.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
+                <a href="javascript:void(0);" title="View"
+                   *ngIf="!row.Role.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
                           !row.Role.split(',').includes(_EnumRole.ShikshaSambal.toString()) &&
-                          sSOLoginDataModel.UserID != row.StaffUserID" 
-                  (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)">
+                          sSOLoginDataModel.UserID != row.StaffUserID"
+                   (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)">
                   <i class="ti ti-eye"></i>
                 </a>
 
                 <a href="javascript:void(0);" title="Approve Profile"
-                  *ngIf="!row.Role.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
+                   *ngIf="!row.Role.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
                           !row.Role.split(',').includes(_EnumRole.ShikshaSambal.toString()) &&
 
                           row.ProfileStatusID != _EnumEMProfileStatus.Approve &&
@@ -477,20 +477,26 @@
                   <i class="ti ti-list"></i>
                 </a>
 
-                <a  href="javascript:void(0);" title="Edit Hostel" 
-                  *ngIf="row.Role.split(',').includes(_EnumRole.HostelWarden.toString())"
-                  (click)="onEditHostel(Model_EditHostel, row)">
+                <a href="javascript:void(0);" title="Staff Details Log"
+                   (click)="onUserProfileStatusHistoryLog(MyModel_UserStaffStatusHistory, row.StaffID)">
+                  <i class="ti ti-history"></i>
+                </a>
+                  
+
+                <a href="javascript:void(0);" title="Edit Hostel"
+                   *ngIf="row.Role.split(',').includes(_EnumRole.HostelWarden.toString())"
+                   (click)="onEditHostel(Model_EditHostel, row)">
                   <i class="ti ti-pencil"></i>
                 </a>
 
                 <a href="javascript:void(0);" title="View"
-                  *ngIf="row.Role.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
+                   *ngIf="row.Role.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
                         row.Role.split(',').includes(_EnumRole.ShikshaSambal.toString()) &&
                         !(row.ProfileStatusID == _EnumEMProfileStatus.Pending ||
-                          row.ProfileStatusID == _EnumEMProfileStatus.Completed || 
+                          row.ProfileStatusID == _EnumEMProfileStatus.Completed ||
                           row.ProfileStatusID ==  _EnumEMProfileStatus.Revert) &&
-                        sSOLoginDataModel.UserID != row.StaffUserID"  
-                  (click)="openModal_ApproveStaffProfileOterFaculty(Modal_ApproveStaffProfileOterFaculty, row.StaffUserID, row.SSOID, true)">
+                        sSOLoginDataModel.UserID != row.StaffUserID"
+                   (click)="openModal_ApproveStaffProfileOterFaculty(Modal_ApproveStaffProfileOterFaculty, row.StaffUserID, row.SSOID, true)">
                   <i class="ti ti-check" *ngIf="(row.ProfileStatusID != _EnumEMProfileStatus.Approve ||
                                                 row.ProfileStatusID !=  _EnumEMProfileStatus.Revert ||
                                                 row.ProfileStatusID != _EnumEMProfileStatus.Completed ||
@@ -519,7 +525,7 @@
           </tr>
           <tr *ngIf="StaffMasterList?.length==0">
             <td colspan="12">
-              No Record Found
+             No Record Found
             </td>
 
           </tr>
@@ -1244,7 +1250,6 @@
               <tr>
                 <th class="text-left">S No</th>
                 <th class="text-left">Name</th>
-                <th class="text-left">Designation</th>
                 <th class="text-left">Status</th>
                 <th class="text-left">Remark</th>
                 <th class="text-left">Date</th>
@@ -1255,10 +1260,9 @@
               <tr *ngFor="let row of UserProfileStatusHistoryList; let idx=index;  ">
                 <td align="left">{{idx+1}}</td>
                 <td align="left">{{ row.DisplayName }}</td>
-                <td align="left">{{ row.Designation }}</td>
                 <td align="left">{{ row.UserProfileStatus }}</td>
                 <td align="left">{{ row.Remarks}}</td>
-                <td align="left">{{ row.CreatedDate || '-' }}</td>
+                <td align="left">{{ row.CreatedDate}}</td>
 
               </tr>
               <tr *ngIf="UserProfileStatusHistoryList?.length==0">
@@ -1740,6 +1744,95 @@
 
               </tr>
               <tr *ngIf="Branchhodlist?.length==0">
+                <td colspan="10" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+
+
+          </table>
+
+        </div>
+
+
+
+      </div>
+
+      <div class="card-footer text-right">
+        <button type="button" (click)="CloseModalProfileStatuslist()" class="btn bg-success text-white btn-sm">
+          Close
+        </button>
+      </div>
+    </div> <!-- Close this div here for card-body -->
+  </div>
+
+</ng-template>
+<ng-template #MyModel_UserStaffStatusHistory let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+
+        <button class="btn bg-info text-white" (click)="CloseModalProfileStatuslist()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+
+
+      <div class="card-body">
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Staff Details History</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a>-->
+            <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in PDF</a> -->
+          </div>
+        </div>
+
+
+        <!--{{UserProfileStatusHistoryList|json}}-->
+        <div class="overflow-x-auto mt-3">
+
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">Sr. No.</th>
+                <th class="text-left">SSO Id</th>
+                <th class="text-left">Contact Details</th>
+                <th class="text-left">Staff Type</th>
+                <th class="text-left">Designation as per service book</th>
+                <th class="text-left">Salary Drawn Post</th>
+                <th class="text-left">Branch as per service book</th>
+                <th class="text-left">Salary Drawn Branch</th>
+                <th class="text-left">Role/Additional Role</th>
+                <th class="text-left">Creadted Date</th>
+                <th class="text-left">Creadted By</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of UserProfileStatusHistoryLog; let idx=index;  ">
+                <td>{{idx+1}}</td>
+                <td>{{row.SSOID}}</td>
+                <td>
+                  <p *ngIf="row.Name?.length>0"><i class="ti ti-user"></i> {{row.Name}}</p>
+                  <p *ngIf="row.MobileNumber?.length>0"><i class="ti ti-phone"></i> {{row.MobileNumber}}</p>
+                  <p *ngIf="row.Email?.length>0"><i class="ti ti-mail"></i> {{row.Email}}</p>
+                </td>
+                <td>{{row.StaffType}}</td>
+                <td> {{row.DesignationName}}</td>
+                <td> {{row.SalaryDrownPost}}</td>
+                <td>{{row.ServiceBookBranch}}</td>
+                <td>{{row.SalaryDrawnBranch}}</td>
+                <td> {{row.Role}} </td>
+                <!-- <td>{{row.Subject}}</td> -->
+                <!-- <td>
+    <p *ngIf="row.Address?.length>0" style="max-width:350px">
+      {{row.Address}}, {{row.District}}, {{row.State}}, {{row.PinCode}}
+    </p>
+  </td> -->
+                <td align="left">{{ row.CreatedDate}}</td>
+                <td align="left">{{ row.CreatedBy}}</td>
+
+              </tr>
+              <tr *ngIf="UserProfileStatusHistoryLog?.length==0">
                 <td colspan="10" class="text-center">No Record Found </td>
               </tr>
             </tbody>

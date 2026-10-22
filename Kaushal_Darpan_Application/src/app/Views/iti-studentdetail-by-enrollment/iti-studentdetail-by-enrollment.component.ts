@@ -63,7 +63,7 @@ ngOnInit() {
 //     });
 
 //   } else {
-//     this.toastr.warning("No data found");
+//     this.toastr.warning("No Record Found");
 //     this.form.patchValue({
 //       StudentName: '',
 //       FatherName: '',
@@ -108,7 +108,7 @@ async search() {
     this.form.updateValueAndValidity();
 
   } else {
-    this.toastr.warning("No data found");
+    this.toastr.warning("No Record Found");
 
     this.showFields = false;
 

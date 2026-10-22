@@ -99,7 +99,7 @@ export class BranchWiseStatisticalReportsComponent implements OnInit {
       if (data && data.Data) {   
         this.downloadBase64PDF(data.Data, 'BranchWiseStatistical.pdf');
       } else {
-        this.toastr.error('Data not found');
+        this.toastr.error('No Record Found');
       }
     } catch (ex) {
       console.error(ex);

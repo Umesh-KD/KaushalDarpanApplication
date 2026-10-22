@@ -184,7 +184,7 @@ export class CorrectionMeritComponent {
             }
           } else {
             this.isShowGrid = false;
-            this.toastrService.error("Data not found");
+            this.toastrService.error("No Record Found");
           }
         }, (error: any) => console.error(error)
         );

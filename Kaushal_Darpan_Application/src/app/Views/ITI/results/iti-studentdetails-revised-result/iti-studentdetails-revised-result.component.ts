@@ -940,7 +940,7 @@ export class ITIStudentDetailsRevisedResultComponent {
       await this.GetStudentDetailsReviseResult();
 
     } else {
-      this.toastr.warning("No data found");
+      this.toastr.warning("No Record Found");
 
       this.showFields = false;
 

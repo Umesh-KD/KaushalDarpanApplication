@@ -165,7 +165,7 @@ export class CounsellingImportCandidateListComponent implements OnInit {
           }
         }
         }else{
-          this.toastr.error("Data Not Found");
+          this.toastr.error("No Record Found");
 
         }
       });

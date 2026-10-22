@@ -182,7 +182,7 @@ export class KnowRevealuationITIComponent {
   //          }
   //        } else {
   //          this.isShowGrid = false;
-  //          this.toastrService.error("Data not found");
+  //          this.toastrService.error("No Record Found");
   //        }
   //      }, (error: any) => console.error(error)
   //      );
@@ -386,7 +386,7 @@ export class KnowRevealuationITIComponent {
       if (data?.State === EnumStatus.Success && data?.Data?.Table?.length) {
         this.RVLstudentList = data.Data.Table;
       } else {
-        this.toastrService.warning('No data found!');
+        this.toastrService.warning('No Record Found!');
         this.RVLstudentList = [];
       }
 

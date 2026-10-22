@@ -125,26 +125,73 @@ export class CollegeMasterComponent implements OnInit {
     this.GetCollegeMasterList(1);
   }
 
+ /* ---------------OLD Comment 20261021---------*/
+  //exportToExcel(): void {
+  //  const unwantedColumns = [
+  //    'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+  //    'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID'
+  //  ];
+  //  const filteredData = this.CollegeMasterList.map((item: any) => {
+  //    const filteredItem: any = {};
+  //    Object.keys(item).forEach(key => {
+  //      if (!unwantedColumns.includes(key)) {
+  //        filteredItem[key] = item[key];
+  //      }
+  //    });
+  //    return filteredItem;
+  //  });
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  //  XLSX.writeFile(wb, 'CollegeMasterListData.xlsx');
+  //}
 
+
+  /* ---------------New Added UI Column Downloaded in Excel 20261021---------*/
   exportToExcel(): void {
-    const unwantedColumns = [
-      'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID'
+    const ExcelColumns = [
+      { key: 'SrNo', header: 'Sr. No.' },
+      { key: 'InstituteCode', header: 'Institute Code' },
+      { key: 'InstituteNameEnglish', header: 'Name' },
+      { key: 'ManagementType', header: 'Management Type' },
+      { key: 'Email', header: 'Email' },
+      { key: 'SSOID', header: 'SSOID' },
+      { key: 'CreatedByName', header: 'Created By' },
+      { key: 'CreatedDate', header: 'Created Date' },
+      { key: 'ModifyByName', header: 'Modify By' },
+      { key: 'ModifyDate', header: 'Modify Date' },
+      ...(this.statusID != 0  ? [{ key: 'IssuedCertificate', header: 'Issue Certificate' }]
+        : []),
+      { key: 'Status', header: 'Status' }
     ];
-    const filteredData = this.CollegeMasterList.map((item: any) => {
-      const filteredItem: any = {};
-      Object.keys(item).forEach(key => {
-        if (!unwantedColumns.includes(key)) {
-          filteredItem[key] = item[key];
-        }
-      });
-      return filteredItem;
+
+    const filteredData = this.CollegeMasterList.map(
+      (item: any, index: number) => {
+        const row: any = {};
+
+        ExcelColumns.forEach(col => {
+          if (col.key === 'SrNo') {
+            row[col.header] =
+              (this.pageSize * (this.pageNo - 1)) + index + 1;
+          } else {
+            row[col.header] = item[col.key] ?? '';
+          }
+        });
+
+        return row;
+      }
+    );
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData, {
+      header: ExcelColumns.map(col => col.header)
     });
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
     XLSX.writeFile(wb, 'CollegeMasterListData.xlsx');
   }
+
 
   onSearchClick() {
 
@@ -669,6 +716,46 @@ export class CollegeMasterComponent implements OnInit {
         }
       }      
     })
+  }
+
+
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection === 'asc' ? '&uarr;' : '&darr;';
+  }
+
+  sortData(column: string): void {
+    if (this.sortInTableColumn === column) {
+      this.sortInTableDirection =
+        this.sortInTableDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortInTableColumn = column;
+      this.sortInTableDirection = 'asc';
+    }
+
+    const direction = this.sortInTableDirection === 'asc' ? 1 : -1;
+
+    this.CollegeMasterList.sort((a: any, b: any) => {
+      const valueA = a[column];
+      const valueB = b[column];
+
+      if (valueA == null && valueB == null) return 0;
+      if (valueA == null) return 1;
+      if (valueB == null) return -1;
+
+      let result: number;
+
+      if (column === 'CreatedDate' || column === 'ModifyDate') {
+        result = new Date(valueA).getTime() - new Date(valueB).getTime();
+      } else {
+        result = String(valueA).localeCompare(
+          String(valueB),
+          undefined,
+          { numeric: true, sensitivity: 'base' }
+        );
+      }
+
+      return result * direction;
+    });
   }
 
 }
