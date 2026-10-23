@@ -591,4 +591,47 @@ export class SeatIntakesListComponent implements OnInit {
     })
   }
 
+
+
+  sortData(column: string): void {
+    if (this.sortInTableColumn === column) {
+      this.sortInTableDirection =
+        this.sortInTableDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortInTableColumn = column;
+      this.sortInTableDirection = 'asc';
+    }
+
+    const direction = this.sortInTableDirection === 'asc' ? 1 : -1;
+
+    this.CollegeBranchesList.sort((a: any, b: any) => {
+      const valueA = a[column];
+      const valueB = b[column];
+
+      if (valueA == null && valueB == null) return 0;
+      if (valueA == null) return 1;
+      if (valueB == null) return -1;
+
+      let result: number;
+
+      if (column === 'CreatedDate' || column === 'ModifyDate') {
+        const dateA = new Date(valueA).getTime();
+        const dateB = new Date(valueB).getTime();
+
+        result = dateA - dateB;
+      } else if (column === 'TotalSeats' || column === 'AdmissionSeats') {
+        result = Number(valueA) - Number(valueB);
+      } else {
+        result = String(valueA).localeCompare(
+          String(valueB),
+          undefined,
+          { numeric: true, sensitivity: 'base' }
+        );
+      }
+
+      return result * direction;
+    });
+  }
+
+
 }

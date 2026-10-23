@@ -28,6 +28,7 @@ export class StaffMasterComponent implements OnInit {
   public BranchesMasterList: any = [];
   public SubjectMasterDDL: any = [];
   public DistrictMasterList: any = [];
+  public PostList:any=[];
   public sSOLoginDataModel = new SSOLoginDataModel();
   public stateID: number = 0;
   public StaffMasterList: any = [];
@@ -52,7 +53,10 @@ export class StaffMasterComponent implements OnInit {
   _enumDepartment = EnumDepartment
   public StaffSubjectListModel: StaffSubjectList[] = [];
   public MenuAllowedRoleList: any;
-
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public sortInTableColumn: string = '';
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -89,7 +93,8 @@ export class StaffMasterComponent implements OnInit {
           this.StateMasterList = data['Data'];
           console.log(this.StateMasterList);
         }, error => console.error(error));
-    }
+
+      }
     catch (Ex) {
       console.log(Ex);
     }
@@ -807,5 +812,46 @@ export class StaffMasterComponent implements OnInit {
       }
     })
   }
-  
+
+
+  async sortInTableData(field: string)
+  {
+    this.loaderService.requestStarted();
+
+    try
+    {
+      this.sortInTableDirection = this.sortInTableColumn === field &&  this.sortInTableDirection === 'asc'  ? 'desc'  : 'asc';
+      this.sortInTableColumn = field;
+      this.StaffMasterList = [...this.StaffMasterList].sort((a, b) => {
+        let valueA = a[field];
+        let valueB = b[field];
+
+        if (valueA == null) valueA = '';
+        if (valueB == null) valueB = '';
+
+        let comparison = 0;
+
+        // Numeric sorting
+        if (typeof valueA === 'number' && typeof valueB === 'number')
+        {
+          comparison = valueA - valueB;
+        }
+        else
+        {
+          comparison = String(valueA).localeCompare(
+            String(valueB),
+            undefined,
+            { numeric: true, sensitivity: 'base' }
+          );
+        }
+        return this.sortInTableDirection === 'asc'  ? comparison  : -comparison;
+      });
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
 }

@@ -246,7 +246,7 @@ export class ITIConsentUpdateComponent {
         };
         console.log("update", this.UpdateConsentRequest);
       } else {
-        console.warn('No data found for the given ID:', InspectionConsentID);
+        console.warn('No Record Found for the given ID:', InspectionConsentID);
         this.UpdateConsentRequest = {
           TentativeDate: '',
           Remark: '',
@@ -294,7 +294,7 @@ export class ITIConsentUpdateComponent {
           ID:row[0].ID || 0
         };
       } else {
-        console.warn('No data found for the given ID:', InspectionConsentID);
+        console.warn('No Record Found for the given ID:', InspectionConsentID);
         this.UpdateConsentRequest = {
           TentativeDate: '',
           Remark: '',

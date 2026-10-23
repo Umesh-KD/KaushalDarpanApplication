@@ -2,24 +2,24 @@
 
 <div>
   <label>Upload .json:</label><br>
-  <input type="file" (change)="onFileSelected($event)" accept=".json">
+  <input type="file" (change)="onFileSelected($event)" accept=".json" style="border: solid black 1px; padding: 4px;">
 </div>
 
 <br>
 
 <div>
   <label>Or paste JSON:</label>
-  <textarea [(ngModel)]="inputJson" rows="8" style="width:100%"></textarea>
+  <textarea style="border: solid black 1px; width: 100%; padding: 4px; " [(ngModel)]="inputJson" rows="8"></textarea>
 </div>
 
 <br>
 
-<button (click)="encrypt()">Encrypt</button>
-<button (click)="copyOutput()">Copy Output</button>
-<button (click)="downloadFile()">Download enc.json</button>
+<button (click)="encrypt()" style="color: green; border: solid black 1px;padding:4px;">Encrypt</button>
+<button (click)="copyOutput()" style="color: green; border: solid black 1px; padding: 4px; ">Copy Output</button>
+<button (click)="downloadFile()" style="color: green; border: solid black 1px; padding: 4px; ">Download enc.json</button>
 
 <br>
 <br>
 
 <h3>Encrypted Output</h3>
-<textarea [value]="outputJson" rows="8" style="width:100%"></textarea>
+<textarea style="border: solid black 1px; width: 100%; padding: 4px; " [value]="outputJson" rows="8"></textarea>

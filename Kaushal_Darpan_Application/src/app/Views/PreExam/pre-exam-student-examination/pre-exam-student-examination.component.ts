@@ -176,6 +176,12 @@ export class PreExamStudentExaminationComponent {
   public alreadyAssignedOptionalSubject: any = [];
   public leftOutStudentMigrationCertificateDataModel = new LeftOutStudentMigrationCertificateDataModel();
 
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(private commonMasterService: CommonFunctionService,
     private preExamStudentExaminationService: PreExamStudentExaminationService,
     private loaderService: LoaderService,

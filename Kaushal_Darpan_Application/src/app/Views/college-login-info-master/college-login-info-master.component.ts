@@ -255,7 +255,7 @@ export class CollegeLoginInfoMasterComponent {
           }
           else {
             this.requestCollege.collegeIdsString = '';
-            this.toastr.success('data not found!')
+            this.toastr.success('No Record Found!')
             return;
 
 

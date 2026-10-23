@@ -256,7 +256,7 @@ export class ITICollegeLoginInfoMasterComponent {
           }
           else {
             this.requestCollege.collegeIdsString = '';
-            this.toastr.success('data not found!')
+            this.toastr.success('No Record Found!')
             return;
 
 

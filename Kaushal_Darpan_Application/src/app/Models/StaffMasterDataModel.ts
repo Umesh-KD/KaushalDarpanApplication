@@ -203,6 +203,7 @@ export class StaffMasterSearchModel {
   public BranchID: number = 0
   public TechnicianID: number = 0
   public UserID?: number = 0
+  public DesignationID?: number=0
 }
 
 export class StaffSubjectList {
