@@ -453,10 +453,10 @@ export class MasterLayoutComponent implements OnInit {
     //window.open('/dashboard', "_self");
     //await this.ChangeRolenFY()
 
+    // Force reload route, no browser refresh
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
     this.router.navigateByUrl(this.router.url);
-    //window.location.reload();
   }
 
   groupMenuItems(menuItems: any[]) {
