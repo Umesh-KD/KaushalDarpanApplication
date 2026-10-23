@@ -510,13 +510,17 @@ export class AddCollegeMasterComponent implements OnInit {
       this.collegeRequest.SSOID = this.sSOLoginDataModel.SSOID;
       this.collegeRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.collegeRequest.RoleID = this.sSOLoginDataModel.RoleID;
-      this.collegeRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      // this.collegeRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      if(this.collegeRequest.InstituteID == 0){
+        this.collegeRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      }
       // this.collegeRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       
       //get
       await this.instituteService.GetByID(this.collegeRequest)
         .then(async (data: any) => {
 
+          this.isSSOVisible = true;
           data = JSON.parse(JSON.stringify(data));
           this.request = data;//data
 
@@ -862,6 +866,7 @@ export class AddCollegeMasterComponent implements OnInit {
   }
 
   async ResetControl() {
+    this.isSSOVisible = false;
     this.isSubmitted = false;    
     this.request = new CollegeMasterDataModels();
     this.instituteForm.reset();
