@@ -36,6 +36,46 @@
             <option value="Suspend">Suspend</option>
           </select>
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hiring Role</label>
+          <select class="form-select" id="ddlHiringRoleID" [(ngModel)]="HiringRoleID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of HiringRoleMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By</label>
+          <select class="form-select" id="ddlHiringRoleID" [(ngModel)]="DDLSearchBy" (change)="DDLSearchByChange()">
+            <option value="0">--Select--</option>
+            <option value="1">Creation Date</option>
+            <option value="2">Approval Date</option>
+          </select>
+        </div>
+
+        <div *ngIf="DDLSearchBy == 1 || DDLSearchBy == 2">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            {{ DDLSearchBy == 1 ? 'Creation From' : 'Approval From' }} <span class="StarMarking">*</span>
+          </label>
+          <input type="date" class="form-input" [(ngModel)]="FromDate">
+        </div>
+
+        <div *ngIf="DDLSearchBy == 1 || DDLSearchBy == 2">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            {{ DDLSearchBy == 1 ? 'Creation To' : 'Approval To' }} <span class="StarMarking">*</span>
+          </label>
+          <input type="date" class="form-input" [(ngModel)]="ToDate">
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Created by (SSOID)</label>
+          <input class="form-input" type="text" placeholder="Enter ssoid" [(ngModel)]="txtCreatedBy">
+        </div>
+
         <!--<div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>-->
         <!--<select class="form-select" id="StudentExamInstituteId" [(ngModel)]="InstituteID">
@@ -52,6 +92,9 @@
         </div>-->
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
+
+
+
           <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
         </div>
       </div>
@@ -133,15 +176,15 @@
               {{row.CampusVenue}}
             </td>
 
-            <!-- <td  
+            <!-- <td
             class="role-detail" [innerHtml]="row.ActionRemarks">
-              
+
             </td> -->
             <!-- <td>
               <div class="role-detail" [innerHtml]="row.ActionRemarks"> </div>
             </td> -->
-             <td><div class="role-detail" [innerHtml]="row.ActionRemarks"> </div></td>
-            
+            <td><div class="role-detail" [innerHtml]="row.ActionRemarks"> </div></td>
+
 
             <td>
               {{ row.ActionRTS | date:'yyyy-MM-dd' }}

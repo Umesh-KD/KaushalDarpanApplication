@@ -73,6 +73,13 @@ export class SeatIntakesListComponent implements OnInit {
   public totalInTableRecord: number = 0;
   //end table feature default
   public searchRequestType = new BTERSeatsDistributionsDataModels();
+
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,

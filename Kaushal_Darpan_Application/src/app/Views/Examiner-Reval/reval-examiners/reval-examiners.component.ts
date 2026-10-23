@@ -54,6 +54,12 @@ export class RevalExaminersComponent implements OnInit {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
 
+    //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(
     private commonMasterService: CommonFunctionService,
     private examinerservice: ExaminerService,

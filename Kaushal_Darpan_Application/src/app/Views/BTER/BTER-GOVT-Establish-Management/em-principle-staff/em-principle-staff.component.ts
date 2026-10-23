@@ -124,6 +124,13 @@ export class EMPrincipleStaffComponent {
   @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
     MenuAllowedRoleList: any;
 
+//Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
+  
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,

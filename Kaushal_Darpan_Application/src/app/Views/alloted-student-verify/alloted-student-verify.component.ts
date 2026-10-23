@@ -88,7 +88,12 @@ export class AllotedStudentVerifyComponent {
 
   public studentApplicationRequest = new StudentApplicationModel();
   public studentApplicationList: any[] = [];
-
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
 
 
   constructor(

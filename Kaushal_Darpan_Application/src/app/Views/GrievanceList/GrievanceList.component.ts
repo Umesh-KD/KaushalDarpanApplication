@@ -58,6 +58,12 @@ export class GrievanceListComponent implements OnInit {
   public Remark: string = '';
   selectedOption: any = 0;
 
+    //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   @ViewChild('modal_Grivience') modal_Grivience: any;
   
   constructor(private fb: FormBuilder,
