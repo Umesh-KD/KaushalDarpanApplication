@@ -101,8 +101,8 @@
               <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
                 <!--<label class="block">Status</label>-->
                 <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
-                  <input class="sr-only peer" type="checkbox" id="Active" [checked]="row.IsCurrentFinancialYear == 'YES'" (change)="ActiveInActive(row.FinancialYearID, row.IsCurrentFinancialYear == 'YES'?false:true)">
-                  <span class="toggleIcon">
+                  <input class="sr-only peer" type="checkbox" id="Active" *ngIf="row.IsCurrentFinancialYear == 'YES'" [checked]="row.IsCurrentFinancialYear == 'YES'" (change)="ActiveInActive(row.FinancialYearID, row.IsCurrentFinancialYear == 'YES'?false:true)">
+                  <span class="toggleIcon" *ngIf="row.IsCurrentFinancialYear == 'YES'" >
                     <span class="toggleTitle">{{ row.IsCurrentFinancialYear == 'YES' ? '' : '' }}</span>
                   </span>
                 </label>
