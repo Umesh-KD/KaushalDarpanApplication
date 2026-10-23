@@ -95,7 +95,12 @@ export class EnrolledStudentVerificationComponent {
 
   public ValidParamTab: any[] = [1, 2, 3, 4];
   public ParamTab: number = 0;
-
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(private commonMasterService: CommonFunctionService,
     private loaderService: LoaderService,
     private toastr: ToastrService,

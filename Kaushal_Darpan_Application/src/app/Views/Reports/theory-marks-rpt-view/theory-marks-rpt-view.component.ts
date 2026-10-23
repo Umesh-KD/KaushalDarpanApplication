@@ -50,7 +50,12 @@ export class TheoryMarksRptViewComponent {
   public totalInTableRecord: number = 0;
   //end table feature default
 
-
+ //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(
     private TheoryMarksService: TheoryMarksService,
     private loaderService: LoaderService,

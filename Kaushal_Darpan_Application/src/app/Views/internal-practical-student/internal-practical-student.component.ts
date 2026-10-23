@@ -76,7 +76,12 @@ export class InternalPracticalStudentComponent implements OnInit {
   public HodBranchlist: any[] = [];
   public hodRequestModel = new AdminUserSearchModel();
     MenuAllowedRoleList: any;
-
+//Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(
     private commonMasterService: CommonFunctionService,
     private activatedRoute: ActivatedRoute,

@@ -46,6 +46,12 @@ export class BterAttendencePercentReportComponent {
   subjectsearch = new CommonDDLSubjectMasterModel()
   StudentAttandanceTimeDDL: any[] = [];
   DayList: any[] = [];
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   public GetLeaveList: any = [];
   public searchRequest = new LeaveMasterSearchModel();
   TableForm!: FormGroup;

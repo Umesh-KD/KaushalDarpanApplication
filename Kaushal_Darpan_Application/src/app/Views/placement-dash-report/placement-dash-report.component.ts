@@ -86,7 +86,7 @@ export class PlacementDashReportComponent implements OnInit {
 
       }, (error: any) => console.error(error));
 
-  
+
 
     await this.commonMasterService.GetCampusPostMasterDDL()
       .then((data: any) => {

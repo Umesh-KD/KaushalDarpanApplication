@@ -19,9 +19,21 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        
+        <button
+          type="button"
+          class="border-0 bg-transparent cursor-pointer p-1"
+          (click)="toggleSearchCriteria()"
+          [attr.aria-expanded]="isSearchVisible"
+          aria-controls="searchCriteriaPanel"
+          aria-label="Toggle search criteria">
+          <i
+          class="ti"
+          [ngClass]="isSearchVisible ? 'ti-chevron-up' : 'ti-chevron-down'"
+          aria-hidden="true">
+          </i>
+        </button>
       </div>
-      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" id="searchCriteriaPanel" *ngIf="isSearchVisible">
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enrollment No:</label>

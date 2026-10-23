@@ -62,6 +62,12 @@ export class PromotedStudentComponent {
   public PromoteStatusList: any[] = [];
   public MenuAllowedRoleList: any[] = [];
 
+    //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   //end table feature default
 
   constructor(private commonMasterService: CommonFunctionService,

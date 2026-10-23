@@ -44,7 +44,13 @@ export class RevokePartiallyDetainedStudentsComponent {
   public totalInTableRecord: number = 0;
   public MenuAllowedRoleList: any;
   //end table feature default
-
+  
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(
     private commonMasterService: CommonFunctionService,
     private preExamStudentExaminationService: PreExamStudentExaminationService,
