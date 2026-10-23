@@ -493,12 +493,15 @@ export class StudentEnrollmentComponent {
             this.PreExamStudentData = data['Data'];
             console.log(this.PreExamStudentData, "lisssstDataaa")
             // Show popup when no records are found
-            Swal.fire({
-              icon: 'info',
-              title: 'No Record Found',
-              text: 'No student records found.',
-              confirmButtonText: 'OK'
-            });
+            // Check if no records are found
+            // if (!this.PreExamStudentData || this.PreExamStudentData.length === 0) {
+            //   Swal.fire({
+            //     icon: 'info',
+            //     title: 'No Record Found',
+            //     text: 'No student records found.',
+            //     confirmButtonText: 'OK'
+            //   });
+            // }
             //table feature load
             this.loadInTable();
             //end table feature load
