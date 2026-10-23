@@ -32,6 +32,25 @@ export class CommonSubjectsComponent implements OnInit {
   public ErrorMessage: string = '';
   public IsCommonSubjectMasterDateOpen: number = 0;
   _EnumRole = EnumRole;
+  pageNo: any = 1;
+  pageSize: any = 50;
+  isPre: boolean = false;
+  isNext: boolean = false;
+  totalRecord: any = 0;
+  TotalPages: any = 0;
+
+  //table feature default
+  public paginatedInTableData: any[] = [];//copy of main data
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "50";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: 'asc' | 'desc' = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
+  //end table feature default
 
   constructor(private commonMasterService: CommonFunctionService,
     private commonSubjectService: CommonSubjectService,
@@ -50,7 +69,7 @@ export class CommonSubjectsComponent implements OnInit {
 
     await this.GetMasterDateConfigData();
     await this.GetSemestarMatserDDL();
-    await this.GetAllData();
+    await this.GetAllData(1);
 
   }
 
@@ -97,17 +116,35 @@ export class CommonSubjectsComponent implements OnInit {
   }
 
   // get all data
-  async GetAllData() {
+  async GetAllData(i: any) {
+
+    console.log("i", i);
+    if (i == 1) {
+      this.pageNo = 1;
+    } else if (i == 2) {
+      this.pageNo++;
+    } else if (i == 3) {
+      if (this.pageNo > 1) {
+        this.pageNo--;
+      }
+    } else {
+      this.pageNo = i;
+    }
+
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+    this.searchRequest.PageNumber = this.pageNo;
+    this.searchRequest.PageSize = this.pageSize; 
     try {
       this.loaderService.requestStarted();
       await this.commonSubjectService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CommonSubjectList = data['Data'];
+          this.totalRecord = this.CommonSubjectList[0]?.TotalRecords;
+          this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
           console.log("CommonSubjectList", this.CommonSubjectList)
         }, (error: any) => console.error(error)
         );
@@ -127,7 +164,7 @@ export class CommonSubjectsComponent implements OnInit {
     this.searchRequest.CommonSubjectName = '';
     this.searchRequest.SemesterID = 0;
     this.searchRequest.SubjectID = 0;
-    await this.GetAllData();
+    await this.GetAllData(1);
     this.SubjectMasterDDLList = [];
   }
 
@@ -153,7 +190,7 @@ export class CommonSubjectsComponent implements OnInit {
                 if (this.State = EnumStatus.Success) {
                   this.toastr.success(this.Message)
                   //reload
-                  await this.GetAllData();
+                  await this.GetAllData(1);
                 }
                 else {
                   this.toastr.error(this.ErrorMessage)
@@ -218,8 +255,7 @@ export class CommonSubjectsComponent implements OnInit {
 
   sortColumn: string = '';
   sortDirection: boolean = true;
-  sortInTableDirection: 'asc' | 'desc' = 'asc';
-  sortInTableColumn = '';
+
 
   get sortInTableDirectionAero(): string {
     return this.sortInTableDirection === 'asc' ? '&uarr;' : '&darr;';
@@ -264,8 +300,6 @@ export class CommonSubjectsComponent implements OnInit {
       return result * direction;
     });
   }
-
-
 
   sortData(column: string): void
   {
@@ -377,8 +411,63 @@ export class CommonSubjectsComponent implements OnInit {
     });
   }
 
+  totalShowData: any = 0
+  pageSizeChange(event: any): void {
+    ;
+    this.pageNo = 1;
+    this.pageSize = event.value;
+    //this.pageNo = 1;
+    this.GetAllData(1)
+  }
 
+  nextData() {
+    if (this.totalShowData < Number(this.CommonSubjectList[0]?.TotalRecords)) {
+      if (this.pageNo >= 1) {
+        // this.pageNo = this.pageNo + 1
+      }
+      this.GetAllData(2)
+    }
 
+  }
+  previousData() {
+    if (this.pageNo > 1) {
+      //this.pageNo = this.pageNo - 1;
+      this.GetAllData(3)
+    }
+  }
+
+  //main 
+  loadInTable() {
+    this.resetInTableValiable();
+    this.calculateInTableTotalPage();
+    this.updateInTablePaginatedData();
+  }
+  // (replace org. list here)
+  resetInTableValiable() {
+    this.paginatedInTableData = [];//copy of main data
+    this.currentInTablePage = 1;
+    this.totalInTablePage = 0;
+    this.sortInTableColumn = '';
+    this.sortInTableDirection = 'asc';
+    this.startInTableIndex = 0;
+    this.endInTableIndex = 0;
+    this.totalInTableRecord = this.CommonSubjectList.length;
+  }
+
+  //table feature
+  calculateInTableTotalPage() {
+    this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
+  }
+
+  // (replace org.list here)
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.CommonSubjectList].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
 
 
 }

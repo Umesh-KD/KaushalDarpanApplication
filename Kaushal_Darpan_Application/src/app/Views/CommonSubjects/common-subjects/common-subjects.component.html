@@ -47,7 +47,7 @@
           </select>
         </div>
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData(1)">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
             <i class="ti ti-refresh"></i> Reset
           </button>
@@ -62,7 +62,7 @@
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
-        <select id="ddlConter" class="form-select  couterDropDown">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize" (change)="GetAllData(1)">
           <option value="50">50</option>
           <option value="100">100</option>
           <option value="500">500</option>
@@ -78,119 +78,138 @@
 
     <div class="overflow-auto mt-3">
       <!--<table class="table table-border w-full" cellpadding="5">
-      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-        <tr>
-          <th>Sr. No.</th>
-          <th class="text-left">Name</th>
-          <th class="text-left">Semester</th>
-          <th class="text-left">Stream Subjects</th>
-          <th>Created By</th>
-          <th>Created Date</th>
-          <th>Modify By</th>
-          <th>Modify Date</th>
-          <th class="text-center">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let row of CommonSubjectList | tableSearchFilter:Table_SearchText;let idx=index;">
-          <td>{{idx+1}}</td>
-          <td>{{row.CommonSubjectName}}</td>
-          <td>{{row.SemesterName}}</td>
-          <td>{{row.SubjectNames}}</td>
+    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+      <tr>
+        <th>Sr. No.</th>
+        <th class="text-left">Name</th>
+        <th class="text-left">Semester</th>
+        <th class="text-left">Stream Subjects</th>
+        <th>Created By</th>
+        <th>Created Date</th>
+        <th>Modify By</th>
+        <th>Modify Date</th>
+        <th class="text-center">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of CommonSubjectList | tableSearchFilter:Table_SearchText;let idx=index;">
+        <td>{{idx+1}}</td>
+        <td>{{row.CommonSubjectName}}</td>
+        <td>{{row.SemesterName}}</td>
+        <td>{{row.SubjectNames}}</td>
 
-          <td>{{row.CreatedByName}}</td>
-          <td>{{row.CreatedDate}}</td>
-          <td>{{row.ModifyByName}}</td>
-          <td>{{row.ModifyDate}}</td>
+        <td>{{row.CreatedByName}}</td>
+        <td>{{row.CreatedDate}}</td>
+        <td>{{row.ModifyByName}}</td>
+        <td>{{row.ModifyDate}}</td>
 
-          <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-            <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-              <a *ngIf="IsCommonSubjectMasterDateOpen==1" [routerLink]="'/addcommonsubjects'" [queryParams]="{commonSubjectId:row.CommonSubjectID}" title="Edit">
-                <i class="ti ti-pencil"></i>
-              </a>-->
+        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+          <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+            <a *ngIf="IsCommonSubjectMasterDateOpen==1" [routerLink]="'/addcommonsubjects'" [queryParams]="{commonSubjectId:row.CommonSubjectID}" title="Edit">
+              <i class="ti ti-pencil"></i>
+            </a>-->
       <!--<a href="javascript:void(0);" title="Delete" (click)="DeleteById(row.CommonSubjectID)"><i
-      class="ti ti-trash"></i></a>-->
+    class="ti ti-trash"></i></a>-->
       <!--</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>-->
+
+
+
+      <table class="table table-border w-full" cellpadding="5">
+        <thead>
+          <tr>
+            <th>Sr. No.</th>
+
+            <th class="text-left cursorHand" (click)="sortData('CommonSubjectName')">
+              Name
+              <span class="shortingSpan" [innerHTML]="sortInTableColumn === 'CommonSubjectName'  ? sortInTableDirectionAero  : '&uarr;'"> </span>
+            </th>
+
+            <th class="text-left cursorHand"
+                (click)="sortData('SemesterName')">
+              Semester
+              <span class="shortingSpan" [innerHTML]="sortInTableColumn === 'SemesterName'  ? sortInTableDirectionAero  : '&uarr;'"> </span>
+            </th>
+
+            <th class="text-left cursorHand" (click)="sortData('SubjectNames')">
+              Stream Subjects
+              <span class="shortingSpan" [innerHTML]="sortInTableColumn === 'SubjectNames'  ? sortInTableDirectionAero  : '&uarr;'"> </span>
+            </th>
+
+            <th class="text-left cursorHand" (click)="sortData('CreatedByName')">
+              Created By
+              <span class="shortingSpan" [innerHTML]="sortInTableColumn === 'CreatedByName'  ? sortInTableDirectionAero  : '&uarr;'"> </span>
+            </th>
+
+            <th class="text-left cursorHand" (click)="sortData('CreatedDate')">
+              Created Date
+              <span class="shortingSpan" [innerHTML]="sortInTableColumn === 'CreatedDate'  ? sortInTableDirectionAero  : '&uarr;'"> </span>
+            </th>
+
+            <th class="text-left cursorHand" (click)="sortData('ModifyByName')">
+              Modify By
+              <span class="shortingSpan" [innerHTML]="sortInTableColumn === 'ModifyByName'  ? sortInTableDirectionAero  : '&uarr;'"> </span>
+            </th>
+
+            <th class="text-left cursorHand" (click)="sortData('ModifyDate')">
+              Modify Date
+              <span class="shortingSpan" [innerHTML]="sortInTableColumn === 'ModifyDate'  ? sortInTableDirectionAero  : '&uarr;'"> </span>
+            </th>
+
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of CommonSubjectList | tableSearchFilter:Table_SearchText; let idx=index">
+            <td>{{(pageSize * (pageNo - 1)) + (idx + 1)}}</td>
+            <td>{{ row.CommonSubjectName }}</td>
+            <td>{{ row.SemesterName }}</td>
+            <td>{{ row.SubjectNames }}</td>
+            <td>{{ row.CreatedByName }}</td>
+            <td>{{ row.CreatedDate }}</td>
+            <td>{{ row.ModifyByName }}</td>
+            <td>{{ row.ModifyDate }}</td>
+
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              <div class="flex align-center justify-center actionBtns w-auto"
+                   style="width:auto !important">
+                <a *ngIf="IsCommonSubjectMasterDateOpen == 1"
+                   [routerLink]="'/addcommonsubjects'"
+                   [queryParams]="{commonSubjectId:row.CommonSubjectID}"
+                   title="Edit">
+                  <i class="ti ti-pencil"></i>
+                </a>
+              </div>
             </td>
           </tr>
         </tbody>
-      </table>-->
-
-
-      
-<table class="table table-border w-full" cellpadding="5">
-  <thead>
-    <tr>
-      <th>Sr. No.</th>
-
-      <th class="text-left cursorHand" (click)="sortData('CommonSubjectName')">
-        Name
-        <span class="shortingSpan" [innerHTML]="sortInTableColumn === 'CommonSubjectName'  ? sortInTableDirectionAero  : '&uarr;'"> </span>
-      </th>
-
-      <th class="text-left cursorHand"
-          (click)="sortData('SemesterName')">
-        Semester
-        <span class="shortingSpan" [innerHTML]="sortInTableColumn === 'SemesterName'  ? sortInTableDirectionAero  : '&uarr;'"> </span>
-      </th>
-
-      <th class="text-left cursorHand" (click)="sortData('SubjectNames')">
-        Stream Subjects
-        <span class="shortingSpan"  [innerHTML]="sortInTableColumn === 'SubjectNames'  ? sortInTableDirectionAero  : '&uarr;'"> </span>
-      </th>
-
-      <th class="text-left cursorHand" (click)="sortData('CreatedByName')">
-        Created By
-        <span class="shortingSpan" [innerHTML]="sortInTableColumn === 'CreatedByName'  ? sortInTableDirectionAero  : '&uarr;'"> </span>
-      </th>
-
-      <th class="text-left cursorHand" (click)="sortData('CreatedDate')">
-        Created Date
-        <span class="shortingSpan" [innerHTML]="sortInTableColumn === 'CreatedDate'  ? sortInTableDirectionAero  : '&uarr;'"> </span>
-      </th>
-
-      <th class="text-left cursorHand" (click)="sortData('ModifyByName')">
-        Modify By
-        <span class="shortingSpan" [innerHTML]="sortInTableColumn === 'ModifyByName'  ? sortInTableDirectionAero  : '&uarr;'"> </span>
-      </th>
-
-      <th class="text-left cursorHand" (click)="sortData('ModifyDate')">
-        Modify Date
-        <span class="shortingSpan" [innerHTML]="sortInTableColumn === 'ModifyDate'  ? sortInTableDirectionAero  : '&uarr;'"> </span>
-      </th>
-
-      <th>Action</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr *ngFor="let row of CommonSubjectList | tableSearchFilter:Table_SearchText; let idx=index">
-      <td>{{ idx + 1 }}</td>
-      <td>{{ row.CommonSubjectName }}</td>
-      <td>{{ row.SemesterName }}</td>
-      <td>{{ row.SubjectNames }}</td>
-      <td>{{ row.CreatedByName }}</td>
-      <td>{{ row.CreatedDate }}</td>
-      <td>{{ row.ModifyByName }}</td>
-      <td>{{ row.ModifyDate }}</td>
-
-      <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-        <div class="flex align-center justify-center actionBtns w-auto"
-          style="width:auto !important">
-          <a *ngIf="IsCommonSubjectMasterDateOpen == 1"
-            [routerLink]="'/addcommonsubjects'"
-            [queryParams]="{commonSubjectId:row.CommonSubjectID}"
-            title="Edit">
-            <i class="ti ti-pencil"></i>
-          </a>
-        </div>
-      </td>
-    </tr>
-  </tbody>
-</table>
+      </table>
 
 
     </div>
+
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">
+        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  CommonSubjectList?.length }} of {{CommonSubjectList[0]?.TotalRecords}}
+      </span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="GetAllData(1)" [disabled]="pageNo==1">First</button>
+        <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+        <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+               [disabled]="CommonSubjectList[0]?.TotalRecords==0" (change)="GetAllData(pageNo)" />
+        <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+        <button (click)="nextData()">Next</button>
+        <button (click)="GetAllData(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+
+
   </div>
 </div>
 <!-- end row -->
