@@ -451,7 +451,12 @@ export class MasterLayoutComponent implements OnInit {
     //redirect
     console.log(this.sSOLoginDataModel, "sso")
     //window.open('/dashboard', "_self");
-    await this.ChangeRolenFY()
+    //await this.ChangeRolenFY()
+
+    // Force reload route, no browser refresh
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.onSameUrlNavigation = 'reload';
+    this.router.navigateByUrl(this.router.url);
   }
 
   groupMenuItems(menuItems: any[]) {
