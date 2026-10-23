@@ -236,6 +236,11 @@ export class HiringRoleMasterComponent implements OnInit {
     if (btnReset) btnReset.innerHTML = "Reset";
   }
 
+  onStatusChange(status: any) {
+    if (typeof (window as any).js_StatusYesNoActiveInActive === 'function') {
+      (window as any).js_StatusYesNoActiveInActive(status);
+    }
+  }
 
   
   
