@@ -94,6 +94,12 @@ export class CollegeRollListAdmitCardComponent {
 
   public SemesterDetails: any[] = [];//copy of main data
 
+    //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(private commonMasterService: CommonFunctionService, private Router: Router,
     private collegeService: CollegeMasterService, private toastr: ToastrService, private loaderService: LoaderService,
     private formBuilder: FormBuilder, private router: ActivatedRoute, private _fb: FormBuilder,

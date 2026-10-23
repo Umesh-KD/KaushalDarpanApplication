@@ -57,7 +57,12 @@ export class ExaminersComponent implements OnInit {
 
   public ExaminersDetailsList: any[] = [];
   public MenuAllowedRoleList: any[] = [];
-
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(
     private commonMasterService: CommonFunctionService,
     private examinerservice: ExaminerService,

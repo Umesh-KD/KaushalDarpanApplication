@@ -23,7 +23,12 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 export class CollegeMasterComponent implements OnInit {
   public State: number = -1;
   public Message: any = [];
-
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   public ErrorMessage: any = [];
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;

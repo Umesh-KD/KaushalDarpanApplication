@@ -133,7 +133,12 @@ export class StudentEnrollmentComponent {
   public IsRejectAtBter: boolean = false;
   public IsFormActionSubmitted: boolean = false;
   public requestRejectDoc: any;
-
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(private commonMasterService: CommonFunctionService,
     private studentEnrollmentService: StudentEnrollmentService,
     private loaderService: LoaderService,

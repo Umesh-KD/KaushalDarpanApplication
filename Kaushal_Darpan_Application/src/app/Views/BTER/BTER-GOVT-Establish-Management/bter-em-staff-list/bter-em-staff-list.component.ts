@@ -49,7 +49,12 @@ export class BTEREMStaffListComponent {
   public guestHouseRequest = new StaffGuestHouseSearchModel();
   public guestHouseSaveRequest = new StaffGuestHouseSearchModel();
   public RetirementProcessModel = new BTER_EM_RetirementProcessModel();
-
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   public menuDataModel: MenuDataModel[] = [];
   public StaffTypeList: any = [];
   public CategoryList: any = [];

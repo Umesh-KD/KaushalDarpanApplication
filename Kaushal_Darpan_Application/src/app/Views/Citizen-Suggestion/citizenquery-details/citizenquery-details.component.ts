@@ -58,7 +58,12 @@ export class CitizenqueryDetailsComponent implements OnInit {
   CitizenQueryStatusList: any[] = [];
   QueryStatus: number = 0;
   public ProfileLists: any = {};
-
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   stars = [
     { id: 1, icon: 'star', class: 'star-gray star-hover star' },
     { id: 2, icon: 'star', class: 'star-gray star-hover star' },
