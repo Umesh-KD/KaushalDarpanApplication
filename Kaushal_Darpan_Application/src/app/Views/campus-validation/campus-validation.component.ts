@@ -28,6 +28,7 @@ export class CampusValidationComponent {
   public CampusValidationListData: any = [];
   public CampusSMSData: any = [];
   public InstituteMasterList: any = [];
+  public InstituteMasterListtemp: any = [];
   public FinancialYearList: any = []
   public CompanyMasterList: any = [];
   public CompanyID: number = 0;
@@ -113,7 +114,12 @@ export class CampusValidationComponent {
       await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.InstituteMasterList = data['Data'];
+          this.InstituteMasterListtemp = data['Data'];
+
+          const excludedIds = new Set([997, 998, 999]);
+          this.InstituteMasterList = (data['Data'] || []).filter(
+                                              (item:any) => !excludedIds.has(Number(item.InstituteID))
+                                            );
         }, error => console.error(error));
         
       await this.commonMasterService.PlacementCompanyMaster(this.sSOLoginDataModel.DepartmentID)

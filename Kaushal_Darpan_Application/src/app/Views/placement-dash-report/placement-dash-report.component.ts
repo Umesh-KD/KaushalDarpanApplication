@@ -79,6 +79,11 @@ export class PlacementDashReportComponent implements OnInit {
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.InstituteMasterList = data['Data'];
+
+        const excludedIds = new Set([997, 998, 999]);
+        this.InstituteMasterList = (data['Data'] || []).filter(
+                                              (item:any) => !excludedIds.has(Number(item.InstituteID)));
+
       }, (error: any) => console.error(error));
 
   

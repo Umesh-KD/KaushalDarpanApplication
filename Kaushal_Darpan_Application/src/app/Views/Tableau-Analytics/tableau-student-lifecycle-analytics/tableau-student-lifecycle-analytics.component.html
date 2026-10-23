@@ -1,6 +1,20 @@
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event">
+  <div class="flex items-center gap-3">
+    <a routerLink="/TableauExamReport" (click)="$event.stopPropagation()" class="an-btn an-green">
+      <i class="material-symbols-rounded">bar_chart</i>
+      <span>Exam Analytics</span>
+      <i class="material-symbols-rounded">arrow_forward</i>
+    </a>
+
+    <a routerLink="/result-analytics-tab" (click)="$event.stopPropagation()" class="an-btn an-violet">
+      <i class="material-symbols-rounded">query_stats</i>
+      <span>Result Analytics</span>
+      <i class="material-symbols-rounded">arrow_forward</i>
+    </a>
+  </div>
+</div>
+
 <div>
-
-
 <iframe
   src="https://va.rajasthan.gov.in/views/StudentLifecycleDashboard/StudentLifecycleDashboard?:embed=y&:showVizHome=no&:toolbar=yes"
   style="width:100%; height:calc(100vh - 120px); border:0;">
