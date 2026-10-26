@@ -62,14 +62,14 @@
             </select>
           </div>
 
-          <div>
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Student Type</label>
             <select class="form-select" id="StudentExamStudentType" [(ngModel)]="searchRequest.StudentTypeID"
                     formControlName="ddlStudentTypeID">
               <option value="0">--All--</option>
               <option *ngFor="let item of StudentTypeList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
-          </div>
+          </div>-->
 
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">

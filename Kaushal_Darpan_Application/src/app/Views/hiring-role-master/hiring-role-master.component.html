@@ -29,7 +29,7 @@
               </div>
             </div>
 
-            <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+            <!-- <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
               <label class="block">Status</label>
               <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
                 <input class="sr-only peer" type="checkbox" id="Active" [(ngModel)]="request.ActiveStatus"
@@ -38,7 +38,26 @@
                   <span class="toggleTitle"></span>
                 </span>
               </label>
+            </div> -->
+
+
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+              <label class="block font-medium mb-1">Status</label>
+              
+              <div class="flex items-center gap-6">
+                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                  <input type="radio" name="statusGroup" [value]="true" [(ngModel)]="request.ActiveStatus" formControlName="chkActiveStatus">
+                  <span>Active</span>
+                </label>
+
+                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                  <input type="radio" name="statusGroup" [value]="false" [(ngModel)]="request.ActiveStatus" formControlName="chkActiveStatus">
+                  <span>Inactive</span>
+                </label>
+              </div>
             </div>
+
             <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
               <div class="flex align-center flexBtn mt-7">
                 <button type="button" id="btnSave" (click)="SaveData()" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Save</button>
@@ -68,8 +87,8 @@
           <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
         </div>
       </div>
-      <div class="overflow-auto mt-3">
-        <table class="table table-border w-full" cellpadding="5">
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
               <th width="80px" align="left">Sr. No.</th>
