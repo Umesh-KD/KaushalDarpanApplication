@@ -31,7 +31,11 @@
             <option value="2">Yearly </option>
           </select>
         </div>
-        <div *ngIf="sSOLoginDataModel.RoleID != _EnumRole.Principal && sSOLoginDataModel.RoleID != _EnumRole.PrincipalNon">
+        <div 
+          *ngIf="!(sSOLoginDataModel.RoleID == _EnumRole.Principal || 
+                  sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon ||
+                  sSOLoginDataModel.RoleID == _EnumRole.PrincipalNodal_Eng || 
+                  sSOLoginDataModel.RoleID == _EnumRole.PrincipalNodal_NonEng)">
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status</label>
             <select class="form-select" id="ddlFilterByStatus" [(ngModel)]="searchRequest.Status" (change)="GetTimeTableList()">
@@ -148,7 +152,11 @@
             <th class="text-left">Status</th>
             <th class="text-left">Created date</th>
 
-            <th class="text-left" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+            <th class="text-left" 
+              *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || 
+                      sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon ||
+                      sSOLoginDataModel.RoleID == _EnumRole.PrincipalNodal_Eng || 
+                      sSOLoginDataModel.RoleID == _EnumRole.PrincipalNodal_NonEng">
               Center Superintendent
             </th>
             <th class="text-left">Action</th>
@@ -168,7 +176,11 @@
             <td align="left">{{row.ExamShift}}</td>
             <td align="left">{{row.StatusName}}</td>
             <td align="left">{{row.CreatedDate}}</td>
-            <td align="left" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+            <td align="left" 
+              *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || 
+                      sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon ||
+                      sSOLoginDataModel.RoleID == _EnumRole.PrincipalNodal_Eng || 
+                      sSOLoginDataModel.RoleID == _EnumRole.PrincipalNodal_NonEng">
               {{row.InvigilatorName}}
             </td>
             <td align="left">

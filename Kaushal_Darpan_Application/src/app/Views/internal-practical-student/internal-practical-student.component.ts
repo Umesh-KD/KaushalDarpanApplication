@@ -185,7 +185,14 @@ export class InternalPracticalStudentComponent implements OnInit {
       this.TheoryMarksList = [];
       this.AllInTableSelect = false;
       this.isSubmitted = true;
-      if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.HOD_Eng || this.sSOLoginDataModel.RoleID == EnumRole.HOD_NonEng) {
+      if (
+        this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+        this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || 
+        this.sSOLoginDataModel.RoleID == EnumRole.HOD_Eng || 
+        this.sSOLoginDataModel.RoleID == EnumRole.HOD_NonEng ||
+        this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng || 
+        this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
+      ) {
         this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;//principle
       }
 

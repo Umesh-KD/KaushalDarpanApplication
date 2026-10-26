@@ -245,7 +245,12 @@ export class StudentEnrollmentComponent {
     console.log(this.sSOLoginDataModel, 'this.sSOLoginDataModel')
     console.log(this.request.InstituteID, 'this.request.InstituteID')
 
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+    if (
+      this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng || 
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
+    ) {
       this.isShowdrop = true;
 
       this.SearchStudentDataFormGroup.get('ddlInstituteID')?.disable();
@@ -319,7 +324,12 @@ export class StudentEnrollmentComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
-          if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+          if (
+            this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng || 
+            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
+          ) {
             this.InstituteMasterList = data['Data'];
             this.request.InstituteID = this.sSOLoginDataModel.InstituteID
             this.InstituteMasterList = this.InstituteMasterList.filter((x: any) => { return x.InstituteID == this.request.InstituteID });
@@ -818,7 +828,12 @@ export class StudentEnrollmentComponent {
           //
           if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
-            if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+            if (
+              this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+              this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+              this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng || 
+              this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
+            ) {
               this.VerifiedSendForSMSEnrollmentStudent();
             }
             await this.GetPreExamStudent();
@@ -933,7 +948,18 @@ export class StudentEnrollmentComponent {
         return;
       }
       if (this.status == enumExamStudentStatus.Dropout) {
-        if (this.request.StudentFilterStatusId != enumExamStudentStatus.RejectatBTER && this.request.StudentFilterStatusId != enumExamStudentStatus.Dropout && (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) || (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng)) {
+        if (
+          this.request.StudentFilterStatusId != enumExamStudentStatus.RejectatBTER && 
+          this.request.StudentFilterStatusId != enumExamStudentStatus.Dropout && 
+          (this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng ||
+            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
+          ) || 
+          (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || 
+            this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng
+          )
+        ) {
           await this.SaveDropout();
         }
         else {
@@ -971,7 +997,18 @@ export class StudentEnrollmentComponent {
       }
       // eligible for enrollment
       if (this.request.StudentFilterStatusId == enumExamStudentStatus.EnrolledFeePaid) {
-        if (this.status == enumExamStudentStatus.EligibleForEnrollment && (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng || this.sSOLoginDataModel.RoleID == EnumRole.Registrar || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng)) {
+        if (
+          this.status == enumExamStudentStatus.EligibleForEnrollment && 
+          (this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || 
+            this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || 
+            this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng || 
+            this.sSOLoginDataModel.RoleID == EnumRole.Registrar || 
+            this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng ||
+            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng || 
+            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
+          )
+        ) {
           await this.SaveEligibleForEnrollment();
         }
         else {

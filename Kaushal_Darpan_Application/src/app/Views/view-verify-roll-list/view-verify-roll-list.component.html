@@ -13,7 +13,13 @@
 
 <div class="card">
   <div class="card-body p-5">
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" *ngIf="this.sSOLoginDataModel.RoleID==_enumRole.Admin||this.sSOLoginDataModel.RoleID==_enumRole.AdminNon||this.sSOLoginDataModel.RoleID==_enumRole.Principal||this.sSOLoginDataModel.RoleID==_enumRole.PrincipalNon">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" 
+      *ngIf="this.sSOLoginDataModel.RoleID==_enumRole.Admin ||
+              this.sSOLoginDataModel.RoleID==_enumRole.AdminNon||
+              this.sSOLoginDataModel.RoleID==_enumRole.Principal||
+              this.sSOLoginDataModel.RoleID==_enumRole.PrincipalNon ||
+              this.sSOLoginDataModel.RoleID==_enumRole.PrincipalNodal_Eng||
+              this.sSOLoginDataModel.RoleID==_enumRole.PrincipalNodal_NonEng">
       <b class="text-1xl-5"><i class="ti ti-search"></i> Search Filter</b>
       <div class="flex justify-end flex-wrap items-center">
       </div>
@@ -26,7 +32,9 @@
               this.sSOLoginDataModel.RoleID==_enumRole.Principal||
               this.sSOLoginDataModel.RoleID==_enumRole.PrincipalNon ||
               this.sSOLoginDataModel.RoleID==_enumRole.Invigilator ||
-              this.sSOLoginDataModel.RoleID==_enumRole.Invigilator_NonEng ">
+              this.sSOLoginDataModel.RoleID==_enumRole.Invigilator_NonEng ||
+              this.sSOLoginDataModel.RoleID==_enumRole.PrincipalNodal_Eng ||
+              this.sSOLoginDataModel.RoleID==_enumRole.PrincipalNodal_NonEng">
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Filter By Status.<span class="StarMarking">*</span></label>
         <select class="form-select" id="ddlFilterByStatus" [(ngModel)]="Status" (change)="GetAllData()">

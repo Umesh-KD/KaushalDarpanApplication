@@ -1,12 +1,13 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
-  <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Assign Role</h4>
-    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Establishment Management</a>
-      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/theory-marks-reval" class="text-sm font-medium text-slate-700" aria-current="page">Assign Role</a>
+    <div>
+        <h4 class="text-slate-900 text-lg font-medium mb-2">Assign Role</h4>
+        <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+            <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Establishment Management</a>
+            <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+            <a routerLink="/theory-marks-reval" class="text-sm font-medium text-slate-700" aria-current="page">Assign
+                Role</a>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="card">
@@ -54,11 +55,11 @@
                         <td>{{row.Email}}</td>
                         <td>{{row.EmailOfficial}}</td>
                         <td>{{row.MobileNo}}</td>
-                        <td>{{row.Designation}}</td>                        
-                        <td>{{row.Role}}</td>                        
+                        <td>{{row.Designation}}</td>
+                        <td>{{row.Role}}</td>
                         <td>
                             <div class="flex align-center justify-center actionBtns">
-                                
+
                                 <a href="javascript:void(0);" title="Assign Role Rights"
                                     (click)="ViewandUpdate(MyModel_Action,row.UserID)"><i
                                         class="ti ti-playlist-add"></i></a>
@@ -99,7 +100,8 @@
                                     </th>
                                     <th align="left">Role Name</th>
                                     <th align="left">Is Main Role</th>
-                                    <th align="left" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.DTE || sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR)"></th>
+                                    <th align="left">
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -117,23 +119,24 @@
                                             [disabled]="!row.Marked" name="radiocheck" (change)="onRadioChange(row)">
                                     </td>
 
-                                    <td align="left" style="width: 500px;" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTE || sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR">
+                                        <!-- *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTE || 
+                                                sSOLoginDataModel.RoleID == _EnumRole.DIRECTOR || 
+                                                sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE ||
+                                                sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_GAZETTED_STAFF ||
+                                                sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_NON_GAZETTED_STAFF" -->
+                                    <td align="left" style="width: 500px;">
                                         <div *ngIf="row.ID == _EnumRole.Principal || row.ID == _EnumRole.PrincipalNon">
-                                            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
-                                             <!-- <ng-select [(ngModel)]="row.InstituteID" [clearable]="false" (change)="onInstituteChange($event, row)">
+                                            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                                                Institute</label>
+                                            <!-- <ng-select [(ngModel)]="row.InstituteID" [clearable]="false" (change)="onInstituteChange($event, row)">
                                                 <ng-option [value]="0" selected>--All--</ng-option>
                                                 <ng-container *ngFor="let item of InstituteMasterList;">
                                                     <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
                                                 </ng-container>
                                             </ng-select>  -->
-                                            <ng-select
-                                                [items]="InstituteMasterList"
-                                                bindLabel="InstituteName"
-                                                bindValue="InstituteID"
-                                                [(ngModel)]="row.InstituteIDs"
-                                                [multiple]="true"
-                                                [closeOnSelect]="false"
-                                                [clearable]="true"
+                                            <ng-select [items]="InstituteMasterList" bindLabel="InstituteName"
+                                                bindValue="InstituteID" [(ngModel)]="row.InstituteIDs" [multiple]="true"
+                                                [closeOnSelect]="false" [clearable]="true"
                                                 placeholder="--Select Institute--"
                                                 (ngModelChange)="onInstituteChange($event, row)">
                                             </ng-select>
