@@ -1089,7 +1089,7 @@ const routes: Routes = [
       { path: 'DispatchToInstitute', loadChildren: () => import('./Views/DispatchManagement/dispatch-to-institute/dispatch-to-institute.module').then(m => m.DispatchToInstituteModule) },
 
       { path: 'DispatchGroupList', loadChildren: () => import('./Views/DispatchManagement/dispatch-group-list/dispatch-group-list.module').then(m => m.DispatchGroupListModule) },
-      /*   { path: 'AllotmentStatus', loadChildren: () => import('./Views/Emitra/allotment-status/allot-status.module').then(m => m.AllotStatusModule) },*/
+      /*   { path: 'AllotmentStatus', loadChildren: () => import('./Views/Emitra/allotment-status/allot-status.module').then(m => ExaminerDispatchRevalVerifym.AllotStatusModule) },*/
       { path: 'PrincipalDispatchGroup', loadChildren: () => import('./Views/DispatchManagement/principal-dispatch-group/principal-dispatch-group.module').then(m => m.PrincipalDispatchGroupModule) },
 
       { path: 'PolytechnicReport', loadChildren: () => import('./Views/polytechnic-report/polytechnic-report.module').then(m => m.PolytechnicReportModule) },

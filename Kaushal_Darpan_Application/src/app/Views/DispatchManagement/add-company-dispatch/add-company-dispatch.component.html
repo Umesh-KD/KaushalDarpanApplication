@@ -6,12 +6,12 @@
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/companydispatchlist" class="text-sm font-medium text-slate-700" aria-current="page">Company Dispatch List</a>
+      <a  class="text-sm font-medium text-slate-700" aria-current="page">Company Dispatch List</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a routerLink="/addcompanydispatch" class="text-sm font-medium text-slate-700" aria-current="page">{{ isUpdate ? 'Update Company Dispatch' : 'Add Company Dispatch' }}</a>
     </div>
   </div>
-  <a routerLink="/companydispatchlist" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+  <a  class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
 </div>
 <!-- Page Title End -->
 
@@ -37,7 +37,7 @@
             </div>
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Supplier Name: <span class="StarMarking">*</span></label>
-              <input formControlName="txtsupplierName" class="form-input" placeholder="Enter Company Name" [(ngModel)]="request.supplierName">
+              <input formControlName="txtsupplierName" class="form-input" placeholder="Enter Supplier Name" [(ngModel)]="request.supplierName">
               <div *ngIf="isSubmitted && groupForm.controls.txtsupplierName.errors" class="text-danger">
                 <p *ngIf="groupForm.controls.txtsupplierName.errors.required">This field is required!</p>
               </div>

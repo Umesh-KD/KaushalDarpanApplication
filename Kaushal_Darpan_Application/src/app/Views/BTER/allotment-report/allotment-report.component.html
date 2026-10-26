@@ -4,9 +4,9 @@
     <h4 class="text-slate-900 text-lg font-medium mb-2">{{searchRequest.StreamTypeId=='1' ?'Engineering':searchRequest.StreamTypeId=='2' ?'Non Engineering':searchRequest.StreamTypeId=='3' ?'lateral':''}} Allotment Report</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a [routerLink]="['/AdminDashboardBTER']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <a  class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a [routerLink]="['/BTERCollageTrade']" class="text-sm font-medium text-slate-700" aria-current="page">Allotment Report</a>
+      <a  class="text-sm font-medium text-slate-700" aria-current="page">Allotment Report</a>
     </div>
 
 
@@ -142,7 +142,7 @@
             <option value="2">In-Active</option>
           </select>
         </div>-->
-        <div>
+        <div style="width:500px">
           <button type="button" class="btn bg-info text-white mt-6" (click)="ShowAllotmentDataList(1)">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="onCancel()">Cancel</button>
 

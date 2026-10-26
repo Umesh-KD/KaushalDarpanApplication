@@ -41,6 +41,8 @@
           <ng-option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
         </ng-select>
       </div>
+
+
       <div>
         <button type="button" class="btn bg-info text-white mt-6" (click)="filterFormSubmit()">Search</button>
         <button type="button" class="btn bg-danger text-white mt-6" (click)="resetForm()"><i class="ti ti-refresh"></i> Reset</button>
