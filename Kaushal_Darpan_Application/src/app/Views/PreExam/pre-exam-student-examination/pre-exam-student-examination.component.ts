@@ -342,7 +342,12 @@ export class PreExamStudentExaminationComponent {
     //
 
     this.UserID = this.sSOLoginDataModel.UserID
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+    if (
+      this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng ||
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
+    ) {
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID
     }
     if (this.InstituteID > 0) {

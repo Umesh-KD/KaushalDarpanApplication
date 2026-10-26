@@ -105,7 +105,7 @@ export class DTEOfficeVacancyListComponent {
       this.OfficeList = data['Data'];
     }, error => console.error(error));
 
-    await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+    await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, 0, this.sSOLoginDataModel.EndTermID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.InstituteMasterDDLList = data.Data;
     })
@@ -123,7 +123,7 @@ export class DTEOfficeVacancyListComponent {
       this.PostList = data['Data'];
     });
 
-    await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
+    await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, 0).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.StreamMasterDDLList = data.Data;
     })

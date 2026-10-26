@@ -351,7 +351,6 @@ export class UserMasterOfficeWiseComponent {
         // x.InstituteID = this.sSOLoginDataModel.InstituteID
       });
       
-      debugger
       await this.assignRoleRightsService.SaveAssignedRole_UserWise(editChild)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));

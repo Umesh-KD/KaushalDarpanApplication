@@ -131,3 +131,8 @@ export class SSOIDDetailRequestModel
   public SSOID: string = '';
   public Action: string = '';
 }
+
+export class CampusPostHistorySearchModel {
+  public CompanyID?: number = 0;   
+  public ApprovedStatus?: number = 0;   
+}

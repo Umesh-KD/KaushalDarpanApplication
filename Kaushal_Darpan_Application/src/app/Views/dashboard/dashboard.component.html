@@ -13,7 +13,13 @@
 <!--<app-bter-dashboard *ngIf="this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon"></app-bter-dashboard>-->
 <app-bter-dashboard *ngIf="this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon || this.sSOLoginDataModel.RoleID ==_EnumRole.DTE"></app-bter-dashboard> <!--// new role added 20261014-->
 <app-placement-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.AdminNodel || this.sSOLoginDataModel.RoleID == _EnumRole.TPO"></app-placement-dashboard>
-<app-principle-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Principal || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNonDegree"></app-principle-dashboard>
+<app-principle-dashboard 
+   *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Principal || 
+         this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon || 
+         this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNonDegree ||
+         this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNodal_Eng ||
+         this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNodal_NonEng">
+</app-principle-dashboard>
 
 <app-jdte-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE
 || this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER
