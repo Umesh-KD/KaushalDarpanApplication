@@ -261,4 +261,17 @@ export class ITIAllotmentReportComponent {
     })
   }
 
+  onSearchChange() {
+    debugger
+
+    if (this.Table_SearchText == '') {
+      this.pageInTableSize = "50"; // reset pagination
+      this.loadInTable();
+    }
+    else {
+      this.pageInTableSize = this?.totalInTableRecord?.toString() ?? "50"; // reset pagination
+      this.loadInTable();
+    }
+  }
+
 }
