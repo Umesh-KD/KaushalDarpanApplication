@@ -20,7 +20,21 @@
           <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-download"></i>Main Annexure-2</a>
           <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-download"></i>Full Data</a>
         </div>-->
+        <button
+          type="button"
+          class="border-0 bg-transparent cursor-pointer p-1"
+          (click)="toggleSearchCriteria()"
+          [attr.aria-expanded]="isSearchVisible"
+          aria-controls="searchCriteriaPanel"
+          aria-label="Toggle search criteria">
+          <i
+          class="ti"
+          [ngClass]="isSearchVisible ? 'ti-chevron-up' : 'ti-chevron-down'"
+          aria-hidden="true">
+          </i>
+        </button>
       </div>
+      <div id="searchCriteriaPanel" *ngIf="isSearchVisible">
       <form [formGroup]="SearchStudentDataFormGroup">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
@@ -157,6 +171,7 @@
         </div>
 
       </form>
+      </div>
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>

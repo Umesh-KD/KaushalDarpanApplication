@@ -32,6 +32,13 @@ export class CampusPostHistoryComponent {
   public InstituteID: number = 0;
   public ApprovedStatus: string = "0";
 
+  public FromDate : string = ""
+  public ToDate : string = ""
+  public txtCreatedBy: string = ""
+  public HiringRoleID: number = 0;
+  public DDLSearchBy: number = 0;
+  public HiringRoleMasterList: any = []
+
   request = new CampusPostMasterModel();
   requestAction = new CampusPostMaster_Action();
   requestEligibilityCriteria = new CampusPostMaster_EligibilityCriteriaModel();
@@ -76,6 +83,13 @@ export class CampusPostHistoryComponent {
           data = JSON.parse(JSON.stringify(data));
           this.CompanyMasterList = data['Data'];
         }, (error: any) => console.error(error));
+
+      await this.commonMasterService.GetHiringRoleMaster()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.HiringRoleMasterList = data['Data'];
+        }, error => console.error(error));
+
     }
     catch (Ex) {
       console.log(Ex);
@@ -107,10 +121,35 @@ export class CampusPostHistoryComponent {
     XLSX.writeFile(wb, 'CampusPostHistoryData.xlsx');
   }
 
-  async btn_SearchClick() {
+  async btn_SearchClick()
+  {
     try {
+
+      if ((this.DDLSearchBy == 1 || this.DDLSearchBy == 2) && (!this.FromDate || !this.ToDate))
+      {
+        this.toastr.warning("Please select From Date and To Date");
+        return;
+      }
+
       this.loaderService.requestStarted();
-      await this.campusPostService.CampusHistoryList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID)
+
+      let SearchObj =
+      {
+        CompanyID: this.CompanyID,
+        CollegeID: this.InstituteID,
+        Status: this.ApprovedStatus,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        SearchBy: this.DDLSearchBy,
+        FromDate: this.FromDate,
+        ToDate: this.ToDate,
+        HiringRoleID: this.HiringRoleID,
+        CreatedBySSOID: this.txtCreatedBy,
+        CampusID: 0    // discussion pending for CampusID Filter
+      };
+
+
+      //await this.campusPostService.CampusHistoryList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID) 
+      await this.campusPostService.CampusHistoryListNew(SearchObj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusValidationListData = data['Data'];
@@ -133,6 +172,12 @@ export class CampusPostHistoryComponent {
     this.CompanyID = 0;
     this.InstituteID = 0;
     this.ApprovedStatus = "0";
+
+    this.txtCreatedBy = "";
+    this.FromDate = "";
+    this.ToDate = "";
+    this.HiringRoleID = 0;
+    this.DDLSearchBy = 0;
   }
   async CampusOnPostAction(content: any, PostID: number) {
     this.requestAction.PostID = PostID;
@@ -203,4 +248,14 @@ export class CampusPostHistoryComponent {
       }, 200);
     }
   }
+
+
+  DDLSearchByChange()
+  {
+    this.FromDate = "";
+    this.ToDate = "";
+    //this.ApprovalFromDate = "";
+    //this.ApprovalToDate = "";
+  }
+ 
 }

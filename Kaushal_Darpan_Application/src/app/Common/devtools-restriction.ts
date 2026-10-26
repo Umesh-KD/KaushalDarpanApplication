@@ -1,52 +1,89 @@
 
 let restrictionEnabled = false;
 
-export function enableDevToolsRestriction(): void {
-  // Avoid registering the same handlers multiple times.
-  if (restrictionEnabled) {
+const minimalUserResponseInMilliseconds = 200;
+const devToolsCheckInterval = 100;
+
+function notRunDevToolCheck(): void {
+  const before = Date.now();
+
+  debugger; // May pause execution when DevTools is open.
+
+  const after = Date.now();
+
+  if (after - before > minimalUserResponseInMilliseconds) {
+    console.clear();
+    document.body.textContent = "Please close Developer Tools.";
+
+    window.location.replace(window.location.href);
     return;
   }
 
-  restrictionEnabled = true;
+  window.setTimeout(
+    notRunDevToolCheck,
+    devToolsCheckInterval
+  );
+}
+
+function disabledEvent(event: Event): void {
+  event.preventDefault();
+  event.stopPropagation();
+}
+
+function notRunDevToolCheckOnLoad(): void {
+  document.addEventListener(
+    "contextmenu",
+    (event: MouseEvent) => {
+      disabledEvent(event);
+    },
+    false
+  );
 
   document.addEventListener(
-    'keydown',
+    "keydown",
     (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
 
-      const isF12 = event.key === 'F12';
+      const isMac = /mac/i.test(navigator.platform);
 
-      const isCtrlShiftShortcut =
-        event.ctrlKey &&
-        event.shiftKey &&
-        ['i', 'j', 'c'].includes(key);
+      const isDevToolsShortcut =
+        (event.ctrlKey &&
+          event.shiftKey &&
+          ["i", "j", "c"].includes(key)) ||
+        (isMac &&
+          event.metaKey &&
+          event.altKey &&
+          ["i", "j", "c"].includes(key));
 
-      const isViewSource =
-        event.ctrlKey && key === 'u';
+      const isSaveShortcut =
+        key === "s" && (isMac ? event.metaKey : event.ctrlKey);
 
-      const isMacShortcut =
-        event.metaKey &&
-        event.altKey &&
-        ['i', 'j', 'c'].includes(key);
+      const isViewSourceShortcut =
+        key === "u" && event.ctrlKey;
+
+      const isF12 = key === "f12";
 
       if (
-        isF12 ||
-        isCtrlShiftShortcut ||
-        isViewSource ||
-        isMacShortcut
+        isDevToolsShortcut ||
+        isSaveShortcut ||
+        isViewSourceShortcut ||
+        isF12
       ) {
-        event.preventDefault();
-        event.stopImmediatePropagation();
+        disabledEvent(event);
       }
     },
     true
   );
+}
 
-  document.addEventListener(
-    'contextmenu',
-    (event: MouseEvent) => {
-      event.preventDefault();
-    },
-    true
-  );
+export function enableDevToolsRestriction(): void {
+  if (restrictionEnabled) return;
+
+  restrictionEnabled = true;
+
+  console.clear();
+
+  notRunDevToolCheckOnLoad();
+
+  notRunDevToolCheck();
 }

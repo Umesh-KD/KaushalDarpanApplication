@@ -2,10 +2,10 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Dispatch Management</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Examiner Dispatch Reval Verify</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dispatch Management</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Reval Dispatch Management</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a routerLink="/ExaminerDispatchRevalVerify" class="text-sm font-medium text-slate-700" aria-current="page">Examiner Dispatch Reval Verify</a>
     </div>
@@ -82,29 +82,24 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
     </div>
-    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-      <div class="">
-        <!--<select id="ddlConter" class="form-select  couterDropDown">
-        <option value="50">50</option>
-        <option value="100">100</option>
-        <option value="500">500</option>
-        <option value="1000">1000</option>
-      </select>-->
-      </div>
-      <div class="">
-        <button *ngIf="searchRequest.Status == 76" class="btn bg-success text-white pull-right" (click)="OnSTatusUpdateByExaminer()" type="button">Verify By Examiner</button>
+    <div class="flex flex-nowrap items-center justify-between gap-3 mb-3">
+
+      <div class="flex flex-nowrap items-center gap-2">
+        <button *ngIf="searchRequest.Status == 76"
+                class="btn bg-success text-white whitespace-nowrap"
+                (click)="OnSTatusUpdateByExaminer()" type="button">
+          Verify By Examiner
+        </button>
+
+        <button *ngIf="searchRequest.Status == 77"
+                class="btn bg-success text-white whitespace-nowrap"
+                (click)="UpdateVerifiedAndSentToPrincipalByExaminer()" type="button">
+          Verified and Sent to Principal by Examiner
+        </button>
       </div>
 
-      <div class="">
-        <button *ngIf="searchRequest.Status == 77" class="btn bg-success text-white pull-right" (click)="UpdateVerifiedAndSentToPrincipalByExaminer()" type="button">Verified and Sent to Principal by Examiner</button>
-      </div>
+      <input class="form-input w-72 shrink-0" placeholder="Search..." [(ngModel)]="Table_SearchText" />
 
-
-      <div class="">
-      </div>
-      <div class="">
-        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
-      </div>
     </div>
 
   

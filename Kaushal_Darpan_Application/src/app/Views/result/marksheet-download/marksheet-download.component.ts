@@ -58,7 +58,12 @@ export class MarksheetDownloadComponent {
   downLoadFG!: FormGroup;
   public EndTermList: any = [];
   public MenuAllowedRoleList: any = [];
-
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(private commonFunctionService: CommonFunctionService,
     private marksheetDownloadService: MarksheetDownloadService,
     private loaderService: LoaderService,

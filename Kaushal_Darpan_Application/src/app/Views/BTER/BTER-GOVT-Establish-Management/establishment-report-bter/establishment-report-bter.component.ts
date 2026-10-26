@@ -61,7 +61,12 @@ export class EstablishmentReportBTERComponent {
   public endInTableIndex: number = 0;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
-
+//Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(
     private loaderService: LoaderService,
     private bterEstablishManagementService: BTEREstablishManagementService,

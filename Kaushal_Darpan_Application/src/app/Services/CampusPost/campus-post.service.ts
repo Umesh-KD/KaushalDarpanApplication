@@ -141,4 +141,12 @@ export class CampusPostService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async CampusHistoryListNew(request: any) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/CampusHistoryListNew', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

@@ -68,6 +68,13 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   public hodRequestModel = new AdminUserSearchModel();
   public IsAnnexure32Uploaded: boolean = false;
     MenuAllowedRoleList: any;
+
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(private commonMasterService: CommonFunctionService,
     private SCAService: StudentCenteredActivitesService,
     private toastr: ToastrService,

@@ -3,9 +3,8 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
     <h4 class="text-slate-900 text-lg font-medium mb-2">College Branches</h4>
-
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a routerLink="#" class="text-sm font-medium text-slate-700">Masters</a>
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Masters</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a routerLink="/BTERSeatIntakesList" class="text-sm font-medium text-slate-700" aria-current="page">College Branches</a>
     </div>
@@ -16,14 +15,39 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="mb-8">
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <!--<a *ngIf="DateConfigSetting[0][BranchMapKeyEng]==1" routerLink="/BTERAddSeatIntakes" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Map Branch</a>-->
-        <a routerLink="/BTERAddSeatIntakes" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Map Branch</a>
-      </div>
+      <div class="flex justify-between items-center flex-wrap gap-2 mb-3 p-3 py-2 bg-light">
+
+  <b class="text-1xl-5">
+    <i class="ti ti-search"></i> Enter Search Criteria
+  </b>
+
+  <div class="flex items-center gap-2 flex-shrink-0">
+    <a routerLink="/BTERAddSeatIntakes"
+       class="btn bg-success btn-sm text-white">
+      <i class="ti ti-plus"></i> Map Branch
+    </a>
+
+    <button
+      type="button"
+      class="border-0 bg-transparent cursor-pointer p-1"
+      (click)="toggleSearchCriteria()"
+      [attr.aria-expanded]="isSearchVisible"
+      aria-controls="searchCriteriaPanel"
+      aria-label="Toggle search criteria">
+      <i
+        class="ti"
+        [ngClass]="isSearchVisible ? 'ti-chevron-up' : 'ti-chevron-down'"
+        aria-hidden="true">
+      </i>
+    </button>
+  </div>
+
+</div>
+
+<!--Form page-->
+    <div id="searchCriteriaPanel" *ngIf="isSearchVisible">
       <form [formGroup]="SeatIntakeSearchFormGroup">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Search By Branch:
@@ -100,7 +124,7 @@
           </div>
         </div>
       </form>
-
+    </div>
 
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">

@@ -133,7 +133,12 @@ export class StudentEnrollmentComponent {
   public IsRejectAtBter: boolean = false;
   public IsFormActionSubmitted: boolean = false;
   public requestRejectDoc: any;
-
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(private commonMasterService: CommonFunctionService,
     private studentEnrollmentService: StudentEnrollmentService,
     private loaderService: LoaderService,
@@ -488,12 +493,15 @@ export class StudentEnrollmentComponent {
             this.PreExamStudentData = data['Data'];
             console.log(this.PreExamStudentData, "lisssstDataaa")
             // Show popup when no records are found
-            Swal.fire({
-              icon: 'info',
-              title: 'No Record Found',
-              text: 'No student records found.',
-              confirmButtonText: 'OK'
-            });
+            // Check if no records are found
+            // if (!this.PreExamStudentData || this.PreExamStudentData.length === 0) {
+            //   Swal.fire({
+            //     icon: 'info',
+            //     title: 'No Record Found',
+            //     text: 'No student records found.',
+            //     confirmButtonText: 'OK'
+            //   });
+            // }
             //table feature load
             this.loadInTable();
             //end table feature load

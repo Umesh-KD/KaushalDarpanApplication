@@ -17,67 +17,55 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="mb-8">
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <!--<a href="../addbranchesmaster" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
-      </div>
-      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="mb-8">
+  <div class="flex justify-between items-center flex-wrap gap-2 mb-3 p-3 py-2 bg-light">
 
-        <div>
-          <label for="txtuserName" class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Apply For</label>
-          <!--<select class="form-select" [(ngModel)]="searchRequest.CommnID" [ngModelOptions]="{standalone: true}" (change)="OnchangeApplyFor()" [disabled]="searchRequest.CommnID">-->
-          <select class="form-select" [(ngModel)]="searchRequest.CommnID" [ngModelOptions]="{standalone: true}" (change)="GetMasterSubDDL()">
-            <option value="0" selected>--Choose Option--</option>
-            <option *ngFor="let item of QueryForMasterList" value="{{item.ID}}">{{item.Name}}</option>
-          </select>
-        </div>
+    <b class="text-1xl-5">
+      <i class="ti ti-search"></i> Enter Search Criteria
+    </b>
 
-        <div>
-          <label for="ddlSubject" class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Subject</label>
-          <select class="form-select" [(ngModel)]="searchRequest.SubjectId" [disabled]="sSOLoginDataModel.IsCitizenQueryUser">
-            <option value="0" selected>--Choose Option--</option>
-            <option *ngFor="let item of SubMasterList" value="{{item.ID}}">{{item.Name}}</option>
-          </select>
-        </div>
+    <button
+      type="button"
+      class="border-0 bg-transparent cursor-pointer p-1"
+      (click)="toggleSearchCriteria()"
+      [attr.aria-expanded]="isSearchVisible"
+      aria-controls="searchCriteriaPanel"
+      aria-label="Toggle search criteria">
 
-        <div>
-          <label for="ddlSubject" class="text-gray-800 text-sm font-medium inline-block mb-1">Query Aging</label>
-          <select class="form-select" [(ngModel)]="searchRequest.QueryAging">
-            <option value="0" selected>--Choose Option--</option>
-            <option value="1" selected>0-7 Days</option>
-            <option value="2" selected>7-15 Days</option>
-            <option value="3" selected>More Then 15 Days</option>
-          </select>
-        </div>
+      <i
+        class="ti"
+        [ngClass]="isSearchVisible ? 'ti-chevron-up' : 'ti-chevron-down'"
+        aria-hidden="true">
+      </i>
+    </button>
+  </div>
 
-        <div>
-          <label for="ddlSubject" class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Query Status</label>
-          <select class="form-select" [(ngModel)]="searchRequest.CitizenQueryStatus">
-            <option value="0" selected>--Choose Option--</option>
-            <option *ngFor="let item of CitizenQueryStatusList" value="{{item.ID}}">{{item.Name}}</option>
-          </select>
-        </div>
+  <div
+    class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3"
+    id="searchCriteriaPanel"
+    *ngIf="isSearchVisible">
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            From Date:
-          </label>
-          <input type="date" class="form-input" [(ngModel)]="searchRequest.FromDate">
-        </div>
+    <!-- Keep all your existing search fields here -->
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            To Date: 
-          </label>
-          <input type="date" class="form-input"  [(ngModel)]="searchRequest.ToDate" >
-        </div>
+  </div>
 
-      </div>
-      <div class="justify-center flex mt-6">
-        <button type="button" class="btn bg-info text-white me-1" (click)="GetAllData()">Search</button>
-        <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
-      </div>
-    </div>
+  <div class="flex justify-center items-center gap-2 mt-6">
+    <button
+      type="button"
+      class="btn bg-info text-white"
+      (click)="GetAllData()">
+      Search
+    </button>
+
+    <button
+      type="button"
+      id="btnReset"
+      class="btn bg-danger text-white"
+      (click)="ResetControl()">
+      <i class="ti ti-refresh"></i> Reset
+    </button>
+  </div>
+</div>
 
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">

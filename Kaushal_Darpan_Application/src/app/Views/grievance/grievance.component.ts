@@ -56,7 +56,12 @@ export class GrievanceComponent implements OnInit {
   selectedOption: any = 0;
   public ReplyBox: boolean = false;
   public Remark: string = '';
-
+//Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(private fb: FormBuilder,
     private commonMasterService: CommonFunctionService,
     private seatMatrixService: SeatMatrixService,

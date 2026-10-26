@@ -33,7 +33,12 @@ export class bterRevalReportComponent {
   public IsReval: boolean = false;
   public SemestarMasterDDLList: any[] = [];
     MenuAllowedRoleList: any;
-
+  //Maximize and minimize toggle YASH WORK
+  public isSearchVisible: boolean = true;
+  public toggleSearchCriteria(): void {
+    this.isSearchVisible = !this.isSearchVisible;
+  }
+  //till here
   constructor(
     public appsettingConfig: AppsettingService,
     private loaderService: LoaderService,
