@@ -481,7 +481,7 @@ export class StudentEnrollmentComponent {
 
   //get student data
   async GetPreExamStudent() {
-    debugger
+    //debugger
     try {
       //debugger;
       this.isSubmitted = true;
@@ -630,7 +630,7 @@ export class StudentEnrollmentComponent {
     var EndTermID = this.sSOLoginDataModel.EndTermID
     this.StudentFilterStatusId = this.request.StudentFilterStatusId
     var FileNameWithDynamicPath = EnumFileUpload.FileNameWithDynamicPath
-    debugger
+    //debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.PreExam_StudentMaster(StudentID, this.request.StudentFilterStatusId, DepartmentID, Eng_NonEng, EndTermID, 0, FileNameWithDynamicPath)
@@ -1455,7 +1455,7 @@ export class StudentEnrollmentComponent {
   }
 
   async GetPreExamStudentAnnexture() {
-    debugger
+    //debugger
     try {
       this.isSubmitted = true;
       //session
@@ -1910,7 +1910,7 @@ export class StudentEnrollmentComponent {
   public file!: File;
   async onFilechange(event: any, Type: string) {
     try {
-      debugger;
+      //debugger;
       this.file = event.target.files[0];
       if (this.file) {
 
@@ -1991,7 +1991,7 @@ export class StudentEnrollmentComponent {
 
   async GetDocumentDetails_RejectAtBter() {
     try {
-      debugger
+      //debugger
       var request: any = {}
       request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       request.FileNameWithDynamicPath = 1
@@ -2018,7 +2018,7 @@ export class StudentEnrollmentComponent {
       // uploadModel.MinFileSize = item.MinFileSize ?? "";
       // uploadModel.MaxFileSize = item.MaxFileSize ?? "";
       // uploadModel.FolderName = item.FolderName ?? "";
-      debugger
+      //debugger
       let uploadModel: UploadBTERFileModel = {
         AcademicYear: this.requestRejectDoc.AcademicYear?.toString() ?? "0",
         DepartmentID: '1',
@@ -2038,7 +2038,7 @@ export class StudentEnrollmentComponent {
       //call
       await this.documentDetailsService.UploadBTERDocument(event, uploadModel)
         .then((data: any) => {
-          debugger
+          //debugger
           //
           if (data.State == EnumStatus.Success) {
             //add/update document in js list
@@ -2143,7 +2143,7 @@ export class StudentEnrollmentComponent {
       await this.studentEnrollmentService.GetOptionalSubjectsByStudentID_enr(StudentID, this.sSOLoginDataModel.DepartmentID, SemesterID)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          debugger
+          //debugger
           this.optionalSubjectList = data['Data']["Table"];// exam id
           this.optionalChildSubjectList = data['Data']["Table1"];
           this.optionalSubjectList.forEach((x: any) => {
