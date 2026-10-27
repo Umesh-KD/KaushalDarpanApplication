@@ -103,7 +103,7 @@ export class CFormComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
+
     // Get URL parameter
     this.activatedRoute.paramMap.subscribe((params) => {
       this.url = params.get('url');
@@ -125,7 +125,7 @@ export class CFormComponent implements OnInit {
       selectedSemester: ['all']
     });
     this.searchRequest.SemesterID = 0;
-
+    await this.GetMenuPermission();
     // Optionally, you can call GetAllData() here if you want data loaded on init.
     // this.GetAllData();
   }
