@@ -4,8 +4,9 @@
 
 <app-dashboard-issue-tracker *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Developer"></app-dashboard-issue-tracker>
 
-<app-analytic-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.PolytechnicSuperAdmin "></app-analytic-dashboard>
-<app-admission-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITISuperAdmin "></app-admission-dashboard>
+<!--<app-analytic-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.PolytechnicSuperAdmin "></app-analytic-dashboard>-->   
+<!--<app-admission-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITISuperAdmin "></app-admission-dashboard>-->
+<app-consolated-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITISuperAdmin || this.sSOLoginDataModel.RoleID == _EnumRole.PolytechnicSuperAdmin"></app-consolated-dashboard> <!--// 20261027 Consolidated Dashboard-->
 
 <app-nodal-dashboard *ngIf="this.sSOLoginDataModel.RoleID == 180 || this.sSOLoginDataModel.RoleID == 181 || this.sSOLoginDataModel.RoleID == 182 || this.sSOLoginDataModel.RoleID == 183 ||this.sSOLoginDataModel.RoleID == 184"></app-nodal-dashboard>
 <app-dte-nodal-dashboard *ngIf="this.sSOLoginDataModel.RoleID == 185 || this.sSOLoginDataModel.RoleID == 186 || this.sSOLoginDataModel.RoleID == 187 || this.sSOLoginDataModel.RoleID == 188 || this.sSOLoginDataModel.RoleID == 189"></app-dte-nodal-dashboard>
@@ -13,7 +14,13 @@
 <!--<app-bter-dashboard *ngIf="this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon"></app-bter-dashboard>-->
 <app-bter-dashboard *ngIf="this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon || this.sSOLoginDataModel.RoleID ==_EnumRole.DTE"></app-bter-dashboard> <!--// new role added 20261014-->
 <app-placement-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.AdminNodel || this.sSOLoginDataModel.RoleID == _EnumRole.TPO"></app-placement-dashboard>
-<app-principle-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Principal || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNonDegree"></app-principle-dashboard>
+<app-principle-dashboard 
+   *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Principal || 
+         this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon || 
+         this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNonDegree ||
+         this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNodal_Eng ||
+         this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNodal_NonEng">
+</app-principle-dashboard>
 
 <app-jdte-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE
 || this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER

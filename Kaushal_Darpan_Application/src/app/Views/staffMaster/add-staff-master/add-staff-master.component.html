@@ -152,7 +152,7 @@
     </div>-->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Email <span class="StarMarking">*</span></label>
-          <input autocomplete="off" type="email" class="form-input" id="txtEmail" value="TEST@gmail.com" placeholder="Enter Applicant Email" formControlName="txtEmail" [(ngModel)]="staffDetailsFormData.Email" maxlength="40">
+          <input autocomplete="off" type="email" class="form-input" id="txtEmail" value="TEST@gmail.com" placeholder="Enter Email" formControlName="txtEmail" [(ngModel)]="staffDetailsFormData.Email" maxlength="40">
           <div *ngIf="isSubmitted && _StaffMasterFormGroup.txtEmail.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.txtEmail.errors.required">
               <i aria-hidden="true"></i> This field

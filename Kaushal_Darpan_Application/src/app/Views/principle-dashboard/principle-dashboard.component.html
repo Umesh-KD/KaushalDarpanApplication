@@ -254,12 +254,14 @@
 
 <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event"
   data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
-  aria-controls="multiCollapseExample3">
+  aria-controls="multiCollapseExample3"
+  *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Principal || sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon">
   <b class="text-1xl-5"><i class="ti ti-list"></i> OtherType</b> <button class="btn btn-primary" type="button"
     data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
     aria-controls="multiCollapseExample3"><i class="ti ti-chevron-down"></i></button>
 </div>
-<div class="collapse multi-collapse show" id="multiCollapseExample3">
+<div class="collapse multi-collapse show" id="multiCollapseExample3"
+  *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Principal || sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon">
   <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
     <div class="col-lg-3" *ngFor="let item of viewAdminDashboardListOther; let i = index">
       <div class="card" *ngIf="item.URL != 'principledashreport' && item.ListType!='inventory'">
@@ -302,12 +304,14 @@
 </div>
 <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event"
   data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
-  aria-controls="multiCollapseExample3">
+  aria-controls="multiCollapseExample3"
+  *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Principal || sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon">
   <b class="text-1xl-5"><i class="ti ti-list"></i> Leave Application</b> <button class="btn btn-primary" type="button"
     data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
     aria-controls="multiCollapseExample3"><i class="ti ti-chevron-down"></i></button>
 </div>
-<div class="collapse multi-collapse show" id="multiCollapseExample3">
+<div class="collapse multi-collapse show" id="multiCollapseExample3"
+  *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Principal || sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon">
   <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
     <div class="col-lg-3" *ngFor="let item of viewAdminDashboardListLeave; let i = index">
       <div class="card" *ngIf="item.URL == 'LeaveValidation' && item.ListType=='Leave'">
@@ -336,12 +340,14 @@
 
 <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event"
   data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
-  aria-controls="multiCollapseExample3">
+  aria-controls="multiCollapseExample3"
+  *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Principal || sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon">
   <b class="text-1xl-5"><i class="ti ti-list"></i> Allotment</b> <button class="btn btn-primary" type="button"
     data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
     aria-controls="multiCollapseExample3"><i class="ti ti-chevron-down"></i></button>
 </div>
-<div class="collapse multi-collapse show" id="multiCollapseExample3">
+<div class="collapse multi-collapse show" id="multiCollapseExample3"
+  *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Principal || sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon">
   <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
     <div class="col-lg-3" *ngFor="let item of viewAdminDashboardAllotment; let i = index">
       <div class="card" *ngIf=" item.ListType=='Allotment'">
@@ -374,12 +380,14 @@
 
 <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event"
   data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true"
-  aria-controls="multiCollapseExample1">
+  aria-controls="multiCollapseExample1"
+  *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Principal || sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon">
   <b class="text-1xl-5"><i class="ti ti-list"></i> Staff Details</b> <button class="btn btn-primary" type="button"
     data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true"
     aria-controls="multiCollapseExample1"><i class="ti ti-chevron-down"></i></button>
 </div>
-<div class="collapse multi-collapse show" id="multiCollapseExample1">
+<div class="collapse multi-collapse show" id="multiCollapseExample1"
+  *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Principal || sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon">
   <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
     <div class="col-lg-3" *ngFor="let item of viewJDTEStaffDetailList; let i = index">
       <div class="card" *ngIf="item.URL != 'principledashreport' && item.ListType!='inventory'">
@@ -408,12 +416,14 @@
 
 <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event"
   data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
-  aria-controls="multiCollapseExample3">
+  aria-controls="multiCollapseExample3"
+  *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Principal || sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon">
   <b class="text-1xl-5"><i class="ti ti-list"></i> Relieving Record</b> <button class="btn btn-primary" type="button"
     data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true"
     aria-controls="multiCollapseExample3"><i class="ti ti-chevron-down"></i></button>
 </div>
-<div class="collapse multi-collapse show" id="multiCollapseExample3">
+<div class="collapse multi-collapse show" id="multiCollapseExample3"
+  *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Principal || sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon">
   <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
     <div class="col-lg-3" *ngFor="let item of viewJDTEReleiving; let i = index">
       <div class="card" *ngIf="item.URL != 'principledashreport' && item.ListType!='inventory'">

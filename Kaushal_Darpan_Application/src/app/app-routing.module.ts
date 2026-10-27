@@ -1089,7 +1089,7 @@ const routes: Routes = [
       { path: 'DispatchToInstitute', loadChildren: () => import('./Views/DispatchManagement/dispatch-to-institute/dispatch-to-institute.module').then(m => m.DispatchToInstituteModule) },
 
       { path: 'DispatchGroupList', loadChildren: () => import('./Views/DispatchManagement/dispatch-group-list/dispatch-group-list.module').then(m => m.DispatchGroupListModule) },
-      /*   { path: 'AllotmentStatus', loadChildren: () => import('./Views/Emitra/allotment-status/allot-status.module').then(m => m.AllotStatusModule) },*/
+      /*   { path: 'AllotmentStatus', loadChildren: () => import('./Views/Emitra/allotment-status/allot-status.module').then(m => ExaminerDispatchRevalVerifym.AllotStatusModule) },*/
       { path: 'PrincipalDispatchGroup', loadChildren: () => import('./Views/DispatchManagement/principal-dispatch-group/principal-dispatch-group.module').then(m => m.PrincipalDispatchGroupModule) },
 
       { path: 'PolytechnicReport', loadChildren: () => import('./Views/polytechnic-report/polytechnic-report.module').then(m => m.PolytechnicReportModule) },
@@ -1858,6 +1858,7 @@ const routes: Routes = [
       { path: 'student-lifecycle-analytics-tab', loadChildren: () => import('./Views/Tableau-Analytics/tableau-student-lifecycle-analytics/tableau-student-lifecycle-analytics.module').then(m => m.TableauStudentLifecycleAnalyticsModule) },
       { path: 'executive-analytics-tab', loadChildren: () => import('./Views/Tableau-Analytics/tableau-executive-analytics/tableau-executive-analytics.module').then(m => m.TableauExecutiveAnalyticsModule) },
       { path: 'Hostel-Management-Dashboard', loadChildren: () => import('./Views/analytic-dashboardNew/hostel-management-dashboard/hostel-management-dashboard.module').then(m => m.HostelManagementDashboardModule) },
+      { path: 'Consolidated-Dashboard', loadChildren: () => import('./Views/Tableau-Analytics/consolated-dashboard/consolated-dashboard.module').then(m => m.ConsolatedDashboardModule), title:'Consolidated Dashboard' },
 
     ]
   },

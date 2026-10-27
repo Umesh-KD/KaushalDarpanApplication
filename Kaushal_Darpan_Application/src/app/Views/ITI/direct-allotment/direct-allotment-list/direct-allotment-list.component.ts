@@ -342,5 +342,6 @@ export class DirectAllotmentListComponent {
 
 
 
+
 }
 

@@ -1066,7 +1066,7 @@ debugger
         this.loaderService.requestEnded();
       }, 200);
     }
-  }
+  } 
 
 
   onSearchChange() {

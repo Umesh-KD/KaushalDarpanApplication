@@ -505,7 +505,7 @@ export class AddCollegeMasterComponent implements OnInit {
 
   async GetByID() {
     try {
-      debugger
+      //debugger
       this.collegeRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.collegeRequest.SSOID = this.sSOLoginDataModel.SSOID;
       this.collegeRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
@@ -584,7 +584,7 @@ export class AddCollegeMasterComponent implements OnInit {
   }
 
  async onDivisionChange() {
-   debugger
+   //debugger
    const selectedDivisionID = this.instituteForm.get('divisionID')?.value;
 
    await this.commonMasterService.DistrictMaster_DivisionIDWise(selectedDivisionID)
@@ -631,7 +631,7 @@ export class AddCollegeMasterComponent implements OnInit {
   get form() { return this.instituteForm.controls; }
 
   async saveData(withPayment: boolean = false): Promise<boolean | void> {
-    debugger;
+    //debugger;
 
     // Default Capacity to 0 if empty
     if (this.request.Capacity?.toString() === "") {
@@ -651,7 +651,7 @@ export class AddCollegeMasterComponent implements OnInit {
    
     this.refreshAdminRefValidation();
     this.refreshCourseTypeRefValidation();
-    //debugger
+    ////debugger
     // Skip form validation only for Admin roles
     //const isAdminRole = this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon;
     //if (!isAdminRole) {
@@ -833,7 +833,7 @@ export class AddCollegeMasterComponent implements OnInit {
         data = JSON.parse(JSON.stringify(data));
         let response = JSON.parse(JSON.stringify(data));
         if (response?.Data) {
-          debugger
+          //debugger
           let parsedData = JSON.parse(response.Data); // parse string inside Data
           if (parsedData != null) {
             // await this.DuplicateCheck(this.requestSSoApi.SSOID);

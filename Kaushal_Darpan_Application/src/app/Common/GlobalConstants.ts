@@ -85,6 +85,9 @@ export enum EnumRole {
   Principal = 7,
   PrincipalNon = 13,
   PrincipalNonDegree = 207,
+
+  PrincipalNodal_Eng = 286,
+  PrincipalNodal_NonEng = 287,
   Student = 3,
   Invigilator = 11,//Center Superintendent
   Invigilator_NonEng = 57,//Center Superintendent

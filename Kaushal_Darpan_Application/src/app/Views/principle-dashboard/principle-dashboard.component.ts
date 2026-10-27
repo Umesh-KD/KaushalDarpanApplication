@@ -48,6 +48,7 @@ export class PrincipleDashboardComponent {
   public searchRequest = new StaffDashboardSearchModel();
   public search=new EM_JDTEDashboardSearchModel();
   public staffSearchRequest = new StaffMasterSearchModel();
+  public _EnumRole = EnumRole;
 
   isProfileComplete: boolean = false;
   private readonly dateMessages: { [key: number]: string } = {
@@ -76,7 +77,12 @@ export class PrincipleDashboardComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.CheckProfileStatus();
 debugger
-    if ((this.sSOLoginDataModel.RoleID == EnumRole.Principal || EnumRole.PrincipalNon)) {
+    if (
+      this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng || 
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
+    ) {
       await this.CheckProfileStatus_SELF();
 
       if (this.StaffMasterList.length > 0) {
@@ -211,7 +217,12 @@ debugger
     else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DTENON || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR) {
       this.search.CommonID = 88;
     }
-    else if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+    else if (
+      this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng || 
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
+    ) {
       this.search.CommonID = 87;
     }
     // else if (this.sSOLoginDataModel.RoleID == 239) {

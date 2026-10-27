@@ -1038,7 +1038,11 @@ uploa
               </table>
 
             </div>
-            <div *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.Principal || this.sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon) && (requestStudent.status == _enumExamStudentStatus.SelectedForEnrollment)">
+            <div *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.Principal || 
+                          this.sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon ||
+                          this.sSOLoginDataModel.RoleID==_EnumRole.PrincipalNodal_Eng || 
+                          this.sSOLoginDataModel.RoleID==_EnumRole.PrincipalNodal_NonEng) && 
+                          (requestStudent.status == _enumExamStudentStatus.SelectedForEnrollment)">
               <!-- Label for "Verified For Examination" -->
               <label class="text-gray-800 text-sm font-bold inline-block mb-1">Verified For Enrollment</label>
               <!-- Radio button options for Yes or No -->

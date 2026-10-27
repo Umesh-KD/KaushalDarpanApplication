@@ -440,7 +440,13 @@
               </p>
             </td> -->
             <td>
-              {{row.ProfileStatus}}
+              <!-- {{row.ProfileStatus}} -->
+              {{row.ProfileStatusID == _EnumEMProfileStatus.Pending ? 'Pending at Employee level for profile updation' 
+              : row.ProfileStatusID == _EnumEMProfileStatus.Completed ? 'Profile Completed by Employee'
+              : row.ProfileStatusID == _EnumEMProfileStatus.LockAndSubmit ? 'Locked and Submitted by Employee' 
+              : row.ProfileStatusID == _EnumEMProfileStatus.Approve ? 'Approved by Principal'
+              : row.ProfileStatusID == _EnumEMProfileStatus.Revert ? 'Revert by Principal'
+              : row.ProfileStatus}}
             </td>
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">

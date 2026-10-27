@@ -106,8 +106,13 @@ export class ViewVerifyRollListComponent {
     this.UserID = this.sSOLoginDataModel.UserID;
     this.MobileNo = Number(this.sSOLoginDataModel.Mobileno ?? 0)
 
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
-      || this.sSOLoginDataModel.RoleID == EnumRole.Invigilator || this.sSOLoginDataModel.RoleID == EnumRole.Invigilator_NonEng
+    if (
+      this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || 
+      this.sSOLoginDataModel.RoleID == EnumRole.Invigilator || 
+      this.sSOLoginDataModel.RoleID == EnumRole.Invigilator_NonEng ||
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng || 
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
     ) {
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.insDisabled = true;

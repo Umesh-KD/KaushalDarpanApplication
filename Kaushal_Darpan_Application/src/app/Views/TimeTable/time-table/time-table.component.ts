@@ -144,7 +144,12 @@ export class TimeTableComponent implements OnInit {
   {
     this.TimeTableID = id
     await this.GetTimeTableByID(id)
-    if(this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon){
+    if(
+      this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng || 
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
+    ){
       await this.GetInvigilatorByID(id)
     }
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
@@ -260,7 +265,12 @@ export class TimeTableComponent implements OnInit {
     }
 
 
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+    if (
+      this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng || 
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
+    ) {
       this.searchRequest.Status=14
     }
     try {

@@ -178,6 +178,7 @@ export class CampusPostHistoryComponent {
     this.ToDate = "";
     this.HiringRoleID = 0;
     this.DDLSearchBy = 0;
+    this.btn_SearchClick();    // default Filter Apply and fetch List
   }
   async CampusOnPostAction(content: any, PostID: number) {
     this.requestAction.PostID = PostID;
