@@ -153,7 +153,7 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"
                  for="fileEmployeePhoto">
-            Employee ID Card Photo :
+            Employee ID Card Photo : <span class="StarMarking">*</span>
           </label>
           <div class="flex fileUploader">
             <input id="fileEmployeePhoto" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -292,7 +292,7 @@
         <div *ngIf="request.Purpose != 0">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"
                  for="PurposeDocPhoto">
-            {{request.Purpose == 1 ? 'Private (Application)' : request.Purpose == 2 ? 'On Duty Documents' : 'Training Documents'}} Upload:
+            {{request.Purpose == 1 ? 'Private (Application)' : request.Purpose == 2 ? 'On Duty Documents' : 'Training Documents'}} Upload:  <span class="StarMarking">*</span>
           </label>
           <div class="flex fileUploader">
             <input id="PurposeDocPhoto" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -311,7 +311,7 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"
                  for="IDProofPhoto">
-            Valid Photo ID / Address ID such as Aadhar / Passport / Licence:
+            Valid Photo ID / Address ID such as Aadhar / Passport / Licence:  <span class="StarMarking">*</span>
           </label>
           <div class="flex fileUploader">
             <input id="IDProofPhoto" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
