@@ -777,7 +777,7 @@
 
             <div>
               <label for="ddlCategoryB_ID" class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Category B <span class="StarMarking">*</span>
+                Category B <!--<span class="StarMarking">*</span>-->
               </label>
               <select class="form-select" id="ddlCategoryB_ID" name="ddlCategoryB_ID"
                       [(ngModel)]="requestStudent.CategoryB_ID" formControlName="ddlCategoryB_ID">
@@ -786,12 +786,12 @@
                   {{item.CasteCategoryName}}
                 </option>
               </select>
-              <div *ngIf="isSubmitted&&EditStudentDataform.ddlCategoryB_ID.errors" class="text-danger">
+              <!--<div *ngIf="isSubmitted&&EditStudentDataform.ddlCategoryB_ID.errors" class="text-danger">
                 <p *ngIf="!EditStudentDataform.ddlCategoryB_ID.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This
                   field is required .!
                 </p>
-              </div>
+              </div>-->
             </div>
 
             <div>
@@ -811,16 +811,16 @@
 
             <div>
               <label for="txtEmail" class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Email
+                Email   <span class="StarMarking">*</span>
               </label>
               <input type="text" class="form-input" id="txtEmail" name="txtEmail" formControlName="txtEmail"
                      [(ngModel)]="requestStudent.Email">
-              <!--<div *ngIf="isSubmitted&&EditStudentDataform.txtEmail.errors" class="text-danger">
+              <div *ngIf="isSubmitted&&EditStudentDataform.txtEmail.errors" class="text-danger">
                 <p *ngIf="EditStudentDataform.txtEmail.errors.required">
                   <i aria-hidden="true"></i> This field is
                   required .!
                 </p>
-              </div>-->
+              </div>
             </div>
 
             <!--<div>
@@ -833,10 +833,16 @@
 
             <div>
 
-              <label for="txtAadharNo" class="text-gray-800 text-sm font-medium inline-block mb-1">Aadhar No.</label>
-              <input type="text" class="form-input disabled" id="txtAadharNo" disabled
-                     name="txtAadharNo" [ngModelOptions]="{standalone: true}"
-                     [(ngModel)]="requestStudent.AadharNo">
+              <label for="txtAadharNo" class="text-gray-800 text-sm font-medium inline-block mb-1">Aadhar No. <span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtAadharNo" formControlName="txtAadharNo"
+                     name="txtAadharNo" [(ngModel)]="requestStudent.AadharNo">
+              <div *ngIf="isSubmitted&&EditStudentDataform.txtAadharNo.errors" class="text-danger">
+                <p *ngIf="EditStudentDataform.txtAadharNo.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required .!
+                </p>
+              </div>
+
             </div>
 
             <div>
@@ -845,7 +851,7 @@
               </label>
               <input type="text" class="form-input" id="txtAbc" name="txtAbc" formControlName="txtAbc" maxlength="12"
                      [(ngModel)]="requestStudent.ABCID">
-              <!-- <div *ngIf="isSubmitted&&EditStudentDataform.txtAbc.errors" class="text-danger">
+               <div *ngIf="isSubmitted&&EditStudentDataform.txtAbc.errors" class="text-danger">
                 <p *ngIf="EditStudentDataform.txtAbc.errors.required">
                   <i aria-hidden="true"></i> This field is
                   required .!
@@ -854,7 +860,7 @@
                   <i aria-hidden="true"></i>  This field is
                   required .!
                 </p>
-              </div> -->
+              </div> 
             </div>
 
 
@@ -927,7 +933,7 @@
               <input type="text" class="form-input" id="txtBankName" name="txtBankName" formControlName="txtBankName"
                      [(ngModel)]="requestStudent.BankName">
             </div>
-uploa
+
             <div>
               <label for="txtIFSCCode" class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Bank IFSC
