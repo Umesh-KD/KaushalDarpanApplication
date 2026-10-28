@@ -454,6 +454,37 @@
         </div>
 
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Current Drawn Pay Level<span
+              class="StarMarking">*</span> </label>
+          <select class="form-select " name="CurrentDrawnPayLevelID" id="CurrentDrawnPayLevelID" formControlName="CurrentDrawnPayLevelID"
+            [(ngModel)]="request.CurrentDrawnPayLevelID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of PayLevelDDLList" [value]="item.PayLevelID">{{item.PayLevel}}</option>
+          </select>
+          <div *ngIf="isCASSubmitted && _CareerAdvancementSchemeFormGroup.CurrentDrawnPayLevelID.errors" class="text-danger">
+            <p *ngIf="!_CareerAdvancementSchemeFormGroup.CurrentDrawnPayLevelID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="request.CurrentDrawnPayLevelID!=0">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Basic Salary
+            <span class="StarMarking">*</span>
+          </label>
+          <input class="form-input" placeholder="Enter Basic Salary" name="BasicPay" id="BasicPay"
+            formControlName="BasicPay" [(ngModel)]="request.BasicPay" 
+            (keypress)="validateNumber($event)" />
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.BasicPay.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.BasicPay.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>  
+
+        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark (If any) </label>
           <textarea autocomplete="off" class="form-input " placeholder="Please Enter The Remark" value="12dfgdf"
             name="SSOId" id="Remark" formControlName="Remark" [(ngModel)]="request.Remark">
@@ -527,39 +558,7 @@
               <i aria-hidden="true"></i>This field is required .!
             </p>
           </div>
-        </div>
-
-        <!-- <div *ngIf=" this.IsOterFacultyTech == false">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Current Drawn Salary
-            <span class="StarMarking">*</span>
-          </label>
-          <input class="form-input" placeholder="Enter Current Drawn Salary" name="CurrentDrawnPay" id="CurrentDrawnPay"
-            formControlName="CurrentDrawnPay" [(ngModel)]="request.CurrentDrawnPay" maxlength="2"
-            (keypress)="validateNumber($event)" />
-
-          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.CurrentDrawnPay.errors" class="text-danger">
-            <p *ngIf="_StaffMasterFormGroup.CurrentDrawnPay.errors.required">
-              <i aria-hidden="true"></i>This field is required .!
-            </p>
-          </div>
-        </div> -->
-
-        <!-- <div *ngIf=" this.IsOterFacultyTech == false">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Basic Salary
-            <span class="StarMarking">*</span>
-          </label>
-          <input class="form-input" placeholder="Enter Basic Salary" name="BasicPay" id="BasicPay"
-            formControlName="BasicPay" [(ngModel)]="request.BasicPay" maxlength="2"
-            (keypress)="validateNumber($event)" />
-
-          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.BasicPay.errors" class="text-danger">
-            <p *ngIf="_StaffMasterFormGroup.BasicPay.errors.required">
-              <i aria-hidden="true"></i>This field is required .!
-            </p>
-          </div>
-        </div>         -->
+        </div>      
 
       </div>
 
