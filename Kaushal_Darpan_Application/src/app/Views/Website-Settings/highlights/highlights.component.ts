@@ -72,7 +72,7 @@ export class HighlightsComponent {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    // await this.GetMenuPermission();
+    await this.GetMenuPermission();
     this.todayDate = new Date().toISOString().substring(0, 16);
 
     await this.GetDynamicUploadTypeDDL();
