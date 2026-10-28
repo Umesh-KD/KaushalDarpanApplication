@@ -363,5 +363,15 @@ export class ITIsService {
       catchError(this.handleErrorObservable)
     )
     .toPromise();
-}
+  }
+
+  public async UpdateScholerShipDetails(data: any)
+  {
+    var body = JSON.stringify(data);
+    return await this.http.post(`${this.APIUrl}/UpdateScholerShipDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
