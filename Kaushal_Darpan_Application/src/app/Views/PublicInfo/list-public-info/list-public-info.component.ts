@@ -41,6 +41,8 @@ export class ListPublicInfoComponent implements OnInit {
   public CollegesListAll: any = [];
   public BranchList: any = [];
   public SeatIntakeDataExcel: any = [];
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
   pageNo: any = 1;
   pageSize: any = 50;
@@ -345,5 +347,54 @@ export class ListPublicInfoComponent implements OnInit {
       this.onSearch(3)
     }
   }
+  sortBy(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
 
+    const dir = this.sortDirection === 'asc' ? 1 : -1;
+    const isDateCol = column === 'CreatedDate' || column === 'ModifyDate';
+    const isNumCol = column === 'ActiveStatus';
+
+    this.PublicInfoList = [...this.PublicInfoList].sort((a: any, b: any) => {
+      let x = a[column];
+      let y = b[column];
+
+      if (isDateCol) {
+        x = this.parseDateOrNull(x) ?? 0;
+        y = this.parseDateOrNull(y) ?? 0;
+      } else if (isNumCol) {
+        x = Number(x) || 0;
+        y = Number(y) || 0;
+      } else {
+        x = (x ?? '').toString().toLowerCase();
+        y = (y ?? '').toString().toLowerCase();
+      }
+
+      if (x < y) return -1 * dir;
+      if (x > y) return 1 * dir;
+      return 0;
+    });
+  }
+
+  getSortIcon(column: string): string {
+    if (this.sortColumn !== column) return 'ti ti-arrows-sort';
+    return this.sortDirection === 'asc' ? 'ti ti-sort-ascending' : 'ti ti-sort-descending';
+  }
+
+  // Parses 'dd-MM-yyyy HH:mm:ss' or 'dd-MM-yyyy hh:mm:ss tt'
+  private parseDateOrNull(value: string): number | null {
+    if (!value) return null;
+    const m = value.match(/^(\d{2})-(\d{2})-(\d{4})[ T](\d{1,2}):(\d{2}):(\d{2})\s*(AM|PM)?$/i);
+    if (!m) return null;
+    let hours = parseInt(m[4], 10);
+    if (m[7]) {
+      hours = hours % 12;
+      if (m[7].toUpperCase() === 'PM') hours += 12;
+    }
+    return new Date(+m[3], +m[2] - 1, +m[1], hours, +m[5], +m[6]).getTime();
+  }
 }

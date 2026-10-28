@@ -18,6 +18,8 @@ export class PublicInfoDataModel {
   public Actoin: string = "";
   public FileName: string = "";
   public Dis_FileName: string = "";
+  public ToDate: string = "";
+  public FromDate: string = "";
 }
 
 export class CommonVerifierApiDataModel {

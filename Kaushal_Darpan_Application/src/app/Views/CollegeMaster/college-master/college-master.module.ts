@@ -8,6 +8,7 @@ import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.modu
 
 import { TableSearchFilterPipe } from '../../../Pipes/table-search-filter.pipe';
 import { MaterialModule } from '../../../material.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { MaterialModule } from '../../../material.module';
   imports: [
     CommonModule,MaterialModule,
     FormsModule, ReactiveFormsModule, CommonModule, LoaderModule,
-    CollegeMasterRoutingModule, TableSearchFilterModule
+    CollegeMasterRoutingModule, TableSearchFilterModule,
+    NgSelectModule
   ],
   exports: [TableSearchFilterPipe]
     

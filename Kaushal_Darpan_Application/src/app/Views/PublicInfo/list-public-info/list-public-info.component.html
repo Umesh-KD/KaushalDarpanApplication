@@ -34,6 +34,21 @@
               <option value="3">Notes</option>
             </select>
           </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              From Date:
+            </label>
+            <input type="date" class="form-input" [(ngModel)]="request.FromDate">
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              To Date:
+            </label>
+            <input type="date" class="form-input" [(ngModel)]="request.ToDate" [min]="request.FromDate">
+          </div>
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Search By Text:
@@ -84,11 +99,34 @@
           <tr>
             <th class="text-left">#</th>
 
-            <th align="left">Type</th>
-            <th align="left">Description English</th>
-            <th align="left">Description Hindi</th>
-            <th align="left">LinkUrl</th>
-            <th class="text-left">Status</th>
+            <th align="left" class="sortable" (click)="sortBy('PublicInfoType')">
+              Type <i [class]="getSortIcon('PublicInfoType')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('DescriptionEn')">
+              Description English <i [class]="getSortIcon('DescriptionEn')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('DescriptionHi')">
+              Description Hindi <i [class]="getSortIcon('DescriptionHi')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('LinkUrl')">
+              LinkUrl <i [class]="getSortIcon('LinkUrl')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('CreatedBy')">
+              CreatedBy <i [class]="getSortIcon('CreatedBy')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('CreatedDate')">
+              CreatedDate <i [class]="getSortIcon('CreatedDate')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('ModifyBy')">
+              ModifyBy <i [class]="getSortIcon('ModifyBy')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('ModifyDate')">
+              ModifyDate <i [class]="getSortIcon('ModifyDate')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('ActiveStatus')">
+              Status <i [class]="getSortIcon('ActiveStatus')"></i>
+            </th>
+
             <th class="text-left">File</th>
             <th style="width: 80px;">Action</th>
           </tr>
@@ -100,6 +138,10 @@
             <td align="left">{{row.DescriptionEn}}</td>
             <td align="left">{{row.DescriptionHi}}</td>
             <td align="left">{{row.LinkUrl}}</td>
+            <td>{{row.CreatedBy}}</td>
+            <td>{{row.CreatedDate}}</td>
+            <td>{{row.ModifyBy}}</td>
+            <td>{{row .ModifyDate}}</td>
 
             <td align="left">
               <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">

@@ -24,22 +24,33 @@
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <!-- Search By college name -->
       <div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By name</label>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Head name</label>
         <input class="form-input" type="text" id="Name" [(ngModel)]="searchRequest.HeadName" placeholder="Name">
       </div>
 
       <div>
-        <button 
-            class="btn bg-info text-white mt-6 me-1" 
-            type="submit" 
-            (click)="GetBudgetHeadMasterData_EM()">
-            <i class="ti ti-search"></i>Search
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+          Budget Type:
+        </label>
+        <select class="form-select" id="EquipmentsId"
+                [(ngModel)]="searchRequest.BudgetTypeID">
+          <option value="0">--- Choose Option ---</option>
+          <option value="1">Planned</option>
+          <option value="2">Unplanned</option>
+        </select>
+      </div>
+
+
+      <div>
+        <button class="btn bg-info text-white mt-6 me-1"
+                type="submit"
+                (click)="GetBudgetHeadMasterData_EM()">
+          <i class="ti ti-search"></i>Search
         </button>
-        <button 
-            class="btn bg-warning text-white mt-6 me-1" 
-            type="submit" 
-            (click)="onResetSearch()">
-            <i class="ti ti-search"></i>Reset
+        <button class="btn bg-warning text-white mt-6 me-1"
+                type="submit"
+                (click)="onResetSearch()">
+          <i class="ti ti-search"></i>Reset
         </button>
       </div>
     </div>
@@ -49,9 +60,10 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> List</b>
-        <div class="flex justify-end flex-wrap items-center">
-
-        </div>
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-excel"></i> Export Excel
+        </a>
+ 
       </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" >
@@ -77,24 +89,44 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr No</th>
-            <th class="text-left">Budget Type</th>
-            <th class="text-left">Head Name</th>
-            <th class="text-left">Head Description</th>
+            <th class="text-left sortable" (click)="sortBy('BudgetType_str')">
+              Budget Type <i [class]="getSortIcon('BudgetType_str')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('HeadName')">
+              Head Name <i [class]="getSortIcon('HeadName')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('HeadDescription')">
+              Head Description <i [class]="getSortIcon('HeadDescription')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('CreatedBy')">
+              Created By <i [class]="getSortIcon('CreatedBy')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('CreatedDate')">
+              Created Date <i [class]="getSortIcon('CreatedDate')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('ModifyBy')">
+              Modify By <i [class]="getSortIcon('ModifyBy')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('ModifyDate')">
+              Modify Date <i [class]="getSortIcon('ModifyDate')"></i>
+            </th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of UCHeadDataList; let idx=index;">
-
             <td align="left">{{idx+1}}</td>
             <td>{{item.BudgetType_str}}</td>
             <td>{{item.HeadName}}</td>
-            <td>{{item.HeadDescription}}
+            <td>{{item.HeadDescription}}</td>
+            <td>{{item.CreatedBy}}</td>
+            <td>{{item.CreatedDate}}</td>
+            <td>{{item.ModifyBy}}</td>
+            <td>{{item.ModifyDate}}</td>
             <td align="left">
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important"> 
-                 <a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_addHead,item.HeadID)"   title="Edit"><i class="ti ti-pencil"></i></a>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_addHead,item.HeadID)" title="Edit"><i class="ti ti-pencil"></i></a>
                 <a href="javascript:void(0);" title="Delete" (click)="onDeleteClick(item.HeadID)"><i class="ti ti-trash"></i></a>
-                
               </div>
             </td>
           </tr>

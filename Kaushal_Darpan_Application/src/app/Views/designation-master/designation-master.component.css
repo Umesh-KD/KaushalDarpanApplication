@@ -58,3 +58,18 @@
 .slider.round:before {
   border-radius: 50%;
 }
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+  th.sortable i {
+    font-size: 14px;
+    margin-left: 4px;
+    opacity: 0.6;
+  }
+
+  th.sortable:hover i {
+    opacity: 1;
+  }

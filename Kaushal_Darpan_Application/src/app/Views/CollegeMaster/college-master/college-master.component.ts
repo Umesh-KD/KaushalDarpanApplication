@@ -28,6 +28,8 @@ export class CollegeMasterComponent implements OnInit {
   public toggleSearchCriteria(): void {
     this.isSearchVisible = !this.isSearchVisible;
   }
+  DistrictIds: number[] = [];
+
   //till here
   public ErrorMessage: any = [];
   public isLoading: boolean = false;
@@ -121,6 +123,7 @@ export class CollegeMasterComponent implements OnInit {
   ResetControl() {
     // Reset all filter fields
     this.searchByInstituteCode = '';
+    this.DistrictIds=[]
     this.searchByInstituteName = '';
     this.searchByInstituteEmail = '';
     this.searchByManagementType = '';
@@ -369,7 +372,7 @@ export class CollegeMasterComponent implements OnInit {
     this.searchRequest.SSOID = this.searchBySSOID;
     this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
 
-
+    this.searchRequest.DistrictIds = (this.DistrictIds || []).join(',');   // e.g. "1,5,9"
     //this.searchRequest.Status = this.searchByStatus;
     this.searchRequest.PageNumber = this.pageNo
     this.searchRequest.PageSize = this.pageSize

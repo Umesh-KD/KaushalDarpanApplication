@@ -17,10 +17,13 @@ export class DesignationMasterDataModel {
 export class DesignationMasterSearchModel {
   public DesignationID: number = 0;
   public DesignationNameEnglish: string = '';
+  public FromDate: string = '';
+  public ToDate: string = '';
   public StaffTypeID: Number = 0;
   public IsActive: boolean = true;
   public UserID: number = 0;
   public Gaz_NonGaz: number = 0;
+  public ActiveStatus:number=-1
 }
 
 export class QueryRequestModel {
