@@ -1858,6 +1858,7 @@ const routes: Routes = [
       { path: 'student-lifecycle-analytics-tab', loadChildren: () => import('./Views/Tableau-Analytics/tableau-student-lifecycle-analytics/tableau-student-lifecycle-analytics.module').then(m => m.TableauStudentLifecycleAnalyticsModule) },
       { path: 'executive-analytics-tab', loadChildren: () => import('./Views/Tableau-Analytics/tableau-executive-analytics/tableau-executive-analytics.module').then(m => m.TableauExecutiveAnalyticsModule) },
       { path: 'Hostel-Management-Dashboard', loadChildren: () => import('./Views/analytic-dashboardNew/hostel-management-dashboard/hostel-management-dashboard.module').then(m => m.HostelManagementDashboardModule) },
+      { path: 'Consolidated-Dashboard', loadChildren: () => import('./Views/Tableau-Analytics/consolated-dashboard/consolated-dashboard.module').then(m => m.ConsolatedDashboardModule), title:'Consolidated Dashboard' },
 
     ]
   },

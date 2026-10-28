@@ -58,7 +58,7 @@ export class BranchesMasterComponent implements OnInit {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     // debugger
-    // await this.GetMenuPermission();
+     await this.GetMenuPermission();
     this.request.UserID = this.sSOLoginDataModel.UserID;
     this.UserID = this.sSOLoginDataModel.UserID;
     await this.GetStreamMasterList();

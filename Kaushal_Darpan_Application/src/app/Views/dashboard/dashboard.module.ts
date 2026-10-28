@@ -66,6 +66,7 @@ import { AnalyticDashboardModule } from '../analytic-dashboard/analytic-dashboar
 import { AdmissionDashboardModule } from '../admission-dashboard/admission-dashboard.module';
 
 import { CommitteeInchargeDashboardModule } from '../../Views/committee-incharge-dashboard/committee-incharge-dashboard.module';
+import { ConsolatedDashboardModule } from '../../Views/Tableau-Analytics/consolated-dashboard/consolated-dashboard.module';
 /// work here 
 
 
@@ -131,7 +132,8 @@ import { CommitteeInchargeDashboardModule } from '../../Views/committee-incharge
     AdmissionDashboardModule,
 
     PostPlanningDashboardITIModule,
-    CommitteeInchargeDashboardModule
+    CommitteeInchargeDashboardModule,
+    ConsolatedDashboardModule
     
     
   ]

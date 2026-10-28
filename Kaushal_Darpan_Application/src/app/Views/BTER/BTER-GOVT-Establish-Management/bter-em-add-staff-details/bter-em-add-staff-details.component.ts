@@ -165,6 +165,9 @@ export class BterEMAddStaffDetailsComponent {
       Pincode: ['', [Validators.required]],
       PostServiceTypeID: [''],
       ChildPostServiceTypeID: [''],
+
+      CurrentDrawnPayLevelID: [''],
+      BasicPay: [''],
     });
 
     this.AddsubjectFormGroup = this.formBuilder.group({
@@ -732,6 +735,13 @@ export class BterEMAddStaffDetailsComponent {
   async SaveData(isSaveDraft: boolean = false) {
     debugger
 
+    if(this.StaffMasterFormGroup.get('CurrentDrawnPayLevelID')?.value!=0 || this.StaffMasterFormGroup.get('CurrentDrawnPayLevelID')?.value!=null || this.StaffMasterFormGroup.get('CurrentDrawnPayLevelID')?.value!=undefined){
+      if(this.StaffMasterFormGroup.get('BasicPay')?.value==0 || this.StaffMasterFormGroup.get('BasicPay')?.value==null || this.StaffMasterFormGroup.get('BasicPay')?.value==undefined){
+        this.toastr.error("Please enter basic pay.");
+        return;
+      }
+    }
+
     if (this.StaffQualificationList?.length > 0) {
       const has10thOr12th = this.StaffQualificationList.some((item: any) => item.QualificationID == 14 || item.QualificationID == 15);
       // Neither 10th nor 12th entered 
@@ -810,6 +820,9 @@ export class BterEMAddStaffDetailsComponent {
       }
     }
 
+    console.log(this.StaffMasterFormGroup.get('CurrentDrawnPayLevelID')?.value);
+    console.log(this.StaffMasterFormGroup.get('BasicPay')?.value);
+    
     this.loaderService.requestStarted();
     this.request.StaffUserID = this.sSOLoginDataModel.UserID;
     this.request.bterStaffSubjectListModel = this.staffDetailsFormData.StaffSubjectListModel;
@@ -2270,6 +2283,7 @@ debugger
       request.Action = "GetPayLevelDDL";
       await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
+        debugger
         this.PayLevelDDLList = data['Data'];
       })
     } catch (error) {

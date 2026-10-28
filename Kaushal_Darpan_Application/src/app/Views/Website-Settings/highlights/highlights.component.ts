@@ -330,7 +330,9 @@ export class HighlightsComponent {
           this.file.type == 'image/jpeg' ||
           this.file.type == 'image/jpg' ||
           this.file.type == 'image/png' ||
-          this.file.type == 'application/pdf'
+          this.file.type == 'application/pdf' ||
+          this.file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+          this.file.type === 'application/vnd.ms-excel'
         ) {
           //size validation
           if (this.file.size > 2000000) {
