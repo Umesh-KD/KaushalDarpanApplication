@@ -299,7 +299,8 @@
                   <i class="fa fa-file-o"></i>
                 </a>
 
-                <a *ngIf="row.SemesterID==3" href="javascript:void(0);" class="bg-gray-200" title="Assign Optional Subject" 
+                <a *ngIf="((row.SemesterID==3 && row.CourseType==1) || (row.SemesterID==1 && row.CourseType==2))"
+                   href="javascript:void(0);" class="bg-gray-200" title="Assign Optional Subject" 
                    (click)="StudentOptionalSubjectModelView(OptionalSubjectModal, row.StudentID, row.SemesterID)">
                   <i class="fa fa-file-o"></i>
                 </a>
