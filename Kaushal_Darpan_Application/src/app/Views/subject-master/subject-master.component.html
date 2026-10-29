@@ -48,7 +48,7 @@
             </div>-->
             <div>
               <label for="ddlStream" class="text-gray-800 text-sm font-medium inline-block mb-2">
-                Course<span class="StarMarking">*</span>
+                Branch<span class="StarMarking">*</span>
               </label>
               <select class="form-select" id="ddlStreamType" name="ddlStream" [(ngModel)]="request.StreamID"
                       formControlName="ddlStream" (change)="onCourseChange()">
@@ -349,9 +349,9 @@
           <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
             <div>
               <label for="ddlStream" class="text-gray-800 text-sm font-medium inline-block mb-2">
-                Course<span class="StarMarking">*</span>
+                Branch<span class="StarMarking">*</span>
               </label>
-              <select class="form-select" id="ddlStreamType" name="ddlStream" [(ngModel)]="SearchRequest.BranchID"  >
+              <select class="form-select" id="ddlStreamType" name="ddlStream" [(ngModel)]="SearchRequest.BranchID">
                 <option value="0">-- Select --</option>
                 <option *ngFor="let item of BranchesMasterList" value="{{item.StreamID}}">{{item.StreamName}}</option>
               </select>
@@ -370,17 +370,26 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-2">Scheme  <span class="StarMarking">*</span></label>
-              <select class="form-select" name="ddlSchemeID"  id="ddlSchemeID" [(ngModel)]="SearchRequest.SchemeID" (change)="onSchemeChange()">
+              <select class="form-select" name="ddlSchemeID" id="ddlSchemeID" [(ngModel)]="SearchRequest.SchemeID" (change)="onSchemeChange()">
                 <option [value]="0">--Select--</option>
                 <option [value]="1347">Old</option>
                 <option [value]="1348">New</option>
               </select>
             </div>
-           
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-2">IsParent Subject  <span class="StarMarking">*</span></label>
+              <select class="form-select" name="ddlSchemeID" id="ddlSchemeID" [(ngModel)]="SearchRequest.IsParent" >
+                <option [value]="-1">--Select--</option>
+                <option [value]="1">Yes</option>
+                <option [value]="0">No</option>
+              </select>
+            </div>
+
             <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
               <div class="flex align-center flexBtn mt-7">
-                <button type="button"  (click)="GetSubjectMasterList()" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Search </button>
-                <button type="button"  (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset </button>
+                <button type="button" (click)="GetSubjectMasterList()" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Search </button>
+                <button type="button" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset </button>
               </div>
             </div>
           </div>

@@ -34,7 +34,8 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
 export class BTEREMStaffListComponent {
   StaffMasterFormGroup!: FormGroup;
   StaffMasterFormGroupGuestHouse!: FormGroup;
-
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
   public searchRequest = new BTER_EM_StaffListSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public deleteRequest = new BTER_EM_DeleteModel();
@@ -57,6 +58,7 @@ export class BTEREMStaffListComponent {
   //till here
   public menuDataModel: MenuDataModel[] = [];
   public StaffTypeList: any = [];
+  public RoleList: any = [];
   public CategoryList: any = [];
   public OfficeList: any = [];
   public OfficeWorkList: any = [];
@@ -71,6 +73,7 @@ export class BTEREMStaffListComponent {
   public DesignationMasterDDLList: any = [];
   public GenderList: any = [];
   public InstituteMasterDDLList: any[] = [];
+  public InstituteMasterDDLListFilter: any[] = [];
   public GuestHouseNameList: any = [];
   public BugetHeadList:any=[];
   public StaffProfileStatusList:any=[];
@@ -253,6 +256,8 @@ export class BTEREMStaffListComponent {
     await this.GetStaffTypeData();
     await this.GetDesignationMasterData();
     await this.getInstituteMasterList();
+    await this.getInstituteMasterListFilter();
+    await this.GetRoleData()
     await this.GetCategroyData();
     this.approveRequest.WorkOfficeID = 0;
   }
@@ -365,6 +370,23 @@ export class BTEREMStaffListComponent {
     }
   }
 
+  async GetRoleData() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetRoleMasterDDL(1).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.RoleList = data.Data;
+        console.log("RoleList", this.RoleList);
+      })
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   async GetStaffTypeData() {
     try {
       this.loaderService.requestStarted();
@@ -381,6 +403,7 @@ export class BTEREMStaffListComponent {
       }, 200);
     }
   }
+
 
   async GetCategroyData() {
     debugger;
@@ -975,6 +998,25 @@ export class BTEREMStaffListComponent {
       console.error(error);
     }
   }
+  async getInstituteMasterListFilter() {
+    try {
+      const request: any = {};
+      //request.RoleID = this.sSOLoginDataModel.RoleID;
+      //request.UserID = this.sSOLoginDataModel.UserID;
+      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      request.EndTermId = this.sSOLoginDataModel.EndTermID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.ManagementTypeID = this.searchRequest.InstitutionManagementTypeID; // static passing because we are using this only for govt. institute
+      request.DistrictID = this.searchRequest.DistrictID; // static passing because we are using this only for govt. institute
+      request.Action = "GetInstituteMasterDDL_BTER_EM";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.InstituteMasterDDLListFilter = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async UnlockProfile(StaffUserID: any, SSOID: any, StaffID: any) {
     this.unlockRequest.StaffUserID = StaffUserID;
@@ -1554,4 +1596,54 @@ debugger
       console.error(error);
     }
   }
+
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
+
+  // end table feature
+  sortBy(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    const dir = this.sortDirection === 'asc' ? 1 : -1;
+    const isDateCol = column === 'CreatedDate' || column === 'ModifyDate';
+
+    this.paginatedInTableData = [...this.paginatedInTableData].sort((a: any, b: any) => {
+      let x = a[column];
+      let y = b[column];
+
+      if (isDateCol) {
+        x = this.parseDate(x);
+        y = this.parseDate(y);
+      } else if (typeof x === 'string' || typeof y === 'string') {
+        x = (x ?? '').toString().toLowerCase();
+        y = (y ?? '').toString().toLowerCase();
+      }
+
+      if (x < y) return -1 * dir;
+      if (x > y) return 1 * dir;
+      return 0;
+    });
+  }
+
+  getSortIcon(column: string): string {
+    if (this.sortColumn !== column) return 'ti ti-arrows-sort';
+    return this.sortDirection === 'asc' ? 'ti ti-sort-ascending' : 'ti ti-sort-descending';
+  }
+
+  // Parses 'dd-MM-yyyy hh:mm:ss tt' coming from the proc's FORMAT()
+  private parseDate(value: string): number {
+    if (!value) return 0;
+    const m = value.match(/^(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2}) (AM|PM)$/i);
+    if (!m) return 0;
+    let hours = parseInt(m[4], 10) % 12;
+    if (m[7].toUpperCase() === 'PM') hours += 12;
+    return new Date(+m[3], +m[2] - 1, +m[1], hours, +m[5], +m[6]).getTime();
+  }
+
 }

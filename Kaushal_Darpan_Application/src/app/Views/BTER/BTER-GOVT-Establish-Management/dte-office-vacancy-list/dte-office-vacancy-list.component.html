@@ -23,14 +23,14 @@
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="SearchData.OfficeID" >
+          <select class="form-select" [(ngModel)]="SearchData.OfficeID">
             <option value="0">--Select--</option>
             <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type<span class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="SearchData.StaffTypeID" >
+          <select class="form-select" [(ngModel)]="SearchData.StaffTypeID">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -44,27 +44,30 @@
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
-          <!-- <select class="form-select" [(ngModel)]="SearchData.InstituteID" >
-            <option value="0">--Select--</option>
-            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-          </select> -->
-
-          <ng-select [(ngModel)]="SearchData.InstituteID" [clearable]="false">
-            <ng-option [value]="0">--Select--</ng-option>
-            <ng-container *ngFor="let item of InstituteMasterDDLList">
-              <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
-            </ng-container>
+          <ng-select [items]="InstituteMasterDDLList"
+                     bindLabel="InstituteName"
+                     bindValue="InstituteID"
+                     [multiple]="true"
+                     [closeOnSelect]="false"
+                     [searchable]="true"
+                     [clearable]="true"
+                     placeholder="--All--"
+                     [(ngModel)]="InstituteIds">
           </ng-select>
         </div>
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
-          <select class="form-select" id="BranchID" [(ngModel)]="SearchData.BranchID">
-            <option value="0">--Select--</option>
-            <option *ngFor="let item of StreamMasterDDLList" [value]="item.StreamID">
-              {{item.StreamName}}
-            </option>
-          </select>
+          <ng-select [items]="StreamMasterDDLList"
+                     bindLabel="StreamName"
+                     bindValue="StreamID"
+                     [multiple]="true"
+                     [closeOnSelect]="false"
+                     [searchable]="true"
+                     [clearable]="true"
+                     placeholder="--All--"
+                     [(ngModel)]="BranchIds">
+          </ng-select>
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head</label>
@@ -108,24 +111,56 @@
         <thead>
           <tr>
             <th>S.No</th>
-            <th>Office Name</th>
-            <th>College</th>
-            <th>Name of service</th>
+            <th class="sortable" (click)="sortBy('OfficeName')">
+              Office Name <i [class]="getSortIcon('OfficeName')"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('InstituteName')">
+              College <i [class]="getSortIcon('InstituteName')"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('PostServiceTypeName')">
+              Name of service <i [class]="getSortIcon('PostServiceTypeName')"></i>
+            </th>
             <!-- <th>Institute Name</th> -->
-            <th>Designation Name</th> 
-            <th>Branch</th> 
-            <th>Budget Name</th>
-            <th>Sanctioned Post</th>
-            <th>Working Post </th>
-            <th>Vacant Post</th>
+            <th class="sortable" (click)="sortBy('DesignationName')">
+              Designation Name <i [class]="getSortIcon('DesignationName')"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('BranchName')">
+              Branch <i [class]="getSortIcon('BranchName')"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('BudgetTypeName')">
+              Budget Name <i [class]="getSortIcon('BudgetTypeName')"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('TotalSeatID')">
+              Sanctioned Post <i [class]="getSortIcon('TotalSeatID')"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('PostedSeat')">
+              Working Post <i [class]="getSortIcon('PostedSeat')"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('RemainingSeatID')">
+              Vacant Post <i [class]="getSortIcon('RemainingSeatID')"></i>
+            </th>
             <th>Order Details</th>
-            <th>Comments</th>
-            <th  *ngIf="IsEdit">Active/Inactive</th>
-            <th  *ngIf="IsEdit">Actions</th>
+            <th class="sortable" (click)="sortBy('Comments')">
+              Comments <i [class]="getSortIcon('Comments')"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('CreatedBy')">
+              Created By <i [class]="getSortIcon('CreatedBy')"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('CreatedDate')">
+              Created Date <i [class]="getSortIcon('CreatedDate')"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('ModifyBy')">
+              Modify By <i [class]="getSortIcon('ModifyBy')"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('ModifyDate')">
+              Modify Date <i [class]="getSortIcon('ModifyDate')"></i>
+            </th>
+            <th *ngIf="IsEdit">Active/Inactive</th>
+            <th *ngIf="IsEdit">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let leave of paginatedInTableData;  let idx = index">
+          <tr *ngFor="let leave of paginatedInTableData; let idx = index">
             <td>{{(startInTableIndex+1)+idx}}</td>
             <td>{{ leave.OfficeName }}</td>
             <td>{{ leave.InstituteName }}</td>
@@ -142,14 +177,18 @@
                 <span style="white-space: nowrap;"><b>Order No:</b> {{leave.OrderNumber}}</span>
                 <span style="white-space: nowrap;"><b>Order Date:</b> {{leave.OrderDate}}</span>
                 <span style="white-space: nowrap;">
-                  <b>Order Doc:</b> 
+                  <b>Order Doc:</b>
                   <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/VacancyOrderDocument/' + leave.orderDoc"
-                    class="text-info" target="_blank"> Order</a>
+                     class="text-info" target="_blank"> Order</a>
                 </span>
               </div>
             </td>
             <td>{{ leave.Comments }}</td>
-            <td  *ngIf="IsEdit">
+            <td>{{ leave.CreatedBy }}</td>
+            <td>{{ leave.CreatedDate }}</td>
+            <td>{{ leave.ModifyBy }}</td>
+            <td>{{ leave.ModifyDate }}</td>
+            <td *ngIf="IsEdit">
               <label class="switch">
                 <input type="checkbox"
                        [checked]="leave.ActiveStatus"
@@ -157,11 +196,12 @@
                 <span class="slider round"></span>
               </label>
             </td>
-            <td class="row-line-btn"  *ngIf="IsEdit">
-              <button class="btn bg-info text-white" 
-                *ngIf="!IsView" 
-                [routerLink]="['/add-dte-office-vacancy']"
-                [queryParams]="{ id: leave.ID }">Update
+            <td class="row-line-btn" *ngIf="IsEdit">
+              <button class="btn bg-info text-white"
+                      *ngIf="!IsView"
+                      [routerLink]="['/add-dte-office-vacancy']"
+                      [queryParams]="{ id: leave.ID }">
+                Update
               </button>
               <button *ngIf="leave.PostedSeat == 0" class="btn btn-danger btn-sm" (click)="removeVacancy(leave.ID)">
                 Remove
@@ -179,7 +219,7 @@
             <td>{{ totalWorkingPost }}</td>
             <td>{{ totalVacantPost }}</td>
 
-            <td colspan="4"></td>
+            <td colspan="8"></td>
           </tr>
         </tfoot>
       </table>

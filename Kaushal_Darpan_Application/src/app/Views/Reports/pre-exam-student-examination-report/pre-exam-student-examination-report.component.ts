@@ -47,6 +47,8 @@ export class PreExamStudentExaminationReportComponent {
   public UserID: number = 0
   public RoleID: number = 0
   public InstituteMasterList: any = [];
+  InstituteIds: number[] = [];
+  BranchIds: number[] = [];
   public InstitutionManagementMasterList: any = [];
   public StreamMasterList: any = [];
   public SemesterMasterList: any = [];
@@ -558,6 +560,8 @@ export class PreExamStudentExaminationReportComponent {
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.request.InstituteIDs = (this.InstituteIds || []).join(',');
+      this.request.BranchIDs = (this.BranchIds || []).join(',');
       //call
       this.loaderService.requestStarted();
       await this.preExamStudentExaminationService.GetPreExamStudentReport(this.request)

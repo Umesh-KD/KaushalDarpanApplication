@@ -50,6 +50,7 @@ export class SubjectSearchModel {
   public SubjectID: number = 0
   public CourseType:number=0
   public SchemeID?:number=0
+  public IsParent?:number=-1
 }
 export class ParentSubjectMap{
   public SubjectID: number = 0
