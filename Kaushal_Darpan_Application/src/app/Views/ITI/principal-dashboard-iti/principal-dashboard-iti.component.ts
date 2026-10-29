@@ -54,6 +54,9 @@ export class PrincipalDashboardITIComponent implements OnInit
   public ExamMessage: string = ''
   public ISEligiblecollege: boolean = true
   public ISEligiblecollegeRemark: string = ''
+
+  public SidhEnrollmentDashboard: any[] = [];
+
   constructor(private ITIAdminDashboardServiceService: ITIPrincipalDashboardServiceService, private ITIAdminDashboardService: ITIAdminDashboardServiceService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private encryptionService: EncryptionService,
     private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private sweetAlert2: SweetAlert2) {
@@ -188,6 +191,14 @@ export class PrincipalDashboardITIComponent implements OnInit
           // Filter based on ListType 'OtherType'
           this.viewAdminDashboardListOther = this.viewAdminDashboardList.filter(s => s.ListType === 'OtherType');
           this.viewAdminDashboardListResult = this.viewAdminDashboardList.filter(s => s.ListType === 'Results');
+
+
+
+
+          this.SidhEnrollmentDashboard = this.viewAdminDashboardList.filter(s => s.ListType === 'SidhEnrollment');
+
+
+
         }, (error: any) => console.error(error)
         );
     }

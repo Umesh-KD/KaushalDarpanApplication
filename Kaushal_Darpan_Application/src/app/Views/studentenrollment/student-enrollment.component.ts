@@ -159,6 +159,41 @@ export class StudentEnrollmentComponent {
 
   async ngOnInit() {
 
+    this.EditStudentDataFormGroup = this.formBuilder.group(
+      {
+        txtStudentName: [{ value: '', disabled: true }, Validators.required],
+        txtStudentNameHindi: [{ value: '', disabled: true }, Validators.required],
+        txtFatherName: [{ value: '', disabled: true }, Validators.required],
+        txtFatherNameHindi: [{ value: '', disabled: true }, Validators.required],
+        txtMotherName: [{ value: '', disabled: true }, Validators.required],
+        txtMotherNameHindi: [{ value: '', disabled: true }, Validators.required],
+        ddlStudentTypeID: [{ value: '', disabled: true }],
+        ddlGender: [{ value: '', disabled: true }, Validators.required],
+        txtPapers: [{ value: '', disabled: true },],
+        ddlInstituteID: [{ value: '', disabled: true }, [DropdownValidators]],
+        ddlStreamID: [{ value: '', disabled: true }, [DropdownValidators]],
+        txtMobileNo: ['', Validators.required],
+
+        ddlCategoryA_ID: [{ value: '' }, [DropdownValidators]],
+        //ddlCategoryB_ID: [{ value: '', disabled: true }, [DropdownValidators]],
+        ddlCategoryB_ID: [{ value: '' }],
+        txtDOB: [{ value: '' }, Validators.required],
+        txtEmail: [{ value: '' }, Validators.required],
+        //txtEmail: [''],
+        txtAadharNo: [{ value: '' }, Validators.required],
+        txtAbc: [{ value: '' }, Validators.required],
+        //txtAbc: [''],
+        txtBhamashahNo: [{ value: '', disabled: true },],
+        JanAadharNo: [{ value: '', disabled: true },],
+        txtAddress: [{ value: '' }, Validators.required],
+        txtBankName: [{ value: '', disabled: true },],
+        txtIFSCCode: [{ value: '', disabled: true },],
+        txtBankAccountNo: [{ value: '', disabled: true },],
+        IsVerified: [{ value: '', disabled: false },],
+        /*  ddlSubCategoryA_ID: [{ value: '' },   [DropdownValidators]],*/
+        ddlSubCategoryA_ID: [''],
+      })
+
     this.SearchStudentDataFormGroup = this.formBuilder.group(
       {
         ApplicationNo: [''],
@@ -176,41 +211,7 @@ export class StudentEnrollmentComponent {
         txtStudentName: [''],
         txtMobileNo: [''],
         txtAbc :['']
-      })
-
-    this.EditStudentDataFormGroup = this.formBuilder.group(
-      {
-        txtStudentName: [{ value: '', disabled: true }, Validators.required],
-        txtStudentNameHindi: [{ value: '', disabled: true }, Validators.required],
-        txtFatherName: [{ value: '', disabled: true }, Validators.required],
-        txtFatherNameHindi: [{ value: '', disabled: true }, Validators.required],
-        txtMotherName: [{ value: '', disabled: true }, Validators.required],
-        txtMotherNameHindi: [{ value: '', disabled: true }, Validators.required],
-        ddlStudentTypeID: [{ value: '', disabled: true }],
-        ddlGender: [{ value: '', disabled: true }, Validators.required],
-        txtPapers: [{ value: '', disabled: true },],
-        ddlInstituteID: [{ value: '', disabled: true }, [DropdownValidators]],
-        ddlStreamID: [{ value: '', disabled: true }, [DropdownValidators]],
-        txtMobileNo: ['', Validators.required],
-
-        ddlCategoryA_ID: [{ value: ''}, [DropdownValidators]],
-        //ddlCategoryB_ID: [{ value: '', disabled: true }, [DropdownValidators]],
-        ddlCategoryB_ID: [{ value: '' }],
-        txtDOB: [{ value: '' }, Validators.required],
-        txtEmail: [{ value: '' }, Validators.required ],
-        //txtEmail: [''],
-        txtAadharNo: [{ value: '' }, Validators.required ],
-        txtAbc: [{ value: '' }, Validators.required],
-        //txtAbc: [''],
-        txtBhamashahNo: [{ value: '', disabled: true },],
-        JanAadharNo: [{ value: '', disabled: true },],
-        txtAddress: [{ value: '' }, Validators.required],
-        txtBankName: [{ value: '', disabled: true },],
-        txtIFSCCode: [{ value: '', disabled: true },],
-        txtBankAccountNo: [{ value: '', disabled: true },],
-        IsVerified: [{ value: '', disabled: false },],
-        ddlSubCategoryA_ID: [{ value: '', disabled: true }, Validators.required],
-      })
+      })   
 
     this.requestStudent.commonSubjectDetails = [];
 
@@ -233,7 +234,9 @@ export class StudentEnrollmentComponent {
       })
     this.requestStudent.QualificationDetails = [];
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
+    if(!(this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DTENON || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR)){
+      await this.GetMenuPermission();
+    }
     /*this.statusID = Number(this.activatedRoute.snapshot.queryParamMap.get('status')?.toString());*/
     let statusID = Number(this.activatedRoute.snapshot.queryParamMap.get("status")?.toString());
     let currentTab = Number(this.activatedRoute.snapshot.queryParamMap.get("tab")?.toString());
@@ -788,8 +791,17 @@ export class StudentEnrollmentComponent {
 
     }
 
+    // sub category validators on OBC and General case
+    if (this.requestStudent.CategoryA_ID == 4 || this.requestStudent.CategoryA_ID == 1) {
+      this.EditStudentDataFormGroup.get('ddlSubCategoryA_ID')?.setValidators([DropdownValidators]);
+    } else {
+      this.EditStudentDataFormGroup.get('ddlSubCategoryA_ID')?.clearValidators();
+    }
+
+    this.EditStudentDataFormGroup.get('ddlSubCategoryA_ID')?.updateValueAndValidity();
     //form
     if (this.EditStudentDataFormGroup.invalid) {
+      this.toastr.error("please fill mandatory fields!")
       return;
     }
 
@@ -1554,15 +1566,21 @@ export class StudentEnrollmentComponent {
 
   async GetSubCasteCategoryADDL() {
     try {
+      this.SubCasteCategoryADDLList = [];
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetSubCasteCategoryA(this.requestStudent.CategoryA_ID)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          console.log(data);
-          this.SubCasteCategoryADDLList = data['Data'];
-          console.log(this.SubCasteCategoryADDLList);
-        }, (error: any) => console.error(error)
-        );
+      if (this.requestStudent.CategoryA_ID > 0)
+      {
+        await this.commonMasterService.GetSubCasteCategoryA(this.requestStudent.CategoryA_ID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            console.log(data);
+            this.SubCasteCategoryADDLList = data['Data'];
+
+            console.log(this.SubCasteCategoryADDLList);
+          }, (error: any) => console.error(error)
+          );
+      }
+      
     }
     catch (ex) {
       console.log(ex);

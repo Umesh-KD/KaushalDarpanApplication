@@ -971,7 +971,13 @@ export class SeatIntakesListAdmissionComponent implements OnInit
               this.missingData = [];
               if (data.State === EnumStatus.Success) {
                 this.toastr.success(data.Message);
-                this.missingData = [];             
+                this.missingData = [];
+
+                this.CloseModal()
+                this.onSearch();
+
+
+
               }
                else if (
                 data.Data &&

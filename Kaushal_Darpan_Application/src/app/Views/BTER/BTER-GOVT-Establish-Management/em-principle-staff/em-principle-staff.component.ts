@@ -168,7 +168,9 @@ export class EMPrincipleStaffComponent {
       BranchID:['',[DropdownValidators]] ,
       BugetHeadID:['',[DropdownValidators]] ,
       PostServiceTypeID:[''] ,
-      ChildPostServiceTypeID:[''] 
+      ChildPostServiceTypeID:[''], 
+      // IsEmpWorkingOnDeputationFromOther:[''], 
+      // EmpInstituteID:[''], 
     })
 
     this.settingsMultiselect = {
@@ -913,9 +915,16 @@ async GetTechnicianDll() {
       this.formData.PostServiceTypeID = 0;
       this.formData.ChildPostServiceTypeID = 0;
     }
+
+    // if(this.formData.IsEmpWorkingOnDeputationFromOther == true){
+    //   this.AddStaffBasicDetailFromGroup.controls['EmpInstituteID'].setValidators([DropdownValidators]);
+    // } else {
+    //   this.AddStaffBasicDetailFromGroup.controls['EmpInstituteID'].clearValidators();
+    // }
     
     this.AddStaffBasicDetailFromGroup.controls['PostServiceTypeID'].updateValueAndValidity();
     this.AddStaffBasicDetailFromGroup.controls['ChildPostServiceTypeID'].updateValueAndValidity();
+    // this.AddStaffBasicDetailFromGroup.controls['EmpInstituteID'].updateValueAndValidity();
   }
 
   async OnFormSubmit() {

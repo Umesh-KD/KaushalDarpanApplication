@@ -246,12 +246,12 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sno</th>
-            <th class="text-left" style="width: 15%;">District Name</th>
+            <!--<th class="text-left" style="width: 15%;">District Name</th>-->
             <th class="text-left" style="width: 22%;">Institute Name</th>
             <th class="text-left" style="width: 13%;">Trade Name</th>
             <th class="text-left" style="width:7%;">Scheme</th>
-            <th class="text-left">No Of Seats</th>
-            <th class="text-left">Category</th>
+            <th class="text-left">Seats</th>
+            <!--<th class="text-left">Category</th>-->
 
             <th class="text-left" title="Click to sorting" (click)="sortInTableData('Shift')">
               Shift
@@ -262,67 +262,68 @@
 
             <th class="text-left">Seat Status</th>
 
-            <th class="text-left">College Status</th>
+            <th class="text-left">Inst Status</th>
             <th class="text-left">Last Updated</th>
-            <th class="text-left">Remarks</th>  
+            <th class="text-left">Seat Remarks</th>
+            <th class="text-left">inst Remarks</th>
             <th style="width: 80px;">Action</th>
           </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText; let idx=index;">
-                <td align="left">{{(startInTableIndex+1)+idx}}</td>
-                <td align="left">{{row.DistrictNameEnglish}}</td>
-                <td align="left">{{row.CollegeName}}</td>
-                <td align="left">{{row.TradeName}}</td>
-                <td align="left">{{row.TradeScheme}}</td>
-                <td align="left">{{row.NoOfSanctionedSeats}}</td>
-                <td align="left">{{row.Remark}}</td>
-                <td align="left">{{row.Shift}}</td>
-                <td align="left">{{row.Unit_no}}</td>
+          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td align="left">{{(startInTableIndex+1)+idx}}</td>
+            <!--<td align="left">{{row.DistrictNameEnglish}}</td>-->
+            <td align="left">{{row.CollegeName}}</td>
+            <td align="left">{{row.TradeName}}</td>
+            <td align="left">{{row.TradeScheme}}</td>
+            <td align="left">{{row.NoOfSanctionedSeats}}</td>
+            <!--<td align="left">{{row.Remark}}</td>-->
+
+            <td align="left">{{row.Shift}}</td>
+            <td align="left">{{row.Unit_no}}</td>
 
 
-                <td align="center" [ngSwitch]="row.ActiveStatus">
-                    <i *ngSwitchCase="true" class="fa fa-check text-success" title="Active"></i>
-                    <i *ngSwitchCase="false" class="fa fa-times text-danger" title="Inactive"></i>
-                    <i *ngSwitchDefault class="fa fa-question text-muted" title="Unknown"></i>
-                </td>
+            <td align="center" [ngSwitch]="row.ActiveStatus">
+              <i *ngSwitchCase="true" class="fa fa-check text-success" title="Active"></i>
+              <i *ngSwitchCase="false" class="fa fa-times text-danger" title="Inactive"></i>
+              <i *ngSwitchDefault class="fa fa-question text-muted" title="Unknown"></i>
+            </td>
 
-                <td align="center" [ngSwitch]="row.IsActiveColleges">
-                    <i *ngSwitchCase="1" class="fa fa-check text-success" title="Active"></i>
-                    <i *ngSwitchCase="0" class="fa fa-times text-danger" title="Inactive"></i>
-                    <i *ngSwitchDefault class="fa fa-question text-muted" title="Unknown"></i>
-                </td>
+            <td align="center" [ngSwitch]="row.IsActiveColleges">
+              <i *ngSwitchCase="1" class="fa fa-check text-success" title="Active"></i>
+              <i *ngSwitchCase="0" class="fa fa-times text-danger" title="Inactive"></i>
+              <i *ngSwitchDefault class="fa fa-question text-muted" title="Unknown"></i>
+            </td>
 
-                <td align="left">{{row.LastUpdated}}</td>
-                <td align="left">{{row.Remark_str}}</td>
-                <td>
-                    <button class="dropdown" mat-raised-button [matMenuTriggerFor]="menuAdmit" style="width: 130px; padding: 5px;">
-                        Actions <i class="ti ti-chevron-down"></i>
-                    </button>
+            <td align="left">{{row.LastUpdated}}</td>
+            <td align="left">{{row.Remark_str}}</td>
 
-                    <mat-menu #menuAdmit="matMenu">
+            <td align="left">{{row.CollegeRemark}}</td>
 
-                        <!--First Semester-->
-                        <button mat-menu-item
-                                (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveSeat')">
-                            {{row.ActiveStatus==true?'Inactive Seats':'Active Seats'}}
-                        </button>
-                        <!--Second Semester-->
-                        <button mat-menu-item (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveCollege')">
-                            {{row.IsActiveColleges==1?'Inactive College':'Active Colleges'}}
-                        </button>
+            <td>
+              <button class="dropdown" mat-raised-button [matMenuTriggerFor]="menuAdmit" style="width: 130px; padding: 5px;">
+                Actions <i class="ti ti-chevron-down"></i>
+              </button>
 
-                        <!-- action for edit scheme scvt to ncvt -->
-                         <!-- *ngIf="row.TradeScheme=='SCVT'" -->
-                        <button *ngIf="row.TradeScheme === 'SCVT'"  mat-menu-item (click)="changeStatusSchemeType(ModalSchemeTypeChange,row.SeatIntakeID, row,'SchemeTypeChange')">
-                            Update Scheme Type
-                        </button>
+              <mat-menu #menuAdmit="matMenu">
+                <!--First Semester-->
+                <button mat-menu-item
+                        (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveSeat')">
+                  {{row.ActiveStatus==true?'Inactive Seats':'Active Seats'}}
+                </button>
+                <!--Second Semester-->
+                <button mat-menu-item (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveCollege')">
+                  {{row.IsActiveColleges==1?'Inactive College':'Active Colleges'}}
+                </button>
 
-                    </mat-menu>
-
-                
-                </td>
-            </tr>
+                <!-- action for edit scheme scvt to ncvt -->
+                <!-- *ngIf="row.TradeScheme=='SCVT'" -->
+                <button *ngIf="row.TradeScheme === 'SCVT'" mat-menu-item (click)="changeStatusSchemeType(ModalSchemeTypeChange,row.SeatIntakeID, row,'SchemeTypeChange')">
+                  Convert SCVT TO NCVT
+                </button>
+              </mat-menu>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

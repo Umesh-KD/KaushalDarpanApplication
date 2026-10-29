@@ -78,6 +78,7 @@ export class BTEREMStaffListComponent {
   public BugetHeadList:any=[];
   public StaffProfileStatusList:any=[];
   public MenuAllowedRoleList:any=[];
+  public InstituteMasterManagementTypeWiseDDL:any=[];
 
   _EnumEMProfileStatus = EnumEMProfileStatus;
   _EnumRole = EnumRole;
@@ -253,6 +254,7 @@ export class BTEREMStaffListComponent {
     await this.GetBudgetList();
     await this.GetGuestHouseNameList();
     await this.GetInstituteMaster();
+    await this.GetInstituteMaster_ManagementTypeWise();
     await this.GetStaffTypeData();
     await this.GetDesignationMasterData();
     await this.getInstituteMasterList();
@@ -384,6 +386,25 @@ export class BTEREMStaffListComponent {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+  async GetInstituteMaster_ManagementTypeWise() {
+    try {
+      const request: any = {};
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      request.EndTermId = this.sSOLoginDataModel.EndTermID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.ManagementTypeID = this.searchRequest.InstitutionManagementTypeID; // static passing because we are using this only for govt. institute
+      request.Action = "GetInstituteMasterDDL_BTER_EM";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.InstituteMasterManagementTypeWiseDDL = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
     }
   }
 

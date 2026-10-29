@@ -7,6 +7,7 @@ import { LoaderModule } from '../Shared/loader/loader.module';
 import { UserMasterOfficeWiseComponent } from './user-master-office-wise.component';
 import { UserMasterOfficeWiseRoutingModule } from './user-master-office-wise-routing.module';
 import { NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, Ng
     UserMasterOfficeWiseRoutingModule,
     FormsModule, ReactiveFormsModule, CommonModule, TableSearchFilterModule, LoaderModule,
     NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
+    NgMultiSelectDropDownModule.forRoot(),
   ]
 })
 export class UserMasterOfficeWiseModule { }
