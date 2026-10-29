@@ -288,7 +288,7 @@
                   <i class="ti ti-eye" aria-hidden="true"></i>
                 </a>
                 <a href="javascript:void(0);" *ngIf="row.status!=_enumExamStudentStatus.RejectatBTER && !(sSOLoginDataModel.RoleID == _EnumRole.ACP || sSOLoginDataModel.RoleID == _EnumRole.ACP_NonEng)"
-                   title="Edit Student Details" (click)="EditStudentData(MyModel_EditStudentDetails, row.StudentID)">
+                   title="Edit Student Details" (click)="EditStudentData(MyModel_EditStudentDetails, row.StudentID, row.SemesterID, row.StudentTypeID)">
                   <!--<i class="ti ti-user"></i>-->
                   <i class="ti ti-pencil"></i>
                 </a>

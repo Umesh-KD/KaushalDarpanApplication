@@ -151,4 +151,16 @@ export class StudentEnrollmentService {
         })
       ).toPromise();
   }
+
+  public async HaveOptionalSubject_Enrollment(StudentID: number, SemesterID: number, EndTermID: number) {
+    return await this.http.get(this.APIUrl + "/HaveOptionalSubject_Enrollment/" + StudentID + '/' + SemesterID + '/' + EndTermID,
+      {
+        ...this.headersOptions,   // spread existing options (e.g., headers)
+        responseType: 'json'     // explicitly set response type to JSON
+      }
+    )
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

@@ -748,21 +748,50 @@ export class StudentEnrollmentComponent {
     }
   }
 
+  toBoolean(value: any): boolean {
+    return !!value;  // double NOT operator converts any value to true/false
+  }
+
   // get edit student
-  async EditStudentData(content: any, StudentID: number) {
+  async EditStudentData(content: any, StudentID: number, SemesterID: number, StudentTypeID: number) {
+    debugger
+    let needCheckOptionalSubjectAdded = false;
+    // check optional subject already added or not for condition base
+    if ((this.sSOLoginDataModel.RoleID == EnumRole.Principal)
+      && [3,4, 5, 6].includes(SemesterID) && StudentTypeID == 1) {
+      needCheckOptionalSubjectAdded = true;
+    }
 
-    this.requestUpdateEnrollmentNo.OrderDate = (new Date(this.TodayDate)?.toISOString()?.split('T')?.shift()?.toString()) ?? "";
-    this.requestUpdateEnrollmentNo.UpdatedDate = (new Date(this.TodayDate)?.toISOString()?.split('T')?.shift()?.toString()) ?? "";
+    if ((this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)
+      && [1].includes(SemesterID) && StudentTypeID == 1) {
+      needCheckOptionalSubjectAdded = true;
+    }
 
-    this.IsShowViewStudent = true;
-    this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason: any) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-    //
+    try {
+        await this.studentEnrollmentService.HaveOptionalSubject_Enrollment(StudentID, SemesterID, this.sSOLoginDataModel.EndTermID)
+      .then(async (data: any) => {
+        if (needCheckOptionalSubjectAdded == true && this.toBoolean(data?.Data) != true) {
+          this.toastr.warning("Please add optional subject first!");
+          return;
+        }
 
-    await this.GetPreExam_StudentMaster(StudentID);
+        this.requestUpdateEnrollmentNo.OrderDate = (new Date(this.TodayDate)?.toISOString()?.split('T')?.shift()?.toString()) ?? "";
+        this.requestUpdateEnrollmentNo.UpdatedDate = (new Date(this.TodayDate)?.toISOString()?.split('T')?.shift()?.toString()) ?? "";
+
+        this.IsShowViewStudent = true;
+        this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+          this.closeResult = `Closed with: ${result}`;
+        }, (reason: any) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        });
+        //
+
+        await this.GetPreExam_StudentMaster(StudentID);
+
+      }, (error: any) => console.error(error));
+    } catch (error) {
+      console.error(error);
+    }    
   }
 
   // save edited student
@@ -2266,6 +2295,7 @@ validateName(event: Event): void {
 
   this.request.Name = input.value;
 }
+
 
 
 }
