@@ -35,6 +35,7 @@ export class BTER_EM_StaffListSearchModel {
   IsEmpWorkingOnDeputationToOther?: number = -1;
   DistrictID?: number = 0;
   StateID?: number = 0;
+  FilterRoleID?: number = 0;
 
 }
 
@@ -774,7 +775,9 @@ export class OfficeVacancySearchModel {
   public BranchID?:number=0;
   public UserID?:number=0;
   public RoleID?:number=0;
-  public SSOID?:string='';
+  public SSOID?: string = '';
+  InstituteIDs: string = '';
+  BranchIDs: string = '';
 }
 
 export class StaffTrainingDetailDataModel {

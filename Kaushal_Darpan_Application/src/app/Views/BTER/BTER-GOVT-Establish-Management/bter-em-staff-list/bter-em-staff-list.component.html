@@ -12,30 +12,28 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="mb-8">
-<div class="flex justify-between items-center flex-wrap gap-2 mb-3 p-3 py-2 bg-light">
+      <div class="flex justify-between items-center flex-wrap gap-2 mb-3 p-3 py-2 bg-light">
 
-  <b class="text-1xl-5">
-    <i class="ti ti-search"></i> Enter Search Criteria
-  </b>
+        <b class="text-1xl-5">
+          <i class="ti ti-search"></i> Enter Search Criteria
+        </b>
 
-  <div class="flex items-center gap-2 flex-shrink-0">
-    <a routerLink="/bter-em-add-staff" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Staff</a>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <a routerLink="/bter-em-add-staff" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Staff</a>
 
-    <button
-      type="button"
-      class="border-0 bg-transparent cursor-pointer p-1"
-      (click)="toggleSearchCriteria()"
-      [attr.aria-expanded]="isSearchVisible"
-      aria-controls="searchCriteriaPanel"
-      aria-label="Toggle search criteria">
-      <i
-        class="ti"
-        [ngClass]="isSearchVisible ? 'ti-chevron-up' : 'ti-chevron-down'"
-        aria-hidden="true">
-      </i>
-    </button>
-  </div>
-</div>
+          <button type="button"
+                  class="border-0 bg-transparent cursor-pointer p-1"
+                  (click)="toggleSearchCriteria()"
+                  [attr.aria-expanded]="isSearchVisible"
+                  aria-controls="searchCriteriaPanel"
+                  aria-label="Toggle search criteria">
+            <i class="ti"
+               [ngClass]="isSearchVisible ? 'ti-chevron-up' : 'ti-chevron-down'"
+               aria-hidden="true">
+            </i>
+          </button>
+        </div>
+      </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" id="searchCriteriaPanel" *ngIf="isSearchVisible">
 
@@ -77,23 +75,32 @@
           </select>
         </div>
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Salary Drawn Institute</label>
-          <select class="form-select " name="InstituteID" id="InstituteID"
-                  [(ngModel)]="searchRequest.InstituteID" >
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of InstituteMasterManagementTypeWiseDDL" [value]="item.InstituteID">{{item.InstituteName}}</option>
-          </select>
-        </div>
-
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+          <ng-select [(ngModel)]="searchRequest.InstituteID"
+                     [clearable]="false">
+            <ng-option [value]="0" selected>--All--</ng-option>
+            <ng-container *ngFor="let item of InstituteMasterDDLListFilter;">
+              <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+            </ng-container>
+          </ng-select>
+        </div>-->
+          <div>
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Salary Drawn Institute</label>
+  <select class="form-select " name="InstituteID" id="InstituteID"
+          [(ngModel)]="searchRequest.InstituteID" >
+    <option value="0">Choose Option</option>
+    <option *ngFor="let item of InstituteMasterManagementTypeWiseDDL" [value]="item.InstituteID">{{item.InstituteName}}</option>
+  </select>
+</div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Designation</label>
           <ng-select [(ngModel)]="searchRequest.DesignationID"
-                      [clearable]="false">
-              <ng-option [value]="0" selected>--All--</ng-option>
-              <ng-container *ngFor="let item of DesignationMasterDDLList;">
-                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
-              </ng-container>
+                     [clearable]="false">
+            <ng-option [value]="0" selected>--All--</ng-option>
+            <ng-container *ngFor="let item of DesignationMasterDDLList;">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
           </ng-select>
         </div>
 
@@ -104,11 +111,21 @@
             <option *ngFor="let item of StaffProfileStatusList" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Role:</label>
+          <select class="form-select" id="ProfileStatus" [(ngModel)]="searchRequest.FilterRoleID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of RoleList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
         <!-- Need help here as button appear next to Profile status -->
+
+      </div>
       <div class="flex justify-center items-center">
         <button type="button" class="btn bg-info text-white mt-6" (click)="BTER_EM_GetStaffList()">Search</button>
         <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
-      </div>
       </div>
     </div>
 
@@ -140,19 +157,39 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th width="80px" align="left">Sr. No.</th>
-            <th align="left">SSO ID</th>
-            <th align="left">Staff Details</th>
+            <th align="left" class="sortable" (click)="sortBy('SSOID')">
+              SSO ID <i [class]="getSortIcon('SSOID')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('Name')">
+              Staff Details <i [class]="getSortIcon('Name')"></i>
+            </th>
             <!-- <th align="left">Level Name</th> -->
             <!--<th align="left">Office Name</th>-->
-            <th align="left">Department/Institute</th>
+            <th align="left" class="sortable" (click)="sortBy('DepartmentName')">
+              Department/Institute <i [class]="getSortIcon('DepartmentName')"></i>
+            </th>
             <!--<th align="left">District Name</th>-->
-            <th class="left">Designation as per service book</th>
-            <th class="left">Salary Drawn Post </th>
-            <th class="left">Branch as per service book</th>
-            <th class="left">Salary Drawn Branch</th>
-            <th align="left">Role/Additional Role </th>
-            <th align="left">Profile Status</th>
-            <th align="left">Remark</th>
+            <th align="left" class="sortable" (click)="sortBy('DesignationName')">
+              Designation as per service book <i [class]="getSortIcon('DesignationName')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('SalaryDrawnPost')">
+              Salary Drawn Post <i [class]="getSortIcon('SalaryDrawnPost')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('BranchName')">
+              Branch as per service book <i [class]="getSortIcon('BranchName')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('SalaryDrawnBranch')">
+              Salary Drawn Branch <i [class]="getSortIcon('SalaryDrawnBranch')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('RoleName')">
+              Role/Additional Role <i [class]="getSortIcon('RoleName')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('ProfileStatus')">
+              Profile Status <i [class]="getSortIcon('ProfileStatus')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('Remark')">
+              Remark <i [class]="getSortIcon('Remark')"></i>
+            </th>
             <!-- <th align="left">Is Nodal</th> -->
             <th class="text-left">View Profile</th>
             <th align="center" width="200">Action</th>

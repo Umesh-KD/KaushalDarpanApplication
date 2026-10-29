@@ -30,16 +30,16 @@
           </div>
 
           <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Examination Scheme</label>
-            <select class="form-select" id="StudentExamYear"
-                    formControlName="IsYearly"
-                    [(ngModel)]="request.IsYearly"
-                    (change)="ExaminationSchemeChange()">
-              <option value="-1">--Select All--</option>
-              <option value=0>Semester</option>
-              <option value=1>Yearly</option>
-            </select>
-          </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Examination Scheme</label>
+    <select class="form-select" id="StudentExamYear"
+            formControlName="IsYearly"
+            [(ngModel)]="request.IsYearly"
+            (change)="ExaminationSchemeChange()">
+      <option value="-1">--Select All--</option>
+      <option value=0>Semester</option>
+      <option value=1>Yearly</option>
+    </select>
+  </div>-->
 
           <div *ngIf="request.SessionType == 51">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year/Semester</label>
@@ -65,32 +65,64 @@
           </div>
 
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
-           
-            <ng-select [(ngModel)]="request.InstituteID"
-                       formControlName="ddlInstituteID"
-                       [clearable]="false">
-              <ng-option [value]="0" selected>--All--</ng-option>
-              <ng-container *ngFor="let item of InstituteMasterList;">
-                <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
-              </ng-container>
-            </ng-select>
+          <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
 
+    <ng-select [(ngModel)]="request.InstituteID"
+               formControlName="ddlInstituteID"
+               [clearable]="false">
+      <ng-option [value]="0" selected>--All--</ng-option>
+      <ng-container *ngFor="let item of InstituteMasterList;">
+        <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+      </ng-container>
+    </ng-select>
+
+  </div>
+
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
+
+    <ng-select [(ngModel)]="request.BranchID"
+               formControlName="ddlStreamID" [clearable]="false">
+      <ng-option [value]="0" selected>--All--</ng-option>
+      @for (item of StreamMasterList; track item.StreamID) {
+      <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
+      }
+    </ng-select>
+
+  </div>-->
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>
+            <ng-select [items]="InstituteMasterList"
+                       bindLabel="InstituteName"
+                       bindValue="InstituteID"
+                       [multiple]="true"
+                       [closeOnSelect]="false"
+                       [searchable]="true"
+                       [clearable]="true"
+                       placeholder="--All--"
+                       [(ngModel)]="InstituteIds"
+                       [ngModelOptions]="{standalone: true}">
+            </ng-select>
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
-           
-            <ng-select [(ngModel)]="request.BranchID"
-                       formControlName="ddlStreamID" [clearable]="false">
-              <ng-option [value]="0" selected>--All--</ng-option>
-              @for (item of StreamMasterList; track item.StreamID) {
-              <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
-              }
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Stream</label>
+            <ng-select [items]="StreamMasterList"
+                       bindLabel="StreamName"
+                       bindValue="StreamID"
+                       [multiple]="true"
+                       [closeOnSelect]="false"
+                       [searchable]="true"
+                       [clearable]="true"
+                       placeholder="--All--"
+                       [(ngModel)]="BranchIds"
+                       [ngModelOptions]="{standalone: true}">
             </ng-select>
-           
           </div>
+
 
           <div hidden>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Session Type</label>

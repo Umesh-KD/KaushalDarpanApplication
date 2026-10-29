@@ -29,12 +29,14 @@ import { GuestRoomManagmentService } from '../../Services/GuestRoomManagment/Gue
 })
 export class UserMasterOfficeWiseComponent {
   UserMasterFormGroup!: FormGroup;
-
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
   public State: number = 0;
   public SuccessMessage: any = [];
   public AllSelect: boolean = false;
   public AllCheck: boolean = false;
   public Marked: boolean = false;
+  public sortInTableDirection: string = 'asc';
   public Message: any = [];
   public AssignedRoleRights: any = [];
 
@@ -651,4 +653,84 @@ export class UserMasterOfficeWiseComponent {
       }, 200);
     }
   }
+
+
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
+
+  // end table feature
+  sortBy(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    const dir = this.sortDirection === 'asc' ? 1 : -1;
+    const isDateCol = column === 'CreatedDate' || column === 'ModifyDate';
+
+    this.UserMasterList = [...this.UserMasterList].sort((a: any, b: any) => {
+      let x = a[column];
+      let y = b[column];
+
+      if (isDateCol) {
+        x = this.parseDate(x);
+        y = this.parseDate(y);
+      } else if (typeof x === 'string' || typeof y === 'string') {
+        x = (x ?? '').toString().toLowerCase();
+        y = (y ?? '').toString().toLowerCase();
+      }
+
+      if (x < y) return -1 * dir;
+      if (x > y) return 1 * dir;
+      return 0;
+    });
+  }
+
+  getSortIcon(column: string): string {
+    if (this.sortColumn !== column) return 'ti ti-arrows-sort';
+    return this.sortDirection === 'asc' ? 'ti ti-sort-ascending' : 'ti ti-sort-descending';
+  }
+
+  // Parses 'dd-MM-yyyy hh:mm:ss tt' coming from the proc's FORMAT()
+  private parseDate(value: string): number {
+    if (!value) return 0;
+    const m = value.match(/^(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2}) (AM|PM)$/i);
+    if (!m) return 0;
+    let hours = parseInt(m[4], 10) % 12;
+    if (m[7].toUpperCase() === 'PM') hours += 12;
+    return new Date(+m[3], +m[2] - 1, +m[1], hours, +m[5], +m[6]).getTime();
+  }
+  exportToExcel(): void {
+    if (!this.UserMasterList || this.UserMasterList.length === 0) {
+      this.toastr.warning("No data available to export.");
+      return;
+    }
+    const unwantedColumns = ['DesignationID'];
+
+    const columnOrder = [
+      'Name', 'SSOID', 'Email', 'EmailOfficial', 'MobileNo', 'Designation', 'Role'
+    ];
+
+    const filteredData = this.UserMasterList.map((item: any) => {
+      const row: any = {};
+      columnOrder.forEach(col => {
+        if (!unwantedColumns.includes(col)) {
+          row[col] = item[col] ?? ''; // fallback if value missing
+        }
+      });
+
+      return row;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Inventory Report');
+
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    XLSX.writeFile(wb, `designation_master_${timestamp}.xlsx`);
+  }
+
 }
