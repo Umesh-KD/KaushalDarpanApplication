@@ -588,6 +588,74 @@ export class BranchSectionCreateComponent {
     //   return
     // }
 
+    // ---------------------------------------------------------------------------
+  // 1. Validate Category-wise Student Counts
+  // ---------------------------------------------------------------------------
+  const streamId = Number(this.IIPMasterFormGroup.get('StreamID')?.value);
+  const selectedStream = this.StreamMasterDDL.find((x: any) => x.StreamID == streamId);
+  const expectedTotalStudents = Number(selectedStream?.TotalStudent || this.totalStudents || 0);
+
+    if (expectedTotalStudents > 0) {
+      const rawSections = this.sections.getRawValue();
+
+      // Group sections by their type/name indicator
+      const theorySections = rawSections.filter((s: any) => {
+        const name = (s.sectionName || '').toUpperCase();
+        return name.includes('-T-') || (!name.includes('-P-') && !name.includes('-TU-'));
+      });
+
+      const practicalSections = rawSections.filter((s: any) => {
+        const name = (s.sectionName || '').toUpperCase();
+        return name.includes('-P-');
+      });
+
+      const tutorialSections = rawSections.filter((s: any) => {
+        const name = (s.sectionName || '').toUpperCase();
+        return name.includes('-TU-');
+      });
+
+      // Helper to calculate total count for an array of sections
+      const getSum = (list: any[]) => list.reduce((acc, curr) => acc + (Number(curr.studentCount) || 0), 0);
+
+      // Theory Check
+      if (theorySections.length > 0) {
+        const theorySum = getSum(theorySections);
+        if (theorySum < expectedTotalStudents) {
+          this.toastr.error(`Theory student count sum (${theorySum}) cannot be less than total students (${expectedTotalStudents}).`);
+          return;
+        }
+        if (theorySum > expectedTotalStudents) {
+          this.toastr.error(`Theory student count sum (${theorySum}) exceeds total students (${expectedTotalStudents}).`);
+          return;
+        }
+      }
+
+      // Practical Check
+      if (practicalSections.length > 0) {
+        const practicalSum = getSum(practicalSections);
+        if (practicalSum < expectedTotalStudents) {
+          this.toastr.error(`Practical student count sum (${practicalSum}) cannot be less than total students (${expectedTotalStudents}).`);
+          return;
+        }
+        if (practicalSum > expectedTotalStudents) {
+          this.toastr.error(`Practical student count sum (${practicalSum}) exceeds total students (${expectedTotalStudents}).`);
+          return;
+        }
+      }
+
+      // Tutorial Check
+      if (tutorialSections.length > 0) {
+        const tutorialSum = getSum(tutorialSections);
+        if (tutorialSum < expectedTotalStudents) {
+          this.toastr.error(`Tutorial student count sum (${tutorialSum}) cannot be less than total students (${expectedTotalStudents}).`);
+          return;
+        }
+        if (tutorialSum > expectedTotalStudents) {
+          this.toastr.error(`Tutorial student count sum (${tutorialSum}) exceeds total students (${expectedTotalStudents}).`);
+          return;
+        }
+      }
+    }
 
     const formStreamID = Number(this.IIPMasterFormGroup.value.StreamID);
     const formSemesterID = Number(this.IIPMasterFormGroup.value.SemesterID);

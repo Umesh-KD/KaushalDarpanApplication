@@ -129,9 +129,8 @@ export class StudentAttendanceComponent implements OnInit {
       this.TableForm.get('DayID')?.setValue(todayDayId);
     }
 
-
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
+     await this.GetMenuPermission();
     // Access the route parameters
     this.sectionId = this.route.snapshot.paramMap.get('sectionId') ?? '';
     this.streamId = parseInt(this.route.snapshot.paramMap.get('streamId') ?? "0");
