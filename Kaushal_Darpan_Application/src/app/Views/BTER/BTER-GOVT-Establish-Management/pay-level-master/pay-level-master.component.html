@@ -74,31 +74,49 @@
             <div class="overflow-x-auto mt-3">
 
                 <table class="table table-border w-full table-auto" cellpadding="5">
-                    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-                        <tr>
-                            <th class="text-left">Sr No</th>
-                            <th class="text-left">Pay Level</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
+                  <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                    <tr>
+                      <th class="text-left">Sr No</th>
+                      <th class="text-left sortable" (click)="sortBy('PayLevel')">
+                        Pay Level <i [class]="getSortIcon('PayLevel')"></i>
+                      </th>
+                      <th class="text-left sortable" (click)="sortBy('CreatedBy')">
+                        Created By <i [class]="getSortIcon('CreatedBy')"></i>
+                      </th>
+                      <th class="text-left sortable" (click)="sortBy('CreatedDate')">
+                        Created Date <i [class]="getSortIcon('CreatedDate')"></i>
+                      </th>
+                      <th class="text-left sortable" (click)="sortBy('ModifyBy')">
+                        Modify By <i [class]="getSortIcon('ModifyBy')"></i>
+                      </th>
+                      <th class="text-left sortable" (click)="sortBy('ModifyDate')">
+                        Modify Date <i [class]="getSortIcon('ModifyDate')"></i>
+                      </th>
+                      <th class="text-center">Action</th>
+                    </tr>
+                  </thead>
                     <tbody>
-                        <tr
-                            *ngFor="let item of PayLevelMasterData | tableSearchFilter:Table_SearchText; let idx=index;">
+                      <tr *ngFor="let item of PayLevelMasterData | tableSearchFilter:Table_SearchText; let idx=index;">
 
-                            <td align="left">{{idx+1}}</td>
-                            <td>{{item.PayLevel}}</td>
-                            <td align="left">
-                                <div class="flex align-center justify-center actionBtns w-auto"
-                                    style="width:auto !important">
-                                    <a href="javascript:void(0);"
-                                        (click)="ViewandUpdate(Modal_addPayLevel,item.PayLevelID)" title="Edit"><i
-                                            class="ti ti-pencil"></i></a>
-                                    <a href="javascript:void(0);" title="Delete"
-                                        (click)="onClickDelete(item.PayLevelID)"><i class="ti ti-trash"></i></a>
+                        <td align="left">{{idx+1}}</td>
+                        <td>{{item.PayLevel}}</td>
+                        <td>{{item.CreatedBy}}</td>
+                        <td>{{item.CreatedDate}}</td>
+                        <td>{{item.ModifyBy}}</td>
+                        <td>{{item.ModifyDate}}</td>
+                        <td align="left">
+                          <div class="flex align-center justify-center actionBtns w-auto"
+                               style="width:auto !important">
+                            <a href="javascript:void(0);"
+                               (click)="ViewandUpdate(Modal_addPayLevel,item.PayLevelID)" title="Edit">
+                              <i class="ti ti-pencil"></i>
+                            </a>
+                            <a href="javascript:void(0);" title="Delete"
+                               (click)="onClickDelete(item.PayLevelID)"><i class="ti ti-trash"></i></a>
 
-                                </div>
-                            </td>
-                        </tr>
+                          </div>
+                        </td>
+                      </tr>
                     </tbody>
                 </table>
             </div>

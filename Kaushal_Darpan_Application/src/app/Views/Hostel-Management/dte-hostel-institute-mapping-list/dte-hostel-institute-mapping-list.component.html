@@ -12,13 +12,57 @@
   </div>
 </div>
 <div class="card">
+
   <div class="card-body p-5">
-   
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-map"></i> Enter Search Criteria</b>
+      <a *ngIf="IsShowAddButton" [routerLink]="'/Hostel-Institute-Mapping'" class="btn bg-info btn-sm text-white">
+        <i class="ti ti-plus"></i> Add Mapping
+      </a>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <!-- Search By college name -->
+     
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+        Institute
+        </label>
+        <select class="form-select" id="EquipmentsId"
+                [(ngModel)]="HostelInstituteMappingRequest.InstituteID">
+          <option value="0">--- Choose Option ---</option>
+         <option *ngFor="let item of InstituteMaster" [value]="item.InstituteID">{{item.InstituteName}}</option>
+        </select>
+      </div>
+
+
+      <div>
+        <button class="btn bg-info text-white mt-6 me-1"
+                type="submit"
+                (click)="GetAllHostelInstituteMappingList()">
+          <i class="ti ti-search"></i>Search
+        </button>
+        <button class="btn bg-warning text-white mt-6 me-1"
+                type="submit"
+                (click)="onResetSearch()">
+          <i class="ti ti-search"></i>Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body p-5">
+
+
+
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
-        <a  *ngIf="IsShowAddButton" [routerLink]="'/Hostel-Institute-Mapping'" class="btn bg-info btn-sm text-white">
-          <i class="ti ti-plus"></i> Add Mapping
+        <!--<a *ngIf="IsShowAddButton" [routerLink]="'/Hostel-Institute-Mapping'" class="btn bg-info btn-sm text-white">
+    <i class="ti ti-plus"></i> Add Mapping
+  </a>-->
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-excel"></i> Export Excel
         </a>
       </div>
     </div>
@@ -37,51 +81,72 @@
       </div>
       <div class="">
         <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
-      </div>  
+      </div>
     </div>
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5">
-        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+        <thead>
           <tr>
             <th class="text-left">SNo</th>
-            <th class="text-left">Hostel Name</th>
-            <th class="text-left">Institute Name</th>
-            <th class="text-left">Parent Type</th>
+            <th class="text-left sortable" (click)="sortBy('HostelName')">
+              Hostel Name <i [class]="getSortIcon('HostelName')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('InstituteNames')">
+              Institute Name <i [class]="getSortIcon('InstituteNames')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('isParent')">
+              Parent Type <i [class]="getSortIcon('isParent')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('CreatedBy')">
+              Created By <i [class]="getSortIcon('CreatedBy')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('CreatedDate')">
+              Created Date <i [class]="getSortIcon('CreatedDate')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('ModifyBy')">
+              Modify By <i [class]="getSortIcon('ModifyBy')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('ModifyDate')">
+              Modify Date <i [class]="getSortIcon('ModifyDate')"></i>
+            </th>
             <th class="text-center">Action</th>
-
           </tr>
         </thead>
 
         <!--{{HostelInstituteMappingList | json}}-->
-      <tbody>
-        <tr *ngIf="HostelInstituteMappingList?.length === 0">
-          <td colspan="5" class="text-center">No record found</td>
-        </tr>
+        <tbody>
+          <tr *ngIf="HostelInstituteMappingList?.length === 0">
+            <td colspan="5" class="text-center">No record found</td>
+          </tr>
 
-        <tr *ngFor="let item of HostelInstituteMappingList;let idx=index;">
-          <td>{{idx+1}}</td>
-          <td>{{item.HostelName}}</td>
-          <td>{{item.InstituteNames}}</td>
-          <td>
-            <span *ngIf="item.isParent == 1">Map Hostel</span>
-          </td>
-          <td>
-            <!--<button class="btn btn-danger btn-sm" (click)="unmapHostel(item.HIMappingID)">
-        Unmap
-      </button>-->
+          <tr *ngFor="let item of HostelInstituteMappingList;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{item.HostelName}}</td>
+            <td>{{item.InstituteNames}}</td>
+            <td>
+              <span *ngIf="item.isParent == 1">Map Hostel</span>
+            </td>
+            <td>{{item.CreatedBy}}</td>
+            <td>{{item.CreatedDate}}</td>
+            <td>{{item.ModifyBy}}</td>
+            <td>{{item.ModifyDate}}</td>
+            <td>
+              <!--<button class="btn btn-danger btn-sm" (click)="unmapHostel(item.HIMappingID)">
+      Unmap
+    </button>-->
 
-            <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important;">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important;">
 
-              <a *ngIf="item.isParent == 1" class="btn btn-danger btn-sm" (click)="editMapping(item.HIMappingID)">
-                <i class="fa fa-pencil"></i>
-              </a>
-            </div>
+                <a *ngIf="item.isParent == 1" class="btn btn-danger btn-sm" (click)="editMapping(item.HIMappingID)">
+                  <i class="fa fa-pencil"></i>
+                </a>
+              </div>
 
 
 
-          </td>
-        </tr>
-      </tbody>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
 

@@ -45,7 +45,7 @@
           </div>
 
         </div>
-      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3"id="searchCriteriaPanel" *ngIf="isSearchVisible">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" id="searchCriteriaPanel" *ngIf="isSearchVisible">
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Code</label>
           <input type="text" class="form-input" placeholder=" Institute Code"
@@ -70,14 +70,30 @@
             <option *ngFor="let item of ManagmentTypeList" [value]="item.InstitutionManagementTypeID">{{item.InstitutionManagementType}}</option>
           </select>
         </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
-          <select class="form-select" [(ngModel)]="searchRequest.DistrictId">
-            <option value="0">--All--</option>
-            <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
+    <select class="form-select" [(ngModel)]="searchRequest.DistrictId">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
 
-          </select>
+    </select>
+  </div>-->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">District</label>
+          <ng-select [items]="DistrictMasterList"
+                     bindLabel="Name"
+                     bindValue="ID"
+                     [multiple]="true"
+                     [closeOnSelect]="false"
+                     [searchable]="true"
+                     [clearable]="true"
+                     placeholder="--All--"
+                     [(ngModel)]="DistrictIds">
+          </ng-select>
         </div>
+
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> SSOID</label>
           <input type="text" class="form-input" placeholder=" SSOID" [(ngModel)]="searchBySSOID">
