@@ -18,6 +18,8 @@ import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { GlobalConstants } from '../../Common/GlobalConstants';
 import { IDistrictMaster_StateIDWiseDataModel, IStateMasterDataModel } from '../../Models/CommonMasterDataModel';
 import { AssignRoleRightsService } from '../../Services/AssignRoleRights/assign-role-rights.service';
+import { GuestRoomSeatSearchModel } from '../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
+import { GuestRoomManagmentService } from '../../Services/GuestRoomManagment/GuestRoomManagment.service';
 
 @Component({
   selector: 'app-user-master-office-wise',
@@ -37,6 +39,7 @@ export class UserMasterOfficeWiseComponent {
   public AssignedRoleRights: any = [];
 
   public ErrorMessage: any = [];
+  public GuestHouseNameList: any = [];
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public DistrictList: any = [];
@@ -56,6 +59,7 @@ export class UserMasterOfficeWiseComponent {
   public RoleMasterList: AssignRoleRightsDataModel[] = [];
   public searchRequest = new UserMasterSerchModel();
 
+  public searchRequest1 = new GuestRoomSeatSearchModel();
   request = new UserMasterModel();
   public _EnumRole = EnumRole;
   sSOLoginDataModel = new SSOLoginDataModel();
@@ -64,12 +68,23 @@ export class UserMasterOfficeWiseComponent {
   public StateMasterList: IStateMasterDataModel[] = []
   public InstituteMasterList: any = [];
   public MenuAllowedRoleList: any = [];
+  public settingsMultiselect: object = {};
 
-
-  constructor(private commonMasterService: CommonFunctionService, private Router: Router, private assignRoleRightsService: AssignRoleRightsService,
-    private UserMasterService: UserMasterService, private toastr: ToastrService, private loaderService: LoaderService,
-    private formBuilder: FormBuilder, private router: ActivatedRoute, private routers: Router, private _fb: FormBuilder,
-    private modalService: NgbModal, private Swal2: SweetAlert2) {
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private Router: Router, 
+    private assignRoleRightsService: AssignRoleRightsService,
+    private UserMasterService: UserMasterService, 
+    private toastr: ToastrService, 
+    private loaderService: LoaderService,
+    private formBuilder: FormBuilder, 
+    private router: ActivatedRoute, 
+    private routers: Router, 
+    private _fb: FormBuilder,
+    private modalService: NgbModal, 
+    private Swal2: SweetAlert2,
+    private guestRoomManagmentService: GuestRoomManagmentService,
+  ) {
   }
 
   async ngOnInit() {
@@ -82,29 +97,40 @@ export class UserMasterOfficeWiseComponent {
         txtUserEmail: ['', Validators.required],
         txtOfficialEmail: ['', Validators.required],
         txtSSOID: ['', Validators.required],
-
-        txtAadhaarID: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern(GlobalConstants.AadhaarPattern),
-
-          ]
-        ],
-
-
+        txtAadhaarID: ['', [Validators.required, Validators.pattern(GlobalConstants.AadhaarPattern),]],
         txtMobileNo: ['', Validators.required],
         ddlGender: ['', Validators.required],
         ddlStateID: ['', [DropdownValidators]],
         ddlDistrictID: ['', [DropdownValidators]],
         chkActiveStatus: ['true'],
       })
+
+    this.settingsMultiselect = {
+      singleSelection: false,
+      idField: 'ID',
+      textField: 'Name',
+      enableCheckAll: true,
+      selectAllText: 'Select All',
+      unSelectAllText: 'Unselect All',
+      allowSearchFilter: true,
+      limitSelection: -1,
+      clearSearchFilter: true,
+      maxHeight: 197,
+      itemsShowLimit: 10,
+      searchPlaceholderText: 'Search...',
+      noDataAvailablePlaceholderText: 'Not Found',
+      closeDropDownOnSelection: false,
+      showSelectedItemsAtTop: false,
+      defaultOpen: false,
+      IsVerified: false,
+    };
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetMenuPermission();
     console.log("sSOLoginDataModel", this.sSOLoginDataModel);
     this.request.ModifyBy = this.sSOLoginDataModel.UserID;
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
-
+    await this.GetGuestHouseNameList();
     await this.GetMasterData();
     await this.GetRoleMasterData();
     await this.GetUserMasterList();
@@ -194,7 +220,7 @@ export class UserMasterOfficeWiseComponent {
       role.Marked = !assignedRole.Marked;
     }
     this.allSelected = this.RoleMasterList.every(r => this.isChecked(r.ID));
-    if(role.Marked == false) {
+    if (role.Marked == false) {
       role.IsMainRole = false;
     }
   }
@@ -261,7 +287,7 @@ export class UserMasterOfficeWiseComponent {
       await this.UserMasterService.GetUserData_RoleWise(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          
+
           this.UserMasterList = data['Data'];
         }, error => console.error(error));
     }
@@ -327,30 +353,42 @@ export class UserMasterOfficeWiseComponent {
         (!x.InstituteIDs || x.InstituteIDs.length == 0)
       );
 
+      const hasInvalidRole_GuestHouse = this.RoleMasterList.some((x: any) =>
+        (x.ID == EnumRole.GuestRoomWarden || x.ID == EnumRole.GuestHouseIncharge || x.ID == EnumRole.GuestHouseAdmin) &&
+        x.Marked == true &&
+        //  x.InstituteID == 0
+        (!x.GuestHouseID || x.GuestHouseID.length == 0 || x.GuestHouseID == '' || x.GuestHouseID == null || x.GuestHouseID == undefined)
+      );
+
       if (hasInvalidRole) {
         this.toastr.error("Please Select Institute for Principle Role");
         return;
       }
 
-      if(editChild.length == 0){
+      if(hasInvalidRole_GuestHouse) {
+        this.toastr.error("Please Select GuestHouse for GuestHouse Role");
+        return;
+      }
+
+      if (editChild.length == 0) {
         this.toastr.error("Please Marked At least One Role")
         return
       }
 
-      if(isMainRole.length == 0){
+      if (isMainRole.length == 0) {
         this.toastr.error("Please Marked At least One Main Role")
         return
       }
 
       editChild.forEach(x => {
         x.UserID = this.request.UserID,
-        x.SSOID = this.request.SSOID,
-        x.ModifiedBy = this.sSOLoginDataModel.UserID,
-        x.DepartmentID = this.sSOLoginDataModel.DepartmentID
+          x.SSOID = this.request.SSOID,
+          x.ModifiedBy = this.sSOLoginDataModel.UserID,
+          x.DepartmentID = this.sSOLoginDataModel.DepartmentID
         x.ParentRoleID = this.sSOLoginDataModel.RoleID
         // x.InstituteID = this.sSOLoginDataModel.InstituteID
       });
-      
+
       await this.assignRoleRightsService.SaveAssignedRole_UserWise(editChild)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -391,17 +429,13 @@ export class UserMasterOfficeWiseComponent {
                 data = JSON.parse(JSON.stringify(data));
                 console.log(data);
 
-                this.State = data['State'];
-                this.Message = data['Message'];
-                this.ErrorMessage = data['ErrorMessage'];
-
-                if (this.State = EnumStatus.Success) {
-                  this.toastr.success(this.Message)
+                if (data.State = EnumStatus.Success) {
+                  this.toastr.success(data.Message)
                   //reload
                   this.GetUserMasterList();
                 }
                 else {
-                  this.toastr.error(this.ErrorMessage)
+                  this.toastr.error(data.ErrorMessage)
                 }
 
               }, (error: any) => console.error(error)
@@ -430,7 +464,7 @@ export class UserMasterOfficeWiseComponent {
   onRadioChange(row: any): void {
     if (row.Marked) {
       // Unset other rows as main role
-      this.RoleMasterList.forEach(r => r.IsMainRole = false); 
+      this.RoleMasterList.forEach(r => r.IsMainRole = false);
       row.IsMainRole = true;
     }
   }
@@ -507,22 +541,30 @@ export class UserMasterOfficeWiseComponent {
 
   async GetAssignedRole_USerWise(UserID: number) {
     try {
-      let request : any = {};
+      let request: any = {};
       request.UserID = UserID;
       request.ParentRoleID = this.sSOLoginDataModel.RoleID;
       await this.assignRoleRightsService.GetAssignedRole_USerWise(request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.RoleMasterList = data['Data'];
-
-         // Convert comma separated InstituteIDList
+        // Convert comma separated InstituteIDList
         // into array for ng-select
         this.RoleMasterList.forEach((row: any) => {
-
           row.InstituteIDs = row.InstituteIDList
             ? row.InstituteIDList
-                .split(',')
-                .filter((x: string) => x.trim() !== '')
-                .map((x: string) => Number(x))
+              .split(',')
+              .filter((x: string) => x.trim() !== '')
+              .map((x: string) => Number(x))
+            : [];
+
+        });
+
+        this.RoleMasterList.forEach((row: any) => {
+          row.GuestHouseID = row.GuestHouseID
+            ? row.GuestHouseID
+              .split(',')
+              .filter((x: string) => x.trim() !== '')
+              .map((x: string) => Number(x))
             : [];
 
         });
@@ -581,5 +623,32 @@ export class UserMasterOfficeWiseComponent {
     // row.InstituteID = selectedValue;
     row.InstituteIDs = selectedValue || [];
     row.InstituteIDList = row.InstituteIDs.join(',');
+  }
+
+  onGuestHouseChange(selectedValue: number[], row: any) {
+    row.GuestHouseID = selectedValue?.length ? selectedValue.join(',') : '';
+  }
+
+  async GetGuestHouseNameList() {
+   // debugger;
+    try {
+      this.loaderService.requestStarted();
+      this.searchRequest1.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID;
+      this.searchRequest1.isEstablishment = true
+      this.searchRequest1.RoleId = this.sSOLoginDataModel.RoleID
+      await this.guestRoomManagmentService.GetGuestHouseNameList(this.searchRequest1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GuestHouseNameList = data['Data'];
+        }, (error: any) => console.error(error));  
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 }

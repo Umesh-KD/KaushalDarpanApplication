@@ -68,10 +68,21 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Institution Type:
           </label>
-          <select class="form-select" id="ddlInstitutionType" [(ngModel)]="searchRequest.InstitutionManagementTypeID">
+          <select class="form-select" id="ddlInstitutionType" 
+            [(ngModel)]="searchRequest.InstitutionManagementTypeID"
+            (change)="GetInstituteMaster_ManagementTypeWise()">
             <option [value]="0">Choose Option</option>
             <option [value]="1">Government</option>
             <option [value]="5">Private</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Salary Drawn Institute</label>
+          <select class="form-select " name="InstituteID" id="InstituteID"
+                  [(ngModel)]="searchRequest.InstituteID" >
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of InstituteMasterManagementTypeWiseDDL" [value]="item.InstituteID">{{item.InstituteName}}</option>
           </select>
         </div>
 

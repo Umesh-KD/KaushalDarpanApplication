@@ -140,7 +140,16 @@
                                                 placeholder="--Select Institute--"
                                                 (ngModelChange)="onInstituteChange($event, row)">
                                             </ng-select>
+                                        </div>
 
+                                        <div *ngIf="row.ID == _EnumRole.GuestRoomWarden || row.ID == _EnumRole.GuestHouseAdmin || row.ID == _EnumRole.GuestHouseIncharge">
+                                            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Guest House</label>
+                                            <ng-select [items]="GuestHouseNameList" bindLabel="Name"
+                                                bindValue="ID" [(ngModel)]="row.GuestHouseID" [multiple]="true"
+                                                [closeOnSelect]="false" [clearable]="true"
+                                                placeholder="--Select Guest House --"
+                                                (ngModelChange)="onGuestHouseChange($event, row)">
+                                            </ng-select>
                                         </div>
                                     </td>
                                 </tr>

@@ -136,7 +136,9 @@ export class BTER_EM_AddStaffBasicDetailDataModel extends RequestBaseModel {
   public BugetHeadTypeID?: number = 0;
   public PostServiceTypeID?: number = 0;
   public ChildPostServiceTypeID?: number = 0;
+  public EmpInstituteID?: number = 0;
   public OrderNo?: string = '';
+  public IsEmpWorkingOnDeputationFromOther: boolean = false
 }
 
 export class BTER_EM_StaffHostelListModel {

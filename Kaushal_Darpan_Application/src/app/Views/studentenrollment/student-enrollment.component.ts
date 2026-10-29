@@ -231,7 +231,9 @@ export class StudentEnrollmentComponent {
       })
     this.requestStudent.QualificationDetails = [];
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
+    if(!(this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DTENON || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR)){
+      await this.GetMenuPermission();
+    }
     /*this.statusID = Number(this.activatedRoute.snapshot.queryParamMap.get('status')?.toString());*/
     let statusID = Number(this.activatedRoute.snapshot.queryParamMap.get("status")?.toString());
     let currentTab = Number(this.activatedRoute.snapshot.queryParamMap.get("tab")?.toString());
