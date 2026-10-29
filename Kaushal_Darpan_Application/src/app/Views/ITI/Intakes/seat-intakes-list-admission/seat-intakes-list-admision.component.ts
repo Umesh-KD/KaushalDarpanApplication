@@ -213,7 +213,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
     }
   }
   async ddlDivision_Change() {
-    //debugger
+    ////debugger
     try {
       this.searchRequest.DistrictID = 0;
       //const DivisionId = this.SeatIntakeSearchFormGroup.get('ddlDivision')?.value ?? 0;
@@ -280,7 +280,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
 
   ExportActiveSeatIntake(Action: string ='_getActiveSeatIntake'): void {
     try {
-      debugger
+      //debugger
       this.loaderService.requestStarted();
       this.searchRequest.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
       this.searchRequest.Action = Action;
@@ -354,7 +354,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   }
 
   async onSearch() {
-    //debugger
+    ////debugger
     try {
       this.loaderService.requestStarted();
       this.searchRequest.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
@@ -647,7 +647,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
     {
       msg = 'Are you sure you want to change status of </br>' + `<b>${item.CollegeName}</b>`;
     }
-debugger
+//debugger
    this.Swal2.ConfirmationWithOrderDetails(
   msg,
   async (formData: any) => {
@@ -850,7 +850,6 @@ debugger
   
 
   async SaveSchemeTypeModal() {
-        debugger
         try {
           let ConfirmationText = "Are you sure you want to change Scheme Type?";
           this.Swal2.Confirmation(ConfirmationText,
@@ -920,7 +919,7 @@ debugger
 
    async openModal_UpdateSeatData(model: any)
   {
-    debugger
+    //debugger
      try {
        this.selectedFile = null;
        this.missingData = [];
@@ -945,7 +944,7 @@ debugger
     public selectedFile: File | null = null;
 
     onFileChange(event: any): void {
-      debugger;
+      //debugger;
         const file: File = event.target.files[0];
         if (file) {
           this.selectedFile = file;
@@ -972,7 +971,13 @@ debugger
               this.missingData = [];
               if (data.State === EnumStatus.Success) {
                 this.toastr.success(data.Message);
-                this.missingData = [];             
+                this.missingData = [];
+
+                this.CloseModal()
+                this.onSearch();
+
+
+
               }
                else if (
                 data.Data &&

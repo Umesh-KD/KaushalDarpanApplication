@@ -20,7 +20,8 @@ import { SweetAlert2 } from '../../../Common/SweetAlert2';
 export class BranchesMasterComponent implements OnInit {
   public State: number = -1;
   public Message: any = [];
-
+  sortColumn: string = '';
+sortDirection: 'asc' | 'desc' = 'asc';
   public ErrorMessage: any = [];
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
@@ -40,6 +41,8 @@ export class BranchesMasterComponent implements OnInit {
   public searchByBranchCode: string = ''
   public StreamTypeList: any = []
   public Table_SearchText: string = '';
+  public FromDate: string = '';
+  public ToDate: string = '';
   public originalStreamMasterList: any = []
 
 
@@ -57,7 +60,8 @@ export class BranchesMasterComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
+    // debugger
+     await this.GetMenuPermission();
     this.request.UserID = this.sSOLoginDataModel.UserID;
     this.UserID = this.sSOLoginDataModel.UserID;
     await this.GetStreamMasterList();
@@ -149,12 +153,13 @@ export class BranchesMasterComponent implements OnInit {
     this.searchByBranchCode = '';
     this.searchByBranchName = '';
     this.searchByBranchType = '';
+    this.FromDate = '';
+    this.ToDate = '';
 
     //    this.searchByDistrict = 0;
 
     this.GetStreamMasterList()
   }
-
 
   onSearchClick() {
     const searchCriteria: any = {
@@ -163,9 +168,20 @@ export class BranchesMasterComponent implements OnInit {
       StreamTypeID: Number(this.searchByBranchType)
     };
 
+    // Date range: From = start of day, To = end of day (inclusive)
+    const from = this.FromDate ? new Date(this.FromDate + 'T00:00:00').getTime() : null;
+    const to = this.ToDate ? new Date(this.ToDate + 'T23:59:59.999').getTime() : null;
+
+    if (from !== null && to !== null && from > to) {
+      alert('From Date cannot be greater than To Date');   // replace with your toast
+      return;
+    }
+
     // Filter originalStreamMasterList instead of StreamMasterList
     this.StreamMasterList = this.originalStreamMasterList.filter((college: any) => {
-      return Object.keys(searchCriteria).every(key => {
+
+      // existing text / type filters
+      const matchCriteria = Object.keys(searchCriteria).every(key => {
         const searchValue: any = searchCriteria[key];
         if (!searchValue) {
           return true;
@@ -176,8 +192,70 @@ export class BranchesMasterComponent implements OnInit {
         }
         return collegeValue === searchValue;
       });
+
+      // new: Created OR Modified date must fall in the range
+      const matchDate =
+        this.isInDateRange(college.CreatedDate, from, to) ||
+        this.isInDateRange(college.ModifyDate, from, to);
+
+      return matchCriteria && matchDate;
     });
   }
+
+  // True if the date string falls inside [from, to]. Blank dates never match a range.
+  private isInDateRange(value: string, from: number | null, to: number | null): boolean {
+    if (from === null && to === null) return true;   // no date filter applied
+
+    const time = this.parseDateOrNull(value);
+    if (time === null) return false;                 // blank/invalid date
+
+    if (from !== null && time < from) return false;
+    if (to !== null && time > to) return false;
+    return true;
+  }
+
+  // Parses 'dd-MM-yyyy hh:mm:ss tt' (the format returned by the proc)
+  private parseDateOrNull(value: string): number | null {
+    if (!value) return null;
+    const m = value.match(/^(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2}) (AM|PM)$/i);
+    if (!m) return null;
+    let hours = parseInt(m[4], 10) % 12;
+    if (m[7].toUpperCase() === 'PM') hours += 12;
+    return new Date(+m[3], +m[2] - 1, +m[1], hours, +m[5], +m[6]).getTime();
+  }
+
+  exportToExcel(): void {
+    if (!this.StreamMasterList || this.StreamMasterList.length === 0) {
+      this.toastr.warning("No data available to export.");
+      return;
+    }
+    const unwantedColumns = ['StreamID'];
+
+    const columnOrder = [
+      'Code', 'Name', 'StreamType', 'Duration', 'CreatedBy', 'CreatedDate', 'ModifyBy', 'ModifyDate'
+    ];
+
+    const filteredData = this.StreamMasterList.map((item: any) => {
+      const row: any = {};
+      columnOrder.forEach(col => {
+        if (!unwantedColumns.includes(col)) {
+          row[col] = item[col] ?? ''; // fallback if value missing
+        }
+      });
+
+      return row;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Inventory Report');
+
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    XLSX.writeFile(wb, `Branch_master_${timestamp}.xlsx`);
+  }
+
+
+
 
   btnExportTable_Click(): void {
     this.loaderService.requestStarted();
@@ -313,6 +391,50 @@ export class BranchesMasterComponent implements OnInit {
     this.Router.navigate(['/updatebranchesmaster', id]);
     console.log(id)
   }
+  sortBy(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    const dir = this.sortDirection === 'asc' ? 1 : -1;
+    const isDateCol = column === 'CreatedDate' || column === 'ModifyDate';
+
+    this.StreamMasterList = [...this.StreamMasterList].sort((a: any, b: any) => {
+      let x = a[column];
+      let y = b[column];
+
+      if (isDateCol) {
+        x = this.parseDate(x);
+        y = this.parseDate(y);
+      } else if (typeof x === 'string' || typeof y === 'string') {
+        x = (x ?? '').toString().toLowerCase();
+        y = (y ?? '').toString().toLowerCase();
+      }
+
+      if (x < y) return -1 * dir;
+      if (x > y) return 1 * dir;
+      return 0;
+    });
+  }
+
+  getSortIcon(column: string): string {
+    if (this.sortColumn !== column) return 'ti ti-arrows-sort';
+    return this.sortDirection === 'asc' ? 'ti ti-sort-ascending' : 'ti ti-sort-descending';
+  }
+
+  // Parses 'dd-MM-yyyy hh:mm:ss tt' coming from the proc's FORMAT()
+  private parseDate(value: string): number {
+    if (!value) return 0;
+    const m = value.match(/^(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2}) (AM|PM)$/i);
+    if (!m) return 0;
+    let hours = parseInt(m[4], 10) % 12;
+    if (m[7].toUpperCase() === 'PM') hours += 12;
+    return new Date(+m[3], +m[2] - 1, +m[1], hours, +m[5], +m[6]).getTime();
+  }
+  // end table feature
 
 }
 

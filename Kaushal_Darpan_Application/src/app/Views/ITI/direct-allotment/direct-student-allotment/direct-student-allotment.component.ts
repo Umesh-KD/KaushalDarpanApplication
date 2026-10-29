@@ -717,12 +717,19 @@ export class VerifyStudentAllotComponent {
       this.request.TradeLevel = this.searchRequest.TradeLevel
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.request.DocumentList = this.requestReporting.AllotmentDocumentModel
+
+      this.request.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.request.ModifyBy = this.sSOLoginDataModel.UserID;
+
       await this.allotmentService.UpdateAllotments(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if (data.State == EnumStatus.Success) {
+          if (data.State == EnumStatus.Success)
+          {
             this.getAllDataList();
             this.toastr.success('Student Allotment Successfully');
+
+
             this.resetOTPControls();
             this.CloseModal();
             if (this.searchRequest.TradeLevel == 8) {

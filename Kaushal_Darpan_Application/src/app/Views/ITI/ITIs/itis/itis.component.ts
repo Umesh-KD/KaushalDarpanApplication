@@ -178,7 +178,32 @@ export class ITIsComponent implements OnInit {
 
 
 
+
+
   }
+
+  courseList: any[] = [
+    {
+      InstituteName:"Ajmer",
+      Inst_Code: 'G0001',
+      COURSENAME: 'Instrument Mechanic',
+      COURSEID: 1370,
+      PRCODE: 'GR08000100',
+      Trade_code: '037',
+      InstituteID:1,
+    },
+    {
+      InstituteName: "Ajmer",
+      Inst_Code: 'G0001',
+      COURSENAME: 'Mechanic Diesel',
+      COURSEID: 1380,
+      PRCODE: 'GR08000100',
+      Trade_code: '201',
+      InstituteID: 1  
+    }
+  ];
+
+
 
   exportToPDF() {
     const doc = new jsPDF('l', 'mm', 'a4');
@@ -1066,7 +1091,7 @@ debugger
         this.loaderService.requestEnded();
       }, 200);
     }
-  }
+  } 
 
 
   onSearchChange() {
@@ -1144,6 +1169,87 @@ debugger
       }
     })
   }
+
+
+
+  async ViewScholershipUpdate(content: any, id: number)
+  {
+    this.GetScholerShipDeatils(id);
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
+  }
+
+
+
+
+  async saveCourseMapping()
+  {
+    const requestData = this.courseList.map(item => ({
+      Inst_Code: item.Inst_Code,
+      COURSENAME: item.COURSENAME,
+      COURSEID: Number(item.COURSEID),
+      PRCODE: item.PRCODE,
+      Trade_code: item.Trade_code,
+      InstituteID: item.InstituteID,
+      AcademicYearID: this.sSOLoginDataModel.FinancialYearID
+
+    }));
+
+
+    
+    await this.ITIsService
+      .UpdateScholerShipDetails(requestData)
+      .then((res: any) =>
+      {
+        if (res.State == EnumStatus.Success)
+        {
+
+         var  message= res.Data[0]['Message']
+          this.toastr.success(message??"Update Successfully");
+          this.CloseModalPopup();
+        }
+        else
+        {
+          this.toastr.error(res.ErrorMessage);
+        }
+
+      });
+  }
+
+  updateInstituteID(value: string) {
+
+    this.courseList.forEach(item => {
+      item.InstituteID = value;
+    });
+  }
+
+
+  async GetScholerShipDeatils(ID: any)
+  {
+
+
+  var request: any =
+  {
+      FilterBy: ID,
+      MasterCode: "GetScholerShipDeatils"
+
+    }
+
+    await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success)
+      {
+        this.courseList = data.Data
+      
+
+      }
+      else {
+        this.courseList = [];
+      }
+
+    })
+
+  }
+
 
 
 }

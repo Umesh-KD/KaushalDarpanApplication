@@ -26,6 +26,8 @@ export class DesignationMasterComponent implements OnInit {
   public DesignationMasterList: any = [];
   public StaffTypeList: any = [];
   public MenuAllowedRoleList: any = [];
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
   public UserID: number = 0;
   searchText: string = ''; // This is for search input
   Table_SearchText: string = ''; // Add this property
@@ -289,7 +291,7 @@ export class DesignationMasterComponent implements OnInit {
     const unwantedColumns = ['DesignationID'];
 
     const columnOrder = [
-      'StaffType_str', 'DesignationNameEnglish', 'DesignationNameHindi' ,'DesignationNameShort' ,'Status' 
+      'StaffType_str', 'DesignationNameEnglish', 'DesignationNameHindi', 'DesignationNameShort', 'Status', 'CreatedBy', 'CreatedDate', 'ModifyBy','ModifyDate'
     ];
 
     const filteredData = this.DesignationMasterList.map((item: any) => {
@@ -391,4 +393,47 @@ export class DesignationMasterComponent implements OnInit {
   }
   
   // end table feature
+  sortBy(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    const dir = this.sortDirection === 'asc' ? 1 : -1;
+    const isDateCol = column === 'CreatedDate' || column === 'ModifyDate';
+
+    this.paginatedInTableData = [...this.paginatedInTableData].sort((a: any, b: any) => {
+      let x = a[column];
+      let y = b[column];
+
+      if (isDateCol) {
+        x = this.parseDate(x);
+        y = this.parseDate(y);
+      } else if (typeof x === 'string' || typeof y === 'string') {
+        x = (x ?? '').toString().toLowerCase();
+        y = (y ?? '').toString().toLowerCase();
+      }
+
+      if (x < y) return -1 * dir;
+      if (x > y) return 1 * dir;
+      return 0;
+    });
+  }
+
+  getSortIcon(column: string): string {
+    if (this.sortColumn !== column) return 'ti ti-arrows-sort';
+    return this.sortDirection === 'asc' ? 'ti ti-sort-ascending' : 'ti ti-sort-descending';
+  }
+
+  // Parses 'dd-MM-yyyy hh:mm:ss tt' coming from the proc's FORMAT()
+  private parseDate(value: string): number {
+    if (!value) return 0;
+    const m = value.match(/^(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2}) (AM|PM)$/i);
+    if (!m) return 0;
+    let hours = parseInt(m[4], 10) % 12;
+    if (m[7].toUpperCase() === 'PM') hours += 12;
+    return new Date(+m[3], +m[2] - 1, +m[1], hours, +m[5], +m[6]).getTime();
+  }
 }

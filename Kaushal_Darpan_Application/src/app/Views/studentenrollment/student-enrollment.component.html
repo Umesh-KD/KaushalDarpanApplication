@@ -20,157 +20,155 @@
           <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-download"></i>Main Annexure-2</a>
           <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-download"></i>Full Data</a>
         </div>-->
-        <button
-          type="button"
-          class="border-0 bg-transparent cursor-pointer p-1"
-          (click)="toggleSearchCriteria()"
-          [attr.aria-expanded]="isSearchVisible"
-          aria-controls="searchCriteriaPanel"
-          aria-label="Toggle search criteria">
-          <i
-          class="ti"
-          [ngClass]="isSearchVisible ? 'ti-chevron-up' : 'ti-chevron-down'"
-          aria-hidden="true">
+        <button type="button"
+                class="border-0 bg-transparent cursor-pointer p-1"
+                (click)="toggleSearchCriteria()"
+                [attr.aria-expanded]="isSearchVisible"
+                aria-controls="searchCriteriaPanel"
+                aria-label="Toggle search criteria">
+          <i class="ti"
+             [ngClass]="isSearchVisible ? 'ti-chevron-up' : 'ti-chevron-down'"
+             aria-hidden="true">
           </i>
         </button>
       </div>
       <div id="searchCriteriaPanel" *ngIf="isSearchVisible">
-      <form [formGroup]="SearchStudentDataFormGroup">
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <form [formGroup]="SearchStudentDataFormGroup">
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Application No</label>
-            <input class="form-input" type="text" id="ApplicationNo" [(ngModel)]="request.ApplicationNo"
-                   formControlName="ApplicationNo" (input)="validateApplicationNo($event)"  maxlength="20">
-          </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Application No</label>
+              <input class="form-input" type="text" id="ApplicationNo" [(ngModel)]="request.ApplicationNo"
+                     formControlName="ApplicationNo" (input)="validateApplicationNo($event)" maxlength="20">
+            </div>
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
-            <!--<select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.InstituteID"
-            formControlName="ddlInstituteID">
-      <option value="0">--All--</option>
-      <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">
-        {{item.InstituteName}}
-      </option>
-    </select>-->
-            <ng-select [(ngModel)]="request.InstituteID"
-                       formControlName="ddlInstituteID" [clearable]="false">
-              <ng-option [value]="0" selected>--All--</ng-option>
-              @for (item of InstituteMasterList; track item.InstituteID) {
-              <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
-              }
-            </ng-select>
-          </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+              <!--<select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.InstituteID"
+                      formControlName="ddlInstituteID">
+                <option value="0">--All--</option>
+                <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">
+                  {{item.InstituteName}}
+                </option>
+              </select>-->
+              <ng-select [(ngModel)]="request.InstituteID"
+                         formControlName="ddlInstituteID" [clearable]="false">
+                <ng-option [value]="0" selected>--All--</ng-option>
+                @for (item of InstituteMasterList; track item.InstituteID) {
+                <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+                }
+              </ng-select>
+            </div>
 
-          <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year</label>
-    <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.FinacialYearID"
-      formControlName="ddlFinancialYearID">
-      <option value="0">--All--</option>
-      <option *ngFor="let item of FinancialYear" value="{{item.FinancialYearID}}">
-        {{
-        item.FinancialYearName
-        }}
-      </option>
-    </select>
-    <div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlFinancialYearID').errors" class="text-danger">
-      <p *ngIf="!SearchStudentDataFormGroup .get('ddlFinancialYearID').errors.required"><i
-          aria-hidden="true"></i>This field is required.</p>
-    </div>
-  </div>-->
+            <!--<div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year</label>
+              <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.FinacialYearID"
+                formControlName="ddlFinancialYearID">
+                <option value="0">--All--</option>
+                <option *ngFor="let item of FinancialYear" value="{{item.FinancialYearID}}">
+                  {{
+                  item.FinancialYearName
+                  }}
+                </option>
+              </select>
+              <div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlFinancialYearID').errors" class="text-danger">
+                <p *ngIf="!SearchStudentDataFormGroup .get('ddlFinancialYearID').errors.required"><i
+                    aria-hidden="true"></i>This field is required.</p>
+              </div>
+            </div>-->
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
 
-            <ng-select [(ngModel)]="request.BranchID"
-                       formControlName="ddlStreamID" [clearable]="false">
-              <ng-option [value]="0" selected>--All--</ng-option>
-              @for (item of StreamMasterList; track item.StreamID) {
-              <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
-              }
-            </ng-select>
-            <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlStreamID').errors" class="text-danger">
-      <p *ngIf="!SearchStudentDataFormGroup.get('ddlStreamID').errors.required"><i aria-hidden="true"></i>This
-        field is required.</p>
-    </div>-->
-          </div>
+              <ng-select [(ngModel)]="request.BranchID"
+                         formControlName="ddlStreamID" [clearable]="false">
+                <ng-option [value]="0" selected>--All--</ng-option>
+                @for (item of StreamMasterList; track item.StreamID) {
+                <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
+                }
+              </ng-select>
+              <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlStreamID').errors" class="text-danger">
+                <p *ngIf="!SearchStudentDataFormGroup.get('ddlStreamID').errors.required"><i aria-hidden="true"></i>This
+                  field is required.</p>
+              </div>-->
+            </div>
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
-            <select class="form-select" id="StudentExamYear" formControlName="ddlSemesterID"
-                    [(ngModel)]="request.Year_SemID">
-              <option value="0">--All--</option>
-              <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
-            </select>
-            <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlSemesterID').errors" class="text-danger">
-      <p *ngIf="!SearchStudentDataFormGroup.get('ddlSemesterID').errors.required"><i aria-hidden="true"></i>This
-        field is required.</p>
-    </div>-->
-          </div>
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name</label>
-            <input class="form-input" type="text" id="StudentExamName" [(ngModel)]="request.Name"
-                   formControlName="txtStudentName"   (input)="validateName($event)">
-          </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
+              <select class="form-select" id="StudentExamYear" formControlName="ddlSemesterID"
+                      [(ngModel)]="request.Year_SemID">
+                <option value="0">--All--</option>
+                <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
+              </select>
+              <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlSemesterID').errors" class="text-danger">
+                <p *ngIf="!SearchStudentDataFormGroup.get('ddlSemesterID').errors.required"><i aria-hidden="true"></i>This
+                  field is required.</p>
+              </div>-->
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name</label>
+              <input class="form-input" type="text" id="StudentExamName" [(ngModel)]="request.Name"
+                     formControlName="txtStudentName" (input)="validateName($event)">
+            </div>
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Management Type</label>
-            <select class="form-select" id="StudentExamManagementTypeId" [(ngModel)]="request.ManagementTypeID"
-                    formControlName="ddlManagementID">
-              <option value="0">--All--</option>
-              <option *ngFor="let item of InstitutionManagementMasterList" value="{{item.InstitutionManagementTypeID}}">
-                {{item.InstitutionManagementType}}
-              </option>
-            </select>
-          </div>
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Mobile</label>
-            <input class="form-input" type="text" id="StudentExamMobile" [(ngModel)]="request.MobileNo"
-                   formControlName="txtMobileNo" maxlength="10" minlength="10" (keypress)="validateNumber($event)">
-          </div>
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ABC ID</label>
-            <input class="form-input" type="text" id="StudentExamAbc" [(ngModel)]="request.AbcId" maxlength="12"
-                   formControlName="txtAbc">
-          </div>
-
-        </div>
-
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Status</label>
-            <select class="form-select" id="StudentExamStatus" [(ngModel)]="request.StudentFilterStatusId"
-                    formControlName="ddlstatus" (change)="GetPreExamStudent();">
-              <option value="0">--All--</option>
-              <option *ngFor="let item of StudentStatusList" value="{{item.ID}}">{{item.Name}}</option>
-            </select>
-          </div>
-        
-          <div>
-            <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
-            <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
-          </div>
-          <!--&& paginatedInTableData[0]?.IsReturnHistory == 290-->
-          <div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Management Type</label>
+              <select class="form-select" id="StudentExamManagementTypeId" [(ngModel)]="request.ManagementTypeID"
+                      formControlName="ddlManagementID">
+                <option value="0">--All--</option>
+                <option *ngFor="let item of InstitutionManagementMasterList" value="{{item.InstitutionManagementTypeID}}">
+                  {{item.InstitutionManagementType}}
+                </option>
+              </select>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Mobile</label>
+              <input class="form-input" type="text" id="StudentExamMobile" [(ngModel)]="request.MobileNo"
+                     formControlName="txtMobileNo" maxlength="10" minlength="10" (keypress)="validateNumber($event)">
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ABC ID</label>
+              <input class="form-input" type="text" id="StudentExamAbc" [(ngModel)]="request.AbcId" maxlength="12"
+                     formControlName="txtAbc">
+            </div>
 
           </div>
-          <div class="alert alert-warning" *ngIf="paginatedInTableData?.length > 0 && paginatedInTableData[0]?.IsReturnHistory == 290">
-            Remark: {{ paginatedInTableData[0]?.Remark}},<br /> Created By: {{paginatedInTableData[0]?.RemarkCreatedBy}},<br /> Remark Date: {{paginatedInTableData[0]?.RemarkDate | date: 'dd/MM/yyyy'}}
+
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Status</label>
+              <select class="form-select" id="StudentExamStatus" [(ngModel)]="request.StudentFilterStatusId"
+                      formControlName="ddlstatus" (change)="GetPreExamStudent();">
+                <option value="0">--All--</option>
+                <option *ngFor="let item of StudentStatusList" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+            </div>
+
+            <div>
+              <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
+              <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
+            </div>
+            <!--&& paginatedInTableData[0]?.IsReturnHistory == 290-->
+            <div>
+
+            </div>
+            <div class="alert alert-warning" *ngIf="paginatedInTableData?.length > 0 && paginatedInTableData[0]?.IsReturnHistory == 290">
+              Remark: {{ paginatedInTableData[0]?.Remark}},<br /> Created By: {{paginatedInTableData[0]?.RemarkCreatedBy}},<br /> Remark Date: {{paginatedInTableData[0]?.RemarkDate | date: 'dd/MM/yyyy'}}
+            </div>
+
+
+
+
           </div>
 
+          <div class="verify-notice" *ngIf="request.StudentFilterStatusId==_enumExamStudentStatus.SelectedForEnrollment">
+            <span><b>Note:</b> Please Verify each student before 'Fee Pay'.</span>
+          </div>
+          <div class="verify-notice" *ngIf="request.StudentFilterStatusId==_enumExamStudentStatus.VerifiedForEnrollment">
+            <span><b>Note:</b> Please Pay Fee of each student before 'Eligible'.</span>
+          </div>
 
-
-
-        </div>
-
-        <div class="verify-notice" *ngIf="request.StudentFilterStatusId==_enumExamStudentStatus.SelectedForEnrollment">
-          <span><b>Note:</b> Please Verify each student before 'Fee Pay'.</span>
-        </div>
-        <div class="verify-notice" *ngIf="request.StudentFilterStatusId==_enumExamStudentStatus.VerifiedForEnrollment">
-          <span><b>Note:</b> Please Pay Fee of each student before 'Eligible'.</span>
-        </div>
-
-      </form>
+        </form>
       </div>
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
@@ -203,14 +201,14 @@
         <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
       </div>
       <div>
-        
+
       </div>
       <div>
-        <a href="javascript:void(0);" 
-          class="btn bg-info btn-sm text-white justify-end" 
-          (click)="NorifyStudent_VerifyForEnrollment()"
-          *ngIf="(request.StudentFilterStatusId == _enumExamStudentStatus.VerifiedForEnrollment || 
-                request.StudentFilterStatusId == _enumExamStudentStatus.SelectedForEnrollment)&& 
+        <a href="javascript:void(0);"
+           class="btn bg-info btn-sm text-white justify-end"
+           (click)="NorifyStudent_VerifyForEnrollment()"
+           *ngIf="(request.StudentFilterStatusId == _enumExamStudentStatus.VerifiedForEnrollment ||
+                request.StudentFilterStatusId == _enumExamStudentStatus.SelectedForEnrollment)&&
                 (sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon)">
           <i class="ti ti-clock" title="Snooze Notification"></i> Notify Students
         </a>
@@ -274,7 +272,7 @@
         <tbody>
           <tr *ngIf="!PreExamStudentData || PreExamStudentData.length === 0">
             <td colspan="100%" class="text-center py-4 text-gray-500">
-             No Record Found
+              No Record Found
             </td>
           </tr>
           <tr *ngFor="let row of paginatedInTableData; let idx=index;">
@@ -299,7 +297,8 @@
                   <i class="fa fa-file-o"></i>
                 </a>
 
-                <a *ngIf="row.SemesterID==3" href="javascript:void(0);" class="bg-gray-200" title="Assign Optional Subject" 
+                <a *ngIf="((row.SemesterID==3 && row.CourseType==1) || (row.SemesterID==1 && row.CourseType==2))"
+                   href="javascript:void(0);" class="bg-gray-200" title="Assign Optional Subject"
                    (click)="StudentOptionalSubjectModelView(OptionalSubjectModal, row.StudentID, row.SemesterID)">
                   <i class="fa fa-file-o"></i>
                 </a>
@@ -764,11 +763,16 @@
               </label>
               <select class="form-select" id="ddlSubCategoryA_ID" name="ddlSubCategoryA_ID"
                       [(ngModel)]="requestStudent.SubCategoryA_ID" formControlName="ddlSubCategoryA_ID">
-                <option value="">-- Select --</option>
-                <option *ngFor="let item of SubCasteCategoryADDLList" [value]="item.ID">{{item.Name}}</option>
+                <option value="0">-- Select --</option>
+                <option *ngFor="let item of SubCasteCategoryADDLList" value="{{item.ID}}">{{item.Name}}</option>
               </select>
-              <div *ngIf="isSubmitted && EditStudentDataFormGroup.get('ddlSubCategoryA_ID').errors" class="text-danger">
+              <!--<div *ngIf="isSubmitted && EditStudentDataFormGroup.get('ddlSubCategoryA_ID').errors" class="text-danger">
                 <p *ngIf="EditStudentDataFormGroup.get('ddlSubCategoryA_ID').errors.required">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>-->
+              <div *ngIf="isSubmitted&&EditStudentDataform.ddlSubCategoryA_ID.errors" class="text-danger">
+                <p *ngIf="!EditStudentDataform.ddlSubCategoryA_ID.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This field is required .!
                 </p>
               </div>
@@ -777,7 +781,7 @@
 
             <div>
               <label for="ddlCategoryB_ID" class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Category B <span class="StarMarking">*</span>
+                Category B <!--<span class="StarMarking">*</span>-->
               </label>
               <select class="form-select" id="ddlCategoryB_ID" name="ddlCategoryB_ID"
                       [(ngModel)]="requestStudent.CategoryB_ID" formControlName="ddlCategoryB_ID">
@@ -786,12 +790,12 @@
                   {{item.CasteCategoryName}}
                 </option>
               </select>
-              <div *ngIf="isSubmitted&&EditStudentDataform.ddlCategoryB_ID.errors" class="text-danger">
+              <!--<div *ngIf="isSubmitted&&EditStudentDataform.ddlCategoryB_ID.errors" class="text-danger">
                 <p *ngIf="!EditStudentDataform.ddlCategoryB_ID.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This
                   field is required .!
                 </p>
-              </div>
+              </div>-->
             </div>
 
             <div>
@@ -801,7 +805,7 @@
               </label>
               <input type="date" class="form-input" id="txtDOB" name="txtDOB" formControlName="txtDOB"
                      [(ngModel)]="requestStudent.DOB">
-              <div *ngIf="isSubmitted&&EditStudentDataform.txtDOB.errors" class="text-danger">
+              <div *ngIf="isSubmitted && EditStudentDataform.txtDOB.errors" class="text-danger">
                 <p *ngIf="EditStudentDataform.txtDOB.errors.required">
                   <i aria-hidden="true"></i> This field is required
                   .!
@@ -811,16 +815,16 @@
 
             <div>
               <label for="txtEmail" class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Email
+                Email   <span class="StarMarking">*</span>
               </label>
               <input type="text" class="form-input" id="txtEmail" name="txtEmail" formControlName="txtEmail"
                      [(ngModel)]="requestStudent.Email">
-              <!--<div *ngIf="isSubmitted&&EditStudentDataform.txtEmail.errors" class="text-danger">
+              <div *ngIf="isSubmitted&&EditStudentDataform.txtEmail.errors" class="text-danger">
                 <p *ngIf="EditStudentDataform.txtEmail.errors.required">
                   <i aria-hidden="true"></i> This field is
                   required .!
                 </p>
-              </div>-->
+              </div>
             </div>
 
             <!--<div>
@@ -833,10 +837,16 @@
 
             <div>
 
-              <label for="txtAadharNo" class="text-gray-800 text-sm font-medium inline-block mb-1">Aadhar No.</label>
-              <input type="text" class="form-input disabled" id="txtAadharNo" disabled
-                     name="txtAadharNo" [ngModelOptions]="{standalone: true}"
-                     [(ngModel)]="requestStudent.AadharNo">
+              <label for="txtAadharNo" class="text-gray-800 text-sm font-medium inline-block mb-1">Aadhar No. <span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtAadharNo" formControlName="txtAadharNo"
+                     name="txtAadharNo" [(ngModel)]="requestStudent.AadharNo">
+              <div *ngIf="isSubmitted&&EditStudentDataform.txtAadharNo.errors" class="text-danger">
+                <p *ngIf="EditStudentDataform.txtAadharNo.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required .!
+                </p>
+              </div>
+
             </div>
 
             <div>
@@ -845,7 +855,7 @@
               </label>
               <input type="text" class="form-input" id="txtAbc" name="txtAbc" formControlName="txtAbc" maxlength="12"
                      [(ngModel)]="requestStudent.ABCID">
-              <!-- <div *ngIf="isSubmitted&&EditStudentDataform.txtAbc.errors" class="text-danger">
+              <div *ngIf="isSubmitted&&EditStudentDataform.txtAbc.errors" class="text-danger">
                 <p *ngIf="EditStudentDataform.txtAbc.errors.required">
                   <i aria-hidden="true"></i> This field is
                   required .!
@@ -854,7 +864,7 @@
                   <i aria-hidden="true"></i>  This field is
                   required .!
                 </p>
-              </div> -->
+              </div>
             </div>
 
 
@@ -927,7 +937,7 @@
               <input type="text" class="form-input" id="txtBankName" name="txtBankName" formControlName="txtBankName"
                      [(ngModel)]="requestStudent.BankName">
             </div>
-uploa
+
             <div>
               <label for="txtIFSCCode" class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Bank IFSC
@@ -1038,10 +1048,10 @@ uploa
               </table>
 
             </div>
-            <div *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.Principal || 
+            <div *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.Principal ||
                           this.sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon ||
-                          this.sSOLoginDataModel.RoleID==_EnumRole.PrincipalNodal_Eng || 
-                          this.sSOLoginDataModel.RoleID==_EnumRole.PrincipalNodal_NonEng) && 
+                          this.sSOLoginDataModel.RoleID==_EnumRole.PrincipalNodal_Eng ||
+                          this.sSOLoginDataModel.RoleID==_EnumRole.PrincipalNodal_NonEng) &&
                           (requestStudent.status == _enumExamStudentStatus.SelectedForEnrollment)">
               <!-- Label for "Verified For Examination" -->
               <label class="text-gray-800 text-sm font-bold inline-block mb-1">Verified For Enrollment</label>
@@ -1302,7 +1312,7 @@ uploa
                     <td>Uploaded Document</td>
                     <td>
                       <a class="" target="_blank"
-                        href="{{appsettingConfig.StaticFileRootPathURL}}/{{rejectAtBter_StudentDetails.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{rejectAtBter_StudentDetails.RejectDocName}}">
+                         href="{{appsettingConfig.StaticFileRootPathURL}}/{{rejectAtBter_StudentDetails.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{rejectAtBter_StudentDetails.RejectDocName}}">
                         {{rejectAtBter_StudentDetails.Dis_RejectDocName}}
                       </a>
                     </td>
@@ -1321,46 +1331,46 @@ uploa
 <ng-template #OptionalSubjectModal let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
     <!--<form [formGroup]="OptionalSubjectFormGroup" class="form-horizontal">-->
-      <div class="card">
-        <div class="card-header flex justify-between items-center">
-          <b><i class="fa fa-plus"></i>&nbsp;Assign Optional Subject</b>
-          <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Assign Optional Subject</b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5">Assign Optional Subject</b>
         </div>
-        <div class="card-body">
-          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-            <b class="text-1xl-5">Assign Optional Subject</b>
+        <div class="xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+          <div *ngFor="let item of optionalSubjectList">
+            <label>{{item.SubjectCode}}</label><span class="StarMarking">*</span>
+            <select class="form-select" (change)="UpdateSubjectValue(item.ParentSubjectID,$event.target.value)" required>
+              <option *ngFor="let li of (optionalChildSubjectList | filter:{ParentSubjectID:item.ParentSubjectID})" [value]="li.SubjectID" [selected]="li.SubjectID==item.SubjectID">
+                {{li.SubjectName}}
+              </option>
+            </select>
           </div>
-          <div class="xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
-            <div *ngFor="let item of optionalSubjectList">
-              <label>{{item.SubjectCode}}</label><span class="StarMarking">*</span>
-              <select class="form-select" (change)="UpdateSubjectValue(item.ParentSubjectID,$event.target.value)" required>
-                <option *ngFor="let li of (optionalChildSubjectList | filter:{ParentSubjectID:item.ParentSubjectID})" [value]="li.SubjectID" [selected]="li.SubjectID==item.SubjectID">
-                  {{li.SubjectName}}
-                </option>
-              </select>
-            </div>
-            <!--<div class="text-center">
-              <button type="button" class="btn bg-info text-white inline-block mt-5" (click)="SaveOptionalSubjectData()">Assign Subject</button>
-            </div>-->
+          <!--<div class="text-center">
+            <button type="button" class="btn bg-info text-white inline-block mt-5" (click)="SaveOptionalSubjectData()">Assign Subject</button>
+          </div>-->
 
-            <div class="text-center">
-              <!-- Show button if optionalSubjectList is not empty -->
-              <button *ngIf="optionalSubjectList.length > 0"
-                      type="button"
-                      class="btn bg-info text-white inline-block mt-5"
-                      (click)="SaveOptionalSubjectData()">
-                Assign Subject
-              </button>
+          <div class="text-center">
+            <!-- Show button if optionalSubjectList is not empty -->
+            <button *ngIf="optionalSubjectList.length > 0"
+                    type="button"
+                    class="btn bg-info text-white inline-block mt-5"
+                    (click)="SaveOptionalSubjectData()">
+              Assign Subject
+            </button>
 
-              <!-- Show message if optionalSubjectList is empty -->
-              <span *ngIf="optionalSubjectList.length === 0" class="text-danger">
-                No Optional Subject
-              </span>
-            </div>
-
+            <!-- Show message if optionalSubjectList is empty -->
+            <span *ngIf="optionalSubjectList.length === 0" class="text-danger">
+              No Optional Subject
+            </span>
           </div>
+
         </div>
       </div>
+    </div>
     <!--</form>-->
   </div>
 </ng-template>

@@ -85,7 +85,7 @@ export class BranchWiseHodComponent {
         MailPersonal: ['', []],
         MobileNo: ['', []]
       });
-    await this.GetMenuPermission();
+     await this.GetMenuPermission();
     await this.GetBranchHODApplyList();
     
     if (this.ApplyList.length > 0) {

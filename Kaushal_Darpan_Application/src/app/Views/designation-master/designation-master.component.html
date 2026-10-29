@@ -39,22 +39,42 @@
           <select class="form-select" [(ngModel)]="searchRequest.Gaz_NonGaz">
             <option value="0">Choose Option</option>
             <option value="1">Gazetted</option>
-            <option value="2">Non-Gazetted</option>                  
+            <option value="2">Non-Gazetted</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            From Date: 
+          </label>
+          <input type="date" class="form-input"  [(ngModel)]="searchRequest.FromDate">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            To Date: 
+          </label>
+          <input type="date" class="form-input"  [(ngModel)]="searchRequest.ToDate" [min]="searchRequest.FromDate">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status<span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="searchRequest.ActiveStatus">
+            <option value="-1">Choose Option</option>
+            <option value="1">Active</option>
+            <option value="0">InActive</option>
           </select>
         </div>
 
         <div>
-          <button 
-              class="btn bg-info text-white mt-6 me-1" 
-              type="submit" 
-              (click)="GetDesignationMasterList()">
-              <i class="ti ti-search"></i>Search
+          <button class="btn bg-info text-white mt-6 me-1"
+                  type="submit"
+                  (click)="GetDesignationMasterList()">
+            <i class="ti ti-search"></i>Search
           </button>
-          <button 
-              class="btn bg-warning text-white mt-6 me-1" 
-              type="submit" 
-              (click)="ResetSearch()">
-              <i class="ti ti-search"></i>Reset
+          <button class="btn bg-warning text-white mt-6 me-1"
+                  type="submit"
+                  (click)="ResetSearch()">
+            <i class="ti ti-search"></i>Reset
           </button>
         </div>
       </div>
@@ -91,12 +111,36 @@
           <tr>
             <th width="80px" align="left">Sr. No.</th>
 
-            <th align="left">Designation Type</th>
-            <th align="left">Gazetted/Non-Gazetted</th>
-            <th align="left">Designation Name (English)</th>
-            <th align="left">Designation Name (Hindi)</th>
-            <th align="left">Designation Name (Short)</th>
-            <th>Active/Inactive</th>
+            <th align="left" class="sortable" (click)="sortBy('StaffType_str')">
+              Designation Type <i [class]="getSortIcon('StaffType_str')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('Gaz_NonGaz_str')">
+              Gazetted/Non-Gazetted <i [class]="getSortIcon('Gaz_NonGaz_str')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('DesignationNameEnglish')">
+              Designation Name (English) <i [class]="getSortIcon('DesignationNameEnglish')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('DesignationNameHindi')">
+              Designation Name (Hindi) <i [class]="getSortIcon('DesignationNameHindi')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('DesignationNameShort')">
+              Designation Name (Short) <i [class]="getSortIcon('DesignationNameShort')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('CreatedBy')">
+              Created By <i [class]="getSortIcon('CreatedBy')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('CreatedDate')">
+              Created Date <i [class]="getSortIcon('CreatedDate')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('ModifyBy')">
+              Modify By <i [class]="getSortIcon('ModifyBy')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('ModifyDate')">
+              Modify Date <i [class]="getSortIcon('ModifyDate')"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('IsActive')">
+              Active/Inactive <i [class]="getSortIcon('IsActive')"></i>
+            </th>
             <th align="center" width="200">Action</th>
           </tr>
         </thead>
@@ -108,6 +152,10 @@
             <td>{{row.DesignationNameEnglish}}</td>
             <td>{{row.DesignationNameHindi}}</td>
             <td>{{row.DesignationNameShort}}</td>
+            <td>{{row.CreatedBy}}</td>
+            <td>{{row.CreatedDate}}</td>
+            <td>{{row.ModifyBy}}</td>
+            <td>{{row.ModifyDate}}</td>
             <td>
               <label class="switch">
                 <input type="checkbox"

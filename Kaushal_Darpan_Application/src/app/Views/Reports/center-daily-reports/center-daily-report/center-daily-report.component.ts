@@ -71,6 +71,7 @@ export class CenterDailyReportComponent implements OnInit {
       EndTerm: [this.ssoLoginUser.EndTermID],
       selectedInstitute: [0],
       selectedSemester: [0],
+      rollNumber :''
     });
   }
 
@@ -105,7 +106,8 @@ export class CenterDailyReportComponent implements OnInit {
       Type: 0,
       EndTerm: this.ssoLoginUser.EndTermID,
       selectedInstitute: 0,
-      selectedSemester: 0
+      selectedSemester: 0,
+      rollNumber:''
     });
     this.GetAllData();
   }
@@ -122,7 +124,9 @@ export class CenterDailyReportComponent implements OnInit {
       EndTermID: this.filterForm.value.EndTerm || 0,
       DepartmentID: this.ssoLoginUser.DepartmentID,
       Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
-      RoleID: this.ssoLoginUser.RoleID
+      RoleID: this.ssoLoginUser.RoleID,
+      RollNumber: this.filterForm.value.rollNumber || ''
+
     };
 
     this.CollegesWiseReportsModellList = [];

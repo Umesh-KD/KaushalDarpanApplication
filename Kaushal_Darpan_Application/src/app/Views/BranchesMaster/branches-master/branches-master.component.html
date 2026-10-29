@@ -23,11 +23,11 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Branch Code</label>
-          <input type="text" class="form-input" placeholder="Search By Branch Code"  [(ngModel)]="searchByBranchCode" >
+          <input type="text" class="form-input" placeholder="Search By Branch Code" [(ngModel)]="searchByBranchCode">
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Branch Name</label>
-          <input type="text" class="form-input" placeholder="Search By Branch Name"  [(ngModel)]="searchByBranchName">
+          <input type="text" class="form-input" placeholder="Search By Branch Name" [(ngModel)]="searchByBranchName">
         </div>
 
         <div>
@@ -37,6 +37,21 @@
             <option *ngFor="let item of StreamTypeList" [value]="item.StreamTypeID">{{item.StreamType}}</option>
           </select>
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            From Date:
+          </label>
+          <input type="date" class="form-input" [(ngModel)]="FromDate">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            To Date:
+          </label>
+          <input type="date" class="form-input" [(ngModel)]="ToDate" [min]="FromDate">
+        </div>
+
         <div>
           <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="onSearchClick()">Search</button>
           <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
@@ -48,6 +63,9 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+        <i class="ti ti-excel"></i> Export Excel
+      </a>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
@@ -71,10 +89,32 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th width="80px" align="left">Sr. No.</th>
-            <th class="text-left">Code</th>
-            <th class="text-left">Name</th>
-            <th class="text-left">Type</th>
-            <th class="text-left">Duration Years</th>
+
+            <th class="text-left sortable" (click)="sortBy('Code')">
+              Code <i [class]="getSortIcon('Code')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('Name')">
+              Name <i [class]="getSortIcon('Name')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('StreamType')">
+              Type <i [class]="getSortIcon('StreamType')"></i>
+            </th>
+            <th class="text-left sortable" (click)="sortBy('Duration')">
+              Duration Years <i [class]="getSortIcon('Duration')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('CreatedBy')">
+              Created By <i [class]="getSortIcon('CreatedBy')"></i>
+            </th>
+
+            <th align="left" class="sortable" (click)="sortBy('CreatedDate')">
+              Created Date <i [class]="getSortIcon('CreatedDate')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('ModifyBy')">
+              Modify By <i [class]="getSortIcon('ModifyBy')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('ModifyDate')">
+              Modify Date <i [class]="getSortIcon('ModifyDate')"></i>
+            </th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -90,6 +130,10 @@
               {{stream.StreamType}}
             </td>
             <td> {{stream.Duration}}</td>
+            <td>{{stream.CreatedBy}}</td>
+            <td>{{stream.CreatedDate}}</td>
+            <td>{{stream.ModifyBy}}</td>
+            <td>{{stream.ModifyDate}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0);" title="Edit" (click)=" onEdit(stream.StreamID)"><i class="ti ti-pencil"></i></a>

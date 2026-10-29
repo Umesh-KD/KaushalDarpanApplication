@@ -232,6 +232,9 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public OtherDepartmentStaff: number = 0;
   public PostServiceTypeID: number = 0;
   public ChildPostServiceTypeID: number = 0;
+
+  public CurrentDrawnPayLevelID?: number = 0;
+  public BasicPay?: number = 0;
 }
 
 

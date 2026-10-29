@@ -7,7 +7,7 @@
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/Branches" class="text-sm font-medium text-slate-700" aria-current="page">
+      <a class="text-sm font-medium text-slate-700" aria-current="page">
         Add Staff Basic
         Details
       </a>
@@ -38,7 +38,7 @@
           </div>
         </div>
         <div class="AddStaffBox">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID <span class="StarMarking">*</span> </label>
           <input class="form-input" placeholder="Enter SSO ID" name="SSOID" id="txtSSOID"
                  formControlName="txtSSOID" [(ngModel)]="formData.SSOID" />
           <div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.txtSSOID.errors" class="text-danger">
@@ -92,7 +92,7 @@
           </div>
         </div>
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation <span class="StarMarking">*</span></label>
           <select class="form-select" name="DesignationID" id="ddlDesignation"
                   formControlName="ddlDesignation" [(ngModel)]="formData.DesignationID"  >
             <option value="0">Choose Option</option>
