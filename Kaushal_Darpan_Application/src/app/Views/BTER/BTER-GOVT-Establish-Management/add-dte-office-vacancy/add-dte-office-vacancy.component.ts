@@ -43,7 +43,7 @@ export class AddDTEOfficeVacancyComponent {
   public Uploadfile: string = '';
   public isSubmitted: boolean = false;
   public isFinalSave:boolean=true;
-  public IsNonGazetted:boolean=true;
+  public IsNonGazetted:boolean=false;
   public isShow:boolean=true;
   public VacancyID: number = 0;
   public today: string = '';
@@ -362,7 +362,9 @@ export class AddDTEOfficeVacancyComponent {
       OrderDate: formValues.OrderDate,
       BranchID: formValues.BranchID,
       BranchName: BranchID,
-      BugetHeadTypeID: formValues.BugetHeadTypeID
+      BugetHeadTypeID: formValues.BugetHeadTypeID,
+      PostServiceTypeID: formValues.PostServiceTypeID,
+      ChildPostServiceTypeID: formValues.ChildPostServiceTypeID
     };
 
     console.log('Vacancy being added:', vacancyData);
@@ -388,7 +390,7 @@ export class AddDTEOfficeVacancyComponent {
    
     try {
       this.loaderService.requestStarted();
-
+      debugger
       await this.BTER_EstablishManagementService.Save_M_OfficeVacancy_IU(this.OfficeVacancy).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
