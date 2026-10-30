@@ -755,6 +755,8 @@ export class OfficeVacancyModel {
   public BudgetTypeName?:string='';
   public BranchName?:string='';
   public RoleID?: number = 0;
+  public PostServiceTypeID?: number = 0;
+  public ChildPostServiceTypeID?: number = 0;
 }
 
 export class OfficeVacancySearchModel {

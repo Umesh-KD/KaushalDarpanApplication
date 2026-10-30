@@ -12,7 +12,7 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
-import { BudgetType, EnumStatus } from '../../../../Common/GlobalConstants';
+import { BudgetType, EnumPostServiceType_BTER, EnumStatus } from '../../../../Common/GlobalConstants';
 
 @Component({
   selector: 'app-add-dte-office-vacancy',
@@ -26,6 +26,8 @@ export class AddDTEOfficeVacancyComponent {
 
   public AddOfficeVacancyForm!: FormGroup;
 
+   _EnumPostServiceType_BTER =  EnumPostServiceType_BTER;
+
   public OfficeList: any[] = [];
   public PostList: any[] = [];
   public InstituteMasterDDLList: any = [];
@@ -34,11 +36,14 @@ export class AddDTEOfficeVacancyComponent {
   OfficeVacancyList: OfficeVacancyModel[] = [];
   OfficeVacancy: OfficeVacancyModel[] = [];
   public StreamMasterDDLList: any[] = [];
+  public PostServiceTypeDDL: any[] = [];
+  public ChildPostServiceTypeDDL: any[] = [];
 
   public file!: File;
   public Uploadfile: string = '';
   public isSubmitted: boolean = false;
   public isFinalSave:boolean=true;
+  public IsNonGazetted:boolean=true;
   public isShow:boolean=true;
   public VacancyID: number = 0;
   public today: string = '';
@@ -70,7 +75,9 @@ export class AddDTEOfficeVacancyComponent {
       OrderNumber: ['',Validators.required],
       OrderDate: ['',Validators.required],
       BugetHeadTypeID: [0, [DropdownValidators]],
-      BranchID: [0, [DropdownValidators]]
+      BranchID: [0, [DropdownValidators]],
+      PostServiceTypeID: [''],
+      ChildPostServiceTypeID: [''],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -260,8 +267,26 @@ export class AddDTEOfficeVacancyComponent {
   async refreshValidators() {
     if(this.formData.StaffTypeID!=30) {
       this.AddOfficeVacancyForm.get('BranchID')?.clearValidators();
-      this.AddOfficeVacancyForm.get('BranchID')?.updateValueAndValidity();
+    } else {
+      this.AddOfficeVacancyForm.get('BranchID')?.setValidators([DropdownValidators]);
+      
     }
+
+    if(this.IsNonGazetted){
+      this.AddOfficeVacancyForm.controls['PostServiceTypeID'].setValidators([DropdownValidators]);
+      if(this.formData.PostServiceTypeID == EnumPostServiceType_BTER.Other_Department_Services){
+        this.AddOfficeVacancyForm.controls['ChildPostServiceTypeID'].setValidators([DropdownValidators]);
+      } else {
+        this.AddOfficeVacancyForm.controls['ChildPostServiceTypeID'].clearValidators();
+      }
+    } else {
+      this.AddOfficeVacancyForm.controls['PostServiceTypeID'].clearValidators();
+      this.AddOfficeVacancyForm.controls['ChildPostServiceTypeID'].clearValidators();
+    }
+
+    this.AddOfficeVacancyForm.get('BranchID')?.updateValueAndValidity();
+    this.AddOfficeVacancyForm.controls['PostServiceTypeID'].updateValueAndValidity();
+    this.AddOfficeVacancyForm.controls['ChildPostServiceTypeID'].updateValueAndValidity();
   }
 
   tempIndex: number = 1;
@@ -397,6 +422,12 @@ export class AddDTEOfficeVacancyComponent {
 
   async getStreamMasterList() {
     try {
+
+      await this.GetIsNonGazettedPost();
+      if(this.IsNonGazetted){
+        await this.getPostServiceTypeDDL();
+      }
+
       var Eng_NonEng: number = 0
       if(this.formData.DesignationID == 75) {
         Eng_NonEng = 1
@@ -453,5 +484,68 @@ export class AddDTEOfficeVacancyComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  async GetIsNonGazettedPost() {
+    try {
+      const request: any = {};
+      request.DesignationID = this.formData.DesignationID;
+      request.Action = "GetIsPostGazOrNot";
+      await this.BTER_EstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.Data[0].ISNonGazetted == true) {
+          this.IsNonGazetted = true;
+        } else {
+          this.IsNonGazetted = false;
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    } 
+  }
+
+  async getPostServiceTypeDDL() {
+    try {
+      this.PostServiceTypeDDL = [];
+      this.formData.PostServiceTypeID = 0;
+
+      const request: any = {};
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Action = "GetPostServiceType_All";
+      await this.BTER_EstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.PostServiceTypeDDL = data['Data'] || [];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getChildPostServiceTypeDDL() {
+    if(this.formData.PostServiceTypeID != EnumPostServiceType_BTER.Other_Department_Services){
+      this.ChildPostServiceTypeDDL = [];
+      this.formData.ChildPostServiceTypeID = 0;
+      return;
+    } 
+    else {
+      try {
+        this.ChildPostServiceTypeDDL = [];
+        this.formData.ChildPostServiceTypeID = 0;
+
+        const request: any = {};
+        request.RoleID = this.sSOLoginDataModel.RoleID;
+        request.UserID = this.sSOLoginDataModel.UserID;
+        request.PostServiceTypeID = this.formData.PostServiceTypeID;
+        request.Action = "GetChildPostServiceType_All";
+        await this.BTER_EstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ChildPostServiceTypeDDL = data['Data'] || [];
+        })
+
+      } catch (error) {
+        console.error(error);
+      }
+    }    
   }
 }
