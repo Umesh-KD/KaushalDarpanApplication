@@ -790,7 +790,7 @@ export class StudentEnrollmentComponent {
     }
 
     // sub category validators on OBC and General case
-    if (this.requestStudent.CategoryA_ID == 4 || this.requestStudent.CategoryA_ID == 1) {
+    if (this.requestStudent.CategoryA_ID == 4) {
       this.EditStudentDataFormGroup.get('ddlSubCategoryA_ID')?.setValidators([DropdownValidators]);
     } else {
       this.EditStudentDataFormGroup.get('ddlSubCategoryA_ID')?.clearValidators();
