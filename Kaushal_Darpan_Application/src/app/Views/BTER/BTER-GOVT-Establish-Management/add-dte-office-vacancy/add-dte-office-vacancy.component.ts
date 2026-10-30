@@ -121,16 +121,16 @@ export class AddDTEOfficeVacancyComponent {
   }
   
   async GetPostList() {
-    var id = 0;
-    // || this.formData.OfficeID==17
-    if (this.formData.StaffTypeID == 31 && (this.formData.OfficeID==18)) {
-      id = 1;
-    } else if(this.formData.StaffTypeID == 31 && this.formData.OfficeID==17) {
-      id=2;
-    }
+    // var id = 0;
+    // // || this.formData.OfficeID==17
+    // if (this.formData.StaffTypeID == 31 && (this.formData.OfficeID==18)) {
+    //   id = 1;
+    // } else if(this.formData.StaffTypeID == 31 && this.formData.OfficeID==17) {
+    //   id=2;
+    // }
     try {
       this.loaderService.requestStarted();
-      const data: any = await this.commonMasterService.GetDesignationAndPostMaster(id);
+      const data: any = await this.commonMasterService.GetDesignationAndPostMaster(this.formData.StaffTypeID);
       this.PostList = data['Data'];
       this.PostList = this.PostList.filter((item: any) => item.TypeID == this.formData.StaffTypeID);
       // Keep original list for filtering later
