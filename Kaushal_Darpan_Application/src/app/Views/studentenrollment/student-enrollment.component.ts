@@ -210,8 +210,8 @@ export class StudentEnrollmentComponent {
         ddlExamCategoryID: [''],
         txtStudentName: [''],
         txtMobileNo: [''],
-        txtAbc :['']
-      })   
+        txtAbc: ['']
+      })
 
     this.requestStudent.commonSubjectDetails = [];
 
@@ -234,7 +234,7 @@ export class StudentEnrollmentComponent {
       })
     this.requestStudent.QualificationDetails = [];
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    if(!(this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DTENON || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR)){
+    if (!(this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DTENON || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR)) {
       await this.GetMenuPermission();
     }
     /*this.statusID = Number(this.activatedRoute.snapshot.queryParamMap.get('status')?.toString());*/
@@ -251,9 +251,9 @@ export class StudentEnrollmentComponent {
     console.log(this.request.InstituteID, 'this.request.InstituteID')
 
     if (
-      this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+      this.sSOLoginDataModel.RoleID == EnumRole.Principal ||
       this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
-      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng || 
+      this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng ||
       this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
     ) {
       this.isShowdrop = true;
@@ -278,26 +278,26 @@ export class StudentEnrollmentComponent {
   get FormAction() { return this.formAction.controls; }
 
   async GetMenuPermission() {
- 
+
     const baseRoute = this.router.url.split('?')[0].split('/').filter(Boolean)[0] ?? '';
- 
+
     var request: any = {
       FilterBy: baseRoute,
       MasterCode: "GetAllowedRoleForMenu"
     }
- 
+
     await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
-      data =  JSON.parse(JSON.stringify(data));
-      if(data.State == EnumStatus.Success){
-        this.MenuAllowedRoleList=data.Data
- 
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State == EnumStatus.Success) {
+        this.MenuAllowedRoleList = data.Data
+
         if (!this.MenuAllowedRoleList.some(
           (item: any) => Number(item.RoleID) == Number(this.sSOLoginDataModel.RoleID)
         )) {
           // Navigate to dashboard if RoleID is not allowed
           this.router.navigate(['/dashboard']);
         }
-      }      
+      }
     })
   }
 
@@ -308,7 +308,7 @@ export class StudentEnrollmentComponent {
       return;
     }
     // role
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon) {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon || this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
       this.isShowImageDeleteButton = true;
     } else {
       this.isShowImageDeleteButton = false
@@ -330,9 +330,9 @@ export class StudentEnrollmentComponent {
           data = JSON.parse(JSON.stringify(data));
 
           if (
-            this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+            this.sSOLoginDataModel.RoleID == EnumRole.Principal ||
             this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
-            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng || 
+            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng ||
             this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
           ) {
             this.InstituteMasterList = data['Data'];
@@ -470,7 +470,7 @@ export class StudentEnrollmentComponent {
 
   async btn_SearchClick() {
     this.isSubmitted = true;
-    if(this.request.MobileNo.length < 10 && this.request.MobileNo.length > 0){
+    if (this.request.MobileNo.length < 10 && this.request.MobileNo.length > 0) {
       this.toastr.error("Mobile number should be 10 digits.");
     }
     if (this.SearchStudentDataFormGroup.invalid) {
@@ -758,7 +758,7 @@ export class StudentEnrollmentComponent {
     let needCheckOptionalSubjectAdded = false;
     // check optional subject already added or not for condition base
     if ((this.sSOLoginDataModel.RoleID == EnumRole.Principal)
-      && [3,4, 5, 6].includes(SemesterID) && StudentTypeID == 1) {
+      && [3, 4, 5, 6].includes(SemesterID) && StudentTypeID == 1) {
       needCheckOptionalSubjectAdded = true;
     }
 
@@ -768,30 +768,30 @@ export class StudentEnrollmentComponent {
     }
 
     try {
-        await this.studentEnrollmentService.HaveOptionalSubject_Enrollment(StudentID, SemesterID, this.sSOLoginDataModel.EndTermID)
-      .then(async (data: any) => {
-        if (needCheckOptionalSubjectAdded == true && this.toBoolean(data?.Data) != true) {
-          this.toastr.warning("Please add optional subject first!");
-          return;
-        }
+      await this.studentEnrollmentService.HaveOptionalSubject_Enrollment(StudentID, SemesterID, this.sSOLoginDataModel.EndTermID)
+        .then(async (data: any) => {
+          if (needCheckOptionalSubjectAdded == true && this.toBoolean(data?.Data) != true) {
+            this.toastr.warning("Please add optional subject first!");
+            return;
+          }
 
-        this.requestUpdateEnrollmentNo.OrderDate = (new Date(this.TodayDate)?.toISOString()?.split('T')?.shift()?.toString()) ?? "";
-        this.requestUpdateEnrollmentNo.UpdatedDate = (new Date(this.TodayDate)?.toISOString()?.split('T')?.shift()?.toString()) ?? "";
+          this.requestUpdateEnrollmentNo.OrderDate = (new Date(this.TodayDate)?.toISOString()?.split('T')?.shift()?.toString()) ?? "";
+          this.requestUpdateEnrollmentNo.UpdatedDate = (new Date(this.TodayDate)?.toISOString()?.split('T')?.shift()?.toString()) ?? "";
 
-        this.IsShowViewStudent = true;
-        this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
-          this.closeResult = `Closed with: ${result}`;
-        }, (reason: any) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        });
-        //
+          this.IsShowViewStudent = true;
+          this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+            this.closeResult = `Closed with: ${result}`;
+          }, (reason: any) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          });
+          //
 
-        await this.GetPreExam_StudentMaster(StudentID);
+          await this.GetPreExam_StudentMaster(StudentID);
 
-      }, (error: any) => console.error(error));
+        }, (error: any) => console.error(error));
     } catch (error) {
       console.error(error);
-    }    
+    }
   }
 
   // save edited student
@@ -834,13 +834,21 @@ export class StudentEnrollmentComponent {
       return;
     }
 
+    //qualification length
+    if (this.requestStudent.StudentFilterStatusId != this._enumExamStudentStatus.Addimited &&
+      this.requestStudent.QualificationDetails.length == 0) {
+      this.toastr.error("Please add qualification details!");
+      return;
+    }
+
     //qualification custome
     if (!this.isValidQualifications()) {
       return;
     }
 
     //document required
-    if (this.documentDetailsService.HasRequiredDocument(this.requestStudent.DocumentDetails)) {
+    if (this.requestStudent.StudentFilterStatusId != this._enumExamStudentStatus.Addimited &&
+      this.documentDetailsService.HasRequiredDocument(this.requestStudent.DocumentDetails)) {
       return;
     }
 
@@ -875,9 +883,9 @@ export class StudentEnrollmentComponent {
           if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
             if (
-              this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+              this.sSOLoginDataModel.RoleID == EnumRole.Principal ||
               this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
-              this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng || 
+              this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng ||
               this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
             ) {
               this.VerifiedSendForSMSEnrollmentStudent();
@@ -995,14 +1003,14 @@ export class StudentEnrollmentComponent {
       }
       if (this.status == enumExamStudentStatus.Dropout) {
         if (
-          this.request.StudentFilterStatusId != enumExamStudentStatus.RejectatBTER && 
-          this.request.StudentFilterStatusId != enumExamStudentStatus.Dropout && 
-          (this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
+          this.request.StudentFilterStatusId != enumExamStudentStatus.RejectatBTER &&
+          this.request.StudentFilterStatusId != enumExamStudentStatus.Dropout &&
+          (this.sSOLoginDataModel.RoleID == EnumRole.Principal ||
             this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
             this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng ||
             this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
-          ) || 
-          (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || 
+          ) ||
+          (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge ||
             this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng
           )
         ) {
@@ -1044,14 +1052,14 @@ export class StudentEnrollmentComponent {
       // eligible for enrollment
       if (this.request.StudentFilterStatusId == enumExamStudentStatus.EnrolledFeePaid) {
         if (
-          this.status == enumExamStudentStatus.EligibleForEnrollment && 
-          (this.sSOLoginDataModel.RoleID == EnumRole.Principal || 
-            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || 
-            this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || 
-            this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng || 
-            this.sSOLoginDataModel.RoleID == EnumRole.Registrar || 
+          this.status == enumExamStudentStatus.EligibleForEnrollment &&
+          (this.sSOLoginDataModel.RoleID == EnumRole.Principal ||
+            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+            this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge ||
+            this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng ||
+            this.sSOLoginDataModel.RoleID == EnumRole.Registrar ||
             this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng ||
-            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng || 
+            this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_Eng ||
             this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNodal_NonEng
           )
         ) {
@@ -1205,7 +1213,7 @@ export class StudentEnrollmentComponent {
   async SaveRejectAtBTER() {
     try {
       this.IsFormActionSubmitted = true;
-      if(this.formAction.invalid){
+      if (this.formAction.invalid) {
         this.toastr.error("Please fill required fields")
         return
       }
@@ -1560,7 +1568,7 @@ export class StudentEnrollmentComponent {
     const unwantedColumns = [
       'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate',
       'IPAddress', 'Selected', 'status', 'EndTermID', 'StreamID',
-      'StudentExamStatus', 'StudentType', 'RollNo', 'InstituteID','InstituteStreamID',
+      'StudentExamStatus', 'StudentType', 'RollNo', 'InstituteID', 'InstituteStreamID',
       'st_his_StatusId', 'st_his_StatusName', 'st_his_Remark'
     ];
 
@@ -1597,8 +1605,7 @@ export class StudentEnrollmentComponent {
     try {
       this.SubCasteCategoryADDLList = [];
       this.loaderService.requestStarted();
-      if (this.requestStudent.CategoryA_ID > 0)
-      {
+      if (this.requestStudent.CategoryA_ID > 0) {
         await this.commonMasterService.GetSubCasteCategoryA(this.requestStudent.CategoryA_ID)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
@@ -1609,7 +1616,7 @@ export class StudentEnrollmentComponent {
           }, (error: any) => console.error(error)
           );
       }
-      
+
     }
     catch (ex) {
       console.log(ex);
@@ -1996,7 +2003,7 @@ export class StudentEnrollmentComponent {
       /*  }, 200);*/
     }
   }
-  
+
   async openModal_RejectStudent() {
     try {
       await this.GetDocumentDetails_RejectAtBter()
@@ -2009,7 +2016,7 @@ export class StudentEnrollmentComponent {
       const formattedDate = `${year}-${month}-${day}`;
 
       this.requestAction.OrderDate = formattedDate
-      
+
       // Open the modal template
       const modalOptions: NgbModalOptions = {
         size: 'md'  // Set the size of the modal to 'md' (medium)
@@ -2045,10 +2052,10 @@ export class StudentEnrollmentComponent {
       request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       request.FileNameWithDynamicPath = 1
       await this.commonMasterService.GetDocumentDetails_RejectAtBter(request).then(async (data: any) => {
-        if(data.State === EnumStatus.Success) {
+        if (data.State === EnumStatus.Success) {
           this.RejectDocumentDetail = data.Data
           this.requestRejectDoc = this.RejectDocumentDetail[0]
-        } else if(data.State === EnumStatus.Warning) {
+        } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message)
         } else {
           this.toastr.error(data.ErrorMessage)
@@ -2096,11 +2103,11 @@ export class StudentEnrollmentComponent {
             //   this.requestStudent.DocumentDetails[index].FileName = data.Data[0].FileName;
             //   this.requestStudent.DocumentDetails[index].Dis_FileName = data.Data[0].Dis_FileName;
             // }
-            if(name=="rejectPhoto") {
+            if (name == "rejectPhoto") {
               this.requestAction.SuspendDocumnet = data.Data[0]['FileName']
               this.requestAction.Dis_SuspendDoc = data.Data[0]['Dis_FileName']
             }
-              
+
             console.log(this.requestStudent.DocumentDetails)
             //reset file type
             event.target.value = null;
@@ -2127,13 +2134,13 @@ export class StudentEnrollmentComponent {
     });
   }
 
-  async GetRejectAtBter_StudentDetails_Enrollment( StudentID: number) {
+  async GetRejectAtBter_StudentDetails_Enrollment(StudentID: number) {
     const request: any = {}
     request.StudentID = StudentID
     try {
       await this.studentEnrollmentService.GetRejectAtBter_StudentDetails_Enrollment(request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success) {
+        if (data.State === EnumStatus.Success) {
           this.rejectAtBter_StudentDetails = data.Data[0]
         } else {
           this.toastr.error(data.ErrorMessage)
@@ -2147,29 +2154,29 @@ export class StudentEnrollmentComponent {
   async NorifyStudent_VerifyForEnrollment() {
     let Requestdata: any = this.PreExamStudentData.filter((e: any) => e.Selected == true)
 
-    if(Requestdata.length > 0) {
+    if (Requestdata.length > 0) {
       this.Swal2.Confirmation("Are you sure to Notify Students?", async (result: any) => {
-      //confirmed
-      if (result.isConfirmed) {
-        const SMSrequest: ForSMSNotifyStudentModel[] = Requestdata.map((student: any) => ({
+        //confirmed
+        if (result.isConfirmed) {
+          const SMSrequest: ForSMSNotifyStudentModel[] = Requestdata.map((student: any) => ({
             StudentId: student.StudentID,
             MobileNo: student.MobileNo,
             StudentName: student.StudentName,
             MessageType: "Exam_Fee_Reminder"
-        }));
+          }));
 
-        this.sMSMailService.NorifyStudent_VerifyForEnrollment(SMSrequest)
-          .then(async (data: any) => {
-            if (data.State == EnumStatus.Success) {
-              this.toastr.success("Notification sent successfully");
-            } else if (data.State == EnumStatus.Warning) {
-              this.toastr.warning(data.Message);
-            } else {
-              console.log(data.ErrorMessage);
-            }
-          });
-      }
-    });
+          this.sMSMailService.NorifyStudent_VerifyForEnrollment(SMSrequest)
+            .then(async (data: any) => {
+              if (data.State == EnumStatus.Success) {
+                this.toastr.success("Notification sent successfully");
+              } else if (data.State == EnumStatus.Warning) {
+                this.toastr.warning(data.Message);
+              } else {
+                console.log(data.ErrorMessage);
+              }
+            });
+        }
+      });
     } else {
       this.toastr.error('Please select at least one student to notify')
       return
@@ -2270,13 +2277,13 @@ export class StudentEnrollmentComponent {
   }
 
   validateApplicationNo(event: Event): void {
-  const input = event.target as HTMLInputElement;
+    const input = event.target as HTMLInputElement;
 
-  // Allow only letters and numbers
-  input.value = input.value.replace(/[^a-zA-Z0-9]/g, '');
+    // Allow only letters and numbers
+    input.value = input.value.replace(/[^a-zA-Z0-9]/g, '');
 
-  this.request.ApplicationNo = input.value;
-}
+    this.request.ApplicationNo = input.value;
+  }
 
 
   validateNumber(event: KeyboardEvent) {
@@ -2286,16 +2293,26 @@ export class StudentEnrollmentComponent {
     }
   }
 
-  
-validateName(event: Event): void {
-  const input = event.target as HTMLInputElement;
 
-  // Allow only letters and spaces
-  input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
+  validateName(event: Event): void {
+    const input = event.target as HTMLInputElement;
 
-  this.request.Name = input.value;
-}
+    // Allow only letters and spaces
+    input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
 
+    this.request.Name = input.value;
+  }
+
+  isValidRole() {
+
+    var valid = (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon);
+    return valid;
+  }
+  isValidStatus() {
+
+    var valid = (this.request.StudentFilterStatusId == this._enumExamStudentStatus.SelectedForEnrollment || this.request.StudentFilterStatusId == this._enumExamStudentStatus.VerifiedForEnrollment);
+    return valid;
+  }
 
 
 }
