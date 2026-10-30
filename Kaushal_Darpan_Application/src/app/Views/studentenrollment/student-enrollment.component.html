@@ -907,12 +907,12 @@
                 </label>
                 <div class="flex" *ngIf="item.FileName!=''">
                   <!-- when data by application master-->
-                  <a *ngIf="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited" href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
+                  <a *ngIf="request.StudentFilterStatusId == _enumExamStudentStatus.Addimited" href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
                      class="btn bg-primary text-white m-0" target="_blank">
                     <i class="ti ti-eye"></i>
                   </a>
                   <!-- when data by students master-->
-                  <a *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.Addimited"
+                  <a *ngIf="request.StudentFilterStatusId != _enumExamStudentStatus.Addimited"
                      href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{item.FileName}}"
                      class="btn bg-primary text-white m-0" target="_blank">
                     <i class="ti ti-eye"></i>
