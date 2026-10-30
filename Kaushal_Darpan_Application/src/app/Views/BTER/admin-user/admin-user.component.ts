@@ -351,7 +351,7 @@ export class AdminUserComponent implements OnInit {
     try {
       await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID,
         this.sSOLoginDataModel.Eng_NonEng,
-        this.sSOLoginDataModel.EndTermID)
+        this.sSOLoginDataModel.EndTermID, 5)
         .then((data: any) => {
           this.InstituteMasterDDLList = data.Data;
         })
