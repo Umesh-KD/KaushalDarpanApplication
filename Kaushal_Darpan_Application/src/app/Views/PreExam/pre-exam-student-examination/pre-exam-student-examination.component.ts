@@ -330,7 +330,9 @@ export class PreExamStudentExaminationComponent {
 
     this.requestStudent.QualificationDetails = [];
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetMenuPermission();
+    if(!(this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DTENON || this.sSOLoginDataModel.RoleID == EnumRole.DIRECTOR)){
+      await this.GetMenuPermission();
+    }
     this.InstituteID = Number(this.activatedRoute.snapshot.paramMap.get('instituteId') ?? 0);
     //debugger
     // handle for found both

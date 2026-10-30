@@ -24,7 +24,8 @@ export class DTEOfficeVacancyListComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public formData = new OfficeVacancyModel();
   public deleteRequest = new OfficeVacancyModel();
-
+  InstituteIds: number[] = [];
+  BranchIds: number[] = [];
   public OfficeList: any[] = [];
   public OfficeVacancyList: any[] = [];
   public InstituteMasterDDLList: any[] = [];
@@ -39,7 +40,8 @@ export class DTEOfficeVacancyListComponent {
   public totalVacantPost: number = 0;
   public totalWorkingPost: number = 0;  
   public IsEdit: boolean = false;
-
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
   public currentInTablePage: number = 1;
@@ -143,6 +145,8 @@ export class DTEOfficeVacancyListComponent {
       this.SearchData.SSOID = this.sSOLoginDataModel.SSOID;
       this.SearchData.UserID = this.sSOLoginDataModel.UserID;
       this.SearchData.RoleID = this.sSOLoginDataModel.RoleID;
+      this.SearchData.InstituteIDs = (this.InstituteIds || []).join(',');
+      this.SearchData.BranchIDs = (this.BranchIds || []).join(',');
 
       await this.BTER_EstablishManagementService.OfficeVacancyList(this.SearchData)
         .then((data: any) => {
@@ -255,10 +259,11 @@ export class DTEOfficeVacancyListComponent {
 
   exportToExcel() {
     if (!this.OfficeVacancyList || this.OfficeVacancyList.length === 0) {
-      this.toastr.warning("No data available to export."); // or console.warn if toastr isn't available
+      this.toastr.warning("No data available to export.");
       return;
     }
-    const excelData = this.OfficeVacancyList.map((item: any, index: number) => ({
+
+    const excelData: any[] = this.OfficeVacancyList.map((item: any, index: number) => ({
       'S.No': index + 1,
       'Office': item.OfficeName,
       'Institute': item.InstituteName,
@@ -267,12 +272,16 @@ export class DTEOfficeVacancyListComponent {
       'Branch': item.BranchName,
       'Budget Head': item.BudgetTypeName,
       'Sanctioned Post': Number(item.TotalSeatID || 0),
-      'Working Post': Number(item.PostedSeat || 0), 
+      'Working Post': Number(item.PostedSeat || 0),
       'Vacant Post': Number(item.RemainingSeatID || 0),
       'Order Number': item.OrderNumber,
       'Order Date': item.OrderDate,
       'Comments': item.Comments,
-      'Active': item.ActiveStatus,
+      'Created By': item.CreatedBy,
+      'Created Date': item.CreatedDate,
+      'Modify By': item.ModifyBy,
+      'Modify Date': item.ModifyDate,
+      'Active': item.ActiveStatus ? 'Active' : 'Inactive',
     }));
 
     const totalSanctioned = excelData.reduce((sum, item) => sum + item['Sanctioned Post'], 0);
@@ -280,7 +289,7 @@ export class DTEOfficeVacancyListComponent {
     const totalVacant = excelData.reduce((sum, item) => sum + item['Vacant Post'], 0);
 
     excelData.push({
-      'S.No': 0,
+      'S.No': '',
       'Office': 'Total',
       'Institute': '',
       'Staff Type': '',
@@ -293,6 +302,10 @@ export class DTEOfficeVacancyListComponent {
       'Order Number': '',
       'Order Date': '',
       'Comments': '',
+      'Created By': '',
+      'Created Date': '',
+      'Modify By': '',
+      'Modify Date': '',
       'Active': '',
     });
 
@@ -382,6 +395,49 @@ export class DTEOfficeVacancyListComponent {
   get sortInTableDirectionAero(): string {
     return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
   }
-  
+  sortBy(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    const dir = this.sortDirection === 'asc' ? 1 : -1;
+    const isDateCol = column === 'CreatedDate' || column === 'ModifyDate';
+
+    this.paginatedInTableData = [...this.paginatedInTableData].sort((a: any, b: any) => {
+      let x = a[column];
+      let y = b[column];
+
+      if (isDateCol) {
+        x = this.parseDate(x);
+        y = this.parseDate(y);
+      } else if (typeof x === 'string' || typeof y === 'string') {
+        x = (x ?? '').toString().toLowerCase();
+        y = (y ?? '').toString().toLowerCase();
+      }
+
+      if (x < y) return -1 * dir;
+      if (x > y) return 1 * dir;
+      return 0;
+    });
+  }
+
+  getSortIcon(column: string): string {
+    if (this.sortColumn !== column) return 'ti ti-arrows-sort';
+    return this.sortDirection === 'asc' ? 'ti ti-sort-ascending' : 'ti ti-sort-descending';
+  }
+
+  // Parses 'dd-MM-yyyy hh:mm:ss tt' coming from the proc's FORMAT()
+  private parseDate(value: string): number {
+    if (!value) return 0;
+    const m = value.match(/^(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2}) (AM|PM)$/i);
+    if (!m) return 0;
+    let hours = parseInt(m[4], 10) % 12;
+    if (m[7].toUpperCase() === 'PM') hours += 12;
+    return new Date(+m[3], +m[2] - 1, +m[1], hours, +m[5], +m[6]).getTime();
+  }
+
   // end table feature
 }

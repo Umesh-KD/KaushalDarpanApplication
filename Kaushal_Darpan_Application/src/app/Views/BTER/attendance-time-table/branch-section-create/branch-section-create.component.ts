@@ -68,6 +68,7 @@ export class BranchSectionCreateComponent {
   displayedColumns: string[] = [
     'SNo',
     'StreamName',
+    'SchemeID',
     //'TotalSections',
     'Semester',
     'LastCreated',
@@ -243,11 +244,57 @@ export class BranchSectionCreateComponent {
 
   createSection1(item?: any): FormGroup {
     ////debugger
+    // return this.formBuilder.group({
+    //   sectionName: [item?.SectionName || ''],
+    //   studentCount: [item?.StudentCount || 0]
+    // });
+
     return this.formBuilder.group({
-      sectionName: [item?.SectionName || ''],
-      studentCount: [item?.StudentCount || 0]
-    });
+    SectionID: [item?.SectionID || 0],
+    type: [item?.SectionType || item?.type || 'Theory'],
+    sectionName: [item?.SectionName || '', Validators.required],
+    studentCount: [item?.StudentCount || 0, [Validators.required, Validators.min(1)]],
+    studentids: [item?.studentids || item?.StudentIDs || '']
+  });
   }
+
+  onStudentCountChange(index?: number) {
+  const streamId = this.IIPMasterFormGroup.get('StreamID')?.value;
+  
+  // 1. Retrieve full pool of students for the selected stream
+  let studentPool: string[] = this.StreamMasterDDL
+    .filter((item: any) => item.StreamID == streamId)
+    .map((x: any) => x.students)
+    .filter((x: any) => x != null && x !== '')
+    .join(',')
+    .split(',')
+    .map((s: any) => s.trim());
+
+  // If stream pool is empty, fall back to aggregating IDs already assigned in controls
+  if (studentPool.length === 0) {
+    const existingIds = this.sections.controls
+      .map(ctrl => ctrl.get('studentids')?.value)
+      .filter(Boolean)
+      .join(',');
+    studentPool = [...new Set(existingIds.split(',').map((s: string) => s.trim()).filter(Boolean))];
+  }
+
+  // 2. Separate sections by type (Theory, Practical, Tutorial)
+  const types = ['Theory', 'Practical', 'Tutorial'];
+
+  types.forEach(type => {
+    let poolCopy = [...studentPool];
+    const matchingControls = this.sections.controls.filter(
+      ctrl => (ctrl.get('type')?.value || 'Theory').toLowerCase() === type.toLowerCase()
+    );
+
+    matchingControls.forEach(ctrl => {
+      const count = Number(ctrl.get('studentCount')?.value) || 0;
+      const assigned = poolCopy.splice(0, count);
+      ctrl.patchValue({ studentids: assigned.join(',') }, { emitEvent: false });
+    });
+  });
+}
 
   get _IIPMasterFormGroup() {
     return this.IIPMasterFormGroup.controls;
@@ -292,9 +339,9 @@ export class BranchSectionCreateComponent {
     this.StreamMasterDDL=[];
     this.IIPMasterFormGroup.get('StreamID')?.setValue(0);
     this.IIPMasterFormGroup.get('StCount')?.setValue('');
-    this.IIPMasterFormGroup.get('SectionCount')?.setValue('');
-    this.IIPMasterFormGroup.get('PracticalSectionCount')?.setValue('');
-    this.IIPMasterFormGroup.get('TutorialSectionCount')?.setValue('');    
+    // this.IIPMasterFormGroup.get('SectionCount')?.setValue('');
+    // this.IIPMasterFormGroup.get('PracticalSectionCount')?.setValue('');
+    // this.IIPMasterFormGroup.get('TutorialSectionCount')?.setValue('');    
 
 
     const formSemesterID = Number(this.IIPMasterFormGroup.value.SemesterID);
@@ -320,7 +367,7 @@ export class BranchSectionCreateComponent {
 
 
   SaveData() {
-    ////debugger
+    //debugger
     this.isSubmitted = true;
     if (this.IIPMasterFormGroup.invalid) {
       return;
@@ -386,6 +433,7 @@ export class BranchSectionCreateComponent {
       this.generateSections(this.sectionSize, this.PsectionSize, this.TusectionSize, this.totalStudents);
   }
   generateSections(sectionCount: number, PsectionCount: number, TsectionCount: number, totalStudents: number): void {
+    //debugger
     if (sectionCount <= 0 || PsectionCount <= 0 || TsectionCount < 0 || totalStudents <= 0) {
       return;
     }
@@ -416,14 +464,10 @@ export class BranchSectionCreateComponent {
     const streamId = this.IIPMasterFormGroup.get('StreamID')?.value;
     const SemesterID = this.IIPMasterFormGroup.get('SemesterID')?.value;
 
-
     const selectedStream = this.StreamMasterDDL.find((item: any) => item.StreamID == streamId);
     const selectedSemester = this.SemesterMasterDDL.find((item: any) => item.SemesterID == SemesterID);
 
-
     const StreamName = selectedStream.StreamName;
-
-
 
     const SemesterName = selectedSemester.SemesterName;
     ////debugger
@@ -532,7 +576,7 @@ export class BranchSectionCreateComponent {
   }
 
   async save() {
-    ////debugger
+   //debugger
     const totalFromSections = this.sectionForm.value.sections.reduce((sum: any, section: { studentCount: any; }) => sum + section.studentCount, 0);
 
     // const streamID = this.GetBranchSectionData.some((x: { StreamID: string }) =>
@@ -543,6 +587,75 @@ export class BranchSectionCreateComponent {
     //   this.toastr.warning("Branch Alredy Exists!");
     //   return
     // }
+
+    // ---------------------------------------------------------------------------
+  // 1. Validate Category-wise Student Counts
+  // ---------------------------------------------------------------------------
+  const streamId = Number(this.IIPMasterFormGroup.get('StreamID')?.value);
+  const selectedStream = this.StreamMasterDDL.find((x: any) => x.StreamID == streamId);
+  const expectedTotalStudents = Number(selectedStream?.TotalStudent || this.totalStudents || 0);
+
+    if (expectedTotalStudents > 0) {
+      const rawSections = this.sections.getRawValue();
+
+      // Group sections by their type/name indicator
+      const theorySections = rawSections.filter((s: any) => {
+        const name = (s.sectionName || '').toUpperCase();
+        return name.includes('-T-') || (!name.includes('-P-') && !name.includes('-TU-'));
+      });
+
+      const practicalSections = rawSections.filter((s: any) => {
+        const name = (s.sectionName || '').toUpperCase();
+        return name.includes('-P-');
+      });
+
+      const tutorialSections = rawSections.filter((s: any) => {
+        const name = (s.sectionName || '').toUpperCase();
+        return name.includes('-TU-');
+      });
+
+      // Helper to calculate total count for an array of sections
+      const getSum = (list: any[]) => list.reduce((acc, curr) => acc + (Number(curr.studentCount) || 0), 0);
+
+      // Theory Check
+      if (theorySections.length > 0) {
+        const theorySum = getSum(theorySections);
+        if (theorySum < expectedTotalStudents) {
+          this.toastr.error(`Theory student count sum (${theorySum}) cannot be less than total students (${expectedTotalStudents}).`);
+          return;
+        }
+        if (theorySum > expectedTotalStudents) {
+          this.toastr.error(`Theory student count sum (${theorySum}) exceeds total students (${expectedTotalStudents}).`);
+          return;
+        }
+      }
+
+      // Practical Check
+      if (practicalSections.length > 0) {
+        const practicalSum = getSum(practicalSections);
+        if (practicalSum < expectedTotalStudents) {
+          this.toastr.error(`Practical student count sum (${practicalSum}) cannot be less than total students (${expectedTotalStudents}).`);
+          return;
+        }
+        if (practicalSum > expectedTotalStudents) {
+          this.toastr.error(`Practical student count sum (${practicalSum}) exceeds total students (${expectedTotalStudents}).`);
+          return;
+        }
+      }
+
+      // Tutorial Check
+      if (tutorialSections.length > 0) {
+        const tutorialSum = getSum(tutorialSections);
+        if (tutorialSum < expectedTotalStudents) {
+          this.toastr.error(`Tutorial student count sum (${tutorialSum}) cannot be less than total students (${expectedTotalStudents}).`);
+          return;
+        }
+        if (tutorialSum > expectedTotalStudents) {
+          this.toastr.error(`Tutorial student count sum (${tutorialSum}) exceeds total students (${expectedTotalStudents}).`);
+          return;
+        }
+      }
+    }
 
     const formStreamID = Number(this.IIPMasterFormGroup.value.StreamID);
     const formSemesterID = Number(this.IIPMasterFormGroup.value.SemesterID);
@@ -561,8 +674,36 @@ export class BranchSectionCreateComponent {
       return
     }
 
+      // Double-check: rebind if any section still has empty studentids
+    const hasEmpty = this.sections.controls.some(
+      c => Number(c.get('studentCount')?.value) > 0 && (!c.get('studentids')?.value || c.get('studentids')?.value === '')
+    );
+    if (hasEmpty) {
+      this.rebindAllStudentIds();
+    }
 
 
+    // Map sections ensuring sectionName, studentCount, SectionID, and studentids are bound
+    const formattedSections = this.sections.getRawValue().map((sec: any) => ({
+      SectionID: sec.SectionID || 0,
+      SectionName: sec.sectionName,
+      StudentCount: Number(sec.studentCount),
+      type: sec.type || 'Theory',
+      studentids: sec.studentids || ''
+    }));
+
+    // Aggregate student IDs from all sections
+    const allSectionStudentIds = [
+      ...new Set(
+        formattedSections
+          .map((s: any) => s.studentids)
+          .filter(Boolean)
+          .join(',')
+          .split(',')
+          .map((id: string) => id.trim())
+          .filter(Boolean)
+      )
+    ].join(',');
 
     //let obj = {
     //  Action:"SAVE",
@@ -584,7 +725,8 @@ export class BranchSectionCreateComponent {
       EndTermID: this.sSOLoginDataModel.EndTermID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
       StreamID: this.IIPMasterFormGroup.value.StreamID,
-      Section: this.sectionForm.value.sections,
+      // Section: this.sectionForm.value.sections,
+      Section: formattedSections,
       ActiveStatus: 1,
       DeleteStatus: 0,
       CreatedBy: this.sSOLoginDataModel.UserID,
@@ -592,7 +734,9 @@ export class BranchSectionCreateComponent {
       CreatedDate: new Date(),
       SemesterID: this.IIPMasterFormGroup.value.SemesterID,
       InstituteId: this.sSOLoginDataModel.InstituteID,
-      studentids: this.sectionForm.value.studentids,
+      // studentids: this.sectionForm.value.studentids,
+      studentids: allSectionStudentIds,
+      SchemeID: this.IIPMasterFormGroup.value.SchemeID
     }
 
     ////debugger
@@ -797,6 +941,61 @@ export class BranchSectionCreateComponent {
       }
     }
   }
+
+  rebindAllStudentIds(): void {
+  const streamId = Number(this.IIPMasterFormGroup.get('StreamID')?.value);
+
+  // 1. Get complete student list from StreamMasterDDL
+  let fullStudentList: string[] = this.StreamMasterDDL
+    .filter((item: any) => item.StreamID == streamId)
+    .map((x: any) => x.students)
+    .filter((x: any) => x != null && x !== '')
+    .join(',')
+    .split(',')
+    .map((s: any) => s.trim())
+    .filter(Boolean);
+
+  // 2. Fallback: if StreamMasterDDL has no students, grab all unique IDs from the existing controls
+  if (fullStudentList.length === 0) {
+    const existingCombined = this.sections.controls
+      .map(c => c.get('studentids')?.value)
+      .filter(Boolean)
+      .join(',');
+    fullStudentList = [...new Set(existingCombined.split(',').map((s: string) => s.trim()).filter(Boolean))];
+  }
+
+  if (fullStudentList.length === 0) return;
+
+  // 3. Partition sections by their type
+  const theoryControls = this.sections.controls.filter(c => {
+    const name = (c.get('sectionName')?.value || '').toUpperCase();
+    return name.includes('-T-') || (!name.includes('-P-') && !name.includes('-TU-'));
+  });
+
+  const practicalControls = this.sections.controls.filter(c => {
+    const name = (c.get('sectionName')?.value || '').toUpperCase();
+    return name.includes('-P-');
+  });
+
+  const tutorialControls = this.sections.controls.filter(c => {
+    const name = (c.get('sectionName')?.value || '').toUpperCase();
+    return name.includes('-TU-');
+  });
+
+  // 4. Distribute student IDs independently for each category
+  const distribute = (controls: any[]) => {
+    let pool = [...fullStudentList];
+    controls.forEach(ctrl => {
+      const count = Number(ctrl.get('studentCount')?.value) || 0;
+      const assigned = pool.splice(0, count);
+      ctrl.get('studentids')?.setValue(assigned.join(','), { emitEvent: false });
+    });
+  };
+
+  distribute(theoryControls);
+  distribute(practicalControls);
+  distribute(tutorialControls);
+}
 
   reset(): void {
     this.IIPMasterFormGroup.reset({ StreamID: 0, SectionCount: '' });
@@ -1394,22 +1593,22 @@ export class BranchSectionCreateComponent {
       return;
     }
 
-
     this.IIPMasterFormGroup.patchValue({
       SemesterID: rowData.SemesterID,
       StreamID: rowData.StreamID,
- 
-
       StCount: rowData.TotalStudent,
       SectionCount: rowData.TheorySectionCount,
       PracticalSectionCount: rowData.PracticalSectionCount,
-      TutorialSectionCount: rowData.TutorialSectionCount
+      TutorialSectionCount: rowData.TutorialSectionCount,
+      SchemeID: rowData.SchemeID
     });
-  await  this.SemeIDAcStream()
+
+    await  this.SemeIDAcStream()
 
     this.IIPMasterFormGroup.patchValue({
       StreamID: rowData.StreamID
     })
+
     this.onBranchChange(rowData.StreamID)
     const obj = {
       Action: "GET_BY_ID",
@@ -1417,7 +1616,8 @@ export class BranchSectionCreateComponent {
       EndTermID: this.sSOLoginDataModel.EndTermID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
       StreamID: rowData.StreamID,
-      SemesterID: rowData.SemesterID
+      SemesterID: rowData.SemesterID,
+      InstituteId: this.sSOLoginDataModel.InstituteID
     };
 
     try {
@@ -1433,12 +1633,30 @@ export class BranchSectionCreateComponent {
       );
 
       // ✅ Push FormGroup for each row
+      // filteredRows.forEach((item: any) => {
+      //   this.sections.push(this.createSection1(item));
+      // });
+
+      // Bind each section with SectionID, sectionName, studentCount, studentids
       filteredRows.forEach((item: any) => {
-        this.sections.push(this.createSection1(item));
+        this.sections.push(
+          this.formBuilder.group({
+            SectionID: [item.SectionID || 0],
+            sectionName: [item.SectionName || '', Validators.required],
+            studentCount: [item.StudentCount || 0, [Validators.required, Validators.min(1)]],
+            studentids: [item.studentids || '']
+          })
+        );
       });
 
       this.totalRecord1 = filteredRows.length;
       this.isEdit=true
+
+      // Distribute/bind studentids if missing in the fetched edit rows
+      const hasMissingStudentIds = this.sections.controls.some(c => !c.get('studentids')?.value);
+      if (hasMissingStudentIds) {
+        this.onStudentCountChange();
+      }
 
     } catch (error) {
       console.error(error);

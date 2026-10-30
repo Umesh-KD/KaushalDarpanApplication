@@ -157,8 +157,6 @@
           </div>
         </div>
 
-
-
         <div *ngIf="formData.StaffLevelChildID == _ITIGovtEM_EnumStaffLevelChild.LabIncharge">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Technician <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.TechnicianID" formControlName="Technician" [ngModelOptions]="{standalone: true}">
@@ -234,7 +232,39 @@
             </p>
           </div>
         </div>
+        
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Employee Deputed To Other Institute Y/N<span class="StarMarking">*</span></label>
 
+          <div class="flex gap-4">
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsEmpWorkingOnDeputationFromOther" [value]="true" formControlName="IsEmpWorkingOnDeputationFromOther"
+                      [(ngModel)]="formData.IsEmpWorkingOnDeputationFromOther" />
+              <span>Yes</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsEmpWorkingOnDeputationFromOther" [value]="false" formControlName="IsEmpWorkingOnDeputationFromOther"
+                      [(ngModel)]="formData.IsEmpWorkingOnDeputationFromOther" />
+              <span>No</span>
+            </label>
+          </div>
+        </div>
+
+        <div *ngIf="formData.IsEmpWorkingOnDeputationFromOther">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name of deputed Institute</label>
+          <select class="form-select " name="EmpInstituteID" id="EmpInstituteID" formControlName="EmpInstituteID"
+                  [(ngModel)]="formData.EmpInstituteID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.EmpInstituteID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.EmpInstituteID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div> -->
 
       </div>
       <!--{{isSSOVisible}}
@@ -283,7 +313,6 @@
             </p>
           </div>
         </div>
-
 
         <div>
           <button class="btn bg-success text-white mt-6" id="btnSave" type="button" (click)="OnFormSubmit()">Submit</button>
@@ -464,16 +493,16 @@
                 </a>
 
                 <a href="javascript:void(0);" title="View"
-                   *ngIf="!row.Role.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
-                          !row.Role.split(',').includes(_EnumRole.ShikshaSambal.toString()) &&
+                   *ngIf="!row.RoleID.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
+                          !row.RoleID.split(',').includes(_EnumRole.ShikshaSambal.toString()) &&
                           sSOLoginDataModel.UserID != row.StaffUserID"
                    (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)">
                   <i class="ti ti-eye"></i>
                 </a>
 
                 <a href="javascript:void(0);" title="Approve Profile"
-                   *ngIf="!row.Role.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
-                          !row.Role.split(',').includes(_EnumRole.ShikshaSambal.toString()) &&
+                   *ngIf="!row.RoleID.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
+                          !row.RoleID.split(',').includes(_EnumRole.ShikshaSambal.toString()) &&
 
                           row.ProfileStatusID != _EnumEMProfileStatus.Approve &&
                           row.ProfileStatusID != _EnumEMProfileStatus.Revert &&
@@ -503,14 +532,14 @@
                   
 
                 <a href="javascript:void(0);" title="Edit Hostel"
-                   *ngIf="row.Role.split(',').includes(_EnumRole.HostelWarden.toString())"
+                   *ngIf="row.RoleID.split(',').includes(_EnumRole.HostelWarden.toString())"
                    (click)="onEditHostel(Model_EditHostel, row)">
                   <i class="ti ti-pencil"></i>
                 </a>
 
                 <a href="javascript:void(0);" title="View"
-                   *ngIf="row.Role.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
-                        row.Role.split(',').includes(_EnumRole.ShikshaSambal.toString()) &&
+                   *ngIf="row.RoleID.split(',').includes(_EnumRole.GuestFaculty.toString()) &&
+                        row.RoleID.split(',').includes(_EnumRole.ShikshaSambal.toString()) &&
                         !(row.ProfileStatusID == _EnumEMProfileStatus.Pending ||
                           row.ProfileStatusID == _EnumEMProfileStatus.Completed ||
                           row.ProfileStatusID ==  _EnumEMProfileStatus.Revert) &&

@@ -12,9 +12,12 @@
 
 <div class="card">
     <div class="card-body p-5">
-        <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
-            <b class="text-1xl-5"><i class="ti ti-list"></i> List</b>
-        </div>
+      <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> List</b>
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-excel"></i> Export Excel
+        </a>
+      </div>
         <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
             <div class="">
                 <select id="ddlConter" class="form-select  couterDropDown">
@@ -35,37 +38,60 @@
         <div class="overflow-auto mt-3">
             <table class="table table-border w-full" cellpadding="5">
                 <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-                    <tr>
-                        <th width="80px" align="left">Sr. No.</th>
-                        <th align="left">Name</th>
-                        <th align="left">SSOID (Hindi)</th>
-                        <th align="left">Email</th>
-                        <th align="left">OfficialEmail</th>
-                        <th align="left">MobileNo</th>
-                        <th align="left">Designation</th>
-                        <th align="left">Role</th>
-                        <th align="center" width="200">Action</th>
-                    </tr>
+                  <tr>
+                    <th width="80px" align="left">Sr. No.</th>
+                    <th align="left" class="sortable" (click)="sortBy('Name')">
+                      Name <i [class]="getSortIcon('Name')"></i>
+                    </th>
+                    <th align="left" class="sortable" (click)="sortBy('SSOID')">
+                      SSOID (Hindi) <i [class]="getSortIcon('SSOID')"></i>
+                    </th>
+                    <th align="left" class="sortable" (click)="sortBy('Email')">
+                      Email <i [class]="getSortIcon('Email')"></i>
+                    </th>
+                    <th align="left" class="sortable" (click)="sortBy('OfficialEmail')">
+                      OfficialEmail <i [class]="getSortIcon('OfficialEmail')"></i>
+                    </th>
+                    <th align="left" class="sortable" (click)="sortBy('MobileNo')">
+                      MobileNo <i [class]="getSortIcon('MobileNo')"></i>
+                    </th>
+                    <th align="left" class="sortable" (click)="sortBy('Designation')">
+                      Designation <i [class]="getSortIcon('Designation')"></i>
+                    </th>
+                    <th align="left" class="sortable" (click)="sortBy('Role')">
+                      Role <i [class]="getSortIcon('Role')"></i>
+                    </th>
+                    <!--<th align="left" class="sortable" (click)="sortBy('ModifyBy')">
+                      Modify By <i [class]="getSortIcon('ModifyBy')"></i>
+                    </th>
+                    <th align="left" class="sortable" (click)="sortBy('ModifyDate')">
+                      Modify Date <i [class]="getSortIcon('ModifyDate')"></i>
+                    </th>-->
+                    <th align="center" width="200">Action</th>
+                  </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of UserMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
-                        <td>{{idx+1}}</td>
-                        <td>{{row.Name}}</td>
-                        <td>{{row.SSOID}}</td>
-                        <td>{{row.Email}}</td>
-                        <td>{{row.EmailOfficial}}</td>
-                        <td>{{row.MobileNo}}</td>
-                        <td>{{row.Designation}}</td>
-                        <td>{{row.Role}}</td>
-                        <td>
-                            <div class="flex align-center justify-center actionBtns">
+                  <tr *ngFor="let row of UserMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
+                    <td>{{idx+1}}</td>
+                    <td>{{row.Name}}</td>
+                    <td>{{row.SSOID}}</td>
+                    <td>{{row.Email}}</td>
+                    <td>{{row.EmailOfficial}}</td>
+                    <td>{{row.MobileNo}}</td>
+                    <td>{{row.Designation}}</td>
+                    <td>{{row.Role}}</td>
+                    <!--<td>{{row.ModifyBy}}</td>
+                    <td>{{row.ModifyDate}}</td>-->
+                    <td>
+                      <div class="flex align-center justify-center actionBtns">
 
-                                <a href="javascript:void(0);" title="Assign Role Rights"
-                                    (click)="ViewandUpdate(MyModel_Action,row.UserID)"><i
-                                        class="ti ti-playlist-add"></i></a>
-                            </div>
-                        </td>
-                    </tr>
+                        <a href="javascript:void(0);" title="Assign Role Rights"
+                           (click)="ViewandUpdate(MyModel_Action,row.UserID)">
+                          <i class="ti ti-playlist-add"></i>
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
             </table>
         </div>
@@ -140,7 +166,16 @@
                                                 placeholder="--Select Institute--"
                                                 (ngModelChange)="onInstituteChange($event, row)">
                                             </ng-select>
+                                        </div>
 
+                                        <div *ngIf="row.ID == _EnumRole.GuestRoomWarden || row.ID == _EnumRole.GuestHouseAdmin || row.ID == _EnumRole.GuestHouseIncharge">
+                                            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Guest House</label>
+                                            <ng-select [items]="GuestHouseNameList" bindLabel="Name"
+                                                bindValue="ID" [(ngModel)]="row.GuestHouseID" [multiple]="true"
+                                                [closeOnSelect]="false" [clearable]="true"
+                                                placeholder="--Select Guest House --"
+                                                (ngModelChange)="onGuestHouseChange($event, row)">
+                                            </ng-select>
                                         </div>
                                     </td>
                                 </tr>

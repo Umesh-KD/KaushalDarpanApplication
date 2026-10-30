@@ -307,14 +307,30 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th width="80px" align="left">Sr. No.</th>
-            <th align="left">SSO ID</th>
-            <th align="left">Staff Details</th>
-            <th align="left">Department/Institute Name</th>
-            <th class="left">Designation as per service book</th>
-            <th class="left">Salary Drawn Post </th>
-            <th align="left">Role</th>
-            <th align="left">Profile Status</th>
-            <th align="left">Remark</th>
+            <th align="left" class="sortable" (click)="sortBy('SSOID')">
+              SSO ID <i [class]="getSortIcon('SSOID')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('Name')">
+              Staff Details <i [class]="getSortIcon('Name')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('DepartmentName')">
+              Department/Institute Name <i [class]="getSortIcon('DepartmentName')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('DesignationName')">
+              Designation as per service book <i [class]="getSortIcon('DesignationName')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('SalaryDrawnPost')">
+              Salary Drawn Post <i [class]="getSortIcon('SalaryDrawnPost')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('RoleName')">
+              Role <i [class]="getSortIcon('RoleName')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('ProfileStatus')">
+              Profile Status <i [class]="getSortIcon('ProfileStatus')"></i>
+            </th>
+            <th align="left" class="sortable" (click)="sortBy('Remark')">
+              Remark <i [class]="getSortIcon('Remark')"></i>
+            </th>
             <th class="text-left">View Profile</th>
           </tr>
         </thead>

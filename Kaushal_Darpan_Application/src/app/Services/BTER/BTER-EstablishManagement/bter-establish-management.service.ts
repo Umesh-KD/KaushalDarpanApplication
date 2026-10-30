@@ -295,7 +295,7 @@ export class BTEREstablishManagementService {
       ).toPromise();
   }
 
-  public async OfficeVacancyList(request: OfficeVacancySearchModel) {
+  public async OfficeVacancyList(request: any) {
     var body = JSON.stringify(request);
 
     return await this.http.post(`${this.APIUrl}/OfficeVacancyList`, body, this.headersOptions)

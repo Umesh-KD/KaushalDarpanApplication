@@ -35,6 +35,7 @@ export class BTER_EM_StaffListSearchModel {
   IsEmpWorkingOnDeputationToOther?: number = -1;
   DistrictID?: number = 0;
   StateID?: number = 0;
+  FilterRoleID?: number = 0;
 
 }
 
@@ -136,7 +137,9 @@ export class BTER_EM_AddStaffBasicDetailDataModel extends RequestBaseModel {
   public BugetHeadTypeID?: number = 0;
   public PostServiceTypeID?: number = 0;
   public ChildPostServiceTypeID?: number = 0;
+  public EmpInstituteID?: number = 0;
   public OrderNo?: string = '';
+  public IsEmpWorkingOnDeputationFromOther: boolean = false
 }
 
 export class BTER_EM_StaffHostelListModel {
@@ -772,7 +775,9 @@ export class OfficeVacancySearchModel {
   public BranchID?:number=0;
   public UserID?:number=0;
   public RoleID?:number=0;
-  public SSOID?:string='';
+  public SSOID?: string = '';
+  InstituteIDs: string = '';
+  BranchIDs: string = '';
 }
 
 export class StaffTrainingDetailDataModel {
